@@ -5583,7 +5583,7 @@
                                                     <item name="cm:46060679-8ae3-4d19-ac45-2abd666f2da3"
                                                           type="lecm-arm:statuses-child-rule">
                                                         <property name="lecm-arm:selected-statuses">
-                                                            <![CDATA[На согласовании,Согласован,На доработке,На подписании,Подписан,На регистрации,Зарегистрирован,Введен в действие,Действует,Отменен]]></property>
+                                                    <![CDATA[На согласовании,Согласован,На доработке,На подписании,Подписан,На регистрации,Зарегистрирован,Введен в действие,Действует,Срок действия окончен,Отменен]]></property>
                                                         <property name="cm:name">
                                                             <![CDATA[46060679-8ae3-4d19-ac45-2abd666f2da3]]></property>
                                                         <property name="lecm-arm:statuses-rule"><![CDATA[SELECTED]]></property>
@@ -5675,20 +5675,6 @@
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                            </item>
-                                            <item name="cm:Срок действия окончен" type="lecm-arm:node">
-                                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
-                                                <property name="lecm-arm:search-query">
-                                                    <![CDATA[@lecm\-statemachine\:status:'Срок действия окончен']]></property>
-                                                <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
-                                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
-                                                <property name="lecm-arm:counter-description"><![CDATA[]]></property>
-                                                <property name="cm:name"><![CDATA[Срок действия окончен]]></property>
-                                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
-                                                <property name="lecm-arm:expression"><![CDATA[]]></property>
-                                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-                                                <property name="lecm-arm:order"><![CDATA[0]]></property>
-                                                <property name="lecm-arm:types"><![CDATA[]]></property>
                                             </item>
                                         </items>
                                         <assocs>
@@ -5863,7 +5849,7 @@
                                         <property name="lecm-arm:search-type"><![CDATA[]]></property>
                                         <property name="lecm-arm:expression"><![CDATA[]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-                                        <property name="lecm-arm:order"><![CDATA[60]]></property>
+                                        <property name="lecm-arm:order"><![CDATA[80]]></property>
                                         <property name="lecm-arm:types"><![CDATA[lecm-errands:document]]></property>
                                         <items>
                                             <item name="cm:Статусы" type="lecm-arm:node">
@@ -6339,7 +6325,7 @@
                                         <property name="lecm-arm:search-type"><![CDATA[]]></property>
                                         <property name="lecm-arm:expression"><![CDATA[]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-                                        <property name="lecm-arm:order"><![CDATA[70]]></property>
+                                        <property name="lecm-arm:order"><![CDATA[60]]></property>
                                         <property name="lecm-arm:types"><![CDATA[lecm-protocol:document]]></property>
                                         <items>
                                             <item name="cm:Статусы" type="lecm-arm:node">
@@ -6475,18 +6461,6 @@
                                                     <![CDATA[lecm-protocol:secretary-assoc]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                             </item>
-                                            <item name="cm:b224010a-4411-433d-9f1e-a8d353b4fad0" type="lecm-arm:field">
-                                                <property name="lecm-arm:field-title"><![CDATA[Исполнитель]]></property>
-                                                <property name="cm:name">
-                                                    <![CDATA[a6beb513-a74a-431c-8f9e-2bb24495dee4]]></property>
-                                                <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
-                                                <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
-                                                <property name="lecm-arm:order"><![CDATA[3]]></property>
-                                                <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
-                                                <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecm-eds-document:executor-assoc]]></property>
-                                                <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                            </item>
                                             <item name="cm:d55ebf9b-1004-4740-8c76-9b2d3761b3b0" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-title"><![CDATA[Номер проекта]]></property>
                                                 <property name="cm:name">
@@ -6528,8 +6502,6 @@
                                             <assoc type="lecm-arm:fields-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По типам документов/Протоколы/786e9da0-d0fa-4810-89fd-0512a0e4b29a"/>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По типам документов/Протоколы/a6beb513-a74a-431c-8f9e-2bb24495dee4"/>
-                                            <assoc type="lecm-arm:fields-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По типам документов/Протоколы/be038c4b-26cf-446b-a8c8-2c1e5f5b9f53"/>
                                         </assocs>
                                     </item>
@@ -6541,7 +6513,7 @@
                                         <property name="lecm-arm:search-type"><![CDATA[]]></property>
                                         <property name="lecm-arm:expression"><![CDATA[]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-                                        <property name="lecm-arm:order"><![CDATA[55]]></property>
+                                        <property name="lecm-arm:order"><![CDATA[70]]></property>
                                         <property name="lecm-arm:types"><![CDATA[lecm-resolutions:document]]></property>
                                         <items>
                                             <item name="cm:0844aeda-2765-4425-ae41-ad81d0b5763e" type="lecm-arm:field">
@@ -6568,7 +6540,7 @@
                                             </item>
                                             <item name="cm:9add62d9-e2f4-4378-824b-90d5f7730fdb" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
-                                                <property name="lecm-arm:order"><![CDATA[3]]></property>
+                                                <property name="lecm-arm:order"><![CDATA[8]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-resolutions:base-document-assoc]]></property>
                                                 <property name="lecm-arm:field-title"><![CDATA[Документ-основание]]></property>
@@ -6579,7 +6551,7 @@
                                             </item>
                                             <item name="cm:205e4da4-2d48-4d4c-ac5f-e707005543f4" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
-                                                <property name="lecm-arm:order"><![CDATA[4]]></property>
+                                                <property name="lecm-arm:order"><![CDATA[9]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-document:author-assoc]]></property>
                                                 <property name="lecm-arm:field-title"><![CDATA[Создатель]]></property>
@@ -6590,7 +6562,7 @@
                                             </item>
                                             <item name="cm:61aa9da0-1574-47fa-8697-72e349eca8b7" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
-                                                <property name="lecm-arm:order"><![CDATA[5]]></property>
+                                                <property name="lecm-arm:order"><![CDATA[3]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-resolutions:author-assoc]]></property>
                                                 <property name="lecm-arm:field-title"><![CDATA[Автор]]></property>
@@ -6601,7 +6573,7 @@
                                             </item>
                                             <item name="cm:f04d13c9-f69f-4934-b48d-e9d289b08ea1" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
-                                                <property name="lecm-arm:order"><![CDATA[6]]></property>
+                                                <property name="lecm-arm:order"><![CDATA[4]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-resolutions:controller-assoc]]></property>
                                                 <property name="lecm-arm:field-title"><![CDATA[Контролер]]></property>
@@ -6612,7 +6584,7 @@
                                             </item>
                                             <item name="cm:16f4807e-d727-4ede-89de-66c10c914cec" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
-                                                <property name="lecm-arm:order"><![CDATA[7]]></property>
+                                                <property name="lecm-arm:order"><![CDATA[6]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-resolutions:limitation-date]]></property>
                                                 <property name="lecm-arm:field-title"><![CDATA[Исполнить к]]></property>
@@ -6890,7 +6862,7 @@
                                                         <property name="lecm-arm:field-by-default"><![CDATA[false]]></property>
                                                     </item>
                                                     <item name="cm:2ecbbc65-f17c-45cb-b35a-dde459455471" type="lecm-arm:field">
-                                                        <property name="lecm-arm:field-title"><![CDATA[Исполнители]]></property>
+                                                        <property name="lecm-arm:field-title"><![CDATA[Исполнитель]]></property>
                                                         <property name="cm:name">
                                                             <![CDATA[840df7e4-6c9e-4487-b77e-5b093e8fc0ce]]></property>
                                                         <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
@@ -7277,7 +7249,7 @@
                                             </item>
                                             <item name="cm:e874a36b-889a-478d-8c7b-6e90708f65e3" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
-                                                <property name="lecm-arm:order"><![CDATA[8]]></property>
+                                                <property name="lecm-arm:order"><![CDATA[7]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-statemachine:status]]></property>
                                                 <property name="lecm-arm:field-title"><![CDATA[Статус]]></property>
@@ -7288,7 +7260,7 @@
                                             </item>
                                             <item name="cm:d30878ed-3b79-42ba-b719-536c2260a3ba" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
-                                                <property name="lecm-arm:order"><![CDATA[9]]></property>
+                                                <property name="lecm-arm:order"><![CDATA[5]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-errands-aspect:errands-executors-assoc]]></property>
                                                 <property name="lecm-arm:field-title"><![CDATA[Исполнитель]]></property>
@@ -8492,7 +8464,7 @@
                                                                 <property name="cm:name">
                                                                     <![CDATA[0b835eec-9e6b-44a7-b5b8-f9116d5a448f]]></property>
                                                                 <property name="lecm-arm:field-by-default">
-                                                                    <![CDATA[false]]></property>
+                                                                    <![CDATA[true]]></property>
                                                                 <property name="lecm-arm:field-sortable">
                                                                     <![CDATA[true]]></property>
                                                                 <property name="lecm-arm:order"><![CDATA[3]]></property>
@@ -8713,24 +8685,6 @@
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
-                                                            <item name="cm:80136c9b-11ce-4bd1-acc3-519ed5b28d44"
-                                                                  type="lecm-arm:field">
-                                                                <property name="lecm-arm:field-title">
-                                                                    <![CDATA[Исполнитель]]></property>
-                                                                <property name="cm:name">
-                                                                    <![CDATA[0ab85b4a-5e68-4f46-ad1f-64d27ef73dd6]]></property>
-                                                                <property name="lecm-arm:field-by-default">
-                                                                    <![CDATA[true]]></property>
-                                                                <property name="lecm-arm:field-sortable">
-                                                                    <![CDATA[true]]></property>
-                                                                <property name="lecm-arm:order"><![CDATA[3]]></property>
-                                                                <property name="lecm-arm:field-is-marker">
-                                                                    <![CDATA[false]]></property>
-                                                                <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecm-eds-document:executor-assoc]]></property>
-                                                                <property name="lecm-arm:field-format-string">
-                                                                    <![CDATA[]]></property>
-                                                            </item>
                                                             <item name="cm:110c105c-9f95-4218-80d3-f04b760f9d1a"
                                                                   type="lecm-arm:field">
                                                                 <property name="lecm-arm:field-title"><![CDATA[Вид]]></property>
@@ -8834,8 +8788,6 @@
                                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Согласование и подписание/На согласовании/Протоколы/ca5caec5-c802-4b11-9e44-e237baf59fd7"/>
                                                             <assoc type="lecm-arm:fields-assoc"
                                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Согласование и подписание/На согласовании/Протоколы/7613d2b9-69a2-4b0c-a2a9-5e88de89b1c6"/>
-                                                            <assoc type="lecm-arm:fields-assoc"
-                                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Согласование и подписание/На согласовании/Протоколы/0ab85b4a-5e68-4f46-ad1f-64d27ef73dd6"/>
                                                             <assoc type="lecm-arm:fields-assoc"
                                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Согласование и подписание/На согласовании/Протоколы/c8230ff4-1ebb-4195-8b3d-c60f4a013e3d"/>
                                                             <assoc type="lecm-arm:fields-assoc"
@@ -9734,7 +9686,7 @@
                                                                 <property name="cm:name">
                                                                     <![CDATA[0b835eec-9e6b-44a7-b5b8-f9116d5a448f]]></property>
                                                                 <property name="lecm-arm:field-by-default">
-                                                                    <![CDATA[false]]></property>
+                                                                    <![CDATA[true]]></property>
                                                                 <property name="lecm-arm:field-sortable">
                                                                     <![CDATA[true]]></property>
                                                                 <property name="lecm-arm:order"><![CDATA[3]]></property>
@@ -9955,24 +9907,6 @@
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
-                                                            <item name="cm:80136c9b-11ce-4bd1-acc3-519ed5b28d44"
-                                                                  type="lecm-arm:field">
-                                                                <property name="lecm-arm:field-title">
-                                                                    <![CDATA[Исполнитель]]></property>
-                                                                <property name="cm:name">
-                                                                    <![CDATA[0ab85b4a-5e68-4f46-ad1f-64d27ef73dd6]]></property>
-                                                                <property name="lecm-arm:field-by-default">
-                                                                    <![CDATA[true]]></property>
-                                                                <property name="lecm-arm:field-sortable">
-                                                                    <![CDATA[true]]></property>
-                                                                <property name="lecm-arm:order"><![CDATA[3]]></property>
-                                                                <property name="lecm-arm:field-is-marker">
-                                                                    <![CDATA[false]]></property>
-                                                                <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecm-eds-document:executor-assoc]]></property>
-                                                                <property name="lecm-arm:field-format-string">
-                                                                    <![CDATA[]]></property>
-                                                            </item>
                                                             <item name="cm:110c105c-9f95-4218-80d3-f04b760f9d1a"
                                                                   type="lecm-arm:field">
                                                                 <property name="lecm-arm:field-title"><![CDATA[Вид]]></property>
@@ -10076,8 +10010,6 @@
                                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Согласование и подписание/Согласован/Протоколы/ca5caec5-c802-4b11-9e44-e237baf59fd7"/>
                                                             <assoc type="lecm-arm:fields-assoc"
                                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Согласование и подписание/Согласован/Протоколы/7613d2b9-69a2-4b0c-a2a9-5e88de89b1c6"/>
-                                                            <assoc type="lecm-arm:fields-assoc"
-                                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Согласование и подписание/Согласован/Протоколы/0ab85b4a-5e68-4f46-ad1f-64d27ef73dd6"/>
                                                             <assoc type="lecm-arm:fields-assoc"
                                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Согласование и подписание/Согласован/Протоколы/c8230ff4-1ebb-4195-8b3d-c60f4a013e3d"/>
                                                             <assoc type="lecm-arm:fields-assoc"
@@ -10976,7 +10908,7 @@
                                                                 <property name="cm:name">
                                                                     <![CDATA[0b835eec-9e6b-44a7-b5b8-f9116d5a448f]]></property>
                                                                 <property name="lecm-arm:field-by-default">
-                                                                    <![CDATA[false]]></property>
+                                                                    <![CDATA[true]]></property>
                                                                 <property name="lecm-arm:field-sortable">
                                                                     <![CDATA[true]]></property>
                                                                 <property name="lecm-arm:order"><![CDATA[3]]></property>
@@ -11197,24 +11129,6 @@
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
-                                                            <item name="cm:80136c9b-11ce-4bd1-acc3-519ed5b28d44"
-                                                                  type="lecm-arm:field">
-                                                                <property name="lecm-arm:field-title">
-                                                                    <![CDATA[Исполнитель]]></property>
-                                                                <property name="cm:name">
-                                                                    <![CDATA[0ab85b4a-5e68-4f46-ad1f-64d27ef73dd6]]></property>
-                                                                <property name="lecm-arm:field-by-default">
-                                                                    <![CDATA[true]]></property>
-                                                                <property name="lecm-arm:field-sortable">
-                                                                    <![CDATA[true]]></property>
-                                                                <property name="lecm-arm:order"><![CDATA[3]]></property>
-                                                                <property name="lecm-arm:field-is-marker">
-                                                                    <![CDATA[false]]></property>
-                                                                <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecm-eds-document:executor-assoc]]></property>
-                                                                <property name="lecm-arm:field-format-string">
-                                                                    <![CDATA[]]></property>
-                                                            </item>
                                                             <item name="cm:110c105c-9f95-4218-80d3-f04b760f9d1a"
                                                                   type="lecm-arm:field">
                                                                 <property name="lecm-arm:field-title"><![CDATA[Вид]]></property>
@@ -11318,8 +11232,6 @@
                                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Согласование и подписание/На подписании/Протоколы/ca5caec5-c802-4b11-9e44-e237baf59fd7"/>
                                                             <assoc type="lecm-arm:fields-assoc"
                                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Согласование и подписание/На подписании/Протоколы/7613d2b9-69a2-4b0c-a2a9-5e88de89b1c6"/>
-                                                            <assoc type="lecm-arm:fields-assoc"
-                                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Согласование и подписание/На подписании/Протоколы/0ab85b4a-5e68-4f46-ad1f-64d27ef73dd6"/>
                                                             <assoc type="lecm-arm:fields-assoc"
                                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Согласование и подписание/На подписании/Протоколы/c8230ff4-1ebb-4195-8b3d-c60f4a013e3d"/>
                                                             <assoc type="lecm-arm:fields-assoc"
@@ -12218,7 +12130,7 @@
                                                                 <property name="cm:name">
                                                                     <![CDATA[0b835eec-9e6b-44a7-b5b8-f9116d5a448f]]></property>
                                                                 <property name="lecm-arm:field-by-default">
-                                                                    <![CDATA[false]]></property>
+                                                                    <![CDATA[true]]></property>
                                                                 <property name="lecm-arm:field-sortable">
                                                                     <![CDATA[true]]></property>
                                                                 <property name="lecm-arm:order"><![CDATA[3]]></property>
@@ -12439,24 +12351,6 @@
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
-                                                            <item name="cm:80136c9b-11ce-4bd1-acc3-519ed5b28d44"
-                                                                  type="lecm-arm:field">
-                                                                <property name="lecm-arm:field-title">
-                                                                    <![CDATA[Исполнитель]]></property>
-                                                                <property name="cm:name">
-                                                                    <![CDATA[0ab85b4a-5e68-4f46-ad1f-64d27ef73dd6]]></property>
-                                                                <property name="lecm-arm:field-by-default">
-                                                                    <![CDATA[true]]></property>
-                                                                <property name="lecm-arm:field-sortable">
-                                                                    <![CDATA[true]]></property>
-                                                                <property name="lecm-arm:order"><![CDATA[3]]></property>
-                                                                <property name="lecm-arm:field-is-marker">
-                                                                    <![CDATA[false]]></property>
-                                                                <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecm-eds-document:executor-assoc]]></property>
-                                                                <property name="lecm-arm:field-format-string">
-                                                                    <![CDATA[]]></property>
-                                                            </item>
                                                             <item name="cm:110c105c-9f95-4218-80d3-f04b760f9d1a"
                                                                   type="lecm-arm:field">
                                                                 <property name="lecm-arm:field-title"><![CDATA[Вид]]></property>
@@ -12560,8 +12454,6 @@
                                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Согласование и подписание/Подписан/Протоколы/ca5caec5-c802-4b11-9e44-e237baf59fd7"/>
                                                             <assoc type="lecm-arm:fields-assoc"
                                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Согласование и подписание/Подписан/Протоколы/7613d2b9-69a2-4b0c-a2a9-5e88de89b1c6"/>
-                                                            <assoc type="lecm-arm:fields-assoc"
-                                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Согласование и подписание/Подписан/Протоколы/0ab85b4a-5e68-4f46-ad1f-64d27ef73dd6"/>
                                                             <assoc type="lecm-arm:fields-assoc"
                                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Согласование и подписание/Подписан/Протоколы/c8230ff4-1ebb-4195-8b3d-c60f4a013e3d"/>
                                                             <assoc type="lecm-arm:fields-assoc"
@@ -13460,7 +13352,7 @@
                                                                 <property name="cm:name">
                                                                     <![CDATA[0b835eec-9e6b-44a7-b5b8-f9116d5a448f]]></property>
                                                                 <property name="lecm-arm:field-by-default">
-                                                                    <![CDATA[false]]></property>
+                                                                    <![CDATA[true]]></property>
                                                                 <property name="lecm-arm:field-sortable">
                                                                     <![CDATA[true]]></property>
                                                                 <property name="lecm-arm:order"><![CDATA[3]]></property>
@@ -13681,24 +13573,6 @@
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
-                                                            <item name="cm:80136c9b-11ce-4bd1-acc3-519ed5b28d44"
-                                                                  type="lecm-arm:field">
-                                                                <property name="lecm-arm:field-title">
-                                                                    <![CDATA[Исполнитель]]></property>
-                                                                <property name="cm:name">
-                                                                    <![CDATA[0ab85b4a-5e68-4f46-ad1f-64d27ef73dd6]]></property>
-                                                                <property name="lecm-arm:field-by-default">
-                                                                    <![CDATA[true]]></property>
-                                                                <property name="lecm-arm:field-sortable">
-                                                                    <![CDATA[true]]></property>
-                                                                <property name="lecm-arm:order"><![CDATA[3]]></property>
-                                                                <property name="lecm-arm:field-is-marker">
-                                                                    <![CDATA[false]]></property>
-                                                                <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecm-eds-document:executor-assoc]]></property>
-                                                                <property name="lecm-arm:field-format-string">
-                                                                    <![CDATA[]]></property>
-                                                            </item>
                                                             <item name="cm:110c105c-9f95-4218-80d3-f04b760f9d1a"
                                                                   type="lecm-arm:field">
                                                                 <property name="lecm-arm:field-title"><![CDATA[Вид]]></property>
@@ -13802,8 +13676,6 @@
                                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Согласование и подписание/На доработке/Протоколы/ca5caec5-c802-4b11-9e44-e237baf59fd7"/>
                                                             <assoc type="lecm-arm:fields-assoc"
                                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Согласование и подписание/На доработке/Протоколы/7613d2b9-69a2-4b0c-a2a9-5e88de89b1c6"/>
-                                                            <assoc type="lecm-arm:fields-assoc"
-                                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Согласование и подписание/На доработке/Протоколы/0ab85b4a-5e68-4f46-ad1f-64d27ef73dd6"/>
                                                             <assoc type="lecm-arm:fields-assoc"
                                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Согласование и подписание/На доработке/Протоколы/c8230ff4-1ebb-4195-8b3d-c60f4a013e3d"/>
                                                             <assoc type="lecm-arm:fields-assoc"
@@ -14959,24 +14831,6 @@
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
-                                                            <item name="cm:6b95a5f1-8339-457e-879e-8dfc7fce1d4f"
-                                                                  type="lecm-arm:field">
-                                                                <property name="lecm-arm:field-title">
-                                                                    <![CDATA[Исполнитель]]></property>
-                                                                <property name="cm:name">
-                                                                    <![CDATA[cbdf5df4-6cdb-4522-8156-5652bf8c239a]]></property>
-                                                                <property name="lecm-arm:field-by-default">
-                                                                    <![CDATA[true]]></property>
-                                                                <property name="lecm-arm:field-sortable">
-                                                                    <![CDATA[true]]></property>
-                                                                <property name="lecm-arm:order"><![CDATA[3]]></property>
-                                                                <property name="lecm-arm:field-is-marker">
-                                                                    <![CDATA[false]]></property>
-                                                                <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecm-eds-document:executor-assoc]]></property>
-                                                                <property name="lecm-arm:field-format-string">
-                                                                    <![CDATA[]]></property>
-                                                            </item>
                                                             <item name="cm:8f66c922-b356-4f40-bc6f-83a5532910db"
                                                                   type="lecm-arm:field">
                                                                 <property name="lecm-arm:field-title"><![CDATA[Вид]]></property>
@@ -15080,8 +14934,6 @@
                                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Исполнение/На исполнении/Протоколы/cc508d24-09df-4010-adb7-b5582572c007"/>
                                                             <assoc type="lecm-arm:fields-assoc"
                                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Исполнение/На исполнении/Протоколы/7c15f9b4-7267-4477-860d-5870c890aea4"/>
-                                                            <assoc type="lecm-arm:fields-assoc"
-                                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Исполнение/На исполнении/Протоколы/cbdf5df4-6cdb-4522-8156-5652bf8c239a"/>
                                                             <assoc type="lecm-arm:fields-assoc"
                                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Исполнение/На исполнении/Протоколы/c6c3c1b3-a1eb-4db4-bea0-455b9a60b60e"/>
                                                             <assoc type="lecm-arm:fields-assoc"
@@ -18626,24 +18478,6 @@
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
-                                                            <item name="cm:fc9e53e4-94fb-4210-aa82-276271cd0763"
-                                                                  type="lecm-arm:field">
-                                                                <property name="lecm-arm:field-title">
-                                                                    <![CDATA[Исполнитель]]></property>
-                                                                <property name="cm:name">
-                                                                    <![CDATA[339533b1-55a8-4300-8f8d-73f284b34a0f]]></property>
-                                                                <property name="lecm-arm:field-by-default">
-                                                                    <![CDATA[true]]></property>
-                                                                <property name="lecm-arm:field-sortable">
-                                                                    <![CDATA[true]]></property>
-                                                                <property name="lecm-arm:order"><![CDATA[4]]></property>
-                                                                <property name="lecm-arm:field-is-marker">
-                                                                    <![CDATA[false]]></property>
-                                                                <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecm-eds-document:executor-assoc]]></property>
-                                                                <property name="lecm-arm:field-format-string">
-                                                                    <![CDATA[]]></property>
-                                                            </item>
                                                             <item name="cm:db91dbcc-d560-446b-a486-46dd6cfbf8f8"
                                                                   type="lecm-arm:field">
                                                                 <property name="lecm-arm:field-title">
@@ -18728,8 +18562,6 @@
                                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Регистрация/На регистрации/Протоколы/b27ad829-6fbd-43d6-8881-9f49dc1b90e8"/>
                                                             <assoc type="lecm-arm:fields-assoc"
                                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Регистрация/На регистрации/Протоколы/bab2972e-b7c2-4a3f-b5b2-c05f375b34f4"/>
-                                                            <assoc type="lecm-arm:fields-assoc"
-                                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Регистрация/На регистрации/Протоколы/339533b1-55a8-4300-8f8d-73f284b34a0f"/>
                                                             <assoc type="lecm-arm:fields-assoc"
                                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Регистрация/На регистрации/Протоколы/06a8aff9-fd9d-4ac1-ab0f-8977d2866057"/>
                                                             <assoc type="lecm-arm:fields-assoc"
@@ -20137,24 +19969,6 @@
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
-                                                            <item name="cm:a27c3cd4-1f99-4fde-b50a-4eb5fdddf0de"
-                                                                  type="lecm-arm:field">
-                                                                <property name="lecm-arm:field-title">
-                                                                    <![CDATA[Исполнитель]]></property>
-                                                                <property name="cm:name">
-                                                                    <![CDATA[e86e3ac6-789b-4e19-8e23-ff6fd362e258]]></property>
-                                                                <property name="lecm-arm:field-by-default">
-                                                                    <![CDATA[true]]></property>
-                                                                <property name="lecm-arm:field-sortable">
-                                                                    <![CDATA[true]]></property>
-                                                                <property name="lecm-arm:order"><![CDATA[4]]></property>
-                                                                <property name="lecm-arm:field-is-marker">
-                                                                    <![CDATA[false]]></property>
-                                                                <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecm-eds-document:executor-assoc]]></property>
-                                                                <property name="lecm-arm:field-format-string">
-                                                                    <![CDATA[]]></property>
-                                                            </item>
                                                             <item name="cm:56c4106d-291d-408b-b18d-aa82eb5ab7fd"
                                                                   type="lecm-arm:field">
                                                                 <property name="lecm-arm:field-title">
@@ -20237,8 +20051,6 @@
                                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Регистрация/Зарегистрирован/Протоколы/e9e69093-f782-4da9-b632-c5d1d3f7ae66"/>
                                                             <assoc type="lecm-arm:fields-assoc"
                                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Регистрация/Зарегистрирован/Протоколы/b868919f-2222-47e2-946c-f8ab3c34f749"/>
-                                                            <assoc type="lecm-arm:fields-assoc"
-                                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Регистрация/Зарегистрирован/Протоколы/e86e3ac6-789b-4e19-8e23-ff6fd362e258"/>
                                                             <assoc type="lecm-arm:fields-assoc"
                                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Регистрация/Зарегистрирован/Протоколы/ab9b9dc4-3118-4fae-98c9-90e4cae01059"/>
                                                             <assoc type="lecm-arm:fields-assoc"
@@ -23829,17 +23641,6 @@
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                                 <property name="lecm-arm:field-by-default"><![CDATA[false]]></property>
                                             </item>
-                                            <item name="cm:154b56ba-0f92-4012-b34c-7e42e9a5996b" type="lecm-arm:field">
-                                                <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
-                                                <property name="lecm-arm:order"><![CDATA[4]]></property>
-                                                <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecm-eds-document:executor-assoc]]></property>
-                                                <property name="lecm-arm:field-title"><![CDATA[Исполнитель]]></property>
-                                                <property name="cm:name">
-                                                    <![CDATA[2cd11aad-1ad6-444d-9cb8-c61d7b5c7d0b]]></property>
-                                                <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                                <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
-                                            </item>
                                             <item name="cm:f6a60119-7541-4995-b6ee-7dc857a5f532" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[6]]></property>
@@ -23888,8 +23689,6 @@
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/Протоколы/b15df841-614b-467a-a940-10ba4d3c5acb"/>
                                             <assoc type="lecm-arm:fields-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/Протоколы/8af2979c-2a7d-4f76-aaaa-5ab62e407600"/>
-                                            <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/Протоколы/2cd11aad-1ad6-444d-9cb8-c61d7b5c7d0b"/>
                                             <assoc type="lecm-arm:fields-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/Протоколы/f6a60119-7541-4995-b6ee-7dc857a5f532"/>
                                             <assoc type="lecm-arm:fields-assoc"
@@ -24873,17 +24672,6 @@
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                                 <property name="lecm-arm:field-by-default"><![CDATA[false]]></property>
                                             </item>
-                                            <item name="cm:a71c9b47-2548-490e-91b1-f4c3b6e70511" type="lecm-arm:field">
-                                                <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
-                                                <property name="lecm-arm:order"><![CDATA[4]]></property>
-                                                <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecm-eds-document:executor-assoc]]></property>
-                                                <property name="lecm-arm:field-title"><![CDATA[Исполнитель]]></property>
-                                                <property name="cm:name">
-                                                    <![CDATA[6882011e-cbd2-4eef-852e-291f93597ced]]></property>
-                                                <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                                <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
-                                            </item>
                                             <item name="cm:7135f208-6e37-4df5-aa45-73bd56b02645" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[6]]></property>
@@ -24914,8 +24702,6 @@
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Протоколы/544a430b-de93-4183-9d32-26dcff323ce6"/>
                                             <assoc type="lecm-arm:fields-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Протоколы/7c577a0c-96a6-4b19-8542-2d203b8cfead"/>
-                                            <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Протоколы/6882011e-cbd2-4eef-852e-291f93597ced"/>
                                             <assoc type="lecm-arm:fields-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Протоколы/72ace289-47e0-4d81-b694-bf1e0ca00ff7"/>
                                         </assocs>

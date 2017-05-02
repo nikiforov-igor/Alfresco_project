@@ -261,7 +261,24 @@
                     <show id="lecm-group-actions:field-priority"/>
                     <show id="lecm-group-actions:field-default-value"/>
                     <show id="lecm-group-actions:field-is-mandatory"/>
+                    <show id="lecm-group-actions:field-control"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-group-actions:field-type">
+                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+                            <control-param name="webscriptType">server</control-param>
+                            <control-param name="webscript">lecm/api/cm_cmobject/subclasses?recur=true&amp;withPrim=true&amp;exclNsp=act,cmiscustom,reporting,smf,trx,fm,app,imap,ia,st,pub,pubwf,lnk,srft,rc,flickr,wf,inwf</control-param>
+                            <control-param name="withEmpty">false</control-param>
+                            <control-param name="changeItemFireAction">selectFieldType</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-group-actions:field-control">
+                        <control template="/ru/it/lecm/documentforms/controls/form-field-component-control.ftl">
+                            <control-param name="fromForm">false</control-param>
+                            <control-param name="updateOnAction">selectFieldType</control-param>
+                        </control>
+                    </field>
+                </appearance>
             </form>
         </forms>
     </config>
@@ -277,7 +294,24 @@
                     <show id="lecm-group-actions:field-priority"/>
                     <show id="lecm-group-actions:field-default-value"/>
                     <show id="lecm-group-actions:field-is-mandatory"/>
+                    <show id="lecm-group-actions:field-control"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-group-actions:field-type">
+                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+                            <control-param name="webscriptType">server</control-param>
+                            <control-param name="webscript">lecm/api/cm_cmobject/subclasses?recur=true&amp;withPrim=truee&amp;exclNsp=act,cmiscustom,reporting,smf,trx,fm,app,imap,ia,st,pub,pubwf,lnk,srft,rc,flickr,wf,inwf</control-param>
+                            <control-param name="withEmpty">false</control-param>
+                            <control-param name="changeItemFireAction">selectFieldType</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-group-actions:field-control">
+                        <control template="/ru/it/lecm/documentforms/controls/form-field-component-control.ftl">
+                            <control-param name="fromForm">false</control-param>
+                            <control-param name="updateOnAction">selectFieldType</control-param>
+                        </control>
+                    </field>
+                </appearance>
             </form>
             <!-- Форма для табличного представления (набор столбцов)-->
             <form id="datagrid">
