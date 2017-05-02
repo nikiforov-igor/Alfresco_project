@@ -298,9 +298,8 @@
         <constructor-arg>
             <util:constant static-field="ru.it.lecm.incoming.beans.IncomingServiceImpl.TYPE_INCOMING"/>
         </constructor-arg>
-        <property name="cronExpression">
-            <value>0 0 5 */1 * ?</value>
-        </property>
+        <property name="statuses" value="${lecm.incoming.scheduling.expired.statuses}"/>
+        <property name="cronExpression" value="${lecm.incoming.scheduling.expired.cronExpression}"/>
         <property name="jobName">
             <value>incoming-sys-agent-expired</value>
         </property>

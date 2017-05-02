@@ -272,9 +272,8 @@
         <constructor-arg>
             <util:constant static-field="ru.it.lecm.ord.api.ORDModel.TYPE_ORD"/>
         </constructor-arg>
-        <property name="cronExpression">
-            <value>0 0 5 */1 * ?</value>
-        </property>
+        <property name="statuses" value="${lecm.ord.scheduling.expired.statuses}"/>
+        <property name="cronExpression" value="${lecm.ord.scheduling.expired.cronExpression}"/>
         <property name="jobName">
             <value>ord-sys-agent-expired</value>
         </property>

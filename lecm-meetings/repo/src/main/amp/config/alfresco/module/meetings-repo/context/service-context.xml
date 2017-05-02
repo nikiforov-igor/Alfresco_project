@@ -307,9 +307,8 @@
 		<constructor-arg>
 			<util:constant static-field="ru.it.lecm.meetings.beans.ProtocolService.TYPE_PROTOCOL"/>
 		</constructor-arg>
-		<property name="cronExpression">
-			<value>0 0 5 */1 * ?</value>
-		</property>
+        <property name="statuses" value="${lecm.protocol.scheduling.expired.statuses}"/>
+        <property name="cronExpression" value="${lecm.protocol.scheduling.expired.cronExpression}"/>
 		<property name="jobName">
 			<value>protocol-sys-agent-expired</value>
 		</property>

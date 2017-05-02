@@ -7,16 +7,13 @@ import ru.it.lecm.base.beans.BaseTransactionalSchedule;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.eds.api.EDSDocumentService;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class EveryDayStatusShedule extends BaseTransactionalSchedule {
 
     private DocumentService documentService;
     private NamespaceService namespaceService;
-    private List<String> statuses;
+    private String[] statuses = null;
     private QName type;
 
     public EveryDayStatusShedule(QName type) {
@@ -24,7 +21,7 @@ public class EveryDayStatusShedule extends BaseTransactionalSchedule {
         this.type = type;
     }
 
-    public void setStatuses(List<String> statuses) {
+    public void setStatuses(String[] statuses) {
         this.statuses = statuses;
     }
 
@@ -46,14 +43,12 @@ public class EveryDayStatusShedule extends BaseTransactionalSchedule {
         String filters;
         List<QName> types = new ArrayList<QName>();
         List<String> paths = new ArrayList<String>();
-
-        if (statuses == null || statuses.size() == 0) {
-            statuses = Arrays.asList("Зарегистрирован", "На исполнении");
-        }
+        List<String> statuses = new ArrayList<String>();
         types.add(type);
-
         paths.add(documentService.getDocumentsFolderPath());
-
+        if (this.statuses != null) {
+            statuses.addAll(Arrays.asList(this.statuses));
+        }
         filters = "@lecm\\-eds\\-document\\:is\\-expired: false";
         // Фильтр по датам
         QName dateProperty = EDSDocumentService.PROP_EXECUTION_DATE;

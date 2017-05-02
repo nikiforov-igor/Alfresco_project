@@ -115,7 +115,7 @@
         <dependency>
             <groupId>ru.it.lecm.eds-documents</groupId>
             <artifactId>eds-documents-repo-api</artifactId>
-            <version>${project.version}</version>
+            <version>${platform.version}</version>
         </dependency>
         <!-- Don't add here amp dependencies as it will break amp packaging -->
     </dependencies>
