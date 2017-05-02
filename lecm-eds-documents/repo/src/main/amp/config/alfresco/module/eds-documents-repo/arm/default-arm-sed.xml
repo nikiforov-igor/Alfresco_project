@@ -5583,7 +5583,7 @@
                                                     <item name="cm:46060679-8ae3-4d19-ac45-2abd666f2da3"
                                                           type="lecm-arm:statuses-child-rule">
                                                         <property name="lecm-arm:selected-statuses">
-                                                            <![CDATA[На согласовании,Согласован,На доработке,На подписании,Подписан,На регистрации,Зарегистрирован,Введен в действие,Действует,Отменен]]></property>
+                                                    <![CDATA[На согласовании,Согласован,На доработке,На подписании,Подписан,На регистрации,Зарегистрирован,Введен в действие,Действует,Срок действия окончен,Отменен]]></property>
                                                         <property name="cm:name">
                                                             <![CDATA[46060679-8ae3-4d19-ac45-2abd666f2da3]]></property>
                                                         <property name="lecm-arm:statuses-rule"><![CDATA[SELECTED]]></property>
@@ -5675,20 +5675,6 @@
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                            </item>
-                                            <item name="cm:Срок действия окончен" type="lecm-arm:node">
-                                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
-                                                <property name="lecm-arm:search-query">
-                                                    <![CDATA[@lecm\-statemachine\:status:'Срок действия окончен']]></property>
-                                                <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
-                                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
-                                                <property name="lecm-arm:counter-description"><![CDATA[]]></property>
-                                                <property name="cm:name"><![CDATA[Срок действия окончен]]></property>
-                                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
-                                                <property name="lecm-arm:expression"><![CDATA[]]></property>
-                                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-                                                <property name="lecm-arm:order"><![CDATA[0]]></property>
-                                                <property name="lecm-arm:types"><![CDATA[]]></property>
                                             </item>
                                         </items>
                                         <assocs>
