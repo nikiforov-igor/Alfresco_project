@@ -283,15 +283,15 @@
             </map>
         </property>
     </bean>
-    <util:list id="schedulingRecipients" value-type="org.alfresco.service.namespace.QName">
-        <util:constant static-field="ru.it.lecm.documents.beans.DocumentService.ASSOC_REG_DATA_DOC_REGISTRATOR" id="registerAssocQName"/>
+    <util:list id="incomingSchedulingRecipients" value-type="org.alfresco.service.namespace.QName">
+        <util:constant static-field="ru.it.lecm.documents.beans.DocumentService.ASSOC_REG_DATA_DOC_REGISTRATOR"/>
     </util:list>
     <bean id="incomingEveryDayStatusExecutor" class="ru.it.lecm.eds.schedule.EveryDayStatusExecutor" parent="action-executer">
         <property name="ignoreLock" value="false"/>
         <property name="notificationsService" ref="notificationsService"/>
         <property name="nodeService" ref="nodeService"/>
         <property name="publicAction" value="false" />
-        <property name="recipientsQNames" ref="schedulingRecipients"/>
+        <property name="recipientsQNames" ref="incomingSchedulingRecipients"/>
     </bean>
 
     <bean id="incomingEveryDayStatusSchedule" class="ru.it.lecm.eds.schedule.EveryDayStatusShedule" parent="baseTransactionalSchedule">
@@ -299,7 +299,7 @@
             <util:constant static-field="ru.it.lecm.incoming.beans.IncomingServiceImpl.TYPE_INCOMING"/>
         </constructor-arg>
         <property name="cronExpression">
-            <value>0 0/5 * */1 * ?</value>
+            <value>0 0 5 */1 * ?</value>
         </property>
         <property name="jobName">
             <value>incoming-sys-agent-expired</value>

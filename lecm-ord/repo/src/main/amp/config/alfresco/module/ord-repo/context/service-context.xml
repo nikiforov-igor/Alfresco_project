@@ -257,15 +257,15 @@
         </property>
         <property name="repositoryWorkflowDefsLocations" ref="customWorkflowDefsRepositoryLocation"/>
     </bean>
-    <util:list id="schedulingRecipients" value-type="org.alfresco.service.namespace.QName">
-        <util:constant static-field="ru.it.lecm.ord.api.ORDModel.ASSOC_ORD_CONTROLLER" id="controllerAssocQName"/>
+    <util:list id="ordSchedulingRecipients" value-type="org.alfresco.service.namespace.QName">
+        <util:constant static-field="ru.it.lecm.ord.api.ORDModel.ASSOC_ORD_CONTROLLER"/>
     </util:list>
     <bean id="ordEveryDayStatusExecutor" class="ru.it.lecm.eds.schedule.EveryDayStatusExecutor" parent="action-executer">
         <property name="ignoreLock" value="false"/>
         <property name="notificationsService" ref="notificationsService"/>
         <property name="nodeService" ref="nodeService"/>
         <property name="publicAction" value="false" />
-        <property name="recipientsQNames" ref="schedulingRecipients"/>
+        <property name="recipientsQNames" ref="ordSchedulingRecipients"/>
     </bean>
 
     <bean id="ordEveryDayStatusSchedule" class="ru.it.lecm.eds.schedule.EveryDayStatusShedule" parent="baseTransactionalSchedule">
