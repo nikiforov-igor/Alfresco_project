@@ -40,5 +40,10 @@
 			<version>${platform.version}</version>
 			<scope>provided</scope>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>ru.it.lecm.notifications</groupId>
+            <artifactId>notifications-repo-api</artifactId>
+            <version>1.8.7</version>
+        </dependency>
+    </dependencies>
 </project>

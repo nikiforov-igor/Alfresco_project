@@ -33,6 +33,7 @@ public interface EDSDocumentService {
     QName ASSOC_COMPLETION_SIGNAL_SENDER = QName.createQName(EDS_ASPECTS_NAMESPACE_URI, "completion-signal-sender-assoc");
 
 	QName PROP_EXECUTION_DATE = QName.createQName(EDS_NAMESPACE_URI, "execution-date");
+    QName PROP_IS_EXPIRED = QName.createQName(EDS_NAMESPACE_URI, "is-expired");
     QName PROP_EXECUTOR_TEXT_CONTENT = QName.createQName(EDS_NAMESPACE_URI, "executor-assoc-text-content");
     QName PROP_EXECUTOR_REF = QName.createQName(EDS_NAMESPACE_URI, "executor-assoc-ref");
 
