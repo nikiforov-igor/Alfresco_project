@@ -114,7 +114,25 @@
 			</field-type>
 
 			<field-type id="date-range" localName="Временной промежуток">
-				<control id="date-range-default-control" template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl" localName="Выбор промежутка времени"/>
+				<control id="date-range" template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl" localName="Диапазон дат">
+					<param id="mandatory" localName="Обязательность заполнения">false</param>
+					<param id="forceEditable" localName="Включить принудительное редактирование">false</param>
+					<param id="fillDates" localName="Включить предзаполнение дат">false</param>
+					<param id="fromDateDefault" localName="Предзаполнить дату (От)"/>
+					<param id="toDateDefault" localName="Предзаполнить дату (До)"/>
+					<param id="minToLimitCurrentDate" localName="Не позволять выбирать дату меньше текущей (До)" description="true - нельзя выбирать дату в прошлом; false - можно выбирать любую дату"/>
+					<param id="minToLimit" localName="Минимальная дата, доступная для выбора (До)"/>
+					<param id="minFromLimitCurrentDate" localName="Не позволять выбирать дату меньше текущей (С)" description="true - нельзя выбирать дату в прошлом; false - можно выбирать любую дату"/>
+					<param id="minFromLimit" localName="Минимальная дата, доступная для выбора (С)"/>
+					<param id="maxToLimitCurrentDate" localName="Не позволять выбирать дату больше текущей (До)" description="true - нельзя выбирать дату в будущем; false - можно выбирать любую дату"/>
+					<param id="maxToLimit" localName="Максимальная дата, доступная для выбора (До)"/>
+					<param id="maxFromLimitCurrentDate" localName="Не позволять выбирать дату больше текущей (С)" description="true - нельзя выбирать дату в будущем; false - можно выбирать любую дату"/>
+					<param id="maxFromLimit" localName="Максимальная дата, доступная для выбора (С)"/>
+				</control>
+			</field-type>
+			<field-type id="number-range" localName="Числовой диапазон">
+				<control id="number-range-control" template="/ru/it/lecm/base-share/components/controls/numberrange.ftl" localName="Выбор диапазона чисел">
+				</control>
 			</field-type>
 
 			<field-type id="int-range" localName="Числовой промежуток (int)">

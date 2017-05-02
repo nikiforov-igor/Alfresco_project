@@ -50,8 +50,8 @@ public class GetRegisteredTypes extends DictionaryWebServiceBase {
         addPrimitiveValue("d:locale");
         addPrimitiveValue("TEMPLATES");
         addPrimitiveValue("fake");
-/*        addPrimitiveValue("date-range");
-        addPrimitiveValue("number-range");*/
+        addPrimitiveValue("date-range");
+        addPrimitiveValue("number-range");
     }
 
     private static String getLabel(MessageLookup messageLookup, String name) {
