@@ -18,7 +18,20 @@
         <items>
             <item name="cm:Причина" type="lecm-group-actions:form-field">
                 <property name="lecm-group-actions:field-control">
-                    <![CDATA[{"template":"/ru/it/lecm/base-share/components/controls/textarea.ftl","displayName":"Многострочное текстовое поле","id":"d:text-textarea","params":[{"name":"containerStyleClass","value":""},{"name":"columns","value":"60"},{"name":"defaultValue","value":""},{"name":"forceEditable","value":"false"},{"name":"style","value":""},{"name":"rows","value":"7"},{"name":"styleClass","value":""}]}]]></property>
+                    <![CDATA[{
+                        "template":"/ru/it/lecm/base-share/components/controls/textarea.ftl",
+                        "displayName":"Многострочное текстовое поле",
+                        "id":"d:text-textarea",
+                        "params":[
+                            {"name":"containerStyleClass","value":""},
+                            {"name":"columns","value":"60"},
+                            {"name":"defaultValue","value":""},
+                            {"name":"forceEditable","value":"false"},
+                            {"name":"style","value":""},
+                            {"name":"rows","value":"7"},
+                            {"name":"styleClass","value":""}
+                        ]
+                    }]]></property>
                 <property name="lecm-group-actions:field-is-mandatory"><![CDATA[false]]></property>
                 <property name="lecm-group-actions:field-type"><![CDATA[d:text]]></property>
                 <property name="cm:name"><![CDATA[Причина]]></property>

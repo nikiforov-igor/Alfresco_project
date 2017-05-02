@@ -15,7 +15,17 @@
         <items>
             <item name="cm:Шаблон" type="lecm-group-actions:form-field">
                 <property name="lecm-group-actions:field-control">
-                    <![CDATA[{"template":"/ru/it/lecm/reports-editor/controls/select-report-template-control.ftl","displayName":"Выбор шаблона","id":"TEMPLATES-control","params":[{"name":"fromParent","value":"false"},{"name":"reportId","value":"outgoing-cover"},{"name":"ctrlValue","value":"templateCode"},{"name":"notSelectedOption","value":"false"}]}]]></property>
+                    <![CDATA[{
+                        "template":"/ru/it/lecm/reports-editor/controls/select-report-template-control.ftl",
+                        "displayName":"Выбор шаблона",
+                        "id":"TEMPLATES-control",
+                        "params":[
+                            {"name":"fromParent","value":"false"},
+                            {"name":"reportId","value":"outgoing-cover"},
+                            {"name":"ctrlValue","value":"templateCode"},
+                            {"name":"notSelectedOption","value":"false"}
+                        ]
+                    }]]></property>
                 <property name="lecm-group-actions:field-is-mandatory"><![CDATA[false]]></property>
                 <property name="lecm-group-actions:field-type"><![CDATA[TEMPLATES]]></property>
                 <property name="cm:name"><![CDATA[Шаблон]]></property>

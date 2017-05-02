@@ -57,7 +57,15 @@
 				<property name="lecm-group-actions:field-id"><![CDATA[reviewers-mandatory-validator]]></property>
 				<property name="lecm-group-actions:field-default-value"><![CDATA[]]></property>
 				<property name="lecm-group-actions:field-control">
-					<![CDATA[{"template":"/ru/it/lecm/base-share/components/controls/load-script-control.ftl","displayName":"Контрол для загрузки скриптов","id":"fake-load-script-control","params":[{"name":"scriptLoadedFireAction","value":"scriptLoaded"},{"name":"scripts","value":"scripts/lecm-review/reviewers-mandatory-validator.js,scripts/lecm-review/add-reviewers-mandatory-validation.js"}]}]]></property>
+					<![CDATA[{
+						"template":"/ru/it/lecm/base-share/components/controls/load-script-control.ftl",
+						"displayName":"Контрол для загрузки скриптов",
+						"id":"fake-load-script-control",
+						"params":[
+							{"name":"scriptLoadedFireAction","value":"scriptLoaded"},
+							{"name":"scripts","value":"scripts/lecm-review/reviewers-mandatory-validator.js,scripts/lecm-review/add-reviewers-mandatory-validation.js"}
+						]
+					}]]></property>
 				<property name="lecm-group-actions:field-is-mandatory"><![CDATA[false]]></property>
 				<property name="lecm-group-actions:field-priority"><![CDATA[2]]></property>
 			</item>
