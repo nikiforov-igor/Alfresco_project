@@ -89,7 +89,7 @@ public class ScriptForm extends LecmFormGet {
                     }
                     JSONObject control = null;
                     String controlStr = jsonField.has("control") ? jsonField.getString("control") : null;
-                    if (controlStr != null && !controlStr.isEmpty()) {
+                    if (controlStr != null && !controlStr.isEmpty() && !controlStr.toLowerCase().equals("null")) {
                         control = new JSONObject(controlStr);
                     }
                     FieldDescriptor descriptor = new FieldDescriptor(name, id, type, value, mandatory, control);
