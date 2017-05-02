@@ -87,6 +87,7 @@
                         <value>lecm-group-actions:field-priority</value>
                         <value>lecm-group-actions:field-default-value</value>
                         <value>lecm-group-actions:field-is-mandatory</value>
+                        <value>lecm-group-actions:field-control</value>
                     </list>
                 </entry>
                 <entry key="lecm-group-actions:workflow-action">

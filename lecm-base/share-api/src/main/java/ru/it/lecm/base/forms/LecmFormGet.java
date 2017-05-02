@@ -4,14 +4,12 @@ import org.alfresco.web.config.forms.*;
 import org.alfresco.web.scripts.forms.FormUIGet;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.extensions.webscripts.WebScriptException;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: dbashmakov
@@ -92,6 +90,68 @@ public abstract class LecmFormGet extends FormUIGet {
         return defaultControlConfig;
     }
 
+    /**
+     * Получить контрол по шаблону и параметрам
+     */
+    protected FieldControl generateControlModel(String template, String alfrescoType, JSONObject paramsObj) {
+        JSONArray paramsArray = new JSONArray();
+        if (paramsObj != null) {
+            // прописываем кастомные параметры
+            try {
+                Iterator keys = paramsObj.keys();
+                while (keys.hasNext()) {
+                    String next = (String) keys.next();
+                    Object value = paramsObj.get(next);
+
+                    JSONObject param = new JSONObject();
+                    param.put("name", next);
+                    param.put("value", value);
+                    paramsArray.put(param);
+                }
+            } catch (JSONException e) {
+                logger.error(e.getMessage(), e);
+            }
+        }
+        return generateControlModel(template, alfrescoType, paramsArray);
+    }
+
+    protected FieldControl generateControlModel(final String template, final String alfrescoType, final JSONArray paramsArray) {
+        FieldControl control = null;
+
+        if (template != null && template.length() > 0) {
+            control = new FieldControl(template);
+        } else if (alfrescoType != null && !alfrescoType.isEmpty()) {
+            DefaultControlsConfigElement defaultControls = null;
+            FormsConfigElement formsGlobalConfig = (FormsConfigElement) this.configService.getGlobalConfig().getConfigElement(CONFIG_FORMS);
+            if (formsGlobalConfig != null) {
+                defaultControls = formsGlobalConfig.getDefaultControls();
+            }
+            if (defaultControls == null) {
+                throw new WebScriptException("Failed to locate default controls configuration");
+            }
+
+            Control defaultControlConfig = getDefaultControlFromConfig(defaultControls, alfrescoType);
+            if (defaultControlConfig != null) {
+                control = new FieldControl(defaultControlConfig.getTemplate());
+                List<ControlParam> paramsConfig = defaultControlConfig.getParamsAsList();
+                for (ControlParam param : paramsConfig) {
+                    control.getParams().put(param.getName(), param.getValue());
+                }
+            }
+        }
+        // прописываем кастомные параметры
+        if (control != null && paramsArray != null) {
+            try {
+                for (int i = 0; i < paramsArray.length(); i++) {
+                    JSONObject parameter = paramsArray.getJSONObject(i);
+                    control.getParams().put(parameter.getString("name"), parameter.getString("value"));
+                }
+            } catch (JSONException e) {
+                logger.error(e.getMessage(), e);
+            }
+        }
+        return control;
+    }
     /**
      * Обновить список констрейнтов (@param constraints) на основании данных из поля (@param field)
      */
@@ -518,6 +578,7 @@ public abstract class LecmFormGet extends FormUIGet {
         private String type;
         private String value;
         private boolean mandatory;
+        private JSONObject control;
 
         public FieldDescriptor(String name, String id, String type, String value, boolean mandatory) {
             this.name = name;
@@ -526,7 +587,14 @@ public abstract class LecmFormGet extends FormUIGet {
             this.value = value;
             this.mandatory = mandatory;
         }
-
+        public FieldDescriptor(String name, String id, String type, String value, boolean mandatory, JSONObject control) {
+            this.name = name;
+            this.id = id;
+            this.type = type;
+            this.value = value;
+            this.mandatory = mandatory;
+            this.control = control;
+        }
         public String getName() {
             return name;
         }
@@ -545,6 +613,10 @@ public abstract class LecmFormGet extends FormUIGet {
 
         public boolean isMandatory() {
             return mandatory;
+        }
+
+        public JSONObject getControl() {
+            return control;
         }
     }
 
