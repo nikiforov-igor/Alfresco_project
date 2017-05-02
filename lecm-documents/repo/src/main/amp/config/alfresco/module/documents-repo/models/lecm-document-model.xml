@@ -467,7 +467,7 @@
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>false</tokenised>
+                        <tokenised>both</tokenised>
                     </index>
                 </property>
 			</properties>
