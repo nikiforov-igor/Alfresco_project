@@ -10,7 +10,7 @@
             <item name="cm:REASSIGN_TASK" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[REASSIGN_TASK]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Сотрудник {#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} переназначил вам задачу по документу: {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}]]></property>
+                    <![CDATA[Сотрудник {#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} переназначил Вам задачу по документу: {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}]]></property>
                 <property name="lecm-notification-template:description"><![CDATA[Переназначение задачи]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
                 <assocs>

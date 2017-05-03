@@ -6,7 +6,7 @@
     <parent>
         <groupId>ru.it.lecm.model-editor</groupId>
         <artifactId>model-editor</artifactId>
-        <version>1.8.7</version>
+        <version>2.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>model-editor-repo</artifactId>

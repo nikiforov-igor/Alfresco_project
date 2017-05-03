@@ -29,12 +29,6 @@ public class ControlForm extends LecmFormGet {
     private final static Log logger = LogFactory.getLog(ControlForm.class);
     public static final String DEFAULT_VALUE = "defaultValue";
 
-    private ConfigService configService;
-
-    public void setConfigService(ConfigService configService) {
-        this.configService = configService;
-    }
-
     protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
         Map<String, Object> model = new HashMap<>();
 
@@ -104,46 +98,6 @@ public class ControlForm extends LecmFormGet {
         form.put(MODEL_SHOW_SUBMIT_BUTTON, false);
 
         return model;
-    }
-
-    protected FieldControl generateControlModel(String template, String alfrescoType, JSONObject paramsObj) {
-        FieldControl control = null;
-
-        DefaultControlsConfigElement defaultControls = null;
-        FormsConfigElement formsGlobalConfig = (FormsConfigElement) this.configService.getGlobalConfig().getConfigElement(CONFIG_FORMS);
-        if (formsGlobalConfig != null) {
-            defaultControls = formsGlobalConfig.getDefaultControls();
-        }
-        if (defaultControls == null) {
-            throw new WebScriptException("Failed to locate default controls configuration");
-        }
-
-        if (template != null && template.length() > 0) {
-            control = new FieldControl(template);
-        } else if (alfrescoType != null && alfrescoType.length() > 0) {
-            Control defaultControlConfig = getDefaultControlFromConfig(defaultControls, alfrescoType);
-            if (defaultControlConfig != null) {
-                control = new FieldControl(defaultControlConfig.getTemplate());
-                List<ControlParam> paramsConfig = defaultControlConfig.getParamsAsList();
-                for (ControlParam param : paramsConfig) {
-                    control.getParams().put(param.getName(), param.getValue());
-                }
-            }
-        }
-        if (control != null && paramsObj != null) {
-            // прописываем кастомные параметры
-            try {
-                Iterator keys = paramsObj.keys();
-                while (keys.hasNext()) {
-                    String next = (String) keys.next();
-                    Object value = paramsObj.get(next);
-                    control.getParams().put(next, value.toString());
-                }
-            } catch (JSONException e) {
-                logger.error(e.getMessage(), e);
-            }
-        }
-        return control;
     }
 
     protected Field generateFieldModel(String fieldId, String labelId, String dataType) {

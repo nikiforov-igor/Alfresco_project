@@ -14,7 +14,7 @@
 	<p>Уважаемые коллеги!</p>
 	</#if>
 	<br>
-	<p>${initiator!""} приглашает вас на ${link!""}.</p> 
+	<p>${initiator!""} приглашает Вас на ${link!""}.</p>
 	<p>
 		Время проведения: <#if allDay>${fromDate?date?string("dd.MM.yyyy")}<#else>с ${fromDate?datetime?string("dd.MM.yyyy HH:mm")} по ${toDate?datetime?string("dd.MM.yyyy HH:mm (z)")}</#if>
 		<br>

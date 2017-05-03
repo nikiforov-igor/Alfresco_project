@@ -12,7 +12,8 @@ if (actionNode != null && actionNode.children != null) {
             type: action.properties["lecm-group-actions:field-type"],
             value: action.properties["lecm-group-actions:field-default-value"],
             order: action.properties["lecm-group-actions:field-priority"],
-            mandatory: action.properties["lecm-group-actions:field-is-mandatory"]
+            mandatory: action.properties["lecm-group-actions:field-is-mandatory"],
+            control: action.properties["lecm-group-actions:field-control"]
         });
     }
 

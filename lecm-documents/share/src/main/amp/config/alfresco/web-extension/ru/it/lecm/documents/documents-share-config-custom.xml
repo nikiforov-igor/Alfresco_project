@@ -685,10 +685,11 @@
                     </field>
                     <field id="lecm-connect:connected-document-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-search-control.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
+                            <control-param name="rootLocation">/app:company_home</control-param>
                             <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
 	                        <control-param name="changeItemsFireAction">changeConnectedDocument</control-param>
+	                        <control-param name="additionalFilter">NOT @lecm\-statemachine\-aspects\:is\-draft:true</control-param>
                         </control>
                     </field>
                     <field id="lecm-connect:connection-type-assoc">
@@ -711,10 +712,11 @@
                 <appearance>
                     <field id="lecm-connect:connected-document-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-search-control.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
+                            <control-param name="rootLocation">/app:company_home</control-param>
                             <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
                             <control-param name="changeItemsFireAction">changeConnectedDocument</control-param>
+                            <control-param name="additionalFilter">NOT @lecm\-statemachine\-aspects\:is\-draft:true</control-param>
                         </control>
                     </field>
                     <field id="lecm-connect:connection-type-assoc">
@@ -747,10 +749,11 @@
                 <appearance>
                     <field id="lecm-connect:connected-document-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-search-control.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
+                            <control-param name="rootLocation">/app:company_home</control-param>
                             <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
                             <control-param name="changeItemsFireAction">changeConnectedDocument</control-param>
+                            <control-param name="additionalFilter">NOT @lecm\-statemachine\-aspects\:is\-draft:true</control-param>
                         </control>
                     </field>
                     <field id="lecm-connect:connection-type-assoc">
@@ -1070,6 +1073,91 @@
 			</form>
 		</forms>
 	</config>
+
+    <config evaluator="node-type" condition="lecm-doc-type-settings-dic:document-type-settings">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-doc-type-settings-dic:document-type"/>
+                    <show id="lecm-doc-type-settings-dic:default-upload-attachment-category"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-doc-type-settings-dic:document-type">
+                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+                            <control-param name="webscript">lecm/documents/types</control-param>
+                            <control-param name="webscriptType">server</control-param>
+                            <control-param name="changeItemFireAction">changeAttachToDocumentType</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-doc-type-settings-dic:default-upload-attachment-category">
+                        <control template="/ru/it/lecm/documents/controls/select-document-category-control.ftl">
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"></control-param>
+                            <control-param name="changerKind">type</control-param>
+                            <control-param name="updateOnEvent">changeAttachToDocumentType</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-doc-type-settings-dic:document-type-settings">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-doc-type-settings-dic:document-type"/>
+                    <show id="lecm-doc-type-settings-dic:default-upload-attachment-category"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-doc-type-settings-dic:document-type">
+                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+                            <control-param name="webscript">lecm/documents/types</control-param>
+                            <control-param name="webscriptType">server</control-param>
+                            <control-param name="changeItemFireAction">changeAttachToDocumentType</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-doc-type-settings-dic:default-upload-attachment-category">
+                        <control template="/ru/it/lecm/documents/controls/select-document-category-control.ftl">
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"></control-param>
+                            <control-param name="changerKind">type</control-param>
+                            <control-param name="updateOnEvent">changeAttachToDocumentType</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+            <form id="search">
+                <field-visibility>
+                    <show id="lecm-doc-type-settings-dic:document-type"/>
+                    <show id="lecm-doc-type-settings-dic:default-upload-attachment-category"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-doc-type-settings-dic:document-type">
+                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+                            <control-param name="webscript">lecm/documents/types</control-param>
+                            <control-param name="webscriptType">server</control-param>
+                            <control-param name="changeItemFireAction">changeAttachToDocumentType</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-doc-type-settings-dic:default-upload-attachment-category">
+                        <control template="/ru/it/lecm/documents/controls/select-document-category-control.ftl">
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"></control-param>
+                            <control-param name="changerKind">type</control-param>
+                            <control-param name="updateOnEvent">changeAttachToDocumentType</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="lecm-doc-type-settings-dic:document-type"/>
+                    <show id="lecm-doc-type-settings-dic:default-upload-attachment-category"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
 
 	<config evaluator="aspect" condition="lecm-document-aspects:parent-document">
 		<forms>

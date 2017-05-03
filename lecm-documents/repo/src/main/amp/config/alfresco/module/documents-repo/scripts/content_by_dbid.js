@@ -1,7 +1,5 @@
 /*параметры*/
-var categoryName = "Подлинник";
 var errorFolderName = "Сканирование/Ошибки сканирования";
-
 /*выполняем*/
 var name = document.properties["cm:name"];
 var attempts = 0;
@@ -31,37 +29,42 @@ while (!attached && (10 > attempts++)) {
                 /*нашли ноду по ID*/
                 if (node.isSubType('lecm-document:base')) {
                     documentAttachments.getCategories(node.nodeRef.toString());
-                    /*получаем категорию "categoryName"*/
-                    var category = documentAttachments.getCategoryByName(categoryName, node);
+                    var categoryName = documentAttachments.getDefaultUploadCategoryName(node);
+                    if (categoryName) {
+                        /*получаем категорию "categoryName"*/
+                        var category = documentAttachments.getCategoryByName(categoryName, node);
 
-                    var i = 0;
-                    while (category.childByNamePath(newName) != null) {
-                        i++;
-                        newName = fName + "(" + i + ")" + extension;
-                    }
-                    if (i > 0) {
-                        document.properties["cm:name"] = newName;
-                        document.save();
-                    }
-                    /*перемешаем вложение в категорию "Подлинник"*/
-                    documentAttachments.addAttachment(document, category);
+                        var i = 0;
+                        while (category.childByNamePath(newName) != null) {
+                            i++;
+                            newName = fName + "(" + i + ")" + extension;
+                        }
+                        if (i > 0) {
+                            document.properties["cm:name"] = newName;
+                            document.save();
+                        }
+                        /*перемешаем вложение в категорию "Подлинник"*/
+                        documentAttachments.addAttachment(document, category);
 
-                    /*увеличиваем счетчик отсканированных документов*/
-                    var saCount = node.properties["lecm-document-aspects:scanned-attachments-count"];
-                    if (saCount) {
-                        saCount++;
+                        /*увеличиваем счетчик отсканированных документов*/
+                        var saCount = node.properties["lecm-document-aspects:scanned-attachments-count"];
+                        if (saCount) {
+                            saCount++;
+                        } else {
+                            saCount = 1;
+                        }
+                        node.properties["lecm-document-aspects:scanned-attachments-count"] = saCount;
+                        node.save();
+                        attached = true;
                     } else {
-                        saCount = 1;
+                        break;
                     }
-                    node.properties["lecm-document-aspects:scanned-attachments-count"] = saCount;
-                    node.save();
-                    attached = true;
                 } else {
                     break;
                 }
             }
         }
-    } catch (e) {
+    } catch(e){
         attached = false;
         if (e.javaException) {
             logger.log(e.javaException.getMessage());
@@ -95,7 +98,7 @@ if (!attached) {
     var props = [];
     props["cm:isIndexed"] = false;
     document.addAspect("cm:indexControl", props);
-    
+
     logger.log("FolderName = " + errorFolderName);
     base.moveNode(document, errorFolderName);
 }

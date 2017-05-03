@@ -229,6 +229,7 @@
 		<property name="labels">
 			<list>
 				<value>alfresco/module/base-repo/messages/lecm-base-aspects-model</value>
+				<value>alfresco/module/base-repo/messages/lecm-base-primitive-types</value>
 			</list>
 		</property>
 	</bean>
@@ -575,4 +576,8 @@
           parent="webscript"
           p:lockService-ref="lockService"/>
 
+	<bean id="webscript.ru.it.lecm.types.types.list.get" class="ru.it.lecm.base.scripts.GetRegisteredTypes" init-method="init" parent="webscript.dictionary">
+		<property name="dictionaryService" ref="dictionaryService" />
+		<property name="namespaceService" ref="namespaceService"/>
+	</bean>
 </beans>

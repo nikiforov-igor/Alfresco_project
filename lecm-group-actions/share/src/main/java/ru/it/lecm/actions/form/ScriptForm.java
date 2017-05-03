@@ -87,7 +87,12 @@ public class ScriptForm extends LecmFormGet {
                     if (value != null) {
                         value = URLDecoder.decode(value);
                     }
-                    FieldDescriptor descriptor = new FieldDescriptor(name, id, type, value, mandatory);
+                    JSONObject control = null;
+                    String controlStr = jsonField.has("control") ? jsonField.getString("control") : null;
+                    if (controlStr != null && !controlStr.isEmpty() && !controlStr.toLowerCase().equals("null")) {
+                        control = new JSONObject(controlStr);
+                    }
+                    FieldDescriptor descriptor = new FieldDescriptor(name, id, type, value, mandatory, control);
                     descriptors.add(descriptor);
                 }
 
@@ -167,7 +172,7 @@ public class ScriptForm extends LecmFormGet {
 
                 String fieldValue = column.getValue();
 
-                Map<String, String> paramsMap = new HashMap<String, String>();
+                Map<String, String> paramsMap = new HashMap<>();
 
                 if (!fieldValue.contains("=")) {
                     field.setValue(column.getValue());
@@ -190,52 +195,35 @@ public class ScriptForm extends LecmFormGet {
         return field;
     }
 
-    protected void processFieldControl(Field field, FieldDescriptor descriptor, Map<String,String> controlParams) throws JSONException {
-        FieldControl control = null;
-
-        DefaultControlsConfigElement defaultControls = null;
-        FormsConfigElement formsGlobalConfig =
-                (FormsConfigElement) this.configService.getGlobalConfig().getConfigElement(CONFIG_FORMS);
-        if (formsGlobalConfig != null) {
-            defaultControls = formsGlobalConfig.getDefaultControls();
-        }
-
-        if (defaultControls == null) {
-            throw new WebScriptException("Failed to locate default controls configuration");
-        }
-
+    protected void processFieldControl(Field field, FieldDescriptor descriptor, Map<String, String> controlParams) throws JSONException {
         String alfrescoType = descriptor.getType();
-        if (alfrescoType != null) {
-            if (alfrescoType.isEmpty()) {
-                return;
-            }
+        if (alfrescoType == null || alfrescoType.isEmpty()) {
+            return;
+        }
 
-            Control defaultControlConfig;
+        boolean isPropertyField = isNotAssoc(alfrescoType);
+        if (isPropertyField) {
+            field.setType(PROPERTY);
+        } else {
+            field.setType(ASSOCIATION);
+            field.setEndpointDirection("TARGET");
+        }
 
-            boolean isPropertyField = isNotAssoc(alfrescoType);
-            if (isPropertyField) {
-                field.setType(PROPERTY);
-            } else {
-                field.setType(ASSOCIATION);
-                field.setEndpointDirection("TARGET");
-            }
-            defaultControlConfig = getDefaultControlFromConfig(defaultControls, alfrescoType);
-
-            if (defaultControlConfig != null) {
-                control = new FieldControl(defaultControlConfig.getTemplate());
-                List<ControlParam> paramsConfig = defaultControlConfig.getParamsAsList();
-                for (ControlParam param : paramsConfig) {
-                    control.getParams().put(param.getName(), param.getValue());
-                }
-
-                if (controlParams != null && !controlParams.isEmpty())  {
-                    for (String paramKey : controlParams.keySet()) {
-                        control.getParams().put(paramKey, controlParams.get(paramKey));
-                    }
+        String template = null;
+        JSONArray params = new JSONArray();
+        if (descriptor.getControl() != null) {
+            JSONObject controlObj = descriptor.getControl();
+            template = controlObj.has("template") ? controlObj.getString("template") : null;
+            params = controlObj.getJSONArray("params");
+        }
+        FieldControl fieldControl = generateControlModel(template, alfrescoType, params);
+        if (fieldControl != null) {
+            if (controlParams != null && !controlParams.isEmpty())  {
+                for (String paramKey : controlParams.keySet()) {
+                    fieldControl.getParams().put(paramKey, controlParams.get(paramKey));
                 }
             }
-
-            field.setControl(control);
+            field.setControl(fieldControl);
         }
     }
 

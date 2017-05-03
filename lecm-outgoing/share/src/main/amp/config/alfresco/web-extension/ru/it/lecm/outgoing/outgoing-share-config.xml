@@ -147,7 +147,7 @@
                             <control-param name="lazyLoading">true</control-param>
                             <control-param name="checkType">false</control-param>
                             <!--customization options-->
-                            <control-param name="employeesByOrgDS">lecm/employees/byOrg/{organization}/picker</control-param>
+                            <control-param name="employeesByOrgDS">lecm/forms/picker</control-param>
                             <control-param name="representativesByContrDS">lecm/representatives/{contractor}/picker</control-param>
 
                             <!--<control-param name="employeesType">lecm-orgstr:employee</control-param>
@@ -163,7 +163,8 @@
 
                             <control-param name="employeesDefaultValueDS"></control-param>
                             <control-param name="representativesDefaultValueDS">lecm/contractors/getMainRepresentative?contractor={contractor}</control-param>
-                        </control>
+							<control-param name="doNotCheckAccess">true</control-param>
+						</control>
 					</field>
 
 					<field id="lecm-eds-document:summaryContent" set="common">
@@ -258,7 +259,7 @@
                             <control-param name="lazyLoading">true</control-param>
                             <control-param name="checkType">false</control-param>
                             <!--customization options-->
-                            <control-param name="employeesByOrgDS">lecm/employees/byOrg/{organization}/picker</control-param>
+                            <control-param name="employeesByOrgDS">lecm/forms/picker</control-param>
                             <control-param name="representativesByContrDS">lecm/representatives/{contractor}/picker</control-param>
 
                             <!--<control-param name="employeesType">lecm-orgstr:employee</control-param>
@@ -274,7 +275,8 @@
 
                             <control-param name="employeesDefaultValueDS"></control-param>
                             <control-param name="representativesDefaultValueDS">lecm/contractors/getMainRepresentative?contractor={contractor}</control-param>
-                        </control>
+							<control-param name="doNotCheckAccess">true</control-param>
+						</control>
                     </field>
 					<field id="lecm-outgoing:contractor-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
@@ -385,7 +387,7 @@
                             <control-param name="lazyLoading">true</control-param>
                             <control-param name="checkType">false</control-param>
                             <!--customization options-->
-                            <control-param name="employeesByOrgDS">lecm/employees/byOrg/{organization}/picker</control-param>
+                            <control-param name="employeesByOrgDS">lecm/forms/picker</control-param>
                             <control-param name="representativesByContrDS">lecm/representatives/{contractor}/picker</control-param>
 
                             <!--<control-param name="employeesType">lecm-orgstr:employee</control-param>
@@ -401,7 +403,8 @@
 
                             <control-param name="employeesDefaultValueDS"></control-param>
                             <control-param name="representativesDefaultValueDS">lecm/contractors/getMainRepresentative?contractor={contractor}</control-param>
-                        </control>
+							<control-param name="doNotCheckAccess">true</control-param>
+						</control>
                     </field>
 					<field id="lecm-outgoing:contractor-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
@@ -686,7 +689,7 @@
                             <control-param name="lazyLoading">true</control-param>
                             <control-param name="checkType">false</control-param>
                             <!--customization options-->
-                            <control-param name="employeesByOrgDS">lecm/employees/byOrg/{organization}/picker</control-param>
+                            <control-param name="employeesByOrgDS">lecm/forms/picker</control-param>
                             <control-param name="representativesByContrDS">lecm/representatives/{contractor}/picker</control-param>
 
                             <!--<control-param name="employeesType">lecm-orgstr:employee</control-param>
@@ -702,7 +705,8 @@
 
                             <control-param name="employeesDefaultValueDS"></control-param>
                             <control-param name="representativesDefaultValueDS">lecm/contractors/getMainRepresentative?contractor={contractor}</control-param>
-                        </control>
+							<control-param name="doNotCheckAccess">true</control-param>
+						</control>
 					</field>
 
 					<field id="lecm-document-aspects:response-to-assoc">
@@ -949,8 +953,10 @@
 				<field-visibility>
 					<show id="lecm-eds-document:document-type-assoc"/>													<!-- Вид документа -->
 					<show id="lecm-statemachine:status" force="true"/>
-					<show id="lecm-document:regnum"/>																	<!-- Номер проекта -->
-					<show id="lecm-document:doc-date"/>																	<!-- Дата регистрации & Регистрационный номер -->
+					<show id="lecm-document-aspects:reg-data-number"/>                                                  <!-- Рег. номер -->
+					<show id="lecm-document-aspects:reg-data-date"/>                                                    <!-- Дата регистрации -->
+					<show id="lecm-document-aspects:reg-project-data-number"/>                                          <!-- Номер проекта -->
+					<show id="lecm-document-aspects:reg-project-data-date"/>                                            <!-- Дата регистрации проекта -->
 					<show id="lecm-document:title"/>																	<!-- Заголовок -->
 					<show id="lecmSignAspects:signerEmployeeAssoc"/>
 					<show id="lecm-outgoing:contractor-assoc"/>															<!-- Организация-получатель -->
@@ -974,7 +980,11 @@
 							<control-param name="nameSuffix">-multiText</control-param>
 						</control>
 					</field>
-					<field id="lecm-document:doc-date">
+					<field id="lecm-document-aspects:reg-data-number" label-id="label.number"/>
+					<field id="lecm-document-aspects:reg-data-date" label-id="label.simple.date">
+						<control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+					</field>
+					<field id="lecm-document-aspects:reg-project-data-date" label-id="label.project.date">
 						<control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
 					</field>
                     <field id="lecm-document:title">

@@ -292,4 +292,39 @@
 			</list>
 		</property>
 	</bean>
+
+	<util:list id="protocolSchedulingRecipients" value-type="org.alfresco.service.namespace.QName">
+		<util:constant static-field="ru.it.lecm.documents.beans.DocumentService.ASSOC_REG_DATA_DOC_REGISTRATOR"/>
+	</util:list>
+	<bean id="protocolEveryDayStatusExecutor" class="ru.it.lecm.eds.schedule.EveryDayStatusExecutor" parent="action-executer">
+		<property name="ignoreLock" value="false"/>
+		<property name="notificationsService" ref="notificationsService"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="publicAction" value="false" />
+		<property name="recipientsQNames" ref="protocolSchedulingRecipients"/>
+	</bean>
+	<bean id="protocolEveryDayStatusSchedule" class="ru.it.lecm.eds.schedule.EveryDayStatusShedule" parent="baseTransactionalSchedule">
+		<constructor-arg>
+			<util:constant static-field="ru.it.lecm.meetings.beans.ProtocolService.TYPE_PROTOCOL"/>
+		</constructor-arg>
+        <property name="statuses" value="${lecm.protocol.scheduling.expired.statuses}"/>
+        <property name="cronExpression" value="${lecm.protocol.scheduling.expired.cronExpression}"/>
+		<property name="jobName">
+			<value>protocol-sys-agent-expired</value>
+		</property>
+		<property name="jobGroup">
+			<value>protocol-expired</value>
+		</property>
+		<property name="triggerName">
+			<value>protocol-sys-agent-expired-trigger</value>
+		</property>
+		<property name="triggerGroup">
+			<value>protocol-expired-trigger</value>
+		</property>
+		<property name="actionName">
+			<value>protocolEveryDayStatusExecutor</value>
+		</property>
+		<property name="namespaceService" ref="namespaceService"/>
+		<property name="documentService" ref="documentService"/>
+	</bean>
 </beans>

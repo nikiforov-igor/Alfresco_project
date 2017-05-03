@@ -127,6 +127,7 @@
 					<control-param name="useStrictFilterByOrg">true</control-param>
 					<control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
 					<control-param name="showSearch">true</control-param>
+					<control-param name="showAssocViewForm">true</control-param>
 				</type>
 				<type name="association:lecm-orgstr:workRole" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
 					<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Роли_x0020_для_x0020_рабочих_x0020_групп</control-param>
