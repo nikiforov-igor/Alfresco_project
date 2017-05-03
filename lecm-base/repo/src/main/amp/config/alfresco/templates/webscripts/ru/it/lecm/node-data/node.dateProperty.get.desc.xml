@@ -1,0 +1,10 @@
+<webscript>
+    <shortname>Get formatted Date property of Node</shortname>
+    <description>
+        Returns node[property] in ISO format  or empty string if property not date
+    </description>
+    <url>/lecm/node/getDateProperty?nodeRef={nodeRef}&amp;property={property}</url>
+    <format default="json">argument</format>
+    <authentication>user</authentication>
+    <transaction allow="readonly">required</transaction>
+</webscript>
