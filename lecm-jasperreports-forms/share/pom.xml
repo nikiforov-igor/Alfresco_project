@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>ru.it.lecm.reports</groupId>
 		<artifactId>lecm-reports</artifactId>
-		<version>1.8.7</version>
+		<version>2.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>lecm-reports-share</artifactId>
