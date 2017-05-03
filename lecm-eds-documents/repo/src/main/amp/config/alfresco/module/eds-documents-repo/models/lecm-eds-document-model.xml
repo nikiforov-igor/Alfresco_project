@@ -54,6 +54,12 @@
 		            <title>Срок исполнения</title>
 		            <type>d:date</type>
 	            </property>
+                <!--Просрочено-->
+                <property name="lecm-eds-document:is-expired">
+                    <title>Просрочено</title>
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
                 <!--Количество листов документа-->
                 <property name="lecm-eds-document:sheets-number">
                     <title>Количество листов</title>

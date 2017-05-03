@@ -257,5 +257,39 @@
         </property>
         <property name="repositoryWorkflowDefsLocations" ref="customWorkflowDefsRepositoryLocation"/>
     </bean>
+    <util:list id="ordSchedulingRecipients" value-type="org.alfresco.service.namespace.QName">
+        <util:constant static-field="ru.it.lecm.ord.api.ORDModel.ASSOC_ORD_CONTROLLER"/>
+    </util:list>
+    <bean id="ordEveryDayStatusExecutor" class="ru.it.lecm.eds.schedule.EveryDayStatusExecutor" parent="action-executer">
+        <property name="ignoreLock" value="false"/>
+        <property name="notificationsService" ref="notificationsService"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="publicAction" value="false" />
+        <property name="recipientsQNames" ref="ordSchedulingRecipients"/>
+    </bean>
 
+    <bean id="ordEveryDayStatusSchedule" class="ru.it.lecm.eds.schedule.EveryDayStatusShedule" parent="baseTransactionalSchedule">
+        <constructor-arg>
+            <util:constant static-field="ru.it.lecm.ord.api.ORDModel.TYPE_ORD"/>
+        </constructor-arg>
+        <property name="statuses" value="${lecm.ord.scheduling.expired.statuses}"/>
+        <property name="cronExpression" value="${lecm.ord.scheduling.expired.cronExpression}"/>
+        <property name="jobName">
+            <value>ord-sys-agent-expired</value>
+        </property>
+        <property name="jobGroup">
+            <value>ord-expired</value>
+        </property>
+        <property name="triggerName">
+            <value>ord-sys-agent-expired-trigger</value>
+        </property>
+        <property name="triggerGroup">
+            <value>ord-expired-trigger</value>
+        </property>
+        <property name="actionName">
+            <value>ordEveryDayStatusExecutor</value>
+        </property>
+        <property name="namespaceService" ref="namespaceService"/>
+        <property name="documentService" ref="documentService"/>
+    </bean>
 </beans>
