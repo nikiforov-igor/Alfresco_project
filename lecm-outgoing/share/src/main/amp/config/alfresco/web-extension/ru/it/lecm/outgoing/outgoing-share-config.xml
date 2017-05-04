@@ -60,7 +60,7 @@
 							<control-param name="contractor_nameSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="contractor_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="contractor_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
-							<control-param name="contractor_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
+							<control-param name="contractor_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}, {lecm-contractor:phone}&lt;/div&gt;</control-param>
 							<control-param name="contractor_plane">true</control-param>
 							<control-param name="contractor_showSearch">false</control-param>
 							<control-param name="contractor_showExSearch">true</control-param>
@@ -82,7 +82,7 @@
 							<control-param name="organisation_nameSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="organisation_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="organisation_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
-							<control-param name="organisation_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
+							<control-param name="organisation_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}, {lecm-contractor:phone}&lt;/div&gt;</control-param>
 							<control-param name="organisation_plane">true</control-param>
 							<control-param name="organisation_showSearch">false</control-param>
 							<control-param name="organisation_showExSearch">true</control-param>
@@ -258,7 +258,7 @@
 							<control-param name="contractor_nameSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="contractor_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="contractor_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
-							<control-param name="contractor_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
+							<control-param name="contractor_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}, {lecm-contractor:phone}&lt;/div&gt;</control-param>
 							<control-param name="contractor_plane">true</control-param>
 							<control-param name="contractor_showSearch">false</control-param>
 							<control-param name="contractor_showExSearch">true</control-param>
@@ -280,7 +280,7 @@
 							<control-param name="organisation_nameSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="organisation_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="organisation_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
-							<control-param name="organisation_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
+							<control-param name="organisation_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}, {lecm-contractor:phone}&lt;/div&gt;</control-param>
 							<control-param name="organisation_plane">true</control-param>
 							<control-param name="organisation_showSearch">false</control-param>
 							<control-param name="organisation_showExSearch">true</control-param>
@@ -377,7 +377,7 @@
 							<control-param name="contractor_nameSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="contractor_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="contractor_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
-							<control-param name="contractor_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
+							<control-param name="contractor_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}, {lecm-contractor:phone}&lt;/div&gt;</control-param>
 							<control-param name="contractor_plane">true</control-param>
 							<control-param name="contractor_showSearch">false</control-param>
 							<control-param name="contractor_showExSearch">true</control-param>
@@ -399,7 +399,7 @@
 							<control-param name="organisation_nameSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="organisation_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="organisation_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
-							<control-param name="organisation_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
+							<control-param name="organisation_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}, {lecm-contractor:phone}&lt;/div&gt;</control-param>
 							<control-param name="organisation_plane">true</control-param>
 							<control-param name="organisation_showSearch">false</control-param>
 							<control-param name="organisation_showExSearch">true</control-param>
@@ -566,7 +566,7 @@
 							<control-param name="contractor_nameSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="contractor_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="contractor_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
-							<control-param name="contractor_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
+							<control-param name="contractor_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}, {lecm-contractor:phone}&lt;/div&gt;</control-param>
 							<control-param name="contractor_plane">true</control-param>
 							<control-param name="contractor_showSearch">false</control-param>
 							<control-param name="contractor_showExSearch">true</control-param>
@@ -588,7 +588,7 @@
 							<control-param name="organisation_nameSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="organisation_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="organisation_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
-							<control-param name="organisation_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
+							<control-param name="organisation_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}, {lecm-contractor:phone}&lt;/div&gt;</control-param>
 							<control-param name="organisation_plane">true</control-param>
 							<control-param name="organisation_showSearch">false</control-param>
 							<control-param name="organisation_showExSearch">true</control-param>
@@ -745,7 +745,7 @@
 							<control-param name="contractor_nameSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="contractor_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="contractor_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
-							<control-param name="contractor_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
+							<control-param name="contractor_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}, {lecm-contractor:phone}&lt;/div&gt;</control-param>
 							<control-param name="contractor_plane">true</control-param>
 							<control-param name="contractor_showSearch">false</control-param>
 							<control-param name="contractor_showExSearch">true</control-param>
@@ -767,7 +767,7 @@
 							<control-param name="organisation_nameSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="organisation_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="organisation_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
-							<control-param name="organisation_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
+							<control-param name="organisation_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}, {lecm-contractor:phone}&lt;/div&gt;</control-param>
 							<control-param name="organisation_plane">true</control-param>
 							<control-param name="organisation_showSearch">false</control-param>
 							<control-param name="organisation_showExSearch">true</control-param>
@@ -901,7 +901,7 @@
 							<control-param name="contractor_nameSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="contractor_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="contractor_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
-							<control-param name="contractor_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
+							<control-param name="contractor_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}, {lecm-contractor:phone}&lt;/div&gt;</control-param>
 							<control-param name="contractor_plane">true</control-param>
 							<control-param name="contractor_showSearch">false</control-param>
 							<control-param name="contractor_showExSearch">true</control-param>
@@ -923,7 +923,7 @@
 							<control-param name="organisation_nameSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="organisation_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="organisation_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
-							<control-param name="organisation_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
+							<control-param name="organisation_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}, {lecm-contractor:phone}&lt;/div&gt;</control-param>
 							<control-param name="organisation_plane">true</control-param>
 							<control-param name="organisation_showSearch">false</control-param>
 							<control-param name="organisation_showExSearch">true</control-param>
@@ -1076,7 +1076,7 @@
 							<control-param name="contractor_nameSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="contractor_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="contractor_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
-							<control-param name="contractor_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
+							<control-param name="contractor_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}, {lecm-contractor:phone}&lt;/div&gt;</control-param>
 							<control-param name="contractor_plane">true</control-param>
 							<control-param name="contractor_showSearch">false</control-param>
 							<control-param name="contractor_showExSearch">true</control-param>
@@ -1098,7 +1098,7 @@
 							<control-param name="organisation_nameSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="organisation_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="organisation_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
-							<control-param name="organisation_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
+							<control-param name="organisation_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}, {lecm-contractor:phone}&lt;/div&gt;</control-param>
 							<control-param name="organisation_plane">true</control-param>
 							<control-param name="organisation_showSearch">false</control-param>
 							<control-param name="organisation_showExSearch">true</control-param>
