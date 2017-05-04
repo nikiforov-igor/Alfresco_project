@@ -430,6 +430,14 @@
                 </appearance>
             </form>
 
+            <form id="searchColumns">
+                <field-visibility>
+                    <show id="lecm-contractor:shortname"/>
+                    <show id="lecm-contractor:physical-address"/>
+                    <show id="lecm-contractor:phone"/>
+                    <show id="lecm-contractor:postal-code"/>
+                </field-visibility>
+            </form>
             <!-- Контрагент: Таблица -->
             <form id="search">
                 <field-visibility>
