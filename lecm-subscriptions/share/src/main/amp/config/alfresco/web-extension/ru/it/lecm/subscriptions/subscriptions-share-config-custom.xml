@@ -32,26 +32,26 @@
 					<field id="cm:name" label-id="label.form.cm-name"/>
 					<field id="lecm-subscr:object-type-assoc" set="type-events">
 						<control
-								template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-							<control-param name="startLocation">
+								template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+							<control-param name="rootLocation">
 								/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тип_x0020_объекта
 							</control-param>
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
-							<control-param name="notSelectedOptionShow">true</control-param>
-							<control-param name="notSelectedOptionLabelCode">subscriptions.all</control-param>
-							<control-param name="showCreateNewButton">false</control-param>
+							<control-param name="showCreateNewLink">false</control-param>
+							<control-param name="plane">true</control-param>
+							<control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
 						</control>
 					</field>
 					<field id="lecm-subscr:event-category-assoc" set="type-events">
 						<control
-								template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-							<control-param name="startLocation">
+								template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+							<control-param name="rootLocation">
 								/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Категория_x0020_события
 							</control-param>
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
-							<control-param name="notSelectedOptionShow">true</control-param>
-							<control-param name="notSelectedOptionLabelCode">subscriptions.all</control-param>
-							<control-param name="showCreateNewButton">false</control-param>
+							<control-param name="showCreateNewLink">false</control-param>
+							<control-param name="plane">true</control-param>
+							<control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
 						</control>
 					</field>
 					<field id="lecm-subscr:destination-employee-assoc" mandatory="true" set="destination">
@@ -154,26 +154,26 @@
 					<field id="cm:name" label-id="label.form.cm-name"/>
 					<field id="lecm-subscr:object-type-assoc" set="type-events">
 						<control
-								template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-							<control-param name="startLocation">
+								template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+							<control-param name="rootLocation">
 								/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тип_x0020_объекта
 							</control-param>
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
-							<control-param name="notSelectedOptionShow">true</control-param>
-							<control-param name="notSelectedOptionLabelCode">subscriptions.all</control-param>
-							<control-param name="showCreateNewButton">false</control-param>
+							<control-param name="showCreateNewLink">false</control-param>
+							<control-param name="plane">true</control-param>
+							<control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
 						</control>
 					</field>
 					<field id="lecm-subscr:event-category-assoc" set="type-events">
 						<control
-								template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-							<control-param name="startLocation">
+								template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+							<control-param name="rootLocation">
 								/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Категория_x0020_события
 							</control-param>
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
-							<control-param name="notSelectedOptionShow">true</control-param>
-							<control-param name="notSelectedOptionLabelCode">subscriptions.all</control-param>
-							<control-param name="showCreateNewButton">false</control-param>
+							<control-param name="showCreateNewLink">false</control-param>
+							<control-param name="plane">true</control-param>
+							<control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
 						</control>
 					</field>
 					<field id="lecm-subscr:destination-employee-assoc" mandatory="true" set="destination">
@@ -246,26 +246,26 @@
                         </constraint-handlers>
                     </field>
                     <field id="lecm-subscr:object-type-assoc" set="type-events">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="rootLocation">
                                 /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тип_x0020_объекта
                             </control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabelCode">subscriptions.all</control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+							<control-param name="plane">true</control-param>
+							<control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
                         </control>
                     </field>
                     <field id="lecm-subscr:event-category-assoc" set="type-events">
                         <control
-                                template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">
+                                template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="rootLocation">
                                 /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Категория_x0020_события
                             </control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabelCode">subscriptions.all</control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+							<control-param name="plane">true</control-param>
+							<control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
                         </control>
                     </field>
                     <field id="lecm-subscr:destination-employee-assoc" mandatory="false" set="destination">

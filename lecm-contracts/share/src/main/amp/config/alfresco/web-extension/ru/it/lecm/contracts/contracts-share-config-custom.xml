@@ -8,26 +8,31 @@
 			</dependencies>
 
             <default-controls>
-                <type name="association:lecm-contract-dic:contract-type" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                    <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_договора</control-param>
+                <type name="association:lecm-contract-dic:contract-type" template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                    <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_договора</control-param>
                     <control-param name="showCreateNewLink">false</control-param>
-                    <control-param name="showCreateNewButton">false</control-param>
                     <control-param name="nameSubstituteString">{cm:name}</control-param>
                     <control-param name="itemType">lecm-contract-dic:contract-type</control-param>
+                    <control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
+                    <control-param name="plane">true</control-param>
+                    <control-param name="showAssocViewForm">false</control-param>
                 </type>
-                <type name="association:lecm-contract-dic:contract-documents-type" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                    <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа_x0020_к_x0020_договору</control-param>
+                <type name="association:lecm-contract-dic:contract-documents-type" template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                    <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа_x0020_к_x0020_договору</control-param>
                     <control-param name="showCreateNewLink">false</control-param>
-                    <control-param name="showCreateNewButton">false</control-param>
                     <control-param name="nameSubstituteString">{cm:name}</control-param>
                     <control-param name="itemType">lecm-contract-dic:contract-documents-type</control-param>
+                    <control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
+                    <control-param name="plane">true</control-param>
+                    <control-param name="showAssocViewForm">false</control-param>
                 </type>
-                <type name="association:lecm-currency:currency" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                    <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Валюты</control-param>
+                <type name="association:lecm-currency:currency" template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                    <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Валюты</control-param>
                     <control-param name="showCreateNewLink">false</control-param>
-                    <control-param name="showCreateNewButton">false</control-param>
                     <control-param name="nameSubstituteString">{cm:name}</control-param>
                     <control-param name="itemType">lecm-currency:currency</control-param>
+                    <control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
+                    <control-param name="plane">true</control-param>
                 </type>
             </default-controls>
 		</forms>
@@ -80,15 +85,7 @@
 
                     <field id="lecm-document-aspects:reg-project-data-number" set="contract-info"/>
                     <field id="lecm-document-aspects:reg-project-data-date" set="contract-info"/>
-                    <field id="lecm-contract:typeContract-assoc" set="contract-info">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_договора</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                        </control>
-                    </field>
+                    <field id="lecm-contract:typeContract-assoc" set="contract-info"/>
                     <field id="lecm-document:subject-assoc" set="contract-info">
                         <control>
                             <control-param name="endpointMany">false</control-param>
@@ -96,13 +93,6 @@
                     </field>
                     <field id="lecm-contract:totalAmount" mandatory="true" set="price" help=""/>
                     <field id="lecm-contract:currency-assoc" set="price">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Валюты</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                        </control>
 	                    <constraint-handlers>
 		                    <constraint type="MANDATORY" validation-handler="LogicECM.module.Contracts.currencyValidation" message-id="validation-hint.mandatory" event="change"/>
 	                    </constraint-handlers>
@@ -453,15 +443,7 @@
 	                <set id="dates" appearance="" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
 	                <set id="afterDates" appearance=""/>
 
-                    <field id="lecm-contract:typeContract-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_договора</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                        </control>
-                    </field>
+                    <field id="lecm-contract:typeContract-assoc"/>
                     <field id="lecm-document:subject-assoc">
                         <control>
                             <control-param name="endpointMany">false</control-param>
@@ -469,13 +451,6 @@
                     </field>
                     <field id="lecm-contract:totalAmount" mandatory="true" set="price" help=""/>
                     <field id="lecm-contract:currency-assoc" set="price">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Валюты</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                        </control>
 	                    <constraint-handlers>
 		                    <constraint type="MANDATORY" validation-handler="LogicECM.module.Contracts.currencyValidation" message-id="validation-hint.mandatory" event="change"/>
 	                    </constraint-handlers>
@@ -628,25 +603,9 @@
                     <show id="lecm-contract:locationContract"/>
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-contract:typeContract-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_договора</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                        </control>
-                    </field>
+                    <field id="lecm-contract:typeContract-assoc"/>
                     <field id="lecm-contract:totalAmount" mandatory="true"/>
-                    <field id="lecm-contract:currency-assoc" mandatory="true">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Валюты</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                        </control>
-                    </field>
+                    <field id="lecm-contract:currency-assoc" mandatory="true"/>
                     <field id="lecm-contract:partner-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
                             <control-param name="changeItemsFireAction">contractor.selected</control-param>
@@ -1351,16 +1310,6 @@
                         </constraint-handlers>
                     </field>
                     <field id="lecm-contract:typeContract-assoc" mandatory="false">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">
-                                /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_договора
-                            </control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabelCode"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="mandatory">false</control-param>
-                        </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
                         </constraint-handlers>
@@ -1370,18 +1319,7 @@
 		                    <control-param name="mandatory">false</control-param>
 	                    </control>
                     </field>
-                    <field id="lecm-contract:currency-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">
-                                /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Валюты
-                            </control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabelCode"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="mandatory">false</control-param>
-                        </control>
-                    </field>
+                    <field id="lecm-contract:currency-assoc" mandatory="false"/>
                     <field id="lecm-document-aspects:reg-project-data-date">
                         <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
                     </field>
@@ -2056,15 +1994,7 @@
                 <appearance>
                     <set id="price" appearance="" template="/ru/it/lecm/base-share/components/controls/price.ftl" />
                     <field id="lecm-contract-table-structure:stage-amount" set="price" help=""/>
-                    <field id="lecm-contract-table-structure:stage-currency-assoc" set="price" help="">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Валюты</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                        </control>
-                    </field>
+                    <field id="lecm-contract-table-structure:stage-currency-assoc" set="price" help=""/>
                     <field id="lecm-document:indexTableRow" help-id="label.stage.number.help"/>
                     <field id="lecm-contract-table-structure:stage-status">
                         <control template="/ru/it/lecm/base-share/components/controls/view-text-control.ftl"/>
@@ -2112,15 +2042,7 @@
                 <appearance>
                     <set id="price" appearance="" template="/ru/it/lecm/base-share/components/controls/price.ftl" />
                     <field id="lecm-contract-table-structure:stage-amount" set="price" help=""/>
-                    <field id="lecm-contract-table-structure:stage-currency-assoc" set="price" help="">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Валюты</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                        </control>
-                    </field>
+                    <field id="lecm-contract-table-structure:stage-currency-assoc" set="price" help=""/>
                     <field id="lecm-document:indexTableRow" help-id="label.stage.number.help"/>
                     <!--<field id="lecm-contract-table-structure:attachments-temp-assoc" >-->
                         <!--<control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">-->
@@ -2188,15 +2110,7 @@
 					<field id="packageItems">
 						<control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
 					</field>
-					<field id="lecmContractWf:documentType" label-id="contract.additionalDocumentType">
-						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа_x0020_к_x0020_договору</control-param>
-							<control-param name="nameSubstituteString">{cm:name}</control-param>
-							<control-param name="notSelectedOptionShow">true</control-param>
-							<control-param name="notSelectedOptionLabel"> </control-param>
-							<control-param name="showCreateNewButton">false</control-param>
-						</control>
-					</field>
+					<field id="lecmContractWf:documentType" label-id="contract.additionalDocumentType"/>
 				</appearance>
 			</form>
 		</forms>
@@ -2214,12 +2128,12 @@
                         <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
                     </field>
                     <field id="lecmContractWf:deleteReason" label-id="contract.deleteReason">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Причины_x0020_удаления</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Причины_x0020_удаления</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="plane">true</control-param>
+                            <control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
                         </control>
                     </field>
                 </appearance>

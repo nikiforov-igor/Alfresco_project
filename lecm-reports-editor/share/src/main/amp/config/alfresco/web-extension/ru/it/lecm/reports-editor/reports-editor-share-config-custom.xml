@@ -55,11 +55,12 @@
                     </field>
                     <field id="lecm-rpeditor:reportDocType" help-id="report.doctype.help"/>
                     <field id="lecm-rpeditor:reportProviderAssoc" mandatory="true">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_провайдера</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_провайдера</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="plane">true</control-param>
+                            <control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="changeItemsFireAction">changeProviderType</control-param>
                         </control>
                     </field>
@@ -142,11 +143,12 @@
                         </control>
                     </field>
                     <field id="lecm-rpeditor:reportProviderAssoc" mandatory="true">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_провайдера</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_провайдера</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="plane">true</control-param>
+                            <control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="changeItemsFireAction">changeProviderType</control-param>
                         </control>
                     </field>
@@ -196,12 +198,12 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-rpeditor:reportTemplateType">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_отчета</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_отчета</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="plane">true</control-param>
+                            <control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
                         </control>
                     </field>
                     <field id="lecm-rpeditor:reportTemplateFile">
@@ -242,12 +244,12 @@
                 <appearance>
                     <field id="cm:name" label-id="label.report.displayName"/>
                     <field id="lecm-rpeditor:reportTemplateType">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_отчета</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_отчета</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="plane">true</control-param>
+                            <control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
                         </control>
                     </field>
                     <field id="lecm-rpeditor:reportTemplateFile">
@@ -266,12 +268,12 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-rpeditor:reportTemplateType">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_отчета</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_отчета</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="plane">true</control-param>
+                            <control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
                         </control>
                     </field>
                     <field id="lecm-rpeditor:reportTemplateFile">
@@ -289,12 +291,12 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-rpeditor:reportTemplateType">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_отчета</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_отчета</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="plane">true</control-param>
+                            <control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -553,12 +555,12 @@
                     <field id="cm:name" label-id="label.report.displayName" set="settings"/>
                     <field id="lecm-rpeditor:dataColumnCode" set="settings"/>
                     <field id="lecm-rpeditor:columnTypeAssoc" set="settings">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_столбцов</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_столбцов</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">false</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="plane">true</control-param>
+                            <control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
                         </control>
                     </field>
                     <field id="lecm-rpeditor:dataColumnExpression" mandatory="true" set="settings">
@@ -568,13 +570,13 @@
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
                     </field>
                     <field id="lecm-rpeditor:columnParameterTypeAssoc" set="parameter">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_параметра</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_параметра</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="changeItemsFireAction">changeParamType</control-param>
+                            <control-param name="plane">true</control-param>
+                            <control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
                         </control>
                     </field>
                     <field id="lecm-rpeditor:dataColumnClass" set="parameter">
@@ -616,25 +618,25 @@
                     <field id="cm:name" label-id="label.report.displayName" set="settings"/>
                     <field id="lecm-rpeditor:dataColumnCode" set="settings"/>
                     <field id="lecm-rpeditor:columnTypeAssoc" set="settings">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_столбцов</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_столбцов</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">false</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="plane">true</control-param>
+                            <control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
                         </control>
                     </field>
                     <field id="lecm-rpeditor:dataColumnExpression" mandatory="false" set="settings">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
                     </field>
                     <field id="lecm-rpeditor:columnParameterTypeAssoc" set="parameter">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_параметра</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_параметра</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="changeItemsFireAction">changeParamType</control-param>
+                            <control-param name="plane">true</control-param>
+                            <control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
                         </control>
                     </field>
                     <field id="lecm-rpeditor:dataColumnClass" set="parameter">
@@ -683,25 +685,25 @@
                     <field id="cm:name" label-id="label.report.displayName" set="settings"/>
                     <field id="lecm-rpeditor:dataColumnCode" set="settings"/>
                     <field id="lecm-rpeditor:columnTypeAssoc" set="settings">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_столбцов</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_столбцов</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">false</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="plane">true</control-param>
+                            <control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
                         </control>
                     </field>
                     <field id="lecm-rpeditor:dataColumnExpression" set="settings" mandatory="true">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
                     </field>
                     <field id="lecm-rpeditor:columnParameterTypeAssoc" set="parameter" >
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_параметра</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_параметра</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="changeItemsFireAction">changeParamType</control-param>
+                            <control-param name="plane">true</control-param>
+                            <control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
                         </control>
                     </field>
                     <field id="lecm-rpeditor:dataColumnClass" set="parameter" >
@@ -754,22 +756,22 @@
                     <field id="cm:name" label-id="label.report.displayName" set="settings"/>
                     <field id="lecm-rpeditor:dataColumnCode" set="settings"/>
                     <field id="lecm-rpeditor:columnTypeAssoc" set="settings">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_столбцов</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_столбцов</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">false</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="plane">true</control-param>
+                            <control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
                         </control>
                     </field>
                     <field id="lecm-rpeditor:columnParameterTypeAssoc" set="parameter">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_параметра</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_параметра</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="changeItemsFireAction">changeParamType</control-param>
+                            <control-param name="plane">true</control-param>
+                            <control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
                         </control>
                     </field>
                     <field id="lecm-rpeditor:dataColumnClass" set="parameter">

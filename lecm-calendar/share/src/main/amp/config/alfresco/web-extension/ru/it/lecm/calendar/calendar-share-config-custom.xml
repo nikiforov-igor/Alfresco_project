@@ -3,10 +3,12 @@
 	<config>
 		<forms>
 			<default-controls>
-				<type name="association:lecm-absence:reason"  template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-						<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Причины_x0020_отсутствия</control-param>
+				<type name="association:lecm-absence:reason"  template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+						<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Причины_x0020_отсутствия</control-param>
 						<control-param name="nameSubstituteString">{lecm-absence:code} - {cm:name}</control-param>
-						<control-param name="showCreateNewButton">false</control-param>
+						<control-param name="showCreateNewLink">false</control-param>
+						<control-param name="plane">true</control-param>
+						<control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
 				</type>
 			</default-controls>
 		</forms>
@@ -357,7 +359,7 @@
 					</field>
 					<field id="lecm-absence:abscence-reason-assoc" set="abscence-reason">
 						<control>
-							<control-param name="showCreateNewButton">true</control-param>
+							<control-param name="showCreateNewLink">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-absence:comment" set="comment"/>

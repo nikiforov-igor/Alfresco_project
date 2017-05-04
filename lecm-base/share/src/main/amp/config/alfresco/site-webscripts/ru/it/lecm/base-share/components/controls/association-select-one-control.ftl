@@ -1,3 +1,4 @@
+<#--This association-select-one-control.ftl is deprecated!-->
 <#include "/org/alfresco/components/form/controls/common/utils.inc.ftl" />
 
 <#assign fieldValue=field.value!"">

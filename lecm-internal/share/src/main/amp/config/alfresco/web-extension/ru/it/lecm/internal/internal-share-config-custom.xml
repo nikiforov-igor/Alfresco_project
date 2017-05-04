@@ -2,12 +2,12 @@
     <config>
         <forms>
             <default-controls>
-                <type name="association:lecm-internal-doc-type:dictionary" template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                        <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_внутреннего_x0020_документа</control-param>
+                <type name="association:lecm-internal-doc-type:dictionary" template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                        <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_внутреннего_x0020_документа</control-param>
                         <control-param name="nameSubstituteString">{cm:name}</control-param>
-                        <control-param name="notSelectedOptionShow">true</control-param>
-                        <control-param name="notSelectedOptionLabel"> </control-param>
-                        <control-param name="showCreateNewButton">false</control-param>
+                        <control-param name="showCreateNewLink">false</control-param>
+                        <control-param name="plane">true</control-param>
+                        <control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
                 </type>
             </default-controls>
         </forms>

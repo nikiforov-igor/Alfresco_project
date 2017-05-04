@@ -10,13 +10,13 @@
 		<forms>
 			<default-controls>
 				<type name="association:lecm-os:security-classification"
-                      template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                    <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Грифы_x0020_секретности</control-param>
+                      template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                    <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Грифы_x0020_секретности</control-param>
                     <control-param name="nameSubstituteString">{cm:title}</control-param>
                     <control-param name="sortProp">lecm-base-aspects:order</control-param>
                     <control-param name="selectedItemsNameSubstituteString">{cm:title}</control-param>
-                    <control-param name="notSelectedOptionShow">false</control-param>
-                    <control-param name="showCreateNewButton">false</control-param>
+                    <control-param name="plane">true</control-param>
+                    <control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
                     <control-param name="showCreateNewLink">false</control-param>
                 </type>
 				<type name="association:lecm-os:base" template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
