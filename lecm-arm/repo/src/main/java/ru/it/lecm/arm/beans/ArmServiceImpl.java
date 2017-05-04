@@ -678,6 +678,8 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
 
 	public void aggregateNode(NodeRef nodeRef) {
 		if (isArmAccordion(nodeRef) || isArmNode(nodeRef)) {
+            invalidateCache();
+
 			Boolean isAggregationNode = (Boolean) getCachedProperties(nodeRef).get(ArmService.PROP_IS_AGGREGATION_NODE);
 
 			if (Boolean.TRUE.equals(isAggregationNode)) {
