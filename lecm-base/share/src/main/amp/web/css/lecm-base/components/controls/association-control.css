@@ -5,7 +5,8 @@
 }
 
 .control.association-control .value-div .cropped-item .ci-value-div .control-small-font,
-.association-picker .currentValueDisplay .cropped-item .ci-value-div .control-small-font {
+.association-picker .currentValueDisplay .cropped-item .ci-value-div .control-small-font,
+.control-autocomplete-item .control-small-font {
 	font-size: 80%;
 	line-height: 6px;
 	padding-bottom: 5px;
