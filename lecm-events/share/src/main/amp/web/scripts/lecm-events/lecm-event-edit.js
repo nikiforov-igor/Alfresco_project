@@ -282,16 +282,16 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					var leftPart = fileIconHtml + fileName;
 					leftPart = "<a href='" + Alfresco.constants.URL_PAGECONTEXT + "document-attachment?nodeRef=" + nodeRef + "'>" + leftPart + "</a>";
 
-					var reghtPart = "";
+					var rightPart = "";
 					if (this.hasDeleteContentRight) {
 						var iconRemoveId = "attachment-remove-" + nodeRef;
-						reghtPart += "<img id='" + iconRemoveId + "' src='" + Alfresco.constants.URL_RESCONTEXT
+						rightPart += "<img id='" + iconRemoveId + "' src='" + Alfresco.constants.URL_RESCONTEXT
 							+ "components/images/delete-16.png' class='remove-icon'/>";
 						Event.onAvailable(iconRemoveId, this.attachRemoveItemClickListener, item, this);
 					}
 
 					var rowId = "attachment-" + nodeRef.replace(/:|\//g, '_');
-					elAttachments.innerHTML += "<li id='" + rowId + "'>" + Util.getCroppedItem(leftPart, reghtPart) + "</li>";
+					elAttachments.innerHTML += "<li id='" + rowId + "'>" + Util.getCroppedItem(leftPart, rightPart) + "</li>";
 				}
 			}
 		},
