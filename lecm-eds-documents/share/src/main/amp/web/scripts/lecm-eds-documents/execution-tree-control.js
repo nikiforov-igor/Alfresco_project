@@ -256,7 +256,7 @@ LogicECM.module = LogicECM.module || {};
                                     content += "<table class='execution-expanded-content type-errand'>";
                                     content += "    <tr>";
                                     content += "        <td class='label-column'>{reportTextLabel}</td>";
-                                    content += "        <td>{reportTextContent}</td>";
+                                    content += "        <td class='content-column'>{reportTextContent}</td>";
                                     content += "    </tr>";
                                     content += "    <tr>";
                                     content += "        <td class='label-column'>{connectionsLabel}</td>";
