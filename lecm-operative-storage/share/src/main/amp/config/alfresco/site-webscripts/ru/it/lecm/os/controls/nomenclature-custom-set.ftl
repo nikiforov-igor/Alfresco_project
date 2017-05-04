@@ -7,10 +7,12 @@
 </#if>
 <div class="<#if form.mode == "view">nomenclature-view-set</#if>">
 <#list thisSet.children as item>
-    <#if item.kind == "set">
-        <@formLib.renderSet set=item />
-    <#else>
-        <@formLib.renderField field=form.fields[item.id] />
+    <#if item??>
+        <#if item.kind == "set">
+            <@formLib.renderSet set=item />
+        <#else>
+            <@formLib.renderField field=form.fields[item.id] />
+        </#if>
     </#if>
 </#list>
 </div>

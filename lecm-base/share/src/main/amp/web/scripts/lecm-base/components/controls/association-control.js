@@ -356,12 +356,13 @@ LogicECM.module = LogicECM.module || {};
 
 		formatResult: function (oResultData, sQuery, sResultMatch) {
 			var name = oResultData[1].name,
+				selectedName = oResultData[1].selectedName,
 				path;
 			if (!this.options.plane) {
 				path = oResultData[1].path + name;
-				return '<div title="' + path + '">' + name + '</div>';
+				return '<div title="' + path + '" class="control-autocomplete-item">' + selectedName + '</div>';
 			} else {
-				return name;
+				return selectedName;
 			}
 		},
 
