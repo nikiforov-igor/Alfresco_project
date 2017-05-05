@@ -31,3 +31,6 @@
 .graph-tree .yui-dt-expandablerow-trigger {
     background-color: transparent;
 }
+.execution-expanded-content.type-errand .content-column {
+    white-space: pre-wrap;
+}
