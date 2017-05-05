@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Created by KKurets on 04.05.2017.
  */
-public class SelectRecipientProcessor extends SearchQueryProcessor {
+public class CurrentEmployeeUnitsProcessor extends SearchQueryProcessor {
 
     OrgstructureBean orgstructureBean;
 
@@ -19,17 +19,15 @@ public class SelectRecipientProcessor extends SearchQueryProcessor {
     }
 
     /*
-	 * Usage example: {{SELECT_RECIPIENT({user:'*#current-user*', onlyBoss:false})}}
+	 * Usage example: {{CURRENT_EMPLOYEE_UNITS({onlyBoss:false})}}
 	 */
 
     @Override
     public String getQuery(Map<String, Object> params) {
         StringBuilder sbQuery = new StringBuilder();
-        Object user = params != null ? params.get("user") : null;
-        Object onlyBoss = params != null ? params.get("onlyBoss") : null;
+        Object onlyBoss = params != null ? params.get("onlyBoss") != null ? params.get("onlyBoss") : false : null;
 
-        if (user != null && onlyBoss != null) {
-            sbQuery.append("\"").append(user.toString()).append("\"");
+        if (onlyBoss != null) {
             List<NodeRef> units;
             if ((boolean) onlyBoss) {
                 units = orgstructureBean.getEmployeeUnits(orgstructureBean.getCurrentEmployee(), true);
@@ -38,7 +36,10 @@ public class SelectRecipientProcessor extends SearchQueryProcessor {
             }
             if (units != null && units.size() > 0) {
                 for (int i = 0; i < units.size(); i++) {
-                    sbQuery.append(" OR ").append("\"*").append(units.get(i)).append("*\"");
+                    sbQuery.append("\"*").append(units.get(i)).append("*\"");
+                    if (i < units.size() - 1) {
+                        sbQuery.append(" OR ");
+                    }
                 }
             }
         } else {
