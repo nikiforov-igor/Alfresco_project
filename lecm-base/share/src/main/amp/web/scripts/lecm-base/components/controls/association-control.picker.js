@@ -315,7 +315,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		},
 
 		onSelectButtonClick: function (type, args, menuItem) {
-			this.widgets.selectButton.set('label', menuItem.value.options.label);
+			this.widgets.selectButton.set('label', Alfresco.util.message(menuItem.value.options.label));
 			this.fire('hide', {});
 			this.fire('show', {
 				itemKey: menuItem.value.itemKey
@@ -367,7 +367,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 
 				menu = this.options.itemsOptions.map(function (obj) {
 					return {
-						text: obj.options.label,
+						text: Alfresco.util.message(obj.options.label),
 						value: obj,
 						onclick: {
 							scope: this,
