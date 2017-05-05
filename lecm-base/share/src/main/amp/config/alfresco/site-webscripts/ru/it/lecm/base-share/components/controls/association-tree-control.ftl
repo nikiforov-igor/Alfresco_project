@@ -1,3 +1,4 @@
+<#--This association-tree-control.ftl is deprecated!-->
 <#include "/org/alfresco/components/component.head.inc">
 <#include "association-tree-picker-dialog.inc.ftl">
 
