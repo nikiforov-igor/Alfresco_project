@@ -48,6 +48,7 @@
 				<property name="lecm-group-actions:field-is-mandatory"><![CDATA[true]]></property>
 				<property name="lecm-group-actions:field-type"><![CDATA[lecm-os:nomenclature-unit-section]]></property>
 				<property name="lecm-group-actions:field-priority"><![CDATA[0]]></property>
+                <property name="lecm-group-actions:field-control"/>
 			</item>
 		</items>
     </item>

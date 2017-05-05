@@ -1,0 +1,33 @@
+<alfresco-config>
+    <config>
+        <field-types>
+            <field-type id="lecm-contract-dic:contract-type" localName="Вид договора">
+                <control id="lecm-contract-dic:contract-type-control" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl" localName="Выбор вида договора">
+                    <param id="startLocation" localName="Корневая директория" visible="false">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_договора</param>
+                    <param id="nameSubstituteString" localName="Шаблон имени">{cm:name}</param>
+                    <param id="showCreateNewLink" localName="Показывать ссылку создания нового">false</param>
+                    <param id="showCreateNewButton" localName="Показывать кнопку создания нового">false</param>
+                    <param id="itemType" localName="Тип" visible="false">lecm-contract-dic:contract-type</param>
+                </control>
+            </field-type>
+            <field-type id="lecm-contract-dic:contract-documents-type" localName="Вид документа к договору">
+                <control id="lecm-contract-dic:contract-documents-type-control" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl" localName="Выбор вида документа к договору">
+                    <param id="startLocation" localName="Корневая директория" visible="false">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа_x0020_к_x0020_договору</param>
+                    <param id="nameSubstituteString" localName="Шаблон имени">{cm:name}</param>
+                    <param id="showCreateNewLink" localName="Показывать ссылку создания нового">false</param>
+                    <param id="showCreateNewButton" localName="Показывать кнопку создания нового">false</param>
+                    <param id="itemType" localName="Тип" visible="false">lecm-contract-dic:contract-documents-type</param>
+                </control>
+            </field-type>
+            <field-type id="lecm-currency:currency" localName="Валюты">
+                <control id="lecm-currency:currency-control" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl" localName="Выбор валюты">
+                    <param id="startLocation" localName="Корневая директория" visible="false">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Валюты</param>
+                    <param id="nameSubstituteString" localName="Шаблон имени">{cm:name}</param>
+                    <param id="showCreateNewLink" localName="Показывать ссылку создания нового">false</param>
+                    <param id="showCreateNewButton" localName="Показывать кнопку создания нового">false</param>
+                    <param id="itemType" localName="Тип" visible="false">lecm-currency:currency</param>
+                </control>
+            </field-type>
+        </field-types>
+    </config>
+</alfresco-config>
