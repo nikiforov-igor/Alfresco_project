@@ -186,6 +186,12 @@
 		<property name="id" value="FILTER_BY_DICTIONARY_ATTRIBUTE_VALUE"/>
 		<property name="dictionaryBean" ref="serviceDictionary"/>
 	</bean>
+
+	<bean id="CurrentEmployeeUnitsProcessor" class="ru.it.lecm.eds.processors.CurrentEmployeeUnitsProcessor" parent="searchQueryBaseProccesor">
+		<property name="id" value="CURRENT_EMPLOYEE_UNITS"/>
+		<property name="orgstructureBean" ref="serviceOrgstructure"/>
+	</bean>
+
 	<bean id="edsBaseDocumentTypeBean" class="ru.it.lecm.eds.policy.EDSBaseDocumentTypePolicy"
 		  init-method="init" abstract="true">
 		<property name="policyComponent" ref="policyComponent"/>
