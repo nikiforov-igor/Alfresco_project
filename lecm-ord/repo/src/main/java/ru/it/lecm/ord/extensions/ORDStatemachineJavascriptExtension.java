@@ -373,7 +373,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 					associations.put(ErrandsService.ASSOC_ERRANDS_CO_EXECUTORS.toPrefixString(namespaceService), StringUtils.join(coexecutorsList, ","));
 				}
 				//тематика поручения
-				List<AssociationRef> subjectAssocs = nodeService.getTargetAssocs(ord, DocumentService.ASSOC_SUBJECT);
+				List<AssociationRef> subjectAssocs = nodeService.getTargetAssocs(point, ORDModel.ASSOC_ORD_TABLE_SUBJECT);
 				if (!subjectAssocs.isEmpty()) {
 					List<String> subjects = new ArrayList<>();
 					for (AssociationRef subjectAssoc : subjectAssocs) {
