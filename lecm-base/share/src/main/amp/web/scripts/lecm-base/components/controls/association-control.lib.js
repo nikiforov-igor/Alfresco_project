@@ -39,7 +39,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			if (options.ignoreNodes && options.ignoreNodes.length) {
 				ignoreNodesFilter = options.ignoreNodes.reduce(function (prev, curr) {
 					return prev + ' AND NOT ID:"' + curr + '"';
-				}, '(ISNOTNULL:\"cm:name\" AND  @cm\\:name:\"?*\")');
+				}, '(ISNOTNULL:\"cm:name\")');
 
 				if (additionalFilter) {
 					singleNotQuery = additionalFilter.indexOf("NOT") == 0 && !notSingleQueryPattern.test(additionalFilter);
@@ -73,7 +73,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				rootNodeRef: options.rootNodeRef,
 				xpath: forAutocomplete ? options.rootLocation : undefined,
 				skipCount: forAutocomplete ? undefined : skipItemsCount.toString(),
-				elementsParams: LogicECM.module.AssociationComplexControl.Utils.getElementsParams(context, forAutocomplete)
+				elementsParams: LogicECM.module.AssociationComplexControl.Utils.getElementsParams(context, forAutocomplete),
+				ignoreNodes: (options.ignoreNodes && options.ignoreNodes.length) ? options.ignoreNodes : ""
 			};
 
 			return options.autocompleteDataSourceMethodPost ? YAHOO.lang.JSON.stringify(paramsObj) : Alfresco.util.toQueryString(paramsObj);

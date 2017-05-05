@@ -122,7 +122,7 @@
 							itemType: '${i}',
 							</#if>
 							<#if args.ignoreNodes??>
-								ignoreNodes: '${args.ignoreNodes?split(',')}',
+								ignoreNodes: '${args.ignoreNodes}'.split(','),
 							<#else>
 								ignoreNodes: [],
 							</#if>
@@ -142,6 +142,11 @@
 									'${key}': <#if isNotBoolean>'</#if>${params[key]}<#if isNotBoolean>'</#if>,
 								</#if>
 							</#list>
+							<#if params[itemKey + "_rootLocationArg"]?? && form.arguments[params[itemKey + "_rootLocationArg"]]??>
+								'rootLocation': '${form.arguments[params[itemKey + "_rootLocationArg"]]}',
+							<#elseif params.rootLocationArg?? && form.arguments[params.rootLocationArg]??>
+								'rootLocation': '${form.arguments[params.rootLocationArg]}',
+							</#if>
 						}
 					}<#if i_has_next>,</#if>
 					</#list>
