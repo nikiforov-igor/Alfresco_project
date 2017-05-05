@@ -25,21 +25,23 @@ public class CurrentEmployeeUnitsProcessor extends SearchQueryProcessor {
     @Override
     public String getQuery(Map<String, Object> params) {
         StringBuilder sbQuery = new StringBuilder();
-        Object onlyBoss = params != null ? params.get("onlyBoss") != null ? params.get("onlyBoss") : false : null;
-
-        if (onlyBoss != null) {
-            List<NodeRef> units;
-            if ((boolean) onlyBoss) {
-                units = orgstructureBean.getEmployeeUnits(orgstructureBean.getCurrentEmployee(), true);
-            } else {
-                units = orgstructureBean.getEmployeeUnits(orgstructureBean.getCurrentEmployee(), false);
-            }
-            if (units != null && units.size() > 0) {
-                for (int i = 0; i < units.size(); i++) {
-                    sbQuery.append("\"*").append(units.get(i)).append("*\"");
-                    if (i < units.size() - 1) {
-                        sbQuery.append(" OR ");
-                    }
+        boolean onlyBoss;
+        List<NodeRef> units;
+        if (params != null && params.get("onlyBoss") != null) {
+            onlyBoss = Boolean.parseBoolean(params.get("onlyBoss").toString());
+        } else {
+            onlyBoss = false;
+        }
+        if (onlyBoss) {
+            units = orgstructureBean.getEmployeeUnits(orgstructureBean.getCurrentEmployee(), true);
+        } else {
+            units = orgstructureBean.getEmployeeUnits(orgstructureBean.getCurrentEmployee(), false);
+        }
+        if (units != null && units.size() > 0) {
+            for (int i = 0; i < units.size(); i++) {
+                sbQuery.append("\"*").append(units.get(i)).append("*\"");
+                if (i < units.size() - 1) {
+                    sbQuery.append(" OR ");
                 }
             }
         } else {
