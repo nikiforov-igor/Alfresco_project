@@ -32,11 +32,8 @@ public class CurrentEmployeeUnitsProcessor extends SearchQueryProcessor {
         } else {
             onlyBoss = false;
         }
-        if (onlyBoss) {
-            units = orgstructureBean.getEmployeeUnits(orgstructureBean.getCurrentEmployee(), true);
-        } else {
-            units = orgstructureBean.getEmployeeUnits(orgstructureBean.getCurrentEmployee(), false);
-        }
+        units = orgstructureBean.getEmployeeUnits(orgstructureBean.getCurrentEmployee(), onlyBoss);
+
         if (units != null && units.size() > 0) {
             for (int i = 0; i < units.size(); i++) {
                 sbQuery.append("\"*").append(units.get(i)).append("*\"");
