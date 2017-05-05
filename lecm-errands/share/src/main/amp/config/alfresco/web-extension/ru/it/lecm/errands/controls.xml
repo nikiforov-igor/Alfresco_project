@@ -6,6 +6,17 @@
                     <param id="uri" localName="Адрес веб-скрипта">/lecm/components/document/document-errands</param>
                 </control>
             </field-type>
+            <field-type id="lecm-errands-dic:errand-titles" localName="Заголовки поручений">
+                <control id="lecm-errands-dic:errand-titles-control" template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl" localName="Выбор заголовка">
+                    <param id="startLocation" localName="Корневая директория" visible="false">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</param>
+                    <param id="itemType" localName="Тип" visible="false">lecm-errands-dic:errand-titles</param>
+                    <param id="nameSubstituteString" localName="Шаблон имени">{cm:name}</param>
+                    <param id="notSelectedOptionShow" localName="Показывать пустой элемент" description="Если true, то по умолчанию показывается элемент без значения ассоциации.">true</param>
+                    <param id="notSelectedOptionLabel" localName="Название  для пустого элемента" description="Название для элемента без значения ассоциации"> </param>
+                    <param id="showCreateNewLink" localName="Показывать ссылку создания">false</param>
+                    <param id="showCreateNewButton" localName="Показывать кнопку создания">false</param>
+                </control>
+            </field-type>
         </field-types>
     </config>
 </alfresco-config>

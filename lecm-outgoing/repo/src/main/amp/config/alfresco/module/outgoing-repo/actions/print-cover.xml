@@ -14,11 +14,24 @@
             <![CDATA[model.openWindow="proxy/alfresco/lecm/report/outgoing-cover?exec=1&templateCode=" + templateCode + "&ID=" + documentsArray.join(",")]]></property>
         <items>
             <item name="cm:Шаблон" type="lecm-group-actions:form-field">
-                <property name="cm:name"><![CDATA[Шаблон]]></property>
-                <property name="lecm-group-actions:field-default-value"><![CDATA[reportId=outgoing-cover]]></property>
-                <property name="lecm-group-actions:field-id"><![CDATA[templateCode]]></property>
+                <property name="lecm-group-actions:field-control">
+                    <![CDATA[{
+                        "template":"/ru/it/lecm/reports-editor/controls/select-report-template-control.ftl",
+                        "displayName":"Выбор шаблона",
+                        "id":"TEMPLATES-control",
+                        "params":[
+                            {"name":"fromParent","value":"false"},
+                            {"name":"reportId","value":"outgoing-cover"},
+                            {"name":"ctrlValue","value":"templateCode"},
+                            {"name":"notSelectedOption","value":"false"}
+                        ]
+                    }]]></property>
+                <property name="lecm-group-actions:field-is-mandatory"><![CDATA[false]]></property>
                 <property name="lecm-group-actions:field-type"><![CDATA[TEMPLATES]]></property>
+                <property name="cm:name"><![CDATA[Шаблон]]></property>
+                <property name="lecm-group-actions:field-id"><![CDATA[templateCode]]></property>
                 <property name="lecm-group-actions:field-priority"><![CDATA[10]]></property>
+                <property name="lecm-group-actions:field-default-value"><![CDATA[]]></property>
             </item>
         </items>
     </item>

@@ -1,0 +1,86 @@
+<alfresco-config>
+    <config>
+        <field-types>
+            <field-type id="lecm-os:security-classification" localName="Гриф секретности">
+                <control id="lecm-os:security-classification-control" template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl" localName="Выбор грифа">
+                    <param id="startLocation" localName="Корневая директория" mandatory="true" visible="false">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Грифы_x0020_секретности</param>
+                    <param id="nameSubstituteString" localName="Шаблон имени">{cm:title}</param>
+                    <param id="selectedItemsNameSubstituteString" localName="Шаблон имени выбранных элементов">{cm:title}</param>
+                    <param id="notSelectedOptionShow" localName="Показывать пустой элемент" description="Если true, то по умолчанию показывается элемент без значения ассоциации.">false</param>
+                    <param id="notSelectedOptionLabel" localName="Название  для пустого элемента" description="Название для элемента без значения ассоциации"> </param>
+                    <param id="showCreateNewLink" localName="Показывать ссылку создания">false</param>
+                    <param id="showCreateNewButton" localName="Показывать кнопку создания">false</param>
+                    <param id="sortProp" localName="Поле для сортировки">lecm-base-aspects:order</param>
+                </control>
+            </field-type>
+            <field-type id="lecm-os:nomenclature-case" localName="Номенклатура дел">
+                <control id="lecm-os:nomenclature-case-control" template="/ru/it/lecm/base-share/components/controls/association-control.ftl" localName="Выбор номенклатуры">
+                    <param id="rootLocation" localName="Корневая директория" mandatory="true" visible="false">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел</param>
+                    <param id="nameSubstituteString" localName="Шаблон имени">{lecm-os:nomenclature-case-index}-{cm:title}</param>
+                    <param id="selectedItemsNameSubstituteString" localName="Шаблон имени выбранных элементов">{cm:title|lecm-os:nomenclature-year-section-year}</param>
+                    <param id="notSelectedOptionShow" localName="Показывать пустой элемент" description="Если true, то по умолчанию показывается элемент без значения ассоциации.">false</param>
+                    <param id="notSelectedOptionLabel" localName="Название  для пустого элемента" description="Название для элемента без значения ассоциации"> </param>
+                    <param id="showCreateNewLink" localName="Показывать ссылку создания">false</param>
+                    <param id="showCreateNewButton" localName="Показывать кнопку создания">false</param>
+                    <param id="sortProp" localName="Поле для сортировки">lecm-os:nomenclature-case-index</param>
+                    <param id="plane" localName="Плоский справочник" visible="false">false</param>
+                    <param id="showSearch" localName="Показывать поле поиска">true</param>
+                    <param id="showSelectedItemsPath" localName="Показывать путь до выбранных элементов">false</param>
+                    <param id="treeItemType" localName="Тип элемента в дереве">lecm-dic:hierarchical_dictionary_values</param>
+                    <param id="endpointType" localName="Тип выбираемых элементов" visible="false">lecm-os:nomenclature-case</param>
+                    <param id="childrenDataSource" localName="Скрипт для получения списка значений">lecm/os/nomenclature/datasource/avaliableUnits</param>
+                    <param id="additionalFilter" localName="Дополнительный фильтр (FTS query)">{{FILTER_YEARS_BY_ORG({allowAdmin: true})}} AND @lecm\\-os\\:nomenclature\\-case\\-status:\"OPEN\"</param>
+                    <param id="treeBranchesDatasource" localName="Скрипт для построения дерева">lecm/nomenclature/tree/ApprovedOnly</param>
+                    <param id="showParentNodeInTreeView" localName="Показывать корневой узел в дереве">false</param>
+                </control>
+            </field-type>
+            <field-type id="lecm-os:nomenclature-unit-section" localName="Раздел управления">
+                <control id="lecm-os:nomenclature-unit-section-control" template="/ru/it/lecm/base-share/components/controls/association-control.ftl" localName="Выбор раздела управления">
+                    <param id="rootLocation" localName="Корневая директория" mandatory="true" visible="false">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел</param>
+                    <param id="nameSubstituteString" localName="Шаблон имени">{cm:title|lecm-os:nomenclature-year-section-year}</param>
+                    <param id="treeNodeSubstituteString" localName="Шаблон имени элемента дерева">{cm:title|lecm-os:nomenclature-year-section-year}</param>
+                    <param id="showCreateNewLink" localName="Показывать ссылку создания">false</param>
+                    <param id="showCreateNewButton" localName="Показывать кнопку создания">false</param>
+                    <param id="sortProp" localName="Поле для сортировки">cm:title</param>
+                    <param id="plane" localName="Плоский справочник" visible="false">false</param>
+                    <param id="showSearch" localName="Показывать поле поиска">false</param>
+                    <param id="showSelectedItemsPath" localName="Показывать путь до выбранных элементов">false</param>
+                    <param id="treeItemType" localName="Тип элемента в дереве">lecm-dic:hierarchical_dictionary_values</param>
+                    <param id="endpointType" localName="Тип выбираемых элементов" visible="false">lecm-os:nomenclature-unit-section</param>
+                    <param id="childrenDataSource" localName="Скрипт для получения списка значений">lecm/os/nomenclature/datasource/avaliableUnits</param>
+                    <param id="additionalFilter" localName="Дополнительный фильтр (FTS query)">{{FILTER_YEARS_BY_ORG({allowAdmin: true})}} AND NOT @lecm\\-os\\:nomenclature\\-unit\\-section\\-status:\"CLOSED\"</param>
+                    <param id="treeBranchesDatasource" localName="Скрипт для построения дерева">lecm/nomenclature/tree/notClosed</param>
+                    <param id="showParentNodeInTreeView" localName="Показывать корневой узел в дереве">false</param>
+                </control>
+                <control id="lecm-os:nomenclature-unit-section-and-year-control" template="/ru/it/lecm/base-share/components/controls/association-control.ftl" localName="Выбор раздела (годового и управления)">
+                    <param id="rootLocation" localName="Корневая директория" visible="false">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел</param>
+                    <param id="nameSubstituteString" localName="Шаблон имени">{cm:title} {lecm-os:nomenclature-year-section-year}</param>
+                    <param id="treeNodeSubstituteString" localName="Шаблон имени элемента дерева">{cm:title} {lecm-os:nomenclature-year-section-year}</param>
+                    <param id="showCreateNewLink" localName="Показывать ссылку создания">false</param>
+                    <param id="showCreateNewButton" localName="Показывать кнопку создания">false</param>
+                    <param id="sortProp" localName="Поле для сортировки">cm:title</param>
+                    <param id="plane" localName="Плоский справочник" visible="false">false</param>
+                    <param id="showSearch" localName="Показывать поле поиска">false</param>
+                    <param id="showSelectedItemsPath" localName="Показывать путь до выбранных элементов">false</param>
+                    <param id="treeItemType" localName="Тип элемента в дереве">lecm-dic:hierarchical_dictionary_values</param>
+                    <param id="endpointType" localName="Тип выбираемых элементов" visible="false">lecm-dic:hierarchical_dictionary_values</param>
+                    <param id="childrenDataSource" localName="Скрипт для получения списка значений">lecm/os/nomenclature/datasource/avaliableUnits</param>
+                    <param id="additionalFilter" localName="Дополнительный фильтр (FTS query)">{{FILTER_YEARS_BY_ORG({allowAdmin: true})}} AND NOT @lecm\\-os\\:nomenclature\\-unit\\-section\\-status:\"CLOSED\" OR NOT @lecm\\-os\\:nomenclature\\-year\\-section\\-status:\"CLOSED\"</param>
+                    <param id="changeItemsFireAction" localName="Событие после выбора"/><!--osUnitCopyItemChanged-->
+                    <param id="treeBranchesDatasource" localName="Скрипт для построения дерева">lecm/nomenclature/tree/notClosed</param>
+                </control>
+            </field-type>
+            <field-type id="lecm-os:nomenclature-year-section" localName="Годовой раздел">
+                <control id="lecm-os:nomenclature-year-section-control" template="/ru/it/lecm/base-share/components/controls/association-control.ftl" localName="Выбор годового раздела">
+                    <param id="rootLocation" localName="Корневая директория" mandatory="true" visible="false">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел</param>
+                    <param id="nameSubstituteString" localName="Шаблон имени">{lecm-os:nomenclature-year-section-year}</param>
+                    <param id="treeItemType" localName="Тип элемента в дереве">lecm-dic:hierarchical_dictionary_values</param>
+                    <param id="childrenDataSource" localName="Скрипт для получения списка значений">lecm/os/nomenclature/datasource/avaliableUnits</param>
+                    <param id="additionalFilter" localName="Дополнительный фильтр (FTS query)">{{FILTER_YEARS_BY_ORG({allowAdmin: true})}}</param>
+                    <param id="treeBranchesDatasource" localName="Скрипт для построения дерева">lecm/nomenclature/tree</param>
+                    <param id="sortProp" localName="Поле для сортировки">lecm-os:nomenclature-year-section-year</param>
+                </control>
+            </field-type>
+        </field-types>
+    </config>
+</alfresco-config>

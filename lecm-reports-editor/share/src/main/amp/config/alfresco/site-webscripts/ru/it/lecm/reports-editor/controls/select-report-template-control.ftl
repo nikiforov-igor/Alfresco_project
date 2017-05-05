@@ -21,7 +21,10 @@
 <#elseif field.control.params.notSelectedOptionLabelCode??>
     <#assign notSelectedText = msg(field.control.params.notSelectedOptionLabelCode)>
 </#if>
-
+<#assign notSelectedOption = false>
+<#if field.control.params.notSelectedOption??>
+    <#assign notSelectedText = field.control.params.notSelectedOption == "true">
+</#if>
 <script type="text/javascript">//<![CDATA[
 (function () {
 
@@ -47,7 +50,7 @@
             oldValue: "${fieldValue}",
             selectedValue: "${fieldValue}",
             nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name} ({lecm-rpeditor:templateCode})'}",
-            notSelectedOptionShow: ${field.control.params.notSelectedOption?string},
+            notSelectedOptionShow: ${notSelectedOption?string},
             notSelectedText: "${notSelectedText?string}",
             fieldId: "${fieldId}"
         });
