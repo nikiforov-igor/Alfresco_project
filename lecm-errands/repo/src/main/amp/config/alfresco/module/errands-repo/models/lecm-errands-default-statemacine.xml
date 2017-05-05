@@ -3721,12 +3721,12 @@ if (doc) {
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[Имеется необработанный запрос отмены поручения]]></value>
+                                                                                    <![CDATA[doc.attr("lecm-errands-aspect:isCancelRequested") == null OR !doc.attr("lecm-errands-aspect:isCancelRequested")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.attr("lecm-errands-aspect:isCancelRequested") == null OR !doc.attr("lecm-errands-aspect:isCancelRequested")]]></value>
+                                                                                    <![CDATA[Имеется необработанный запрос отмены поручения]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
