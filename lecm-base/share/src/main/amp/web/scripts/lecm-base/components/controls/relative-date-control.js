@@ -19,7 +19,6 @@ LogicECM.module = LogicECM.module || {};
         daysInput: null,
         daysModeSelect: null,
 
-        radioValue: null,
         options: {
             formId: null,
             fieldId: null,
@@ -31,22 +30,34 @@ LogicECM.module = LogicECM.module || {};
             type: "RELATIVE_DATE",
             daysMode: "WORK",
             date: null,
-            days: null,
+            days: 0,
             mode: "RELATIVE"
         },
 
-        onDateSelected: function (layer, args) {
-            this.onValueChanged(layer);
+        onDateSelected: function () {
+            this.onValueChanged();
         },
 
         onRadioValueChanged: function (layer) {
             if (layer.target && layer.target.value) {
                 this.controlStateValue.mode = layer.target.value;
+
                 this.updateValue();
 
                 if ("RELATIVE" == this.controlStateValue.mode) {
-                    this.daysInput.setAttribute("disabled", false);
-                    this.daysModeSelect.setAttribute("disabled", false);
+                    if (this.daysModeSelect){
+                        this.daysModeSelect.removeAttribute("disabled");
+                    }
+
+                    if (this.daysInput) {
+                        this.daysInput.removeAttribute("disabled");
+                        YAHOO.Bubbling.fire("registerValidationHandler",
+                            {
+                                fieldId: this.daysInput.id,
+                                handler: LogicECM.constraints.isNumber,
+                                when: "change"
+                            });
+                    }
 
                     if (this.datePicker) {
                         this.datePicker.onDisableControl(null, [null, {
@@ -55,9 +66,16 @@ LogicECM.module = LogicECM.module || {};
                         }])
                     }
                 } else {
-                    this.daysInput.value = "";
+                    if (this.daysInput) {
+                        YAHOO.Bubbling.fire("registerValidationHandler",
+                            {
+                                fieldId: this.daysInput.id,
+                                handler: LogicECM.constraints.notMandatory,
+                                when: "change"
+                            });
+                    }
+
                     this.daysInput.setAttribute("disabled", true);
-                    this.daysModeSelect.value = "";
                     this.daysModeSelect.setAttribute("disabled", true);
 
                     if (this.datePicker) {
@@ -70,24 +88,12 @@ LogicECM.module = LogicECM.module || {};
             }
         },
 
-        onValueChanged: function (layer) {
+        onValueChanged: function () {
             this.updateValue();
         },
 
         onReady: function () {
             LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
-
-            var radioButtons = YAHOO.util.Selector.query('input[name="' + this.options.fieldName + '-radio"]', this.id + "-radio-parent");
-            if (radioButtons && radioButtons.length) {
-                for (var i = 0; i < radioButtons.length; i++) {
-                    YAHOO.util.Event.addListener(radioButtons[i], "click", this.onRadioValueChanged, null, this);
-                    if (radioButtons[i].checked) {
-                        this.onRadioValueChanged({
-                            target: radioButtons[i]
-                        });
-                    }
-                }
-            }
 
             this.daysInput = YAHOO.util.Dom.get(this.id + "-days");
             if (this.daysInput) {
@@ -100,18 +106,34 @@ LogicECM.module = LogicECM.module || {};
             }
 
             this.dateInput = YAHOO.util.Dom.get(this.id + "-date-value");
+
+            var radioButtons = YAHOO.util.Selector.query('input[name="' + this.options.fieldName + '-radio"]', this.id + "-radio-parent");
+            if (radioButtons && radioButtons.length) {
+                for (var i = 0; i < radioButtons.length; i++) {
+                    YAHOO.util.Event.addListener(radioButtons[i], "click", this.onRadioValueChanged, null, this);
+                    if (radioButtons[i].checked) {
+                        this.onRadioValueChanged({
+                            target: radioButtons[i]
+                        });
+                    }
+                }
+            }
         },
 
         updateValue: function () {
-            this.controlStateValue.mode = this.daysModeSelect.value;
+            this.controlStateValue.daysMode = this.daysModeSelect.value;
             this.controlStateValue.date = this.dateInput.value;
             this.controlStateValue.days = this.daysInput.value;
 
-            YAHOO.util.Dom.get(this.id).value = YAHOO.lang.JSON.stringify(this.controlStateValue);
+            YAHOO.util.Dom.get(this.id).value = this.getValue();
         },
 
         getValue: function () {
             return YAHOO.lang.JSON.stringify(this.controlStateValue);
+        },
+
+        setValue: function (config) {
+            this.controlStateValue = config;
         }
     });
 })();

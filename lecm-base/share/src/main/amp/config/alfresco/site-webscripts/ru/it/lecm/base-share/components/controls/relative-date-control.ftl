@@ -1,57 +1,67 @@
 <#include "/org/alfresco/components/form/controls/common/utils.inc.ftl" />
 <#assign id=args.htmlid/>
-<#assign fieldValue=field.value>
+<#assign defaultSettings = "{\"type\":\"RELATIVE_DATE\", \"daysMode\":\"WORK\", \"mode\":\"RELATIVE\", \"days\":0, \"date\":\"\"}">
+<#if (field.control.params.defaultSettings)?has_content>
+    <#assign defaultSettings = field.control.params.defaultSettings>
+</#if>
+
+<#assign defaultValue=field.value>
+<#if form.mode == "create">
+    <#if (form.arguments[field.name])?has_content>
+        <#assign defaultValue=form.arguments[field.name]>
+    <#elseif (field.control.params.defaultValue)?has_content>
+        <#assign defaultValue=field.control.params.defaultValue>
+    <#else>
+        <#assign defaultValue = defaultSettings>
+    </#if>
+</#if>
+
+<#assign defaultConfig=defaultValue?eval>
 
 <div class="relative-date-set">
+    <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${defaultValue?html}"/>
     <div class="relative-date-set-radio">
-    <#assign optionSeparator=",">
-    <#assign labelSeparator="|">
-    <#assign radioValue="WORK">
-    <#assign radioControlId= fieldHtmlId + "-radio">
-    <#if form.mode == "create" && fieldValue?string == "">
-        <#if field.control.params.defaultValue??>
-            <#assign fieldValue=field.control.params.defaultValue>
-        </#if>
-        <#if form.arguments[field.name]?has_content>
-            <#assign fieldValue=form.arguments[field.name]>
-        </#if>
-    </#if>
-    <div id="${radioControlId}-parent" class="control selectone-radiobuttons editmode">
-        <div class="label-div">
-            <label for="${radioControlId}">${field.label?html}:
-            <#if field.mandatory>
-                <span class="mandatory-indicator">${msg("form.required.fields.marker")}</span>
-            </#if>
-            </label>
-        </div>
-        <div class="container">
-            <div class="value-div">
-            <#if field.control.params.radioOptions?? && field.control.params.radioOptions != "">
-                <input id="${radioControlId}" type="hidden" name="-"/>
-                <#list field.control.params.radioOptions?split(optionSeparator) as nameValue>
-                    <#if nameValue?index_of(labelSeparator) == -1>
-                            <input type="radio" name="${field.name}-radio" value="${nameValue?html}"/>
-                            <label class="checkbox">${nameValue?html}</label>
-                    <#else>
-                        <#assign choice=nameValue?split(labelSeparator)>
-                            <input type="radio" name="${field.name}-radio" value="${choice[0]?html}"/>
-                            <label class="checkbox">${msgValue(choice[1])?html}</label>
-                    </#if>
-                </#list>
-            <#else>
-                <div id="${radioControlId}" class="missing-options">${msg("form.control.selectone.missing-options")}</div>
-            </#if>
+        <#assign optionSeparator=",">
+        <#assign labelSeparator="|">
+        <#assign radioControlId= fieldHtmlId + "-radio">
+
+        <div id="${radioControlId}-parent" class="control selectone-radiobuttons editmode">
+            <div class="label-div">
+                <label for="${radioControlId}">${field.label?html}:
+                <#if field.mandatory>
+                    <span class="mandatory-indicator">${msg("form.required.fields.marker")}</span>
+                </#if>
+                </label>
             </div>
+            <div class="container">
+                <div class="value-div">
+                <#if field.control.params.radioOptions?? && field.control.params.radioOptions != "">
+                    <input id="${radioControlId}" type="hidden" name="-"/>
+                    <#list field.control.params.radioOptions?split(optionSeparator) as nameValue>
+                        <#if nameValue?index_of(labelSeparator) == -1>
+                                <input type="radio" name="${field.name}-radio" value="${nameValue?html}" <#if nameValue == defaultConfig.mode?string>checked</#if>/>
+                                <label class="checkbox">${nameValue?html}</label>
+                        <#else>
+                            <#assign choice=nameValue?split(labelSeparator)>
+                                <input type="radio" name="${field.name}-radio" value="${choice[0]?html}" <#if choice[0] == defaultConfig.mode?string>checked</#if>/>
+                                <label class="checkbox">${msgValue(choice[1])?html}</label>
+                        </#if>
+                    </#list>
+                <#else>
+                    <div id="${radioControlId}" class="missing-options">${msg("form.control.selectone.missing-options")}</div>
+                </#if>
+                </div>
+            </div>
+            <div class="clear"></div>
         </div>
-        <div class="clear"></div>
     </div>
-    </div>
+
     <div class="relative-date-set-days">
         <#assign daysControlId = fieldHtmlId + "-days">
         <div id="${daysControlId}-parent" class="control textfield editmode">
             <div class="container">
                 <div class="value-div">
-                    <input id="${daysControlId}" name="-" type="text"/>
+                    <input id="${daysControlId}" name="-" type="text" value="${defaultConfig.days}"/>
                 </div>
             </div>
         </div>
@@ -67,10 +77,10 @@
                     <select id="${daysModeControlId}" name="-">
                         <#list field.control.params.modeOptions?split(optionSeparator) as nameValue>
                             <#if nameValue?index_of(labelSeparator) == -1>
-                                <option value="${nameValue?html}">${nameValue?html}</option>
+                                <option value="${nameValue?html}" <#if nameValue == defaultConfig.daysMode?string> selected="selected"</#if>>${nameValue?html}</option>
                             <#else>
                                 <#assign choice=nameValue?split(labelSeparator)>
-                                <option value="${choice[0]?html}">${msgValue(choice[1])?html}</option>
+                                <option value="${choice[0]?html}" <#if choice[0] == defaultConfig.daysMode?string> selected="selected"</#if>>${msgValue(choice[1])?html}</option>
                             </#if>
                         </#list>
                     </select>
@@ -85,7 +95,10 @@
 
     <div class="relative-date-set-date">
         <#assign dateControlId = fieldHtmlId + "-date">
-        <#assign currentValue = .now?string("yyyy-MM-dd")>
+        <#assign currentValue = defaultConfig.date?js_string>
+        <#if !(currentValue)?has_content>
+            <#assign currentValue = .now?string("yyyy-MM-dd")>
+        </#if>
         <div id="${dateControlId}-parent" class="control date editmode">
             <div class="container">
                 <div class="buttons-div">
@@ -94,8 +107,7 @@
                 <div id="${dateControlId}" class="datepicker"></div>
                 <div class="value-div">
                     <div class="date-entry-container only-date">
-                        <input id="${dateControlId}-value" type="hidden" name="${field.name}"/>
-                        <#--<input id="${dateControlId}" type="hidden" name="-"/>-->
+                        <input id="${dateControlId}-value" type="hidden" name="${field.name}" value="${currentValue?html}"/>
                         <input id="${dateControlId}-date" name="-" type="text" class="date-entry mandatory-highlightable"/>
                     </div>
                 </div>
@@ -125,6 +137,7 @@
             fieldId: "${field.configName}",
             formId: "${args.htmlid}"
         });
+        controller.setValue(eval('(${defaultValue})'));
 
         var datePicker = new LogicECM.DatePicker("${dateControlId}", "${dateControlId}-value").setOptions(
                 {

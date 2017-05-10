@@ -347,12 +347,10 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 			String name = (String)props.get(ContentModel.PROP_TITLE);
 			JSONArray attributes = new JSONArray((String)props.get(DocumentTemplateModel.PROP_DOCUMENT_TEMPLATE_ATTRIBUTES));
             for (int i = 0; i < attributes.length(); i++) {
-                JSONObject jsonAttribute = attributes.getJSONObject(i);
-                JSONObject attrConfig = jsonAttribute.getJSONObject("initial");
-                JSONObject attrValue;
+                JSONObject attrConfig = attributes.getJSONObject(i).getJSONObject("initial");
                 try {
-                    attrValue = attrConfig.getJSONObject("value");
-                    jsonAttribute.put("value", valueEvaluatorsManager.evaluate(attrValue));
+                    JSONObject attrValue = new JSONObject(attrConfig.getString("value"));
+                    attrConfig.put("value", valueEvaluatorsManager.evaluate(attrValue));
                 } catch (JSONException ignored) {}
             }
 			JSONObject template = new JSONObject();

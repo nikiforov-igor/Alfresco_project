@@ -41,8 +41,9 @@ public class ValueEvaluatorsManager {
     }
 
     public String evaluate(JSONObject value) throws JSONException {
-        if (value.has("type")) {
-            String evaluatorId = value.getString("type");
+        String TYPE_FIELD = "type";
+        if (value.has(TYPE_FIELD)) {
+            String evaluatorId = value.getString(TYPE_FIELD);
             ValueEvaluator evaluator = getEvaluatorById(evaluatorId);
             if (evaluator != null) {
                 return evaluator.evaluate(value);
