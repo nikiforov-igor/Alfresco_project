@@ -580,4 +580,20 @@
 		<property name="dictionaryService" ref="dictionaryService" />
 		<property name="namespaceService" ref="namespaceService"/>
 	</bean>
+
+	<bean id="valueEvaluatorsManager" class="ru.it.lecm.base.beans.evaluators.ValueEvaluatorsManager"/>
+
+	<bean id="baseValueEvaluator" init-method="register" abstract="true"
+		  class="ru.it.lecm.base.beans.evaluators.ValueEvaluator">
+		<property name="nodeService" ref="nodeService"/>
+		<property name="namespaceService" ref="namespaceService"/>
+		<property name="authService" ref="authenticationService"/>
+		<property name="evaluatorsManager" ref="valueEvaluatorsManager"/>
+		<property name="searchService" ref="searchService"/>
+	</bean>
+
+	<bean id="relativeDateEvalutor" class="ru.it.lecm.base.beans.evaluators.GetRelativeDateEvaluator" parent="baseValueEvaluator">
+		<property name="id" value="RELATIVE_DATE"/>
+		<property name="calendarBean" ref="WorkCalendarService"/>
+	</bean>
 </beans>
