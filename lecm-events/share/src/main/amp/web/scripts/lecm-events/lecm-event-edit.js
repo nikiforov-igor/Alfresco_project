@@ -378,7 +378,16 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 						this.initAttachments();
 					}
 				},
-				failureMessage: this.msg("message.failure")
+				failureCallback:{
+					scope: this,
+					fn: function () {
+						Alfresco.util.PopupManager.displayMessage(
+							{
+								text: this.msg("message.failure")
+							});
+						this.initAttachments();
+					}
+				}
 			});
 		}
 	}, true);
