@@ -496,10 +496,29 @@ LogicECM.module = LogicECM.module || {};
 					if (obj.childrenDataSource) {
 						this.options.childrenDataSource = obj.childrenDataSource;
 					}
-					if (obj.itemKey || !this.options.isComplex) {
-						obj.itemKey = obj.itemKey ? obj.itemKey : this.options.itemsOptions[0].itemKey;
+                    var itemParamObjects = [];
+                    var controlItemsOptions = this.options.itemsOptions;
+                    if (obj.itemsOptions && obj.itemsOptions.length) {
+                        itemParamObjects = obj.itemsOptions.filter(function(argOpt) {
+                            return controlItemsOptions.some(function(opt){
+                                return opt.itemKey == argOpt.itemKey;
+                            })
+                        })
+                    }
+                    if (!this.options.isComplex) {
+                        var itemObj = obj;
+                        itemObj.itemKey = controlItemsOptions[0].itemKey;
+                        itemParamObjects.push(itemObj);
+                    }
+					if (itemParamObjects.length){
+                        for (var i = 0; i < itemParamObjects.length; i++) {
+                            var item = itemParamObjects[i];
+                            item.formId = args[1].formId;
+                            item.fieldId = args[1].fieldId;
+                            this.fire('refreshControlItemList', item);
+                        }
 					}
-					this.fire('refreshControlItemList', obj);
+
 				}
 			}
 		},

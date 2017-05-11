@@ -504,6 +504,7 @@
 		            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Способ_x0020_доставки</control-param>
 		            <control-param name="plane">true</control-param>
                     <control-param name="showAssocViewForm">false</control-param>
+                    <control-param name="nameSubstituteString">{cm:name}</control-param>
 	            </type>
                 <type name="association:lecm-connect:connection" template="/ru/it/lecm/documents/controls/connections/document-temp-connection.ftl"></type>
             </default-controls>
