@@ -104,10 +104,10 @@
                     <show id="lecm-eds-document:note"/>
                     <show id="lecm-eds-document:sheets-number"/>
                     <show id="lecm-document:subject-assoc"/>
-                    <show id="lecm-document-aspects:additional-organization-unit-assoc" mandatory="true"/>
-                    <show id="lecm-nd:begin-date" mandatory="true"/>
-                    <show id="lecm-nd:end-date" mandatory="true"/>
-                    <show id="lecm-nd:unlimited" mandatory="true"/>
+                    <show id="lecm-document-aspects:additional-organization-unit-assoc"/>
+                    <show id="lecm-nd:begin-date"/>
+                    <show id="lecm-nd:end-date"/>
+                    <show id="lecm-nd:unlimited"/>
                     <show id="lecm-document-aspects:registrator-assoc" force="true"/>
                 </field-visibility>
                 <appearance>
@@ -154,6 +154,18 @@
                             <control-param name="useStrictFilterByOrg">true</control-param>
                             <control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
                             <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=DA_REGISTRARS</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-nd:begin-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/relative-date-control.ftl">
+                            <control-param name="radioOptions">RELATIVE,ABSOLUTE</control-param>
+                            <control-param name="modeOptions">WORK|Рабочих,CALENDAR|Календарных</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-nd:end-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/relative-date-control.ftl">
+                            <control-param name="radioOptions">RELATIVE,ABSOLUTE</control-param>
+                            <control-param name="modeOptions">WORK|Рабочих,CALENDAR|Календарных</control-param>
                         </control>
                     </field>
                 </appearance>

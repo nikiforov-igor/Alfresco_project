@@ -40,7 +40,9 @@ public class GetRelativeDateEvaluator extends ValueEvaluator {
             switch (dayMode) {
                 case WORK: {
                     Date nextDate = calendarBean.getNextWorkingDate(now.getTime(), days, Calendar.DAY_OF_MONTH);
-                    isoDate = BaseBean.DateFormatISO8601.format(nextDate);
+                    if (nextDate != null) {
+                        isoDate = BaseBean.DateFormatISO8601.format(nextDate);
+                    }
                 }
                 break;
                 case CALENDAR: {

@@ -43,6 +43,12 @@
     margin-left: 20px;
     float: none;
 }
+.relative-date-set .relative-date-set-date-with-time {
+    width: 100%;
+    margin-left: 20px;
+    float: none;
+}
+
 .relative-date-set .relative-date-set-radio .control input:last-of-type {
     margin-bottom: 15px;
 }
@@ -57,4 +63,19 @@
 .relative-date-set .relative-date-set-radio .control .container  {
     min-width: 10px;
     float:left;
+}
+
+.relative-date-set .relative-date-set-date-with-time .control .buttons-div {
+    display: none;
+}
+
+.relative-date-set .relative-date-set-date-with-time .control .date-entry-container {
+    width: calc(100% - 180px);
+    float: left;
+    padding-right: 5px;
+}
+
+.relative-date-set .relative-date-set-date-with-time .control .time-entry-container {
+    float: left;
+    width: 155px;
 }
