@@ -96,12 +96,13 @@
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
 					</field>
 					<field id="lecm-notification-template:template-assoc">
-						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
 							<control-param name="plane">true</control-param>
 							<control-param name="showPath">false</control-param>
 							<control-param name="showAutocomplete">false</control-param>
 							<control-param name="rootLocation">/app:company_home/app:dictionary/app:email_templates</control-param>
 							<control-param name="additionalFilter">PATH:\"/app:company_home/app:dictionary/app:email_templates//*\"</control-param>
+							<control-param name="nameSubstituteString">{cm:name}</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -133,13 +134,14 @@
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
 					</field>
 					<field id="lecm-notification-template:template-assoc">
-						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
 							<control-param name="plane">true</control-param>
 							<control-param name="showPath">false</control-param>
 							<control-param name="showAutocomplete">false</control-param>
 							<control-param name="rootLocation">/app:company_home/app:dictionary/app:email_templates</control-param>
 							<control-param name="additionalFilter">PATH:\"/app:company_home/app:dictionary/app:email_templates//*.ftl\"</control-param>
 							<control-param name="defaultValue">workspace://SpacesStore/default-notification-template</control-param>
+							<control-param name="nameSubstituteString">{cm:name}</control-param>
 						</control>
 					</field>
 				</appearance>

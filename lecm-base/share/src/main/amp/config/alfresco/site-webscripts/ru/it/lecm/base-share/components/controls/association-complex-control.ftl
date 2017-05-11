@@ -67,7 +67,10 @@
 <#if params.sortSelected?? && params.sortSelected == "true">
 	<#assign  sortSelected = true>
 </#if>
-
+<#assign showCreateNewButton = false>
+<#if params.showCreateNewButton?? && params.showCreateNewButton == "true" && !isComplex>
+	<#assign showCreateNewButton = true>
+</#if>
 <#if 'view' == form.mode>
 	<#assign value>
 		<input type='hidden' id='${fieldHtmlId}' name='${field.name}' value='${fieldValue?html}'>
@@ -75,7 +78,7 @@
 	</#assign>
 	<@components.baseControl field=field name='association-control' classes='association-control viewmode' value=value disabled=disabled/>
 <#else>
-	<#assign buttons><@components.baseControlBtns field=field renderCreateBtn=false/></#assign>
+	<#assign buttons><@components.baseControlBtns field=field renderCreateBtn=showCreateNewButton/></#assign>
 	<#assign value><@components.baseControlValue field=field fieldValue=fieldValue showAutocomplete=showAutocomplete isDefaultValue=defaultValue?has_content/></#assign>
 	<@components.baseControl field=field name='association-control' classes='association-control' buttons=buttons value=value>
 		<#if showAutocomplete>
@@ -98,6 +101,8 @@
 				showAutocomplete: ${showAutocomplete?string},
 				<#if params.autocompleteDataSource??>
 				autocompleteDataSource: '${params.autocompleteDataSource}',
+				<#elseif !isComplex >
+				autocompleteDataSource: 'lecm/forms/picker',
 				</#if>
 				<#if params.dataSourceLogic??>
                 dataSourceLogic: '${params.dataSourceLogic}',
@@ -108,6 +113,7 @@
 				</#if>
                 endpointMany: ${endpointMany?string},
                 showAssocViewForm: ${showAssocViewForm?string},
+                showCreateNewButton: ${showCreateNewButton?string},
                 sortSelected: ${sortSelected?string},
 				itemsOptions: [
 					<#list items as i>
@@ -142,6 +148,9 @@
 									'${key}': <#if isNotBoolean>'</#if>${params[key]}<#if isNotBoolean>'</#if>,
 								</#if>
 							</#list>
+							<#if !params?keys?seq_contains("endpointMany") && !params?keys?seq_contains(itemKey + "_endpointMany")>
+							    'endpointMany': ${endpointMany?string},
+							</#if>
 							<#if params[itemKey + "_rootLocationArg"]?? && form.arguments[params[itemKey + "_rootLocationArg"]]??>
 								'rootLocation': '${form.arguments[params[itemKey + "_rootLocationArg"]]}',
 							<#elseif params.rootLocationArg?? && form.arguments[params.rootLocationArg]??>

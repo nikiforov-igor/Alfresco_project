@@ -30,12 +30,15 @@ LogicECM.module = LogicECM.module || {};
 		this.createAssociationControlPicker(options, messages);
 		this.createAssociationControlItems(messages);
 
+		Bubbling.on("refreshItemList", this.onRefreshItemList, this);
 		Bubbling.on('searchProperties', this.onItemSearchProperties, this);
 		Bubbling.on('addSelectedItem', this.onAddSelectedItem, this);
 		Bubbling.on('removeSelectedItem', this.onRemoveSelectedItem, this);
 		Bubbling.on('pickerClosed', this.onPickerClosed, this);
         Bubbling.on('loadAllOriginalItems', this.onLoadAllOriginalItems, this);
         Bubbling.on('readonlyControl', this.onReadonlyControl, this);
+		Bubbling.on('disableControl', this.onDisableControl, this);
+		Bubbling.on('enableControl', this.onEnableControl, this);
 
 		return this;
 	};
@@ -170,11 +173,73 @@ LogicECM.module = LogicECM.module || {};
 			}
 		},
 
+		onDisableControl: function (layer, args) {
+			if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+				if (this.widgets.pickerButton != null) {
+					this.widgets.pickerButton.set('disabled', true);
+				}
+				if (this.widgets.picker) {
+					this.widgets.picker.hide();
+				}
+				if (this.widgets.createNewButton != null) {
+					this.widgets.createNewButton.set('disabled', true);
+				}
+				if (this.widgets.autocomplete) {
+					autocompleteInput = this.widgets.autocomplete.getInputEl();
+					autocompleteInput.setAttribute('disabled', '');
+				}
+				if (this.widgets.added) {
+					this.widgets.added.set('disabled', true);
+				}
+				if (this.widgets.removed) {
+					this.widgets.added.set('disabled', true);
+				}
+				var input = Dom.get(this.id);
+				if (input) {
+					input.disabled = true;
+				}
+				this.tempDisabled = true;
+			}
+		},
+
+		onEnableControl: function (layer, args) {
+			if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+				if (!this.options.disabled) {
+					if (this.widgets.pickerButton != null) {
+						this.widgets.pickerButton.set('disabled', false);
+					}
+					if (this.widgets.picker) {
+						this.widgets.picker.hide();
+					}
+					if (this.widgets.createNewButton != null) {
+						this.widgets.createNewButton.set('disabled', false);
+					}
+					if (this.widgets.autocomplete) {
+						autocompleteInput = this.widgets.autocomplete.getInputEl();
+						autocompleteInput.removeAttribute('disabled');
+					}
+					if (this.widgets.added) {
+						this.widgets.added.set('disabled', false);
+					}
+					if (this.widgets.removed) {
+						this.widgets.added.set('disabled', false);
+					}
+					var input = Dom.get(this.id);
+					if (input) {
+						input.disabled = false;
+					}
+				}
+				this.tempDisabled = false;
+			}
+		},
 		onReadonlyControl: function(layer, args) {
 			var autocompleteInput, fn;
 			if (!this.options.disabled && this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
 				this.readonly = args[1].readonly;
 				this.widgets.pickerButton.set('disabled', args[1].readonly);
+				if (this.widgets.createNewButton != null) {
+					this.widgets.createNewButton.set('disabled', args[1].readonly);
+				}
 				if (this.widgets.autocomplete) {
 					autocompleteInput = this.widgets.autocomplete.getInputEl();
 					fn = args[1].readonly ? autocompleteInput.setAttribute : autocompleteInput.removeAttribute;
@@ -419,7 +484,25 @@ LogicECM.module = LogicECM.module || {};
 			}
 			Event.stopEvent(event);
 		},
-
+		onRefreshItemList: function (layer, args)
+		{
+			// Check the event is directed towards this instance
+			if (Alfresco.util.hasEventInterest(this, args) || (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId)) {
+				var obj = args[1];
+				if (obj) {
+					if (obj.additionalFilter) {
+						this.options.additionalFilter = obj.additionalFilter;
+					}
+					if (obj.childrenDataSource) {
+						this.options.childrenDataSource = obj.childrenDataSource;
+					}
+					if (obj.itemKey || !this.options.isComplex) {
+						obj.itemKey = obj.itemKey ? obj.itemKey : this.options.itemsOptions[0].itemKey;
+					}
+					this.fire('refreshControlItemList', obj);
+				}
+			}
+		},
 		enableAutocomplete: function () {
 			this.widgets.autoCompleteListener.enable();
 		},

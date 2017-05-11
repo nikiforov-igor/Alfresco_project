@@ -7,7 +7,7 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-deputy:dictionary-assoc">
-						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники</control-param>
 							<control-param name="plane">true</control-param>
 							<control-param name="endpointMany">false</control-param>
@@ -36,13 +36,14 @@
 						</control>
 					</field>
 					<field id="lecm-deputy:complete-deputy-assoc" label-id="label.employee.full.deputies">
-						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
 							<control-param name="plane">true</control-param>
 							<control-param name="endpointMany">true</control-param>
 							<control-param name="endpointType">lecm-orgstr:employee</control-param>
 							<control-param name="useDeferedReinit">true</control-param>
 							<control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
+							<control-param name="showSearch">true</control-param>
 						</control>
 					</field>
 					<field id="complete-deputy-values-script">
@@ -80,7 +81,7 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-deputy:employee-assoc" mandatory="true">
-						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
 							<control-param name="plane">true</control-param>
 							<control-param name="endpointMany">false</control-param>
@@ -89,7 +90,7 @@
 						</control>
 					</field>
 					<field id="lecm-deputy:subject-assoc" mandatory="true">
-						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники</control-param>
 							<control-param name="plane">false</control-param>
 							<control-param name="useObjectDescription">true</control-param>
@@ -121,7 +122,7 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-deputy:employee-assoc" mandatory="true">
-						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
 							<control-param name="plane">true</control-param>
 							<control-param name="endpointMany">false</control-param>
@@ -130,7 +131,7 @@
 						</control>
 					</field>
 					<field id="lecm-deputy:subject-assoc" mandatory="true">
-						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники</control-param>
 							<control-param name="plane">true</control-param>
 							<control-param name="useObjectDescription">true</control-param>
@@ -187,7 +188,7 @@
 				<appearance>
 					<field id="lecm-deputy:employee-assoc" read-only="true"/>
 					<field id="lecm-deputy:subject-assoc" mandatory="true">
-						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники</control-param>
 							<control-param name="plane">false</control-param>
 							<control-param name="useObjectDescription">true</control-param>
@@ -212,7 +213,7 @@
 				<appearance>
 					<field id="lecm-deputy:employee-assoc" read-only="true"/>
 					<field id="lecm-deputy:subject-assoc" mandatory="true">
-						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники</control-param>
 							<control-param name="plane">true</control-param>
 							<control-param name="useObjectDescription">true</control-param>
@@ -264,8 +265,8 @@
 				</field-visibility>
 				<appearance>
 					<field id="ID" label-id="label.chief.search">
-						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
 							<control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="endpointType">lecm-orgstr:employee</control-param>
@@ -278,8 +279,8 @@
 						</control>
 					</field>
 					<field id="lecm-deputy:deputy-assoc" label-id="label.deputy.search">
-						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
 							<control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="endpointType">lecm-orgstr:employee</control-param>

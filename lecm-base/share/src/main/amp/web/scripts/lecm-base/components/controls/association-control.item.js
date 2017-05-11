@@ -29,8 +29,15 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		});
 		this._loadRootNode();
 		this._loadSearchProperties();
-		this._loadOriginalValues(fieldValues);
+		if (fieldValues && fieldValues.length) {
+			this._loadOriginalValues(fieldValues);
+		} else if (this.options.defaultValueDataSource) {
+			this._loadDefaultValue();
+		} else {
+			this._loadOriginalValues([]);
+		}
 
+        Bubbling.on("refreshControlItemList", this.onRefreshControlItemList, this);
 		Bubbling.on('show', this.onShow, this);
 		Bubbling.on('hide', this.onHide, this);
 		Bubbling.on('addItemToControlItems', this.onAddSelectedItem, this);
@@ -84,11 +91,14 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			checkType: true,
 			pickerItemsScript: 'lecm/forms/picker/items',
 			showCreateNewLink: false,
+			showCreateNewButton: false,
 			hasAspects: null,
 			hasNoAspects: null,
 			showExSearch: false,
 			fillFormFromSearch: false,
-			showEditButton: false
+			showEditButton: false,
+			defaultValue: null,
+			defaultValueDataSource: null
 		},
 
 		widgets: {
@@ -101,7 +111,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			exSearchListener: null,
 			treeView: null,
 			datatable: null,
-			datasource: null
+			datasource: null,
+			createNewButton: null
 		},
 
 		stateParams: {
@@ -302,7 +313,28 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				}
 			});
 		},
-
+        onRefreshControlItemList: function (layer, args)
+        {
+            // Check the event is directed towards this instance
+			if (this.key == args[1].itemKey) {
+				if (Alfresco.util.hasEventInterest(this, args) || (this.parentControl.options.formId == args[1].formId && this.parentControl.options.fieldId == args[1].fieldId)) {
+					var searchTerm = "";
+					var obj = args[1];
+					if (obj) {
+						if (obj.searchTerm) {
+							searchTerm = obj.searchTerm;
+						}
+						if (obj.additionalFilter) {
+							this.options.additionalFilter = obj.additionalFilter;
+						}
+						if (obj.childrenDataSource) {
+							this.options.childrenDataSource = obj.childrenDataSource;
+						}
+					}
+					this.loadTableData(true, searchTerm);
+				}
+			}
+        },
 		_loadSearchProperties: function () {
 			/* получение данных для поиска */
 			function onSuccess (successResponse) {
@@ -344,7 +376,24 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				}
 			});
 		},
-
+		_loadDefaultValue: function AssociationComplex__loadDefaultValue() {
+			Alfresco.util.Ajax.jsonGet({
+				url: Alfresco.constants.PROXY_URI + this.options.defaultValueDataSource,
+				successCallback: {
+					scope: this,
+					fn: function (oResponse) {
+						var oResults = oResponse.json;
+						var value = [];
+						if (oResults && oResults.nodeRef) {
+							this.defaultValue = oResults.nodeRef;
+							value.push(this.defaultValue);
+						}
+						this._loadOriginalValues(value);
+					}
+				},
+				failureMessage: this.msg("message.failure")
+			});
+		},
 		_loadOriginalValues: function (fieldValues) {
 
 			function onSuccess(successResponse) {
@@ -843,6 +892,13 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				initialLoad: false,
 				MSG_EMPTY: this.msg('logicecm.base.select-tree-element')
 			});
+			if (this.options.showCreateNewButton && !this.widgets.createNewButton) {
+				this.widgets.createNewButton = new Alfresco.util.createYUIButton(this.parentControl, 'btn-create', this._fnCreateNewItemHandler.bind(this, "addSelectedItem"), {
+					disabled: this.options.disabled,
+					type: 'push'
+				});
+				this.parentControl.widgets.createNewButton = this.widgets.createNewButton;
+			}
 			this.widgets.datatable.owner = this;
 //			this.widgets.datatable.on('renderEvent', this.onDatatableRendered, null, this);
 			this.widgets.datatable.on('cellClickEvent', this.onClick, null, this);
@@ -908,11 +964,17 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			};
 		},
 
-		_fnCreateNewItemHandler: function() {
+		_fnCreateNewItemHandler: function(bubblingLabel) {
 			if (this.stateParams.doubleClickLock) return;
 			this.stateParams.doubleClickLock = true;
-
-			var templateRequestParams = this._generateCreateNewParams(this.currentState.nodeData.nodeRef, this.options.itemType);
+			var nodeData = this.currentState.nodeData;
+			if (!nodeData) {
+				nodeData = this.rootNodeData;
+			}
+			if (!bubblingLabel) {
+				bubblingLabel = "addSelectedItemToPicker";
+			}
+			var templateRequestParams = this._generateCreateNewParams(nodeData.nodeRef, this.options.itemType);
 			templateRequestParams["createNewMessage"] = this.options.createNewMessage;
 
 			new Alfresco.module.SimpleDialog("create-form-dialog-" + this.eventGroup).setOptions({
@@ -961,7 +1023,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 									var items =successResponse.json.data.items;
 
 									if (items && items[0]) {
-										this.fire('addSelectedItemToPicker', { /* Bubbling.fire */
+										this.fire(bubblingLabel, { /* Bubbling.fire */
 											added: items[0],
 											options: this.options,
 											key: this.key

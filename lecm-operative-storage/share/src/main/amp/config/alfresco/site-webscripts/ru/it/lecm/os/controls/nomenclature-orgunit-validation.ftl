@@ -1,4 +1,4 @@
-<#include "/ru/it/lecm/base-share/components/controls/association-control.ftl">
+<#include "/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
 <#assign dialogId = args.htmlid>
 <script type="text/javascript">
 
@@ -22,7 +22,7 @@
 				<#if field.value??>
 				currentValue: '${field.value}',
 				</#if>
-				errorContainer: '${dialogId}_assoc_lecm-os_nomenclature-unit-section-unit-assoc-cntrl-autocomplete-input'
+				errorContainer: '${dialogId}_assoc_lecm-os_nomenclature-unit-section-unit-assoc-autocomplete'
 			});
 
 			control.registerValidator();
