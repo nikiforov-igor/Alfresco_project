@@ -9,6 +9,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 (function () {
     var Dom = YAHOO.util.Dom,
         Anim = YAHOO.util.Anim,
+        Lang = YAHOO.lang,
         Event = YAHOO.util.Event;
 
     LogicECM.module.ARM.TreeMenu = function (htmlId) {
@@ -29,6 +30,40 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
         return this;
     };
+
+    /*Объект узла дерева на основе YAHOO.widget.TextNode*/
+    LogicECM.module.ARM.Node = function (oData, oParent, expanded) {
+        LogicECM.module.ARM.Node.superclass.constructor.call(this, oData, oParent, expanded);
+        return this;
+    };
+
+    YAHOO.extend(LogicECM.module.ARM.Node, YAHOO.widget.TextNode);
+    YAHOO.lang.augmentObject(LogicECM.module.ARM.Node.prototype, {
+        setCounterHtml: function (html) {
+            this.data.counterHTML = html;
+        },
+
+        getContentHtml: function () {
+            var sb = [];
+            sb[sb.length] = this.href ? '<a' : '<span';
+            sb[sb.length] = ' id="' + Lang.escapeHTML(this.labelElId) + '"';
+            sb[sb.length] = ' class="' + Lang.escapeHTML(this.labelStyle) + '"';
+            if (this.href) {
+                sb[sb.length] = ' href="' + Lang.escapeHTML(this.href) + '"';
+                sb[sb.length] = ' target="' + Lang.escapeHTML(this.target) + '"';
+            }
+            if (this.title) {
+                sb[sb.length] = ' title="' + Lang.escapeHTML(this.title) + '"';
+            }
+            sb[sb.length] = ' >';
+            sb[sb.length] = Lang.escapeHTML(this.label);
+            if (this.data.counter && this.data.counterHTML) {
+                sb[sb.length] = this.data.counterHTML;
+            }
+            sb[sb.length] = this.href ? '</a>' : '</span>';
+            return sb.join("");
+        }
+    }, true);
 
     YAHOO.extend(LogicECM.module.ARM.TreeMenu, Alfresco.component.Base, {
 
@@ -310,7 +345,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                             };
 
                             // добавляем элемент в дерево
-                            var curElement = new YAHOO.widget.TextNode(newNode, node);
+                            var curElement = new LogicECM.module.ARM.Node(newNode, node);
                             curElement.labelElId = curElement.data.id;
                             curElement.id = curElement.data.id;
 
@@ -330,8 +365,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                             //отрисовка счетчика, если нужно
                             if (curElement.id) {
                                 Event.onAvailable(curElement.id, function (obj) {
-                                    obj.context.drawCounterValue(obj.node.data, obj.context.getSearchQuery(obj.node), obj.node.getLabelEl());
-                                }, {node: curElement, context:otree}, this);
+                                    obj.context.drawCounterValue(obj.node, obj.context.getSearchQuery(obj.node), obj.node.getLabelEl());
+                                }, {node: curElement, context: otree}, this);
                             }
                         }
                     }
@@ -496,7 +531,9 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             Dom.setStyle("arm-calendar", "display", "block");
         },
 
-        drawCounterValue: function (data, query, labelElement) {
+        drawCounterValue: function (node, query, labelElement) {
+            var data = node.data ? node.data : node;
+            var label = node.label;
             if ((data && data.counter != null && ("" + data.counter == "true"))) {
                 var searchQuery = query;
                 if (data.counterLimit && data.counterLimit.length > 0) {
@@ -530,7 +567,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     }
                 }
 
-                if (searchQuery.length > 0) {
+                if (searchQuery.length) {
                     Alfresco.util.Ajax.jsonRequest({
                         method: "POST",
                         url: Alfresco.constants.PROXY_URI + "lecm/count/by-query",
@@ -539,14 +576,14 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         },
                         successCallback: {
                             fn: function (oResponse) {
-                                if (oResponse != null) {
-                                    if (labelElement) {
-                                        var counterSpan = "<span title=\"" + data.counterDesc + "\" class=\"accordion-counter-label\">";
-                                        counterSpan += "(" + (oResponse.json !== null ? oResponse.json : "-" )+ ")";
-                                        counterSpan += "</span>";
-
-                                        labelElement.innerHTML = labelElement.innerHTML + counterSpan;
+                                if (oResponse && labelElement) {
+                                    var counterSpan = "<span title=\"" + data.counterDesc + "\" class=\"accordion-counter-label\">";
+                                    counterSpan += "(" + (oResponse.json !== null ? oResponse.json : "-" ) + ")";
+                                    counterSpan += "</span>";
+                                    if (YAHOO.lang.isFunction(node.setCounterHtml)) {
+                                        node.setCounterHtml(counterSpan);
                                     }
+                                    labelElement.innerHTML = labelElement.innerHTML != label ? counterSpan : (labelElement.innerHTML + counterSpan);
                                 }
                             }
                         },
