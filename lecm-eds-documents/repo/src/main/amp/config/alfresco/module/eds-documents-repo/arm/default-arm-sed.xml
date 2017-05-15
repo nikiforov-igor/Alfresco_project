@@ -5297,7 +5297,7 @@
                                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
                                                 <property name="lecm-arm:expression"><![CDATA[]]></property>
                                                 <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-                                                <property name="lecm-arm:order"><![CDATA[40]]></property>
+                                                <property name="lecm-arm:order"><![CDATA[50]]></property>
                                                 <property name="lecm-arm:types"><![CDATA[]]></property>
                                                 <assocs>
                                                     <assoc type="lecm-arm:filters-assoc"
@@ -5317,7 +5317,7 @@
                                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
                                                 <property name="lecm-arm:expression"><![CDATA[]]></property>
                                                 <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-                                                <property name="lecm-arm:order"><![CDATA[50]]></property>
+                                                <property name="lecm-arm:order"><![CDATA[60]]></property>
                                                 <property name="lecm-arm:types"><![CDATA[]]></property>
                                                 <assocs>
                                                     <assoc type="lecm-arm:filters-assoc"
@@ -5336,7 +5336,7 @@
                                                 <property name="cm:name"><![CDATA[На доработке]]></property>
                                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
                                                 <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-                                                <property name="lecm-arm:order"><![CDATA[60]]></property>
+                                                <property name="lecm-arm:order"><![CDATA[40]]></property>
                                                 <property name="lecm-arm:types"><![CDATA[]]></property>
                                             </item>
                                             <item name="cm:На регистрации" type="lecm-arm:node">
