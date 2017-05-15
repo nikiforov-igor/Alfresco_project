@@ -7,7 +7,7 @@
 				<property name="lecm-busjournal:objectType-code">LECM_PROTOCOL</property>
 				<property name="lecm-busjournal:objectType-class">lecm-protocol:document</property>
 				<property name="lecm-busjournal:objectType-template">{lecm-document:present-string}</property>
-				<property name="lecm-busjournal:objectType-list-template">{lecm-document:ext-present-string}&lt;/br&gt;Статус: {lecm-statemachine:status}, автор: {!~AUTHOR}</property>
+				<property name="lecm-busjournal:objectType-list-template">Статус: {lecm-statemachine:status}, автор: {!~AUTHOR}</property>
 			</item>
 			<item name="cm:Пункт протокола" type="lecm-busjournal:objectType">
 				<property name="cm:name">Пункт протокола</property>
