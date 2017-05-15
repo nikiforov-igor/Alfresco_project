@@ -974,6 +974,7 @@ function checkForApplet() {
 						submitType: 'json',
 						formId: 'multiple-sign-form',
 						showCancelButton: 'true',
+						showCaption: false,
 						obj: JSON.stringify(response.json)
 					};
 					var url = Alfresco.constants.URL_SERVICECONTEXT + 'components/form';
@@ -2493,6 +2494,7 @@ function checkForApplet() {
 						submitType: 'json',
 						formId: 'multiple-sign-form',
 						showCancelButton: 'true',
+						showCaption: false,
 						obj: JSON.stringify(response.json)
 					};
 					var url = Alfresco.constants.URL_SERVICECONTEXT + 'components/form';
@@ -3047,4 +3049,4 @@ SignatureFromContent.prototype.getCheckInfo = function () {
 		contentNodeRef: this.contentAssociation,
 		isValid: this.valid
 	};
-};
+};
