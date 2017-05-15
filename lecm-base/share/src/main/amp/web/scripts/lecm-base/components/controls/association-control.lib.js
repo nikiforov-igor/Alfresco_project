@@ -246,8 +246,15 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			var titleName = (options.plane || !options.showPath) ? item.selectedName : item.path + item.selectedName;
 			var title = (options.showAssocViewForm && item.nodeRef != null) ? Alfresco.util.message('title.click.for.extend.info') : titleName;
 			var result = '<span class="not-person" title="' + title + '">';
-			if (options.showAssocViewForm && item.nodeRef != null) {
-				result += "<a href='javascript:void(0);' " + " onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'" + item.nodeRef + "\', title: \'logicecm.view\'})\">" + displayValue + "</a>";
+			if (options.showAssocViewForm && item.nodeRef != null && (!options.disabled || (options.disabled && item.hasAccess))) {
+				if (options.viewUrl) {
+					var href = YAHOO.lang.substitute(options.viewUrl, {
+						nodeRef: item.nodeRef
+					});
+					result += "<a href=\'" + href + "\'>" + displayValue + "</a>"
+				} else {
+					result += "<a href='javascript:void(0);' " + " onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'" + item.nodeRef + "\', title: \'logicecm.view\'})\">" + displayValue + "</a>";
+				}
 			} else {
 				result += displayValue;
 			}

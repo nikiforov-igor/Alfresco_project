@@ -30,7 +30,6 @@ LogicECM.module = LogicECM.module || {};
 		this.createAssociationControlPicker(options, messages);
 		this.createAssociationControlItems(messages);
 
-		Bubbling.on("refreshItemList", this.onRefreshItemList, this);
 		Bubbling.on('searchProperties', this.onItemSearchProperties, this);
 		Bubbling.on('addSelectedItem', this.onAddSelectedItem, this);
 		Bubbling.on('removeSelectedItem', this.onRemoveSelectedItem, this);
@@ -39,6 +38,7 @@ LogicECM.module = LogicECM.module || {};
         Bubbling.on('readonlyControl', this.onReadonlyControl, this);
 		Bubbling.on('disableControl', this.onDisableControl, this);
 		Bubbling.on('enableControl', this.onEnableControl, this);
+		Bubbling.on("reInitializeControl", this.onReInitializeControl, this);
 
 		return this;
 	};
@@ -178,9 +178,6 @@ LogicECM.module = LogicECM.module || {};
 				if (this.widgets.pickerButton != null) {
 					this.widgets.pickerButton.set('disabled', true);
 				}
-				if (this.widgets.picker) {
-					this.widgets.picker.hide();
-				}
 				if (this.widgets.createNewButton != null) {
 					this.widgets.createNewButton.set('disabled', true);
 				}
@@ -189,10 +186,10 @@ LogicECM.module = LogicECM.module || {};
 					autocompleteInput.setAttribute('disabled', '');
 				}
 				if (this.widgets.added) {
-					this.widgets.added.set('disabled', true);
+					this.widgets.added.disabled = true;
 				}
 				if (this.widgets.removed) {
-					this.widgets.added.set('disabled', true);
+					this.widgets.removed.disabled = true;
 				}
 				var input = Dom.get(this.id);
 				if (input) {
@@ -207,9 +204,9 @@ LogicECM.module = LogicECM.module || {};
 				if (!this.options.disabled) {
 					if (this.widgets.pickerButton != null) {
 						this.widgets.pickerButton.set('disabled', false);
-					}
-					if (this.widgets.picker) {
-						this.widgets.picker.hide();
+                        if (this.widgets.picker &&  this.widgets.picker.widgets.picker) {
+                            this.widgets.picker.widgets.picker.hide();
+                        }
 					}
 					if (this.widgets.createNewButton != null) {
 						this.widgets.createNewButton.set('disabled', false);
@@ -219,10 +216,10 @@ LogicECM.module = LogicECM.module || {};
 						autocompleteInput.removeAttribute('disabled');
 					}
 					if (this.widgets.added) {
-						this.widgets.added.set('disabled', false);
+						this.widgets.added.disabled = false;
 					}
 					if (this.widgets.removed) {
-						this.widgets.added.set('disabled', false);
+						this.widgets.removed.disabled = false;
 					}
 					var input = Dom.get(this.id);
 					if (input) {
@@ -484,44 +481,7 @@ LogicECM.module = LogicECM.module || {};
 			}
 			Event.stopEvent(event);
 		},
-		onRefreshItemList: function (layer, args)
-		{
-			// Check the event is directed towards this instance
-			if (Alfresco.util.hasEventInterest(this, args) || (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId)) {
-				var obj = args[1];
-				if (obj) {
-					if (obj.additionalFilter) {
-						this.options.additionalFilter = obj.additionalFilter;
-					}
-					if (obj.childrenDataSource) {
-						this.options.childrenDataSource = obj.childrenDataSource;
-					}
-                    var itemParamObjects = [];
-                    var controlItemsOptions = this.options.itemsOptions;
-                    if (obj.itemsOptions && obj.itemsOptions.length) {
-                        itemParamObjects = obj.itemsOptions.filter(function(argOpt) {
-                            return controlItemsOptions.some(function(opt){
-                                return opt.itemKey == argOpt.itemKey;
-                            })
-                        })
-                    }
-                    if (!this.options.isComplex) {
-                        var itemObj = obj;
-                        itemObj.itemKey = controlItemsOptions[0].itemKey;
-                        itemParamObjects.push(itemObj);
-                    }
-					if (itemParamObjects.length){
-                        for (var i = 0; i < itemParamObjects.length; i++) {
-                            var item = itemParamObjects[i];
-                            item.formId = args[1].formId;
-                            item.fieldId = args[1].fieldId;
-                            this.fire('refreshControlItemList', item);
-                        }
-					}
 
-				}
-			}
-		},
 		enableAutocomplete: function () {
 			this.widgets.autoCompleteListener.enable();
 		},
@@ -529,7 +489,67 @@ LogicECM.module = LogicECM.module || {};
 		onPickerButtonClick: function (evt, target) {
             this.widgets.picker.show();
 		},
+		onReInitializeControl: function (layer, args) {
+			if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+				var options = args[1].options;
+				var controlItems = this.options.itemsOptions;
+				var itemsOptions = [];
+				this.fieldValues = [];
+				if (options != null) {
+					if (options.childrenDataSource && !this.options.isComplex) {
+						options.autocompleteDataSource = options.childrenDataSource;
+					}
+					if (options.itemsOptions && options.itemsOptions.length) {
+						itemsOptions = options.itemsOptions;
+					} else if (!this.options.isComplex) {
+						itemsOptions.push(
+							{
+								itemKey: controlItems[0].itemKey,
+								options: options ? options : {}
+							});
+					}
+					for (var i = 0; i < this.options.itemsOptions.length; i++) {
+						itemsOptions.forEach(function (itemOptions) {
+							if (itemOptions.itemKey == this.options.itemsOptions[i].itemKey) {
+								this.options.itemsOptions[i].options = YAHOO.lang.merge(this.options.itemsOptions[i].options, itemOptions.options);
+							}
+						}, this)
+					}
+					Object.keys(options).forEach(function(key) {
+						if (key != "itemsOptions" && key != "plane") {
+							this.options[key] = options[key];
+						}
+					}, this);
 
+					if (options.fieldValues && options.fieldValues.length) {
+						this.fieldValues = options.fieldValues;
+					}
+				}
+				this.searchProperties = [];
+				this.clearSelectedItems();
+                this.widgets.datasource.liveData = Alfresco.constants.PROXY_URI_RELATIVE + this.options.autocompleteDataSource + '/node/children';
+				this.fire('reInitializeControlPicker', {
+					options: this.options
+				});
+				itemsOptions.forEach(function(itemOptions){
+					this.fire('reInitializeControlItem', {
+						itemKey: itemOptions.itemKey,
+						options: itemOptions.options,
+						fieldValues: this.fieldValues
+					})
+				}, this);
+			}
+		},
+		clearSelectedItems: function() {
+			Dom.getChildren(this.widgets.selected).forEach(function (el) {
+				Selector.query('a[class="remove-item"]', el, true).click();
+			}, this);
+			if(this.widgets.picker.items) {
+				Dom.getChildren(this.widgets.picker.items).forEach(function (el) {
+					Selector.query('a[class="remove-item"]', el, true).click();
+				}, this);
+			}
+		},
 		onReady: function () {
 			/* загрузка данных по field.value и передача их в picker и в items. Отрисовка selectedItems здесь и в пикере */
 			this.widgets.added = Dom.get(this.id + '-added');

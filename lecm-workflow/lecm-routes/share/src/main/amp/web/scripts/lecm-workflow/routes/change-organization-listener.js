@@ -39,10 +39,8 @@
                             var unit = new Alfresco.util.NodeRef(response.json.nodeRef);
                             LogicECM.module.Base.Util.readonlyControl(formId, "lecmWorkflowRoutes:routeOrganizationUnitAssoc", false);
                             YAHOO.util.Event.onAvailable(LogicECM.module.Base.Util.getComponentReadyElementId(formId, "lecmWorkflowRoutes:routeOrganizationUnitAssoc"), function() {
-                                YAHOO.Bubbling.fire("refreshItemList", {
-                                    formId: formId,
-                                    fieldId: "lecmWorkflowRoutes:routeOrganizationUnitAssoc",
-                                    additionalFilter: '@lecm\\-orgstr\\-aspects\\:linked\\-organization\\-assoc\\-ref:\"' + organization.nodeRef + '\" AND NOT(@sys\\:node\\-uuid:\"' + unit.id + '\")',
+                                LogicECM.module.Base.Util.reInitializeControl(formId, "lecmWorkflowRoutes:routeOrganizationUnitAssoc", {
+                                    additionalFilter: '@lecm\\-orgstr\\-aspects\\:linked\\-organization\\-assoc\\-ref:\"' + organization.nodeRef + '\" AND NOT(@sys\\:node\\-uuid:\"' + unit.id + '\")'
                                 });
                             }, this);
                             currentOrganization = organization.nodeRef;

@@ -40,6 +40,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		Bubbling.on('loadOriginalItems', this.onLoadOriginalItems, this);
 		Bubbling.on('afterChange', this.onAfterChange, this);
 		Bubbling.on('restorePreviousValues', this.onRestorePreviousValues, this);
+		Bubbling.on('reInitializeControlPicker', this.onReInitializeControlPicker, this);
 		return this;
 	};
 
@@ -388,6 +389,22 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 
 			this.widgets.items = Dom.get(this.id + '-items');
 			this.fire('pickerReady', {});
+		},
+		onReInitializeControlPicker: function(layer, args) {
+			if (Alfresco.util.hasEventInterest(this, args)) {
+				var options = args[1].options;
+				if (options) {
+					this.setOptions(options);
+				}
+				this.added = {};
+				this.removed = {};
+				this.original = {};
+				this.selected = {};
+				this.originalItemsDeferred = new Alfresco.util.Deferred(LogicECM.module.AssociationComplexControl.Utils.getItemKeys(this.options.itemsOptions), {
+					scope: this,
+					fn: this._onOriginalItemsDeferred
+				});
+			}
 		}
 	}, true);
 })();

@@ -37,12 +37,12 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			this._loadOriginalValues([]);
 		}
 
-        Bubbling.on("refreshControlItemList", this.onRefreshControlItemList, this);
 		Bubbling.on('show', this.onShow, this);
 		Bubbling.on('hide', this.onHide, this);
 		Bubbling.on('addItemToControlItems', this.onAddSelectedItem, this);
 		Bubbling.on('removeSelectedItem', this.onRemoveSelectedItem, this);
 		Bubbling.on('removeSelectedItemFromPicker', this.onRemoveSelectedItemFromPicker, this);
+		Bubbling.on('reInitializeControlItem', this.onReInitializeControlItem, this);
 
 		return this;
 	};
@@ -84,7 +84,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			allowedNodesScript: null,
 			minSearchTermLength: 3,
 			sortProp: 'cm:name',
-			nameSubstituteString: 'cm:name',
+			nameSubstituteString: '{cm:name}',
 			additionalFilter: '',
 			endpointMany: false,
 			useObjectDescription: false,
@@ -98,8 +98,10 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			fillFormFromSearch: false,
 			showEditButton: false,
 			defaultValue: null,
-			defaultValueDataSource: null
-		},
+			defaultValueDataSource: null,
+            showInaccessible: false,
+            viewUrl: null
+        },
 
 		widgets: {
 			search: null,
@@ -126,7 +128,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			/* this == this.widgets.datatable */
 			function renderItem (item, template) {
 				return YAHOO.lang.substitute(template, item, function (key, value, metadata) {
-					return Alfresco.util.encodeHTML(value);
+					return value;
 				});
 			}
 
@@ -313,28 +315,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				}
 			});
 		},
-        onRefreshControlItemList: function (layer, args)
-        {
-            // Check the event is directed towards this instance
-			if (this.key == args[1].itemKey) {
-				if (Alfresco.util.hasEventInterest(this, args) || (this.parentControl.options.formId == args[1].formId && this.parentControl.options.fieldId == args[1].fieldId)) {
-					var searchTerm = "";
-					var obj = args[1];
-					if (obj) {
-						if (obj.searchTerm) {
-							searchTerm = obj.searchTerm;
-						}
-						if (obj.additionalFilter) {
-							this.options.additionalFilter = obj.additionalFilter;
-						}
-						if (obj.childrenDataSource) {
-							this.options.childrenDataSource = obj.childrenDataSource;
-						}
-					}
-					this.loadTableData(true, searchTerm);
-				}
-			}
-        },
+
 		_loadSearchProperties: function () {
 			/* получение данных для поиска */
 			function onSuccess (successResponse) {
@@ -387,6 +368,10 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 						if (oResults && oResults.nodeRef) {
 							this.defaultValue = oResults.nodeRef;
 							value.push(this.defaultValue);
+							Dom.get(this.parentControl.id).value = Alfresco.util.encodeHTML(this.defaultValue);
+							if (this.parentControl.widgets.added) {
+								this.parentControl.widgets.added.value = Alfresco.util.encodeHTML(this.defaultValue);
+							}
 						}
 						this._loadOriginalValues(value);
 					}
@@ -428,8 +413,9 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 					selectedItemsNameSubstituteString: ACUtils.getSelectedItemsNameSubstituteString(this.options),
 					pathRoot: this.options.rootLocation,
 					pathNameSubstituteString: this.options.treeNodeSubstituteString,
-					useObjectDescription: this.options.useObjectDescription
-				},
+					useObjectDescription: this.options.useObjectDescription,
+                    showInaccessible: this.options.showInaccessible
+                },
 				successCallback: {
 					scope: this,
 					fn: onSuccess
@@ -860,6 +846,16 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				this.widgets.treeRoot.setDynamicLoad(this.bind(this._loadNodes));
 				Dom.addClass(this.widgets.treeView.id, 'treeview');
 			}
+			if (this.options.showCreateNewButton && !this.widgets.createNewButton) {
+				this.widgets.createNewButton = new Alfresco.util.createYUIButton(this.parentControl, 'btn-create', this._fnCreateNewItemHandler.bind(this, "addSelectedItem"), {
+					disabled: this.options.disabled,
+					type: 'push'
+				});
+				this.parentControl.widgets.createNewButton = this.widgets.createNewButton;
+			}
+			this.init();
+		},
+		init: function() {
 			this.widgets.datasource = new YAHOO.util.DataSource(Alfresco.constants.PROXY_URI_RELATIVE + this.options.childrenDataSource + '/node/', {
 				responseType: YAHOO.util.DataSource.TYPE_JSON,
 				connXhrMode: 'queueRequests',
@@ -892,19 +888,73 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				initialLoad: false,
 				MSG_EMPTY: this.msg('logicecm.base.select-tree-element')
 			});
-			if (this.options.showCreateNewButton && !this.widgets.createNewButton) {
-				this.widgets.createNewButton = new Alfresco.util.createYUIButton(this.parentControl, 'btn-create', this._fnCreateNewItemHandler.bind(this, "addSelectedItem"), {
-					disabled: this.options.disabled,
-					type: 'push'
-				});
-				this.parentControl.widgets.createNewButton = this.widgets.createNewButton;
-			}
 			this.widgets.datatable.owner = this;
 //			this.widgets.datatable.on('renderEvent', this.onDatatableRendered, null, this);
 			this.widgets.datatable.on('cellClickEvent', this.onClick, null, this);
 			this.widgets.datatable.on('tableScrollEvent', this.onDatatableScroll, null, this);
-
+			var context = this;
+			if (this.options.allowedNodesScript && this.options.allowedNodesScript != "") {
+				Alfresco.util.Ajax.request({
+					method: "GET",
+					requestContentType: "application/json",
+					responseContentType: "application/json",
+					url: Alfresco.constants.PROXY_URI_RELATIVE + this.options.allowedNodesScript,
+					successCallback: {
+						fn: function (response) {
+							context.options.allowedNodes = response.json.nodes;
+							context.parentControl.options.allowedNodes = context.parentControl.options.allowedNodes ? context.parentControl.options.allowedNodes.concat(context.options.allowedNodes) : context.options.allowedNodes;
+						},
+						scope: this
+					},
+					failureCallback: {
+						fn: function onFailure(response) {
+							context.options.allowedNodes = null;
+						},
+						scope: this
+					},
+					execScripts: true
+				});
+			}
 			this.loadHelper.fulfil('ready');
+		},
+		onReInitializeControlItem: function(layer, args) {
+			if (Alfresco.util.hasEventInterest(this, args) && this.key == args[1].itemKey) {
+				var options = args[1].options;
+				var fieldValues = args[1].fieldValues;
+				if (options) {
+					this.setOptions(options);
+				}
+				this.currentState = {
+					original: {},
+					selected: {},
+					temporarySelected: {},
+					nodeData: null,
+					skipItemsCount: null,
+					searchTerm: null,
+					exSearchFilter: null,
+					exSearchFormId: null,
+					loadingInProcess: false
+				};
+				this.searchProperties = [];
+				this.rootNodeData = null;
+
+				this.loadHelper = new Alfresco.util.Deferred(['rootNode', 'searchProperties', 'ready', 'show'], {
+					scope: this,
+					fn: this.loadData
+				});
+				this._loadRootNode();
+
+				if (fieldValues && fieldValues.length) {
+					this._loadOriginalValues(fieldValues);
+				} else if (this.options.defaultValueDataSource) {
+					this._loadDefaultValue();
+				} else {
+					this._loadOriginalValues([]);
+				}
+
+				this._loadSearchProperties();
+				this.init();
+			}
 		},
 
 		_loadSearchForm: function () {
