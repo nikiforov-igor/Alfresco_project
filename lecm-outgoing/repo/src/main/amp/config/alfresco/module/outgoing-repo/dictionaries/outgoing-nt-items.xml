@@ -43,6 +43,30 @@
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
                 </assocs>
             </item>
+            <item name="cm:OUTGOING_SENT" type="lecm-notification-template:template">
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Сотрудник {#initiator.wrapAsLink(#initiator.attribute("lecm-orgstr:employee-short-name"))} произвел отправку документа {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}.]]></property>
+                <property name="cm:name"><![CDATA[OUTGOING_SENT]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Исходящий. Отправлен]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
+            <item name="cm:OUTGOING_NO_SEND_REQUIRED" type="lecm-notification-template:template">
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Сотрудник {#initiator.wrapAsLink(#initiator.attribute("lecm-orgstr:employee-short-name"))}  произвел отметку о том, что документ {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} не требует отправки.]]></property>
+                <property name="cm:name"><![CDATA[OUTGOING_NO_SEND_REQUIRED]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Исходящий. Отправка не требуется]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
         </items>
     </item>
 </items>
