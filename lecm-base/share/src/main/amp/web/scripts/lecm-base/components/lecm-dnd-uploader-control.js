@@ -224,6 +224,7 @@ LogicECM.control = LogicECM.control || {};
 								this.hasAddContentRight = response.json[2];
 								this.hasDeleteContentRight = response.json[3];
 								this.hasDeleteOwnContentRight = response.json[4];
+
 								if (this.hasViewContentRight) {
 									this.loadSelectedItems();
 								}
