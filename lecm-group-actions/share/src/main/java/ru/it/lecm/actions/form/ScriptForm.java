@@ -125,7 +125,8 @@ public class ScriptForm extends LecmFormGet {
         set.addChild(fieldPointer);
 
         FormUIGet.Field itemsField = generateTransientFieldModel("items", "/org/alfresco/components/form/controls/hidden.ftl");
-        itemsField.setValue(request.getParameter("items"));
+        String items = request.getParameter("items");
+        itemsField.setValue(items);
         itemsField.setType("property");
         itemsField.setDataType("text");
         itemsField.setDataKeyName(itemsField.getId());
@@ -138,7 +139,13 @@ public class ScriptForm extends LecmFormGet {
         for (String parameter : parameters) {
             arguments.put(parameter, request.getParameter(parameter));
         }
-
+        /*Проброс nodeRef документа - если он один*/
+        if (items != null && !items.isEmpty()) {
+            String[] itemsArray = items.replaceFirst("^\\[", "").replaceFirst("\\]$", "").split(",");
+            if (itemsArray.length == 1) {
+                arguments.put(PARAM_ITEM_ID, itemsArray[0].replace("\"", ""));
+            }
+        }
         form.put(MODEL_ARGUMENTS, arguments);
 
         form.put(MODEL_MODE, Mode.CREATE);

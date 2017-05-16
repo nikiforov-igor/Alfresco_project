@@ -43,7 +43,7 @@
 </#if>
 
 <#assign minLimit = ""/>
-<#if field.control.params.minLimitArg??>
+<#if (field.control.params.minLimitArg)?has_content>
     <#assign minLimit = form.arguments[field.control.params.minLimitArg]!"" />
 <#elseif field.control.params.minLimitCurrentDate?? && field.control.params.minLimitCurrentDate == "true">
 	<#if showTime>
@@ -54,7 +54,7 @@
 </#if>
 
 <#assign maxLimit = ""/>
-<#if field.control.params.maxLimitArg??>
+<#if (field.control.params.maxLimitArg)?has_content>
     <#assign maxLimit = form.arguments[field.control.params.maxLimitArg]!"" />
 <#elseif field.control.params.maxLimitCurrentDate?? && field.control.params.maxLimitCurrentDate == "true">
     <#if showTime>
@@ -172,7 +172,7 @@
                             currentValue: "${currentValue}",
                             <#if field.control.params.defaultScriptURL?has_content>
                                 defaultScript: '${field.control.params.defaultScriptURL?js_string}',
-                                destination: "${form.destination!""}",
+                                destination: "<#if form.destination?has_content>${form.destination}<#else>${form.arguments.itemId!""}</#if>",
                                 itemKind: "${form.arguments.itemKind!""}",
                             </#if>
                             <#if field.control.params.changeFireAction??>
