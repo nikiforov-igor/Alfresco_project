@@ -60,6 +60,7 @@ LogicECM.control = LogicECM.control || {};
 			hasViewContentRight: null,
 			hasAddContentRight: null,
 			hasDeleteContentRight: null,
+			hasDeleteOwnContentRight: null,
 			hasNewVersionContentRight: null,
 			selectedPreviewFile: null,
 
@@ -211,18 +212,18 @@ LogicECM.control = LogicECM.control || {};
 					url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/security/api/getPermissions",
 					dataObj: {
 						nodeRef: this.options.itemNodeRef,
-						permissions: "_lecmPerm_ContentList,_lecmPerm_ContentAddVer,_lecmPerm_ContentAdd,_lecmPerm_ContentDelete"
+						permissions: "_lecmPerm_ContentList,_lecmPerm_ContentAddVer,_lecmPerm_ContentAdd,_lecmPerm_ContentDelete,_lecmPerm_OwnContentDelete"
 					},
 					successCallback: {
 						scope: this,
 						fn: function (response) {
 							var oResults = response.json;
-							if (oResults && oResults.length == 4) {
+							if (oResults && oResults.length == 5) {
 								this.hasViewContentRight = response.json[0];
 								this.hasNewVersionContentRight = response.json[1];
 								this.hasAddContentRight = response.json[2];
 								this.hasDeleteContentRight = response.json[3];
-
+								this.hasDeleteOwnContentRight = response.json[4];
 								if (this.hasViewContentRight) {
 									this.loadSelectedItems();
 								}
@@ -610,7 +611,7 @@ LogicECM.control = LogicECM.control || {};
 									Event.onAvailable(iconNewVersionId, this.attachUploadNewVersionClickListener, item, this);
 								}
 
-								if (!this.options.checkRights || this.hasDeleteContentRight) {
+								if (!this.options.checkRights || this.hasDeleteContentRight || (Alfresco.constants.USERNAME == item.owner && this.hasDeleteOwnContentRight)) {
 									var iconRemoveId = "attachment-remove-" + nodeRef;
 									reghtPart += "<img id='" + iconRemoveId + "' src='" + Alfresco.constants.URL_RESCONTEXT
 										+ "components/images/delete-16.png' class='remove-icon'/>";

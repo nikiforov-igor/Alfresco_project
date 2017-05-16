@@ -22,6 +22,9 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		allAttachments: [],
 		attachmentsRootNode: null,
 
+		hasDeleteContentRight: false,
+		hasDeleteOwnContentRight: false,
+
 		onReady: function () {
 			this.loadForm();
 			this.loadPermissions();
@@ -283,7 +286,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					leftPart = "<a href='" + Alfresco.constants.URL_PAGECONTEXT + "document-attachment?nodeRef=" + nodeRef + "'>" + leftPart + "</a>";
 
 					var rightPart = "";
-					if (this.hasDeleteContentRight) {
+					if (this.hasDeleteContentRight || (Alfresco.constants.USERNAME == item.owner && this.hasDeleteOwnContentRight)) {
 						var iconRemoveId = "attachment-remove-" + nodeRef;
 						rightPart += "<img id='" + iconRemoveId + "' src='" + Alfresco.constants.URL_RESCONTEXT
 							+ "components/images/delete-16.png' class='remove-icon'/>";
@@ -365,7 +368,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/security/api/getPermissions",
 				dataObj: {
 					nodeRef: this.options.nodeRef,
-					permissions: "_lecmPerm_ContentDelete"
+					permissions: "_lecmPerm_ContentDelete,_lecmPerm_OwnContentDelete"
 				},
 				successCallback: {
 					scope: this,
@@ -373,6 +376,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 						var oResults = response.json;
 						if (oResults) {
 							this.hasDeleteContentRight = response.json[0];
+							this.hasDeleteOwnContentRight = response.json[1];
 						}
 
 						this.initAttachments();
