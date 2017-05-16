@@ -3,10 +3,10 @@
 	<item name="cm:Реестр на отправку" type="lecm-group-actions:script-action">
 		<property name="cm:name"><![CDATA[Реестр на отправку]]>	</property>
 		<property name="cm:title"><![CDATA[Реестр на отправку]]>	</property>
-		<property name="lecm-group-actions:statuses"><![CDATA[На регистрации;Зарегистрирован;Закрыт]]> </property>
+		<property name="lecm-group-actions:statuses"><![CDATA[На регистрации;Зарегистрирован;На отправке;Закрыт]]> </property>
 		<property name="lecm-group-actions:type"><![CDATA[lecm-outgoing:document]]> </property>
 		<property name="lecm-group-actions:order"><![CDATA[10]]> </property>
-		<property name="lecm-group-actions:expression"><![CDATA[]]> </property>
+		<property name="lecm-group-actions:expression"><![CDATA[user.currentUser().hasBusinessRole('DA_REGISTRARS') OR user.currentUser().hasBusinessRole('OUTGOING_SENDERS')]]> </property>
 		<property name="lecm-group-actions:isGroup"><![CDATA[true]]> </property>
 		<property name="lecm-group-actions:forCollection"><![CDATA[true]]> </property>
 		<property name="lecm-group-actions:script"><![CDATA[model.openWindow="proxy/alfresco/lecm/report/register-sending?exec=1&templateCode=" + templateCode + "&ID=" + documentsArray.join(",") +"&targetFormat=DOC"]]>	</property>
