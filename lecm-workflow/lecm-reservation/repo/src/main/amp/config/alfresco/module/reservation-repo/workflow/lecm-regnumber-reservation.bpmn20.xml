@@ -45,7 +45,7 @@
                         var currentEmployee = orgstructure.getCurrentEmployee();
                         var registrars = [];
                         /* Централизованная ли регистрация */
-                        if (edsGlobalSettings.isRegistrationCenralized().booleanValue()) {
+                        if (edsGlobalSettings.isRegistrationCenralized()) {
                             registrars = orgstructure.getEmployeesByBusinessRoleId('DA_REGISTRARS', true);
                         } else {
                             /* Получаем основную должностную позицию */

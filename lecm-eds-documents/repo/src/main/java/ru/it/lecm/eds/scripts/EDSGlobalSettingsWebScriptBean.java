@@ -119,7 +119,7 @@ public class EDSGlobalSettingsWebScriptBean extends BaseWebScript {
 		return new ScriptNode(edsGlobalSettingsService.getSettingsNode(), serviceRegistry, getScope());
 	}
 
-	public Boolean isRegistrationCenralized() {
+	public boolean isRegistrationCenralized() {
 		return edsGlobalSettingsService.isRegistrationCenralized();
 	}
 
