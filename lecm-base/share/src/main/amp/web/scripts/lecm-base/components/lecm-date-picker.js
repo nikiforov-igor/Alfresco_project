@@ -199,10 +199,9 @@
                     var theDate = null;
 
                     // calculate current date
-                    if (me.options.currentValue !== null && me.options.currentValue !== "" && me.options.currentValue !== "now") {
+                    if (me.options.currentValue && me.options.currentValue !== "now") {
                         theDate = Alfresco.util.fromISO8601(me.options.currentValue);
-                    }
-                    else {
+                    } else {
                         if (me.options.defaultScript && (me.options.destination || me.options.itemKind === "workflow")) {
                             var dataObj = {
                                 nodeRef: me.options.destination
@@ -212,9 +211,9 @@
                                 dataObj: dataObj,
                                 successCallback: {
                                     scope: me,
-                                    fn: function(response) {
-                                        if (response.json != null) {
-                                            me.options.currentValue=response.json["date"];
+                                    fn: function (response) {
+                                        if (response.json) {
+                                            me.options.currentValue = response.json["date"] ? response.json["date"] : response.json["value"];
                                             me.draw();
                                         }
                                     }
