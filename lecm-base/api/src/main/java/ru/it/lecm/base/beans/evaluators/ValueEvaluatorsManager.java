@@ -17,34 +17,26 @@ public class ValueEvaluatorsManager {
     private final static Logger logger = LoggerFactory.getLogger(ValueEvaluatorsManager.class);
     private Map<String, ValueEvaluator> evaluators = new HashMap<>();
 
-    public void resister(ValueEvaluator newEvaluator) {
+    public void register(ValueEvaluator newEvaluator) {
         if (newEvaluator != null) {
             final String id = newEvaluator.getId();
             if (id != null && !id.isEmpty()) {
-                if (getEvaluatorById(id) == null) {
-                    getEvaluators().put(id, newEvaluator);
+                if (evaluators.get(id) == null) {
+                    evaluators.put(id, newEvaluator);
                 } else {
-                    logger.debug("Evaluator with id= " + id + " already registered. New registration skipped...");
+                    logger.warn("Evaluator with id= " + id + " already registered. New registration skipped...");
                 }
             } else {
-                logger.debug("Evaluator with class= " + newEvaluator.getClass().getName() + " has not ID. Registration skipped...");
+                logger.warn("Evaluator with class= " + newEvaluator.getClass().getName() + " has not ID. Registration skipped...");
             }
         }
-    }
-
-    public ValueEvaluator getEvaluatorById(String id) {
-        return getEvaluators().get(id);
-    }
-
-    public Map<String, ValueEvaluator> getEvaluators() {
-        return evaluators;
     }
 
     public String evaluate(JSONObject value) throws JSONException {
         String TYPE_FIELD = "type";
         if (value.has(TYPE_FIELD)) {
             String evaluatorId = value.getString(TYPE_FIELD);
-            ValueEvaluator evaluator = getEvaluatorById(evaluatorId);
+            ValueEvaluator evaluator = evaluators.get(evaluatorId);
             if (evaluator != null) {
                 return evaluator.evaluate(value);
             }

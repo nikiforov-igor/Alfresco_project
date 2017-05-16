@@ -8,8 +8,6 @@ import org.alfresco.util.PropertyCheck;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Map;
-
 /**
  * User: dbashmakov
  * Date: 04.05.2017
@@ -44,7 +42,7 @@ public abstract class ValueEvaluator {
         PropertyCheck.mandatory(this, "searchService", searchService);
 
         if (id != null && !id.isEmpty()) {
-            evaluatorsManager.resister(this);
+            evaluatorsManager.register(this);
         }
     }
 
