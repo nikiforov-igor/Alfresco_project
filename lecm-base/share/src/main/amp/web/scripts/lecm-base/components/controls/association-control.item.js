@@ -358,22 +358,22 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			});
 		},
 		_loadDefaultValue: function AssociationComplex__loadDefaultValue() {
-			Alfresco.util.Ajax.jsonGet({
+            Alfresco.util.Ajax.jsonGet({
 				url: Alfresco.constants.PROXY_URI + this.options.defaultValueDataSource,
 				successCallback: {
 					scope: this,
 					fn: function (oResponse) {
 						var oResults = oResponse.json;
-						var value = [];
-						if (oResults && oResults.nodeRef) {
-							this.defaultValue = oResults.nodeRef;
-							value.push(this.defaultValue);
-							Dom.get(this.parentControl.id).value = Alfresco.util.encodeHTML(this.defaultValue);
-							if (this.parentControl.widgets.added) {
-								this.parentControl.widgets.added.value = Alfresco.util.encodeHTML(this.defaultValue);
-							}
+						var defaultValues = [];
+                        if (oResults && oResults instanceof Array) {
+                            defaultValues = oResults.map(function (res) {
+								return res.nodeRef ? res.nodeRef : res;
+							});
+                        } else if (oResults && oResults.nodeRef) {
+							defaultValues.push(oResults.nodeRef);
 						}
-						this._loadOriginalValues(value);
+						this.parentControl.defaultValues = this.parentControl.defaultValues.concat(defaultValues);
+						this._loadOriginalValues(defaultValues);
 					}
 				},
 				failureMessage: this.msg("message.failure")
@@ -387,8 +387,14 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 					itemType = this.options.itemType;
 
 				this.currentState.original = {};
-
-				items.forEach(function (item, i) {
+				var values = [];
+				if (this.parentControl.options.dataSourceLogic == "AND" || (this.parentControl.options.dataSourceLogic == "OR" && ACUtils.isKeySelectedOrEmpty(this.key, this.parentControl))) {
+					values = items;
+				}
+				if (!this.parentControl.options.endpointMany && values.length) {
+					values = [values[0]];
+				}
+				values.forEach(function (item, i) {
 					if (!checkType || item.type === itemType) {
 						item.index = i;
 						this.currentState.original[item.nodeRef] = item;

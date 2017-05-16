@@ -248,6 +248,17 @@ LogicECM.module = LogicECM.module || {};
 		onLoadAllOriginalItems: function(layer, args) {
 			if (Alfresco.util.hasEventInterest(this, args)) {
                 this.optionsMap = args[1].optionsMap;
+				if (this.defaultValues.length && args[1].selected.length) {
+					if (!Dom.get(this.id).value) {
+						var nodeRefs = args[1].selected.map(function(node) {
+							return node.nodeRef;
+						});
+						Dom.get(this.id).value = Alfresco.util.encodeHTML(nodeRefs);
+						if (this.widgets.added) {
+							this.widgets.added.value = Alfresco.util.encodeHTML(nodeRefs);
+						}
+					}
+				}
                 this._renderSelectedItems(args[1].selected);
 			}
 		},
@@ -495,6 +506,7 @@ LogicECM.module = LogicECM.module || {};
 				var controlItems = this.options.itemsOptions;
 				var itemsOptions = [];
 				this.fieldValues = [];
+				this.defaultValues = [];
 				if (options != null) {
 					if (options.childrenDataSource && !this.options.isComplex) {
 						options.autocompleteDataSource = options.childrenDataSource;
