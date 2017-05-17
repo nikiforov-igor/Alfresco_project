@@ -46,7 +46,7 @@ public interface EDSGlobalSettingsService {
 	NodeRef createPotentialRole(NodeRef businessRoleRef, NodeRef orgElementRef, List<NodeRef> employeesRefs);
 	NodeRef updatePotentialRole(NodeRef potentialRoleRef, List<NodeRef> employeesRefs);
 
-	Boolean isRegistrationCenralized();
+	boolean isRegistrationCenralized();
 
 	@Deprecated
 	Boolean isHideProperties();

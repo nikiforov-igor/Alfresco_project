@@ -156,7 +156,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 		//получаем текущего пользователя
 		NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
 		// централизованная ли регистрация
-		Boolean registrationCenralized = edsGlobalSettingsService.isRegistrationCenralized();
+		boolean registrationCenralized = edsGlobalSettingsService.isRegistrationCenralized();
 
 		if (registrationCenralized) {
 			registrars = orgstructureService.getEmployeesByBusinessRole(businessRoleId);
