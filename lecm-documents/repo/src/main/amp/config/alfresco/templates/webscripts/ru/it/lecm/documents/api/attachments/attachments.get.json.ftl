@@ -16,7 +16,8 @@
                         {
                             "nodeRef": "${attachment.nodeRef}",
                             "name": "${attachment.name}",
-                            "locked": ${lockStatus[attachment.nodeRef]?string}
+                            "locked": ${lockStatus[attachment.nodeRef]?string},
+                            "owner": "${attachment.properties["cm:creator"]}"
                         }<#if attachment_has_next>,</#if>
                     </#list>
                 ]

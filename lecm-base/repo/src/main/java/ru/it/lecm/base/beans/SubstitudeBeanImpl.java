@@ -8,6 +8,7 @@ import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.dictionary.Constraint;
 import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
+import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceException;
@@ -22,6 +23,8 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.expression.BeanFactoryResolver;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
+import org.springframework.extensions.surf.util.I18NUtil;
+import org.springframework.util.StringUtils;
 import ru.it.lecm.base.beans.getchildren.FilterPropLECM;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -642,6 +645,8 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
                     DateFormat dFormat = new SimpleDateFormat(fieldFormat != null ? fieldFormat : dateFormat);
                     result = dFormat.format(result);
                 }
+            } else if ("type_label".equals(fieldFormat)) {
+                result = getTypeLabel(result.toString());
             }
         }
 
@@ -1051,6 +1056,19 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
             filteredResults.clear();
         }
         return nextTransionNodes;
+    }
+
+    public String getTypeLabel(String type) {
+        QName typeQName = QName.createQName(type, namespaceService);
+        TypeDefinition definition = dictionary.getType(typeQName);
+        String label = null;
+        if (definition != null) {
+            String key = definition.getModel().getName().toPrefixString(namespaceService);
+            key += ".type." + type + ".title";
+            key = StringUtils.replace(key, ":", "_");
+            label = I18NUtil.getMessage(key, I18NUtil.getLocale());
+        }
+        return label != null ? label : type;
     }
 
     public void setDocumentService(DocumentService documentService) {
