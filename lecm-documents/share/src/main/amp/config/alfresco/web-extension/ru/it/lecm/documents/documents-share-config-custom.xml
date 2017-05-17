@@ -1155,6 +1155,9 @@
                     <show id="lecm-doc-type-settings-dic:document-type"/>
                     <show id="lecm-doc-type-settings-dic:default-upload-attachment-category"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-doc-type-settings-dic:document-type" substituteString="{lecm-doc-type-settings-dic:document-type?type_label}"/>
+                </appearance>
             </form>
         </forms>
     </config>
