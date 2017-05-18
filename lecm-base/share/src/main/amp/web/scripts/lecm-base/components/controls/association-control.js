@@ -133,19 +133,8 @@ LogicECM.module = LogicECM.module || {};
 			}
 			count = this.widgets.selected.childElementCount;
 			if (this.widgets.autocomplete) {
-				var autocompleteInput = this.widgets.autocomplete.getInputEl();
 				fn = (!this.options.endpointMany && count) ? Dom.addClass : Dom.removeClass;
 				fn.call(Dom, this.widgets.autocomplete.getInputEl(), 'hidden');
-				if (autocompleteInput) {
-					var container = this.widgets.selected.parentElement.parentElement;
-					if (!this.options.endpointMany && count) {
-						Dom.addClass(autocompleteInput, "hidden");
-						Dom.addClass(container, "collapse-width");
-					} else {
-						Dom.removeClass(autocompleteInput, "hidden");
-						Dom.removeClass(container, "collapse-width");
-					}
-				}
 			}
 			return count;
 		},

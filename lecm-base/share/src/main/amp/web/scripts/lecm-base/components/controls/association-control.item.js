@@ -298,9 +298,6 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			if (this.options.hasNoAspects) {
 				params.hasNoAspects = this.options.hasNoAspects;
 			}
-			if (this.options.ignoreNodesInTreeView && this.options.ignoreNodes) {
-				params.ignoreNodes = this.options.ignoreNodes;
-			}
 
 			Alfresco.util.Ajax.jsonGet({
 				url: Alfresco.constants.PROXY_URI_RELATIVE + this.options.treeBranchesDatasource + '/' + node.data.nodeRef.replace("://", "/") + '/items',

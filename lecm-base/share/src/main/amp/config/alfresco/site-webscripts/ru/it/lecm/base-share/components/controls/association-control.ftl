@@ -11,7 +11,10 @@
 <#if params.plane?? && params.plane == "true">
 	<#assign plane = true>
 </#if>
-
+<#assign onlyTree = false>
+<#if params.onlyTree?? && params.onlyTree == "true">
+	<#assign onlyTree = true>
+</#if>
 <#assign showPath = true>
 <#if params.showPath?? && params.showPath == "false">
 	<#assign showPath = false>
@@ -183,18 +186,22 @@
 
 	(function() {
 		function init() {
-			LogicECM.module.Base.Util.loadScripts([
+			LogicECM.module.Base.Util.loadResources([
 				'scripts/lecm-base/components/lecm-association-control.js',
 				'modules/simple-dialog.js'
-			], createControl);
+			], [
+                'css/lecm-base/components/controls/association-control-picker.css'
+            ], createControl);
 		}
 		function createControl(){
 			new LogicECM.module.AssociationControl("${fieldHtmlId}", "${controlJsName}").setOptions({
 			<#if disabled>
 				disabled: true,
 			</#if>
-			<#if params.rootLocation??>
-				rootLocation: "${params.rootLocation}",
+			<#if params.rootLocationArg??>
+                rootLocation: "${form.arguments[params.rootLocationArg]}",
+			<#elseif params.rootLocation??>
+                rootLocation: "${params.rootLocation}",
 			</#if>
                 showParentNodeInTreeView: ${showParentNodeInTreeView?string},
 			<#if field.mandatory??>
@@ -280,6 +287,10 @@
 			<#if defaultValue?has_content>
 				defaultValue: "${defaultValue?string}",
 			</#if>
+			<#if params.rootNodeScript??>
+                rootNodeScript: "${params.rootNodeScript}",
+			</#if>
+        		onlyTreeNodeSelectable: ${onlyTree?string},
 			<#if params.fireAction?? && params.fireAction != "">
 				fireAction: {
 					<#list params.fireAction?split(optionSeparator) as typeValue>

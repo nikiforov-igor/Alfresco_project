@@ -73,8 +73,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				rootNodeRef: options.rootNodeRef,
 				xpath: forAutocomplete ? options.rootLocation : undefined,
 				skipCount: forAutocomplete ? undefined : skipItemsCount.toString(),
-				elementsParams: LogicECM.module.AssociationComplexControl.Utils.getElementsParams(context, forAutocomplete),
-				ignoreNodes: (options.ignoreNodes && options.ignoreNodes.length) ? options.ignoreNodes : ""
+				elementsParams: LogicECM.module.AssociationComplexControl.Utils.getElementsParams(context, forAutocomplete)
 			};
 
 			return options.autocompleteDataSourceMethodPost ? YAHOO.lang.JSON.stringify(paramsObj) : Alfresco.util.toQueryString(paramsObj);

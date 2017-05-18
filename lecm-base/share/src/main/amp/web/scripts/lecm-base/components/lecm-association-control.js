@@ -139,6 +139,8 @@ LogicECM.module = LogicECM.module || {};
 
 				rootNodeRef: "",
 
+                rootNodeScript: "/lecm/forms/node/search",
+
 				hasPermAddChildren: false,
 
 				wasLoadWindowData: false,
@@ -236,7 +238,9 @@ LogicECM.module = LogicECM.module || {};
 
                 showInaccessible: false,
 
-                viewUrl: null
+                viewUrl: null,
+
+                onlyTreeNodeSelectable: false
 			},
 
 			onReady: function () {
@@ -357,6 +361,10 @@ LogicECM.module = LogicECM.module || {};
 				} else {
 					this.updateViewForm();
 				}
+				if (this.options.onlyTreeNodeSelectable) {
+				    Dom.addClass(this.options.pickerId + "-dataTable", "hidden");
+                    Dom.removeClass(this.options.pickerId + "-treeSelector", "panel-left");
+                }
 				LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
 			},
 
@@ -952,7 +960,7 @@ LogicECM.module = LogicECM.module || {};
 								data: {
 									isContainer: true,
 									nodeRef: this.options.rootNodeRef,
-									hasPermAddChildren: this.options.hasPermAddChildren
+									hasPermAddChildren: this.options.hasPermAddChildren,
 								}
 							});
 					}
@@ -1271,9 +1279,11 @@ LogicECM.module = LogicECM.module || {};
 					this.tree.setDynamicLoad(this._loadNode.bind(this));
 
 					this.tree.subscribe('clickEvent', function(event) {
-						event.node.focus();
-						this.treeViewClicked(event.node);
-						this.tree.onEventToggleHighlight(event);
+                        if (event.node.data.isSelectable) {
+                            event.node.focus();
+                            this.treeViewClicked(event.node);
+                            this.tree.onEventToggleHighlight(event);
+                        }
 						return false;
 					}.bind(this));
 
@@ -1309,9 +1319,14 @@ LogicECM.module = LogicECM.module || {};
 												displayPath: oResults.displayPath,
 												path: oResults.path,
 												simplePath: oResults.simplePath,
-												renderHidden:true
+												renderHidden:true,
+                                                isSelectable: oResults.selectable != null ? oResults.selectable : true,
+                                                selectedName: oResults.title
 											};
 											this.rootNode = new YAHOO.widget.TextNode(newNode, this.tree.getRoot());
+                                            if (!newNode.isSelectable) {
+                                                this.rootNode.contentStyle = "not-selectable";
+                                            }
 										} else {
 											this.rootNode = this.tree.getRoot();
 											var augmented = Alfresco.util.deepCopy(this.tree.getRoot());
@@ -1366,7 +1381,7 @@ LogicECM.module = LogicECM.module || {};
 
 			_generateRootUrlPath: function (nodeRef)
 			{
-				return $combine(Alfresco.constants.PROXY_URI, "/lecm/forms/node/search", nodeRef.replace("://", "/"));
+				return $combine(Alfresco.constants.PROXY_URI, this.options.rootNodeScript, nodeRef.replace("://", "/"));
 			},
 
 			_generateRootUrlParams: function ()
@@ -1407,10 +1422,15 @@ LogicECM.module = LogicECM.module || {};
 											type:oResults[nodeIndex].type,
 											isContainer: oResults[nodeIndex].isContainer,
 											hasPermAddChildren: oResults[nodeIndex].hasPermAddChildren,
-											renderHidden:true
+											renderHidden:true,
+                                            isSelectable: oResults[nodeIndex].selectable != null ? oResults[nodeIndex].selectable : true,
+                                            selectedName: oResults[nodeIndex].label
 										};
 
-										new YAHOO.widget.TextNode(newNode, node);
+										var textNode = new YAHOO.widget.TextNode(newNode, node);
+                                        if (!newNode.isSelectable) {
+                                            textNode.contentStyle = "not-selectable";
+                                        }
 									}
 								}
 							}
@@ -1459,7 +1479,17 @@ LogicECM.module = LogicECM.module || {};
 				this.currentNode = node;
 				this.isSearch = false;
 				this.searchData = "";
-				this._updateItems(node.data.nodeRef, "");
+                if (!this.options.onlyTreeNodeSelectable) {
+                    this._updateItems(node.data.nodeRef, "");
+                } else {
+                    if (!this.canItemBeSelected([node.data.nodeRef])) {
+                        this.selectedItems = {};
+                    }
+                    this.selectedItems[node.data.nodeRef] = node.data;
+                    this.singleSelectedItem = node.data;
+                    this.updateSelectedItems();
+                    this.updateFormFields(true)
+                }
 			},
 
 			_createSelectedControls: function ()
@@ -1539,6 +1569,7 @@ LogicECM.module = LogicECM.module || {};
 					];
 
 				var initialMessage = this.msg("logicecm.base.select-tree-element");
+
 
 				this.widgets.dataTable = new YAHOO.widget.DataTable(this.options.pickerId + "-group-members", columnDefinitions, this.widgets.dataSource,
 					{
@@ -1992,7 +2023,7 @@ LogicECM.module = LogicECM.module || {};
 						if (this.options.plane || !this.options.showPath) {
 							var displayName = items[i].selectedName;
 						} else {
-							displayName = items[i].simplePath + items[i].selectedName;
+							displayName = items[i].simplePath ? items[i].simplePath + items[i].selectedName : items[i].selectedName;
 						}
 						if (this.options.showAssocViewForm) {
 							if (this.options.itemType == "lecm-orgstr:employee") {
@@ -2015,7 +2046,7 @@ LogicECM.module = LogicECM.module || {};
 				if (this.options.plane || !this.options.showPath) {
 					var displayName = item.selectedName;
 				} else {
-					displayName =item.simplePath + item.selectedName;
+					displayName =item.simplePath ? item.simplePath + item.selectedName : item.selectedName;
 				}
 				if (this.options.showAssocViewForm) {
 					if (this.options.itemType == "lecm-orgstr:employee") {
@@ -2036,7 +2067,7 @@ LogicECM.module = LogicECM.module || {};
 			},
 
 			getDefaultView: function (displayValue, item) {
-				var titleName = (this.options.plane || !this.options.showPath) ? item.selectedName : item.path + item.selectedName;
+				var titleName = (this.options.plane || !this.options.showPath) ? item.selectedName : item.path ? item.path + item.selectedName : item.selectedName;
 				var title = (this.options.showAssocViewForm && item.nodeRef != null) ? Alfresco.component.Base.prototype.msg("title.click.for.extend.info") : titleName;
 				var result = "<span class='not-person' title='" + title + "'>";
 				if (this.options.showAssocViewForm && item.nodeRef != null) {
@@ -2111,7 +2142,7 @@ LogicECM.module = LogicECM.module || {};
 						if (this.options.plane || !this.options.showPath) {
 							var displayName = this.selectedItems[i].selectedName;
 						} else {
-							displayName = this.selectedItems[i].simplePath + this.selectedItems[i].selectedName;
+							displayName = this.selectedItems[i].simplePath ? this.selectedItems[i].simplePath + this.selectedItems[i].selectedName : this.selectedItems[i].selectedName;
 						}
 
 						if(this.options.disabled) {
