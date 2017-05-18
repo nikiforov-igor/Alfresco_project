@@ -1361,7 +1361,8 @@ LogicECM.module = LogicECM.module || {};
 									this._loadSelectedItems(this.options.clearFormsOnStart, true);
 
 									if (this.options.showCreateNewButton && this.widgets.createNewButton != null) {
-										this.widgets.createNewButton.set("disabled", !oResults.hasPermAddChildren);
+
+										this.widgets.createNewButton.set("disabled", !oResults.hasPermAddChildren || !!this.readonly);
 									}
 								}
 							},
@@ -2475,6 +2476,9 @@ LogicECM.module = LogicECM.module || {};
 					if (this.widgets.pickerButton) {
 						this.widgets.pickerButton.set('disabled', args[1].readonly);
 					}
+                    if (this.widgets.createNewButton) {
+                        this.widgets.createNewButton.set('disabled', true);
+                    }
 					autocompleteInput = Dom.get(this.options.controlId + '-autocomplete-input');
 					if (autocompleteInput) {
 						autocompleteInput.disabled = args[1].readonly;
