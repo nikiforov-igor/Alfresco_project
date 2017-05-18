@@ -1,7 +1,7 @@
 <alfresco-config>
     <!-- Document Library Actions config section -->
     <config evaluator="string-compare" condition="DocLibActions">
-        <!-- Перегруженны ресолвер actionGroups (ru.it.lecm.documents.resolvers.ActionsGroupResolver)-->
+        <!-- Перегруженный ресолвер actionGroups (ru.it.lecm.documents.resolvers.ActionsGroupResolver)-->
         <actionGroupResolver>lecm.resolver.doclib.actionGroup</actionGroupResolver>
 
         <!-- Список кастомных действий -->
