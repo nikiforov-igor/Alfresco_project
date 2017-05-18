@@ -6,7 +6,7 @@
         <property name="lecm-group-actions:type"><![CDATA[[lecm-meetings:document]]]></property>
         <property name="lecm-group-actions:order"><![CDATA[0]]></property>
         <property name="lecm-group-actions:expression">
-            <![CDATA[(user.currentUser().getEmployee().toString().equals(doc.attr("lecm-meetings:secretary-assoc-ref")) OR user.currentUser().getEmployee().toString().equals(doc.attr("lecm-meetings:chairman-assoc-ref")) OR user.currentUser().getEmployee().toString().equals(doc.attr("lecm-document:author-assoc-ref")))
+            <![CDATA[(user.currentUser().getEmployee().toString().equals(doc.attr("lecm-meetings:secretary-assoc-ref")) OR user.currentUser().getEmployee().toString().equals(doc.attr("lecm-meetings:chairman-assoc-ref")) OR user.currentUser().getEmployee().toString().equals(doc.attr("lecm-document:author-assoc-ref")) OR user.currentUser().getEmployee().toString().equals(doc.attr("lecm-events:initiator-assoc-ref")))
                         AND (user.currentUser().hasBusinessRole("DA_ENGINEER") OR user.currentUser().hasBusinessRole("MEETINGS_CREATOR"))]]></property>
         <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
         <property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
