@@ -8,7 +8,7 @@ import org.json.simple.JSONObject;
  * Date: 16.05.2017
  * Time: 16:48
  */
-public class isCreatorEvaluator extends BaseEvaluator {
+public class IsCreatorEvaluator extends BaseEvaluator {
     @Override
     public boolean evaluate(JSONObject jsonObject) {
         return getMatchesCurrentUser(jsonObject, "cm:creator");

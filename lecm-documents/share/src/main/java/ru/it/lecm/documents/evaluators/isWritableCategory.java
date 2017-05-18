@@ -8,7 +8,7 @@ import org.json.simple.JSONObject;
  * Date: 17.05.2017
  * Time: 10:09
  */
-public class isWritableCategory extends BaseEvaluator {
+public class IsWritableCategory extends BaseEvaluator {
     private EvaluatorsUtil evaluatorsUtil;
 
     public void setEvaluatorsUtil(EvaluatorsUtil evaluatorsUtil) {

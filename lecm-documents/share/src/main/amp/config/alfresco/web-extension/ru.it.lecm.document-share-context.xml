@@ -68,7 +68,7 @@
 		<property name="scriptRemote" ref="webscripts.script.remote" />
 	</bean>
 
-	<bean id="evaluator.documents.isCreator" class="ru.it.lecm.documents.evaluators.isCreatorEvaluator"/>
+	<bean id="evaluator.documents.isCreator" class="ru.it.lecm.documents.evaluators.IsCreatorEvaluator"/>
 
 	<bean id="evaluator.documents.isAttachment" parent="evaluator.doclib.metadata.hasAspect">
 		<property name="aspects">
@@ -78,7 +78,7 @@
 		</property>
 	</bean>
 
-	<bean id="evaluator.documents.isWritableCategory" class="ru.it.lecm.documents.evaluators.isWritableCategory">
+	<bean id="evaluator.documents.isWritableCategory" class="ru.it.lecm.documents.evaluators.IsWritableCategory">
 		<property name="evaluatorsUtil" ref="evaluators.documents.util"/>
 	</bean>
 
