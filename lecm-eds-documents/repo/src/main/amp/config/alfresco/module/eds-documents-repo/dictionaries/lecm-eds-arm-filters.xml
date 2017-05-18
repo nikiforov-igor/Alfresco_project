@@ -15,7 +15,7 @@
                 <property name="lecm-arm:filter-code">DATE_FILTER</property>
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
-                <property name="lecm-arm:filter-values">@lecm\\-errands:is\\-expired:true OR @lecm\\-resolutions:is\\-expired:true|С нарушением срока;NOT @lecm\\-errands\:is\\-expired:true AND NOT @lecm\\-resolutions:is\\-expired:true|Без нарушения;@lecm\\-eds\\-document:execution\\-date:[NOW TO NOW+4DAY] OR @lecm\\-errands\\:limitation\\-date:[NOW TO NOW+4DAY] OR @lecm\\-resolutions\\:limitation\\-date:[NOW TO NOW+4DAY]|Осталось менее 5-ти дней</property>
+                <property name="lecm-arm:filter-values">@lecm\\-errands:is\\-expired:true OR @lecm\\-resolutions:is\\-expired:true OR @lecm\\-eds\\-document:is\\-expired:true|С нарушением срока;NOT @lecm\\-errands\:is\\-expired:true AND NOT @lecm\\-resolutions:is\\-expired:true AND NOT @lecm\\-eds\\-document:is\\-expired:true|Без нарушения;@lecm\\-eds\\-document:execution\\-date:[NOW TO NOW+4DAY] OR @lecm\\-errands\\:limitation\\-date:[NOW TO NOW+4DAY] OR @lecm\\-resolutions\\:limitation\\-date:[NOW TO NOW+4DAY]|Осталось менее 5-ти дней</property>
                 <property name="lecm-arm:filter-query">#value</property>
             </item>
                 <item name="cm:Вид документа" type="lecm-arm:filter">
