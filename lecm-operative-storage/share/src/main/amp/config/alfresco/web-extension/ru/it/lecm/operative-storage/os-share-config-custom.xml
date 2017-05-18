@@ -10,16 +10,16 @@
 		<forms>
 			<default-controls>
 				<type name="association:lecm-os:security-classification"
-                      template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
-                    <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Грифы_x0020_секретности</control-param>
+                      template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
+                    <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Грифы_x0020_секретности</control-param>
                     <control-param name="nameSubstituteString">{cm:title}</control-param>
                     <control-param name="sortProp">lecm-base-aspects:order</control-param>
                     <control-param name="selectedItemsNameSubstituteString">{cm:title}</control-param>
-                    <control-param name="plane">true</control-param>
-                    <control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
+                    <control-param name="notSelectedOptionShow">false</control-param>
+                    <control-param name="showCreateNewButton">false</control-param>
                     <control-param name="showCreateNewLink">false</control-param>
                 </type>
-				<type name="association:lecm-os:base" template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
+				<type name="association:lecm-os:base" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
 					<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел</control-param>
 					<control-param name="nameSubstituteString">{cm:title} {lecm-os:nomenclature-year-section-year}</control-param>
 					<control-param name="treeNodeSubstituteString">{cm:title} {lecm-os:nomenclature-year-section-year}</control-param>
@@ -27,13 +27,12 @@
 					<control-param name="showCreateNewButton">false</control-param>
 					<control-param name="plane">false</control-param>
 					<control-param name="showSearch">false</control-param>
-					<control-param name="showSelectedItemsPath">false</control-param>
 					<control-param name="treeItemType">lecm-dic:hierarchical_dictionary_values</control-param>
 					<control-param name="endpointType">lecm-dic:hierarchical_dictionary_values</control-param>
                     <control-param name="childrenDataSource">lecm/os/nomenclature/datasource/avaliableUnits</control-param>
 					<control-param name="additionalFilter">NOT @lecm\\-os\\:nomenclature\\-unit\\-section\\-status:\"CLOSED\" OR NOT @lecm\\-os\\:nomenclature\\-year\\-section\\-status:\"CLOSED\"</control-param>
 				</type>
-				<type name="association:lecm-os:base_copy_action" template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+				<type name="association:lecm-os:base_copy_action" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
 					<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел</control-param>
 					<control-param name="nameSubstituteString">{cm:title} {lecm-os:nomenclature-year-section-year}</control-param>
 					<control-param name="treeNodeSubstituteString">{cm:title} {lecm-os:nomenclature-year-section-year}</control-param>
@@ -52,7 +51,7 @@
 				<type name="association:lecm-os:copy-unit-validate-script" template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                     <control-param name="scripts">scripts/lecm-os/nomenclature/copy-unit-validation.js</control-param>
                 </type>
-				<type name="association:lecm-os:nomenclature-year-section" template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+				<type name="association:lecm-os:nomenclature-year-section" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                     <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел</control-param>
                     <control-param name="nameSubstituteString">{lecm-os:nomenclature-year-section-year}</control-param>
                     <control-param name="treeItemType">lecm-dic:hierarchical_dictionary_values</control-param>
@@ -60,9 +59,8 @@
 					<control-param name="additionalFilter">{{FILTER_YEARS_BY_ORG({allowAdmin: true})}}</control-param>
 					<control-param name="treeBranchesDatasource">lecm/nomenclature/tree</control-param>
                     <control-param name="sortProp">lecm-os:nomenclature-year-section-year</control-param>
-                    <control-param name="endpointType">lecm-os:nomenclature-year-section</control-param>
                 </type>
-				<type name="association:lecm-os:nomenclature-unit-section" template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+				<type name="association:lecm-os:nomenclature-unit-section" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                     <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел</control-param>
                     <control-param name="nameSubstituteString">{cm:title|lecm-os:nomenclature-year-section-year}</control-param>
                     <control-param name="treeNodeSubstituteString">{cm:title|lecm-os:nomenclature-year-section-year}</control-param>
@@ -78,7 +76,7 @@
 					<control-param name="treeBranchesDatasource">lecm/nomenclature/tree/notClosed</control-param>
                     <control-param name="sortProp">cm:title</control-param>
 				</type>
-				<type name="association:lecm-os:nomenclature-base-section" template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+				<type name="association:lecm-os:nomenclature-base-section" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                     <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел</control-param>
 					<control-param name="nameSubstituteString">{cm:title|lecm-os:nomenclature-year-section-year}</control-param>
 					<control-param name="treeNodeSubstituteString">{cm:title|lecm-os:nomenclature-year-section-year}</control-param>
@@ -94,7 +92,7 @@
 					<control-param name="treeBranchesDatasource">lecm/nomenclature/tree</control-param>
 					<control-param name="sortProp">cm:title</control-param>
 				</type>
-				<type name="association:lecm-os:nomenclature-case" template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+				<type name="association:lecm-os:nomenclature-case" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                     <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел</control-param>
                     <control-param name="nameSubstituteString">{lecm-os:nomenclature-case-index}-{cm:title}</control-param>
                     <control-param name="treeNodeSubstituteString">{cm:title|lecm-os:nomenclature-year-section-year}</control-param>
@@ -111,7 +109,7 @@
                     <control-param name="showParentNodeInTreeView">true</control-param>
                     <control-param name="sortProp">lecm-os:nomenclature-case-index</control-param>
                 </type>
-				<type name="association:lecm-os:nomenclature-case-for-reports" template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+				<type name="association:lecm-os:nomenclature-case-for-reports" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                     <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел</control-param>
                     <control-param name="nameSubstituteString">{lecm-os:nomenclature-case-index}-{cm:title}</control-param>
                     <control-param name="treeNodeSubstituteString">{cm:title|lecm-os:nomenclature-year-section-year}</control-param>
@@ -127,7 +125,7 @@
                     <control-param name="treeBranchesDatasource">lecm/nomenclature/tree</control-param>
                     <control-param name="sortProp">lecm-os:nomenclature-case-index</control-param>
                 </type>
-                <type name="association:lecm-os:nomenclature-case-volume" template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                <type name="association:lecm-os:nomenclature-case-volume" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                     <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел</control-param>
                     <control-param name="plane">false</control-param>
                     <control-param name="treeItemType">lecm-dic:hierarchical_dictionary_values,lecm-os:nomenclature-case</control-param>
@@ -250,13 +248,12 @@
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.OS.isOrganizationCentralized" event="keyup" message-id="os.organization.selected"/>
                         </constraint-handlers>
-						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
 							<control-param name="plane">true</control-param>
                             <control-param name="changeItemsFireAction">organizationChanged</control-param>
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел</control-param>
                             <control-param name="endpointType">lecm-orgstr:organization-unit</control-param>
-                            <control-param name="showAssocViewForm">true</control-param>
-                        </control>
+						</control>
                     </field>
                     <field id="disableOrgControl">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
@@ -476,11 +473,12 @@
                     </field>
                     <field id="lecm-os:nomenclature-case-index" set="set1"/>
                     <field id="lecm-os:nomenclature-case-store-term-assoc" set="set1">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Сроки_x0020_хранения_x0020_номенклатурных_x0020_дел</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Сроки_x0020_хранения_x0020_номенклатурных_x0020_дел</control-param>
                             <control-param name="nameSubstituteString">{cm:title}</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-os:nomenclature-case-security-classification-assoc" set="set1"/>
@@ -569,11 +567,12 @@
                     </field>
                     <field id="lecm-os:nomenclature-case-index" set="set1" read-only="true"/>
                     <field id="lecm-os:nomenclature-case-store-term-assoc" set="set1" read-only="true">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Сроки_x0020_хранения_x0020_номенклатурных_x0020_дел</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Сроки_x0020_хранения_x0020_номенклатурных_x0020_дел</control-param>
                             <control-param name="nameSubstituteString">{cm:title}</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
 
@@ -689,11 +688,12 @@
                     </field>
                     <field id="lecm-os:nomenclature-case-index" set="set2"/>
                     <field id="lecm-os:nomenclature-case-store-term-assoc" set="set2">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Сроки_x0020_хранения_x0020_номенклатурных_x0020_дел</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Сроки_x0020_хранения_x0020_номенклатурных_x0020_дел</control-param>
                             <control-param name="nameSubstituteString">{cm:title}</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-os:nomenclature-case-security-classification-assoc" set="set2"/>
@@ -805,11 +805,12 @@
                     </field>
                     <field id="lecm-os:nomenclature-case-index" set="set2"/>
                     <field id="lecm-os:nomenclature-case-store-term-assoc" set="set2">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Сроки_x0020_хранения_x0020_номенклатурных_x0020_дел</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Сроки_x0020_хранения_x0020_номенклатурных_x0020_дел</control-param>
                             <control-param name="nameSubstituteString">{cm:title}</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-os:nomenclature-case-security-classification-assoc" set="set2"/>
@@ -920,11 +921,12 @@
                     <field id="lecm-os:nomenclature-case-volume-date-till" set="dates"/>
                     <field id="lecm-os:nomenclature-case-volume-pages-number" set="set3"/>
                     <field id="lecm-os:nomenclature-case-volume-storage-assoc" set="set3">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Хранилища</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Хранилища</control-param>
                             <control-param name="nameSubstituteString">{cm:title}</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-os:nomenclature-case-volume-rack" set="set3"/>
@@ -984,11 +986,12 @@
                     <field id="lecm-os:nomenclature-case-volume-date-till" read-only="true"/>
                     <field id="lecm-os:nomenclature-case-volume-pages-number" read-only="true"/>
                     <field id="lecm-os:nomenclature-case-volume-storage-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Хранилища</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Хранилища</control-param>
                             <control-param name="nameSubstituteString">{cm:title}</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-os:nomenclature-case-volume-rack"/>
@@ -1025,11 +1028,12 @@
                     <field id="lecm-os:nomenclature-case-volume-date-till" set="dates"/>
                     <field id="lecm-os:nomenclature-case-volume-pages-number" set="set3"/>
                     <field id="lecm-os:nomenclature-case-volume-storage-assoc" set="set3">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Хранилища</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Хранилища</control-param>
                             <control-param name="nameSubstituteString">{cm:title}</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-os:nomenclature-case-volume-rack" set="set3"/>
@@ -1116,12 +1120,13 @@
                         <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
                     </field>
                     <field id="lecm-os:store-entry-store-term-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Сроки_x0020_хранения_x0020_номенклатурных_x0020_дел</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Сроки_x0020_хранения_x0020_номенклатурных_x0020_дел</control-param>
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="nameSubstituteString">{cm:title}</control-param>
 							<control-param name="doNotCheckAccess">true</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -1154,12 +1159,13 @@
                         <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
                     </field>
                     <field id="lecm-os:store-entry-store-term-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Сроки_x0020_хранения_x0020_номенклатурных_x0020_дел</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Сроки_x0020_хранения_x0020_номенклатурных_x0020_дел</control-param>
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="nameSubstituteString">{cm:title}</control-param>
 							<control-param name="doNotCheckAccess">true</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
                 </appearance>

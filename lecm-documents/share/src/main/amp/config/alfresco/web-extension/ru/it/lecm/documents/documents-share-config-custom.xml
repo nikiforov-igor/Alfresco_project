@@ -484,13 +484,10 @@
             </dependencies>
 -->
             <default-controls>
-                <type name="association:lecm-doc-dic:subjects" template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                <type name="association:lecm-doc-dic:subjects" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                     <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
-                    <control-param name="nameSubstituteString">{cm:name}</control-param>
-                    <control-param name="showAssocViewForm">false</control-param>
-                    <control-param name="showSearch">true</control-param>
                 </type>
-	            <type name="association:lecm-document:base" template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+	            <type name="association:lecm-document:base" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
 		            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
 		            <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
 		            <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
@@ -502,11 +499,9 @@
                     <control-param name="multiply">false</control-param>
                     <control-param name="withEmpty">true</control-param>
                 </type>
-	            <type name="association:lecm-doc-dic-dm:deliveryMethod" template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+	            <type name="association:lecm-doc-dic-dm:deliveryMethod" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
 		            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Способ_x0020_доставки</control-param>
 		            <control-param name="plane">true</control-param>
-                    <control-param name="showAssocViewForm">false</control-param>
-                    <control-param name="nameSubstituteString">{cm:name}</control-param>
 	            </type>
                 <type name="association:lecm-connect:connection" template="/ru/it/lecm/documents/controls/connections/document-temp-connection.ftl"></type>
             </default-controls>
@@ -691,7 +686,7 @@
                         <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
                     </field>
                     <field id="lecm-connect:connected-document-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                             <control-param name="rootLocation">/app:company_home</control-param>
                             <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
@@ -720,7 +715,7 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-connect:connected-document-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                             <control-param name="rootLocation">/app:company_home</control-param>
                             <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
@@ -731,12 +726,12 @@
                         </control>
                     </field>
                     <field id="lecm-connect:connection-type-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Типы_x0020_связи</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Типы_x0020_связи</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="showCreateNewLink">false</control-param>
-                            <control-param name="plane">true</control-param>
-                            <control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"> </control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -764,18 +759,18 @@
                             <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
                             <control-param name="changeItemsFireAction">changeConnectedDocument</control-param>
-                            <control-param name="additionalFilter">NOT @lecm\-statemachine\-aspects\:is\-draft:true</control-param>
-                            <control-param name="showSearch">true</control-param>
                             <control-param name="plane">true</control-param>
+                            <control-param name="showSearch">true</control-param>
+                            <control-param name="additionalFilter">NOT @lecm\-statemachine\-aspects\:is\-draft:true</control-param>
                         </control>
                     </field>
                     <field id="lecm-connect:connection-type-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Типы_x0020_связи</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Типы_x0020_связи</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"> </control-param>
                             <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="plane">true</control-param>
-                            <control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -1241,14 +1236,14 @@
 					<set id="set" template="/ru/it/lecm/documents/sets/attach-to-document-set.ftl"/>
 
 					<field id="document" label-id="label.attach-to-document.document" set="set">
-						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
 							<control-param name="itemType">lecm-document:base</control-param>
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
 							<control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
 							<control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
 							<control-param name="changeItemsFireAction">changeAttachToDocument</control-param>
-                            <control-param name="showSearch">true</control-param>
                             <control-param name="plane">true</control-param>
+                            <control-param name="showSearch">true</control-param>
 						</control>
 					</field>
 					<field id="category" label-id="label.attach-to-document.category" set="set">

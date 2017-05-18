@@ -99,8 +99,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			showEditButton: false,
 			defaultValue: null,
 			defaultValueDataSource: null,
-            showInaccessible: false,
-            viewUrl: null
+			showInaccessible: false,
+			viewUrl: null
         },
 
 		widgets: {
@@ -298,7 +298,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			if (this.options.hasNoAspects) {
 				params.hasNoAspects = this.options.hasNoAspects;
 			}
-			if (this.options.ignoreNodesInTreeView && this.options.ignoreNodes != null) {
+			if (this.options.ignoreNodesInTreeView && this.options.ignoreNodes) {
 				params.ignoreNodes = this.options.ignoreNodes;
 			}
 
@@ -420,7 +420,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 					pathRoot: this.options.rootLocation,
 					pathNameSubstituteString: this.options.treeNodeSubstituteString,
 					useObjectDescription: this.options.useObjectDescription,
-                    showInaccessible: this.options.showInaccessible
+                    showInaccessible: this.options.showInaccessible,
+					substituteParent: this.options.substituteParent != "" ? this.options.substituteParent : "none"
                 },
 				successCallback: {
 					scope: this,
@@ -899,7 +900,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			this.widgets.datatable.on('cellClickEvent', this.onClick, null, this);
 			this.widgets.datatable.on('tableScrollEvent', this.onDatatableScroll, null, this);
 			var context = this;
-			if (this.options.allowedNodesScript && this.options.allowedNodesScript != "") {
+			if (this.options.allowedNodesScript) {
 				Alfresco.util.Ajax.request({
 					method: "GET",
 					requestContentType: "application/json",

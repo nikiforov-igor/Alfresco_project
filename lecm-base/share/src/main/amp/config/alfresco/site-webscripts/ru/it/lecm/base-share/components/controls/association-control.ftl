@@ -1,10 +1,12 @@
-<#--This association-control.ftl is deprecated!-->
 <#include "/org/alfresco/components/component.head.inc">
 <#include "association-tree-picker-dialog.inc.ftl">
 
 <#assign controlId = fieldHtmlId + "-cntrl">
 <#assign params = field.control.params>
-
+<#assign controlJsName = "AssociationControl">
+<#if params.controlJsName??>
+    <#assign controlJsName = params.controlJsName?string>
+</#if>
 <#assign plane = false>
 <#if params.plane?? && params.plane == "true">
 	<#assign plane = true>
@@ -19,7 +21,10 @@
 <#if params.showPath?? && params.showPath == "false">
 	<#assign showPath = false>
 </#if>
-
+<#assign hideLabel = false/>
+<#if field.control.params.hideLabel?? && field.control.params.hideLabel == "true">
+	<#assign hideLabel = true/>
+</#if>
 <#assign showAutocomplete = true>
 <#if params.showAutocomplete?? && params.showAutocomplete == "false">
 	<#assign showAutocomplete = false>
@@ -95,7 +100,7 @@
 
 <#if disabled>
 <div id="${controlId}" class="control association-control viewmode">
-	<div class="label-div">
+	<div class="label-div<#if hideLabel> hidden</#if>">
 		<#if showViewIncompleteWarning && (field.endpointMandatory!false || field.mandatory!false) && field.value == "">
 		<span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png" title="${msg("form.field.incomplete")}"/><span>
 		</#if>
@@ -110,7 +115,7 @@
 </div>
 <#else>
 <div id="${controlId}-edt" class="control association-control editmode">
-	<div class="label-div">
+	<div class="label-div<#if hideLabel> hidden</#if>">
 		<label for="${controlId}">
 		${field.label?html}:
 			<#if field.endpointMandatory!false || field.mandatory!false>
@@ -184,7 +189,7 @@
 			], createControl);
 		}
 		function createControl(){
-			new LogicECM.module.AssociationControl("${fieldHtmlId}").setOptions({
+			new LogicECM.module.AssociationControl("${fieldHtmlId}", "${controlJsName}").setOptions({
 			<#if disabled>
 				disabled: true,
 			</#if>
@@ -289,6 +294,12 @@
 						</#if>
 					</#list>
 				},
+			</#if>
+			<#if field.control.params.showInaccessible ??>
+                showInaccessible: ${field.control.params.showInaccessible?string},
+			</#if>
+			<#if field.control.params.viewUrl??>
+                viewUrl: "${field.control.params.viewUrl}",
 			</#if>
 				itemType: "${params.endpointType ! field.endpointType}",
 				additionalFilter: "${params.additionalFilter!''}",

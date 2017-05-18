@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Get pickeritems for dictionary move node</shortname>
-	<description>Get pickeritems for dictionary move node</description>
-	<url>/lecm/dictionary/move/picker/{type}/{store_type}/{store_id}/{id}/children</url>
-	<format default="json"/>
-	<authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

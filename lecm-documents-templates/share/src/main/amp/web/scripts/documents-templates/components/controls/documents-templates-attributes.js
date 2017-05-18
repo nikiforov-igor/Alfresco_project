@@ -467,7 +467,9 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 							var unit = new Alfresco.util.NodeRef(response.json.nodeRef);
 							LogicECM.module.Base.Util.readonlyControl(formId, "lecm-template:unitAssoc", false);
 							YAHOO.util.Event.onAvailable(LogicECM.module.Base.Util.getComponentReadyElementId(formId, "lecm-template:unitAssoc"), function() {
-								LogicECM.module.Base.Util.reInitializeControl(formId, "lecm-template:unitAssoc", {
+								YAHOO.Bubbling.fire("refreshItemList", {
+									formId: formId,
+									fieldId: "lecm-template:unitAssoc",
 									additionalFilter: '@lecm\\-orgstr\\-aspects\\:linked\\-organization\\-assoc\\-ref:\"' + organization.nodeRef + '\" AND NOT(@sys\\:node\\-uuid:\"' + unit.id + '\")'
 								});
 							}, this);

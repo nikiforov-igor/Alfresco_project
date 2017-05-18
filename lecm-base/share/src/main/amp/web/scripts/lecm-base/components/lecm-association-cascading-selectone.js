@@ -403,8 +403,7 @@ LogicECM.module = LogicECM.module || {};
                 var param = args[1];
                 var success = false;
                 for (obj in  this.options.dependentFieldName){
-                    if ((param.bubblingLabel && param.bubblingLabel.indexOf(this.options.dependentFieldName[obj]) != -1) ||
-                        (param.fieldId && param.fieldId.indexOf(this.options.dependentFieldName[obj]) != -1)){
+                    if (param.bubblingLabel.indexOf(this.options.dependentFieldName[obj]) != -1){
                         success = true; break;
                     }
                 }

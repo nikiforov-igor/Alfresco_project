@@ -30,9 +30,9 @@ LogicECM.module = LogicECM.module || {};
 
 	var IDENT_CREATE_NEW = "~CREATE~NEW~";
 
-	LogicECM.module.AssociationControl = function(htmlId)
+	LogicECM.module.AssociationControl = function(htmlId, controlName)
 	{
-		LogicECM.module.AssociationControl.superclass.constructor.call(this, "AssociationControl", htmlId);
+		LogicECM.module.AssociationControl.superclass.constructor.call(this, controlName, htmlId);
 		YAHOO.Bubbling.on("refreshItemList", this.onRefreshItemList, this);
 		YAHOO.Bubbling.on("addSelectedItems", this.onAddSelectedItems, this);
 		YAHOO.Bubbling.on("readonlyControl", this.onReadonlyControl, this);
@@ -192,6 +192,8 @@ LogicECM.module = LogicECM.module || {};
 
 				defaultValueDataSource: null,
 
+				defaultValueUseOnce: false,
+
 				ignoreNodes: null,
 
 				childrenDataSource: "lecm/forms/picker",
@@ -230,7 +232,11 @@ LogicECM.module = LogicECM.module || {};
 
 				useObjectDescription: false,
 
-				doNotResetOnCancel: false
+				doNotResetOnCancel: false,
+
+                showInaccessible: false,
+
+                viewUrl: null
 			},
 
 			onReady: function () {
@@ -264,7 +270,7 @@ LogicECM.module = LogicECM.module || {};
 					this.widgets.pickerButton.set('disabled', this.options.disabled || this.readonly);
 				}
 
-				var input = Dom.get(this.controlId + "-autocomplete-input");
+				var input = Dom.get(this.options.controlId + "-autocomplete-input");
 				if (input != null) {
 					input.disabled = this.options.disabled || this.options.lazyLoading || this.readonly;
 				}
@@ -466,6 +472,9 @@ LogicECM.module = LogicECM.module || {};
 
 					if (arrItems == "" && this.defaultValue != null) {
 						arrItems += this.defaultValue;
+						if (this.options.defaultValueUseOnce) {
+							this.defaultValue = null;
+						}
 					}
 				}
 
@@ -519,7 +528,8 @@ LogicECM.module = LogicECM.module || {};
 								selectedItemsNameSubstituteString: this.getSelectedItemsNameSubstituteString(),
 								pathRoot: this.options.rootLocation,
 								pathNameSubstituteString: this.options.treeNodeSubstituteString,
-								useObjectDescription: this.options.useObjectDescription
+								useObjectDescription: this.options.useObjectDescription,
+                                showInaccessible: this.options.showInaccessible
 							},
 							successCallback:
 							{
@@ -1673,15 +1683,17 @@ LogicECM.module = LogicECM.module || {};
 						return;
 					}
 
-					if (oRecord.getData("type") == "lecm-orgstr:employee") {
-						template += '<h3 class="item-name">' + Util.getControlEmployeeView(oRecord.getData("nodeRef"),"{name}", true) + '</h3>';
-					} else {
-						if (scope.options.showAssocViewForm) {
-							template += '<h3 class="item-name">' + Util.getControlValueView(oRecord.getData("nodeRef"), "{name}", "{name}") + '</h3>';
+					if (scope.options.showAssocViewForm) {
+						if (oRecord.getData("type") == "lecm-orgstr:employee") {
+							template += '<h3 class="item-name">' + Util.getControlEmployeeView(oRecord.getData("nodeRef"), "{name}", true) + '</h3>';
 						} else {
-							template += '<h3 class="item-name">{name}</h3>';
+							template += '<h3 class="item-name">' + Util.getControlValueView(oRecord.getData("nodeRef"), "{name}", "{name}") + '</h3>';
 						}
 					}
+					else {
+						template += '<h3 class="item-name">{name}</h3>';
+					}
+
 
 					if (!scope.options.compactMode)
 					{
@@ -1982,10 +1994,13 @@ LogicECM.module = LogicECM.module || {};
 						} else {
 							displayName = items[i].simplePath + items[i].selectedName;
 						}
-
-						if (this.options.itemType == "lecm-orgstr:employee") {
-							var elementName = this.getEmployeeAbsenceMarkeredHTML(items[i].nodeRef, displayName, true);
-							Dom.get(fieldId).innerHTML += Util.getCroppedItem(elementName, this.getRemoveButtonHTML(items[i]));
+						if (this.options.showAssocViewForm) {
+							if (this.options.itemType == "lecm-orgstr:employee") {
+								var elementName = this.getEmployeeAbsenceMarkeredHTML(items[i].nodeRef, displayName, true);
+								Dom.get(fieldId).innerHTML += Util.getCroppedItem(elementName, this.getRemoveButtonHTML(items[i]));
+							} else {
+								Dom.get(fieldId).innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, items[i]), this.getRemoveButtonHTML(items[i]));
+							}
 						} else {
 							Dom.get(fieldId).innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, items[i]), this.getRemoveButtonHTML(items[i]));
 						}
@@ -2002,14 +2017,16 @@ LogicECM.module = LogicECM.module || {};
 				} else {
 					displayName =item.simplePath + item.selectedName;
 				}
-
-				if (this.options.itemType == "lecm-orgstr:employee") {
-					var elementName = this.getEmployeeAbsenceMarkeredHTML(item.nodeRef, displayName, true);
-					Dom.get(fieldId).innerHTML += Util.getCroppedItem(elementName, this.getRemoveButtonHTML(item));
+				if (this.options.showAssocViewForm) {
+					if (this.options.itemType == "lecm-orgstr:employee") {
+						var elementName = this.getEmployeeAbsenceMarkeredHTML(item.nodeRef, displayName, true);
+						Dom.get(fieldId).innerHTML += Util.getCroppedItem(elementName, this.getRemoveButtonHTML(item));
+					} else {
+						Dom.get(fieldId).innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, item), this.getRemoveButtonHTML(item));
+					}
 				} else {
 					Dom.get(fieldId).innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, item), this.getRemoveButtonHTML(item));
 				}
-
 				var items = this.selectedItems;
 				for (var i in items) {
 					if (typeof(items[i]) != "function") {
@@ -2023,7 +2040,16 @@ LogicECM.module = LogicECM.module || {};
 				var title = (this.options.showAssocViewForm && item.nodeRef != null) ? Alfresco.component.Base.prototype.msg("title.click.for.extend.info") : titleName;
 				var result = "<span class='not-person' title='" + title + "'>";
 				if (this.options.showAssocViewForm && item.nodeRef != null) {
-					result += "<a href='javascript:void(0);' " + " onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'"+ item.nodeRef + "\', title: \'logicecm.view\'})\">" + displayValue + "</a>";
+                    if (!this.options.disabled || (this.options.disabled && item.hasAccess)) {
+                        if (this.options.viewUrl) {
+                            var href = YAHOO.lang.substitute(this.options.viewUrl, {
+                                nodeRef: item.nodeRef
+                            });
+                            result += "<a href=\'" + href + "\'>" + displayValue + "</a>"
+                        } else {
+                            result += "<a href='javascript:void(0);' " + " onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'"+ item.nodeRef + "\', title: \'logicecm.view\'})\">" + displayValue + "</a>";
+                        }
+                    }
 				} else {
 					result += displayValue;
 				}
@@ -2089,15 +2115,23 @@ LogicECM.module = LogicECM.module || {};
 						}
 
 						if(this.options.disabled) {
-							if (this.options.itemType == "lecm-orgstr:employee") {
-								el.innerHTML += Util.getCroppedItem(Util.getControlEmployeeView(this.selectedItems[i].nodeRef, displayName));
+							if (this.options.showAssocViewForm) {
+								if (this.options.itemType == "lecm-orgstr:employee") {
+									el.innerHTML += Util.getCroppedItem(Util.getControlEmployeeView(this.selectedItems[i].nodeRef, displayName));
+								} else {
+									el.innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, this.selectedItems[i]));
+								}
 							} else {
 								el.innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, this.selectedItems[i]));
 							}
 						} else {
-							if (this.options.itemType == "lecm-orgstr:employee") {
-								var elementName = this.getEmployeeAbsenceMarkeredHTML(this.selectedItems[i].nodeRef, displayName, null);
-								el.innerHTML += Util.getCroppedItem(elementName, this.getRemoveButtonHTML(this.selectedItems[i], "_c"));
+							if (this.options.showAssocViewForm) {
+								if (this.options.itemType == "lecm-orgstr:employee") {
+									var elementName = this.getEmployeeAbsenceMarkeredHTML(this.selectedItems[i].nodeRef, displayName, null);
+									el.innerHTML += Util.getCroppedItem(elementName, this.getRemoveButtonHTML(this.selectedItems[i], "_c"));
+								} else {
+									el.innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, this.selectedItems[i]), this.getRemoveButtonHTML(this.selectedItems[i], "_c"));
+								}
 							} else {
 								el.innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, this.selectedItems[i]), this.getRemoveButtonHTML(this.selectedItems[i], "_c"));
 							}
@@ -2428,7 +2462,9 @@ LogicECM.module = LogicECM.module || {};
 					if (this.widgets.pickerButton != null) {
 						this.widgets.pickerButton.set('disabled', true);
 					}
-
+					if (this.widgets.createNewButton) {
+						this.widgets.createNewButton.set('disabled', true);
+					}
 					var autocomplete = Dom.get(this.options.controlId + "-autocomplete-input");
 					if (autocomplete) {
 						autocomplete.disabled = true;
@@ -2459,7 +2495,9 @@ LogicECM.module = LogicECM.module || {};
 								this.widgets.dialog.hide();
 							}
 						}
-
+						if (this.widgets.createNewButton) {
+							this.widgets.createNewButton.set('disabled', false);
+						}
 						var autocomplete = Dom.get(this.options.controlId + "-autocomplete-input");
 						if (autocomplete) {
 							autocomplete.disabled = false;
@@ -2509,6 +2547,7 @@ LogicECM.module = LogicECM.module || {};
 					this.isSearch = false;
 					this.allowedNodes = null;
 					this.allowedNodesScript = null;
+					this.tempDisabled = false;
 
 					if(this.options.useDeferedReinit) {
 						this.reinitDeferedList.fulfil("eventRecieved");

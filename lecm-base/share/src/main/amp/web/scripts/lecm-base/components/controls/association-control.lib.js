@@ -39,7 +39,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			if (options.ignoreNodes && options.ignoreNodes.length) {
 				ignoreNodesFilter = options.ignoreNodes.reduce(function (prev, curr) {
 					return prev + ' AND NOT ID:"' + curr + '"';
-				}, '(ISNOTNULL:\"cm:name\")');
+				}, '(ISNOTNULL:\"cm:name\" AND  @cm\\:name:\"?*\")');
 
 				if (additionalFilter) {
 					singleNotQuery = additionalFilter.indexOf("NOT") == 0 && !notSingleQueryPattern.test(additionalFilter);
@@ -246,7 +246,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			var titleName = (options.plane || !options.showPath) ? item.selectedName : item.path + item.selectedName;
 			var title = (options.showAssocViewForm && item.nodeRef != null) ? Alfresco.util.message('title.click.for.extend.info') : titleName;
 			var result = '<span class="not-person" title="' + title + '">';
-			if (options.showAssocViewForm && item.nodeRef != null && (!options.disabled || (options.disabled && item.hasAccess))) {
+			if (options.showAssocViewForm && item.nodeRef && (!options.disabled || (options.disabled && item.hasAccess))) {
 				if (options.viewUrl) {
 					var href = YAHOO.lang.substitute(options.viewUrl, {
 						nodeRef: item.nodeRef

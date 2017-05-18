@@ -10,7 +10,7 @@
 					<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Ресурсы</control-param>
 					<control-param name="plane">true</control-param>
 				</type>
-				<type name="association:new_secretaty" template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+				<type name="association:new_secretaty" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
 					<control-param name="plane">true</control-param>
 					<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
 					<control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
@@ -18,7 +18,6 @@
 					<control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
 					<control-param name="childrenDataSource">lecm/employees/MEETINGS_CREATOR/picker</control-param>
 					<control-param name="endpointType">lecm-orgstr:employee</control-param>
-					<control-param name="showSearch">true</control-param>
 				</type>
 			</default-controls>
 			<dependencies>
@@ -296,11 +295,9 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-events:location-assoc">
-						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Места_x0020_проведения_x0020_мероприятий</control-param>
 							<control-param name="plane">true</control-param>
-							<control-param name="showAssocViewForm">true</control-param>
-							<control-param name="nameSubstituteString">{cm:name}</control-param>
 						</control>
 					</field>
 					<field id="lecm-events-ts:members-assoc">
@@ -1148,7 +1145,7 @@
 						</control>
 					</field>
 					<field id="lecm-meetings-ts:documents-assoc">
-						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
 							<control-param name="rootLocation">/app:company_home</control-param>
 							<control-param name="itemType">lecm-document:base</control-param>
 							<control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
@@ -1263,7 +1260,7 @@
 					</field>
 
 					<field id="lecm-meetings-ts:documents-assoc">
-						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
 							<control-param name="rootLocation">/app:company_home</control-param>
 							<control-param name="itemType">lecm-document:base</control-param>
 							<control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
@@ -1364,7 +1361,7 @@
 					</field>
 
 					<field id="lecm-meetings-ts:documents-assoc">
-						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
 							<control-param name="rootLocation">/app:company_home</control-param>
 							<control-param name="itemType">lecm-document:base</control-param>
 							<control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
@@ -1396,7 +1393,7 @@
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
 					</field>
 					<field id="lecm-meetings-ts:site-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                             <control-param name="rootLocation">/app:company_home</control-param>
                             <control-param name="itemType">st:site</control-param>
                             <control-param name="nameSubstituteString">{cm:title}</control-param>

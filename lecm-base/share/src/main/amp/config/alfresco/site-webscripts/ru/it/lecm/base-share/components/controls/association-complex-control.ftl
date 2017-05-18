@@ -101,8 +101,6 @@
 				showAutocomplete: ${showAutocomplete?string},
 				<#if params.autocompleteDataSource??>
 				autocompleteDataSource: '${params.autocompleteDataSource}',
-				<#elseif !isComplex >
-				autocompleteDataSource: 'lecm/forms/picker',
 				</#if>
 				<#if params.dataSourceLogic??>
                 dataSourceLogic: '${params.dataSourceLogic}',
@@ -156,6 +154,9 @@
 							<#elseif params.rootLocationArg?? && form.arguments[params.rootLocationArg]??>
 								'rootLocation': '${form.arguments[params.rootLocationArg]}',
 							</#if>
+							<#if params.substituteParent?? && params.substituteParent == "true">
+                                'substituteParent':"${form.arguments.itemId!""}",
+							</#if>
 						}
 					}<#if i_has_next>,</#if>
 					</#list>
@@ -179,6 +180,11 @@
 		], [
 			'css/lecm-base/components/controls/association-control.css',
 			'css/lecm-base/components/controls/association-control.picker.css'
+			<#if params.additionalStyles?has_content>
+				<#list params.additionalStyles?split(",") as css>
+					,'${css}'
+				</#list>
+			</#if>
 		], initAssociationControl);
 	})();
 //]]></script>

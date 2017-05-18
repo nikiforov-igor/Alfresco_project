@@ -44,12 +44,12 @@
 
 					<field id="lecm-document:title" set="common" />
 					<field id="lecm-eds-document:document-type-assoc" set="common">
-						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
-							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_протокола</control-param>
+						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
+							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_протокола</control-param>
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
-							<control-param name="showCreateNewLink">false</control-param>
-							<control-param name="plane">true</control-param>
-							<control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
+							<control-param name="notSelectedOptionShow">true</control-param>
+							<control-param name="notSelectedOptionLabel"> </control-param>
+							<control-param name="showCreateNewButton">false</control-param>
 						</control>
 					</field>
 					<field id="lecm-eds-document:execution-date" set="common">
@@ -267,12 +267,12 @@
 				<appearance>
 					<field id="lecm-document:title"/>
 					<field id="lecm-eds-document:document-type-assoc">
-						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
-							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_протокола</control-param>
+						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
+							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_протокола</control-param>
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
-							<control-param name="showCreateNewLink">false</control-param>
-							<control-param name="plane">true</control-param>
-							<control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
+							<control-param name="notSelectedOptionShow">true</control-param>
+							<control-param name="notSelectedOptionLabel"> </control-param>
+							<control-param name="showCreateNewButton">false</control-param>
 						</control>
 					</field>
 					<field id="lecm-eds-document:execution-date">
@@ -282,8 +282,8 @@
 						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
 					</field>
 					<field id="lecm-protocol:signers-assoc" mandatory="true">
-						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
 							<control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
@@ -292,6 +292,7 @@
 							<control-param name="endpointMany">true</control-param>
 							<control-param name="useStrictFilterByOrg">true</control-param>
 							<control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_APPROVERS</control-param>
+							<control-param name="plane">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-protocol:meeting-chairman-assoc" mandatory="true"/>
@@ -381,12 +382,12 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-eds-document:document-type-assoc">
-						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
-							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_протокола</control-param>
+						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
+							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_протокола</control-param>
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
-							<control-param name="showCreateNewLink">false</control-param>
-							<control-param name="plane">true</control-param>
-							<control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
+							<control-param name="notSelectedOptionShow">true</control-param>
+							<control-param name="notSelectedOptionLabel"> </control-param>
+							<control-param name="showCreateNewButton">false</control-param>
 						</control>
 					</field>
 					<field id="lecm-eds-document:execution-date">
@@ -562,12 +563,12 @@
 						</constraint-handlers>
 					</field>
 					<field id="lecm-eds-document:document-type-assoc">
-						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
-							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_протокола</control-param>
+						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
+							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_протокола</control-param>
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
-							<control-param name="showCreateNewLink">false</control-param>
-							<control-param name="plane">true</control-param>
-							<control-param name="autocompleteDataSource">lecm/forms/picker</control-param>
+							<control-param name="notSelectedOptionShow">true</control-param>
+							<control-param name="notSelectedOptionLabel"> </control-param>
+							<control-param name="showCreateNewButton">false</control-param>
 						</control>
 					</field>
 				</appearance>

@@ -63,7 +63,7 @@ LogicECM.module = LogicECM.module || {};
 			additionalFilter: '',
 			isComplex: null,
 			autocompleteDataSource: 'lecm/autocomplete/complex/picker',
-			autocompleteDataSourceMethodPost: false,
+			autocompleteDataSourceMethodPost: true,
 			dataSourceLogic: 'AND',
 			maxSearchAutocompleteResults: 10,
 			showAutocomplete: null,
@@ -133,8 +133,19 @@ LogicECM.module = LogicECM.module || {};
 			}
 			count = this.widgets.selected.childElementCount;
 			if (this.widgets.autocomplete) {
+				var autocompleteInput = this.widgets.autocomplete.getInputEl();
 				fn = (!this.options.endpointMany && count) ? Dom.addClass : Dom.removeClass;
 				fn.call(Dom, this.widgets.autocomplete.getInputEl(), 'hidden');
+				if (autocompleteInput) {
+					var container = this.widgets.selected.parentElement.parentElement;
+					if (!this.options.endpointMany && count) {
+						Dom.addClass(autocompleteInput, "hidden");
+						Dom.addClass(container, "collapse-width");
+					} else {
+						Dom.removeClass(autocompleteInput, "hidden");
+						Dom.removeClass(container, "collapse-width");
+					}
+				}
 			}
 			return count;
 		},
@@ -175,10 +186,10 @@ LogicECM.module = LogicECM.module || {};
 
 		onDisableControl: function (layer, args) {
 			if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
-				if (this.widgets.pickerButton != null) {
+				if (this.widgets.pickerButton) {
 					this.widgets.pickerButton.set('disabled', true);
 				}
-				if (this.widgets.createNewButton != null) {
+				if (this.widgets.createNewButton) {
 					this.widgets.createNewButton.set('disabled', true);
 				}
 				if (this.widgets.autocomplete) {
@@ -202,13 +213,13 @@ LogicECM.module = LogicECM.module || {};
 		onEnableControl: function (layer, args) {
 			if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
 				if (!this.options.disabled) {
-					if (this.widgets.pickerButton != null) {
+					if (this.widgets.pickerButton) {
 						this.widgets.pickerButton.set('disabled', false);
                         if (this.widgets.picker &&  this.widgets.picker.widgets.picker) {
                             this.widgets.picker.widgets.picker.hide();
                         }
 					}
-					if (this.widgets.createNewButton != null) {
+					if (this.widgets.createNewButton) {
 						this.widgets.createNewButton.set('disabled', false);
 					}
 					if (this.widgets.autocomplete) {
@@ -234,7 +245,7 @@ LogicECM.module = LogicECM.module || {};
 			if (!this.options.disabled && this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
 				this.readonly = args[1].readonly;
 				this.widgets.pickerButton.set('disabled', args[1].readonly);
-				if (this.widgets.createNewButton != null) {
+				if (this.widgets.createNewButton) {
 					this.widgets.createNewButton.set('disabled', args[1].readonly);
 				}
 				if (this.widgets.autocomplete) {
@@ -539,7 +550,15 @@ LogicECM.module = LogicECM.module || {};
 					}
 				}
 				this.searchProperties = [];
-				this.clearSelectedItems();
+
+				Dom.get(this.widgets.selected).innerHTML = "";
+				if (this.widgets.autocomplete) {
+					Dom.removeClass(this.widgets.autocomplete.getInputEl(), 'hidden');
+				}
+				if (this.widgets.picker.widgets.items) {
+					Dom.get(this.widgets.picker.widgets.items).innerHTML = "";
+				}
+
                 this.widgets.datasource.liveData = Alfresco.constants.PROXY_URI_RELATIVE + this.options.autocompleteDataSource + '/node/children';
 				this.fire('reInitializeControlPicker', {
 					options: this.options
@@ -553,16 +572,7 @@ LogicECM.module = LogicECM.module || {};
 				}, this);
 			}
 		},
-		clearSelectedItems: function() {
-			Dom.getChildren(this.widgets.selected).forEach(function (el) {
-				Selector.query('a[class="remove-item"]', el, true).click();
-			}, this);
-			if(this.widgets.picker.items) {
-				Dom.getChildren(this.widgets.picker.items).forEach(function (el) {
-					Selector.query('a[class="remove-item"]', el, true).click();
-				}, this);
-			}
-		},
+
 		onReady: function () {
 			/* загрузка данных по field.value и передача их в picker и в items. Отрисовка selectedItems здесь и в пикере */
 			this.widgets.added = Dom.get(this.id + '-added');

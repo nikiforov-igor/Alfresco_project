@@ -2,11 +2,12 @@
 	<config>
 		<forms>
 			<default-controls>
-				<type name="association:lecm-dic:dictionary" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-					<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники</control-param>
+				<type name="association:lecm-dic:dictionary" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+					<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники</control-param>
 					<control-param name="nameSubstituteString">{cm:name}</control-param>
 					<control-param name="showCreateNewLink">false</control-param>
 					<control-param name="showCreateNewButton">false</control-param>
+					<control-param name="plane">true</control-param>
 				</type>
 			</default-controls>
 		</forms>
@@ -146,16 +147,17 @@
 
             <form id="moveDictionaryItem">
                 <field-visibility>
-                    <show id="parentNodeRef" force="true"/>
+                    <show id="cm:title" force="true"/>
                     <show id="childNodeRef" force="true"/>
                 </field-visibility>
                 <appearance>
-                    <field id="parentNodeRef" label-id="label.dictionary.move.parent" mandatory="true">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
-							<control-param name="rootLocationArg">rootLocation</control-param>
-							<control-param name="endpointType">lecm-dic:hierarchical_dictionary_values</control-param>
-							<control-param name="childrenDataSource">lecm/dictionary/move/picker</control-param>
-							<control-param name="nameSubstituteString">{cm:name}</control-param>
+                    <field id="cm:title" label-id="label.dictionary.move.parent" mandatory="true">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-tree-control.ftl">
+                            <control-param name="fieldName">parentNodeRef</control-param>
+                            <control-param name="rootLocationArg">rootLocation</control-param>
+                            <control-param name="endpointType">lecm-dic:hierarchical_dictionary_values</control-param>
+                            <control-param name="treeBranchesDatasource">lecm/dictionary/move/tree</control-param>
+                            <control-param name="rootNodeScript">lecm/dictionary/move/root</control-param>
                         </control>
                     </field>
                     <field id="childNodeRef">

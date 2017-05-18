@@ -5,12 +5,11 @@
     function changeProviderType(layer, args) {
         var selectProviderName = null;
         var formId = args[1].formId;
-        var selectedItems = args[1].selectedItems;
-        if (selectedItems) {
-            var keys = Object.keys(selectedItems);
-            if (keys && keys.length){
-                selectProviderName = selectedItems[keys[0]]["selectedName"];
-            }
+        var fieldId = args[1].fieldId;
+
+        var selector = YAHOO.util.Dom.get(formId + "_" + fieldId);
+        if (selector !== null) {
+            selectProviderName = selector[selector.selectedIndex].text;
         }
 
         if (formId != null) {
