@@ -1,0 +1,14 @@
+<alfresco-config>
+    <config>
+        <field-types>
+            <field-type id="TEMPLATES" localName="Шаблон отчета">
+                <control id="TEMPLATES-control" template="/ru/it/lecm/reports-editor/controls/select-report-template-control.ftl" localName="Выбор шаблона">
+                    <param id="reportId" localName="Код отчета"/>
+                    <param id="ctrlValue" localName="" visible="false">templateCode</param>
+                    <param id="notSelectedOption" localName="" visible="false">false</param>
+                    <param id="fromParent" localName="" visible="false">false</param>
+                </control>
+            </field-type>
+        </field-types>
+    </config>
+</alfresco-config>

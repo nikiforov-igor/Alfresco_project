@@ -22,9 +22,12 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		allAttachments: [],
 		attachmentsRootNode: null,
 
+		hasDeleteContentRight: false,
+		hasDeleteOwnContentRight: false,
+
 		onReady: function () {
 			this.loadForm();
-			this.initAttachments();
+			this.loadPermissions();
 		},
 
 		onFormSubmitSuccess: function (response) {
@@ -217,6 +220,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		},
 
 		loadAttachments: function() {
+			this.allAttachments = [];
 			Alfresco.util.Ajax.request({
 				method: "GET",
 				url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/document/attachments/api/get?documentNodeRef=" + this.options.nodeRef + "&showEmptyCategory=true",
@@ -263,11 +267,11 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			}
 		},
 
-		updateAttachmentsView: function() {
+		updateAttachmentsView: function () {
 			var items = this.allAttachments;
 			var elAttachments = Dom.get(this.id + "-attachments");
 
-			if (elAttachments != null) {
+			if (elAttachments) {
 				elAttachments.innerHTML = '';
 
 				for (var i = 0; i < items.length; i++) {
@@ -281,28 +285,39 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					var leftPart = fileIconHtml + fileName;
 					leftPart = "<a href='" + Alfresco.constants.URL_PAGECONTEXT + "document-attachment?nodeRef=" + nodeRef + "'>" + leftPart + "</a>";
 
-					var reghtPart = "";
-					//if (this.options.showUploadNewVersion && (!this.options.checkRights || this.hasNewVersionContentRight)) {
-					//	var iconNewVersionId = "attachment-newVersion-" + nodeRef;
-					//	reghtPart += "<img id='" + iconNewVersionId + "' src='" + Alfresco.constants.URL_RESCONTEXT
-					//	+ "/components/documentlibrary/actions/document-upload-new-version-16.png' class='newVersion-icon'/>";
-					//	Event.onAvailable(iconNewVersionId, this.attachUploadNewVersionClickListener, item, this);
-					//}
-					//
-					//if (!this.options.checkRights || this.hasDeleteContentRight) {
-					//	var iconRemoveId = "attachment-remove-" + nodeRef;
-					//	reghtPart += "<img id='" + iconRemoveId + "' src='" + Alfresco.constants.URL_RESCONTEXT
-					//	+ "components/images/delete-16.png' class='remove-icon'/>";
-					//	Event.onAvailable(iconRemoveId, this.attachRemoveItemClickListener, item, this);
-					//}
+					var rightPart = "";
+					if (this.hasDeleteContentRight || (Alfresco.constants.USERNAME == item.owner && this.hasDeleteOwnContentRight)) {
+						var iconRemoveId = "attachment-remove-" + nodeRef;
+						rightPart += "<img id='" + iconRemoveId + "' src='" + Alfresco.constants.URL_RESCONTEXT
+							+ "components/images/delete-16.png' class='remove-icon'/>";
+						Event.onAvailable(iconRemoveId, this.attachRemoveItemClickListener, item, this);
+					}
 
 					var rowId = "attachment-" + nodeRef.replace(/:|\//g, '_');
-					elAttachments.innerHTML += "<li id='" + rowId + "'>" + Util.getCroppedItem(leftPart, reghtPart) + "</li>";
-					//if (!this.options.disabled && this.options.showUploadNewVersion) {
-					//	Event.onAvailable(rowId, this.attachUploadNewVersionDndListener, item, this);
-					//}
+					elAttachments.innerHTML += "<li id='" + rowId + "'>" + Util.getCroppedItem(leftPart, rightPart) + "</li>";
 				}
 			}
+		},
+
+		attachRemoveItemClickListener: function (node) {
+			Event.addListener("attachment-remove-" + node.nodeRef, "click", this.removeSelectedElement, node, this);
+		},
+
+		removeSelectedElement: function (event, node) {
+			Alfresco.util.Ajax.request({
+				method: "DELETE",
+				url: Alfresco.constants.PROXY_URI + "slingshot/doclib/action/file/node/" + node.nodeRef.replace(":/", ""),
+				successCallback: {
+					fn: function (response) {
+						Alfresco.util.PopupManager.displayMessage(
+							{
+								text: Alfresco.util.message("message.delete.success")
+							});
+						this.loadAttachments();
+					},
+					scope: this
+				}
+			});
 		},
 
 		showUploader: function() {
@@ -346,6 +361,38 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 
 				me.updateAttachmentsView();
 			}
+		},
+
+		loadPermissions: function() {
+			Alfresco.util.Ajax.jsonGet({
+				url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/security/api/getPermissions",
+				dataObj: {
+					nodeRef: this.options.nodeRef,
+					permissions: "_lecmPerm_ContentDelete,_lecmPerm_OwnContentDelete"
+				},
+				successCallback: {
+					scope: this,
+					fn: function (response) {
+						var oResults = response.json;
+						if (oResults) {
+							this.hasDeleteContentRight = response.json[0];
+							this.hasDeleteOwnContentRight = response.json[1];
+						}
+
+						this.initAttachments();
+					}
+				},
+				failureCallback:{
+					scope: this,
+					fn: function () {
+						Alfresco.util.PopupManager.displayMessage(
+							{
+								text: this.msg("message.failure")
+							});
+						this.initAttachments();
+					}
+				}
+			});
 		}
 	}, true);
 })();

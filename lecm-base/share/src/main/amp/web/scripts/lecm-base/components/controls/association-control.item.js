@@ -344,7 +344,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			Alfresco.util.Ajax.jsonGet({
 				url: Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/datagrid/config/columns',
 				dataObj: {
-					formId: 'searchColumn',
+					formId: 'searchColumns',
 					itemType: this.options.itemType
 				},
 				successCallback: {

@@ -80,6 +80,7 @@
 				<type name="float-range" template="/ru/it/lecm/base-share/components/controls/numberrange.ftl"/>
 				<type name="double-range" template="/ru/it/lecm/base-share/components/controls/numberrange.ftl"/>
 				<type name="long-range" template="/ru/it/lecm/base-share/components/controls/numberrange.ftl"/>
+				<type name="number-range" template="/ru/it/lecm/base-share/components/controls/numberrange.ftl"/>
 
 				<type name="category" template="/ru/it/lecm/base-share/components/controls/category.ftl" />
 

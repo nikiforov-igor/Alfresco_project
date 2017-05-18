@@ -38,7 +38,8 @@ public class ControlElementReader implements ConfigElementReader{
 			paramObject.setId(param.attributeValue(ATTR_ID));
 			paramObject.setLocalName(param.attributeValue(ATTR_LOCAL_NAME));
 			paramObject.setMandatory(Boolean.parseBoolean(param.attributeValue(ATTR_MANDATORY)));
-			paramObject.setVisible(Boolean.parseBoolean(param.attributeValue(ATTR_VISIBLE)));
+			String visibleValue = param.attributeValue(ATTR_VISIBLE);
+			paramObject.setVisible(visibleValue == null || Boolean.parseBoolean(visibleValue));
 			paramObject.setValue((String) param.getData());
 			paramObject.setDescription(param.attributeValue(ATTR_DESCRIPTION));
 			result.addParam(paramObject);
