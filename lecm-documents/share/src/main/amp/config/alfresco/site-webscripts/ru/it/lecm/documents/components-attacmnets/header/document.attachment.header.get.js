@@ -10,16 +10,16 @@ function main() {
 	var isMlSupported;
 	var mlValue;
 	var presentString;
+	var documentPage = "document";
 
-	var rAttachmentPermission = hasReadAttachmentPermission(model.nodeRef,user.id);
+	var rAttachmentPermission = hasReadAttachmentPermission(model.nodeRef, user.id);
 	var nodeDetails = DocumentUtils.getNodeDetails(model.nodeRef);
-	if (nodeDetails && rAttachmentPermission)
-	{
+	if (nodeDetails && rAttachmentPermission) {
 		model.item = nodeDetails.item;
 		model.node = nodeDetails.item.node;
 
 		var document = getDocumentByAttachments(model.nodeRef);
-		if (document != null && document.nodeRef != null && document.nodeRef.length > 0) {
+		if (document && document.nodeRef && document.nodeRef.length) {
 			isMlSupported = nodeDetails.isMlSupported;
 			mlValue = document.mlPresentString;
 			presentString = isMlSupported && mlValue ? mlValue : document.presentString;
@@ -28,6 +28,11 @@ function main() {
 			model.documentNodeRef = document.nodeRef;
 			model.documentName = presentString ? presentString : document.name;
 			model.allAttachments = getAllDocumentAttachments(document.nodeRef, null, baseDocAssocName, showBaseDocAttachmentsBottom);
+
+			var page = getDocumentPage(document.nodeRef);
+			if (page) {
+				documentPage = page.pageName;
+			}
 		}
 	} else {
 		var accessInfo = DocumentUtils.getNodeAccess(model.nodeRef, user.id);
@@ -48,8 +53,8 @@ function main() {
 		}
 	}
 	model.hasViewListPerm = hasViewListPerm;
-	model.documentPageName = getDocumentPage(document.nodeRef) ? getDocumentPage(document.nodeRef).pageName : 'document';
-}
+	model.documentPageName = documentPage;
+};
 
 function getDocumentByAttachments(nodeRef, defaultValue) {
 	var url = '/lecm/document/attachments/api/getDocumentByAttachment?nodeRef=' + nodeRef;
