@@ -418,7 +418,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 					pathNameSubstituteString: this.options.treeNodeSubstituteString,
 					useObjectDescription: this.options.useObjectDescription,
                     showInaccessible: this.options.showInaccessible,
-					substituteParent: this.options.substituteParent != "" ? this.options.substituteParent : "none"
+					substituteParent: this.options.substituteParent || "none"
                 },
 				successCallback: {
 					scope: this,
