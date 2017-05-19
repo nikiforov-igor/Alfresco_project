@@ -162,13 +162,11 @@ LogicECM.module = LogicECM.module || {};
                 initDatatasources(this, selectedContractor, marker);
             } else {
                 if (marker != 'contractor') {
-                    var treeControl = LogicECM.CurrentModules[this.options.treeViewJsName];
-                    if (treeControl) {
-                        this.isCurrentUserFromSelectedOrgUnit(selectedContractor, function(showAssocViewForm){
-                            treeControl.options.showAssocViewForm = showAssocViewForm;
-                            treeControl.updateFormFields();
+                    this.isCurrentUserFromSelectedOrgUnit(selectedContractor, function(showAssocViewForm){
+                        this._updateControls(selectedContractor, {
+                            showAssocViewForm: showAssocViewForm
                         });
-                    }
+                    });
                 }
             }
         },

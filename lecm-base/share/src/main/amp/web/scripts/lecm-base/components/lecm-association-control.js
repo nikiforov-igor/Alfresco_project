@@ -274,7 +274,19 @@ LogicECM.module = LogicECM.module || {};
 					this.widgets.pickerButton.set('disabled', this.options.disabled || this.readonly);
 				}
 
-				var input = Dom.get(this.options.controlId + "-autocomplete-input");
+                var input = Dom.get(this.id);
+                if (input) {
+                    input.disabled = this.options.disabled || this.readonly;
+                }
+                var added = Dom.get(this.options.controlId + "-added");
+                if (added) {
+                    added.disabled = this.options.disabled || this.readonly;
+                }
+                var removed = Dom.get(this.options.controlId + "-removed");
+                if (removed) {
+                    removed.disabled = this.options.disabled || this.readonly;
+                }
+                input = Dom.get(this.options.controlId + "-autocomplete-input");
 				if (input != null) {
 					input.disabled = this.options.disabled || this.options.lazyLoading || this.readonly;
 				}
