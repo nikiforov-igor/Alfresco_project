@@ -3713,7 +3713,7 @@ if (document) {
                 message += incoming.properties["lecm-document:title"];
                 message += " № ";
                 message += outgoingNumber ? outgoingNumber + " от ": "б/н от <b>";
-                message += outgoingDate ? outgoingDate : "дата не указана";
+                message += outgoingDate && outgoingDate.length() > 0 ? outgoingDate : "дата не указана";
                 message += "</b>, поступившее ";
                 message += substitude.formatNodeTitle(incoming, "{cm:created?dd.MM.yyyy}");
                 message += ", зарегистрировано ";
