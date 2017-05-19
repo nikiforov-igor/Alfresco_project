@@ -116,6 +116,7 @@
 		<property name="armService" ref="armService"/>
 		<property name="documentTemplateService" ref="documentTemplateService"/>
 		<property name="nodeService" ref="nodeService"/>
+		<property name="valueEvaluatorsManager" ref="valueEvaluatorsManager"/>
 	</bean>
 
 	<bean id="armWrapperService"

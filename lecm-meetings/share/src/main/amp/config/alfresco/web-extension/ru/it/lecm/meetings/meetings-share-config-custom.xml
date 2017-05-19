@@ -769,40 +769,37 @@
 						</constraint-handlers>
 					</field>
 					<field id="lecm-events:from-date">
-						<control>
-							<control-param name="defaultValue">now</control-param>
+						<control template="/ru/it/lecm/base-share/components/controls/relative-date-control.ftl">
+							<control-param name="radioOptions">RELATIVE,ABSOLUTE</control-param>
+							<control-param name="modeOptions">WORK|Рабочих,CALENDAR|Календарных</control-param>
 							<control-param name="defaultTime">12:00</control-param>
+							<control-param name="showTime">true</control-param>
 						</control>
-						<constraint-handlers>
-							<constraint type="INVALID" validation-handler="LogicECM.module.Events.updateLocationDSValidation" event="change"/>
-						</constraint-handlers>
 					</field>
 					<field id="lecm-events:to-date">
-						<control>
-							<control-param name="defaultValue">now</control-param>
+						<control template="/ru/it/lecm/base-share/components/controls/relative-date-control.ftl">
+							<control-param name="radioOptions">RELATIVE,ABSOLUTE</control-param>
+							<control-param name="modeOptions">WORK|Рабочих,CALENDAR|Календарных</control-param>
 							<control-param name="defaultTime">13:00</control-param>
+							<control-param name="showTime">true</control-param>
 						</control>
-						<constraint-handlers>
-							<constraint type="INVALID" validation-handler="LogicECM.module.Events.updateLocationDSValidation" event="change"/>
-						</constraint-handlers>
 					</field>
-
 					<field id="lecm-events:repeatable">
 						<constraint-handlers>
 							<constraint type="INVALID" validation-handler="LogicECM.module.Events.changeRepeatableValidation" event="change"/>
 						</constraint-handlers>
 					</field>
 					<field id="lecm-events:repeatable-start-period" mandatory="true">
-						<constraint-handlers>
-							<constraint type="MANDATORY" validation-handler="LogicECM.module.Events.repeatableValidation" event="change"/>
-							<constraint type="INVALID" validation-handler="LogicECM.module.Events.repeateDateValidation" event="change"/>
-						</constraint-handlers>
+						<control template="/ru/it/lecm/base-share/components/controls/relative-date-control.ftl">
+							<control-param name="radioOptions">RELATIVE,ABSOLUTE</control-param>
+							<control-param name="modeOptions">WORK|Рабочих,CALENDAR|Календарных</control-param>
+						</control>
 					</field>
 					<field id="lecm-events:repeatable-end-period" mandatory="true">
-						<constraint-handlers>
-							<constraint type="MANDATORY" validation-handler="LogicECM.module.Events.repeatableValidation" event="change"/>
-							<constraint type="INVALID" validation-handler="LogicECM.module.Events.repeateDateValidation" event="change"/>
-						</constraint-handlers>
+						<control template="/ru/it/lecm/base-share/components/controls/relative-date-control.ftl">
+							<control-param name="radioOptions">RELATIVE,ABSOLUTE</control-param>
+							<control-param name="modeOptions">WORK|Рабочих,CALENDAR|Календарных</control-param>
+						</control>
 					</field>
 					<field id="lecm-events:repeatable-rule" mandatory="true">
 						<control template="/ru/it/lecm/base-share/components/controls/reiteration-control-ext.ftl" />

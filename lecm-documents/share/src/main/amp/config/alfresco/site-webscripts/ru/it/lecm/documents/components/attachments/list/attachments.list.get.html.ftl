@@ -95,13 +95,6 @@
 				<#if categories??>
 					<#list categories as category>
 						<#assign categoryId = el + "-" + category.nodeRef?replace("/", "")?replace(":", "")/>
-						<#if !hasReadAttachmentPerm>
-							<#assign showActions = []/>
-						<#elseif category.isReadOnly || !hasStatemachine>
-							<#assign showActions = readOnlyActions/>
-						<#else>
-							<#assign showActions = allActions/>
-						</#if>
 
 						var path = "${category.path}";
 						path = path.substring(path.indexOf("/", 1), path.length);
@@ -113,17 +106,6 @@
 				                    path: path,
 				                    showFileFolderLink: ${hasViewAttachmentPerm?string},
 				                    hasAddAttachmentPerm: ${(hasAddAttachmentPerm && !category.isReadOnly)?string},
-				                    hasDeleteOwnAttachmentPerm: ${hasDeleteOwnAttachmentPerm?string},
-				                    showActions: [
-					                    <#if showActions??>
-				                            <#list showActions as action>
-					                            {
-						                            id: "${action.id}",
-						                            onlyForOwn: ${action.onlyForOwn?string}
-					                            }<#if action_has_next>,</#if>
-				                            </#list>
-				                        </#if>
-				                    ],
 				                    bubblingLabel: "${category.nodeRef}-${aDateTime?iso_utc}"
 			                    }).setMessages(${messages});
 					</#list>
