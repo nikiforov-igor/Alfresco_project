@@ -1583,7 +1583,6 @@ LogicECM.module = LogicECM.module || {};
 
 				var initialMessage = this.msg("logicecm.base.select-tree-element");
 
-
 				this.widgets.dataTable = new YAHOO.widget.DataTable(this.options.pickerId + "-group-members", columnDefinitions, this.widgets.dataSource,
 					{
 						renderLoopSize: 100,

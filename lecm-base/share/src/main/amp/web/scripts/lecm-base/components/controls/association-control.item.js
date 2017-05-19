@@ -896,7 +896,6 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 //			this.widgets.datatable.on('renderEvent', this.onDatatableRendered, null, this);
 			this.widgets.datatable.on('cellClickEvent', this.onClick, null, this);
 			this.widgets.datatable.on('tableScrollEvent', this.onDatatableScroll, null, this);
-			var context = this;
 			if (this.options.allowedNodesScript) {
 				Alfresco.util.Ajax.request({
 					method: "GET",
@@ -905,14 +904,14 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 					url: Alfresco.constants.PROXY_URI_RELATIVE + this.options.allowedNodesScript,
 					successCallback: {
 						fn: function (response) {
-							context.options.allowedNodes = response.json.nodes;
-							context.parentControl.options.allowedNodes = context.parentControl.options.allowedNodes ? context.parentControl.options.allowedNodes.concat(context.options.allowedNodes) : context.options.allowedNodes;
+							this.options.allowedNodes = response.json.nodes;
+							this.parentControl.options.allowedNodes = this.parentControl.options.allowedNodes ? this.parentControl.options.allowedNodes.concat(this.options.allowedNodes) : this.options.allowedNodes;
 						},
 						scope: this
 					},
 					failureCallback: {
 						fn: function onFailure(response) {
-							context.options.allowedNodes = null;
+							this.options.allowedNodes = null;
 						},
 						scope: this
 					},

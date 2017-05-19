@@ -508,7 +508,7 @@ LogicECM.module = LogicECM.module || {};
 				var itemsOptions = [];
 				this.fieldValues = [];
 				this.defaultValues = [];
-				if (options != null) {
+				if (options) {
 					if (options.childrenDataSource && !this.options.isComplex) {
 						options.autocompleteDataSource = options.childrenDataSource;
 					}
