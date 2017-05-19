@@ -8,11 +8,7 @@ function main() {
     model.showBaseDocAttachmentsBottom = AlfrescoUtil.param("showBaseDocAttachmentsBottom", "false").toLowerCase() == "true";
 
     model.hasViewListPerm = hasPermission(model.nodeRef, PERM_CONTENT_LIST);
-    model.hasViewAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_VIEW);
-    model.hasReadAttachmentPerm = hasPermission(model.nodeRef, PERM_READ_ATTACHMENT);
     model.hasAddAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_ADD);
-    model.hasDeleteOwnAttachmentPerm = hasPermission(model.nodeRef, PERM_OWN_CONTENT_DELETE);
-    model.hasStatemachine = hasStatemachine(model.nodeRef);
 
     if (model.hasViewListPerm) {
         var cats = getCategories(model.nodeRef);
@@ -34,55 +30,7 @@ function main() {
             }
         }
     }
-
-    var allActions = [];
-    model.readOnlyActions = [
-        {
-            id: "document-download",
-            onlyForOwn: false
-        },
-        {
-            id: "document-view-content",
-            onlyForOwn: false
-        }
-    ];
-
-    if (model.hasViewAttachmentPerm) {
-        allActions.push({
-            id: "document-download",
-            onlyForOwn: false
-        });
-        allActions.push({
-            id: "document-view-content",
-            onlyForOwn: false
-        });
-        allActions.push({
-            id: "document-edit-properties",
-            onlyForOwn: false
-        });
-    }
-
-    if (hasPermission(model.nodeRef, PERM_CONTENT_ADD_VER)) {
-        allActions.push({
-            id: "document-upload-new-version",
-            onlyForOwn: false
-        });
-    }
-
-    if (hasPermission(model.nodeRef, PERM_CONTENT_DELETE)) {
-        allActions.push({
-            id: "document-delete",
-            onlyForOwn: false
-        });
-    } else if (hasPermission(model.nodeRef, PERM_OWN_CONTENT_DELETE)) {
-        allActions.push({
-            id: "document-delete",
-            onlyForOwn: true
-        });
-    }
-
-        model.allActions = allActions;
-    }
+};
 
 function getCategories(nodeRef, defaultValue) {
     var url = '/lecm/document/attachments/api/categories?documentNodeRef=' + nodeRef;
