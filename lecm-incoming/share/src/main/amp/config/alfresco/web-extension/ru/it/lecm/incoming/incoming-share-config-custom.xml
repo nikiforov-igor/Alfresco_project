@@ -748,7 +748,6 @@
                     <show id="lecm-document-aspects:response-to-assoc"/>
                     <show id="lecm-incoming:outgoing-number"/>
                     <show id="lecm-incoming:outgoing-date"/>
-                    <show id="lecm-incoming:outgoing-date"/>
                     <show id="lecm-eds-document:summaryContent"/>
                     <show id="lecm-eds-document:sheets-number"/>
                     <show id="lecm-document:subject-assoc"/>
@@ -872,8 +871,16 @@
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
                     </field>
                     <field id="lecm-eds-document:execution-date">
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/relative-date-control.ftl">
+                            <control-param name="radioOptions">RELATIVE,ABSOLUTE</control-param>
+                            <control-param name="modeOptions">WORK|Рабочих,CALENDAR|Календарных</control-param>
                             <control-param name="minLimitCurrentDate">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-incoming:outgoing-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/relative-date-control.ftl">
+                            <control-param name="radioOptions">RELATIVE,ABSOLUTE</control-param>
+                            <control-param name="modeOptions">WORK|Рабочих,CALENDAR|Календарных</control-param>
                         </control>
                     </field>
                     <field id="lecm-eds-document:sheets-number">
