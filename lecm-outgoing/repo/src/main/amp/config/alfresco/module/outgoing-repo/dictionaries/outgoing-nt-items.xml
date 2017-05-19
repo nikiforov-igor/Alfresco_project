@@ -9,7 +9,7 @@
         <items>
             <item name="cm:OUTGOING_SEND" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">
-                    <![CDATA[На отправку поступил документ {#mainObject.attribute('lecm-eds-document:document-type-assoc-text-content') != null ? #mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-eds-document:document-type-assoc-text-content} {lecm-document:present-string}")) : #mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}.]]></property>
+                    <![CDATA[На отправку поступил документ {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:ext-present-string"))}.]]></property>
                 <property name="cm:name"><![CDATA[OUTGOING_SEND]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Исходящий. Подготовить к отправке]]></property>
