@@ -960,7 +960,7 @@ LogicECM.module = LogicECM.module || {};
 								data: {
 									isContainer: true,
 									nodeRef: this.options.rootNodeRef,
-									hasPermAddChildren: this.options.hasPermAddChildren,
+									hasPermAddChildren: this.options.hasPermAddChildren
 								}
 							});
 					}
