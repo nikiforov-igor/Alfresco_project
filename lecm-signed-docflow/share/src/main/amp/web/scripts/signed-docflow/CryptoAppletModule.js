@@ -666,7 +666,7 @@ function checkForApplet() {
 					}
 
 					for (i = 0; i < contentFailure.length; i++) {
-						template = '<a style=align: left; href=\"' + Alfresco.constants.URL_PAGECONTEXT + 'document-attachment?nodeRef={signedContentNodeRef}\">{signedContentName}</a><br/>';
+						template = '<a style=\"text-align: left;\" href=\"' + Alfresco.constants.URL_PAGECONTEXT + 'document-attachment?nodeRef={signedContentNodeRef}\">{signedContentName}</a><br/>';
 						badContent += YAHOO.lang.substitute(template, contentFailure[i]);
 					}
 
@@ -990,12 +990,12 @@ function checkForApplet() {
 										handler: function(field, args, event, form) {
 											var nodeRefList = [],
 												fields = document.forms[params.htmlId + '-form'].getElementsByTagName('input');
-
 											for (var i = 0; i < fields.length; i++) {
-												if (fields[i].checked)
-													nodeRefList.push(fields[i].value);
+												if (fields[i].checked) {
+													return true;
+												}
 											}
-											return nodeRefList.length > 0;
+											return false;
 										},
 										when: "change",
 										message: Alfresco.util.message('lecm.signdoc.msg.must.select.one.or.more.docs')
