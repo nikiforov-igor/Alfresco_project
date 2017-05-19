@@ -16,7 +16,7 @@
 <#list data as group>
 	<p>
 	<strong>${group.categoryName}</strong><br/>
-	<div class="form-text-underline"></div>
+	<div id="${htmlId}-underline" class="form-text-underline"></div>
 	<#list group.content as content>
 		<input style="margin: 5px 0px 10px 10px;" type="checkbox" value="${content.nodeRef}" checked>
 			&nbsp;<a style="margin: 5px 0px 10px 10px;" href="${url.server}${url.context}/page/document-attachment?nodeRef=${content.nodeRef}">${content.name}</a>
