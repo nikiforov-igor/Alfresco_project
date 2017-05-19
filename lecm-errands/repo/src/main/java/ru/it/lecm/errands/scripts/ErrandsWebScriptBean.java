@@ -842,7 +842,11 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 
                                     value = properties.get("lecmErrandWf_subjectAssoc");
                                     if (value != null) {
-                                        nodeService.createAssociation(errand, ((ScriptNode) value).getNodeRef(), DocumentService.ASSOC_SUBJECT);
+                                        value = getObjectsArray(value);
+                                        Collection<ScriptNode> subjects = (Collection<ScriptNode>) value;
+                                        for (ScriptNode subject : subjects) {
+                                            nodeService.createAssociation(errand, subject.getNodeRef(), DocumentService.ASSOC_SUBJECT);
+                                        }
                                     }
 
                                     value = properties.get("lecmErrandWf_attachmentsAssoc");
