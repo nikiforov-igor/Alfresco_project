@@ -45,6 +45,9 @@ public interface NotificationsService {
 	QName PROP_NOTIFICATION_TEMPLATE = QName.createQName(NOTIFICATIONS_TEMPLATE_NAMESPACE_URI, "template");
 	QName PROP_NOTIFICATION_TEMPLATE_SUBJECT = QName.createQName(NOTIFICATIONS_TEMPLATE_NAMESPACE_URI, "subject");
 	QName ASSOC_NOTIFICATION_TEMPLATE_TEMPLATE_ASSOC = QName.createQName(NOTIFICATIONS_TEMPLATE_NAMESPACE_URI, "template-assoc");
+	QName PROP_NOTIFICATION_TEMPLATE_SEND_ENABLE = QName.createQName(NOTIFICATIONS_TEMPLATE_NAMESPACE_URI, "send-enable");
+	QName PROP_NOTIFICATION_TEMPLATE_EXCLUSIONS_LIST = QName.createQName(NOTIFICATIONS_TEMPLATE_NAMESPACE_URI, "exclusions-list");
+	QName ASSOC_NOTIFICATION_TEMPLATE_EXCLUSIONS_EMPLOYEE = QName.createQName(NOTIFICATIONS_TEMPLATE_NAMESPACE_URI, "exclusion-employee");
 
 	String NOTIFICATION_TYPE_DICTIONARY_NAME = "Типы доставки уведомлений";
 	QName TYPE_NOTIFICATION_TYPE = QName.createQName(NOTIFICATIONS_TYPE_NAMESPACE_URI, "notification-type");
@@ -249,4 +252,14 @@ public interface NotificationsService {
 
 	void sendNotification(String author, NodeRef initiatorRef, List<NodeRef> recipientRefs, String templateCode, Map<String, Object> config, boolean dontCheckAccessToObject);
 
+	/**
+	 * @return Включена или выключена отправка уведомлений по шаблону
+	 */
+	boolean isTemplateNotificationsEnable(String templateCode);
+
+	boolean isTemplateNotificationsEnable(NodeRef template);
+
+	boolean isTemplateNotificationsEnable(String templateCode, NodeRef employee);
+
+	boolean isTemplateNotificationsEnable(NodeRef template, NodeRef employee);
 }

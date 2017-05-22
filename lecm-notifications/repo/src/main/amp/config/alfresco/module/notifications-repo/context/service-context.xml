@@ -53,10 +53,12 @@
 	</bean>
 
 	<bean id="${groupId}.${artifactId}.notificationsTemplatesBootstrap" parent="lecmDictionaryBootstrap"
-          depends-on="businessJournalLogEventsPolicy,ru.it.lecm.notifications.notifications-repo.notificationsBootstrap">
+          depends-on="ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,businessJournalLogEventsPolicy,ru.it.lecm.notifications.notifications-repo.notificationsBootstrap">
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-notifications-templates-dic.xml</value>
+				<value>alfresco/module/${artifactId}/dictionaries/lecm-notifications-event-categories.xml</value>
+				<value>alfresco/module/${artifactId}/dictionaries/lecm-notification-objectType-items.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -168,4 +170,14 @@
 		</property>
 	</bean>
 
+	<bean id="notificationOnCreateExclusionPolicy" class="ru.it.lecm.notifications.policies.NotificationOnCreateExclusionPolicy"
+		  parent="baseBean"
+		  depends-on="${groupId}.${artifactId}.notificationsDictionaryBootstrap" init-method="init">
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="orgstructureBean" ref="serviceOrgstructure"/>
+		<property name="businessJournalService" ref="businessJournalService"/>
+	</bean>
+
+	<bean id="notificationsOnCreateAssociationsPolicy" class="ru.it.lecm.notifications.policies.TemplatesOnCreateAssociationPolicy"
+		  init-method="init" parent="logicEcmAssociationPolicy"/>
 </beans>
