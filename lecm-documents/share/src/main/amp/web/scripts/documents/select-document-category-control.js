@@ -97,19 +97,13 @@ LogicECM.module = LogicECM.module || {};
 							opt = document.createElement('option');
 							opt.innerHTML = item.name;
 							opt.value = item.name;
+							if (this.options.selectedValue && !this.currentValue) {
+								if (opt.value == this.options.selectedValue) {
+									opt.selected = true;
+								}
+							}
 							this.selectItem.appendChild(opt);
 						}
-					}
-					if (this.options.selectedValue && !this.currentValue) {
-					    var options = this.selectItem.options;
-					    if (options) {
-                            for (var i = 0; i < options.length; i++) {
-                                if (options[i].value == this.options.selectedValue) {
-                                    this.selectItem.value = this.options.selectedValue;
-                                    break;
-                                }
-                            }
-                        }
 					}
 				}
 
