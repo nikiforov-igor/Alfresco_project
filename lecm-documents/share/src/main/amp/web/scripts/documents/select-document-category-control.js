@@ -41,7 +41,7 @@ LogicECM.module = LogicECM.module || {};
 			},
 
 			selectItem: null,
-			previousSelected: null,
+			currentValue: null,
 
 			onReady: function () {
 				this.selectItem = Dom.get(this.id);
@@ -54,7 +54,9 @@ LogicECM.module = LogicECM.module || {};
 			},
 
 			onSelectChange: function () {
-				this.previousSelected = this.selectItem.value;
+			    if (this.selectItem.value) {
+                    this.currentValue = this.selectItem.value;
+                }
 				if (this.options.mandatory) {
 					YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
 				}
@@ -98,13 +100,16 @@ LogicECM.module = LogicECM.module || {};
 							this.selectItem.appendChild(opt);
 						}
 					}
-					if ((this.options.selectedValue && !this.previousSelected)) {
-						for (var i = 0; i < this.selectItem.options.length; i++) {
-							if (this.selectItem.options[i].value == this.options.selectedValue) {
-								this.selectItem.value = this.options.selectedValue;
-								break;
-							}
-						}
+					if (this.options.selectedValue && !this.currentValue) {
+					    var options = this.selectItem.options;
+					    if (options) {
+                            for (var i = 0; i < options.length; i++) {
+                                if (options[i].value == this.options.selectedValue) {
+                                    this.selectItem.value = this.options.selectedValue;
+                                    break;
+                                }
+                            }
+                        }
 					}
 				}
 
