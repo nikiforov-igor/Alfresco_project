@@ -1732,8 +1732,7 @@ LogicECM.module = LogicECM.module || {};
 						} else {
 							template += '<h3 class="item-name">' + Util.getControlValueView(oRecord.getData("nodeRef"), "{name}", "{name}") + '</h3>';
 						}
-					}
-					else {
+					} else {
 						template += '<h3 class="item-name">{name}</h3>';
 					}
 

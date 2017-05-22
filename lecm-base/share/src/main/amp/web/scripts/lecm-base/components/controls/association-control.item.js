@@ -29,13 +29,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		});
 		this._loadRootNode();
 		this._loadSearchProperties();
-		if (fieldValues && fieldValues.length) {
-			this._loadOriginalValues(fieldValues);
-		} else if (this.options.defaultValueDataSource) {
-			this._loadDefaultValue();
-		} else {
-			this._loadOriginalValues([]);
-		}
+		this._initValues(fieldValues);
 
 		Bubbling.on('show', this.onShow, this);
 		Bubbling.on('hide', this.onHide, this);
@@ -353,6 +347,15 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 					fn: onFailure
 				}
 			});
+		},
+		_initValues: function(fieldValues) {
+			if (fieldValues && fieldValues.length) {
+				this._loadOriginalValues(fieldValues);
+			} else if (this.options.defaultValueDataSource) {
+				this._loadDefaultValue();
+			} else {
+				this._loadOriginalValues([]);
+			}
 		},
 		_loadDefaultValue: function AssociationComplex__loadDefaultValue() {
             Alfresco.util.Ajax.jsonGet({
@@ -947,13 +950,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				});
 				this._loadRootNode();
 
-				if (fieldValues && fieldValues.length) {
-					this._loadOriginalValues(fieldValues);
-				} else if (this.options.defaultValueDataSource) {
-					this._loadDefaultValue();
-				} else {
-					this._loadOriginalValues([]);
-				}
+				this._initValues(fieldValues);
 
 				this._loadSearchProperties();
 				this.init();

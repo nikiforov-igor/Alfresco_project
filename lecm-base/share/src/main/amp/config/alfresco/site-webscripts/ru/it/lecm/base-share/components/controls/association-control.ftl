@@ -312,7 +312,7 @@
 			<#if field.control.params.viewUrl??>
                 viewUrl: "${field.control.params.viewUrl}",
 			</#if>
-				itemType: "${params.endpointType ! field.endpointType}",
+				itemType: "${params.endpointType ! params.itemType ! field.endpointType}",
 				additionalFilter: "${params.additionalFilter!''}",
 				showAssocViewForm: ${showAssocViewForm?string},
 				checkType: ${checkType?string},
