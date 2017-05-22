@@ -4,5 +4,5 @@
    <url>/lecm/statemachine/editor/ds/categories</url>
    <format default="json"/>
    <authentication>user</authentication>
-   <transaction allow="readonly">required</transaction>
+   <transaction allow="readwrite">required</transaction>
 </webscript>
