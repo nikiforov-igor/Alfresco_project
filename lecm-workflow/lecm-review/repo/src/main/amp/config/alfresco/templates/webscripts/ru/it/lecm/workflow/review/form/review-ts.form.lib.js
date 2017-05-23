@@ -76,19 +76,21 @@ function createReviewTSItem(reviewTable, reviewTsItems, initiatingDocument) {
             reviewRecord.createAssociation(employee, 'lecm-review-ts:reviewer-assoc');
 			items.push(reviewRecord);
 		}
-        if (reviewRecord && initiatingDocument) {
-            var existAssocs = initiatingDocument.assocs["lecm-review-aspects:related-review-records-assoc"];
-            var existReviewRecordAssoc = existAssocs && existAssocs.some(function (assoc) {
-                return assoc.equals(reviewRecord);
-            });
-            if (!existReviewRecordAssoc) {
-                initiatingDocument.createAssociation(reviewRecord, 'lecm-review-aspects:related-review-records-assoc');
-            }
-        }
+        if (reviewRecord) {
+			createReviewRecordAssoc(initiatingDocument || document, reviewRecord);
+		}
 	}
 	return items;
 }
-
+function createReviewRecordAssoc(document, reviewItem) {
+	var existAssocs = document.assocs["lecm-review-aspects:related-review-records-assoc"];
+	var existReviewRecordAssoc = existAssocs && existAssocs.some(function (assoc) {
+			return assoc.equals(reviewItem);
+		});
+	if (!existReviewRecordAssoc) {
+		document.createAssociation(reviewItem, 'lecm-review-aspects:related-review-records-assoc');
+	}
+}
 function sendToReview(items, reviewDocument) {
 	var initiator = orgstructure.getCurrentEmployee(),
 		recipients = [],
@@ -145,6 +147,12 @@ function cancelReviewFromInitiatingDocument(initiatingDocument, reviewItems) {
         var items = Array.isArray(reviewItems) ? reviewItems : [reviewItems];
         items.forEach(function (item) {
             initiatingDocument.removeAssociation(item, "lecm-review-aspects:related-review-records-assoc");
+			var initiatingDocuments = item.sourceAssocs['lecm-review-aspects:related-review-records-assoc'];
+			if (!initiatingDocuments || !initiatingDocuments.length) {
+				item.properties['lecm-review-ts:review-state'] = 'CANCELLED';
+				item.properties['lecm-review-ts:review-finish-date'] = new Date();
+				item.save();
+			}
         });
         return true;
     }
