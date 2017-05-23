@@ -282,8 +282,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 					var params = {
 						selectedItems: this.selected,
 						marker: null,
-						formId: this.options.formId,
-						fieldId: this.options.fieldId.replace(":","_")
+						formId: this.options.formId || null,
+						fieldId: this.options.fieldId || null
 					};
 
 					if (selectedItems.length === 1) {
