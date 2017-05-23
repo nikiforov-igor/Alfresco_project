@@ -37,20 +37,18 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 
 		actionCancelReviewEvaluator: function (rowData) {
 			var state = rowData.itemData['prop_lecm-review-ts_review-state'],
-				username = rowData.itemData['prop_lecm-review-ts_initiator-username'],
-                initiatingDocuments = rowData.initiatingDocuments;
+				username = rowData.itemData['prop_lecm-review-ts_initiator-username'];
 			if (!rowData.initiatingDocuments) {
 				$.ajax({
 					url: Alfresco.constants.PROXY_URI + "lecm/workflow/review/getInitiatingDocuments?nodeRef=" + encodeURIComponent(rowData.nodeRef),
 					context: this,
 					success: function (response) {
 						rowData.initiatingDocuments = response.initiatingDocuments || [];
-						initiatingDocuments = rowData.initiatingDocuments;
 					},
 					async: false
 				});
 			}
-
+			var initiatingDocuments = rowData.initiatingDocuments;
 			var onlyCurrentDocIntiated = !initiatingDocuments || !initiatingDocuments.length || (initiatingDocuments.length == 1 && initiatingDocuments.includes(this.options.documentNodeRef));
 
 			return 'NOT_REVIEWED' === state.value && Alfresco.constants.USERNAME === username.value && onlyCurrentDocIntiated;
