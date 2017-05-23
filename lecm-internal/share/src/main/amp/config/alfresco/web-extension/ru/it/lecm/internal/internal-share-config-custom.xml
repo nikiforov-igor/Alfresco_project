@@ -560,9 +560,11 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-internal:response-date">
-	                    <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-		                    <control-param name="minLimitCurrentDate">true</control-param>
-	                    </control>
+                        <control template="/ru/it/lecm/base-share/components/controls/relative-date-control.ftl">
+                            <control-param name="radioOptions">RELATIVE,ABSOLUTE</control-param>
+                            <control-param name="modeOptions">WORK|Рабочих,CALENDAR|Календарных</control-param>
+                            <control-param name="minLimitCurrentDate">true</control-param>
+                        </control>
                     </field>
                     <field id="lecm-internal:recipients-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">

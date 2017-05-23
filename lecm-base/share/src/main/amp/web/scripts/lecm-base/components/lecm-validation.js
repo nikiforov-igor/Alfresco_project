@@ -40,16 +40,19 @@ LogicECM.validation.uniquenessValidation = function() {
 
         model.htmlId = htmlId;
         YAHOO.util.Event.addListener(htmlId, "keyup", model.validate.bind(model));
-
+        LogicECM.validation.uniquenessFieldObjects.forEach(function(model, index, array){
+            if(model.htmlId == htmlId) {
+                array.splice(index, 1);
+            }
+        });
         LogicECM.validation.uniquenessFieldObjects.push(model);
-
         return model;
     };
 
     YAHOO.extend(LogicECM.validation.Uniqueness, Alfresco.component.Base, {
         htmlId:null,
         uniqueValidationTimer:null,
-        valid:true,
+        valid:false,
 
         options:{
             nodeRef:"",

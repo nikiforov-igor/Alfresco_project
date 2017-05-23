@@ -42,13 +42,9 @@ public class EvaluatorsUtil {
 		Response response = scriptRemote.connect("alfresco").get(url);
 
 		try{
-			if (response.getStatus().getCode() == ResponseStatus.STATUS_OK){
+			if (response.getStatus().getCode() == ResponseStatus.STATUS_OK) {
 				JSONObject json = new JSONObject(response.getResponse());
-				if (json.has("isReadOnly")){
-					return json.getBoolean("isReadOnly");
-				} else {
-                    return false;
-                }
+				return json.has("isReadOnly") && json.getBoolean("isReadOnly");
 			}else{
 				logger.warn("Cannot get result from server");
 			}
@@ -60,4 +56,7 @@ public class EvaluatorsUtil {
 		return true;
 	}
 
+	public boolean hasPermissionOnAttachment(String login, String nodeRef, String permission) {
+		return hasPermission(nodeRef, permission, "lecm-document-aspects:lecm-attachment", login);
+	}
 }

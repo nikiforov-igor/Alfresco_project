@@ -17,7 +17,7 @@ LogicECM.constraints.isNumber = function number(field, args, event, form) {
     var numberExp = /[-]?\d+(\.\d+|,\d+)?/ig;
 
     // determine if field has repeating values
-    if (args !== null && args.repeating) {
+    if (args && args.repeating) {
         repeating = true;
     }
 

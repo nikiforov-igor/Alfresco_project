@@ -736,6 +736,18 @@
                             <control-param name="endpointMany">false</control-param>
                         </control>
                     </field>
+                    <field id="lecm-contract:startDate">
+                        <control template="/ru/it/lecm/base-share/components/controls/relative-date-control.ftl">
+                            <control-param name="radioOptions">RELATIVE,ABSOLUTE</control-param>
+                            <control-param name="modeOptions">WORK|Рабочих,CALENDAR|Календарных</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-contract:endDate">
+                        <control template="/ru/it/lecm/base-share/components/controls/relative-date-control.ftl">
+                            <control-param name="radioOptions">RELATIVE,ABSOLUTE</control-param>
+                            <control-param name="modeOptions">WORK|Рабочих,CALENDAR|Календарных</control-param>
+                        </control>
+                    </field>
                 </appearance>
 			</form>
             <form id="searchQueryGrid">

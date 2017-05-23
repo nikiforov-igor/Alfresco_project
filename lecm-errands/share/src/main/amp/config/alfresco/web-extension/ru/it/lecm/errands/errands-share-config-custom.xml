@@ -523,7 +523,9 @@
 		                </control>
 	                </field>
                     <field id="lecm-errands:limitation-date" mandatory="true">
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/relative-date-control.ftl">
+                            <control-param name="radioOptions">RELATIVE,ABSOLUTE</control-param>
+                            <control-param name="modeOptions">WORK|Рабочих,CALENDAR|Календарных</control-param>
                             <control-param name="minLimitCurrentDate">true</control-param>
                         </control>
                     </field>
@@ -545,7 +547,9 @@
                         </control>
                     </field>
 					<field id="lecm-errands:start-date">
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/relative-date-control.ftl">
+                            <control-param name="radioOptions">RELATIVE,ABSOLUTE</control-param>
+                            <control-param name="modeOptions">WORK|Рабочих,CALENDAR|Календарных</control-param>
                             <control-param name="minLimitCurrentDate">true</control-param>
                         </control>
 					</field>

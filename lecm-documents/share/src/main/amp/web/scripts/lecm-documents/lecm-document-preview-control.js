@@ -44,9 +44,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
             baseDocAssocName: null,
             showBaseDocAttachmentsBottom: false,
             resizeable: false,
-            categories: null,
-            allActions: null,
-            readOnlyActions: null
+            categories: null
         },
 
         documentNodeRef: null,
@@ -127,7 +125,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                     Alfresco.util.Ajax.jsonGet({
                         url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/document/data/doclistAttachments/documents/node/" + categoryNodeRef.replace(":/", ""),
                         dataObj: {
-                            view: "attachment",
+                            view: "attachment-preview",
                             nodeRef: categoryNodeRef
                         },
                         successCallback: {
@@ -419,17 +417,18 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
             item.jsNode = new Alfresco.util.Node(item.node);
 
             this.attachmentActions = [];
-
-            for (var i = 0; i < actions.length; i++) {
-                var action = actions[i];
-                this.attachmentActions.push({
-                    value: this.msg(action.label),
-                    text: this.msg(action.label),
-                    onclick: {
-                        fn: this.getActionMenuFunction(action, item),
-                        scope: this
-                    }
-                });
+            if (actions) {
+                for (var i = 0; i < actions.length; i++) {
+                    var action = actions[i];
+                    this.attachmentActions.push({
+                        value: this.msg(action.label),
+                        text: this.msg(action.label),
+                        onclick: {
+                            fn: this.getActionMenuFunction(action, item),
+                            scope: this
+                        }
+                    });
+                }
             }
 
             if (this.widgets.attachmentMenuButton) {
@@ -449,37 +448,6 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
         showActions: function DocumentPreviewControl_showActions() {
             var actionSet = Dom.get(this.id + "-action-set");
             Dom.removeClass(actionSet, "hidden");
-        },
-
-        checkActions: function DocumentPreviewControl_checkActions(record) {
-            if (record.meta && record.meta.category) {
-                var categoryNodeRef = record.meta.category;
-                var category = this.getCategoryByNodeRef(categoryNodeRef);
-                var isReadOnly = category.isReadOnly;
-            } else {
-                isReadOnly = true;
-            }
-            var showActions = (isReadOnly) ? this.options.readOnlyActions : this.options.allActions;
-            var result = [];
-            var actions = record.actions;
-            if (actions != null) {
-                for (var i = 0; i < actions.length; i++) {
-                    var action = actions[i];
-                    var show = false;
-                    for (var j = 0; j < showActions.length; j++) {
-                        if (action.id == showActions[j].id &&
-                            (!showActions[j].onlyForOwn ||
-                            (record.node && record.node.properties["cm:creator"] &&
-                            record.node.properties["cm:creator"].userName == Alfresco.constants.USERNAME))) {
-                            show = true;
-                        }
-                    }
-                    if (show) {
-                        result.push(action);
-                    }
-                }
-            }
-            return result;
         },
 
         getActionMenuFunction: function DocumentPreviewControl_checkActions_(action, item) {
@@ -590,8 +558,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
         },
 
         updateActions: function DocumentPreviewControl_selectAttachment() {
-            var actions = this.checkActions(this.selectedAttachment);
-            this.renderActions(actions, this.selectedAttachment);
+            this.renderActions(this.selectedAttachment.actions, this.selectedAttachment);
         },
 
         _loadVersions: function DocumentPreviewControl_loadVersions(nodeRef) {
