@@ -36,8 +36,8 @@ LogicECM.module = LogicECM.module || {};
 		Bubbling.on('pickerClosed', this.onPickerClosed, this);
         Bubbling.on('loadAllOriginalItems', this.onLoadAllOriginalItems, this);
         Bubbling.on('readonlyControl', this.onReadonlyControl, this);
-		Bubbling.on('disableControl', this.onDisableControl, this);
-		Bubbling.on('enableControl', this.onEnableControl, this);
+		Bubbling.on('disableControl', this.toggleControl, this);
+		Bubbling.on('enableControl', this.toggleControl, this);
 		Bubbling.on("reInitializeControl", this.onReInitializeControl, this);
 
 		return this;
@@ -172,61 +172,39 @@ LogicECM.module = LogicECM.module || {};
 				this.widgets[i].setMessages(messages);
 			}
 		},
-
-		onDisableControl: function (layer, args) {
+		toggleControl: function (layer, args) {
 			if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
-				if (this.widgets.pickerButton) {
-					this.widgets.pickerButton.set('disabled', true);
-				}
-				if (this.widgets.createNewButton) {
-					this.widgets.createNewButton.set('disabled', true);
-				}
-				if (this.widgets.autocomplete) {
-					autocompleteInput = this.widgets.autocomplete.getInputEl();
-					autocompleteInput.setAttribute('disabled', '');
-				}
-				if (this.widgets.added) {
-					this.widgets.added.disabled = true;
-				}
-				if (this.widgets.removed) {
-					this.widgets.removed.disabled = true;
-				}
-				var input = Dom.get(this.id);
-				if (input) {
-					input.disabled = true;
-				}
-				this.tempDisabled = true;
-			}
-		},
-
-		onEnableControl: function (layer, args) {
-			if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
-				if (!this.options.disabled) {
+				var disableEvent = layer == "disableControl";
+				if (!this.options.disabled || disableEvent) {
 					if (this.widgets.pickerButton) {
-						this.widgets.pickerButton.set('disabled', false);
-                        if (this.widgets.picker &&  this.widgets.picker.widgets.picker) {
+						this.widgets.pickerButton.set('disabled', disableEvent);
+                        if (this.widgets.picker &&  this.widgets.picker.widgets.picker && !disableEvent) {
                             this.widgets.picker.widgets.picker.hide();
                         }
 					}
 					if (this.widgets.createNewButton) {
-						this.widgets.createNewButton.set('disabled', false);
+						this.widgets.createNewButton.set('disabled', disableEvent);
 					}
 					if (this.widgets.autocomplete) {
 						autocompleteInput = this.widgets.autocomplete.getInputEl();
-						autocompleteInput.removeAttribute('disabled');
+						if (disableEvent) {
+							autocompleteInput.setAttribute('disabled', '');
+						} else {
+							autocompleteInput.removeAttribute('disabled');
+						}
 					}
 					if (this.widgets.added) {
-						this.widgets.added.disabled = false;
+						this.widgets.added.disabled = disableEvent;
 					}
 					if (this.widgets.removed) {
-						this.widgets.removed.disabled = false;
+						this.widgets.removed.disabled = disableEvent;
 					}
 					var input = Dom.get(this.id);
 					if (input) {
-						input.disabled = false;
+						input.disabled = disableEvent;
 					}
 				}
-				this.tempDisabled = false;
+				this.tempDisabled = disableEvent;
 			}
 		},
 		onReadonlyControl: function(layer, args) {
@@ -509,9 +487,6 @@ LogicECM.module = LogicECM.module || {};
 				this.fieldValues = [];
 				this.defaultValues = [];
 				if (options) {
-					if (options.childrenDataSource && !this.options.isComplex) {
-						options.autocompleteDataSource = options.childrenDataSource;
-					}
 					if (options.itemsOptions && options.itemsOptions.length) {
 						itemsOptions = options.itemsOptions;
 					} else if (!this.options.isComplex) {
