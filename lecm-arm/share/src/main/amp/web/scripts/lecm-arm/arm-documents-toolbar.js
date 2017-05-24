@@ -434,6 +434,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     var templateRequestParams = {
                             itemKind: "workflow",
                             itemId: p_oItem.workflowId,
+                            args: JSON.stringify({"assoc_packageItems": p_oItem.items.join(",")}),
                             mode: "create",
                             submitType: "json",
                             formId: "workflow-form",
@@ -442,7 +443,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         };
                     var responseHandler = function(response) {
                             document.location.reload();
-                        }
+                        };
                     var me = this;
                     LogicECM.CurrentModules = {};
                     LogicECM.CurrentModules.WorkflowForm = new Alfresco.module.SimpleDialog("workflow-form").setOptions({
