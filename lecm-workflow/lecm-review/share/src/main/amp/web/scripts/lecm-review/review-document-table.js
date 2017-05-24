@@ -37,10 +37,21 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 
 		actionCancelReviewEvaluator: function (rowData) {
 			var state = rowData.itemData['prop_lecm-review-ts_review-state'],
-				username = rowData.itemData['prop_lecm-review-ts_initiator-username'],
-                initiatingDocuments = rowData.itemData['prop_lecm-review-ts_initiating-documents'];
+				username = rowData.itemData['prop_lecm-review-ts_initiator-username'];
+			if (!rowData.initiatingDocuments) {
+				$.ajax({
+					url: Alfresco.constants.PROXY_URI + "lecm/workflow/review/getInitiatingDocuments?nodeRef=" + encodeURIComponent(rowData.nodeRef),
+					context: this,
+					success: function (response) {
+						rowData.initiatingDocuments = response.initiatingDocuments || [];
+					},
+					async: false
+				});
+			}
+			var initiatingDocuments = rowData.initiatingDocuments;
+			var onlyCurrentDocIntiated = !initiatingDocuments || !initiatingDocuments.length || (initiatingDocuments.length == 1 && initiatingDocuments.includes(this.options.documentNodeRef));
 
-			return 'NOT_REVIEWED' === state.value && Alfresco.constants.USERNAME === username.value && !initiatingDocuments.value.length;
+			return 'NOT_REVIEWED' === state.value && Alfresco.constants.USERNAME === username.value && onlyCurrentDocIntiated;
 		},
 
 		rejectReview: function () {
@@ -171,7 +182,8 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 					dataSource: this.options.dataSource,
 					expandable: this.options.expandable,
 					expandDataSource: this.options.expandDataSource,
-					createItemBtnMsg: this.options.createItemBtnMsg
+					createItemBtnMsg: this.options.createItemBtnMsg,
+					documentNodeRef: this.documentNodeRef
 				}).setMessages(this.options.messages);
 
 				datagrid.tableDataNodeRef = this.tableData.nodeRef;
