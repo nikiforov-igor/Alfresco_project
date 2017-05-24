@@ -111,6 +111,7 @@
 		<property name="substituteService" ref="substitudeService"/>
 		<property name="threadPoolExecutor" ref="notificationsAsyncThreadPool"/>
 		<property name="secretaryService" ref="secretaryService"/>
+		<property name="businessJournalService" ref="businessJournalService"/>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
 			<map>
@@ -175,7 +176,6 @@
 		  depends-on="${groupId}.${artifactId}.notificationsDictionaryBootstrap" init-method="init">
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="orgstructureBean" ref="serviceOrgstructure"/>
-		<property name="businessJournalService" ref="businessJournalService"/>
 	</bean>
 
 	<bean id="notificationsOnCreateAssociationsPolicy" class="ru.it.lecm.notifications.policies.TemplatesOnCreateAssociationPolicy"

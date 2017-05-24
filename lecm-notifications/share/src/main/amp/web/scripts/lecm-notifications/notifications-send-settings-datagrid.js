@@ -38,21 +38,21 @@ LogicECM.module.Templates = LogicECM.module.Templates || {};
                             var columnContent = '';
                             switch (datalistColumn.name) { //  меняем отрисовку для конкретных колонок
                                 case 'lecm-notification-template:send-enable':
-                                    if (data.value) {
+                                    if (!data.value || data.value == "true") {
                                         columnContent += grid.msg("lecm-notification-template-send-enable");
                                     } else {
                                         columnContent += grid.msg("lecm-notification-template-send-disabled");
                                     }
                                     break;
                                 case 'lecm-notification-template:exclusions-list':
-                                    if (data.value) {
+                                    if (data.value ) {
                                         var exclusions = YAHOO.lang.JSON.parse(data.value);
                                         if (exclusions && exclusions.rows && exclusions.rows.length) {
                                             columnContent += '<div>';
                                             columnContent += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16"/>';
                                             columnContent += '</div>';
                                         } else {
-                                            columnContent += '';
+                                            columnContent += '<div></div>';
                                         }
                                     }
                                     break;

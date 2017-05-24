@@ -16,12 +16,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.ApplicationEvent;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.notifications.template.FreemarkerParserImpl;
@@ -64,6 +64,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
     private TransactionListener transactionListener;
 	private ApplicationContext applicationContext;
 	private NodeRef settingsNode;
+    private BusinessJournalService businessJournalService;
 
 	public ApplicationContext getApplicationContext() {
 		return applicationContext;
@@ -101,6 +102,10 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	public void setSecretaryService(SecretaryService secretaryService) {
 		this.secretaryService = secretaryService;
 	}
+
+    public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+        this.businessJournalService = businessJournalService;
+    }
 
     public Map<NodeRef, NotificationChannelBeanBase> getChannels() {
         if (this.channels == null) {
@@ -722,32 +727,129 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 
     @Override
     public boolean isTemplateNotificationsEnable(String templateCode, NodeRef employee) {
-        if (templateCode != null) {
-            NodeRef template = dictionaryService.getRecordByParamValue(NOTIFICATION_TEMPLATE_DICTIONARY_NAME, ContentModel.PROP_NAME, templateCode);
-            return isTemplateNotificationsEnable(template, employee);
-        }
-        return true;
+        return isTemplateNotificationsEnable(getTemplateByCode(templateCode), employee);
     }
 
     @Override
     public boolean isTemplateNotificationsEnable(NodeRef template, NodeRef employee) {
-        boolean isEnabled = true;
-        boolean isExclusionEmployee = false;
+        boolean isEnabled = isTemplateSendEnabled(template);
+        boolean isExclusionEmployee = isEmployeeHasExclusionForTemplate(template, employee);
+        return isEnabled ^ isExclusionEmployee;
+    }
+
+    @Override
+    public boolean enableTemplateNotification(String templateCode, NodeRef employee) {
+        return setTemplateNotificationStatusForEmployee(templateCode, employee, true);
+    }
+
+    @Override
+    public boolean disableTemplateNotification(String templateCode, NodeRef employee) {
+        return setTemplateNotificationStatusForEmployee(templateCode, employee, false);
+    }
+
+    @Override
+    public boolean createTemplateNotificationExclusion(String templateCode, NodeRef employee) {
+        boolean result = false;
+        NodeRef template = getTemplateByCode(templateCode);
         if (template != null) {
-            Serializable isEnabledObj = nodeService.getProperty(template, PROP_NOTIFICATION_TEMPLATE_SEND_ENABLE);
-            isEnabled = (isEnabledObj == null || Boolean.TRUE.equals(isEnabledObj));
-            if (employee != null) {
-                List<AssociationRef> exclusionEmployees = nodeService.getTargetAssocs(template, ASSOC_NOTIFICATION_TEMPLATE_EXCLUSIONS_EMPLOYEE);
-                for (AssociationRef exclusionEmployee : exclusionEmployees) {
-                    NodeRef affectedEmployee = exclusionEmployee.getTargetRef();
-                    if (affectedEmployee.equals(employee)) {
-                        isExclusionEmployee = true;
-                        break;
-                    }
+            boolean isEmployeeHasExclusion = isEmployeeHasExclusionForTemplate(template, employee);
+            if (!isEmployeeHasExclusion) {
+                nodeService.createAssociation(template, employee, ASSOC_NOTIFICATION_TEMPLATE_EXCLUSIONS_EMPLOYEE);
+
+                //Запись в бизнес-журнал
+                List<String> objects = new ArrayList<>();
+                objects.add(employee.toString());
+                businessJournalService.log(template, "CREATE_TEMPLATE_EXCLUSION", "#initiator создал исключение для #object1 по правилу #mainobject", objects);
+
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public boolean deleteTemplateNotificationExclusion(String templateCode, NodeRef employee) {
+        boolean result = false;
+        NodeRef template = getTemplateByCode(templateCode);
+        if (template != null) {
+            boolean isEmployeeHasExclusion = isEmployeeHasExclusionForTemplate(template, employee);
+            if (isEmployeeHasExclusion) {
+                nodeService.removeAssociation(template, employee, ASSOC_NOTIFICATION_TEMPLATE_EXCLUSIONS_EMPLOYEE);
+
+                //Запись в бизнес-журнал
+                List<String> objects = new ArrayList<>();
+                objects.add(employee.toString());
+                businessJournalService.log(template, "DELETE_TEMPLATE_EXCLUSION", "#initiator удалил исключение для #object1 по правилу #mainobject", objects);
+
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public void clearExclusions(String templateCode) {
+        NodeRef template = getTemplateByCode(templateCode);
+        if (template != null) {
+            List<AssociationRef> exclusionEmployees = nodeService.getTargetAssocs(template, ASSOC_NOTIFICATION_TEMPLATE_EXCLUSIONS_EMPLOYEE);
+            for (AssociationRef exclusionEmployee : exclusionEmployees) {
+                NodeRef affectedEmployee = exclusionEmployee.getTargetRef();
+                nodeService.removeAssociation(template, affectedEmployee, ASSOC_NOTIFICATION_TEMPLATE_EXCLUSIONS_EMPLOYEE);
+            }
+        }
+    }
+
+    private boolean setTemplateNotificationStatusForEmployee(String templateCode, NodeRef employee, boolean isEnabledStatus) {
+        boolean result = false;
+        NodeRef template = getTemplateByCode(templateCode);
+        if (template != null) {
+            if (employee == null) {
+                employee = orgstructureService.getCurrentEmployee();
+            }
+            boolean isEnabled = isTemplateSendEnabled(template);
+            boolean isExclusionEmployee = isEmployeeHasExclusionForTemplate(template, employee);
+
+            if (isExclusionEmployee && ((isEnabled && isEnabledStatus) || (!isEnabled && !isEnabledStatus))) {
+                nodeService.removeAssociation(template, employee, ASSOC_NOTIFICATION_TEMPLATE_EXCLUSIONS_EMPLOYEE);
+                result = true;
+            }
+            if (!isExclusionEmployee && ((isEnabled && !isEnabledStatus) || (!isEnabled && isEnabledStatus))) {
+                nodeService.createAssociation(template, employee, ASSOC_NOTIFICATION_TEMPLATE_EXCLUSIONS_EMPLOYEE);
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    private NodeRef getTemplateByCode(String code) {
+        if (code != null) {
+            return dictionaryService.getRecordByParamValue(NOTIFICATION_TEMPLATE_DICTIONARY_NAME, ContentModel.PROP_NAME, code);
+        } else {
+            return null;
+        }
+    }
+
+    private boolean isEmployeeHasExclusionForTemplate(NodeRef template, NodeRef employee) {
+        boolean isExclusionEmployee = false;
+        if (template != null && employee != null) {
+            List<AssociationRef> exclusionEmployees = nodeService.getTargetAssocs(template, ASSOC_NOTIFICATION_TEMPLATE_EXCLUSIONS_EMPLOYEE);
+            for (AssociationRef exclusionEmployee : exclusionEmployees) {
+                NodeRef affectedEmployee = exclusionEmployee.getTargetRef();
+                if (employee.equals(affectedEmployee)) {
+                    isExclusionEmployee = true;
+                    break;
                 }
             }
         }
-        return isEnabled ^ isExclusionEmployee;
+        return isExclusionEmployee;
+    }
+
+    private boolean isTemplateSendEnabled(NodeRef template) {
+        if (template != null) {
+            Serializable isEnabledObj = nodeService.getProperty(template, PROP_NOTIFICATION_TEMPLATE_SEND_ENABLE);
+            return (isEnabledObj == null || Boolean.TRUE.equals(isEnabledObj));
+        }
+        return true;
     }
 
     @Override

@@ -19,6 +19,17 @@
 		<namespace uri="http://www.it.ru/lecm/notifications/template/1.0" prefix="lecm-notification-template"/>
 	</namespaces>
 
+	<constraints>
+		<constraint name="lecm-notification-template:send-state-constraint" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>true</value> <!-- Включить для всех -->
+					<value>false</value> <!-- Отключить для всех -->
+				</list>
+			</parameter>
+		</constraint>
+	</constraints>
+
 	<types>
 		<type name="lecm-notification-template:template">
 			<title>Notification template</title>
@@ -58,8 +69,11 @@
 					<index enabled="false"/>
 				</property>
 				<property name="lecm-notification-template:send-enable">
-					<type>d:boolean</type>
+					<type>d:text</type>
 					<default>true</default>
+					<constraints>
+						<constraint ref="lecm-notification-template:send-state-constraint"/>
+					</constraints>
 				</property>
 				<!-- json {"rows":[{"employee": "сотрудник", "created": "Дата создания", "author": "Автор"},...{}]}-->
 				<property name="lecm-notification-template:exclusions-list">

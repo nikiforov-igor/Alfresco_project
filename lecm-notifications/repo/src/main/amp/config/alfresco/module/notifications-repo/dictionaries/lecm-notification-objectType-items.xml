@@ -6,7 +6,8 @@
                 <property name="cm:name">Шаблон уведомления</property>
                 <property name="lecm-busjournal:objectType-code">NOTIFICATION_TEMPLATE</property>
                 <property name="lecm-busjournal:objectType-class">lecm-notification-template:template</property>
-                <property name="lecm-busjournal:objectType-template">cm:name</property>
+                <property name="lecm-busjournal:objectType-template">{cm:name}</property>
+                <property name="lecm-busjournal:objectType-list-template">{lecm-notification-template:description}</property>
             </item>
         </items>
     </item>

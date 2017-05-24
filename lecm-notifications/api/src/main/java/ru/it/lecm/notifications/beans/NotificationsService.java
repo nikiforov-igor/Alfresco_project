@@ -262,4 +262,28 @@ public interface NotificationsService {
 	boolean isTemplateNotificationsEnable(String templateCode, NodeRef employee);
 
 	boolean isTemplateNotificationsEnable(NodeRef template, NodeRef employee);
+
+	/**
+	 * @return Включить отправку уведомлений по шаблону для сотрудника
+	 */
+	boolean enableTemplateNotification(String templateCode, NodeRef employee);
+	/**
+	 * @return Отключить отправку уведомлений по шаблону для сотрудника
+	 */
+	boolean disableTemplateNotification(String templateCode, NodeRef employee);
+
+	/**
+	 * Создать исключение для шаблона для сотрудника
+	 */
+	boolean createTemplateNotificationExclusion(String templateCode, NodeRef employee);
+
+	/**
+	 * Удалить исключение для шаблона для сотрудника
+	 */
+	boolean deleteTemplateNotificationExclusion(String templateCode, NodeRef employee);
+
+	/**
+	 * Удалить все исключения
+	 */
+	void clearExclusions(String templateCode);
 }

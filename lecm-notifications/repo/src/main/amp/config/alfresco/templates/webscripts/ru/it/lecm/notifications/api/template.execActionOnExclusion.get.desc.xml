@@ -1,0 +1,8 @@
+<webscript>
+	<shortname>Exec Action On Notification Template Exclusion</shortname>
+	<description>Exec Action On Notification Template Exclusion</description>
+	<url>/lecm/notifications/template/{action}/exclusion?template={template}</url>
+	<authentication>user</authentication>
+	<format default="json"/>
+	<transaction>required</transaction>
+</webscript>

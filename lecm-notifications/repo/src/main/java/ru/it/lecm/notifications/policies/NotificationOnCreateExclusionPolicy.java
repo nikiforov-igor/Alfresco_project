@@ -14,13 +14,11 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
-import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 /**
  * User: dbashmakov
@@ -28,10 +26,10 @@ import java.util.List;
  * Time: 13:51
  */
 public class NotificationOnCreateExclusionPolicy extends BaseBean implements NodeServicePolicies.OnCreateAssociationPolicy, NodeServicePolicies.OnDeleteAssociationPolicy {
+    private final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     private final static Logger logger = LoggerFactory.getLogger(NotificationOnCreateExclusionPolicy.class);
     private PolicyComponent policyComponent;
     private OrgstructureBean orgstructureBean;
-    private BusinessJournalService businessJournalService;
 
     @Override
     public NodeRef getServiceRootFolder() {
@@ -44,10 +42,6 @@ public class NotificationOnCreateExclusionPolicy extends BaseBean implements Nod
 
     public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
         this.orgstructureBean = orgstructureBean;
-    }
-
-    public void setBusinessJournalService(BusinessJournalService businessJournalService) {
-        this.businessJournalService = businessJournalService;
     }
 
     final public void init() {
@@ -79,19 +73,13 @@ public class NotificationOnCreateExclusionPolicy extends BaseBean implements Nod
 
             JSONObject newExclusion = new JSONObject();
             newExclusion.put("employee", employee);
-            newExclusion.put("created", BaseBean.DateFormatISO8601.format(new Date()));
+            newExclusion.put("created", formatter.format(new Date()));
             NodeRef creator = orgstructureBean.getEmployeeByPerson(AuthenticationUtil.getFullyAuthenticatedUser());
             newExclusion.put("creator", creator);
-            newExclusion.put("creatorShortName", businessJournalService.getObjectDescription(creator));
             rows.put(newExclusion);
             updatedList.put("rows", rows);
 
             nodeService.setProperty(template, NotificationsService.PROP_NOTIFICATION_TEMPLATE_EXCLUSIONS_LIST, updatedList.toString());
-
-            //Запись в бизнес-журнал
-            List<String> objects = new ArrayList<>();
-            objects.add(employee.toString());
-            businessJournalService.log(template, "CREATE_TEMPLATE_EXCLUSION", "#initiator создал исключение для #object1 по правилу #mainobject", objects);
         } catch (JSONException e) {
             logger.error(e.getMessage(), e);
         }
@@ -126,11 +114,6 @@ public class NotificationOnCreateExclusionPolicy extends BaseBean implements Nod
             updatedList.put("rows", updatedArray);
 
             nodeService.setProperty(template, NotificationsService.PROP_NOTIFICATION_TEMPLATE_EXCLUSIONS_LIST, updatedList.toString());
-
-            //Запись в бизнес-журнал
-            List<String> objects = new ArrayList<>();
-            objects.add(employee.toString());
-            businessJournalService.log(template, "DELETE_TEMPLATE_EXCLUSION", "#initiator удалил исключение для #object1 по правилу #mainobject", objects);
         } catch (JSONException e) {
             logger.error(e.getMessage(), e);
         }

@@ -30,6 +30,7 @@
             showCheckboxColumn: false,
             showActionColumn: true,
             editForm: "editSendMode",
+            editFormTitleMsg: "title.edit.send-settings",
             searchForm: "search-in-settings",
             datagridMeta: {
                 itemType: "lecm-notification-template:template",
