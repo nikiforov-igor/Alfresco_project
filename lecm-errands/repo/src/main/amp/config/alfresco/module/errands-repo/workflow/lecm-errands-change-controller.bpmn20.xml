@@ -12,45 +12,77 @@
                     <activiti:field name="script">
                         <activiti:string>
                             var document = bpm_package.children[0];
-                            if (document != null) {
+                            if (document) {
                                 if (lecmErrandWf_changeControllerNewController != null) {
 			                        var logObjects = [];
 			                        logObjects.push("" + lecmErrandWf_changeControllerNewController.nodeRef);
-			                        var logText = "Сотрудник #initiator ";
-			                        logText += documentScript.wrapperTitle("назначил", lecmErrandWf_changeControllerReason);
-			                        logText += " сотрудника #object1 контролером по поручению: #mainobject";
+			                        var logText = "#initiator ";
+			                        logText += documentScript.wrapperTitle("изменил", lecmErrandWf_changeControllerReason);
+			                        logText += " контролёра по поручению #mainobject на #object1";
 			                        businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_CONTROLLER", logText, logObjects);
 
 			                        var currentEmployee = orgstructure.getCurrentEmployee();
-
-			                        var controller = null;
+                                    var members = [];
+			                        var recipients = [];
+                                    var controller = null;
 			                        var controllerAssoc = document.assocs["lecm-errands:controller-assoc"];
-			                        if (controllerAssoc != null &amp;&amp; controllerAssoc.length == 1) {
-			                            controller = controllerAssoc[0];
+			                        if (controllerAssoc &amp;&amp; controllerAssoc.length == 1) {
+                                        controller = controllerAssoc[0];
+                                        recipients.push(controller);
+                                        members.push(controller);
 			                        }
-	                                if (controller != null) {
-	                                    document.removeAssociation(controller, "lecm-errands:controller-assoc");
+                                    members.push(lecmErrandWf_changeControllerNewController);
 
-	                                    notifications.sendNotificationFromCurrentUser({
-                                            recipients: [controller],
-                                            templateCode: 'ERRANDS_CONTROLLER_DISMISS',
+                                    var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
+                                    if (executorAssoc &amp;&amp; executorAssoc.length) {
+                                        recipients.push(executorAssoc[0]);
+                                    }
+                                    var coexecutorAssoc = document.assocs["lecm-errands:coexecutors-assoc"];
+                                    if (coexecutorAssoc &amp;&amp; coexecutorAssoc.length) {
+                                        recipients.push(coexecutorAssoc[0]);
+                                    }
+                                    if (recipients &amp;&amp; recipients.length) {
+                                        notifications.sendNotificationFromCurrentUser({
+                                            recipients: recipients,
+                                            templateCode: 'ERRANDS_CHANGE_CONTROLLER',
                                             templateConfig: {
                                                 mainObject: document,
-                                                eventExecutor: currentEmployee
+                                                eventExecutor: currentEmployee,
+                                                reason: lecmErrandWf_changeControllerReason,
+                                                newController: lecmErrandWf_changeControllerNewController
                                             },
                                             dontCheckAccessToObject: true
                                         });
+                                    }
+                                    if (controller) {
+                                        document.removeAssociation(controller, "lecm-errands:controller-assoc");
+                                        lecmPermission.revokeDynamicRole(document, controller, "ERRANDS_CONTROLLER");
+                                    }
 
-	                                    lecmPermission.revokeDynamicRole(document, controller, "ERRANDS_CONTROLLER");
-                                        documentMembers.deleteMember(document, controller);
-	                                }
+                                    if (members) {
+                                        for each (var member in members) {
+                                            documentMembers.addMemberWithoutCheckPermission(document, member, "LECM_BASIC_PG_Reader", true);
+                                        }
+                                    }
+
+                                    var baseDocumentAssoc = document.assocs["lecm-errands:base-assoc"];
+                                        transferRights = document.properties["lecm-errands:settings-transfer-rights"];
+                                    if (baseDocumentAssoc &amp;&amp; transferRights) {
+                                        documentMembers.addMemberWithoutCheckPermission(baseDocumentAssoc[0], lecmErrandWf_changeControllerNewController, "LECM_BASIC_PG_Reader", true);
+                                    }
+
+                                    var isOnControl = document.properties["lecm-document-aspects:is-on-control"];
+                                    if (!isOnControl) {
+                                        document.properties["lecm-document-aspects:is-on-control"] = true;
+                                        document.save();
+                                    }
 
 	                                document.createAssociation(lecmErrandWf_changeControllerNewController, "lecm-errands:controller-assoc");
                                     statemachine.grandDynamicRoleForEmployee(document, lecmErrandWf_changeControllerNewController, "ERRANDS_CONTROLLER");
 
                                     var newController = null;
                                     var newControllerAssoc = document.assocs["lecm-errands:controller-assoc"];
-                                    if (newControllerAssoc != null &amp;&amp; newControllerAssoc.length == 1) {
+                                    if (newControllerAssoc &amp;&amp; newControllerAssoc.length == 1) {
                                         newController = newControllerAssoc[0];
                                     }
 

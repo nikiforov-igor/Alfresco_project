@@ -403,6 +403,18 @@
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
                 </assocs>
             </item>
+            <item name="cm:ERRANDS_CHANGE_CONTROLLER" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[ERRANDS_CHANGE_CONTROLLER]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} {#wrapTitle("изменил", #reason)} контролёра по поручению {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} на {#newController}.]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Поручение. Смена контролера]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
         </items>
     </item>
 </items>
