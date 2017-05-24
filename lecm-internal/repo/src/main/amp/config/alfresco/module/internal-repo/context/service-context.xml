@@ -78,6 +78,7 @@
                 <value>alfresco/module/${artifactId}/actions/reservation-internal.xml</value>
                 <value>alfresco/module/${artifactId}/actions/force-approval.xml</value>
                 <value>alfresco/module/${artifactId}/actions/reject-approval.xml</value>
+                <value>alfresco/module/${artifactId}/actions/work-completion.xml</value>
             </list>
         </property>
     </bean>

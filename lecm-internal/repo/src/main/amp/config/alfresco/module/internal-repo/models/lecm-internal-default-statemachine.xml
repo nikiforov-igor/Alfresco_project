@@ -8770,7 +8770,7 @@ businessJournal.log(internal.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer_Lite]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -9543,41 +9543,7 @@ businessJournal.log(internal.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
                                                         <properties>
                                                             <property>
                                                                 <name>transition-script</name>
-                                                                <value><![CDATA[(function(){
-
-    var units = [];
-
-    var author = stm_document.assocs["lecm-document:author-assoc"][0];
-    var primaryUnit = orgstructure.getPrimaryOrgUnit(author);
-	if(primaryUnit) {
-        units.push(primaryUnit)
-    }
-
-    var recipients = stm_document.assocs["lecm-eds-document:recipients-assoc"];
-    var additionalUnits = [];
-    for each (var recipient in recipients) {
-        var unit = orgstructure.getPrimaryOrgUnit(recipient);
-        units.push(unit);
-    }
-
-    operativeStorage.moveToNomenclatureCase(stm_document, units);
-
-    /* Выставляем права на ответы */
-    var answersTable = stm_document.assocs["lecm-internal-table-structure:answers-assoc"][0];
-    var answers = answersTable.getChildren();
-    for each (var answer in answers) {
-        var employee = answer.assocs["lecm-internal-table-structure:employee-assoc"][0];
-        var unit = orgstructure.getPrimaryOrgUnit(employee);
-        if (primaryUnit != null) {
-            var initiatorAuthority = orgstructure.getOrgstructureUnitAuthority(primaryUnit, false); 
-            answer.setPermission("LECM_BASIC_PG_Reader", initiatorAuthority);
-        }
-        if (unit != null) {
-            var recipientAuthority = orgstructure.getOrgstructureUnitAuthority(unit, false);
-            answer.setPermission("LECM_BASIC_PG_Reader", recipientAuthority);
-        }
-    }
-})();]]></value>
+                                                                <value><![CDATA[]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>stopSubWorkflows</name>
@@ -9585,7 +9551,7 @@ businessJournal.log(internal.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
-                                                                <value><![CDATA[Закрыть]]></value>
+                                                                <value><![CDATA[Завершение работы]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>do-not-ask-for-confirmation</name>
@@ -9623,13 +9589,12 @@ businessJournal.log(internal.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[У Вас нет прав!]]></value>
+                                                                                    <![CDATA[Действие недоступно]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
