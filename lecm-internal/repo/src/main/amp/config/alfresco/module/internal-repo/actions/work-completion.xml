@@ -7,27 +7,117 @@
         <property name="lecm-group-actions:statuses"><![CDATA[Направлен]]></property>
         <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
         <property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
-        <property name="lecm-group-actions:script"><![CDATA[ (function(){
+        <property name="lecm-group-actions:script"><![CDATA[(function(){
 
-    var units = [];
+    var reviewTable = document.assocs['lecm-review-ts:review-table-assoc'][0],
+        reviewTsItems = reviewTable.getChildAssocsByType('lecm-review-ts:review-table-item'),
+        currentEmployee = orgstructure.getCurrentEmployee(),
+        recipients = [],
+        reviewers = [],
+        members = [],
+        units = [],
+        i;
 
-    var author = stm_document.assocs["lecm-document:author-assoc"][0];
+    for (i in reviewTsItems) {
+        var item = reviewTsItems[i],
+            state = '' + item.properties['lecm-review-ts:review-state'];
+        if ('NOT_REVIEWED' == state) {
+            reviewers.push(item.assocs['lecm-review-ts:reviewer-assoc'][0]);
+            item.properties['lecm-review-ts:review-state'] = 'CANCELLED';
+	        item.properties['lecm-review-ts:review-finish-date'] = new Date();
+		    item.save();
+        }
+    }
+    if (reviewers && reviewers.length) {
+		notifications.sendNotificationFromCurrentUser({
+			reviewers: reviewers,
+			templateCode: 'REVIEW_CANCELED_ALL',
+			templateConfig: {
+				mainObject: document,
+				initiator: currentEmployee
+			}
+		});
+	}
+
+    var author = document.assocs["lecm-document:author-assoc"][0];
     var primaryUnit = orgstructure.getPrimaryOrgUnit(author);
 	if(primaryUnit) {
-        units.push(primaryUnit)
+        units.push(primaryUnit);
     }
 
-    var recipients = stm_document.assocs["lecm-eds-document:recipients-assoc"];
-    var additionalUnits = [];
-    for each (var recipient in recipients) {
-        var unit = orgstructure.getPrimaryOrgUnit(recipient);
-        units.push(unit);
+    recipients = document.assocs["lecm-eds-document:recipients-assoc"];
+    var notificationRecipients = [];
+    if (recipients) {
+        var additionalUnits = [];
+        for each (var recipient in recipients) {
+            var unit = orgstructure.getPrimaryOrgUnit(recipient);
+            units.push(unit);
+        }
+        recipients.forEach(function (recipient) {
+            if (recipient.typeShort == "lecm-orgstr:employee") {
+                notificationRecipients.push(recipient);
+                members.push(recipient);
+            } else if (recipient.typeShort == "lecm-orgstr:organization-unit") {
+                var boss = orgstructure.findUnitBoss(recipient.nodeRef.toString());
+                if (boss) {
+                    notificationRecipients.push(boss);
+                    members.push(boss);
+                }
+            }
+        });
+    }
+    var signerAssoc = document.assocs["lecmSignAspects:signerEmployeeAssoc"];
+    if (signerAssoc) {
+        notificationRecipients.push(signerAssoc[0]);
+        members.push(signerAssoc[0]);
+    }
+    var registratorAssoc = document.assocs["lecm-document-aspects:registrator-assoc"];
+    if (registratorAssoc) {
+        notificationRecipients.push(registratorAssoc[0]);
+        members.push(registratorAssoc[0]);
+    }
+    var executorAssoc = document.assocs["lecm-eds-document:executor-assoc"];
+    if (executorAssoc) {
+        notificationRecipients.push(executorAssoc[0]);
+    }
+    for each (var member in members) {
+        documentMembers.addMemberWithoutCheckPermission(document, member, "LECM_BASIC_PG_Reader", true);
+    }
+    notifications.sendNotificationFromCurrentUser({
+        recipients: notificationRecipients,
+        templateCode: 'INTERNAL_WORK_COMPLETED',
+        templateConfig: {
+            mainObject: document,
+            initiator: currentEmployee,
+            reason: completionReason
+        },
+        dontCheckAccessToObject: true
+    });
+
+    var reason;
+    var childErrands = errands.getChildErrands(document.nodeRef.toString());
+    if (childErrands && childErrands.length) {
+        reason = 'Поручение автоматически закрыто в связи с завершением работы по документу ' + document.properties["lecm-document:present-string"] + ' пользователем ' + currentEmployee.properties["lecm-orgstr:employee-short-name"];
+        for each (var childErrand in childErrands) {
+            errands.sendCancelSignal(childErrand.nodeRef.toString(), reason, currentEmployee.nodeRef.toString());
+        }
+    }
+    var childResolutions = errands.getChildResolutions(document.nodeRef.toString());
+    if (childResolutions && childResolutions.length) {
+        reason = 'Резолюция автоматически аннулирована в связи с завершением работы по документу ' + document.properties["lecm-document:present-string"] + ' пользователем ' + currentEmployee.properties["lecm-orgstr:employee-short-name"];
+        for each (var childResolution in childResolutions) {
+            resolutionsScript.sendAnnulSignal(childResolution.nodeRef.toString(), reason);
+        }
     }
 
-    operativeStorage.moveToNomenclatureCase(stm_document, units);
+    operativeStorage.moveToNomenclatureCase(document, units);
+    statemachine.executeTransitionAction(document, 'Завершение работы');
+
+    var logText = "#initiator " + documentScript.wrapperTitle("завершил", completionReason) + " работу по документу " + documentScript.wrapperDocumentLink(document, "{lecm-document:present-string}");
+    businessJournal.log(document.nodeRef.toString(), "EXECUTE_DOCUMENT", substitude.formatNodeTitle(document.nodeRef.toString(), logText), []);
 
     /* Выставляем права на ответы */
-    var answersTable = stm_document.assocs["lecm-internal-table-structure:answers-assoc"][0];
+    var answersTable = document.assocs["lecm-internal-table-structure:answers-assoc"][0];
     var answers = answersTable.getChildren();
     for each (var answer in answers) {
         var employee = answer.assocs["lecm-internal-table-structure:employee-assoc"][0];
@@ -44,8 +134,8 @@
 })();]]></property>
         <property name="lecm-group-actions:order"><![CDATA[0]]></property>
         <property name="cm:title"><![CDATA[Завершить работу]]></property>
-        <property name="lecm-group-actions:type"><![CDATA[[lecm-events:document]]]></property>
-        <property name="lecm-group-actions:availableForReader"><![CDATA[true]]></property>
+        <property name="lecm-group-actions:type"><![CDATA[[lecm-internal:document]]]></property>
+        <property name="lecm-group-actions:availableForReader"><![CDATA[false]]></property>
         <items>
             <item name="cm:Причина" type="lecm-group-actions:form-field">
                 <property name="lecm-group-actions:field-control">
