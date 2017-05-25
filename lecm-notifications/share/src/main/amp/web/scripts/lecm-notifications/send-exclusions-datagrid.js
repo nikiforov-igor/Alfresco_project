@@ -101,35 +101,23 @@ LogicECM.module.Notifications = LogicECM.module.Notifications || {};
                     nodeRefs.push(items[i].nodeRef);
                 }
 
-                this.modules.actions.genericAction(
-                    {
-                        success: {
-                            scope:this,
-                            callback: {
-                                fn: function (response) {
-                                    YAHOO.Bubbling.fire("datagridRefresh",
-                                        {
-                                            bubblingLabel: me.options.bubblingLabel
-                                        });
-                                }
-                            }
+                Alfresco.util.Ajax.jsonGet({
+                    url: Alfresco.constants.PROXY_URI + "lecm/notifications/template/delete/exclusion",
+                    dataObj: {
+                        template: me.argumentsItemId,
+                        forEmployees: nodeRefs
+                    },
+                    successCallback: {
+                        fn: function (response) {
+                            YAHOO.Bubbling.fire("datagridRefresh",
+                                {
+                                    bubblingLabel: me.options.bubblingLabel
+                                });
                         },
-                        failure: {
-                            message: this.msg("message.delete.failure")
-                        },
-                        webscript: {
-                            method: Alfresco.util.Ajax.GET,
-                            stem: Alfresco.constants.PROXY_URI + "lecm/notifications/template/delete",
-                            name: "exclusion"
-                        },
-                        config: {
-                            requestContentType: Alfresco.util.Ajax.JSON,
-                            dataObj: {
-                                forEmployees: nodeRefs,
-                                template: this.argumentsItemId
-                            }
-                        }
-                    });
+                        scope: me
+                    },
+                    failureMessage: me.msg("message.delete.failure")
+                });
             };
 
             if (!fnPrompt) {

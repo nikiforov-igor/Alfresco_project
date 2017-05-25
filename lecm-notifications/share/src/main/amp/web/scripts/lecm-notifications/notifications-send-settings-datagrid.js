@@ -28,9 +28,9 @@ LogicECM.module.Templates = LogicECM.module.Templates || {};
                     oData = oRecord.getData('itemData')[oColumn.field];
                 }
 
-                if (oData) {
-                    var datalistColumn = grid.datagridColumns[oColumn.key];
-                    if (datalistColumn) {
+                var datalistColumn = grid.datagridColumns[oColumn.key];
+                if (datalistColumn) {
+                    if (oData) {
                         oData = YAHOO.lang.isArray(oData) ? oData : [oData];
                         for (var i = 0, ii = oData.length, data; i < ii; i++) {
                             data = oData[i];
@@ -45,7 +45,7 @@ LogicECM.module.Templates = LogicECM.module.Templates || {};
                                     }
                                     break;
                                 case 'lecm-notification-template:exclusions-list':
-                                    if (data.value ) {
+                                    if (data.value) {
                                         var exclusions = YAHOO.lang.JSON.parse(data.value);
                                         if (exclusions && exclusions.rows && exclusions.rows.length) {
                                             columnContent += '<div>';
@@ -66,6 +66,8 @@ LogicECM.module.Templates = LogicECM.module.Templates || {};
 
                             html += columnContent;
                         }
+                    } else if (datalistColumn.name == "lecm-notification-template:send-enable") {
+                        html += grid.msg("lecm-notification-template-send-enable");
                     }
                 }
             }
