@@ -444,4 +444,13 @@ public class NotificationsWebScriptBean extends BaseWebScript {
 		service.clearExclusions(templateCode);
 		return true;
 	}
+
+	public boolean unsubscribeFromTemplate(String templateCode, ScriptNode employee) {
+		return service.disableTemplateNotification(templateCode, employee != null ? employee.getNodeRef() : null);
+	}
+
+	public boolean subscribeOnTemplate(String templateCode, ScriptNode employee) {
+		return service.enableTemplateNotification(templateCode, employee != null ? employee.getNodeRef() : null);
+
+	}
 }

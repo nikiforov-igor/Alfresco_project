@@ -10,12 +10,14 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.extensions.surf.util.URLEncoder;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
 import ru.it.lecm.base.beans.BaseBean;
@@ -423,14 +425,36 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
                     newNotificationUnit.setObjectRef(generalizedNotification.getObjectRef());
                     newNotificationUnit.setTypeRef(typeRef);
                     newNotificationUnit.setRecipientRef(employeeRef);
-					newNotificationUnit.setBody(templateBody);
-					newNotificationUnit.setSubject(templateSubject);
+                    newNotificationUnit.setBody(injectURLToBody(generalizedNotification, employeeRef, templateBody));
+                    newNotificationUnit.setSubject(templateSubject);
                     result.add(newNotificationUnit);
                 }
             }
         }
 
         return result;
+    }
+
+    private String injectURLToBody(Notification template, NodeRef employeeRef, String templateBody) {
+        if (templateBody.contains("#unsubscribeURL")) {
+            StringBuilder url = new StringBuilder();
+            url.append(getUrlService().getServerShareUrl()).append("/page/unsubscribeTemplate");
+
+            StringBuilder paramsBuilder = new StringBuilder();
+            paramsBuilder.append("templateCode=").append(template.getTemplateCode());
+            paramsBuilder.append("&template=").append(getTemplateByCode(template.getTemplateCode()));
+            paramsBuilder.append("&employee=").append(employeeRef);
+
+            String encodedParams = Base64.encodeBase64String(paramsBuilder.toString().getBytes());
+            int encodedParamsHash = paramsBuilder.toString().hashCode();
+            String encodedURIParams = URLEncoder.encodeUriComponent(encodedParams);
+
+            url.append("?p1=").append(encodedURIParams);
+            url.append("&p2=").append(encodedParamsHash);
+
+            return templateBody.replace("#unsubscribeURL", url.toString());
+        }
+        return templateBody;
     }
 
     /**
@@ -801,10 +825,11 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 
     private boolean setTemplateNotificationStatusForEmployee(String templateCode, NodeRef employee, boolean isEnabledStatus) {
         boolean result = false;
-        NodeRef template = getTemplateByCode(templateCode);
+        final NodeRef template = getTemplateByCode(templateCode);
+        final NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
         if (template != null) {
             if (employee == null) {
-                employee = orgstructureService.getCurrentEmployee();
+                employee = currentEmployee;
             }
             boolean isEnabled = isTemplateSendEnabled(template);
             boolean isExclusionEmployee = isEmployeeHasExclusionForTemplate(template, employee);
@@ -816,6 +841,17 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
             if (!isExclusionEmployee && ((isEnabled && !isEnabledStatus) || (!isEnabled && isEnabledStatus))) {
                 nodeService.createAssociation(template, employee, ASSOC_NOTIFICATION_TEMPLATE_EXCLUSIONS_EMPLOYEE);
                 result = true;
+            }
+            if (result) {
+                List<String> objects = new ArrayList<>();
+                objects.add(employee.toString());
+                String employeeText = employee.equals(currentEmployee) ? "для себя" : "для #object1";
+
+                if (isEnabledStatus) {
+                    businessJournalService.log(template, "CREATE_TEMPLATE_EXCLUSION", "#initiator отменил " + employeeText + " отключение уведомлений типа #mainobject", objects);
+                } else {
+                    businessJournalService.log(template, "CREATE_TEMPLATE_EXCLUSION", "#initiator отключил " + employeeText + " прием уведомлений типа #mainobject", objects);
+                }
             }
         }
         return result;
@@ -847,7 +883,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
     private boolean isTemplateSendEnabled(NodeRef template) {
         if (template != null) {
             Serializable isEnabledObj = nodeService.getProperty(template, PROP_NOTIFICATION_TEMPLATE_SEND_ENABLE);
-            return (isEnabledObj == null || Boolean.TRUE.equals(isEnabledObj));
+            return (isEnabledObj == null || Boolean.valueOf(isEnabledObj.toString()));
         }
         return true;
     }

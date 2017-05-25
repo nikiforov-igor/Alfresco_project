@@ -1,12 +1,6 @@
-var templateArg = args["template"];
+<import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/notifications/api/getTemplateCode.lib.js">
 
-var templateCode;
-var templateNode = search.findNode(templateArg);
-if (templateNode) {
-    templateCode = templateNode.name;
-} else {
-    templateCode = templateArg;
-}
+var templateCode = getTemplateCode(args["template"]);
 if (url.templateArgs.action) {
     var action = ('' + url.templateArgs.action);
     if ("create" == action) {
