@@ -12,7 +12,14 @@
 		item = reviewTsItems[i];
 		state = '' + item.properties['lecm-review-ts:review-state'];
 		initiators = item.assocs['lecm-review-ts:initiator-assoc'];
+
+		document.removeAssociation(item, "lecm-review-aspects:related-review-records-assoc");
         initiatingDocuments = item.sourceAssocs['lecm-review-aspects:related-review-records-assoc'];
+		if (initiatingDocuments && initiatingDocuments.length) {
+			initiatingDocuments = initiatingDocuments.filter(function (doc) {
+				return !doc.equals(document);
+			});
+		}
 		if (initiators && initiators.length) {
 			initiator = initiators[0];
 			if (initiator.equals(currentEmployee) && 'NOT_REVIEWED' == state
