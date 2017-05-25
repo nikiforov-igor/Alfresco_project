@@ -34,6 +34,16 @@
     -->
     <version>2.1-SNAPSHOT</version>
     <description>Logic ECM Platform</description>
+    <distributionManagement>
+        <repository>
+            <id>lecm-repo</id>
+            <url>http://172.19.213.24:8081/nexus/content/repositories/releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>lecm-repo</id>
+            <url>http://172.19.213.24:8081/nexus/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
     <repositories>
         <repository>
             <id>alfresco-public</id>
@@ -50,6 +60,17 @@
         <repository>
             <id>alfresco-public-snapshots</id>
             <url>https://artifacts.alfresco.com/nexus/content/groups/public-snapshots</url>
+        </repository>
+        <repository>
+            <id>lecm-repo</id>
+            <url>http://172.19.213.24:8081/nexus/content/groups/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
         </repository>
     </repositories>
     <pluginRepositories>
