@@ -37,11 +37,11 @@
     <distributionManagement>
         <repository>
             <id>lecm-repo</id>
-            <url>http://172.19.213.24:8081/nexus/content/repositories/releases</url>
+            <url>http://maven.datateh.ru:8081/nexus/content/repositories/releases</url>
         </repository>
         <snapshotRepository>
             <id>lecm-repo</id>
-            <url>http://172.19.213.24:8081/nexus/content/repositories/snapshots</url>
+            <url>http://maven.datateh.ru:8081/nexus/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
     <repositories>
@@ -63,7 +63,7 @@
         </repository>
         <repository>
             <id>lecm-repo</id>
-            <url>http://172.19.213.24:8081/nexus/content/groups/public</url>
+            <url>http://maven.datateh.ru:8081/nexus/content/groups/public</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
