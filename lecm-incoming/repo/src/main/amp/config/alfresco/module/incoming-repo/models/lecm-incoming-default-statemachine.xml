@@ -1179,7 +1179,7 @@
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_None]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -3092,7 +3092,7 @@
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_None]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -5544,7 +5544,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Owner]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_None]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -5572,7 +5572,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_None]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -6885,8 +6885,59 @@ if (document) {
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>f1b9633a-4645-4ffc-a63d-f1f29a8a8c24</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/e5bea87a-3f6e-4777-aabc-9b75be5dd80c
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value>
+                                                                    <![CDATA[Добавление получателей в участники]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[(function(){
+    var incoming = bpm_package.children[0];
+		recipients = [];
+  		recipientsAssocs = incoming.associations["lecm-incoming:recipient-assoc"];
+  	if (recipientsAssocs) {
+    	recipientsAssocs.forEach(function (recipient) {
+      	if (recipient.typeShort == "lecm-orgstr:employee") {
+        	recipients.push(recipient);
+      	} else if (recipient.typeShort == "lecm-orgstr:organization-unit") {
+        	boss = orgstructure.findUnitBoss(recipient.nodeRef.toString());
+        	if (boss) {
+          		recipients.push(boss);
+        	}
+      	}
+    	});
+  	}
+	if (recipients && recipients.length) {
+      	for each (var recipient in recipients) {
+          	if (orgstructure.isEmployeeHasBusinessRole(recipient, "DA_RECIPIENT_DYN", true, true)) {
+      			documentMembers.addMemberWithoutCheckPermission(incoming, recipient, "LECM_BASIC_PG_Reader", true);
+            }
+      	}
+    }
+})();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                </nodes>
+                            </subFolder>
+                        </subFolders>
+                    </node>
                                 </nodes>
                             </subFolder>
                         </subFolders>
@@ -7260,8 +7311,59 @@ if (document) {
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>fadc24dd-b7da-4f7f-8062-a750fbd7c869</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/6c394dfb-c9af-49e2-96f7-2232b6804960
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value>
+                                                                    <![CDATA[Добавление получателей в участники]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[(function(){
+    var incoming = bpm_package.children[0];
+		recipients = [];
+  		recipientsAssocs = incoming.associations["lecm-incoming:recipient-assoc"];
+  	if (recipientsAssocs) {
+    	recipientsAssocs.forEach(function (recipient) {
+      	if (recipient.typeShort == "lecm-orgstr:employee") {
+        	recipients.push(recipient);
+      	} else if (recipient.typeShort == "lecm-orgstr:organization-unit") {
+        	boss = orgstructure.findUnitBoss(recipient.nodeRef.toString());
+        	if (boss) {
+          		recipients.push(boss);
+        	}
+      	}
+    	});
+  	}
+	if (recipients && recipients.length) {
+      	for each (var recipient in recipients) {
+          	if (orgstructure.isEmployeeHasBusinessRole(recipient, "DA_RECIPIENT_DYN", true, true)) {
+      			documentMembers.addMemberWithoutCheckPermission(incoming, recipient, "LECM_BASIC_PG_Reader", true);
+            }
+      	}
+    }
+})();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                </nodes>
+                            </subFolder>
+                        </subFolders>
+                    </node>
                                 </nodes>
                             </subFolder>
                         </subFolders>
@@ -7635,8 +7737,59 @@ if (document) {
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>11a67607-4b1c-497f-83a9-c4f07648a643</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/31dcdc91-ea1c-4b8e-b6ba-dd30d8e2aeb4
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value>
+                                                                    <![CDATA[Добавление получателей в участники]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[(function(){
+    var incoming = bpm_package.children[0];
+		recipients = [];
+  		recipientsAssocs = incoming.associations["lecm-incoming:recipient-assoc"];
+  	if (recipientsAssocs) {
+    	recipientsAssocs.forEach(function (recipient) {
+      	if (recipient.typeShort == "lecm-orgstr:employee") {
+        	recipients.push(recipient);
+      	} else if (recipient.typeShort == "lecm-orgstr:organization-unit") {
+        	boss = orgstructure.findUnitBoss(recipient.nodeRef.toString());
+        	if (boss) {
+          		recipients.push(boss);
+        	}
+      	}
+    	});
+  	}
+	if (recipients && recipients.length) {
+      	for each (var recipient in recipients) {
+          	if (orgstructure.isEmployeeHasBusinessRole(recipient, "DA_RECIPIENT_DYN", true, true)) {
+      			documentMembers.addMemberWithoutCheckPermission(incoming, recipient, "LECM_BASIC_PG_Reader", true);
+            }
+      	}
+    }
+})();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                </nodes>
+                            </subFolder>
+                        </subFolders>
+                    </node>
                                 </nodes>
                             </subFolder>
                         </subFolders>
