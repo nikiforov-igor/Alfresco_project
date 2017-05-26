@@ -23,7 +23,7 @@ LogicECM.module.Base.Util.loadCSS(
         ], null);
 
 function unsubscribe() {
-    Alfresco.util.Ajax.jsonGet({
+    Alfresco.util.Ajax.jsonPost({
         url: Alfresco.constants.PROXY_URI + "lecm/notifications/template/unsubscribe",
         dataObj: {
             <#if (employee)?has_content>employee: "${employee}",</#if>

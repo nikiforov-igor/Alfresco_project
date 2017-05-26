@@ -35,8 +35,8 @@ function sortResults(list, sortField, sortAsc) {
 		return list;
 	}
 	list.sort(function (a, b) {
-		var value1 = a.sortField;
-		var value2 = b.sortField;
+		var value1 = a[sortField];
+		var value2 = b[sortField];
 		if (!value1) {
 			if (value2) {
 				return -1;

@@ -59,17 +59,8 @@ public class NotificationOnCreateExclusionPolicy extends BaseBean implements Nod
         NodeRef template = associationRef.getSourceRef();
         NodeRef employee = associationRef.getTargetRef();
 
-        Object exclusionsListProp = nodeService.getProperty(template, NotificationsService.PROP_NOTIFICATION_TEMPLATE_EXCLUSIONS_LIST);
-        JSONObject exclusionsList;
         try {
-            exclusionsList = new JSONObject(exclusionsListProp != null ? exclusionsListProp.toString() : "{}");
-        } catch (JSONException ignored) {
-            exclusionsList = new JSONObject();
-        }
-        try {
-            JSONObject updatedList = new JSONObject();
-
-            JSONArray rows = exclusionsList.has("rows") ? exclusionsList.getJSONArray("rows") : new JSONArray();
+            JSONArray rows = getExclusionsListRows(template);
 
             JSONObject newExclusion = new JSONObject();
             newExclusion.put("employee", employee);
@@ -77,9 +68,8 @@ public class NotificationOnCreateExclusionPolicy extends BaseBean implements Nod
             NodeRef creator = orgstructureBean.getEmployeeByPerson(AuthenticationUtil.getFullyAuthenticatedUser());
             newExclusion.put("creator", creator);
             rows.put(newExclusion);
-            updatedList.put("rows", rows);
 
-            nodeService.setProperty(template, NotificationsService.PROP_NOTIFICATION_TEMPLATE_EXCLUSIONS_LIST, updatedList.toString());
+            updateExclusions(template, rows);
         } catch (JSONException e) {
             logger.error(e.getMessage(), e);
         }
@@ -90,17 +80,8 @@ public class NotificationOnCreateExclusionPolicy extends BaseBean implements Nod
         NodeRef template = associationRef.getSourceRef();
         NodeRef employee = associationRef.getTargetRef();
 
-        Object exclusionsListProp = nodeService.getProperty(template, NotificationsService.PROP_NOTIFICATION_TEMPLATE_EXCLUSIONS_LIST);
-        JSONObject exclusionsList;
         try {
-            exclusionsList = new JSONObject(exclusionsListProp != null ? exclusionsListProp.toString() : "{}");
-        } catch (JSONException ignored) {
-            exclusionsList = new JSONObject();
-        }
-        try {
-            JSONObject updatedList = new JSONObject();
-
-            JSONArray rows = exclusionsList.has("rows") ? exclusionsList.getJSONArray("rows") : new JSONArray();
+            JSONArray rows = getExclusionsListRows(template);
 
             JSONArray updatedArray = new JSONArray();
             for (int i = 0; i < rows.length(); i++) {
@@ -111,11 +92,26 @@ public class NotificationOnCreateExclusionPolicy extends BaseBean implements Nod
                 }
             }
 
-            updatedList.put("rows", updatedArray);
-
-            nodeService.setProperty(template, NotificationsService.PROP_NOTIFICATION_TEMPLATE_EXCLUSIONS_LIST, updatedList.toString());
+            updateExclusions(template, updatedArray);
         } catch (JSONException e) {
             logger.error(e.getMessage(), e);
         }
+    }
+
+    private JSONArray getExclusionsListRows(NodeRef template) throws JSONException {
+        Object exclusionsListProp = nodeService.getProperty(template, NotificationsService.PROP_NOTIFICATION_TEMPLATE_EXCLUSIONS_LIST);
+        JSONObject exclusionsList;
+        try {
+            exclusionsList = new JSONObject(exclusionsListProp != null ? exclusionsListProp.toString() : "{}");
+        } catch (JSONException ignored) {
+            exclusionsList = new JSONObject();
+        }
+        return exclusionsList.has("rows") ? exclusionsList.getJSONArray("rows") : new JSONArray();
+    }
+
+    private void updateExclusions(NodeRef template, JSONArray exclusions) throws JSONException {
+        JSONObject updatedList = new JSONObject();
+        updatedList.put("rows", exclusions);
+        nodeService.setProperty(template, NotificationsService.PROP_NOTIFICATION_TEMPLATE_EXCLUSIONS_LIST, updatedList.toString());
     }
 }

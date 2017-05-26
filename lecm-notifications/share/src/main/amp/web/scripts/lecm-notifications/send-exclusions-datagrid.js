@@ -51,7 +51,7 @@ LogicECM.module.Notifications = LogicECM.module.Notifications || {};
                 width: "50em",
                 templateUrl: templateUrl,
                 templateRequestParams: templateRequestParams,
-                actionUrl: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/notifications/template/create/exclusion',
+                actionUrl: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/notifications/template/createNewExclusion',
                 destroyOnHide: true,
                 doBeforeDialogShow: {
                     fn: doBeforeDialogShow,
@@ -66,7 +66,6 @@ LogicECM.module.Notifications = LogicECM.module.Notifications || {};
                         }
                         form.dataObj["forEmployees"] = exclusionEmployees;
                         form.dataObj["template"] = this.argumentsItemId;
-                        form.method = "GET";
                         return true;
                     }
                 },
@@ -100,13 +99,13 @@ LogicECM.module.Notifications = LogicECM.module.Notifications || {};
                 for (var i = 0, ii = items.length; i < ii; i++) {
                     nodeRefs.push(items[i].nodeRef);
                 }
-
-                Alfresco.util.Ajax.jsonGet({
-                    url: Alfresco.constants.PROXY_URI + "lecm/notifications/template/delete/exclusion",
-                    dataObj: {
+                var deleteURL = YAHOO.lang.substitute(Alfresco.constants.PROXY_URI + "lecm/notifications/template/deleteExclusion?template={template}&forEmployees={forEmployees}",
+                    {
                         template: me.argumentsItemId,
-                        forEmployees: nodeRefs
-                    },
+                        forEmployees: nodeRefs.join(",")
+                    });
+                Alfresco.util.Ajax.jsonDelete({
+                    url: deleteURL,
                     successCallback: {
                         fn: function (response) {
                             YAHOO.Bubbling.fire("datagridRefresh",
@@ -151,8 +150,8 @@ LogicECM.module.Notifications = LogicECM.module.Notifications || {};
                 toolbar.appendChild(del);
 
                 YAHOO.util.Event.addListener(del, "click", function(event) {
-                    Alfresco.util.Ajax.jsonGet({
-                        url: Alfresco.constants.PROXY_URI + "lecm/notifications/template/clearAll/exclusion",
+                    Alfresco.util.Ajax.jsonPost({
+                        url: Alfresco.constants.PROXY_URI + "lecm/notifications/template/clearAllExclusions",
                         dataObj: {
                             template: this.argumentsItemId
                         },
