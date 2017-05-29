@@ -390,6 +390,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 
 							newNotificationUnit.setTypeRef(typeRef);
 							newNotificationUnit.setRecipientRef(tasksSecretary);
+							newNotificationUnit.setTemplate(generalizedNotification.getTemplateCode());
 							result.add(newNotificationUnit);
 						}
 					}
@@ -427,6 +428,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
                     newNotificationUnit.setRecipientRef(employeeRef);
                     newNotificationUnit.setBody(injectURLToBody(generalizedNotification, employeeRef, templateBody));
                     newNotificationUnit.setSubject(templateSubject);
+                    newNotificationUnit.setTemplate(generalizedNotification.getTemplateCode());
                     result.add(newNotificationUnit);
                 }
             }
@@ -890,12 +892,12 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 
     @Override
     public boolean isTemplateNotificationsEnable(final String templateCode) {
-        return isTemplateNotificationsEnable(templateCode, null);
+        return isTemplateNotificationsEnable(templateCode, orgstructureService.getCurrentEmployee());
     }
 
     @Override
     public boolean isTemplateNotificationsEnable(NodeRef template) {
-        return isTemplateNotificationsEnable(template, null);
+        return isTemplateNotificationsEnable(template, orgstructureService.getCurrentEmployee());
     }
 
     private class NotificationTransactionListener implements TransactionListener {
