@@ -118,7 +118,7 @@ public class ContractorsBean extends BaseBean implements Contractors {
         if (dicOPF != null) {
             updatedValue = delDicValuesFromString(updatedValue, dicOPF);
         }
-        return updatedValue.trim();
+        return updatedValue.trim().replaceAll("\\s+", " ");
     }
 
     @Override

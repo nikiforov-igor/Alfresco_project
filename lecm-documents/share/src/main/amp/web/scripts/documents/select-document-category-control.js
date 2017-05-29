@@ -41,6 +41,7 @@ LogicECM.module = LogicECM.module || {};
 			},
 
 			selectItem: null,
+			currentValue: null,
 
 			onReady: function () {
 				this.selectItem = Dom.get(this.id);
@@ -53,6 +54,9 @@ LogicECM.module = LogicECM.module || {};
 			},
 
 			onSelectChange: function () {
+			    if (this.selectItem.value) {
+                    this.currentValue = this.selectItem.value;
+                }
 				if (this.options.mandatory) {
 					YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
 				}
@@ -93,6 +97,11 @@ LogicECM.module = LogicECM.module || {};
 							opt = document.createElement('option');
 							opt.innerHTML = item.name;
 							opt.value = item.name;
+							if (this.options.selectedValue && !this.currentValue) {
+								if (opt.value == this.options.selectedValue) {
+									opt.selected = true;
+								}
+							}
 							this.selectItem.appendChild(opt);
 						}
 					}

@@ -168,38 +168,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 	            showFileFolderLink: false,
 
-	            hasDeleteOwnAttachmentPerm: false,
-
 	            hasAddAttachmentPerm: false,
 
-				uploaderDialogHeaderTemplate: Alfresco.component.Base.prototype.msg("select.category"),
-
-	            showActions: [
-		            {
-			            id: "document-download",
-			            onlyForOwn: false
-		            },
-		            {
-			            id: "document-view-content",
-			            onlyForOwn: false
-		            },
-		            {
-			            id: "document-edit-properties",
-			            onlyForOwn: false
-		            },
-		            {
-			            id: "document-upload-new-version",
-			            onlyForOwn: false
-		            },
-		            {
-			            id: "document-delete",
-			            onlyForOwn: false
-		            },
-                    {
-                        id: "move-to-another-category",
-                        onlyForOwn: false
-                    }
-	            ]
+				uploaderDialogHeaderTemplate: Alfresco.component.Base.prototype.msg("select.category")
             },
 
             renderers: null,
@@ -778,7 +749,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			        var oRecord = oArgs.record,
 				        record = oRecord.getData(),
 				        jsNode = record.jsNode,
-				        actions = this.checkActions(record),
+				        actions = record.actions,
 				        actionsEl = document.createElement("div"),
 				        actionHTML = "",
 				        actionsSel;
@@ -1324,28 +1295,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 		        }
 
 		        return YAHOO.lang.substitute(actionTypeMarkup[p_action.type], markupParams);
-	        },
-	        checkActions: function DocumentCategoryAttachmentsList_checkActions(record) {
-		        var result = [];
-		        var actions = record.actions;
-		        if (actions != null) {
-			        for (var i = 0; i < actions.length; i++) {
-				        var action = actions[i];
-				        var show = false;
-				        for (var j = 0; j < this.options.showActions.length; j++) {
-					        if (action.id == this.options.showActions[j].id &&
-						        (!this.options.showActions[j].onlyForOwn ||
-							        (record.node != null && record.node.properties["cm:creator"] != null
-								        && record.node.properties["cm:creator"].userName == Alfresco.constants.USERNAME))) {
-						        show = true;
-					        }
-				        }
-				        if (show) {
-					        result.push(action);
-				        }
-			        }
-		        }
-		        return result;
 	        },
 
 	        /**

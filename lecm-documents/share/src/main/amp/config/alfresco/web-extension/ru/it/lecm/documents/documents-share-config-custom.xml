@@ -1,313 +1,12 @@
 <alfresco-config>
     <!-- Document Library Actions config section -->
     <config evaluator="string-compare" condition="DocLibActions">
-
+        <!-- Перегруженный ресолвер actionGroups (ru.it.lecm.documents.resolvers.ActionsGroupResolver)-->
         <actionGroupResolver>lecm.resolver.doclib.actionGroup</actionGroupResolver>
-        <!--
-           Action definitions
-        -->
+
+        <!-- Список кастомных действий -->
         <actions>
-            <!-- Download document -->
-            <action id="document-download" type="link" label="actions.document.download">
-                <param name="href">{downloadUrl}</param>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-
-            <!-- View document in browser -->
-            <action id="document-view-content" type="link" label="actions.document.view">
-                <param name="href">{viewUrl}</param>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-
-            <!-- View document details -->
-            <action id="document-view-details" type="pagelink" label="actions.document.view-details">
-                <param name="page">document-details?nodeRef={node.nodeRef}</param>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-
-            <!-- View folder details -->
-            <action id="folder-view-details" type="pagelink" label="actions.folder.view-details">
-                <param name="page">folder-details?nodeRef={node.nodeRef}</param>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-
-            <!-- Edit properties pop-up -->
-            <action id="document-edit-properties" type="javascript" label="actions.document.edit-metadata">
-                <param name="function">onActionDetails</param>
-                <permissions>
-                    <permission allow="true">Write</permission>
-                </permissions>
-                <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-
-            <!-- Edit properties page -->
-            <action id="document-edit-metadata" type="pagelink" label="actions.document.edit-metadata">
-                <param name="page">edit-metadata?nodeRef={node.nodeRef}</param>
-                <permissions>
-                    <permission allow="true">Write</permission>
-                </permissions>
-                <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-
-            <!-- Approve simple workflow -->
-            <action id="document-approve" type="javascript" label="{jsNode.properties.app_approveStep}">
-                <param name="function">onActionSimpleRepoAction</param>
-                <!-- Additional parameters for onRepoAction function  -->
-                <param name="action">accept-simpleworkflow</param>
-                <param name="successMessage">message.simple-workflow.approved</param>
-                <param name="failureMessage">message.simple-workflow.failure</param>
-                <!-- aspect check, property != null check, action name = property value -->
-                <evaluator>evaluator.doclib.action.simpleApprove</evaluator>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-
-            <!-- Reject simple workflow -->
-            <action id="document-reject" type="javascript" label="{jsNode.properties.app_rejectStep}">
-                <param name="function">onActionSimpleRepoAction</param>
-                <!-- Additional parameters for onRepoAction function  -->
-                <param name="action">reject-simpleworkflow</param>
-                <param name="successMessage">message.simple-workflow.rejected</param>
-                <param name="failureMessage">message.simple-workflow.failure</param>
-                <!-- aspect check, property != null check, action name = property value -->
-                <evaluator>evaluator.doclib.action.simpleReject</evaluator>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-
-            <!-- Increment Counter -->
-            <action id="document-increment-counter" type="javascript" label="actions.document.increment-counter">
-                <param name="function">onActionSimpleRepoAction</param>
-                <!-- Additional parameters for onRepoAction function  -->
-                <param name="action">counter</param>
-                <param name="successMessage">message.increment-counter.success</param>
-                <param name="failureMessage">message.increment-counter.failure</param>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-
-            <!-- Extract Metadata -->
-            <action id="document-extract-metadata" type="javascript" label="actions.document.extract-metadata">
-                <param name="function">onActionSimpleRepoAction</param>
-                <!-- Additional parameters for onRepoAction function  -->
-                <param name="action">extract-metadata</param>
-                <param name="successMessage">message.extract-metadata.success</param>
-                <param name="failureMessage">message.extract-metadata.failure</param>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-
-            <!-- Transform -->
-            <action id="document-transform" type="javascript" label="actions.document.transform">
-                <param name="function">onActionFormDialog</param>
-                <!-- Additional parameters for onFormDialog function  -->
-                <param name="itemKind">action</param>
-                <param name="itemId">transform</param>
-                <param name="mode">create</param>
-                <param name="destination">{node.nodeRef}</param>
-                <param name="successMessage">message.transform.success</param>
-                <param name="failureMessage">message.transform.failure</param>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-
-            <!-- Transform Image -->
-            <action id="document-transform-image" type="javascript" label="actions.document.transform-image">
-                <param name="function">onActionFormDialog</param>
-                <!-- Additional parameters for onFormDialog function  -->
-                <param name="itemKind">action</param>
-                <param name="itemId">transform-image</param>
-                <param name="mode">create</param>
-                <param name="destination">{node.nodeRef}</param>
-                <param name="successMessage">message.transform-image.success</param>
-                <param name="failureMessage">message.transform-image.failure</param>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-
-            <!-- Execute Script -->
-            <action id="document-execute-script" type="javascript" label="actions.document.execute-script">
-                <param name="function">onActionFormDialog</param>
-                <!-- Additional parameters for onFormDialog function  -->
-                <param name="itemKind">action</param>
-                <param name="itemId">script</param>
-                <param name="mode">create</param>
-                <param name="destination">{node.nodeRef}</param>
-                <param name="successMessage">message.execute-script.success</param>
-                <param name="failureMessage">message.execute-script.failure</param>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-
-            <!-- Locate with path view -->
-            <action id="document-locate" type="javascript" label="actions.document.locate">
-                <param name="function">onActionLocate</param>
-                <evaluator>evaluator.doclib.action.locateAction</evaluator>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-
-            <!-- Upload new version -->
-            <action id="document-upload-new-version" type="javascript" label="actions.document.upload-new-version">
-                <param name="function">onActionUploadNewVersion</param>
-                <permissions>
-                    <permission allow="true">Write</permission>
-                </permissions>
-                <evaluator>evaluator.doclib.action.editableByCurrentUser</evaluator>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-
-            <!-- Inline edit -->
-            <action id="document-inline-edit" type="pagelink" label="actions.document.inline-edit">
-                <param name="page">inline-edit?nodeRef={node.nodeRef}</param>
-                <permissions>
-                    <permission allow="true">Write</permission>
-                </permissions>
-                <!-- aspect check (app:inlineeditable), mimetype check (text/plain, text/html, text/xml) -->
-                <evaluator>evaluator.doclib.action.inlineEdit</evaluator>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-
-            <!-- Edit online -->
-            <action id="document-edit-online" type="javascript" label="actions.document.edit-online">
-                <param name="function">onActionEditOnline</param>
-                <permissions>
-                    <permission allow="true">Write</permission>
-                </permissions>
-                <!-- vti module check, mimetype check, userAgent check -->
-                <evaluator>evaluator.doclib.action.onlineEdit</evaluator>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-
-            <!-- Edit offline -->
-            <action id="document-edit-offline" type="javascript" label="actions.document.edit-offline">
-                <param name="function">onActionEditOffline</param>
-                <permissions>
-                    <permission allow="true">Write</permission>
-                </permissions>
-                <evaluator negate="true">evaluator.doclib.action.notEditable</evaluator>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-
-            <!-- Copy to -->
-            <action id="document-copy-to" type="javascript" label="actions.document.copy-to">
-                <param name="function">onActionCopyTo</param>
-                <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-
-            <!-- Move to -->
-            <action id="document-move-to" type="javascript" label="actions.document.move-to">
-                <param name="function">onActionMoveTo</param>
-                <permissions>
-                    <permission allow="true">Delete</permission>
-                </permissions>
-                <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-
-            <!-- Delete -->
-            <action id="document-delete" type="javascript" label="actions.document.delete">
-                <param name="function">onActionDelete</param>
-                <permissions>
-                    <permission allow="true">Delete</permission>
-                </permissions>
-                <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-
-            <!-- Assign workflow -->
-            <action id="document-assign-workflow" type="javascript" label="actions.document.assign-workflow">
-                <param name="function">onActionAssignWorkflow</param>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-
-            <!-- Manage permissions (site roles) -->
-            <action id="document-manage-site-permissions" type="javascript" icon="document-manage-permissions" label="actions.document.manage-permissions">
-                <param name="function">onActionManagePermissions</param>
-                <permissions>
-                    <permission allow="true">ChangePermissions</permission>
-                </permissions>
-                <evaluator>evaluator.doclib.action.siteBased</evaluator>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-
-            <!-- Manage permissions (repository roles) -->
-            <action id="document-manage-repo-permissions" type="pagelink" icon="document-manage-permissions" label="actions.document.manage-permissions">
-                <param name="page">manage-permissions?nodeRef={node.nodeRef}</param>
-                <permissions>
-                    <permission allow="true">ChangePermissions</permission>
-                </permissions>
-                <evaluator negate="true">evaluator.doclib.action.siteBased</evaluator>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-
-            <!-- Manage aspects -->
-            <action id="document-manage-aspects" type="javascript" label="actions.document.manage-aspects">
-                <param name="function">onActionManageAspects</param>
-                <permissions>
-                    <permission allow="true">Write</permission>
-                </permissions>
-                <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-
-            <!-- Change type -->
-            <action id="document-change-type" type="javascript" label="actions.document.change-type">
-                <param name="function">onActionChangeType</param>
-                <permissions>
-                    <permission allow="true">Write</permission>
-                </permissions>
-                <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-
-            <!-- View original (of a Working Copy pair) -->
-            <action id="document-view-original" type="pagelink" label="actions.document.view-original">
-                <param name="page">document-details?nodeRef={workingCopy.sourceNodeRef}</param>
-                <!-- cm:workingcopy aspect -->
-                <evaluator>evaluator.doclib.action.isWorkingCopy</evaluator>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-
-            <!-- View working copy (of a Working Copy pair) -->
-            <action id="document-view-working-copy" type="pagelink" label="actions.document.view-working-copy">
-                <param name="page">document-details?nodeRef={workingCopy.workingCopyNodeRef}</param>
-                <!-- cm:workingcopy aspect -->
-                <evaluator>evaluator.doclib.action.hasWorkingCopy</evaluator>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-
-            <!-- Cancel editing (cancel checkout) -->
-            <action id="document-cancel-editing" type="javascript" label="actions.document.cancel-editing">
-                <param name="function">onActionCancelEditing</param>
-                <permissions>
-                    <permission allow="true">CancelCheckOut</permission>
-                </permissions>
-                <evaluator>evaluator.doclib.action.isWorkingCopy</evaluator>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-
-            <!-- Manage folder rules -->
-            <action id="folder-manage-rules" type="pagelink" label="actions.folder.rules">
-                <param name="page">folder-rules?nodeRef={node.nodeRef}</param>
-                <permissions>
-                    <permission allow="true">ChangePermissions</permission>
-                </permissions>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-
-            <!-- Transferred node: View in source repository -->
-            <action id="document-view-in-source-repository" type="link" label="actions.document.view-source-repository">
-                <!-- calculated from siteId, item.location.repositoryId, replicationUrlMapping from share-config-custom.xml and node.type -->
-                <param name="href">{sourceRepositoryUrl}</param>
-                <param name="target">_blank</param>
-                <!-- aspect trx:transferred, not portlet mode -->
-                <evaluator>evaluator.doclib.action.transferred</evaluator>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-
-            <!-- Publish document -->
-            <action id="document-publish" type="javascript" label="actions.document.publish">
-                <param name="function">onActionPublish</param>
-                <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-        	        <action id="lecm-attach-to-document" type="javascript" label="label.action.attach-to-document">
+            <action id="lecm-attach-to-document" type="javascript" label="label.action.attach-to-document">
 		        <param name="function">onActionFormDialog</param>
 		        <param name="itemKind">action</param>
 		        <param name="itemId">attach-to-document</param>
@@ -320,6 +19,7 @@
 		        <param name="failureMessage">message.attachToDocument.failure</param>
 		        <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
 		        <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+                <evaluator>evaluator.documents.mayCopyAttachment</evaluator>
 	        </action>
 
             <action id="move-to-another-category" type="javascript" label="label.action.move-to-another-category">
@@ -337,134 +37,265 @@
                 <param name="failureMessage">message.moveToCategory.failure</param>
                 <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
                 <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+                <evaluator>evaluator.documents.mayCopyAttachment</evaluator>
             </action>
         </actions>
 
-        <!--
-           Action Group definitions
-        -->
+        <!-- Переопределенные группы -->
         <actionGroups>
-            <actionGroup id="empty"/>
-
             <actionGroup id="document-attachment">
-                <action index="100" id="document-upload-new-version"/>
+                <action index="100" id="document-upload-new-version" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayAddAttachment</evaluator>
+                    <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
+                </action>
                 <action index="110" id="move-to-another-category"/>
-                <action index="120" id="document-edit-online"/>
-                <action index="130" id="document-download"/>
-                <action index="140" id="document-delete"/>
-                <action index="150" id="document-view-content"/>
-                <action index="160" id="document-edit-properties"/>
+                <action index="120" id="document-edit-online" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayEditAttachment</evaluator>
+                </action>
+                <action index="130" id="document-download" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayViewAttachment</evaluator>
+                </action>
+                <action index="140" id="document-delete" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayDeleteAttachment</evaluator>
+                    <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
+                </action>
+                <action index="150" id="document-view-content" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayViewAttachment</evaluator>
+                </action>
+                <action index="160" id="document-edit-properties" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayEditAttachment</evaluator>
+                </action>
+            </actionGroup>
+
+            <actionGroup id="document-attachment-preview">
+                <action index="100" id="document-upload-new-version" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayAddAttachment</evaluator>
+                </action>
+                <action index="110" id="document-download" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayViewAttachment</evaluator>
+                </action>
+                <action index="120" id="document-delete" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayDeleteAttachment</evaluator>
+                    <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
+                </action>
+                <action index="130" id="document-view-content" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayViewAttachment</evaluator>
+                </action>
+                <action index="140" id="document-edit-properties" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayEditAttachment</evaluator>
+                </action>
             </actionGroup>
 
             <actionGroup id="document-browse">
-                <action index="100" id="document-upload-new-version"/>
-                <action index="110" id="document-download"/>
-                <action index="120" id="document-delete"/>
-                <action index="130" id="document-copy-to"/>
-                <action index="140" id="document-move-to"/>
+                <action index="100" id="document-upload-new-version" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayAddAttachment</evaluator>
+                </action>
+                <action index="110" id="document-download" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayViewAttachment</evaluator>
+                </action>
+                <action index="120" id="document-delete" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayDeleteAttachment</evaluator>
+                    <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
+                </action>
+                <action index="130" id="document-copy-to" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayCopyAttachment</evaluator>
+                    <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
+                </action>
+                <action index="140" id="document-move-to" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayCopyAttachment</evaluator>
+                    <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
+                </action>
                 <action index="150" id="document-locate"/>
-                <action index="160" id="document-edit-online"/>
-                <action index="170" id="document-edit-offline"/>
-                <action index="180" id="document-inline-edit"/>
-                <action index="190" id="document-view-content"/>
-
-                <action index="200" id="document-cancel-editing"/>
-                <action index="210" id="document-view-original"/>
-                <action index="220" id="document-view-working-copy"/>
-                <action index="230" id="document-edit-properties"/>
-                <action index="240" id="document-publish"/>
-                <action index="250" id="document-view-in-source-repository"/>
-                <action index="260" id="document-assign-workflow"/>
-                <action index="270" id="document-approve"/>
-                <action index="280" id="document-reject"/>
+                <action index="160" id="document-edit-online" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayEditAttachment</evaluator>
+                </action>
+                <action index="170" id="document-edit-offline" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayEditAttachment</evaluator>
+                </action>
+                <action index="180" id="document-inline-edit" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayEditAttachment</evaluator>
+                </action>
+                <action index="190" id="document-view-content" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayViewAttachment</evaluator>
+                </action>
+                <action index="200" id="document-cancel-editing" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayEditAttachment</evaluator>
+                </action>
+                <action index="210" id="document-view-original" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayViewAttachment</evaluator>
+                </action>
+                <action index="220" id="document-view-working-copy" />
+                <action index="230" id="document-edit-properties" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayEditAttachment</evaluator>
+                </action>
+                <action index="250" id="document-view-in-source-repository" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayViewAttachment</evaluator>
+                </action>
+                <action index="260" id="document-assign-workflow" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayViewAttachment</evaluator>
+                </action>
+                <action index="270" id="document-approve" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayViewAttachment</evaluator>
+                </action>
+                <action index="280" id="document-reject" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayViewAttachment</evaluator>
+                </action>
                 <action index="290" id="lecm-attach-to-document"/>
             </actionGroup>
 
             <actionGroup id="document-details">
-                <action index="100" id="document-upload-new-version"/>
-                <action index="110" id="document-edit-online"/>
-                <action index="120" id="document-download"/>
-                <action index="130" id="document-delete"/>
-                <action index="140" id="document-copy-to"/>
-                <action index="150" id="document-move-to"/>
-                <action index="160" id="document-edit-offline"/>
-                <action index="170" id="document-inline-edit"/>
-                <action index="180" id="document-view-content"/>
-                <action index="190" id="document-cancel-editing"/>
-
-                <action index="200" id="document-view-original"/>
-                <action index="210" id="document-view-working-copy"/>
-                <action index="220" id="document-edit-metadata"/>
-                <action index="230" id="document-publish"/>
-                <action index="240" id="document-view-in-source-repository"/>
-                <action index="250" id="document-assign-workflow"/>
-                <action index="260" id="document-approve"/>
-                <action index="270" id="document-reject"/>
-                <action index="280" id="document-manage-site-permissions"/>
-                <action index="290" id="document-manage-repo-permissions"/>
-
-                <action index="300" id="document-manage-aspects"/>
-                <action index="310" id="document-change-type"/>
+                <action index="100" id="document-upload-new-version" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayAddAttachment</evaluator>
+                </action>
+                <action index="110" id="document-edit-online" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayEditAttachment</evaluator>
+                </action>
+                <action index="120" id="document-download" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayViewAttachment</evaluator>
+                </action>
+                <action index="130" id="document-delete" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayDeleteAttachment</evaluator>
+                    <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
+                </action>
+                <action index="140" id="document-copy-to" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayCopyAttachment</evaluator>
+                    <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
+                </action>
+                <action index="150" id="document-move-to" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayCopyAttachment</evaluator>
+                    <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
+                </action>
+                <action index="160" id="document-edit-offline" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayEditAttachment</evaluator>
+                </action>
+                <action index="170" id="document-inline-edit" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayEditAttachment</evaluator>
+                </action>
+                <action index="180" id="document-view-content" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayViewAttachment</evaluator>
+                </action>
+                <action index="190" id="document-cancel-editing" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayEditAttachment</evaluator>
+                </action>
+                <action index="200" id="document-view-original" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayViewAttachment</evaluator>
+                </action>
+                <action index="210" id="document-view-working-copy" />
+                <action index="220" id="document-edit-metadata" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayEditAttachment</evaluator>
+                </action>
+                <action index="240" id="document-view-in-source-repository" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayViewAttachment</evaluator>
+                </action>
+                <action index="250" id="document-assign-workflow" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayViewAttachment</evaluator>
+                </action>
+                <action index="260" id="document-approve" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayViewAttachment</evaluator>
+                </action>
+                <action index="270" id="document-reject" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayViewAttachment</evaluator>
+                </action>
+                <action index="290" id="document-manage-repo-permissions" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayEditAttachment</evaluator>
+                </action>
+                <action index="300" id="document-manage-aspects" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayEditAttachment</evaluator>
+                </action>
+                <action index="310" id="document-change-type" appendEvaluators="true">
+                    <evaluator>evaluator.documents.mayEditAttachment</evaluator>
+                </action>
                 <action index="320" id="lecm-attach-to-document"/>
             </actionGroup>
 
             <actionGroup id="folder-browse">
-                <action index="100" id="folder-view-details" />
-                <action index="110" id="document-edit-properties" icon="folder-edit-properties" label="actions.folder.edit-metadata" />
-                <action index="120" id="document-approve" icon="folder-approve" />
-                <action index="130" id="document-reject" icon="folder-reject" />
-                <action index="140" id="document-locate" icon="document-locate" label="actions.folder.locate" />
-                <action index="150" id="document-copy-to" icon="folder-copy-to" label="actions.folder.copy-to" />
-                <action index="160" id="document-move-to" icon="folder-move-to" label="actions.folder.move-to" />
-                <action index="170" id="folder-manage-rules" />
-                <action index="180" id="document-delete" icon="folder-delete" label="actions.folder.delete" />
-                <action index="190" id="document-manage-site-permissions" icon="folder-manage-permissions" label="actions.folder.manage-permissions" />
-                <action index="200" id="document-manage-repo-permissions" icon="folder-manage-permissions" label="actions.folder.manage-permissions" />
-                <action index="210" id="document-manage-aspects" label="actions.folder.manage-aspects" />
-                <action index="220" id="document-view-in-source-repository" label="actions.folder.view-source-repository" />
-	            <action index="230" id="lecm-document-assign-workflow" icon="document-assign-workflow" label="actions.document.assign-workflow"/>
+                <action index="100" id="folder-view-details" appendEvaluators="true">
+                    <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+                </action>
+                <action index="110" id="document-edit-properties" icon="folder-edit-properties" label="actions.folder.edit-metadata" appendEvaluators="true">
+                    <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+                </action>
+                <action index="120" id="document-approve" icon="folder-approve" appendEvaluators="true">
+                    <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+                </action>
+                <action index="130" id="document-reject" icon="folder-reject" appendEvaluators="true">
+                    <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+                </action>
+                <action index="140" id="document-locate" icon="document-locate" label="actions.folder.locate" appendEvaluators="true">
+                    <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+                </action>
+                <action index="150" id="document-copy-to" icon="folder-copy-to" label="actions.folder.copy-to" appendEvaluators="true">
+                    <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+                    <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
+                </action>
+                <action index="160" id="document-move-to" icon="folder-move-to" label="actions.folder.move-to" appendEvaluators="true">
+                    <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+                    <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
+                </action>
+                <action index="170" id="folder-manage-rules" appendEvaluators="true">
+                    <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+                </action>
+                <action index="180" id="document-delete" icon="folder-delete" label="actions.folder.delete" appendEvaluators="true">
+                    <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+                    <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
+                </action>
+                <!--<action index="190" id="document-manage-site-permissions" icon="folder-manage-permissions" label="actions.folder.manage-permissions" />-->
+                <action index="200" id="document-manage-repo-permissions" icon="folder-manage-permissions" label="actions.folder.manage-permissions" appendEvaluators="true">
+                    <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+                </action>
+                <action index="210" id="document-manage-aspects" label="actions.folder.manage-aspects" appendEvaluators="true">
+                    <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+                </action>
+                <action index="220" id="document-view-in-source-repository" label="actions.folder.view-source-repository" appendEvaluators="true">
+                    <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+                </action>
+	            <action index="230" id="document-assign-workflow" icon="document-assign-workflow" label="actions.document.assign-workflow" appendEvaluators="true">
+                    <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+                </action>
             </actionGroup>
 
             <actionGroup id="folder-details">
-                <action index="100" id="document-edit-metadata" icon="folder-edit-metadata" label="actions.folder.edit-metadata" />
-                <action index="110" id="document-approve" icon="folder-approve" />
-                <action index="120" id="document-reject" icon="folder-reject" />
-                <action index="130" id="document-copy-to" icon="folder-copy-to" label="actions.folder.copy-to" />
-                <action index="140" id="document-move-to" icon="folder-move-to" label="actions.folder.move-to" />
-                <action index="150" id="folder-manage-rules" />
-                <action index="160" id="document-delete" icon="folder-delete" label="actions.folder.delete" />
-                <action index="170" id="document-manage-site-permissions" icon="folder-manage-permissions" label="actions.folder.manage-permissions" />
-                <action index="180" id="document-manage-repo-permissions" icon="folder-manage-permissions" label="actions.folder.manage-permissions" />
-                <action index="190" id="document-manage-aspects" label="actions.folder.manage-aspects" />
-                <action index="200" id="document-change-type" label="actions.folder.change-type" />
+                <action index="100" id="document-edit-metadata" icon="folder-edit-metadata" label="actions.folder.edit-metadata" appendEvaluators="true">
+                    <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+                </action>
+                <action index="110" id="document-approve" icon="folder-approve" appendEvaluators="true">
+                    <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+                </action>
+                <action index="120" id="document-reject" icon="folder-reject" appendEvaluators="true">
+                    <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+                </action>
+                <action index="130" id="document-copy-to" icon="folder-copy-to" label="actions.folder.copy-to" appendEvaluators="true">
+                    <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+                    <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
+                </action>
+                <action index="140" id="document-move-to" icon="folder-move-to" label="actions.folder.move-to" appendEvaluators="true">
+                    <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+                    <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
+                </action>
+                <action index="150" id="folder-manage-rules" appendEvaluators="true">
+                    <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+                </action>
+                <action index="160" id="document-delete" icon="folder-delete" label="actions.folder.delete" appendEvaluators="true">
+                    <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+                    <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
+                </action>
+                <action index="180" id="document-manage-repo-permissions" icon="folder-manage-permissions" label="actions.folder.manage-permissions" appendEvaluators="true">
+                    <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+                </action>
+                <action index="190" id="document-manage-aspects" label="actions.folder.manage-aspects" appendEvaluators="true">
+                    <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+                </action>
+                <action index="200" id="document-change-type" label="actions.folder.change-type" appendEvaluators="true">
+                    <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+                </action>
                 <action index="210" id="view-in-explorer" />
-                <action index="220" id="document-view-in-source-repository" label="actions.folder.view-source-repository" />
-	            <action index="230" id="lecm-document-assign-workflow"  icon="document-assign-workflow" label="actions.document.assign-workflow"/>
-            </actionGroup>
-
-            <actionGroup id="document-link-browse">
-                <action index="100" id="document-locate" label="actions.link.locate">
-                    <evaluator />
+                <action index="220" id="document-view-in-source-repository" label="actions.folder.view-source-repository" appendEvaluators="true">
+                    <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
                 </action>
-                <action index="110" id="document-delete" label="actions.link.delete" />
-            </actionGroup>
-
-            <actionGroup id="document-link-details">
-                <action index="100" id="document-delete" label="actions.link.delete" />
-            </actionGroup>
-
-            <actionGroup id="folder-link-browse">
-                <action index="100" id="folder-view-details" />
-                <action index="110" id="document-locate" label="actions.link.locate">
-                    <evaluator />
+	            <action index="230" id="document-assign-workflow"  icon="document-assign-workflow" label="actions.document.assign-workflow" appendEvaluators="true">
+                    <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
                 </action>
-                <action index="120" id="document-delete" icon="folder-delete" label="actions.link.delete" />
             </actionGroup>
-
-            <actionGroup id="folder-link-details">
-                <action index="100" id="document-delete" icon="folder-delete" label="actions.link.delete" />
-            </actionGroup>
-
         </actionGroups>
     </config>
 

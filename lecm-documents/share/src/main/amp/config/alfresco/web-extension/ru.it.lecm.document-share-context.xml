@@ -68,6 +68,158 @@
 		<property name="scriptRemote" ref="webscripts.script.remote" />
 	</bean>
 
+	<bean id="evaluator.documents.isCreator" class="ru.it.lecm.documents.evaluators.IsCreatorEvaluator"/>
+
+	<bean id="evaluator.documents.isAttachment" parent="evaluator.doclib.metadata.hasAspect">
+		<property name="aspects">
+			<list>
+				<value>lecm-document-aspects:lecm-attachment</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="evaluator.documents.isWritableCategory" class="ru.it.lecm.documents.evaluators.IsWritableCategory">
+		<property name="evaluatorsUtil" ref="evaluators.documents.util"/>
+	</bean>
+
+	<bean id="evaluator.documents.isNotAttachment" parent="evaluator.documents.isAttachment">
+		<property name="negateOutput" value="true" />
+	</bean>
+
+	<!-- Base permissions -->
+	<bean id="evaluator.documents.hasPermissionEvaluator" class="ru.it.lecm.documents.evaluators.HasPermissionEvaluator" abstract="true">
+		<property name="evaluatorsUtil" ref="evaluators.documents.util"/>
+	</bean>
+
+	<bean id="evaluator.documents.hasContentDeletePermission" parent="evaluator.documents.hasPermissionEvaluator">
+		<property name="permission" value="_lecmPerm_ContentDelete"/>
+	</bean>
+
+	<bean id="evaluator.documents.hasOwnContentDeletePermission" parent="evaluator.documents.hasPermissionEvaluator">
+		<property name="permission" value="_lecmPerm_OwnContentDelete"/>
+	</bean>
+
+	<bean id="evaluator.documents.hasContentAddVerPermission" parent="evaluator.documents.hasPermissionEvaluator">
+		<property name="permission" value="_lecmPerm_ContentAddVer"/>
+	</bean>
+
+	<bean id="evaluator.documents.hasContentViewPermission" parent="evaluator.documents.hasPermissionEvaluator">
+		<property name="permission" value="_lecmPerm_ContentView"/>
+	</bean>
+
+	<bean id="evaluator.documents.hasContentCopyPermission" parent="evaluator.documents.hasPermissionEvaluator">
+		<property name="permission" value="_lecmPerm_ContentView"/>
+	</bean>
+	<!-- Base permissions -->
+
+	<!-- Copy content -->
+	<bean id="evaluator.documents.mayCopyAttachment" parent="evaluator.doclib.action.chainedMatchOne">
+		<property name="evaluators">
+			<list>
+				<ref bean="evaluator.documents.isNotAttachment"/>
+				<ref bean="evaluator.documents.mayCopyAttachmentEvaluator"/>
+			</list>
+		</property>
+	</bean>
+	<bean id="evaluator.documents.mayCopyAttachmentEvaluator" parent="evaluator.doclib.action.chainedMatchAll">
+		<property name="evaluators">
+			<list>
+				<ref bean="evaluator.documents.hasContentCopyPermission"/>
+				<ref bean="evaluator.documents.mayEditAttachmentEvaluator"/>
+			</list>
+		</property>
+	</bean>
+	<!-- Copy content -->
+
+	<!-- Delete content -->
+	<bean id="evaluator.documents.mayDeleteAttachment" parent="evaluator.doclib.action.chainedMatchOne">
+		<property name="evaluators">
+			<list>
+				<ref bean="evaluator.documents.isNotAttachment"/>
+				<ref bean="evaluator.documents.mayDeleteAttachmentEvaluatorComplex"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="evaluator.documents.mayDeleteAttachmentEvaluatorComplex" parent="evaluator.doclib.action.chainedMatchAll">
+		<property name="evaluators">
+			<list>
+				<ref bean="evaluator.documents.isWritableCategory"/>
+				<ref bean="evaluator.documents.mayDeleteAttachmentEvaluator"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="evaluator.documents.mayDeleteAttachmentEvaluator" parent="evaluator.doclib.action.chainedMatchOne">
+		<property name="evaluators">
+			<list>
+				<ref bean="evaluator.documents.hasContentDeletePermission"/>
+				<ref bean="evaluator.documents.mayDeleteOwnAttachmentEvaluator"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="evaluator.documents.mayDeleteOwnAttachmentEvaluator" parent="evaluator.doclib.action.chainedMatchAll">
+		<property name="evaluators">
+			<list>
+				<ref bean="evaluator.documents.isCreator"/>
+				<ref bean="evaluator.documents.hasOwnContentDeletePermission"/>
+			</list>
+		</property>
+	</bean>
+	<!-- Delete content -->
+
+	<!-- Add content -->
+	<bean id="evaluator.documents.mayAddAttachment" parent="evaluator.doclib.action.chainedMatchOne">
+		<property name="evaluators">
+			<list>
+				<ref bean="evaluator.documents.isNotAttachment"/>
+				<ref bean="evaluator.documents.mayAddAttachmentEvaluator"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="evaluator.documents.mayAddAttachmentEvaluator" parent="evaluator.doclib.action.chainedMatchAll">
+		<property name="evaluators">
+			<list>
+				<ref bean="evaluator.documents.isWritableCategory"/>
+				<ref bean="evaluator.documents.hasContentAddVerPermission"/>
+			</list>
+		</property>
+	</bean>
+	<!-- Add content -->
+
+	<!--Edit content -->
+	<bean id="evaluator.documents.mayEditAttachment" parent="evaluator.doclib.action.chainedMatchOne">
+		<property name="evaluators">
+			<list>
+				<ref bean="evaluator.documents.isNotAttachment"/>
+				<ref bean="evaluator.documents.mayEditAttachmentEvaluator"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="evaluator.documents.mayEditAttachmentEvaluator" parent="evaluator.doclib.action.chainedMatchAll">
+		<property name="evaluators">
+			<list>
+				<ref bean="evaluator.documents.isWritableCategory"/>
+				<ref bean="evaluator.documents.hasContentViewPermission"/>
+			</list>
+		</property>
+	</bean>
+	<!--Edit content -->
+
+	<!--View content -->
+	<bean id="evaluator.documents.mayViewAttachment" parent="evaluator.doclib.action.chainedMatchOne">
+		<property name="evaluators">
+			<list>
+				<ref bean="evaluator.documents.isNotAttachment"/>
+				<ref bean="evaluator.documents.hasContentViewPermission"/>
+			</list>
+		</property>
+	</bean>
+	<!--View content -->
+
 	<bean id="evaluator.ru.it.lecm.documents.hasReadAttachmentComponent" class="ru.it.lecm.documents.evaluators.HasReadAttachmentComponentEvaluator">
 		<property name="evaluatorsUtil" ref="evaluators.documents.util" />
 	</bean>

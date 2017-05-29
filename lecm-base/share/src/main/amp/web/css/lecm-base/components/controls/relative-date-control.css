@@ -1,0 +1,81 @@
+.relative-date-set .label-div,
+.relative-date-set .control span.help-icon {
+    display: none;
+}
+
+.relative-date-set .relative-date-set-radio {
+    float: left;
+}
+.relative-date-set .relative-date-set-radio .control .value-div {
+    width: 12px;
+}
+.relative-date-set .relative-date-set-radio .control label.checkbox {
+    display: none;
+}
+.relative-date-set .relative-date-set-radio .control input {
+    margin-top: 8px;
+    margin-bottom: 20px;
+}
+.relative-date-set .relative-date-set-radio .buttons-div {
+    padding: 0;
+}
+.relative-date-set .relative-date-set-days {
+    float: left;
+    overflow: hidden;
+    width: 80px;
+    margin-left: 4px;
+}
+.relative-date-set .relative-date-set-days .control .value-div input {
+    width: 70px;
+}
+
+.relative-date-set .relative-date-set-limitless {
+    float: left;
+}
+
+.relative-date-set .relative-date-set-type {
+    float: left;
+    width: calc(100% - 260px);
+}
+
+.relative-date-set .relative-date-set-date {
+    width: calc(100% - 180px);
+    margin-left: 20px;
+    float: none;
+}
+.relative-date-set .relative-date-set-date-with-time {
+    width: 100%;
+    margin-left: 20px;
+    float: none;
+}
+
+.relative-date-set .relative-date-set-radio .control input:last-of-type {
+    margin-bottom: 15px;
+}
+.relative-date-set .control .container .value-div input[type=text] {
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+.relative-date-set .relative-date-set-radio .label-div {
+    display:block;
+}
+.relative-date-set .relative-date-set-radio .control .container  {
+    min-width: 10px;
+    float:left;
+}
+
+.relative-date-set .relative-date-set-date-with-time .control .buttons-div {
+    display: none;
+}
+
+.relative-date-set .relative-date-set-date-with-time .control .date-entry-container {
+    width: calc(100% - 180px);
+    float: left;
+    padding-right: 5px;
+}
+
+.relative-date-set .relative-date-set-date-with-time .control .time-entry-container {
+    float: left;
+    width: 155px;
+}

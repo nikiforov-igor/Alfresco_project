@@ -22,6 +22,7 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
 import ru.it.lecm.arm.beans.*;
 import ru.it.lecm.arm.beans.node.ArmNode;
 import ru.it.lecm.base.beans.LecmTransactionHelper;
+import ru.it.lecm.base.beans.evaluators.ValueEvaluatorsManager;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.templates.api.DocumentTemplateModel;
 import ru.it.lecm.documents.templates.api.DocumentTemplateService;
@@ -68,11 +69,12 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 	private NamespaceService namespaceService;
 	private StateMachineServiceBean stateMachineService;
 	private DocumentService documentService;
-        private LecmTransactionHelper lecmTransactionHelper;
+    private LecmTransactionHelper lecmTransactionHelper;
 	private TransactionService transtactionService;
     private ArmServiceImpl armService;
 	private DocumentTemplateService documentTemplateService;
 	private NodeService nodeService;
+    private ValueEvaluatorsManager valueEvaluatorsManager;
 
     public void setArmService(ArmServiceImpl armService) {
         this.armService = armService;
@@ -344,6 +346,13 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 			Map<QName, Serializable> props = nodeService.getProperties(templateRef);
 			String name = (String)props.get(ContentModel.PROP_TITLE);
 			JSONArray attributes = new JSONArray((String)props.get(DocumentTemplateModel.PROP_DOCUMENT_TEMPLATE_ATTRIBUTES));
+            for (int i = 0; i < attributes.length(); i++) {
+                JSONObject attrConfig = attributes.getJSONObject(i).getJSONObject("initial");
+                try {
+                    JSONObject attrValue = new JSONObject(attrConfig.getString("value"));
+                    attrConfig.put("value", valueEvaluatorsManager.evaluate(attrValue));
+                } catch (JSONException ignored) {}
+            }
 			JSONObject template = new JSONObject();
 			template.put("name", name);
             template.put("ref", templateRef.toString());
@@ -380,5 +389,9 @@ public class ArmTreeMenuScript extends AbstractWebScript {
             }
         }
         return results;
+    }
+
+    public void setValueEvaluatorsManager(ValueEvaluatorsManager valueEvaluatorsManager) {
+        this.valueEvaluatorsManager = valueEvaluatorsManager;
     }
 }
