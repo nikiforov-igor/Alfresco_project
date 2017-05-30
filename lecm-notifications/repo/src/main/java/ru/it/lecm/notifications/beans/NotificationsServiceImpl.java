@@ -408,7 +408,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
         Set<NotificationUnit> result = new HashSet<NotificationUnit>();
         final String templateCode = generalizedNotification.getTemplateCode();
         for (NodeRef employeeRef : employeeRefs) {
-            if (orgstructureService.isEmployee(employeeRef) && !employeeRef.equals(generalizedNotification.getInitiatorRef()) && isTemplateNotificationsEnable(templateCode, employeeRef)) {
+            if (orgstructureService.isEmployee(employeeRef) && !employeeRef.equals(generalizedNotification.getInitiatorRef()) && isTemplateNotificationsEnabled(templateCode, employeeRef)) {
                 List<NodeRef> typeRefs = generalizedNotification.getTypeRefs();
                 if (typeRefs == null || typeRefs.isEmpty()) {
                     typeRefs = getEmployeeDefaultNotificationTypes(employeeRef);
@@ -752,12 +752,12 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	}
 
     @Override
-    public boolean isTemplateNotificationsEnable(String templateCode, NodeRef employee) {
-        return isTemplateNotificationsEnable(getTemplateByCode(templateCode), employee);
+    public boolean isTemplateNotificationsEnabled(String templateCode, NodeRef employee) {
+        return isTemplateNotificationsEnabled(getTemplateByCode(templateCode), employee);
     }
 
     @Override
-    public boolean isTemplateNotificationsEnable(NodeRef template, NodeRef employee) {
+    public boolean isTemplateNotificationsEnabled(NodeRef template, NodeRef employee) {
         boolean isEnabled = isTemplateSendEnabled(template);
         boolean isExclusionEmployee = isEmployeeHasExclusionForTemplate(template, employee);
         return isEnabled ^ isExclusionEmployee;
@@ -891,13 +891,13 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
     }
 
     @Override
-    public boolean isTemplateNotificationsEnable(final String templateCode) {
-        return isTemplateNotificationsEnable(templateCode, orgstructureService.getCurrentEmployee());
+    public boolean isTemplateNotificationsEnabled(final String templateCode) {
+        return isTemplateNotificationsEnabled(templateCode, orgstructureService.getCurrentEmployee());
     }
 
     @Override
-    public boolean isTemplateNotificationsEnable(NodeRef template) {
-        return isTemplateNotificationsEnable(template, orgstructureService.getCurrentEmployee());
+    public boolean isTemplateNotificationsEnabled(NodeRef template) {
+        return isTemplateNotificationsEnabled(template, orgstructureService.getCurrentEmployee());
     }
 
     private class NotificationTransactionListener implements TransactionListener {
