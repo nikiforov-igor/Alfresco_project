@@ -495,14 +495,8 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
                         column.setTitle((String) columnProps.get(PROP_COLUMN_TITLE));
                         column.setField((String) columnProps.get(PROP_COLUMN_FIELD_NAME));
                         column.setFormatString((String) columnProps.get(PROP_COLUMN_FORMAT_STRING));
-                        Object sortableValue = columnProps.get(PROP_COLUMN_SORTABLE);
-                        if (sortableValue != null) {
-                            column.setSortable((Boolean) sortableValue);
-                        }
-						Object isCounter = columnProps.get(PROP_COLUMN_IS_COUNTER);
-						if (isCounter != null) {
-							column.setCounter((Boolean) isCounter);
-						}
+                        column.setSortable(Boolean.TRUE.equals(columnProps.get(PROP_COLUMN_SORTABLE)));
+    					column.setCounter(Boolean.TRUE.equals(columnProps.get(PROP_COLUMN_IS_COUNTER)));
                         column.setByDefault(true);
 
                         /*Маркер*/

@@ -670,9 +670,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         },
                         successCallback: {
                             fn: function (oResponse) {
-                                if (oResponse != null) {
+                                if (oResponse) {
                                     if (cell) {
-                                        cell.innerHTML = (oResponse.json !== null ? oResponse.json : "-" );
+                                        cell.innerHTML = oResponse.json ? oResponse.json : "-";
                                     }
                                 }
                             }
