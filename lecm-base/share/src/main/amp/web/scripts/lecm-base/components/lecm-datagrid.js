@@ -654,7 +654,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             getCounterCellFormatter: function DataGrid_getCounterCellFormatter(column) {
 				var scope = this;
 				return function(elCell, oRecord, oColumn, oData) {
-					var searchQuery = scope.datagridColumns[oColumn.key]?scope.datagridColumns[oColumn.key].nameSubstituteString:'';
+					var searchQuery = scope.datagridColumns[oColumn.key] ? scope.datagridColumns[oColumn.key].nameSubstituteString : '';
 					if (oRecord){
 						var data = oRecord.getData();
 						if (searchQuery && data) {
@@ -1279,7 +1279,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     var column = this.datagridColumns[i],
 						columnName = column.name.replace(":", "_"),
 						fieldLookup = "";
-					if (column.type!="counter") {
+					if (column.type != "counter") {
 							fieldLookup = ((column.type == "property" || column.formsName.indexOf("prop_") == 0) ? "prop_" : "assoc_");
 					} 
 					fieldLookup =  fieldLookup + columnName;
@@ -1344,15 +1344,15 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                 className = "nowrap "
                             }
                             var columnObj = {
-                                key:column.type=="counter"?column.name:this.dataResponseFields[i],
-                                label:column.label.length > 0 ? column.label : this.msg(column.name.replace(":", "_")),
-                                sortable:sortable,
+                                key: column.type == "counter" ? column.name : this.dataResponseFields[i],
+                                label: column.label.length > 0 ? column.label : this.msg(column.name.replace(":", "_")),
+                                sortable: sortable,
                                 resizeable: column.resizeable === undefined ? false : column.resizeable,
                                 sortOptions:{
-                                    field:column.formsName,
-                                    sortFunction:this.getSortFunction()
+                                    field: column.formsName,
+                                    sortFunction: this.getSortFunction()
                                 },
-                                formatter:column.type=="counter"?this.getCounterCellFormatter(column):this.getCellFormatter(column.dataType),
+                                formatter: column.type == "counter" ? this.getCounterCellFormatter(column) : this.getCellFormatter(column.dataType),
                                 className: className + ((column.dataType == 'boolean') ? 'centered' : '')
                             };
                             if (!isLinkShown && (column.dataType != "lecm-orgstr:employee")) {

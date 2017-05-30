@@ -550,7 +550,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     for (var i = 0, ii = this.dataColumns.length; i < ii; i++) {
                         var column = this.dataColumns[i],
                             columnName = column.name.replace(":", "_");
-						if (column.type!="counter") {
+						if (column.type != "counter") {
 							reqFields.push(columnName);
 							reqNameSubstituteStrings.push(column.nameSubstituteString);
 						}
