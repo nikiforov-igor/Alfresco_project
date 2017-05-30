@@ -48,6 +48,11 @@
 	<#assign showLabel = field.control.params.showLabel == "true"/>
 </#if>
 
+<#assign jsObjectName = "LogicECM.module.Base.DataGrid"/>
+<#if field.control.params.jsObjectName??>
+    <#assign jsObjectName = field.control.params.jsObjectName/>
+</#if>
+
 <div class="control with-grid" id="${controlId}">
 	<#if showLabel>
 		<label for="${controlId}">${field.label?html}:<#if field.endpointMandatory!false || field.mandatory!false>
@@ -57,10 +62,22 @@
         <script type="text/javascript">//<![CDATA[
         (function () {
 			function init() {
-                LogicECM.module.Base.Util.loadScripts([
-                    'scripts/lecm-base/components/advsearch.js',
-                    'scripts/lecm-base/components/lecm-datagrid.js'
-                ], createDatagrid);
+                LogicECM.module.Base.Util.loadResources([
+                            'scripts/lecm-base/components/advsearch.js',
+                            'scripts/lecm-base/components/lecm-datagrid.js'
+                            <#if field.control.params.jsDependencies??>
+                                <#list field.control.params.jsDependencies?split(",") as js>
+                                    , '${js}'
+                                </#list>
+                            </#if>
+                        ],
+                        [
+                            'css/lecm-base/components/datagrid.css'
+                            <#if field.control.params.cssDependencies??>
+                                <#list field.control.params.cssDependencies?split(",") as css>
+                                    , '${css}'
+                                </#list>
+                            </#if>], createDatagrid);
 			}
 			YAHOO.util.Event.onDOMReady(init);
 			function createDatagrid() {
@@ -69,7 +86,7 @@
                     return module;
                 };
 
-                YAHOO.extend(LogicECM.module.Base.DataGridControl_${objectId}, LogicECM.module.Base.DataGrid, {
+                YAHOO.extend(LogicECM.module.Base.DataGridControl_${objectId}, ${jsObjectName}, {
                     ${field.control.params.actionsHandler!""}
                 });
 
@@ -81,6 +98,12 @@
                     </#if>
                     <#if field.control.params.editFormId??>
                         editForm: "${field.control.params.editFormId?string}",
+                    </#if>
+                    <#if field.control.params.pageSize??>
+                        pageSize: "${field.control.params.pageSize?string}",
+                    </#if>
+                    <#if (field.control.params.createItemBtnMsg)?has_content>
+                        createItemBtnMsg: "${field.control.params.createItemBtnMsg}",
                     </#if>
                     showExtendSearchBlock: false,
                         actions: [
@@ -150,6 +173,9 @@
                             ,editFormWidth: "${field.control.params.editFormWidth}"
                         </#if>
                     }).setMessages(${messages});
+                <#if form.mode != "create">
+                    datagrid.argumentsItemId = "${form.arguments.itemId}";
+                </#if>
                 datagrid.draw();
             }
         })();

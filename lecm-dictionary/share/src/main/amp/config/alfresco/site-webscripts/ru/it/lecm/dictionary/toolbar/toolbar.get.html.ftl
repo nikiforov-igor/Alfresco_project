@@ -1,4 +1,17 @@
 <#assign id = args.htmlid>
+<#assign buttons = true/>
+<#if showButtons??>
+    <#assign buttons = showButtons/>
+</#if>
+<#assign searchBlock = true/>
+<#if showSearchBlock??>
+    <#assign searchBlock = showSearchBlock/>
+</#if>
+<#assign exSearch = true/>
+<#if showExSearchBtn??>
+    <#assign exSearch = showExSearchBtn/>
+</#if>
+
 <script type="text/javascript">//<![CDATA[
 (function(){
 	function createToolbar() {
@@ -22,7 +35,7 @@
 //]]></script>
 
 <#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
-<@comp.baseToolbar id true true true>
+<@comp.baseToolbar id buttons searchBlock exSearch>
     <div class="create-row">
             <span id="${id}-newRowButton" class="yui-button yui-push-button">
                 <span class="first-child">

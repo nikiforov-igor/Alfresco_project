@@ -93,3 +93,7 @@ tr.notification-row-delimiter td {
 	color: #E7E7E7;
 	cursor: pointer;
 }
+
+.dijitMenuItem .dijitReset.dijitMenuItemActions {
+	width: 20px;
+}

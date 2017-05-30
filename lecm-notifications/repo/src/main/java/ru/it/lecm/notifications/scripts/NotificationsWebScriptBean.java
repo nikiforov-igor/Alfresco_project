@@ -1,8 +1,11 @@
 package ru.it.lecm.notifications.scripts;
 
 import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.security.AuthenticationService;
+import org.alfresco.service.transaction.TransactionService;
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,23 +14,16 @@ import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.base.beans.BaseWebScript;
+import ru.it.lecm.base.beans.LecmTransactionHelper;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
-import org.alfresco.service.transaction.TransactionService;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.extensions.surf.util.ParameterCheck;
-import ru.it.lecm.base.beans.LecmTransactionHelper;
+import java.util.*;
 
 /**
  * User: AIvkin
@@ -421,4 +417,44 @@ public class NotificationsWebScriptBean extends BaseWebScript {
     public int getSettingsNDays() {
         return service.getSettingsNDays();
     }
+
+	public boolean createExclusionForEmployess(String templateCode, Scriptable employeesArray) {
+		boolean result = false;
+		List<String> employeesList = (List<String>) getValueConverter().convertValueForJava(employeesArray);
+		if (employeesList != null) {
+			for (String employee : employeesList) {
+				result = service.createTemplateNotificationExclusion(templateCode, new NodeRef(employee)) || result;
+			}
+		}
+		return result;
+	}
+
+	public boolean deleteExclusionForEmployess(String templateCode, Scriptable employeesArray) {
+		boolean result = false;
+		List<String> employeesList = (List<String>) getValueConverter().convertValueForJava(employeesArray);
+		if (employeesList != null) {
+			for (String employee : employeesList) {
+				result = service.deleteTemplateNotificationExclusion(templateCode, new NodeRef(employee)) || result;
+			}
+		}
+		return result;
+	}
+
+	public boolean clearExclusions(String templateCode) {
+		service.clearExclusions(templateCode);
+		return true;
+	}
+
+	public boolean unsubscribeFromTemplate(String templateCode, ScriptNode employee) {
+		return service.disableTemplateNotification(templateCode, employee != null ? employee.getNodeRef() : null);
+	}
+
+	public boolean subscribeOnTemplate(String templateCode, ScriptNode employee) {
+		return service.enableTemplateNotification(templateCode, employee != null ? employee.getNodeRef() : null);
+
+	}
+
+	public boolean isTemplateEnableForCurrentEmployee(String templateCode) {
+		return service.isTemplateNotificationsEnable(templateCode, orgstructureService.getCurrentEmployee());
+	}
 }
