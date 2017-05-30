@@ -2,15 +2,16 @@
 {
 	"hasNext": "${next?string}",
 	"items": [
-		<#list notifications as item>
+		<#list notifications as notification>
 		{
-			"nodeRef": "${item.nodeRef}",
-			"formingDate": "${item.properties["lecm-notf:forming-date"]?datetime?string("MM/dd/yyyy HH:mm:ss")}",
-			"readDate": <#if item.properties["lecm-notf-active-channel:read-date"]??>"${item.properties["lecm-notf-active-channel:read-date"]?string("dd.MM.yyyy HH:mm")}"<#else>null</#if>,
-			"isRead": "<#if item.properties["lecm-notf-active-channel:is_read"]??>${item.properties["lecm-notf-active-channel:is_read"]?string}<#else>false</#if>",
-			"description": "<#if item.properties["lecm-notf:description"]??>${item.properties["lecm-notf:description"]}</#if>",
-        	"template": "<#if item.properties["lecm-notf:from-template"]??>${item.properties["lecm-notf:from-template"]}</#if>"
-		}<#if item_has_next>,</#if>
+			"nodeRef": "${notification.item.nodeRef}",
+			"formingDate": "${notification.item.properties["lecm-notf:forming-date"]?datetime?string("MM/dd/yyyy HH:mm:ss")}",
+			"readDate": <#if notification.item.properties["lecm-notf-active-channel:read-date"]??>"${notification.item.properties["lecm-notf-active-channel:read-date"]?string("dd.MM.yyyy HH:mm")}"<#else>null</#if>,
+			"isRead": "<#if notification.item.properties["lecm-notf-active-channel:is_read"]??>${notification.item.properties["lecm-notf-active-channel:is_read"]?string}<#else>false</#if>",
+        	"isEnabled": <#if notification.isEnable??>${notification.isEnable?string}<#else>true</#if>,
+			"description": "<#if notification.item.properties["lecm-notf:description"]??>${notification.item.properties["lecm-notf:description"]}</#if>",
+        	"template": "<#if notification.item.properties["lecm-notf:from-template"]??>${notification.item.properties["lecm-notf:from-template"]}</#if>"
+		}<#if notification_has_next>,</#if>
 		</#list>
 	]
 }

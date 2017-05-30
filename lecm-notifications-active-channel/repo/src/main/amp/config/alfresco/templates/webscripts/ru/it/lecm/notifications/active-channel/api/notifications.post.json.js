@@ -9,6 +9,20 @@
 		}
 	}
 
-	model.notifications = notificationsActiveChannel.getNotifications(skipItemsCount, loadItemsCount, ignoreNotifications);
+	var notificationsList = notificationsActiveChannel.getNotifications(skipItemsCount, loadItemsCount, ignoreNotifications);
+
+	var updated = [];
+	for (var j = 0; j < notificationsList.length; j++) {
+		var notification = notificationsList[j];
+		var template = notification.properties["lecm-notf:from-template"] ? notification.properties["lecm-notf:from-template"] : "";
+		var isEnable = template ? notifications.isTemplateEnableForCurrentEmployee(template) : true;
+		updated.push({
+			item: notification,
+			isEnable: isEnable
+		})
+	}
+
+	model.notifications = updated;
+
 	model.next = true;
 })();

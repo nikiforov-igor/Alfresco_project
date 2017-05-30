@@ -88,7 +88,7 @@ define(['dojo/_base/declare',
 				domAttr.set(this._disableNotifications, 'title', this.message("message.notifications.unsubscribe.title"));
 				on(this._disableNotifications, 'i:click', lang.hitch(this, this._onDisableClick));
 
-				this._changeButtonStatus(this, false);/*default state*/
+				this._changeButtonStatus(this, this.params.item.isEnabled);/*default state*/
 				domClass.add(this.notificationActions, "hidden");
 
 				on(this.domNode, touch.enter, function (evt) {
@@ -109,7 +109,7 @@ define(['dojo/_base/declare',
 						template: this.params.item.template
 					})
 				}).then(lang.hitch(this, function(success) {
-					this.updateOnSuccess(false);
+					this.updateOnSuccess(true);
 				}), lang.hitch(this, function(failure) {
 					Alfresco.util.PopupManager.displayMessage({
 						text: this.message('message.notifications.subscribe.failure', this.params.item.template)
@@ -128,7 +128,7 @@ define(['dojo/_base/declare',
 						template: this.params.item.template
 					})
 				}).then(lang.hitch(this, function(success) {
-					this.updateOnSuccess(true);
+					this.updateOnSuccess(false);
 				}), lang.hitch(this, function(failure) {
 					Alfresco.util.PopupManager.displayMessage({
 						text: this.message('message.notifications.unsubscribe.failure', this.params.item.template)
@@ -138,18 +138,20 @@ define(['dojo/_base/declare',
 				return false;
 			},
 
-			updateOnSuccess: function (setDisabled) {
-				this._changeButtonStatus(this, setDisabled);
+			updateOnSuccess: function (setEnabled) {
+				this.params.item.isEnabled = setEnabled;
+				this._changeButtonStatus(this, setEnabled);
 				array.forEach(this.params.notificationsPopup.rootWidget.getChildren(), function (notificationItem) {
 					if (notificationItem.params.item.template == this.params.item.template) {
-						this._changeButtonStatus(notificationItem, state);
+						this.params.item.isEnabled = setEnabled;
+						this._changeButtonStatus(notificationItem, setEnabled);
 					}
 				}, this);
 			},
 
-			_changeButtonStatus: function (item, setDisabled) {
-				domClass.toggle(item._enableNotifications, "hidden", !setDisabled);
-				domClass.toggle(item._disableNotifications, "hidden", setDisabled);
+			_changeButtonStatus: function (item, isNotificationEnable) {
+				domClass.toggle(item._enableNotifications, "hidden", isNotificationEnable);
+				domClass.toggle(item._disableNotifications, "hidden", !isNotificationEnable);
 			},
 
 			//TODO: ctrl+click handler, open in new tab handler also should mark notification as read!
