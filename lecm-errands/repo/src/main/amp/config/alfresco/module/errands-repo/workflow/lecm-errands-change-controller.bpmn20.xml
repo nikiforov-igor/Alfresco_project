@@ -37,9 +37,11 @@
                                     if (executorAssoc &amp;&amp; executorAssoc.length) {
                                         recipients.push(executorAssoc[0]);
                                     }
-                                    var coexecutorAssoc = document.assocs["lecm-errands:coexecutors-assoc"];
-                                    if (coexecutorAssoc &amp;&amp; coexecutorAssoc.length) {
-                                        recipients.push(coexecutorAssoc[0]);
+                                    var coexecutorsAssocs = document.assocs["lecm-errands:coexecutors-assoc"];
+                                    if (coexecutorsAssocs &amp;&amp; coexecutorsAssocs.length) {
+                                        for (var i = 0; i != coexecutorsAssocs.length; i++) {
+                                            recipients.push(coexecutorsAssocs[i]);
+                                        }
                                     }
                                     if (recipients &amp;&amp; recipients.length) {
                                         notifications.sendNotificationFromCurrentUser({
