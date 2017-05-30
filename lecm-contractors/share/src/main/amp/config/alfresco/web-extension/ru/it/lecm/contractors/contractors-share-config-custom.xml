@@ -426,7 +426,7 @@
                     <field id="lecm-representative:computed-representative-fullname"
                            substituteString="{lecm-contractor:contractor-to-link-association(lecm-contractor:link-to-representative-association-is-primary=true)/lecm-contractor:link-to-representative-association/lecm-representative:surname} {lecm-contractor:contractor-to-link-association(lecm-contractor:link-to-representative-association-is-primary=true)/lecm-contractor:link-to-representative-association/lecm-representative:firstname}"></field>
                     <field id="deletable"
-                           substituteString="{@!hasAspect('lecm-orgstr-aspects:is-organization-aspect')}"></field>
+                           substituteString="{@!doc.hasAspect('lecm-orgstr-aspects:is-organization-aspect')}"></field>
                 </appearance>
             </form>
 
