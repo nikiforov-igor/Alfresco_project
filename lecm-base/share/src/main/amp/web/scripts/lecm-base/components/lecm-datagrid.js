@@ -1280,7 +1280,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 						columnName = column.name.replace(":", "_"),
 						fieldLookup = "";
 					if (column.type != "counter") {
-							fieldLookup = ((column.type == "property" || column.formsName.indexOf("prop_") == 0) ? "prop_" : "assoc_");
+					    fieldLookup = ((column.type == "property" || column.formsName.indexOf("prop_") == 0) ? "prop_" : "assoc_");
 					} 
 					fieldLookup =  fieldLookup + columnName;
 					this.dataRequestFields.push(columnName);
