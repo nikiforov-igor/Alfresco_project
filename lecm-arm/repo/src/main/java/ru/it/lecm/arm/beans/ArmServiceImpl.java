@@ -499,6 +499,10 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
                         if (sortableValue != null) {
                             column.setSortable((Boolean) sortableValue);
                         }
+						Object isCounter = columnProps.get(PROP_COLUMN_IS_COUNTER);
+						if (isCounter != null) {
+							column.setCounter((Boolean) isCounter);
+						}
                         column.setByDefault(true);
 
                         /*Маркер*/
@@ -553,6 +557,10 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
                         if (sortableValue != null) {
                             column.setSortable((Boolean) sortableValue);
                         }
+						Object isCounter = columnProps.get(PROP_COLUMN_IS_COUNTER);
+						if (isCounter != null) {
+							column.setCounter((Boolean) isCounter);
+						}
                         Object byDefaultValue = columnProps.get(PROP_COLUMN_BY_DEFAULT);
                         if (byDefaultValue != null) {
                             column.setByDefault((Boolean) byDefaultValue);

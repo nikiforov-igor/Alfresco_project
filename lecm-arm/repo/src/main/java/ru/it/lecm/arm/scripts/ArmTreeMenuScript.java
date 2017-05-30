@@ -57,7 +57,6 @@ public class ArmTreeMenuScript extends AbstractWebScript {
     private static final String COUNTER_LIMIT = "counterLimit";
     private static final String COUNTER_DESC = "counterDesc";
     private static final String SEARCH_TYPE = "searchType";
-    private static final String COUNTER_FIELD_PREFIX = "counter_";
 
 	public static final String CREATE_TYPES = "createTypes";
 	public static final String HTML_URL = "htmlUrl";
@@ -244,11 +243,10 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 					String formsName = "";
 					String dataType = "";
 
-					if (fieldName.startsWith(COUNTER_FIELD_PREFIX)) 
+					if (column.isCounter()) 
 					{
 						type = "counter";
 						formsName = fieldName;
-						dataType = "d:text";
 					} else 
 											{
 						QName fieldQName = QName.createQName(fieldName, namespaceService);

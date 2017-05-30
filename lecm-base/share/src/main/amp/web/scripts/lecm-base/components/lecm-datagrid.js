@@ -657,7 +657,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 					var searchQuery = scope.datagridColumns[oColumn.key]?scope.datagridColumns[oColumn.key].nameSubstituteString:'';
 					if (oRecord){
 						var data = oRecord.getData();
-						if (data) {
+						if (searchQuery && data) {
 							searchQuery = searchQuery.replace(/#nodeRef/g, data.nodeRef);
 						}
 					}
