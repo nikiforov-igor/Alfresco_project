@@ -58,65 +58,65 @@ public class ArmTreeMenuScript extends AbstractWebScript {
     private static final String COUNTER_DESC = "counterDesc";
     private static final String SEARCH_TYPE = "searchType";
 
-    public static final String CREATE_TYPES = "createTypes";
-    public static final String HTML_URL = "htmlUrl";
-    public static final String REPORT_CODES = "reportCodes";
+	public static final String CREATE_TYPES = "createTypes";
+	public static final String HTML_URL = "htmlUrl";
+	public static final String REPORT_CODES = "reportCodes";
 
     public static final String RUN_AS = "runAs";
 
     private ArmWrapperServiceImpl service;
-    private DictionaryService dictionaryService;
-    private NamespaceService namespaceService;
-    private StateMachineServiceBean stateMachineService;
-    private DocumentService documentService;
+	private DictionaryService dictionaryService;
+	private NamespaceService namespaceService;
+	private StateMachineServiceBean stateMachineService;
+	private DocumentService documentService;
     private LecmTransactionHelper lecmTransactionHelper;
-    private TransactionService transtactionService;
+	private TransactionService transtactionService;
     private ArmServiceImpl armService;
-    private DocumentTemplateService documentTemplateService;
-    private NodeService nodeService;
+	private DocumentTemplateService documentTemplateService;
+	private NodeService nodeService;
     private ValueEvaluatorsManager valueEvaluatorsManager;
 
     public void setArmService(ArmServiceImpl armService) {
         this.armService = armService;
     }
 
-    public void setLecmTransactionHelper(LecmTransactionHelper lecmTransactionHelper) {
-        this.lecmTransactionHelper = lecmTransactionHelper;
-    }
+        public void setLecmTransactionHelper(LecmTransactionHelper lecmTransactionHelper) {
+            this.lecmTransactionHelper = lecmTransactionHelper;
+        }
 
-    public void setTranstactionService(TransactionService transtactionService) {
-        this.transtactionService = transtactionService;
-    }
+	public void setTranstactionService(TransactionService transtactionService) {
+		this.transtactionService = transtactionService;
+	}
 
     public void setService(ArmWrapperServiceImpl service) {
         this.service = service;
     }
 
-    public void setDictionaryService(DictionaryService dictionaryService) {
-        this.dictionaryService = dictionaryService;
-    }
+	public void setDictionaryService(DictionaryService dictionaryService) {
+		this.dictionaryService = dictionaryService;
+	}
 
-    public void setNamespaceService(NamespaceService namespaceService) {
-        this.namespaceService = namespaceService;
-    }
+	public void setNamespaceService(NamespaceService namespaceService) {
+		this.namespaceService = namespaceService;
+	}
 
-    public void setStateMachineService(StateMachineServiceBean stateMachineService) {
-        this.stateMachineService = stateMachineService;
-    }
+	public void setStateMachineService(StateMachineServiceBean stateMachineService) {
+		this.stateMachineService = stateMachineService;
+	}
 
-    public void setDocumentService(DocumentService documentService) {
-        this.documentService = documentService;
-    }
+	public void setDocumentService(DocumentService documentService) {
+		this.documentService = documentService;
+	}
 
-    public void setDocumentTemplateService(DocumentTemplateService documentTemplateService) {
-        this.documentTemplateService = documentTemplateService;
-    }
+	public void setDocumentTemplateService(DocumentTemplateService documentTemplateService) {
+		this.documentTemplateService = documentTemplateService;
+	}
 
-    public void setNodeService(NodeService nodeService) {
-        this.nodeService = nodeService;
-    }
+	public void setNodeService(NodeService nodeService) {
+		this.nodeService = nodeService;
+	}
 
-    @Override
+	@Override
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         List<JSONObject> nodes = new ArrayList<JSONObject>();
 
@@ -127,7 +127,7 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 
         if (nodeRef == null) { // получаем список корневых узлов - аккордеонов для заданного АРМ
             List<ArmNode> accordions = service.getAccordionsByArmCode(armCode);
-            Map<String, Boolean> isStarterHash = new HashMap<String, Boolean>();
+	        Map<String, Boolean> isStarterHash = new HashMap<String, Boolean>();
             for (ArmNode accordion : accordions) {
                 nodes.add(toJSON(accordion, true, isStarterHash, null));
             }
@@ -155,19 +155,19 @@ public class ArmTreeMenuScript extends AbstractWebScript {
             String nodeId = (node.getNodeRef() != null ?
                     node.getNodeRef().getId() :
                     (node.getArmNodeRef() != null ?
-                            node.getArmNodeRef().getId() + "-" + node.getTitle() :
+                            node.getArmNodeRef().getId() + "-" + node.getTitle():
                             node.getTitle()));
             if (node.getRunAsEmployee() == null && (runAs == null || runAs.isEmpty())) {
                 result.put(ID, nodeId);
             } else {
                 String employeeId =
-                        node.getRunAsEmployee() != null ?
-                                node.getRunAsEmployee().getId() :
+                        node.getRunAsEmployee()!= null ?
+                                node.getRunAsEmployee().getId()  :
                                 (NodeRef.isNodeRef(runAs) ? new NodeRef(runAs).getId() : runAs);
                 result.put(ID, nodeId + "-" + employeeId);
             }
             result.put(NODE_REF, node.getNodeRef() != null ? node.getNodeRef().toString() : null);
-            result.put(NODE_TYPE, node.getNodeType() != null ? node.getNodeType() : null);
+	        result.put(NODE_TYPE, node.getNodeType() != null ? node.getNodeType() : null);
 
             if (node.getArmNodeRef() != null) {
                 result.put(ARM_NODE_REF, node.getArmNodeRef().toString());
@@ -192,8 +192,8 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 
             if (node.getSearchQuery() != null) {
                 String query = node.getSearchQuery();
-                if (node.getRunAsEmployee() != null || (runAs != null && !runAs.isEmpty())) {
-                    String employeeRef = node.getRunAsEmployee() != null ? node.getRunAsEmployee().toString() : runAs;
+                if (node.getRunAsEmployee()!= null || (runAs != null && !runAs.isEmpty())) {
+                    String employeeRef = node.getRunAsEmployee()!= null ? node.getRunAsEmployee().toString()  : runAs;
                     if (query.contains("#boss-ref")) {
                         query = query.replaceAll("#boss-ref", employeeRef);
                     }
@@ -206,12 +206,12 @@ public class ArmTreeMenuScript extends AbstractWebScript {
                 result.put(COUNTER_DESC, node.getCounter().getDescription());
                 result.put(COUNTER_LIMIT, node.getCounter().getQuery());
             }
-            if (isAccordionNode) {
-                result.put(CREATE_TYPES, getCreateTypes(node, isStarterHash));
-            }
-            result.put(HTML_URL, node.getHtmlUrl());
-            result.put(REPORT_CODES, node.getReportCodes());
-            result.put(SEARCH_TYPE, node.getSearchType());
+	        if (isAccordionNode) {
+		        result.put(CREATE_TYPES, getCreateTypes(node, isStarterHash));
+	        }
+	        result.put(HTML_URL,node.getHtmlUrl());
+	        result.put(REPORT_CODES,node.getReportCodes());
+	        result.put(SEARCH_TYPE,node.getSearchType());
 
             result.put(RUN_AS, node.getRunAsEmployee() != null ? node.getRunAsEmployee().toString() : runAs);
         } catch (JSONException e) {
@@ -231,66 +231,66 @@ public class ArmTreeMenuScript extends AbstractWebScript {
         return result.toString();
     }
 
-    private JSONArray getColumnsJSON(List<ArmColumn> columns) throws JSONException {
-        JSONArray results = new JSONArray();
-        if (columns != null) {
-            for (ArmColumn column : columns) {
-                String fieldName = column.getField();
-                if (fieldName != null) {
-                    JSONObject columnJSON = new JSONObject();
+	private JSONArray getColumnsJSON(List<ArmColumn> columns) throws JSONException {
+		JSONArray results = new JSONArray();
+		if (columns != null) {
+			for (ArmColumn column: columns) {
+				String fieldName = column.getField();
+				if (fieldName != null) {
+					JSONObject columnJSON = new JSONObject();
 
-                    String type = "";
-                    String formsName;
-                    String dataType = "";
+					String type = "";
+					String formsName;
+					String dataType = "";
 
-                    if (column.isCounter()) {
-                        type = "counter";
-                        formsName = fieldName;
-                    } else {
-                        QName fieldQName = QName.createQName(fieldName, namespaceService);
-                        PropertyDefinition prop = dictionaryService.getProperty(fieldQName);
-                        if (prop != null) {
-                            type = "property";
-                            formsName = "prop_" + fieldName.replace(":", "_");
-                            dataType = prop.getDataType().getName().getLocalName();
-                        } else {
-                            AssociationDefinition assoc = dictionaryService.getAssociation(fieldQName);
-                            if (assoc != null) {
-                                type = "association";
-                                formsName = "assoc_" + fieldName.replace(":", "_");
-                                dataType = assoc.getTargetClass().getName().toPrefixString(namespaceService);
-                            } else {
-                                formsName = "prop_" + fieldName.replace(":", "_");
-                            }
-                        }
+					if (column.isCounter()) {
+						type = "counter";
+						formsName = fieldName;
+					} else {
+						QName fieldQName = QName.createQName(fieldName, namespaceService);
+						PropertyDefinition prop = dictionaryService.getProperty(fieldQName);
+						if (prop != null) {
+							type = "property";
+							formsName = "prop_" + fieldName.replace(":", "_");
+							dataType = prop.getDataType().getName().getLocalName();
+						} else {
+							AssociationDefinition assoc = dictionaryService.getAssociation(fieldQName);
+							if (assoc != null) {
+								type = "association";
+								formsName = "assoc_" + fieldName.replace(":", "_");
+								dataType = assoc.getTargetClass().getName().toPrefixString(namespaceService);
+							} else {
+								formsName = "prop_" + fieldName.replace(":", "_");
+							}
+						}
 
-                    }
-                    columnJSON.put("id", column.getId());
-                    columnJSON.put("type", type);
-                    columnJSON.put("name", fieldName);
-                    columnJSON.put("formsName", formsName);
-                    columnJSON.put("label", column.getTitle());
-                    columnJSON.put("nameSubstituteString", column.getFormatString());
-                    columnJSON.put("dataType", dataType);
-                    columnJSON.put("sortable", column.isSortable());
-                    columnJSON.put("isMarker", column.isMarker());
-                    columnJSON.put("markerIcon", column.getMarkerIcon());
-                    columnJSON.put("markerHTML", URLEncoder.encodeUriComponent(column.getMarkerHTML()));
+					}
+					columnJSON.put("id", column.getId());
+					columnJSON.put("type", type);
+					columnJSON.put("name", fieldName);
+					columnJSON.put("formsName", formsName);
+					columnJSON.put("label", column.getTitle());
+					columnJSON.put("nameSubstituteString", column.getFormatString());
+					columnJSON.put("dataType", dataType);
+					columnJSON.put("sortable", column.isSortable());
+					columnJSON.put("isMarker", column.isMarker());
+					columnJSON.put("markerIcon", column.getMarkerIcon());
+					columnJSON.put("markerHTML", URLEncoder.encodeUriComponent(column.getMarkerHTML()));
 
-                    results.put(columnJSON);
-                }
-            }
-        }
-        return results;
-    }
+					results.put(columnJSON);
+				}
+			}
+		}
+		return results;
+	}
 
-    private JSONArray getCreateTypes(ArmNode node, Map<String, Boolean> isStarterHash) throws JSONException {
-        List<JSONObject> results = new ArrayList<>();
-        List<String> allTypes = node.getCreateTypes();
-        if (allTypes != null) {
-            for (String type : allTypes) {
-                final QName typeQName = QName.createQName(type, namespaceService);
-                TypeDefinition typeDefinition = dictionaryService.getType(typeQName);
+	private JSONArray getCreateTypes(ArmNode node, Map<String, Boolean> isStarterHash) throws JSONException {
+		List<JSONObject> results = new ArrayList<>();
+		List<String> allTypes = node.getCreateTypes();
+		if (allTypes != null) {
+			for (String type : allTypes) {
+				final QName typeQName = QName.createQName(type, namespaceService);
+				TypeDefinition typeDefinition = dictionaryService.getType(typeQName);
                 boolean notArmCreate = false;
                 try {
                     notArmCreate = stateMachineService.isNotArmCreate(type);
@@ -298,11 +298,11 @@ public class ArmTreeMenuScript extends AbstractWebScript {
                     //игнорируем любые ошибки внутри машины состояний
                 }
                 if (typeDefinition != null && !notArmCreate) {
-                    try {
-                        boolean isStarter;
-                        if (isStarterHash.containsKey(type)) {
-                            isStarter = isStarterHash.get(type);
-                        } else {
+					try {
+						boolean isStarter;
+						if (isStarterHash.containsKey(type)) {
+							isStarter = isStarterHash.get(type);
+						} else {
                             isStarter = false;
                             try {
                                 isStarter = stateMachineService.isStarter(type);
@@ -310,63 +310,62 @@ public class ArmTreeMenuScript extends AbstractWebScript {
                                 //игнорируем любые ошибки внутри машины состояний, строчка станет неактивной
                             }
                             isStarterHash.put(type, isStarter);
-                        }
-                        JSONObject json = new JSONObject();
-                        json.put("type", type);
-                        json.put("disabled", !isStarter);
-                        json.put("label", typeDefinition.getTitle(dictionaryService));
+						}
+						JSONObject json = new JSONObject();
+						json.put("type", type);
+						json.put("disabled", !isStarter);
+						json.put("label", typeDefinition.getTitle(dictionaryService));
                         json.put("page", documentService.getCreateUrl(typeQName));
-                        json.put("templates", getTemplates(type));
+						json.put("templates", getTemplates(type));
 
                         results.add(json);
-                    } catch (Exception ex) {
-                        logger.error(ex.getMessage(), ex);
-                    }
-                }
-            }
-        }
-        Collections.sort(results, new Comparator<JSONObject>() {
-            @Override
-            public int compare(JSONObject a, JSONObject b) {
-                String valA = "";
-                String valB = "";
+					} catch (Exception ex) {
+						logger.error(ex.getMessage(), ex);
+					}
+				}
+			}
+		}
+		Collections.sort(results, new Comparator<JSONObject>() {
+			@Override
+			public int compare(JSONObject a, JSONObject b) {
+				String valA = "";
+				String valB = "";
 
-                try {
-                    valA = (String) a.get("label");
-                    valB = (String) b.get("label");
-                } catch (JSONException e) {
-                    logger.error("JSONException in combineJSONArrays sort section", e);
-                }
+				try {
+					valA = (String) a.get("label");
+					valB = (String) b.get("label");
+				} catch (JSONException e) {
+					logger.error("JSONException in combineJSONArrays sort section", e);
+				}
 
-                return valA.compareTo(valB);
-            }
-        });
-        return new JSONArray(results);
-    }
+				return valA.compareTo(valB);
+			}
+		});
+		return new JSONArray(results);
+	}
 
-    private JSONArray getTemplates(String type) throws JSONException {
-        List<NodeRef> templateRefs = documentTemplateService.getDocumentTemplatesForType(type);
-        JSONArray templates = new JSONArray();
-        for (NodeRef templateRef : templateRefs) {
-            Map<QName, Serializable> props = nodeService.getProperties(templateRef);
-            String name = (String) props.get(ContentModel.PROP_TITLE);
-            JSONArray attributes = new JSONArray((String) props.get(DocumentTemplateModel.PROP_DOCUMENT_TEMPLATE_ATTRIBUTES));
+	private JSONArray getTemplates(String type) throws JSONException {
+		List<NodeRef> templateRefs = documentTemplateService.getDocumentTemplatesForType(type);
+		JSONArray templates = new JSONArray();
+		for (NodeRef templateRef : templateRefs) {
+			Map<QName, Serializable> props = nodeService.getProperties(templateRef);
+			String name = (String)props.get(ContentModel.PROP_TITLE);
+			JSONArray attributes = new JSONArray((String)props.get(DocumentTemplateModel.PROP_DOCUMENT_TEMPLATE_ATTRIBUTES));
             for (int i = 0; i < attributes.length(); i++) {
                 JSONObject attrConfig = attributes.getJSONObject(i).getJSONObject("initial");
                 try {
                     JSONObject attrValue = new JSONObject(attrConfig.getString("value"));
                     attrConfig.put("value", valueEvaluatorsManager.evaluate(attrValue));
-                } catch (JSONException ignored) {
-                }
+                } catch (JSONException ignored) {}
             }
-            JSONObject template = new JSONObject();
-            template.put("name", name);
+			JSONObject template = new JSONObject();
+			template.put("name", name);
             template.put("ref", templateRef.toString());
-            template.put("attributes", attributes);
-            templates.put(template);
-        }
-        return templates;
-    }
+			template.put("attributes", attributes);
+			templates.put(template);
+		}
+		return templates;
+	}
 
     private JSONArray getFiltersJSON(List<ArmFilter> filters) throws JSONException {
         JSONArray results = new JSONArray();
