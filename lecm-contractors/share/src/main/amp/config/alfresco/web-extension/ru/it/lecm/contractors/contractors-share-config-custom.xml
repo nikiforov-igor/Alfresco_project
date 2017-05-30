@@ -429,7 +429,7 @@
                     <field id="lecm-representative:computed-representative-fullname"
                            substituteString="{lecm-contractor:contractor-to-link-association(lecm-contractor:link-to-representative-association-is-primary=true)/lecm-contractor:link-to-representative-association/lecm-representative:surname} {lecm-contractor:contractor-to-link-association(lecm-contractor:link-to-representative-association-is-primary=true)/lecm-contractor:link-to-representative-association/lecm-representative:firstname}"></field>
                     <field id="deletable"
-                           substituteString="{@!hasAspect('lecm-orgstr-aspects:is-organization-aspect')}"></field>
+                           substituteString="{@!doc.hasAspect('lecm-orgstr-aspects:is-organization-aspect')}"></field>
                 </appearance>
             </form>
 
@@ -596,7 +596,8 @@
                     <show id="lecm-contractor:contractor-to-link-association"/>
                     <!-- FK Адресант (через ссылку) -->
                     <show id="lecm-contractor:interaction-type"/>
-                    <show id="hasOrganization"/>
+                    <show id="lecm-base-dummy-aspects:script2" force="true"/>
+                    <!-- Наша собственная организация -->
                 </field-visibility>
 
                 <appearance>
@@ -672,10 +673,10 @@
                         <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
                     </field>
 
-                    <field id="hasOrganization" set="contacts" label-id="label.our_organization">
+                    <field id="lecm-base-dummy-aspects:script2" set="contacts" label-id="label.our_organization">
                         <control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
                             <control-param name="formatString">
-                                {@hasAspect('lecm-orgstr-aspects:is-organization-aspect')}
+                                {@doc.hasAspect('lecm-orgstr-aspects:is-organization-aspect')}
                             </control-param>
                         </control>
                     </field>
