@@ -53,6 +53,11 @@ public class LecmURLServiceImpl implements LecmURLService, InitializingBean {
     }
 
     @Override
+    public String getServerShareUrl() {
+        return UrlUtil.getShareUrl(adminParams);
+    }
+
+    @Override
     public void afterPropertiesSet() throws Exception {
         String PAGE_PREFIX = "/page/";
         linkURL = PAGE_PREFIX + this.globalProperties.getProperty("lecm.page.view-metadata", "view-metadata");

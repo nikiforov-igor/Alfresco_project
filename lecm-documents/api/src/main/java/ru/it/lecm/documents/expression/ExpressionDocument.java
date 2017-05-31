@@ -164,8 +164,6 @@ public class ExpressionDocument extends ExpressionNode {
             for (int i = 0; i < searchFields.length(); i++) {
                 JSONObject searchField = searchFields.getJSONObject(i);
                 String propName = searchField.getString("name");
-                boolean searchByPartMatches = searchField.has("searchByPart") && searchField.getBoolean("searchByPart");
-
                 Serializable propValue = nodeService.getProperty(this.nodeRef, QName.createQName(propName, serviceRegistry.getNamespaceService()));
                 if (propValue == null || "".equals(propValue)) {
                     return false;
@@ -179,7 +177,9 @@ public class ExpressionDocument extends ExpressionNode {
                 if (propValue instanceof Date) {
                     value = YYYY_MM_DD.format(propValue);
                 }
+                value = value.replace("\\", "\\\\").replace("*", "\\\\*").replace("?", "\\\\?").replace("_", "\\_");
 
+                boolean searchByPartMatches = searchField.has("searchByPart") && searchField.getBoolean("searchByPart");
                 filters.append(searchByPartMatches ? "" : "=").append("@").append(propName.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-"))
                         .append(":\"").append(value).append("\"");
             }
