@@ -14,6 +14,9 @@
  * @param json
  * @param template
  * @param AlfMenuItem
+ * @param event
+ * @param array
+ * @param touch
  * @author LogicECM
  */
 define(['dojo/_base/declare',
@@ -26,9 +29,12 @@ define(['dojo/_base/declare',
 	'dojo/request/xhr',
 	'dojo/json',
 	'dojo/text!./templates/NotificationsPopupItem.html',
-	'alfresco/header/AlfMenuItem'
+	'alfresco/header/AlfMenuItem',
+	'dojo/_base/event',
+	'dojo/_base/array',
+	'dojo/touch'
 ],
-	function (declare, lang, domAttr, domClass, domConstruct, html, on, xhr, json, template, AlfMenuItem) {
+	function (declare, lang, domAttr, domClass, domConstruct, html, on, xhr, json, template, AlfMenuItem, event, array, touch) {
 
 		return declare([AlfMenuItem], {
 
@@ -75,6 +81,77 @@ define(['dojo/_base/declare',
 				domConstruct.place(Alfresco.util.relativeTime(new Date(this.params.item.formingDate)), this.notificationNode, 'last');
 				this._toggleRead(this.params.item.isRead === 'true');
 				on(this.domNode, 'a:click', lang.hitch(this, this._onHrefClick));
+
+				domAttr.set(this._enableNotifications, 'title', this.message("message.notifications.subscribe.title"));
+				on(this._enableNotifications, 'i:click', lang.hitch(this, this._onEnableClick));
+
+				domAttr.set(this._disableNotifications, 'title', this.message("message.notifications.unsubscribe.title"));
+				on(this._disableNotifications, 'i:click', lang.hitch(this, this._onDisableClick));
+
+				this._changeButtonStatus(this, this.params.item.isEnabled);/*default state*/
+				domClass.add(this.notificationActions, "hidden");
+
+				on(this.domNode, touch.enter, function (evt) {
+					domClass.remove(this.notificationActions, "hidden");
+				}.bind(this));
+				on(this.domNode, touch.leave, function (evt) {
+					domClass.add(this.notificationActions, "hidden");
+				}.bind(this));
+			},
+
+			_onEnableClick: function(evt) {
+				event.stop(evt);
+
+				xhr.post(Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/notifications/template/subscribe', {
+					handleAs: 'json',
+					headers: {'Content-Type': 'application/json'},
+					data: json.stringify({
+						template: this.params.item.template
+					})
+				}).then(lang.hitch(this, function(success) {
+					this.updateOnSuccess(true);
+				}), lang.hitch(this, function(failure) {
+					Alfresco.util.PopupManager.displayMessage({
+						text: this.message('message.notifications.subscribe.failure', this.params.item.template)
+					});
+				}));
+
+				return false;
+			},
+
+			_onDisableClick: function(evt) {
+				event.stop(evt);
+				xhr.post(Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/notifications/template/unsubscribe', {
+					handleAs: 'json',
+					headers: {'Content-Type': 'application/json'},
+					data: json.stringify({
+						template: this.params.item.template
+					})
+				}).then(lang.hitch(this, function(success) {
+					this.updateOnSuccess(false);
+				}), lang.hitch(this, function(failure) {
+					Alfresco.util.PopupManager.displayMessage({
+						text: this.message('message.notifications.unsubscribe.failure', this.params.item.template)
+					});
+				}));
+
+				return false;
+			},
+
+			updateOnSuccess: function (setEnabled) {
+				this.params.item.isEnabled = setEnabled;
+				this._changeButtonStatus(this, setEnabled);
+				array.forEach(this.params.notificationsPopup.rootWidget.getChildren(), function (notificationItem) {
+					if (notificationItem.params.item.template == this.params.item.template) {
+						this.params.item.isEnabled = setEnabled;
+						this._changeButtonStatus(notificationItem, setEnabled);
+					}
+				}, this);
+			},
+
+			_changeButtonStatus: function (item, isNotificationEnable) {
+				domClass.toggle(item._enableNotifications, "hidden", isNotificationEnable);
+				domClass.toggle(item._disableNotifications, "hidden", !isNotificationEnable);
 			},
 
 			//TODO: ctrl+click handler, open in new tab handler also should mark notification as read!
