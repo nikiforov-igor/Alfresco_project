@@ -11,6 +11,9 @@
             <td style="border: 1px solid #000; padding: 5px; text-align: justify;">${notificationText}</td>
         </tr>
     </table>
+    <div style="width: 95%">
+        <a style="float:right" href="#unsubscribeURL">Отключить отправку уведомлений данного типа</a>
+    </div>
 </div>
 </body>
 </html>

@@ -52,6 +52,11 @@ public class NotificationUnit {
 	 */
 	private String subject;
 
+	/**
+	 * Код шаблона уведомления
+	 */
+	private String template;
+
 	public NotificationUnit() {
 	}
 
@@ -123,6 +128,14 @@ public class NotificationUnit {
 		this.subject = subject;
 	}
 
+	public String getTemplate() {
+		return template;
+	}
+
+	public void setTemplate(String template) {
+		this.template = template;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -135,6 +148,7 @@ public class NotificationUnit {
 		if (formingDate != null ? !formingDate.equals(that.formingDate) : that.formingDate != null) return false;
 		if (recipientRef != null ? !recipientRef.equals(that.recipientRef) : that.recipientRef != null) return false;
 		if (typeRef != null ? !typeRef.equals(that.typeRef) : that.typeRef != null) return false;
+		if (template != null ? !template.equals(that.template) : that.template != null) return false;
 
 		return true;
 	}
@@ -146,6 +160,7 @@ public class NotificationUnit {
 		result = 31 * result + (formingDate != null ? formingDate.hashCode() : 0);
 		result = 31 * result + (typeRef != null ? typeRef.hashCode() : 0);
 		result = 31 * result + (recipientRef != null ? recipientRef.hashCode() : 0);
+		result = 31 * result + (template != null ? template.hashCode() : 0);
 		return result;
 	}
 }
