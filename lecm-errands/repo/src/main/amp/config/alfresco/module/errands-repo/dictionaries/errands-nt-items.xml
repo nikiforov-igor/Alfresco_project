@@ -406,7 +406,7 @@
             <item name="cm:ERRANDS_CHANGE_CONTROLLER" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ERRANDS_CHANGE_CONTROLLER]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} {#wrapTitle("изменил", #reason)} контролёра по поручению {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} на {#newController}.]]></property>
+                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} {#wrapTitle("изменил", #reason)} контролёра по поручению {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} на {#newController.wrapAsLink(#newController.attribute("lecm-orgstr:employee-short-name"))}.]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Смена контролера]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
