@@ -46,6 +46,14 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
         },
 		onNewRow: function(p_sType, p_aArgs, p_oItem) {
 			var attributes = p_oItem.attributes ? p_oItem.attributes : [];
+			if (this.currentNodeArgs.nodeType !== 'lecm-arm:node') {
+				attributes.push({
+					initial: {
+						formsName: "selectedArmTreeNode",
+						value: this.currentNodeArgs.nodeRef
+					}
+				});
+			}
 			var params = attributes.reduce(function(prev, curr) {
 				return YAHOO.lang.substitute('{prev}&{key}={value}', {
 					prev: prev,
