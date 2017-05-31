@@ -66,6 +66,23 @@
             }
         });
     }
+
+    /* Выставляем права на ответы */
+    var answersTable = document.assocs["lecm-internal-table-structure:answers-assoc"][0];
+    var answers = answersTable.getChildren();
+    for each (var answer in answers) {
+        var employee = answer.assocs["lecm-internal-table-structure:employee-assoc"][0];
+        var unit = orgstructure.getPrimaryOrgUnit(employee);
+        if (primaryUnit != null) {
+            var initiatorAuthority = orgstructure.getOrgstructureUnitAuthority(primaryUnit, false); 
+            answer.setPermission("LECM_BASIC_PG_Reader", initiatorAuthority);
+        }
+        if (unit != null) {
+            var recipientAuthority = orgstructure.getOrgstructureUnitAuthority(unit, false);
+            answer.setPermission("LECM_BASIC_PG_Reader", recipientAuthority);
+        }
+    }
+
     var signerAssoc = document.assocs["lecmSignAspects:signerEmployeeAssoc"];
     if (signerAssoc) {
         notificationRecipients.push(signerAssoc[0]);
@@ -111,26 +128,11 @@
     }
 
     operativeStorage.moveToNomenclatureCase(document, units);
-    statemachine.executeTransitionAction(document, 'Завершение работы');
 
     var logText = "#initiator " + documentScript.wrapperTitle("завершил", completionReason) + " работу по документу " + documentScript.wrapperDocumentLink(document, "{lecm-document:present-string}");
     businessJournal.log(document.nodeRef.toString(), "EXECUTE_DOCUMENT", substitude.formatNodeTitle(document.nodeRef.toString(), logText), []);
 
-    /* Выставляем права на ответы */
-    var answersTable = document.assocs["lecm-internal-table-structure:answers-assoc"][0];
-    var answers = answersTable.getChildren();
-    for each (var answer in answers) {
-        var employee = answer.assocs["lecm-internal-table-structure:employee-assoc"][0];
-        var unit = orgstructure.getPrimaryOrgUnit(employee);
-        if (primaryUnit != null) {
-            var initiatorAuthority = orgstructure.getOrgstructureUnitAuthority(primaryUnit, false); 
-            answer.setPermission("LECM_BASIC_PG_Reader", initiatorAuthority);
-        }
-        if (unit != null) {
-            var recipientAuthority = orgstructure.getOrgstructureUnitAuthority(unit, false);
-            answer.setPermission("LECM_BASIC_PG_Reader", recipientAuthority);
-        }
-    }
+    statemachine.executeTransitionAction(document, 'Завершение работы');
 })();]]></property>
         <property name="lecm-group-actions:order"><![CDATA[0]]></property>
         <property name="cm:title"><![CDATA[Завершить работу]]></property>
