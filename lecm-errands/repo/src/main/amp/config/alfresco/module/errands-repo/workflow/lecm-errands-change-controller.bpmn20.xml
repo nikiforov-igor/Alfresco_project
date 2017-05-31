@@ -10,7 +10,7 @@
             <extensionElements>
                 <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
                     <activiti:field name="script">
-                        <activiti:string>
+                        <activiti:string><![CDATA[
                             var document = bpm_package.children[0];
                             if (document) {
                                 if (lecmErrandWf_changeControllerNewController != null) {
@@ -26,7 +26,7 @@
 			                        var recipients = [];
                                     var controller = null;
 			                        var controllerAssoc = document.assocs["lecm-errands:controller-assoc"];
-			                        if (controllerAssoc &amp;&amp; controllerAssoc.length == 1) {
+			                        if (controllerAssoc && controllerAssoc.length == 1) {
                                         controller = controllerAssoc[0];
                                         recipients.push(controller);
                                         members.push(controller);
@@ -34,16 +34,16 @@
                                     members.push(lecmErrandWf_changeControllerNewController);
 
                                     var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
-                                    if (executorAssoc &amp;&amp; executorAssoc.length) {
+                                    if (executorAssoc && executorAssoc.length) {
                                         recipients.push(executorAssoc[0]);
                                     }
                                     var coexecutorsAssocs = document.assocs["lecm-errands:coexecutors-assoc"];
-                                    if (coexecutorsAssocs &amp;&amp; coexecutorsAssocs.length) {
+                                    if (coexecutorsAssocs && coexecutorsAssocs.length) {
                                         for (var i = 0; i != coexecutorsAssocs.length; i++) {
                                             recipients.push(coexecutorsAssocs[i]);
                                         }
                                     }
-                                    if (recipients &amp;&amp; recipients.length) {
+                                    if (recipients && recipients.length) {
                                         notifications.sendNotificationFromCurrentUser({
                                             recipients: recipients,
                                             templateCode: 'ERRANDS_CHANGE_CONTROLLER',
@@ -69,7 +69,7 @@
 
                                     var baseDocumentAssoc = document.assocs["lecm-errands:base-assoc"];
                                         transferRights = document.properties["lecm-errands:settings-transfer-rights"];
-                                    if (baseDocumentAssoc &amp;&amp; transferRights) {
+                                    if (baseDocumentAssoc && transferRights) {
                                         documentMembers.addMemberWithoutCheckPermission(baseDocumentAssoc[0], lecmErrandWf_changeControllerNewController, "LECM_BASIC_PG_Reader", true);
                                     }
 
@@ -84,7 +84,7 @@
 
                                     var newController = null;
                                     var newControllerAssoc = document.assocs["lecm-errands:controller-assoc"];
-                                    if (newControllerAssoc &amp;&amp; newControllerAssoc.length == 1) {
+                                    if (newControllerAssoc && newControllerAssoc.length == 1) {
                                         newController = newControllerAssoc[0];
                                     }
 
@@ -98,7 +98,7 @@
                                         dontCheckAccessToObject: true
                                     });
                                 }
-                            }
+                            }]]>
                         </activiti:string>
                     </activiti:field>
                 </activiti:executionListener>
