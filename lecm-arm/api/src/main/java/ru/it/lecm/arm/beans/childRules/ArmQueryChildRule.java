@@ -54,7 +54,7 @@ public class ArmQueryChildRule extends ArmBaseChildRule {
             try {
                 results = searchService.query(sp);
                 for (ResultSetRow row : results) {
-                    ArmNode rowNode = service.wrapAnyNodeAsObject(row.getNodeRef(), node);
+                    ArmNode rowNode = service.wrapAnyNodeAsObject(row.getNodeRef(), node, getSubstituteString());
                     nodes.add(rowNode);
                 }
             } finally {

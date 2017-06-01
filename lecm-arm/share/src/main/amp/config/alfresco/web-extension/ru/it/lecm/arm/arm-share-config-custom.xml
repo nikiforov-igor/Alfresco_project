@@ -515,7 +515,16 @@
 			<form>
 				<field-visibility>
 					<show id="lecm-arm:list-query-child-rule" force="true"/>
+					<show id="lecm-arm:child-rule-substitute-string" force="true"/>
 				</field-visibility>
+				<appearance>
+					<field id="lecm-arm:list-query-child-rule">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+							<control-param name="rows">6</control-param>
+						</control>
+					</field>
+					<field id="lecm-arm:child-rule-substitute-string"></field>
+				</appearance>
 			</form>
 		</forms>
 	</config>
@@ -525,7 +534,17 @@
 			<form>
 				<field-visibility>
 					<show id="lecm-arm:list-query-child-rule" force="true"/>
+					<show id="lecm-arm:child-rule-substitute-string" force="true"/>
 				</field-visibility>
+				<appearance>
+					<field id="lecm-arm:list-query-child-rule">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+							<control-param name="rows">6</control-param>
+						</control>
+					</field>
+					<field id="lecm-arm:child-rule-substitute-string">
+					</field>
+				</appearance>
 			</form>
 		</forms>
 	</config>
@@ -535,6 +554,7 @@
 			<form>
 				<field-visibility>
 					<show id="lecm-arm:child-rule-dictionary-assoc" force="true"/>
+					<show id="lecm-arm:child-rule-substitute-string" force="true"/>
 				</field-visibility>
 			</form>
 		</forms>
@@ -545,6 +565,7 @@
 			<form>
 				<field-visibility>
 					<show id="lecm-arm:child-rule-dictionary-assoc" force="true"/>
+					<show id="lecm-arm:child-rule-substitute-string" force="true"/>
 				</field-visibility>
 			</form>
 		</forms>
@@ -605,6 +626,7 @@
 					<show id="lecm-arm:xpath-child-rule-root-xpath" force="true"/>
 					<show id="lecm-arm:xpath-child-rule-types" force="true"/>
 					<show id="lecm-arm:xpath-child-rule-filter" force="true"/>
+					<show id="lecm-arm:child-rule-substitute-string" force="true"/>
 				</field-visibility>
 			</form>
 		</forms>
@@ -617,6 +639,7 @@
 					<show id="lecm-arm:xpath-child-rule-root-xpath" force="true"/>
 					<show id="lecm-arm:xpath-child-rule-types" force="true"/>
 					<show id="lecm-arm:xpath-child-rule-filter" force="true"/>
+					<show id="lecm-arm:child-rule-substitute-string" force="true"/>
 				</field-visibility>
 			</form>
 		</forms>
@@ -627,6 +650,7 @@
 			<form>
 				<field-visibility>
 					<show id="lecm-arm:script-child-rule-root" force="true"/>
+					<show id="lecm-arm:child-rule-substitute-string" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-arm:script-child-rule-root">
@@ -634,6 +658,7 @@
 							<control-param name="rows">30</control-param>
 						</control>
 					</field>
+					<field id="lecm-arm:child-rule-substitute-string"/>
 				</appearance>
 			</form>
 		</forms>
@@ -644,6 +669,7 @@
 			<form>
 				<field-visibility>
 					<show id="lecm-arm:script-child-rule-root" force="true"/>
+					<show id="lecm-arm:child-rule-substitute-string" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-arm:script-child-rule-root">
@@ -651,6 +677,7 @@
 							<control-param name="rows">30</control-param>
 						</control>
 					</field>
+					<field id="lecm-arm:child-rule-substitute-string"/>
 				</appearance>
 			</form>
 		</forms>

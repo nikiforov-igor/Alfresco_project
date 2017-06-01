@@ -15,10 +15,14 @@ LogicECM.module = LogicECM.module || {};
             base: null,
             added: null
         };
+        this.selectedItems = {};
+
         return this;
     };
 
     YAHOO.extend(LogicECM.module.HiddenAssociationControl, Alfresco.component.Base, {
+
+        selectedItems: null,
 
         options: {
             valueSetFireAction: null,
@@ -34,6 +38,7 @@ LogicECM.module = LogicECM.module || {};
             } else if (this.options.defaultValue) {
                 this.addNodeRef(this.options.defaultValue)
             }
+            this.loadSelectedItems();
         },
         addNodeRef: function (nodeRef) {
             this.fields.base.setAttribute("value", nodeRef);
@@ -66,6 +71,55 @@ LogicECM.module = LogicECM.module || {};
                     },
                     failureMessage: this.msg("message.details.failure")
                 });
+        },
+
+        loadSelectedItems: function () {
+
+            var arrItems = "",
+                value = this.fields.base.value;
+
+            if (this.fields.base.value) {
+                arrItems = value;
+            }
+
+            var onSuccess = function (response) {
+                var items = response.json.data.items;
+                this.selectedItems = {};
+
+                items.forEach (function(item) {
+                    this.selectedItems[item.nodeRef] = item;
+                }, this);
+            };
+
+            var onFailure = function (response) {
+                this.selectedItems = {};
+            };
+
+            if (arrItems) {
+
+                var items = arrItems.indexOf(",") > 0 ? arrItems.split(",") : arrItems.split(";");
+
+                Alfresco.util.Ajax.jsonRequest(
+                    {
+                        url: Alfresco.constants.PROXY_URI + "lecm/forms/picker/items",
+                        method: "POST",
+                        dataObj:
+                            {
+                                items: items,
+                                itemValueType: "nodeRef"
+                            },
+                        successCallback:
+                            {
+                                fn: onSuccess,
+                                scope: this
+                            },
+                        failureCallback:
+                            {
+                                fn: onFailure,
+                                scope: this
+                            }
+                    });
+            }
         }
     }, true);
 })();

@@ -121,7 +121,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
             List<NodeRef> children = parent.getNodeQuery().getChildren(node);
             if (children != null) {
                 for (NodeRef dicChild : children) {
-                    result.add(wrapAnyNodeAsObject(dicChild, parent, onlyMeta));
+                    result.add(wrapAnyNodeAsObject(dicChild, parent, parent.getNodeQuery().getSubstituteString(), onlyMeta));
                 }
 
                 Collections.sort(result, new Comparator<ArmNode>() {
@@ -243,13 +243,26 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
 
     @Override
     public ArmNode wrapAnyNodeAsObject(NodeRef nodeRef, ArmNode parentNode) {
-        return wrapAnyNodeAsObject(nodeRef, parentNode, false);
+        return wrapAnyNodeAsObject(nodeRef, parentNode, null);
     }
 
+	@Override
+	public ArmNode wrapAnyNodeAsObject(NodeRef node, ArmNode parent, String substituteString) {
+		return wrapAnyNodeAsObject(node, parent, substituteString, false);
+	}
+
     @Override
-    public ArmNode wrapAnyNodeAsObject(NodeRef nodeRef, ArmNode parentNode, boolean onlyMeta) {
+    public ArmNode wrapAnyNodeAsObject(NodeRef node, ArmNode parent, String substituteString, boolean onlyMeta) {
+        return wrapAnyNodeAsObject(node, parent, substituteString, onlyMeta, null);
+    }
+
+	public ArmNode wrapAnyNodeAsObject(NodeRef nodeRef, ArmNode parentNode, String substituteString, boolean onlyMeta, String searchTerm) {
         ArmNode node = new ArmNode();
-        node.setTitle(substitudeService.getObjectDescription(nodeRef));
+		if (null == substituteString || substituteString.isEmpty()) {
+            node.setTitle(substitudeService.getObjectDescription(nodeRef));
+		} else {
+			node.setTitle(substitudeService.formatNodeTitle(nodeRef, substituteString));
+		}
         node.setNodeRef(nodeRef);
         node.setNodeType(service.getCachedType(nodeRef).toPrefixString(namespaceService));
         node.setArmNodeRef(parentNode.getNodeRef());
