@@ -16,6 +16,7 @@ public class ArmColumn {
 	private boolean isMarker;
 	private String markerIcon;
 	private String markerHTML;
+	private boolean counter;
     private NodeRef id;
 
 	public ArmColumn(NodeRef nodeRef) {
@@ -54,6 +55,14 @@ public class ArmColumn {
 		this.sortable = sortable;
 	}
 
+	public boolean isCounter() {
+		return counter;
+	}
+
+	public void setCounter(boolean counter) {
+		this.counter = counter;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -62,6 +71,7 @@ public class ArmColumn {
 		ArmColumn armColumn = (ArmColumn) o;
         if (id != null ? !id.equals(armColumn.id) : armColumn.id != null) return false;
 		if (sortable != armColumn.sortable) return false;
+		if (counter != armColumn.counter) return false;
 		if (field != null ? !field.equals(armColumn.field) : armColumn.field != null) return false;
 		if (formatString != null ? !formatString.equals(armColumn.formatString) : armColumn.formatString != null) return false;
 		if (title != null ? !title.equals(armColumn.title) : armColumn.title != null) return false;
@@ -80,6 +90,7 @@ public class ArmColumn {
 		result = 31 * result + (sortable ? 1 : 0);
 		result = 31 * result + (isMarker ? 1 : 0);
 		result = 31 * result + (markerIcon != null ? markerIcon.hashCode() : 0);
+		result = 31 * result + (counter ? 1 : 0);
 		return result;
 	}
 

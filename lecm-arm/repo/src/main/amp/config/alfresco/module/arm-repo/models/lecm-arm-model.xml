@@ -377,6 +377,16 @@
 					<mandatory>false</mandatory>
 					<index enabled="false"/>
 				</property>
+                <!--Счётчик-->
+                <property name="lecm-arm:field-is-counter">
+                    <type>d:boolean</type>
+                    <mandatory>false</mandatory>
+                    <index enabled="false">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
 			</properties>
         	<mandatory-aspects>
                 <aspect>lecm-arm:ordered</aspect>
