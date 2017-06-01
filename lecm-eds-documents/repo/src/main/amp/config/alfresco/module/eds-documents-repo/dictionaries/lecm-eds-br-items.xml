@@ -8,18 +8,6 @@
 				<property name="lecm-orgstr:business-role-is-dynamic">false</property>
 				<property name="lecm-orgstr:business-role-description">Сотрудники, обладающие правами владельца для всех типов документов на всех статусах ЖЦ</property>
 			</item>
-			<item name="cm:Технолог шаблонов" type="lecm-orgstr:business-role">
-				<property name="cm:name">Технолог шаблонов</property>
-				<property name="lecm-orgstr:business-role-identifier">TMPL_ENGINEER</property><!-- Template Engineer -->
-				<property name="lecm-orgstr:business-role-is-dynamic">false</property>
-				<property name="lecm-orgstr:business-role-description">Сотрудники, обладающие правами создавать шаблоны документов</property>
-			</item>
-			<item name="cm:Технолог маршрутов" type="lecm-orgstr:business-role">
-				<property name="cm:name">Технолог маршрутов</property>
-				<property name="lecm-orgstr:business-role-identifier">ROUTE_ENGINEER</property><!-- Route Engineer -->
-				<property name="lecm-orgstr:business-role-is-dynamic">false</property>
-				<property name="lecm-orgstr:business-role-description">Сотрудники, обладающие правами создавать маршруты документов</property>
-			</item>
 			<item name="cm:СЭД. Подписанты" type="lecm-orgstr:business-role">
 				<property name="cm:name">СЭД. Подписанты</property>
 				<property name="lecm-orgstr:business-role-identifier">DA_SIGNERS</property><!-- Document Automation Signer -->
