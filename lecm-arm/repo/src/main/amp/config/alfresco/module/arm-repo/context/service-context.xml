@@ -244,6 +244,7 @@
                         <value>lecm-arm:field-is-marker</value>
                         <value>lecm-arm:field-marker-icon</value>
                         <value>lecm-arm:field-marker-html</value>
+                        <value>lecm-arm:field-is-counter</value>
                         <value>lecm-arm:order</value>
                     </list>
                 </entry>
