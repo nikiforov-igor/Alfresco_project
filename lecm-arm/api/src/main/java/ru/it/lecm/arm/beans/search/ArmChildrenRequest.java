@@ -3,7 +3,7 @@ package ru.it.lecm.arm.beans.search;
 import org.alfresco.service.cmr.repository.NodeRef;
 
 /**
- * Запрос на получения списка дочерних элементов
+ * Запрос на получение списка дочерних элементов
  * User: pmelnikov
  * Date: 31.05.2017
  */

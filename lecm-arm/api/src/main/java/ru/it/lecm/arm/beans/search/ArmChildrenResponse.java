@@ -5,7 +5,7 @@ import ru.it.lecm.arm.beans.node.ArmNode;
 import java.util.List;
 
 /**
- * Ответ на запрос на получения списка дочерних элементов
+ * Ответ на запрос получения списка дочерних элементов
  *
  * User: pmelnikov
  * Date: 01.06.2017
