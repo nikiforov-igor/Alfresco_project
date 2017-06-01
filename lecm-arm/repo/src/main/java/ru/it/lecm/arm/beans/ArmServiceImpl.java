@@ -495,10 +495,8 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
                         column.setTitle((String) columnProps.get(PROP_COLUMN_TITLE));
                         column.setField((String) columnProps.get(PROP_COLUMN_FIELD_NAME));
                         column.setFormatString((String) columnProps.get(PROP_COLUMN_FORMAT_STRING));
-                        Object sortableValue = columnProps.get(PROP_COLUMN_SORTABLE);
-                        if (sortableValue != null) {
-                            column.setSortable((Boolean) sortableValue);
-                        }
+                        column.setSortable(Boolean.TRUE.equals(columnProps.get(PROP_COLUMN_SORTABLE)));
+    					column.setCounter(Boolean.TRUE.equals(columnProps.get(PROP_COLUMN_IS_COUNTER)));
                         column.setByDefault(true);
 
                         /*Маркер*/
@@ -553,6 +551,10 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
                         if (sortableValue != null) {
                             column.setSortable((Boolean) sortableValue);
                         }
+						Object isCounter = columnProps.get(PROP_COLUMN_IS_COUNTER);
+						if (isCounter != null) {
+							column.setCounter((Boolean) isCounter);
+						}
                         Object byDefaultValue = columnProps.get(PROP_COLUMN_BY_DEFAULT);
                         if (byDefaultValue != null) {
                             column.setByDefault((Boolean) byDefaultValue);
@@ -662,6 +664,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
                         ((ArmScriptChildRule) result).setScriptService(scriptService);
                         ((ArmScriptChildRule) result).setOrgstructureService(orgstructureBean);
                     }
+					result.setSubstituteString((String) props.get(PROP_CHILD_RULE_SUBSTITUTE_STRING));
                 }
                 if (result != null) {
                     result.setNamespaceService(namespaceService);

@@ -54,7 +54,7 @@ public class ArmScriptChildRule extends ArmBaseChildRule {
         if (script != null) {
             results = runScript(script, node.getNodeRef(), orgstructureService.getCurrentEmployee());
             for (NodeRef nodeRef : results) {
-                ArmNode rowNode = service.wrapAnyNodeAsObject(nodeRef, node);
+                ArmNode rowNode = service.wrapAnyNodeAsObject(nodeRef, node, getSubstituteString());
                 nodes.add(rowNode);
             }
         }

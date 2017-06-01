@@ -22,43 +22,20 @@
  *
  * @method main
  */
-function main()
-{
-    // Actions
-    var myConfig = new XML(config.script),
-        xmlActionSet = myConfig.actionSet,
-        xmlExportSet = myConfig.exportSet,
-        actionSet = [];
-        exportSet = [];
+function main() {
+    var showSearchBlock = args["showSearchBlock"];
+    var showExSearchBtn = args["showExSearchBtn"];
+    var showButtons = args["showButtons"];
 
-    for each (var xmlAction in xmlActionSet.action)
-    {
-        actionSet.push(
-            {
-                id: xmlAction.@id.toString(),
-                type: xmlAction.@type.toString(),
-                permission: xmlAction.@permission.toString(),
-                asset: xmlAction.@asset.toString(),
-                href: xmlAction.@href.toString(),
-                label: xmlAction.@label.toString()
-            });
+    if (showSearchBlock) {
+        model.showSearchBlock = (showSearchBlock == 'true');
     }
-
-    for each (var xmlAction in xmlExportSet.action)
-    {
-        exportSet.push(
-            {
-                id: xmlAction.@id.toString(),
-                type: xmlAction.@type.toString(),
-                permission: xmlAction.@permission.toString(),
-                asset: xmlAction.@asset.toString(),
-                href: xmlAction.@href.toString(),
-                label: xmlAction.@label.toString()
-            });
+    if (showExSearchBtn){
+        model.showExSearchBtn = (showExSearchBtn == 'true');
     }
-
-    model.actionSet = actionSet;
-    model.exportSet = exportSet;
+    if (showButtons){
+        model.showButtons = (showButtons == 'true');
+    }
 }
 
 main();

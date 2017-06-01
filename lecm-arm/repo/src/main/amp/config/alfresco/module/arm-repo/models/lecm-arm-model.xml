@@ -383,6 +383,12 @@
 					<mandatory>false</mandatory>
 					<index enabled="false"/>
 				</property>
+                <!--Счётчик-->
+                <property name="lecm-arm:field-is-counter">
+                    <type>d:boolean</type>
+                    <mandatory>false</mandatory>
+                    <index enabled="false" />
+                </property>
 			</properties>
         	<mandatory-aspects>
                 <aspect>lecm-arm:ordered</aspect>
@@ -391,6 +397,14 @@
 
 		<type name="lecm-arm:base-child-rule">
 			<parent>cm:cmobject</parent>
+			<properties>
+				<property name="lecm-arm:child-rule-substitute-string">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="false">
+					</index>
+				</property>
+			</properties>
 		</type>
 		<type name="lecm-arm:query-child-rule">
 			<parent>lecm-arm:base-child-rule</parent>

@@ -56,4 +56,10 @@ public interface LecmURLService {
     String getDetailsLinkUrl();
     String getWorkflowLinkUrl();
     String getDocumentAttachmentLinkUrl();
+
+    /**
+     * Получить URL пути к share <protocol>://<host>:<port>/<share-context></>)
+     * @return
+     */
+    String getServerShareUrl();
 }

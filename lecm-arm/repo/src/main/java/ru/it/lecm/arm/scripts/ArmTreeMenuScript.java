@@ -277,28 +277,32 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 				String fieldName = column.getField();
 				if (fieldName != null) {
 					JSONObject columnJSON = new JSONObject();
-					QName fieldQName = QName.createQName(fieldName, namespaceService);
 
 					String type = "";
-					String formsName = "";
+					String formsName;
 					String dataType = "";
 
-					PropertyDefinition prop = dictionaryService.getProperty(fieldQName);
-					if (prop != null) {
-						type = "property";
-						formsName = "prop_" + fieldName.replace(":", "_");
-						dataType = prop.getDataType().getName().getLocalName();
+					if (column.isCounter()) {
+						type = "counter";
+						formsName = fieldName;
 					} else {
-						AssociationDefinition assoc = dictionaryService.getAssociation(fieldQName);
-						if (assoc != null) {
-							type = "association";
-							formsName = "assoc_" + fieldName.replace(":", "_");
-							dataType = assoc.getTargetClass().getName().toPrefixString(namespaceService);
-						} else {
+						QName fieldQName = QName.createQName(fieldName, namespaceService);
+						PropertyDefinition prop = dictionaryService.getProperty(fieldQName);
+						if (prop != null) {
+							type = "property";
 							formsName = "prop_" + fieldName.replace(":", "_");
+							dataType = prop.getDataType().getName().getLocalName();
+						} else {
+							AssociationDefinition assoc = dictionaryService.getAssociation(fieldQName);
+							if (assoc != null) {
+								type = "association";
+								formsName = "assoc_" + fieldName.replace(":", "_");
+								dataType = assoc.getTargetClass().getName().toPrefixString(namespaceService);
+							} else {
+								formsName = "prop_" + fieldName.replace(":", "_");
+							}
 						}
 					}
-
 					columnJSON.put("id", column.getId());
 					columnJSON.put("type", type);
 					columnJSON.put("name", fieldName);

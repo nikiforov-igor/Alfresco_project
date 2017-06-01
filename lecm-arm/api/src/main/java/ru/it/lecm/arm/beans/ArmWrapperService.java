@@ -43,7 +43,9 @@ public interface ArmWrapperService {
     ArmNode wrapArmNodeAsObject(NodeRef armNode, boolean isAccordion, boolean onlyMeta);
 
     ArmNode wrapAnyNodeAsObject(NodeRef node, ArmNode parent);
-    ArmNode wrapAnyNodeAsObject(NodeRef node, ArmNode parent, boolean onlyMeta);
+    ArmNode wrapAnyNodeAsObject(NodeRef node, ArmNode parent, String substituteString);
+    ArmNode wrapAnyNodeAsObject(NodeRef node, ArmNode parent, String substituteString, boolean onlyMeta);
+    ArmNode wrapAnyNodeAsObject(NodeRef node, ArmNode parent, String substituteString, boolean onlyMeta, String searchTerm);
 
     ArmNode wrapStatusAsObject(String status, ArmNode parent);
     ArmNode wrapStatusAsObject(String status, ArmNode parent, boolean onlyMeta);

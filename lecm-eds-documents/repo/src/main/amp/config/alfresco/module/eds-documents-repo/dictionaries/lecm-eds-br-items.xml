@@ -6,7 +6,7 @@
 				<property name="cm:name">СЭД. Технолог</property>
 				<property name="lecm-orgstr:business-role-identifier">DA_ENGINEER</property><!-- Document Automation Engineer -->
 				<property name="lecm-orgstr:business-role-is-dynamic">false</property>
-				<property name="lecm-orgstr:business-role-description">Сотрудники, обладающими правами владельца для всех типов документов на всех статусах ЖЦ</property>
+				<property name="lecm-orgstr:business-role-description">Сотрудники, обладающие правами владельца для всех типов документов на всех статусах ЖЦ</property>
 			</item>
 			<item name="cm:СЭД. Подписанты" type="lecm-orgstr:business-role">
 				<property name="cm:name">СЭД. Подписанты</property>
