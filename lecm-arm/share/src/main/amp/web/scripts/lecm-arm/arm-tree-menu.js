@@ -313,6 +313,9 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 if (node.data.runAs != null) {
                     sUrl += "&runAs=" + encodeURI(node.data.runAs);
                 }
+                if (node.tree.root && node.tree.root.data.nodeRef) {
+                    sUrl += "&currentSection=" + encodeURI(node.tree.root.data.nodeRef);
+                }
             }
             var otree = this;
             var callback = {

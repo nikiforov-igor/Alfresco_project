@@ -72,6 +72,7 @@
         <property name="childRulesCache" ref="arm.rules.cache"/>
         <property name="secretaryService" ref="secretaryService"/>
         <property name="scriptService" ref="scriptService"/>
+        <property name="delegationService" ref="delegationService"/>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
 			<map>
@@ -127,6 +128,7 @@
 		<property name="dictionaryBean" ref="serviceDictionary"/>
 		<property name="searchCounter" ref="searchCounterBean"/>
 		<property name="namespaceService" ref="namespaceService"/>
+        <property name="orgstructureBean" ref="serviceOrgstructure"/>
 	</bean>
 
 	<bean id="armAggregateQueryPolicy" class="ru.it.lecm.arm.policy.ArmAggregateQueryPolicy"

@@ -28,11 +28,12 @@ public interface ArmWrapperService {
      */
     List<ArmNode> getChildNodes(NodeRef armNode, NodeRef parentNode);
     List<ArmNode> getChildNodes(NodeRef armNode, NodeRef parentNode, boolean onlyMeta);
-
+    List<ArmNode> getChildNodes(NodeRef node, NodeRef parentRef, NodeRef currentSection, NodeRef runAsBoss);
     /**
      * проверяет, есть ли у узла дочерние элементы
      */
     boolean hasChildNodes(ArmNode node);
+    boolean hasChildNodes(ArmNode node, String runAs);
 
     /**
      * возвращает Узел по nodeRef
@@ -40,6 +41,7 @@ public interface ArmWrapperService {
     ArmNode wrapArmNodeAsObject(NodeRef armNode, boolean isAccordion);
     ArmNode wrapArmNodeAsObject(NodeRef armNode);
     ArmNode wrapArmNodeAsObject(NodeRef armNode, boolean isAccordion, boolean onlyMeta);
+    ArmNode wrapArmNodeAsObject(NodeRef armNode, boolean isAccordion, boolean onlyMeta, NodeRef currentSection, NodeRef runAs);
 
     ArmNode wrapAnyNodeAsObject(NodeRef node, ArmNode parent);
     ArmNode wrapAnyNodeAsObject(NodeRef node, ArmNode parent, boolean onlyMeta);

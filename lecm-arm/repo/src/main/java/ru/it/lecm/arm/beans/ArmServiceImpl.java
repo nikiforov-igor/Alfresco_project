@@ -3,10 +3,7 @@ package ru.it.lecm.arm.beans;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.cache.SimpleCache;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.service.cmr.repository.AssociationRef;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.ScriptService;
+import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.AuthorityType;
@@ -23,6 +20,7 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.SearchQueryProcessorService;
 import ru.it.lecm.base.beans.TransactionNeededException;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.secretary.SecretaryService;
@@ -51,6 +49,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
     private SearchQueryProcessorService processorService;
     private SecretaryService secretaryService;
     private ScriptService scriptService;
+    private IDelegation delegationService;
 
     private SimpleCache<String, List<ArmColumn>> columnsCache;
     private SimpleCache<NodeRef, List<ArmFilter>> filtersCache;
@@ -169,6 +168,10 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
 
     public void setProcessorService(SearchQueryProcessorService processorService) {
         this.processorService = processorService;
+    }
+
+    public void setDelegationService(IDelegation delegationService) {
+        this.delegationService = delegationService;
     }
 
     @Override
@@ -313,6 +316,45 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
         return result;
     }
 
+    public List<NodeRef> getArmRunAsBossNodes(NodeRef accordion) {
+        List<NodeRef> result = new ArrayList<>();
+        Map<NodeRef, Set<String>> nodesRunAs = new TreeMap<>(comparatorByName);
+        String userName = AuthenticationUtil.getFullyAuthenticatedUser();
+        NodeRef currentEmployee = orgstructureBean.getEmployeeByPerson(userName);
+        if (currentEmployee != null) {
+            NodeRef delegationRootNode = null;
+            List<AssociationRef> associationRefs = nodeService.getTargetAssocs(accordion, ArmService.ASSOC_ARM_ACCORDION_CHILDREN_STRUCTURE_SOURCE_NODE_ASSOC);
+            if (associationRefs != null && associationRefs.size() > 0) {
+                AssociationRef associationRef = associationRefs.get(0);
+                delegationRootNode = associationRef.getTargetRef();
+            }
+            List<NodeRef> chiefsList = secretaryService.getChiefs(currentEmployee);
+            List<NodeRef> delegationOwners = delegationService.getDelegationOwnersByTrustee(currentEmployee, true);
+            chiefsList.addAll(delegationOwners);
+            for (NodeRef chief : chiefsList) {
+                Set<String> roles = new HashSet<>();
+                String secretaryRoleCode = getAutorityForSecretary(chief);
+                roles.add(secretaryRoleCode);
+                String delegatRoleCode = getAuthorityForDelegat(chief);
+                roles.add(delegatRoleCode);
+                if (delegationRootNode != null) {
+                    nodesRunAs.put(new NodeRef(delegationRootNode.getStoreRef(), delegationRootNode.getId() + "_" + chief.getId()), roles);
+                }
+            }
+        }
+        //Дополнительная проверка на тот случай, если сотрудник назначен секретарем, но реальных прав нет (не выдались из-за ошибки и т.д)
+        Set<String> auth = authorityService.getAuthoritiesForUser(userName);
+        for (Map.Entry<NodeRef, Set<String>> accEntry : nodesRunAs.entrySet()) {
+            for (String accRole : accEntry.getValue()) {
+                if (auth.contains(accRole)) {
+                    result.add(accEntry.getKey());
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
     private String getAutorityByBusinessRole(NodeRef businessRole) {
         String roleIdentifier = (String) getCachedProperties(businessRole).get(OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
         String roleName = Types.SGKind.SG_BR.getSGPos(roleIdentifier).getAlfrescoSuffix();
@@ -326,8 +368,36 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
         return authorityService.getName(AuthorityType.GROUP, roleName);
     }
 
+    private String getAuthorityForDelegat(NodeRef owner) {
+        String chiefLogin = orgstructureBean.getEmployeeLogin(owner);
+        Types.SGPrivateMeOfUser sgMeOfUser = Types.SGKind.getSGMeOfUser(owner.getId(), chiefLogin);
+        String roleName = sgMeOfUser.getAlfrescoSuffix();
+        return authorityService.getName(AuthorityType.GROUP, roleName);
+    }
+
+    @Override
+    public boolean isArmDelegationRootNode(NodeRef node, NodeRef currentSection) {
+        Map<QName, Serializable> sectionProperties = getCachedProperties(currentSection);
+        boolean isDelegationNode = Boolean.TRUE.equals(sectionProperties.get(ArmService.PROP_IS_FOR_SECRETARIES));
+        boolean isDelegationRootNode = false;
+        List<AssociationRef> sourceAssocs = nodeService.getSourceAssocs(node, ArmService.ASSOC_ARM_ACCORDION_CHILDREN_STRUCTURE_SOURCE_NODE_ASSOC);
+        if (sourceAssocs != null && sourceAssocs.size() > 0) {
+            for (AssociationRef armAssoc : sourceAssocs) {
+                if (armAssoc.getSourceRef() != null && armAssoc.getSourceRef().equals(currentSection)) {
+                    isDelegationRootNode = true;
+                    break;
+                }
+            }
+        }
+        return isDelegationRootNode && isDelegationNode;
+    }
+
     @Override
     public List<NodeRef> getChildNodes(NodeRef node) {
+        return getChildNodes(node, null);
+    }
+
+    public List<NodeRef> getChildNodes(NodeRef node, NodeRef runAs) {
         if (!childNodesCache.contains(node)) {
             Set<NodeRef> childNodes = new TreeSet<>(comparator);
             LinkedList<NodeRef> allChildren = new LinkedList<>();
@@ -348,10 +418,14 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
 
             childNodesCache.put(node, allChildren);
         }
-        return filterByExpressions(childNodesCache.get(node));
+        return filterByExpressions(childNodesCache.get(node), runAs);
     }
 
     private List<NodeRef> filterByExpressions(List<NodeRef> childs) {
+        return filterByExpressions(childs, null);
+    }
+
+    private List<NodeRef> filterByExpressions(List<NodeRef> childs, NodeRef runAs) {
         List<NodeRef> result = new ArrayList<>();
         for (NodeRef child : childs) {
             Map<QName, Serializable> properties = getCachedProperties(child);
@@ -359,7 +433,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
             if (expression == null || expression.isEmpty()) {
                 result.add(child);
             } else {
-                ExpressionForArm evaluator = new ExpressionForArm(child, applicationContext);
+                ExpressionForArm evaluator = new ExpressionForArm(child, applicationContext, runAs);
                 if (evaluator.executeAsBoolean(expression)) {
                     result.add(child);
                 }

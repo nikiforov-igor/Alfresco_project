@@ -997,4 +997,28 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 		}
 		return effectiveEmployeeRef;
 	}
+
+	@Override
+	public List<NodeRef> getDelegationOwnersByTrustee(NodeRef employee, boolean isActivated) {
+		List<NodeRef> results = new ArrayList<>();
+		List<NodeRef> delegationOptsList = findNodesByAssociationRef(employee, IDelegation.ASSOC_DELEGATION_OPTS_TRUSTEE, IDelegation.TYPE_DELEGATION_OPTS, ASSOCIATION_TYPE.SOURCE);
+		if (delegationOptsList != null) {
+			for (NodeRef delegationOpts : delegationOptsList) {
+				if (!isArchive(delegationOpts)) {
+					NodeRef owner = findNodeByAssociationRef(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_OWNER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+					if (owner != null) {
+						if (isActivated) {
+							NodeRef absence = absenceService.getActiveAbsence(owner);
+							if (absence != null) {
+								results.add(owner);
+							}
+							continue;
+						}
+						results.add(owner);
+					}
+				}
+			}
+		}
+		return results;
+	}
 }

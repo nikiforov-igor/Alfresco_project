@@ -49,6 +49,9 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 				if (node.data.nodeRef != null) {
 					dataObj.armSelectedNodeRef = node.data.nodeRef
 				}
+				if (node.data.runAs != null) {
+					dataObj.runAs = node.data.runAs;
+				}
 
 				Alfresco.util.Ajax.request(
 					{
