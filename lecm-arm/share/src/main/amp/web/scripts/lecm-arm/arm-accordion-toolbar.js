@@ -21,6 +21,7 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 	YAHOO.extend(LogicECM.module.ARM.AccordionToolbar, LogicECM.module.Base.Toolbar);
 
 	YAHOO.lang.augmentObject(LogicECM.module.ARM.AccordionToolbar.prototype, {
+		currentNodeArgs: null,
 		doubleClickLock: false,
 		_initButtons: function() {
 			var newDocumentButton = this.toolbarButtons["defaultActive"].newDocumentButton = new YAHOO.widget.Button(
@@ -46,6 +47,14 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
         },
 		onNewRow: function(p_sType, p_aArgs, p_oItem) {
 			var attributes = p_oItem.attributes ? p_oItem.attributes : [];
+			if (this.currentNodeArgs.nodeType !== 'lecm-arm:node') {
+				attributes.push({
+					initial: {
+						formsName: "selectedArmTreeNode",
+						value: this.currentNodeArgs.nodeRef
+					}
+				});
+			}
 			var params = attributes.reduce(function(prev, curr) {
 				return YAHOO.lang.substitute('{prev}&{key}={value}', {
 					prev: prev,
@@ -56,6 +65,7 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 			window.location.href = Alfresco.constants.URL_PAGECONTEXT + p_oItem.page + "?documentType=" + p_oItem.type + "&" + LogicECM.module.Base.Util.encodeUrlParams(params);
 		},
 		onUpdateArmToolbar: function(layer, args) {
+			this.currentNodeArgs = args[1].currentNodeArgs;
 			var createTypes = args[1].createTypes;
 			var button = this.toolbarButtons["defaultActive"].newDocumentButton;
 			var menu = button.getMenu();
