@@ -347,6 +347,12 @@
                 <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
             </action>
 
+            <!-- Download folder -->
+            <action id="folder-download" type="javascript" label="actions.folder.download" icon="document-download">
+                <param name="function">onActionFolderDownload</param>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
             <!-- Publish document -->
             <action id="document-publish" type="javascript" label="actions.document.publish">
                 <param name="function">onActionPublish</param>
