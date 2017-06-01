@@ -56,7 +56,7 @@
                 <updatePolicy>always</updatePolicy>
             </snapshots>
         </repository>
-    </repositories>;
+    </repositories>
     <pluginRepositories>
         <pluginRepository>
             <id>alfresco-public</id>
