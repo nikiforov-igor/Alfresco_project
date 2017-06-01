@@ -46,22 +46,6 @@
     </distributionManagement>
     <repositories>
         <repository>
-            <id>alfresco-public</id>
-            <url>https://artifacts.alfresco.com/nexus/content/groups/public</url>
-        </repository>
-        <repository>
-            <id>alfresco-activiti</id>
-            <url>https://artifacts.alfresco.com/nexus/content/repositories/activiti-releases/</url>
-        </repository>
-        <repository>
-            <id>apache-activemq</id>
-            <url>https://repository.apache.org/content/repositories/releases/org/apache/activemq/apache-activemq/</url>
-        </repository>
-        <repository>
-            <id>alfresco-public-snapshots</id>
-            <url>https://artifacts.alfresco.com/nexus/content/groups/public-snapshots</url>
-        </repository>
-        <repository>
             <id>lecm-repo</id>
             <url>http://maven.datateh.ru:8081/nexus/content/groups/public</url>
             <releases>
@@ -72,11 +56,11 @@
                 <updatePolicy>always</updatePolicy>
             </snapshots>
         </repository>
-    </repositories>
+    </repositories>;
     <pluginRepositories>
         <pluginRepository>
             <id>alfresco-public</id>
-            <url>https://artifacts.alfresco.com/nexus/content/groups/public</url>
+            <url>http://maven.datateh.ru:8081/nexus/content/groups/public</url>
         </pluginRepository>
     </pluginRepositories>
     <properties>
