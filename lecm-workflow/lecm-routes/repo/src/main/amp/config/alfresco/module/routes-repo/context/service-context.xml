@@ -14,13 +14,25 @@
 		<value>alfresco/module/${artifactId}/messages/lecm-routes</value>
 		<value>alfresco/module/${artifactId}/messages/lecm-routes-macros</value>
 	</util:list>
+
 	<bean id="routes.model.bootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="dictionaryBootstrap,
 					  ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
 					  ru.it.lecm.contractors.lecm-contractors-repo.contractors-model-bootstrap,
 					  lecm.approval3.helper.model.bootstrap"
 		  p:models-ref="routes.models"
-		  p:labels-ref="routes.labels"/>
+		  p:labels-ref="routes.labels"
+	/>
+
+	<bean id="routes.dictionaries.bootstrap"
+		  parent="lecmDictionaryBootstrap"
+		  depends-on="routes.model.bootstrap">
+		<property name="dictionaries">
+			<list>
+				<value>alfresco/module/${artifactId}/dictionaries/routes-br-items.xml</value>
+			</list>
+		</property>
+	</bean>
 
 	<util:constant id="routesServiceFolderID" static-field="ru.it.lecm.workflow.routes.beans.RoutesServiceImpl.ROUTES_FOLDER_ID"/>
 	<util:map id="routes.folders.map">

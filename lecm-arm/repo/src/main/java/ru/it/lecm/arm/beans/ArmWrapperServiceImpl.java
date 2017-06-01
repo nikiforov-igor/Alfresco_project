@@ -81,6 +81,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
     public List<ArmNode> getChildNodes(NodeRef armNode, NodeRef parentNode) {
         return getChildNodes(armNode, parentNode, false);
     }
+
     @Override
     public List<ArmNode> getChildNodes(NodeRef node, NodeRef parentRef, NodeRef currentSection, NodeRef runAsBoss) {
         Map<QName, Serializable> properties = service.getCachedProperties(node);
@@ -312,17 +313,26 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
 
     @Override
     public ArmNode wrapAnyNodeAsObject(NodeRef nodeRef, ArmNode parentNode) {
-        return wrapAnyNodeAsObject(nodeRef, parentNode, false);
+        return wrapAnyNodeAsObject(nodeRef, parentNode, null);
     }
+
+	@Override
+	public ArmNode wrapAnyNodeAsObject(NodeRef node, ArmNode parent, String substituteString) {
+		return wrapAnyNodeAsObject(node, parent, substituteString, false);
+	}
 
     @Override
-    public ArmNode wrapAnyNodeAsObject(NodeRef node, ArmNode parent, boolean onlyMeta) {
-        return wrapAnyNodeAsObject(node, parent, onlyMeta, null);
+    public ArmNode wrapAnyNodeAsObject(NodeRef node, ArmNode parent, String substituteString, boolean onlyMeta) {
+        return wrapAnyNodeAsObject(node, parent, substituteString, onlyMeta, null);
     }
 
-    public ArmNode wrapAnyNodeAsObject(NodeRef nodeRef, ArmNode parentNode, boolean onlyMeta, NodeRef currentSection) {
+	public ArmNode wrapAnyNodeAsObject(NodeRef nodeRef, ArmNode parentNode, String substituteString, boolean onlyMeta, String searchTerm, NodeRef currentSection) {
         ArmNode node = new ArmNode();
-        node.setTitle(substitudeService.getObjectDescription(nodeRef));
+		if (null == substituteString || substituteString.isEmpty()) {
+            node.setTitle(substitudeService.getObjectDescription(nodeRef));
+		} else {
+			node.setTitle(substitudeService.formatNodeTitle(nodeRef, substituteString));
+		}
         node.setNodeRef(nodeRef);
         node.setNodeType(service.getCachedType(nodeRef).toPrefixString(namespaceService));
         node.setArmNodeRef(parentNode.getNodeRef());

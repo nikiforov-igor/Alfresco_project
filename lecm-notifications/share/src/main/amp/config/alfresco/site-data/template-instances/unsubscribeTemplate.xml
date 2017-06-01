@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<template-instance>
+    <template-type>ru/it/lecm/notifications/unsubscribeTemplate</template-type>
+    <components>
+        <component>
+            <region-id>content</region-id>
+            <url>/lecm/notifications-unsubscribe/content</url>
+        </component>
+    </components>
+</template-instance>

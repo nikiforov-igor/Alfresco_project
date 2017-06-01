@@ -1,0 +1,16 @@
+.notifications-unsubscribe-btn {
+    margin: 20px;
+}
+
+.notifications-unsubscribe-btn .templateDescription{
+    font-style: italic;
+}
+
+.notifications-unsubscribe-btn .first-child {
+    padding-left: 5px;
+}
+
+.notifications-header .status-banner {
+    margin-top: 0.75em;
+    padding: 0.5em 1em;
+}

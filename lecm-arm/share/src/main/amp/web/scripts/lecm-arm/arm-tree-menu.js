@@ -505,7 +505,11 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 }
 
                 YAHOO.Bubbling.fire ("updateArmToolbar", {
-                    createTypes: parent.data.createTypes
+                    createTypes: parent.data.createTypes,
+                    currentNodeArgs: {
+                        nodeRef: node.data.nodeRef,
+                        nodeType: node.data.nodeType
+                    }
                 });
             }
             // сбрасываем после того, как отослали запрос к гриду

@@ -249,10 +249,11 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
         }
 
 	@Override
-	public Boolean isRegistrationCenralized() {
+	public boolean isRegistrationCenralized() {
         NodeRef settings = getSettingsNode();
         if (settings != null) {
-            return (Boolean) nodeService.getProperty(settings, PROP_SETTINGS_CENTRALIZED_REGISTRATION);
+        	Boolean isRegCenralized = (Boolean) nodeService.getProperty(settings, PROP_SETTINGS_CENTRALIZED_REGISTRATION);
+            return Boolean.TRUE.equals(isRegCenralized);
         }
         return false;
     }
