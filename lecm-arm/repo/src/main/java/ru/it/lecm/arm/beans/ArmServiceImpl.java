@@ -32,8 +32,6 @@ import ru.it.lecm.statemachine.StateMachineServiceBean;
 import java.io.Serializable;
 import java.util.*;
 import java.util.regex.Matcher;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
-import org.springframework.context.ApplicationEvent;
 
 /**
  * User: AIvkin
@@ -669,6 +667,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
                         ((ArmScriptChildRule) result).setScriptService(scriptService);
                         ((ArmScriptChildRule) result).setOrgstructureService(orgstructureBean);
                     }
+					result.setSubstituteString((String) props.get(PROP_CHILD_RULE_SUBSTITUTE_STRING));
                 }
                 childRulesCache.put(node, result == null ? ArmBaseChildRule.NULL_RULE : result);
             }

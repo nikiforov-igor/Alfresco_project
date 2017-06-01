@@ -62,6 +62,7 @@ public interface ArmService {
 	QName PROP_COLUMN_MARKER_HTML = QName.createQName(ARM_NAMESPACE_URI, "field-marker-html");
 	QName PROP_COLUMN_IS_COUNTER = QName.createQName(ARM_NAMESPACE_URI, "field-is-counter");
 
+	QName PROP_CHILD_RULE_SUBSTITUTE_STRING = QName.createQName(ARM_NAMESPACE_URI, "child-rule-substitute-string");
 	QName TYPE_QUERY_CHILD_RULE = QName.createQName(ARM_NAMESPACE_URI, "query-child-rule");
 	QName PROP_LIST_QUERY_CHILD_RULE = QName.createQName(ARM_NAMESPACE_URI, "list-query-child-rule");
 
