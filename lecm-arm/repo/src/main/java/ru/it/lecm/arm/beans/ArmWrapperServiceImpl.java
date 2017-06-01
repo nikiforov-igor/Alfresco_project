@@ -264,8 +264,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
             }
         }
 
-        node.setSearchQuery(sb.toString());
-
+        node.setSearchQuery(formatQuery(sb.toString(), node.getNodeRef()));
         node.setHtmlUrl(parentNode.getHtmlUrl());
         node.setMaxItemsCount(parentNode.getMaxItemsCount());
         node.setReportCodes(parentNode.getReportCodes());

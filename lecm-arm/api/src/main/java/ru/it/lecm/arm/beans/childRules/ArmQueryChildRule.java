@@ -48,7 +48,7 @@ public class ArmQueryChildRule extends ArmBaseChildRule {
             SearchParameters sp = new SearchParameters();
             sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
             sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
-
+            String queryString = service.formatQuery(listQuery, request.getNodeRef());
             String preparedSearchTerm;
             if (request.getSearchTerm() != null && request.getSearchTerm().length() > 0) {
                 if (request.getSearchTerm().contains("*")) {
@@ -56,10 +56,10 @@ public class ArmQueryChildRule extends ArmBaseChildRule {
                 } else {
                     preparedSearchTerm = "*" + request.getSearchTerm() + "*";
                 }
-                listQuery += " AND @cm\\:name:\"" + preparedSearchTerm + "\"";
+                queryString += " AND @cm\\:name:\"" + preparedSearchTerm + "\"";
             }
 
-            String processedQuery = processorService.processQuery(listQuery);
+            String processedQuery = processorService.processQuery(queryString);
             sp.setQuery(processedQuery);
 
             if (request.getMaxItems() != -1) {
