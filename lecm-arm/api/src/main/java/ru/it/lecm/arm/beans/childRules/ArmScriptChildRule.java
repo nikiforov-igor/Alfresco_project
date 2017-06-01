@@ -5,6 +5,8 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.ScriptService;
 import ru.it.lecm.arm.beans.ArmWrapperService;
 import ru.it.lecm.arm.beans.node.ArmNode;
+import ru.it.lecm.arm.beans.search.ArmChildrenRequest;
+import ru.it.lecm.arm.beans.search.ArmChildrenResponse;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.util.ArrayList;
@@ -45,7 +47,7 @@ public class ArmScriptChildRule extends ArmBaseChildRule {
     }
 
     @Override
-    public List<ArmNode> build(ArmWrapperService service, ArmNode node) {
+    public ArmChildrenResponse build(ArmWrapperService service, ArmNode node, ArmChildrenRequest request) {
         List<ArmNode> nodes = new ArrayList<ArmNode>();
         ArrayList<NodeRef> results = null;
 
@@ -56,7 +58,7 @@ public class ArmScriptChildRule extends ArmBaseChildRule {
                 nodes.add(rowNode);
             }
         }
-        return nodes;
+        return new ArmChildrenResponse(nodes, nodes.size());
     }
 
     private ArrayList<NodeRef> runScript(String macrosString, NodeRef documentNode, NodeRef currentEmployee) {

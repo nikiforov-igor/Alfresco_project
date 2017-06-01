@@ -27,7 +27,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         YAHOO.Bubbling.on("beforeDateChanged", this.onCalSelect, this);
         YAHOO.Bubbling.on("selectedParentCurrentNode", this.onSelectedParentCurrentNode, this);
         YAHOO.Bubbling.on("selectedCurrentNode", this.onSelectedCurrentNode, this);
-
+        YAHOO.Bubbling.on("appendInputField", this._appendInputField, this);
+        YAHOO.Bubbling.on("resetSearch", this._resetSearch, this);
         return this;
     };
 
@@ -119,7 +120,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 success: function (oResponse) {
                     var oResults = eval("(" + oResponse.responseText + ")");
                     if (oResults != null) {
-                        me.accordionItems = oResults;
+                        me.accordionItems = oResults.children;
 
                         if (LogicECM.module.ARM.SETTINGS.ARM_SHOW_CALENDAR) {
                             this.calendarNode = {
@@ -301,47 +302,56 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 this._treeNodeSelected(event.node);
                 return false;
             }.bind(this));
+
+            this.tree.subscribe('expandComplete', this.onExpandComplete, this.tree, this);
+            this.tree.subscribe('collapseComplete', this.onCollapseComplete, this.tree, this);
         },
 
         _loadTree: function loadNodeData(node, fnLoadComplete) {
-            var sUrl = Alfresco.constants.PROXY_URI + "lecm/arm/tree-menu?armCode=" + LogicECM.module.ARM.SETTINGS.ARM_CODE + "&noCache=" + new Date().getTime();
-            if (node.data.nodeRef != null) {
-                sUrl += "&nodeRef=" + encodeURI(node.data.nodeRef);
-                if (node.data.armNodeRef != null) {
-                    sUrl += "&armNodeRef=" + encodeURI(node.data.armNodeRef);
-                }
-                if (node.data.runAs != null) {
-                    sUrl += "&runAs=" + encodeURI(node.data.runAs);
-                }
-            }
+            var sUrl = this._prepareUrl(node);
             var otree = this;
             var callback = {
                 success: function (oResponse) {
                     var oResults = eval("(" + oResponse.responseText + ")");
                     if (oResults != null) {
+                        var children = oResults.children;
                         node.children = [];
-                        for (var nodeIndex in oResults) {
+                        var parentNodeInfo = oResults.parentNodeInfo;
+                        node.data.realChildrenCount = parentNodeInfo.parentNodeRealChildrenCount;
+                        for (var nodeIndex in children) {
                             var newNode = {
-                                id: oResults[nodeIndex].id + "-" + oResults[nodeIndex].armNodeId,
-                                nodeRef: oResults[nodeIndex].nodeRef,
-                                nodeType: oResults[nodeIndex].nodeType,
-                                armNodeRef: oResults[nodeIndex].armNodeRef,
-                                armNodeId: oResults[nodeIndex].armNodeId,
-                                baseNodeId: oResults[nodeIndex].id,
-                                label: oResults[nodeIndex].label,
-                                isLeaf: oResults[nodeIndex].isLeaf,
-                                types: oResults[nodeIndex].types,
-                                columns: oResults[nodeIndex].columns,
-                                filters: oResults[nodeIndex].filters,
-                                searchQuery: oResults[nodeIndex].searchQuery,
-                                counter: oResults[nodeIndex].counter,
-                                counterLimit: oResults[nodeIndex].counterLimit,
-                                counterDesc: oResults[nodeIndex].counterDesc,
-                                htmlUrl: oResults[nodeIndex].htmlUrl,
-                                reportCodes: oResults[nodeIndex].reportCodes,
-	                            searchType: oResults[nodeIndex].searchType,
-                                runAs:oResults[nodeIndex].runAs,
-                                isAggregate: oResults[nodeIndex].isAggregate
+                                id: children[nodeIndex].id + "-" + children[nodeIndex].armNodeId,
+                                nodeRef: children[nodeIndex].nodeRef,
+                                nodeType: children[nodeIndex].nodeType,
+                                armNodeRef: children[nodeIndex].armNodeRef,
+                                armNodeId: children[nodeIndex].armNodeId,
+                                baseNodeId: children[nodeIndex].id,
+                                label: children[nodeIndex].label,
+                                isLeaf: children[nodeIndex].isLeaf,
+                                types: children[nodeIndex].types,
+                                columns: children[nodeIndex].columns,
+                                filters: children[nodeIndex].filters,
+                                searchQuery: children[nodeIndex].searchQuery,
+                                counter: children[nodeIndex].counter,
+                                counterLimit: children[nodeIndex].counterLimit,
+                                counterDesc: children[nodeIndex].counterDesc,
+                                htmlUrl: children[nodeIndex].htmlUrl,
+                                maxItems: children[nodeIndex].maxItems,
+                                realChildrenCount: children[nodeIndex].realChildrenCount,
+                                reportCodes: children[nodeIndex].reportCodes,
+                                searchType: children[nodeIndex].searchType,
+                                runAs: children[nodeIndex].runAs,
+                                isAggregate: children[nodeIndex].isAggregate,
+                                config: {
+                                    showDelay: 100,
+                                    hideDelay: 200,
+                                    autoDismissDelay: 0,
+                                    disabled: false,
+                                    value: null,
+                                    mode: 'create',
+                                    destination: children[nodeIndex].nodeRef,
+                                    formId: ''
+                                }
                             };
 
                             // добавляем элемент в дерево
@@ -371,10 +381,40 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         }
                     }
 
+                    if (node.data.realChildrenCount > node.data.maxItems && node.data.maxItems > 0 && node.data.realChildrenCount > node.children.length) {
+                        var loadNextBlockNode = new YAHOO.widget.TextNode({
+                            label: 'Открыть ещё ...',
+                            labelStyle: 'load-next-block-node',
+                            isLeaf: true,
+                            isAggregate: false
+                        }, node, false, false);
+                        node.data.loadNextBlockNode = loadNextBlockNode;
+                        loadNextBlockNode.data.isServiceNode = true;
+                        loadNextBlockNode.data.clickHandler = function () {
+                            node.data.skipCount = node.children.length - 1;
+                            var url = otree._prepareUrl(node);
+                            YAHOO.util.Connect.asyncRequest('GET', url, {
+                                success: function (oResponse) {
+                                    var oResults = eval("(" + oResponse.responseText + ")");
+                                    children = oResults && oResults.children;
+                                    otree._appendChildrenNodes(node, children);
+                                    otree.tree.render();
+                                    otree._deleteInsituEditors(node.tree.getRoot());
+                                    otree._createInsituEditors(node.tree.getRoot());
+                                },
+                                argument: {
+                                    node: node
+                                }
+                            });
+                        };
+                    }
+
                     if (oResponse.argument.fnLoadComplete != null) {
                         oResponse.argument.fnLoadComplete();
                     } else {
                         otree.tree.render();
+                        otree._deleteInsituEditors(node.tree.getRoot());
+                        otree._createInsituEditors(node.tree.getRoot());
                     }
                 },
                 failure: function (oResponse) {
@@ -394,6 +434,103 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 timeout: 60000
             };
             YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+        },
+
+        _prepareUrl: function (node) {
+            var sUrl = Alfresco.constants.PROXY_URI + "lecm/arm/tree-menu?armCode=" + LogicECM.module.ARM.SETTINGS.ARM_CODE + "&noCache=" + new Date().getTime();
+            if (node.data.nodeRef != null) {
+                sUrl += "&nodeRef=" + encodeURI(node.data.nodeRef);
+                if (node.data.armNodeRef != null) {
+                    sUrl += "&armNodeRef=" + encodeURI(node.data.armNodeRef);
+                }
+                if (node.data.runAs != null) {
+                    sUrl += "&runAs=" + encodeURI(node.data.runAs);
+                }
+                if (node.data.skipCount != null) {
+                    sUrl += "&skipCount=" + encodeURI(node.data.skipCount);
+                }
+                if (node.data.searchTerm != null && node.data.searchTerm.length > 0) {
+                    sUrl += "&searchTerm=" + encodeURI(node.data.searchTerm);
+                }
+                if (node.data.maxItems != null) {
+                    sUrl += "&maxItems=" + encodeURI(node.data.maxItems);
+                }
+            }
+            return sUrl;
+        },
+
+        _appendChildrenNodes: function (node, children) {
+            if (node.data.loadNextBlockNode) {
+                node.tree.popNode(node.data.loadNextBlockNode);
+            }
+            if (children != null && children.length) {
+                for (var nodeIndex in children) {
+                    var newNode = {
+                        id: children[nodeIndex].id + "-" + children[nodeIndex].armNodeId,
+                        nodeRef: children[nodeIndex].nodeRef,
+                        nodeType: children[nodeIndex].nodeType,
+                        armNodeRef: children[nodeIndex].armNodeRef,
+                        armNodeId: children[nodeIndex].armNodeId,
+                        baseNodeId: children[nodeIndex].id,
+                        label: children[nodeIndex].label,
+                        isLeaf: children[nodeIndex].isLeaf,
+                        types: children[nodeIndex].types,
+                        columns: children[nodeIndex].columns,
+                        filters: children[nodeIndex].filters,
+                        searchQuery: children[nodeIndex].searchQuery,
+                        counter: children[nodeIndex].counter,
+                        counterLimit: children[nodeIndex].counterLimit,
+                        counterDesc: children[nodeIndex].counterDesc,
+                        htmlUrl: children[nodeIndex].htmlUrl,
+                        maxItems: children[nodeIndex].maxItems,
+                        realChildrenCount: children[nodeIndex].realChildrenCount,
+                        reportCodes: children[nodeIndex].reportCodes,
+                        searchType: children[nodeIndex].searchType,
+                        runAs: children[nodeIndex].runAs,
+                        isAggregate: children[nodeIndex].isAggregate,
+                        config: {
+                            showDelay: 100,
+                            hideDelay: 200,
+                            autoDismissDelay: 0,
+                            disabled: false,
+                            value: null,
+                            mode: 'create',
+                            destination: children[nodeIndex].nodeRef,
+                            formId: ''
+                        }
+                    };
+
+                    // добавляем элемент в дерево
+                    var curElement = new YAHOO.widget.TextNode(newNode, node);
+                    curElement.labelElId = curElement.data.id;
+                    curElement.id = curElement.data.id;
+
+                    //раскрываем, если этот узел был последним выбранным
+                    var nodeId = this._getTextNodeId(curElement);
+
+                    curElement.expanded = node.expanded && this._isNodeExpanded(curElement.id);
+
+                    if (this.menuState.selected.length > 0) {
+                        if (this.menuState.selected == nodeId) {
+                            this._treeNodeSelected(curElement)
+                        }
+                    } else {
+                        this._treeNodeSelected(curElement);
+                    }
+
+                    //отрисовка счетчика, если нужно
+                    if (curElement.id) {
+                        Event.onAvailable(curElement.id, function (obj) {
+                            obj.context.drawCounterValue(obj.node.data, obj.context.getSearchQuery(obj.node), obj.node.getLabelEl());
+                        }, {node: curElement, context: this}, this);
+                    }
+                    // otree.queryChildrenCount(node);
+                }
+
+                if (node.data.realChildrenCount > node.data.maxItems && node.data.maxItems > 0 && node.data.realChildrenCount > node.children.length) {
+                    node.data.loadNextBlockNode && (node.data.loadNextBlockNode.appendTo(node));
+                }
+            }
         },
 
         getSearchQuery: function (node, buffer, parentId) {
@@ -433,6 +570,13 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         },
 
         _treeNodeSelected: function (node) {
+            if (node.data.isServiceNode) {
+                if (YAHOO.lang.isFunction(node.data.clickHandler)) {
+                    node.data.clickHandler();
+                }
+                return;
+            }
+
             if (this.selectedNode != null) {
                 this.selectedNode.tree.onEventToggleHighlight(this.selectedNode);
             }
@@ -502,7 +646,11 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 }
 
                 YAHOO.Bubbling.fire ("updateArmToolbar", {
-                    createTypes: parent.data.createTypes
+                    createTypes: parent.data.createTypes,
+                    currentNodeArgs: {
+                        nodeRef: node.data.nodeRef,
+                        nodeType: node.data.nodeType
+                    }
                 });
             }
             // сбрасываем после того, как отослали запрос к гриду
@@ -692,6 +840,187 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
         onSelectedCurrentNode: function() {
             this._treeNodeSelected(this.selectedNode);
+        },
+
+        _appendInputField: function () {
+            var node = arguments[1][1].armNode,
+                me = this;
+            if (!Dom.get(node.id + '-arm-tree-attached-input-field') && node.expanded) {
+                var inputField = document.createElement('input'),
+                    contentEl = node.getContentEl();
+                inputField.setAttribute('id', node.id + '-arm-tree-attached-input-field');
+                inputField.setAttribute('placeholder', 'Введите слово...');
+                node.data.afterSearch && inputField.setAttribute('value', node.data.searchTerm);
+                Dom.addClass(inputField, 'arm-tree-attached-input-field');
+                // TODO: Заглушка. Переделать.
+                Event.removeListener(node.tree.getEl(), 'keydown', node.tree._onKeyDownEvent);
+                inputField.onkeydown = function (event) {
+                    if (event.keyCode == 13) {
+                        Event.stopEvent(event);
+                        node.data.searchTerm = event.currentTarget.value;
+                        node.data.skipCount = 0;
+                        node.data.afterSearch = node.data.searchTerm.length > 0;
+                        me._loadTree(node);
+                    }
+                };
+                inputField.onblur = function (event) {
+                    contentEl && (contentEl.removeChild(inputField));
+                };
+                inputField.onfocus = function (event) {
+                    this.value = this.value;
+                };
+                contentEl && (contentEl.appendChild(inputField));
+                inputField.focus();
+            }
+        },
+
+        _resetSearch: function () {
+            var node = arguments[1][1].armNode;
+            node.data.searchTerm = '';
+            node.data.skipCount = 0;
+            node.data.afterSearch = false;
+            this._loadTree(node);
+        },
+
+        onExpandComplete: function (node, tree) {
+            this._createInsituEditors(tree.getRoot());
+        },
+
+        onCollapseComplete: function (node, tree) {
+            this._toggleNodeVisualStyle(node);
+        },
+
+        _createInsituEditors: function (node) {
+            node.children.forEach(function (childNode) {
+                var armChildren = childNode.children.filter(function (node) {
+                    return !!node.data.nodeRef;
+                });
+                if ((childNode.expanded && childNode.data.realChildrenCount > childNode.data.maxItems &&
+                    childNode.data.maxItems > 0 && childNode.data.realChildrenCount > armChildren.length &&
+                    !childNode.data.insituEditor) ||
+                    childNode.data.afterSearch && !childNode.data.insituEditor) {
+
+                    childNode.data.config.treeNode = childNode;
+                    childNode.data.config.container = childNode.getContentEl();
+                    childNode.data.config.context = childNode.getContentEl().parentElement;
+                    childNode.data.config && (childNode.data.config.title = 'Поиск');
+                    childNode.data.insituEditor = new Alfresco.widget.SearchButton(null, childNode.data.config);
+                    if (!childNode.data.resetButton && childNode.data.afterSearch) {
+                        childNode.data.config && (childNode.data.config.title = 'Сбросить');
+                        childNode.data.resetButton = new Alfresco.widget.ResetButton(null, childNode.data.config);
+                    }
+                }
+                if (childNode.expanded && !childNode.isLeaf) {
+                    this._createInsituEditors(childNode);
+                }
+                this._toggleNodeVisualStyle(childNode);
+            }, this);
+        },
+
+        _deleteInsituEditors: function (node) {
+            node.children.forEach(function (childNode) {
+                if (childNode.data.insituEditor) {
+                    delete childNode.data.insituEditor;
+                }
+                if (childNode.data.resetButton) {
+                    delete childNode.data.resetButton;
+                }
+                if (childNode.expanded && !childNode.isLeaf) {
+                    this._deleteInsituEditors(childNode);
+                }
+            }, this);
+        },
+
+        _toggleNodeVisualStyle: function (node) {
+            var armChildren = node.children.filter(function (node) {
+                return !!node.data.nodeRef;
+            });
+            if ((node.data.realChildrenCount > node.data.maxItems && node.data.maxItems > 0 && node.data.realChildrenCount > armChildren.length) || node.data.afterSearch) {
+                var tableEl = YAHOO.util.Selector.query('#' + node.getEl().id + ' > table.ygtvtable')[0];
+                if (node.expanded) {
+                    var serviceNodesCount = this._getServiceNodes(node).length;
+                    if (node.data.afterSearch) {
+                        Dom.removeClass(tableEl, 'arm-tree-icon-container-expanded');
+                        Dom.addClass(tableEl, 'arm-tree-icon-container-after-search');
+                        var title = 'Показаны первые ' + (node.children.length - serviceNodesCount) + ' элементов из ' + node.data.realChildrenCount + ' по запросу "' + node.data.searchTerm + '"';
+                        node.data.insituEditor && node.data.insituEditor.editIcon.setAttribute('title', title);
+                        tableEl && (tableEl.setAttribute('title', title));
+                    } else {
+                        Dom.removeClass(tableEl, 'arm-tree-icon-container-after-search');
+                        Dom.addClass(tableEl, 'arm-tree-icon-container-expanded');
+                        tableEl && (tableEl.setAttribute('title', 'Показаны первые ' + (node.children.length - serviceNodesCount) + ' элементов из ' + node.data.realChildrenCount));
+                    }
+                } else {
+                    Dom.removeClass(tableEl, 'arm-tree-icon-container-after-search');
+                    Dom.removeClass(tableEl, 'arm-tree-icon-container-expanded');
+                }
+            }
+        },
+
+        _getServiceNodes: function (node) {
+            return node.children.filter(function (childNode) {
+                return childNode.data.isServiceNode;
+            })
         }
     });
+
+    Alfresco.widget.SearchButton = function (p_editor, p_params) {
+        var span = document.createElement('span');
+        Alfresco.widget.SearchButton.superclass.constructor.call(this, p_editor, p_params);
+        Dom.addClass(this.editIcon, 'insitu-search-on-node');
+        span.innerHTML = '&nbsp;&nbsp;&nbsp;&nbsp;';
+        this.params.container.appendChild(span);
+        var contentEl = this.params.treeNode.getContentEl();
+        contentEl && Dom.addClass(contentEl, 'arm-tree-node-to-attach');
+        return this;
+    };
+
+    YAHOO.lang.extend(Alfresco.widget.SearchButton, Alfresco.widget.InsituEditorIcon, {
+        onIconClick: function (e, obj) {
+            if (obj.disabled) {
+                return;
+            }
+
+            var node = obj.params.treeNode;
+            YAHOO.Bubbling.fire('appendInputField', {
+                armNode: node,
+                bubblingLabel: "documents-arm"
+            });
+
+            Event.stopEvent(e);
+        },
+
+        _fadeOut: function (p_element) {
+            return;
+        }
+    }, true);
+
+    Alfresco.widget.ResetButton = function (p_editor, p_params) {
+        var span = document.createElement('span');
+        Alfresco.widget.ResetButton.superclass.constructor.call(this, p_editor, p_params);
+        Dom.addClass(this.editIcon, 'reset-search-button');
+        span.innerHTML = '&nbsp;&nbsp;&nbsp;';
+        this.params.container.appendChild(span);
+        return this;
+    };
+
+    YAHOO.lang.extend(Alfresco.widget.ResetButton, Alfresco.widget.InsituEditorIcon, {
+        onIconClick: function (e, obj) {
+            if (obj.disabled) {
+                return;
+            }
+
+            var node = obj.params.treeNode;
+            YAHOO.Bubbling.fire('resetSearch', {
+                armNode: node,
+                bubblingLabel: "documents-arm"
+            });
+
+            Event.stopEvent(e);
+        },
+
+        _fadeOut: function (p_element) {
+            return;
+        }
+    }, true);
 })();

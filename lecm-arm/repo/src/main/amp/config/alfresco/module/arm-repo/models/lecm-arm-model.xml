@@ -262,6 +262,12 @@
 					<mandatory>false</mandatory>
 					<index enabled="false"/>
 				</property>
+				<!--Максимальное количество отображаемых узлов в дереве-->
+				<property name="lecm-arm:max-shown-nodes-count">
+					<type>d:int</type>
+					<mandatory>false</mandatory>
+					<default>-1</default>
+				</property>
 			</properties>
 			<associations>
 				<!-- Список колонок -->

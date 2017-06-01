@@ -9,6 +9,8 @@ import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
 import ru.it.lecm.arm.beans.ArmWrapperService;
 import ru.it.lecm.arm.beans.node.ArmNode;
+import ru.it.lecm.arm.beans.search.ArmChildrenRequest;
+import ru.it.lecm.arm.beans.search.ArmChildrenResponse;
 import ru.it.lecm.base.beans.SearchQueryProcessorService;
 
 import java.util.ArrayList;
@@ -38,16 +40,34 @@ public class ArmQueryChildRule extends ArmBaseChildRule {
     }
 
     @Override
-    public List<ArmNode> build(ArmWrapperService service, ArmNode node) {
-        List<ArmNode> nodes = new ArrayList<ArmNode>();
+    public ArmChildrenResponse build(ArmWrapperService service, ArmNode node, ArmChildrenRequest request) {
+        List<ArmNode> nodes = new ArrayList<>();
+        long totalChildren = -1;
 
         if (listQuery != null) {
             SearchParameters sp = new SearchParameters();
             sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
             sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
 
+            String preparedSearchTerm;
+            if (request.getSearchTerm() != null && request.getSearchTerm().length() > 0) {
+                if (request.getSearchTerm().contains("*")) {
+                    preparedSearchTerm = request.getSearchTerm();
+                } else {
+                    preparedSearchTerm = "*" + request.getSearchTerm() + "*";
+                }
+                listQuery += " AND @cm\\:name:\"" + preparedSearchTerm + "\"";
+            }
+
             String processedQuery = processorService.processQuery(listQuery);
             sp.setQuery(processedQuery);
+
+            if (request.getMaxItems() != -1) {
+                totalChildren = searchCounter.query(sp, false, 0, 0);
+                sp.setSkipCount(request.getSkipCount());
+                sp.setMaxItems(request.getMaxItems());
+            }
+
             sp.addSort("@" + ContentModel.PROP_NAME, true);
 
             ResultSet results = null;
@@ -63,8 +83,7 @@ public class ArmQueryChildRule extends ArmBaseChildRule {
                 }
             }
         }
-
-        return nodes;
+        return new ArmChildrenResponse(nodes, totalChildren == -1 ? nodes.size() : totalChildren);
     }
 
     @Override

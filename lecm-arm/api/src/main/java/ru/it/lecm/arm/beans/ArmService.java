@@ -39,6 +39,7 @@ public interface ArmService {
 	QName PROP_COUNTER_QUERY = QName.createQName(ARM_NAMESPACE_URI, "counter-limitation");
 	QName PROP_COUNTER_DESCRIPTION = QName.createQName(ARM_NAMESPACE_URI, "counter-description");
 	QName PROP_HTML_URL = QName.createQName(ARM_NAMESPACE_URI, "html-url");
+	QName PROP_MAX_ITEMS = QName.createQName(ARM_NAMESPACE_URI, "max-shown-nodes-count");
 	QName PROP_REPORT_CODES = QName.createQName(ARM_NAMESPACE_URI, "reportCodes");
 	QName ASSOC_NODE_COLUMNS = QName.createQName(ARM_NAMESPACE_URI, "fields-assoc");
 	QName ASSOC_NODE_FILTERS = QName.createQName(ARM_NAMESPACE_URI, "filters-assoc");

@@ -3,6 +3,8 @@ package ru.it.lecm.arm.beans.childRules;
 import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.arm.beans.ArmWrapperService;
 import ru.it.lecm.arm.beans.node.ArmNode;
+import ru.it.lecm.arm.beans.search.ArmChildrenRequest;
+import ru.it.lecm.arm.beans.search.ArmChildrenResponse;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.util.ArrayList;
@@ -50,7 +52,7 @@ public class ArmStatusesChildRule extends ArmBaseChildRule {
     }
 
     @Override
-    public List<ArmNode> build(ArmWrapperService service, ArmNode node) {
+    public ArmChildrenResponse build(ArmWrapperService service, ArmNode node, ArmChildrenRequest request) {
         List<ArmNode> nodes = new ArrayList<ArmNode>();
         Set<String> allStatuses = new HashSet<String>();
         List<String> avaiableTypes = new ArrayList<String>();
@@ -123,7 +125,7 @@ public class ArmStatusesChildRule extends ArmBaseChildRule {
                 nodes.add(childNode);
             }
         }
-        return nodes;
+        return new ArmChildrenResponse(nodes, nodes.size());
     }
 
     @Override

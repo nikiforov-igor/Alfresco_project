@@ -10,6 +10,8 @@ import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
 import ru.it.lecm.arm.beans.ArmWrapperService;
 import ru.it.lecm.arm.beans.node.ArmNode;
+import ru.it.lecm.arm.beans.search.ArmChildrenRequest;
+import ru.it.lecm.arm.beans.search.ArmChildrenResponse;
 import ru.it.lecm.base.beans.SearchQueryProcessorService;
 
 import java.util.ArrayList;
@@ -68,8 +70,9 @@ public class ArmXPathChildRule extends ArmBaseChildRule {
 	}
 
 	@Override
-	public List<ArmNode> build(ArmWrapperService service, ArmNode node) {
+	public ArmChildrenResponse build(ArmWrapperService service, ArmNode node, ArmChildrenRequest request) {
 		List<ArmNode> nodes = new ArrayList<>();
+		long totalChildren = -1;
 		//шаблонный запрос из верхнего узла
 		if (rootXPath != null) {
 			SearchParameters sp = new SearchParameters();
@@ -92,9 +95,25 @@ public class ArmXPathChildRule extends ArmBaseChildRule {
 				query.append(" AND (").append(filter).append(")");
 			}
 
-			String processedQuery = processorService.processQuery(query.toString());
+			String preparedSearchTerm;
+			if (request.getSearchTerm() != null && request.getSearchTerm().length() > 0) {
+				if (request.getSearchTerm().contains("*")) {
+					preparedSearchTerm = request.getSearchTerm();
+				} else {
+					preparedSearchTerm = "*" + request.getSearchTerm() + "*";
+				}
+				query.append(" AND @cm\\:name:\"" + preparedSearchTerm + "\"");
+			}
 
+			String processedQuery = processorService.processQuery(query.toString());
 			sp.setQuery(processedQuery);
+
+			if (request.getMaxItems() != -1) {
+				totalChildren = searchCounter.query(sp, false, 0, 0);
+				sp.setSkipCount(request.getSkipCount());
+				sp.setMaxItems(request.getMaxItems());
+			}
+
 			sp.addSort("@" + ContentModel.PROP_NAME, true);
 
 			ResultSet results = null;
@@ -117,8 +136,7 @@ public class ArmXPathChildRule extends ArmBaseChildRule {
 				}
 			});
 		}
-
-		return nodes;
+		return new ArmChildrenResponse(nodes, totalChildren == -1 ? nodes.size() : totalChildren);
 	}
 
 	@Override

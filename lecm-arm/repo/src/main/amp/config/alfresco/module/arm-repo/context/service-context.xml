@@ -72,6 +72,7 @@
         <property name="childRulesCache" ref="arm.rules.cache"/>
         <property name="secretaryService" ref="secretaryService"/>
         <property name="scriptService" ref="scriptService"/>
+        <property name="searchCounter" ref="searchCounterBean"/>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
 			<map>

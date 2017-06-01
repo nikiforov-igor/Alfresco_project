@@ -7,6 +7,8 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.arm.beans.childRules.ArmBaseChildRule;
 import ru.it.lecm.arm.beans.node.ArmNode;
+import ru.it.lecm.arm.beans.search.ArmChildrenRequest;
+import ru.it.lecm.arm.beans.search.ArmChildrenResponse;
 import ru.it.lecm.base.beans.SearchCounter;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
@@ -82,20 +84,15 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
     }
 
     @Override
-    public List<ArmNode> getChildNodes(NodeRef node, NodeRef parentRef) {
-        return getChildNodes(node, parentRef, false);
-    }
-
-    @Override
-    public List<ArmNode> getChildNodes(NodeRef node, NodeRef parentRef, boolean onlyMeta) {
+    public ArmChildrenResponse getChildNodes(ArmChildrenRequest request) {
         List<ArmNode> result = new ArrayList<>();
 
-        ArmNode parent = wrapArmNodeAsObject(parentRef, false, onlyMeta);
+        ArmNode parent = wrapArmNodeAsObject(request.getParentRef(), false, request.isOnlyMeta());
 
         // 1. Дочерние статические элементы из настроек ARM
         NodeRef parentFromArm;
-        if (isArmElement(node)) {
-            parentFromArm = node;
+        if (isArmElement(request.getNodeRef())) {
+            parentFromArm = request.getNodeRef();
         } else { // узел справочника или какой-нить другой объект, то реальный родитель - берется последний узел из ARM
             parentFromArm = parent.getNodeRef();
         }
@@ -103,12 +100,10 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         if (parentFromArm != null) {
             List<NodeRef> staticChilds = service.getChildNodes(parentFromArm); // узлы АРМа
             for (NodeRef staticChild : staticChilds) {
-                ArmNode stNode = wrapArmNodeAsObject(staticChild, false, onlyMeta);
+                ArmNode stNode = wrapArmNodeAsObject(staticChild, false, request.isOnlyMeta());
                 if (stNode.getNodeQuery() != null) {
-                    List<ArmNode> queriedChilds = stNode.getNodeQuery().build(this, stNode);
-                    for (ArmNode queriedChild : queriedChilds) {
-                        result.add(queriedChild);
-                    }
+                    ArmChildrenResponse queriedChilds = stNode.getNodeQuery().build(this, stNode, request);
+                    return queriedChilds;
                 } else {
                     result.add(stNode);
                 }
@@ -117,11 +112,11 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
 
         //2. Добавить реальных дочерних узлов для иерархического справочника!
         // в остальных случаях у нас не может быть дочерних элементов
-        if (node != null && !isArmElement(node)){
-            List<NodeRef> children = parent.getNodeQuery().getChildren(node);
+        if (request.getNodeRef() != null && !isArmElement(request.getNodeRef())){
+            List<NodeRef> children = parent.getNodeQuery().getChildren(request.getNodeRef());
             if (children != null) {
                 for (NodeRef dicChild : children) {
-                    result.add(wrapAnyNodeAsObject(dicChild, parent, onlyMeta));
+                    result.add(wrapAnyNodeAsObject(dicChild, parent, request.isOnlyMeta()));
                 }
 
                 Collections.sort(result, new Comparator<ArmNode>() {
@@ -132,7 +127,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
                 });
             }
         }
-        return result;
+        return new ArmChildrenResponse(result, result.size());
     }
 
     private boolean hasChildNodes(NodeRef node, NodeRef parentRef) {
@@ -161,8 +156,8 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
             for (NodeRef staticChild : staticChilds) {
                 if (service.getNodeChildRule(staticChild) != null) {
                     ArmNode stNode = wrapArmNodeAsObject(staticChild);
-                    List<ArmNode> queriedChilds = stNode.getNodeQuery().build(this, stNode);
-                    if (!queriedChilds.isEmpty()) {
+                    ArmChildrenResponse queriedChilds = stNode.getNodeQuery().build(this, stNode, new ArmChildrenRequest(node, parentRef));
+                    if (!queriedChilds.getNodes().isEmpty()) {
                         return true;
                     }
                 } else {
@@ -177,7 +172,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
 
     public boolean hasChildNodes(ArmNode node) {
         return hasChildNodes(node.getNodeRef(), node.getArmNodeRef()) ||
-                (node.getNodeQuery() != null && !node.getNodeQuery().build(this, node).isEmpty());
+                (node.getNodeQuery() != null && !node.getNodeQuery().build(this, node, new ArmChildrenRequest(node.getNodeRef(), node.getArmNodeRef())).getNodes().isEmpty());
     }
 
     public ArmNode wrapArmNodeAsObject(NodeRef nodeRef, boolean isAccordion) {
@@ -229,6 +224,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
             node.setSearchQuery(searchQuery.replaceAll("\\n", " ").replaceAll("\\r", " "));
         }
         node.setHtmlUrl((String) properties.get(ArmService.PROP_HTML_URL));
+        node.setMaxItemsCount((Integer) properties.get(ArmService.PROP_MAX_ITEMS));
         node.setReportCodes((String) properties.get(ArmService.PROP_REPORT_CODES));
         node.setSearchType((String) properties.get(ArmService.PROP_SEARCH_TYPE));
 
@@ -271,6 +267,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         node.setSearchQuery(sb.toString());
 
         node.setHtmlUrl(parentNode.getHtmlUrl());
+        node.setMaxItemsCount(parentNode.getMaxItemsCount());
         node.setReportCodes(parentNode.getReportCodes());
         node.setSearchType(parentNode.getSearchType());
 
