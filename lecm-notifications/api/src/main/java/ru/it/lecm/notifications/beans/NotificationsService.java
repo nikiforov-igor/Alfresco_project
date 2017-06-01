@@ -45,6 +45,9 @@ public interface NotificationsService {
 	QName PROP_NOTIFICATION_TEMPLATE = QName.createQName(NOTIFICATIONS_TEMPLATE_NAMESPACE_URI, "template");
 	QName PROP_NOTIFICATION_TEMPLATE_SUBJECT = QName.createQName(NOTIFICATIONS_TEMPLATE_NAMESPACE_URI, "subject");
 	QName ASSOC_NOTIFICATION_TEMPLATE_TEMPLATE_ASSOC = QName.createQName(NOTIFICATIONS_TEMPLATE_NAMESPACE_URI, "template-assoc");
+	QName PROP_NOTIFICATION_TEMPLATE_SEND_ENABLE = QName.createQName(NOTIFICATIONS_TEMPLATE_NAMESPACE_URI, "send-enable");
+	QName PROP_NOTIFICATION_TEMPLATE_EXCLUSIONS_LIST = QName.createQName(NOTIFICATIONS_TEMPLATE_NAMESPACE_URI, "exclusions-list");
+	QName ASSOC_NOTIFICATION_TEMPLATE_EXCLUSIONS_EMPLOYEE = QName.createQName(NOTIFICATIONS_TEMPLATE_NAMESPACE_URI, "exclusion-employee");
 
 	String NOTIFICATION_TYPE_DICTIONARY_NAME = "Типы доставки уведомлений";
 	QName TYPE_NOTIFICATION_TYPE = QName.createQName(NOTIFICATIONS_TYPE_NAMESPACE_URI, "notification-type");
@@ -54,6 +57,7 @@ public interface NotificationsService {
 	QName PROP_AUTOR = QName.createQName(NOTIFICATIONS_NAMESPACE_URI, "author");
 	QName PROP_DESCRIPTION = QName.createQName(NOTIFICATIONS_NAMESPACE_URI, "description");
 	QName PROP_FORMING_DATE = QName.createQName(NOTIFICATIONS_NAMESPACE_URI, "forming-date");
+	QName PROP_FROM_TEMPLATE = QName.createQName(NOTIFICATIONS_NAMESPACE_URI, "from-template");
 	QName ASSOC_RECIPIENT = QName.createQName(NOTIFICATIONS_NAMESPACE_URI, "recipient-assoc");
 
 	QName TYPE_NOTIFICATIONS_USER_SETTINGS = QName.createQName(NOTIFICATIONS_SETTINGS_NAMESPACE_URI, "user");
@@ -249,4 +253,38 @@ public interface NotificationsService {
 
 	void sendNotification(String author, NodeRef initiatorRef, List<NodeRef> recipientRefs, String templateCode, Map<String, Object> config, boolean dontCheckAccessToObject);
 
+	/**
+	 * @return Включена или выключена отправка уведомлений по шаблону
+	 */
+	boolean isTemplateNotificationsEnabled(String templateCode);
+
+	boolean isTemplateNotificationsEnabled(NodeRef template);
+
+	boolean isTemplateNotificationsEnabled(String templateCode, NodeRef employee);
+
+	boolean isTemplateNotificationsEnabled(NodeRef template, NodeRef employee);
+
+	/**
+	 * @return Включить отправку уведомлений по шаблону для сотрудника
+	 */
+	boolean enableTemplateNotification(String templateCode, NodeRef employee);
+	/**
+	 * @return Отключить отправку уведомлений по шаблону для сотрудника
+	 */
+	boolean disableTemplateNotification(String templateCode, NodeRef employee);
+
+	/**
+	 * Создать исключение для шаблона для сотрудника
+	 */
+	boolean createTemplateNotificationExclusion(String templateCode, NodeRef employee);
+
+	/**
+	 * Удалить исключение для шаблона для сотрудника
+	 */
+	boolean deleteTemplateNotificationExclusion(String templateCode, NodeRef employee);
+
+	/**
+	 * Удалить все исключения
+	 */
+	void clearExclusions(String templateCode);
 }

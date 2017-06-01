@@ -33,7 +33,7 @@ public class ArmDictionaryChildRule extends ArmBaseChildRule {
         //шаблонный запрос из верхнего узла
         List<NodeRef> children = dictionaryService.getChildrenSortedByName(getDictionary());
         for (NodeRef child : children) {
-            nodes.add(service.wrapAnyNodeAsObject(child, node));
+            nodes.add(service.wrapAnyNodeAsObject(child, node, getSubstituteString()));
         }
 
         return nodes;

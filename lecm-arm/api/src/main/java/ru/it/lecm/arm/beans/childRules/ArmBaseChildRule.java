@@ -12,7 +12,7 @@ import java.util.List;
  * Time: 9:57
  */
 public abstract class ArmBaseChildRule {
-
+	private String substituteString;
     //заглушка для кэширования пустых значений
     public static final ArmBaseChildRule NULL_RULE = new ArmBaseChildRule() {
         @Override
@@ -29,4 +29,13 @@ public abstract class ArmBaseChildRule {
     abstract public List<ArmNode> build(ArmWrapperService service, ArmNode node);
 
     abstract public List<NodeRef> getChildren(NodeRef node);
+
+	public String getSubstituteString() {
+		return substituteString;
+	}
+
+	public void setSubstituteString(String substituteString) {
+		this.substituteString = substituteString;
+	}
+
 }
