@@ -156,7 +156,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
             List<NodeRef> children = parent.getNodeQuery().getChildren(node);
             if (children != null) {
                 for (NodeRef dicChild : children) {
-                    result.add(wrapAnyNodeAsObject(dicChild, parent, onlyMeta, currentSection));
+                    result.add(wrapAnyNodeAsObject(dicChild, parent, parent.getNodeQuery().getSubstituteString(), onlyMeta, null, currentSection));
                 }
 
                 Collections.sort(result, new Comparator<ArmNode>() {
@@ -326,7 +326,12 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         return wrapAnyNodeAsObject(node, parent, substituteString, onlyMeta, null);
     }
 
-	public ArmNode wrapAnyNodeAsObject(NodeRef nodeRef, ArmNode parentNode, String substituteString, boolean onlyMeta, String searchTerm, NodeRef currentSection) {
+    @Override
+    public ArmNode wrapAnyNodeAsObject(NodeRef node, ArmNode parent, String substituteString, boolean onlyMeta, String searchTerm) {
+        return wrapAnyNodeAsObject(node, parent, substituteString, onlyMeta, searchTerm, null);
+    }
+
+    public ArmNode wrapAnyNodeAsObject(NodeRef nodeRef, ArmNode parentNode, String substituteString, boolean onlyMeta, String searchTerm, NodeRef currentSection) {
         ArmNode node = new ArmNode();
 		if (null == substituteString || substituteString.isEmpty()) {
             node.setTitle(substitudeService.getObjectDescription(nodeRef));
