@@ -442,7 +442,6 @@
 					<show id="lecm-arm:field-is-marker" force="true"/>
 					<show id="lecm-arm:field-marker-icon" force="true"/>
 					<show id="lecm-arm:field-marker-html" force="true"/>
-					<show id="lecm-arm:field-is-counter" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-arm:field-is-marker">
@@ -479,7 +478,6 @@
 					<show id="lecm-arm:field-is-marker" force="true"/>
 					<show id="lecm-arm:field-marker-icon" force="true"/>
 					<show id="lecm-arm:field-marker-html" force="true"/>
-					<show id="lecm-arm:field-is-counter" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-arm:field-is-marker">
