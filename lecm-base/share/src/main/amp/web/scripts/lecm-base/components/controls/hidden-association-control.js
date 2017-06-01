@@ -82,26 +82,22 @@ LogicECM.module = LogicECM.module || {};
                 arrItems = value;
             }
 
-            var onSuccess = function (response)
-            {
-                var items = response.json.data.items,
-                    item;
+            var onSuccess = function (response) {
+                var items = response.json.data.items;
                 this.selectedItems = {};
 
-                for (var i = 0, il = items.length; i < il; i++) {
-                    item = items[i];
+                items.forEach (function(item) {
                     this.selectedItems[item.nodeRef] = item;
-                }
+                }, this);
             };
 
-            var onFailure = function (response)
-            {
+            var onFailure = function (response) {
                 this.selectedItems = {};
             };
 
-            if (arrItems !== "") {
+            if (arrItems) {
 
-                var items = (arrItems.indexOf(",") > 0) ? arrItems.split(",") : arrItems.split(";");
+                var items = arrItems.indexOf(",") > 0 ? arrItems.split(",") : arrItems.split(";");
 
                 Alfresco.util.Ajax.jsonRequest(
                     {
