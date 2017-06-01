@@ -75,11 +75,8 @@ public class ArmDictionaryChildRule extends ArmBaseChildRule {
 
         List<ArmNode> nodes = new ArrayList<>();
         //шаблонный запрос из верхнего узла
-        List<NodeRef> children = dictionaryService.getChildrenSortedByName(getDictionary());
-        for (NodeRef child : children) {
-            nodes.add(service.wrapAnyNodeAsObject(child, node, getSubstituteString()));
         for (NodeRef child : resultList) {
-            nodes.add(service.wrapAnyNodeAsObject(child, node));
+            nodes.add(service.wrapAnyNodeAsObject(child, node, getSubstituteString()));
         }
         return new ArmChildrenResponse(nodes, totalChildren == -1 ? nodes.size() : totalChildren);
     }

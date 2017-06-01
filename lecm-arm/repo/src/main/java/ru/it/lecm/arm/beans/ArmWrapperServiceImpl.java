@@ -116,7 +116,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
             List<NodeRef> children = parent.getNodeQuery().getChildren(request.getNodeRef());
             if (children != null) {
                 for (NodeRef dicChild : children) {
-                    result.add(wrapAnyNodeAsObject(dicChild, parent, parent.getNodeQuery().getSubstituteString(), onlyMeta));
+                    result.add(wrapAnyNodeAsObject(dicChild, parent, parent.getNodeQuery().getSubstituteString(), request.isOnlyMeta()));
                 }
 
                 Collections.sort(result, new Comparator<ArmNode>() {
