@@ -1,6 +1,10 @@
 <#include "/ru/it/lecm/base-share/components/controls/association-control.ftl">
 <#assign params = field.control.params>
 <#assign doNotCheckAccess = true/>
+<#assign fieldValue = defaultValue/>
+<#if fieldValue == "">
+    <#assign fieldValue = field.value>
+</#if>
 <#if params.doNotCheckAccess?? && params.doNotCheckAccess == "false">
     <#assign doNotCheckAccess = false/>
 </#if>
@@ -24,7 +28,7 @@
                 </#if>
                     disabled: ${disabled?string},
                     currentValue: "${field.value!''}",
-                    defaultValue: "${fieldValue}",
+                    defaultValue: "${fieldValue!''}",
                 <#if params.employeesByOrgDS??>
                     employeesByOrgDS: "${params.employeesByOrgDS}",
                 </#if>

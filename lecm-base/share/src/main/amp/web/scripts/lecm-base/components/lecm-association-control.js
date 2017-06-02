@@ -240,7 +240,9 @@ LogicECM.module = LogicECM.module || {};
 
                 viewUrl: null,
 
-                onlyTreeNodeSelectable: false
+                onlyTreeNodeSelectable: false,
+
+				noValueLabel: "form.control.novalue"
 			},
 
 			onReady: function () {
@@ -263,7 +265,7 @@ LogicECM.module = LogicECM.module || {};
 			init: function()
 			{
 				this.wasLoadWindowData = false;
-
+				this.tempDisabled = false;
 				this.options.controlId = this.id + '-cntrl';
 				if (this.options.prefixPickerId == null) {
 					this.options.prefixPickerId = this.options.controlId;
@@ -286,6 +288,10 @@ LogicECM.module = LogicECM.module || {};
                 if (removed) {
                     removed.disabled = this.options.disabled || this.readonly;
                 }
+				var selectedItems = Dom.get(this.options.controlId + "-selectedItems");
+				if (selectedItems) {
+					selectedItems.disabled = this.options.disabled || this.readonly;
+				}
                 input = Dom.get(this.options.controlId + "-autocomplete-input");
 				if (input != null) {
 					input.disabled = this.options.disabled || this.options.lazyLoading || this.readonly;
@@ -569,11 +575,12 @@ LogicECM.module = LogicECM.module || {};
 					this.selectedItems = {};
 					this.singleSelectedItem = null;
 					var clear = clearCurrentDisplayValue;
+					var el = Dom.get(this.options.controlId + "-currentValueDisplay");
 					if (!this.options.disabled) {
 						this.updateSelectedItems();
 						this.updateAddButtons();
-					} else if (Dom.get(this.options.controlId + "-currentValueDisplay") != null && Dom.get(this.options.controlId + "-currentValueDisplay").innerHTML.trim() === "") {
-						Dom.get(this.options.controlId + "-currentValueDisplay").innerHTML = this.msg("form.control.novalue");
+					} else if (el && (el.innerHTML.trim() === "" || el.innerHTML.trim() === this.msg(this.options.noValueLabel))) {
+						Dom.get(this.options.controlId + "-currentValueDisplay").innerHTML = this.msg(this.options.noValueLabel);
 						clear = false;
 					}
 					if (updateForms) {
@@ -1780,7 +1787,7 @@ LogicECM.module = LogicECM.module || {};
 			{
 				var renderHelper = function (p_key, p_value, p_metadata)
 				{
-					return $html(p_value);
+					return p_value;
 				};
 
 				return YAHOO.lang.substitute(template, item, renderHelper);
@@ -2592,7 +2599,6 @@ LogicECM.module = LogicECM.module || {};
 					this.isSearch = false;
 					this.allowedNodes = null;
 					this.allowedNodesScript = null;
-					this.tempDisabled = false;
 
 					if(this.options.useDeferedReinit) {
 						this.reinitDeferedList.fulfil("eventRecieved");

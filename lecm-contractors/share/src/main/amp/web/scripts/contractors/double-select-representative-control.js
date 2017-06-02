@@ -33,6 +33,7 @@ LogicECM.module = LogicECM.module || {};
 
     YAHOO.extend(LogicECM.module.DoubleSelectRepresentativeForContractor, Alfresco.component.Base, {
         previousSelected: null,
+        jsControl: null,
         options: {
             employeesByOrgDS: "lecm/employees/byOrg/{organization}/picker",
             representativesByContrDS: "lecm/representatives/{contractor}/picker",
@@ -74,6 +75,7 @@ LogicECM.module = LogicECM.module || {};
             var obj = args[1];
             var control = obj.eventGroup;
             if (control.id === this.options.fieldHtmlId && this.options.controlName == control.name) {
+                this.jsControl = control;
                 if (this.previousSelected == null) {
                     LogicECM.module.Base.Util.disableControl(this.options.formId, this.options.fieldId);
                 }
@@ -106,7 +108,7 @@ LogicECM.module = LogicECM.module || {};
                         additionalFilter: "",
                         showAssocViewForm: scope.options.showAssocViewForm
                     }
-                    scope._updateControls(selectedContractor, controlConfig);
+                    scope._updateControls(selectedContractor, resetValue, controlConfig);
                 } else {
                     scope.isCurrentUserFromSelectedOrgUnit(selectedContractor, updateControls);
                     function updateControls(showAssocViewForm) {
@@ -128,7 +130,7 @@ LogicECM.module = LogicECM.module || {};
                             doNotCheckAccess: scope.options.doNotCheckAccess,
                             additionalFilter: '@lecm\-orgstr\-aspects\:linked\-organization\-assoc\-ref:"' + selectedContractor + '\"'
                         }
-                        scope._updateControls(selectedContractor, controlConfig);
+                        scope._updateControls(selectedContractor, resetValue, controlConfig);
                     }
                 }
             };
@@ -163,9 +165,10 @@ LogicECM.module = LogicECM.module || {};
             } else {
                 if (marker != 'contractor') {
                     this.isCurrentUserFromSelectedOrgUnit(selectedContractor, function(showAssocViewForm){
-                        this._updateControls(selectedContractor, {
+                        LogicECM.module.Base.Util.reInitializeControl(this.options.formId, this.options.fieldId, {
                             showAssocViewForm: showAssocViewForm
                         });
+                        this.options.defaultValueLoaded = true;
                     });
                 }
             }
@@ -219,11 +222,23 @@ LogicECM.module = LogicECM.module || {};
             }
         },
 
-        _updateControls: function (selectedContractor, options) {
-            if (!selectedContractor) {
-                options.disabled = true;
+        _updateControls: function (selectedContractor, resetValue, options) {
+            var control = this.jsControl;
+            if (control) {
+                if (this.options.defaultValueLoaded || !this.options.currentValue) {
+                    control.selectedItems = {};
+                    control.defaultValue = null;
+                    options.selectedValue = "";
+                }
+                options.noValueLabel = '';
+                control.updateFormFields(true);
+                if (!selectedContractor) {
+                    options.disabled = true;
+                }
+                control.setOptions(options);
+                control.init();
+                this.options.defaultValueLoaded = true;
             }
-            LogicECM.module.Base.Util.reInitializeControl(this.options.formId, this.options.fieldId, options);
         }
     });
 })();
