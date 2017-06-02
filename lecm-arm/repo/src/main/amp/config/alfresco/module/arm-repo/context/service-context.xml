@@ -222,6 +222,7 @@
                         <value>lecm-arm:search-type</value>
                         <value>lecm-arm:is-aggregation-node</value>
                         <value>lecm-arm:expression</value>
+                        <value>lecm-arm:max-shown-nodes-count</value>
                     </list>
                 </entry>
                 <entry key="lecm-arm:reports-node">
@@ -232,6 +233,7 @@
                         <value>lecm-arm:types</value>
                         <value>lecm-arm:reportCodes</value>
                         <value>lecm-arm:expression</value>
+                        <value>lecm-arm:max-shown-nodes-count</value>
                     </list>
                 </entry>
                 <entry key="lecm-arm:field">
@@ -309,6 +311,7 @@
                         <value>lecm-arm:order</value>
                         <value>lecm-arm:node-child-rule-assoc</value>
                         <value>lecm-arm:expression</value>
+                        <value>lecm-arm:max-shown-nodes-count</value>
                     </list>
                 </entry>
             </map>
