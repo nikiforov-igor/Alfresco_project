@@ -66,16 +66,11 @@ public class ArmDictionaryChildRule extends ArmBaseChildRule {
 
         ResultSet resultSet = searchService.query(sp);
 
+        List<ArmNode> nodes = new ArrayList<>();
         if (resultSet != null) {
             for (ResultSetRow row : resultSet) {
-                resultList.add(row.getNodeRef());
+                nodes.add(service.wrapAnyNodeAsObject(row.getNodeRef(), node, getSubstituteString()));
             }
-        }
-
-        List<ArmNode> nodes = new ArrayList<>();
-        //шаблонный запрос из верхнего узла
-        for (NodeRef child : resultList) {
-            nodes.add(service.wrapAnyNodeAsObject(child, node, getSubstituteString()));
         }
         return new ArmChildrenResponse(nodes, totalChildren == -1 ? nodes.size() : totalChildren);
     }
