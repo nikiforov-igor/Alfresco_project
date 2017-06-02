@@ -665,8 +665,19 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
                         ((ArmScriptChildRule) result).setOrgstructureService(orgstructureBean);
                     }
 					result.setSubstituteString((String) props.get(PROP_CHILD_RULE_SUBSTITUTE_STRING));
-                }
-                if (result != null) {
+                    //Инициализируем общие параметры
+                    Integer maxItems = (Integer) props.get(PROP_MAX_ITEMS);
+                    if (maxItems != null) {
+                        result.setMaxItems(maxItems);
+                    }
+                    String searchTemplate = (String) props.get(PROP_SEARCH_TEMPLATE);
+                    if (searchTemplate != null) {
+                        result.setSearchTemplate(searchTemplate);
+                    }
+                    String sortConfig = (String) props.get(PROP_SORT_CONFIG);
+                    if (sortConfig != null) {
+                        result.setSortConfig(sortConfig);
+                    }
                     result.setNamespaceService(namespaceService);
                     result.setNodeService(nodeService);
                     result.setProcessorService(processorService);

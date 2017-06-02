@@ -222,7 +222,6 @@
                         <value>lecm-arm:search-type</value>
                         <value>lecm-arm:is-aggregation-node</value>
                         <value>lecm-arm:expression</value>
-                        <value>lecm-arm:max-shown-nodes-count</value>
                     </list>
                 </entry>
                 <entry key="lecm-arm:reports-node">
@@ -233,7 +232,6 @@
                         <value>lecm-arm:types</value>
                         <value>lecm-arm:reportCodes</value>
                         <value>lecm-arm:expression</value>
-                        <value>lecm-arm:max-shown-nodes-count</value>
                     </list>
                 </entry>
                 <entry key="lecm-arm:field">
@@ -261,6 +259,9 @@
                         <value>cm:name</value>
                         <value>lecm-arm:list-query-child-rule</value>
                         <value>lecm-arm:child-rule-substitute-string</value>
+                        <value>lecm-arm:node-rule-page-count</value>
+                        <value>lecm-arm:node-rule-search-template</value>
+                        <value>lecm-arm:node-rule-sort-config</value>
                     </list>
                 </entry>
                 <entry key="lecm-arm:dictionary-child-rule">
@@ -268,6 +269,9 @@
                         <value>cm:name</value>
                         <value>lecm-arm:child-rule-dictionary-assoc</value>
                         <value>lecm-arm:child-rule-substitute-string</value>
+                        <value>lecm-arm:node-rule-page-count</value>
+                        <value>lecm-arm:node-rule-search-template</value>
+                        <value>lecm-arm:node-rule-sort-config</value>
                     </list>
                 </entry>
                 <entry key="lecm-arm:statuses-child-rule">
@@ -276,6 +280,9 @@
                         <value>lecm-arm:statuses-rule</value>
                         <value>lecm-arm:selected-statuses</value>
                         <value>lecm-arm:child-rule-substitute-string</value>
+                        <value>lecm-arm:node-rule-page-count</value>
+                        <value>lecm-arm:node-rule-search-template</value>
+                        <value>lecm-arm:node-rule-sort-config</value>
                     </list>
                 </entry>
                 <entry key="lecm-arm:xpath-child-rule">
@@ -285,6 +292,9 @@
                         <value>lecm-arm:xpath-child-rule-types</value>
                         <value>lecm-arm:xpath-child-rule-filter</value>
                         <value>lecm-arm:child-rule-substitute-string</value>
+                        <value>lecm-arm:node-rule-page-count</value>
+                        <value>lecm-arm:node-rule-search-template</value>
+                        <value>lecm-arm:node-rule-sort-config</value>
                     </list>
                 </entry>
                 <entry key="lecm-arm:script-child-rule">
@@ -292,6 +302,9 @@
                         <value>cm:name</value>
                         <value>lecm-arm:script-child-rule-root</value>
                         <value>lecm-arm:child-rule-substitute-string</value>
+                        <value>lecm-arm:node-rule-page-count</value>
+                        <value>lecm-arm:node-rule-search-template</value>
+                        <value>lecm-arm:node-rule-sort-config</value>
                     </list>
                 </entry>
                 <entry key="lecm-arm:filter">
@@ -311,7 +324,6 @@
                         <value>lecm-arm:order</value>
                         <value>lecm-arm:node-child-rule-assoc</value>
                         <value>lecm-arm:expression</value>
-                        <value>lecm-arm:max-shown-nodes-count</value>
                     </list>
                 </entry>
             </map>

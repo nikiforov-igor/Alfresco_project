@@ -8,6 +8,7 @@ import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
+import org.apache.commons.lang.StringUtils;
 import ru.it.lecm.arm.beans.ArmWrapperService;
 import ru.it.lecm.arm.beans.node.ArmNode;
 import ru.it.lecm.arm.beans.search.ArmChildrenRequest;
@@ -103,6 +104,11 @@ public class ArmXPathChildRule extends ArmBaseChildRule {
 				query.append(" AND @cm\\:name:\"" + preparedSearchTerm + "\"");
 			}
 
+			String searchQuery = getSearchQuery(request.getSearchTerm());
+			if (StringUtils.isNotEmpty(searchQuery)) {
+				query.append(" AND ").append(searchQuery);
+			}
+
 			String processedQuery = processorService.processQuery(query.toString());
 			sp.setQuery(processedQuery);
 
@@ -112,7 +118,7 @@ public class ArmXPathChildRule extends ArmBaseChildRule {
 				sp.setMaxItems(request.getMaxItems());
 			}
 
-			sp.addSort("@" + ContentModel.PROP_NAME, true);
+			addSort(sp);
 
 			ResultSet results = null;
 			try {

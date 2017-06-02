@@ -1,9 +1,16 @@
 package ru.it.lecm.arm.beans.childRules;
 
+import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
+import org.alfresco.service.namespace.NamespaceException;
 import org.alfresco.service.namespace.NamespaceService;
+import org.alfresco.service.namespace.QName;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.arm.beans.ArmWrapperService;
 import ru.it.lecm.arm.beans.node.ArmNode;
 import ru.it.lecm.arm.beans.search.ArmChildrenRequest;
@@ -19,7 +26,17 @@ import java.util.List;
  * Time: 9:57
  */
 public abstract class ArmBaseChildRule {
+
+    private Logger logger = LoggerFactory.getLogger(ArmBaseChildRule.class);
+
 	private String substituteString;
+    protected int maxItems = -1;
+    protected String searchTemplate = "";
+    protected String sortConfig = "";
+
+    private static String SEARCH_TERM_TEMPLATE = "#searchTerm";
+    private static String DEFAULT_SEARCH_TEMPLATE = "@cm\\:name:\"" + SEARCH_TERM_TEMPLATE + "\"";
+
     //заглушка для кэширования пустых значений
     public static final ArmBaseChildRule NULL_RULE = new ArmBaseChildRule() {
         @Override
@@ -71,4 +88,56 @@ public abstract class ArmBaseChildRule {
 		this.substituteString = substituteString;
 	}
 
+    public int getMaxItems() {
+        return maxItems;
+    }
+
+    public void setMaxItems(int maxItems) {
+        this.maxItems = maxItems;
+    }
+
+    public void setSearchTemplate(String searchTemplate) {
+        this.searchTemplate = searchTemplate;
+    }
+
+    public void setSortConfig(String sortConfig) {
+        this.sortConfig = sortConfig;
+    }
+
+    protected String getSearchQuery(String searchTerm) {
+        String preparedSearchTerm = searchTerm;
+        if (StringUtils.isNotEmpty(preparedSearchTerm)) {
+            if (!preparedSearchTerm.contains("*")) {
+                preparedSearchTerm = "*" + preparedSearchTerm + "*";
+            }
+        } else {
+            return "";
+        }
+        String template;
+        if (StringUtils.isNotEmpty(searchTemplate)) {
+            template = searchTemplate;
+        } else {
+            template = DEFAULT_SEARCH_TEMPLATE;
+        }
+        return "(" + template.replace(SEARCH_TERM_TEMPLATE, preparedSearchTerm) + ")";
+    }
+
+    protected void addSort(SearchParameters searchParameters) {
+        if (StringUtils.isNotEmpty(sortConfig)) {
+            try {
+                String[] templates = sortConfig.split(";");
+                for (String sort : templates) {
+                    String[] splitStr = sort.split("\\|");
+                    String field = splitStr[0];
+                    String direction = splitStr[1];
+                    searchParameters.addSort("@" + QName.createQName(field, namespaceService), direction.toLowerCase().equals("asc"));
+                }
+            } catch (NamespaceException e) {
+                logger.error("Cannot parse sort configuration for arm child rule " + sortConfig, e);
+                searchParameters.addSort("@" + ContentModel.PROP_NAME, true);
+            }
+        } else {
+            searchParameters.addSort("@" + ContentModel.PROP_NAME, true);
+        }
+    }
 }

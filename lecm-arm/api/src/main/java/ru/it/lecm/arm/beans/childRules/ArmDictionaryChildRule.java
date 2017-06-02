@@ -8,6 +8,7 @@ import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
+import org.apache.commons.lang.StringUtils;
 import ru.it.lecm.arm.beans.ArmWrapperService;
 import ru.it.lecm.arm.beans.node.ArmNode;
 import ru.it.lecm.arm.beans.search.ArmChildrenRequest;
@@ -46,13 +47,11 @@ public class ArmDictionaryChildRule extends ArmBaseChildRule {
         sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
         String query = "PATH:\"" + path.toPrefixString(namespaceService) + "/*\" AND NOT @lecm\\-dic\\:active:false";
 
-        String preparedSearchTerm = request.getSearchTerm();
-        if (preparedSearchTerm != null && preparedSearchTerm.length() > 0) {
-            if (!preparedSearchTerm.contains("*")) {
-                preparedSearchTerm = "*" + preparedSearchTerm + "*";
-            }
-            query += " AND @cm\\:name:\"" + preparedSearchTerm + "\"";
+        String searchQuery = getSearchQuery(request.getSearchTerm());
+        if (StringUtils.isNotEmpty(searchQuery)) {
+            query += " AND " + searchQuery;
         }
+
         query = processorService.processQuery(query);
         sp.setQuery(query);
         long totalChildren = -1;
@@ -62,7 +61,7 @@ public class ArmDictionaryChildRule extends ArmBaseChildRule {
             sp.setMaxItems(request.getMaxItems());
         }
 
-        sp.addSort("@" + ContentModel.PROP_NAME, true);
+        addSort(sp);
 
         ResultSet resultSet = searchService.query(sp);
 

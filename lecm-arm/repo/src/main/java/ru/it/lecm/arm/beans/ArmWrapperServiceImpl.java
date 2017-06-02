@@ -104,7 +104,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
                 if (stNode.getNodeQuery() != null) {
                     ArmChildrenResponse queriedChilds = stNode.getNodeQuery().build(this, stNode, request);
                     //Если у нас на узле используется нода с постраничным выводом, то остальные ноды игнорируются
-                    if (request.getMaxItems() != -1) {
+                    if (request.getMaxItems() > 0) {
                         return queriedChilds;
                     } else {
                         for (ArmNode queriedChild : queriedChilds.getNodes()) {
@@ -231,7 +231,17 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
             node.setSearchQuery(searchQuery.replaceAll("\\n", " ").replaceAll("\\r", " "));
         }
         node.setHtmlUrl((String) properties.get(ArmService.PROP_HTML_URL));
-        node.setMaxItemsCount((Integer) properties.get(ArmService.PROP_MAX_ITEMS));
+
+        node.setMaxItemsCount(-1);
+        List<NodeRef> dynamicNodes = service.getChildNodes(nodeRef);
+        for (NodeRef dynamicNode : dynamicNodes) {
+            ArmBaseChildRule stNode = service.getNodeChildRule(dynamicNode);
+            if (stNode != null && stNode.getMaxItems() > 0) {
+                node.setMaxItemsCount(stNode.getMaxItems());
+                break;
+            }
+        }
+
         node.setReportCodes((String) properties.get(ArmService.PROP_REPORT_CODES));
         node.setSearchType((String) properties.get(ArmService.PROP_SEARCH_TYPE));
 
@@ -287,6 +297,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         node.setSearchQuery(formatQuery(sb.toString(), node.getNodeRef()));
         node.setHtmlUrl(parentNode.getHtmlUrl());
         node.setMaxItemsCount(parentNode.getMaxItemsCount());
+
         node.setReportCodes(parentNode.getReportCodes());
         node.setSearchType(parentNode.getSearchType());
 
