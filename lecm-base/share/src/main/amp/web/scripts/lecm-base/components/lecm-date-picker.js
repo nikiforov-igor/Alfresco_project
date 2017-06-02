@@ -533,10 +533,10 @@
                                 maxLimitDate.setSeconds(59);
                             }
 
-                            if (parsedDate && (!minLimitDate && !maxLimitDate) ||
+                            if (parsedDate && ((!minLimitDate && !maxLimitDate) ||
                                (minLimitDate && !maxLimitDate && parsedDate >= minLimitDate) ||
                                (!minLimitDate && maxLimitDate && parsedDate <= maxLimitDate) ||
-                               (minLimitDate && maxLimitDate && parsedDate >= minLimitDate && parsedDate <= maxLimitDate)) {
+                               (minLimitDate && maxLimitDate && parsedDate >= minLimitDate && parsedDate <= maxLimitDate))) {
                                if (me.options.disabled) {
                                    Dom.removeClass(me.id + "-date", "invalid");
                                } else {
