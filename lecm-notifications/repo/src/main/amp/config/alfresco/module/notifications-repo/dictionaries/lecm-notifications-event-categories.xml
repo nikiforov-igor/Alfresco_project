@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Категория события" type="lecm-dic:dictionary">
+        <items updateMode="CreateOrUpdate">
+            <item name="cm:Создание исключения" type="lecm-busjournal:eventCategory">
+                <property name="cm:name">Создание исключения</property>
+                <property name="lecm-busjournal:eventCategory-code">CREATE_TEMPLATE_EXCLUSION</property>
+            </item>
+            <item name="cm:Удаление исключения" type="lecm-busjournal:eventCategory">
+                <property name="cm:name">Удаление исключения</property>
+                <property name="lecm-busjournal:eventCategory-code">DELETE_TEMPLATE_EXCLUSION</property>
+            </item>
+        </items>
+    </item>
+</items>

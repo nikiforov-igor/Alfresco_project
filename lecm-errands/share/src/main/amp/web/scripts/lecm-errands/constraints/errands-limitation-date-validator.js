@@ -23,6 +23,7 @@ LogicECM.module.Errands.limitationDateValidation = function (field, args,  event
                 }
             }
         }
+        return true;
     }
-    return true;
+    return false;
 };

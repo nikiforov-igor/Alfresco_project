@@ -1,0 +1,8 @@
+<webscript>
+	<shortname>Unsubscribe Notification Template</shortname>
+	<description>Unsubscribe Notification Template</description>
+	<url>/lecm/notifications/template/unsubscribe?template={template}&amp;employee={employee}</url>
+	<authentication>user</authentication>
+	<format default="json"/>
+	<transaction>required</transaction>
+</webscript>

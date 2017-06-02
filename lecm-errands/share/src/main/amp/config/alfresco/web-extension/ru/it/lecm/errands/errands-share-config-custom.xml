@@ -683,6 +683,7 @@
                     <show id="lecm-errands:is-short"/>
                     <!-- Ссылка на документ основание  -->
                     <show id="lecm-errands:additional-document-assoc"/>
+                    <show id="lecm-base-dummy-aspects:script" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="collapsible1"/>
@@ -705,6 +706,8 @@
                     </field>
                     <field id="lecm-errands:executor-assoc">
                         <control>
+                            <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
+							<control-param name="showSearch">true</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
                             <control-param name="allowedNodesScript">lecm/errands/getAvailableEmployeesForChildErrand?parentDoc={parentDoc}</control-param>
                             <control-param name="param_parentDoc">parentDoc</control-param>
@@ -716,6 +719,7 @@
 	                <field id="lecm-errands:coexecutors-assoc" set="collapsible1">
                         <control>
 							<control-param name="showSearch">true</control-param>
+							<control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
                             <control-param name="allowedNodesScript">lecm/errands/getAvailableEmployeesForChildErrand?parentDoc={parentDoc}</control-param>
                             <control-param name="param_parentDoc">parentDoc</control-param>
@@ -738,6 +742,12 @@
                     <field id="lecm-errands:initiator-assoc" set="exist-bussines-role">
                         <control>
                             <control-param name="defaultValueDataSource">lecm/errands/getDefaultInitiator</control-param>
+                            <control-param name="changeItemsFireAction">initiatorChanged</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-base-dummy-aspects:script" set="exist-bussines-role">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-errands/errands-reinit-executors.js</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:is-important" set="collapsible2-inner">

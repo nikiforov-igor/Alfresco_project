@@ -10,18 +10,20 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.ApplicationEvent;
+import org.springframework.extensions.surf.util.URLEncoder;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.notifications.template.FreemarkerParserImpl;
@@ -64,6 +66,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
     private TransactionListener transactionListener;
 	private ApplicationContext applicationContext;
 	private NodeRef settingsNode;
+    private BusinessJournalService businessJournalService;
 
 	public ApplicationContext getApplicationContext() {
 		return applicationContext;
@@ -101,6 +104,10 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	public void setSecretaryService(SecretaryService secretaryService) {
 		this.secretaryService = secretaryService;
 	}
+
+    public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+        this.businessJournalService = businessJournalService;
+    }
 
     public Map<NodeRef, NotificationChannelBeanBase> getChannels() {
         if (this.channels == null) {
@@ -383,6 +390,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 
 							newNotificationUnit.setTypeRef(typeRef);
 							newNotificationUnit.setRecipientRef(tasksSecretary);
+							newNotificationUnit.setTemplate(generalizedNotification.getTemplateCode());
 							result.add(newNotificationUnit);
 						}
 					}
@@ -398,9 +406,9 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 
     private Set<NotificationUnit> addNotificationUnits(Notification generalizedNotification, Set<NodeRef> employeeRefs, String templateBody, String templateDescription, String templateSubject) {
         Set<NotificationUnit> result = new HashSet<NotificationUnit>();
-
+        final String templateCode = generalizedNotification.getTemplateCode();
         for (NodeRef employeeRef : employeeRefs) {
-            if (orgstructureService.isEmployee(employeeRef) && !employeeRef.equals(generalizedNotification.getInitiatorRef())) {
+            if (orgstructureService.isEmployee(employeeRef) && !employeeRef.equals(generalizedNotification.getInitiatorRef()) && isTemplateNotificationsEnabled(templateCode, employeeRef)) {
                 List<NodeRef> typeRefs = generalizedNotification.getTypeRefs();
                 if (typeRefs == null || typeRefs.isEmpty()) {
                     typeRefs = getEmployeeDefaultNotificationTypes(employeeRef);
@@ -418,14 +426,37 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
                     newNotificationUnit.setObjectRef(generalizedNotification.getObjectRef());
                     newNotificationUnit.setTypeRef(typeRef);
                     newNotificationUnit.setRecipientRef(employeeRef);
-					newNotificationUnit.setBody(templateBody);
-					newNotificationUnit.setSubject(templateSubject);
+                    newNotificationUnit.setBody(injectURLToBody(generalizedNotification, employeeRef, templateBody));
+                    newNotificationUnit.setSubject(templateSubject);
+                    newNotificationUnit.setTemplate(generalizedNotification.getTemplateCode());
                     result.add(newNotificationUnit);
                 }
             }
         }
 
         return result;
+    }
+
+    private String injectURLToBody(Notification template, NodeRef employeeRef, String templateBody) {
+        if (templateBody.contains("#unsubscribeURL")) {
+            StringBuilder url = new StringBuilder();
+            url.append(getUrlService().getServerShareUrl()).append("/page/unsubscribeTemplate");
+
+            StringBuilder paramsBuilder = new StringBuilder();
+            paramsBuilder.append("templateCode=").append(template.getTemplateCode());
+            paramsBuilder.append("&template=").append(getTemplateByCode(template.getTemplateCode()));
+            paramsBuilder.append("&employee=").append(employeeRef);
+
+            String encodedParams = Base64.encodeBase64String(paramsBuilder.toString().getBytes());
+            int encodedParamsHash = paramsBuilder.toString().hashCode();
+            String encodedURIParams = URLEncoder.encodeUriComponent(encodedParams);
+
+            url.append("?p1=").append(encodedURIParams);
+            url.append("&p2=").append(encodedParamsHash);
+
+            return templateBody.replace("#unsubscribeURL", url.toString());
+        }
+        return templateBody;
     }
 
     /**
@@ -719,6 +750,155 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 
 		sendNotification(notification, dontCheckAccessToObject);
 	}
+
+    @Override
+    public boolean isTemplateNotificationsEnabled(String templateCode, NodeRef employee) {
+        return isTemplateNotificationsEnabled(getTemplateByCode(templateCode), employee);
+    }
+
+    @Override
+    public boolean isTemplateNotificationsEnabled(NodeRef template, NodeRef employee) {
+        boolean isEnabled = isTemplateSendEnabled(template);
+        boolean isExclusionEmployee = isEmployeeHasExclusionForTemplate(template, employee);
+        return isEnabled ^ isExclusionEmployee;
+    }
+
+    @Override
+    public boolean enableTemplateNotification(String templateCode, NodeRef employee) {
+        return setTemplateNotificationStatusForEmployee(templateCode, employee, true);
+    }
+
+    @Override
+    public boolean disableTemplateNotification(String templateCode, NodeRef employee) {
+        return setTemplateNotificationStatusForEmployee(templateCode, employee, false);
+    }
+
+    @Override
+    public boolean createTemplateNotificationExclusion(String templateCode, NodeRef employee) {
+        boolean result = false;
+        NodeRef template = getTemplateByCode(templateCode);
+        if (template != null) {
+            boolean isEmployeeHasExclusion = isEmployeeHasExclusionForTemplate(template, employee);
+            if (!isEmployeeHasExclusion) {
+                nodeService.createAssociation(template, employee, ASSOC_NOTIFICATION_TEMPLATE_EXCLUSIONS_EMPLOYEE);
+
+                //Запись в бизнес-журнал
+                List<String> objects = new ArrayList<>();
+                objects.add(employee.toString());
+                businessJournalService.log(template, "CREATE_TEMPLATE_EXCLUSION", "#initiator создал исключение для #object1 по правилу #mainobject", objects);
+
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public boolean deleteTemplateNotificationExclusion(String templateCode, NodeRef employee) {
+        boolean result = false;
+        NodeRef template = getTemplateByCode(templateCode);
+        if (template != null) {
+            boolean isEmployeeHasExclusion = isEmployeeHasExclusionForTemplate(template, employee);
+            if (isEmployeeHasExclusion) {
+                nodeService.removeAssociation(template, employee, ASSOC_NOTIFICATION_TEMPLATE_EXCLUSIONS_EMPLOYEE);
+
+                //Запись в бизнес-журнал
+                List<String> objects = new ArrayList<>();
+                objects.add(employee.toString());
+                businessJournalService.log(template, "DELETE_TEMPLATE_EXCLUSION", "#initiator удалил исключение для #object1 по правилу #mainobject", objects);
+
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public void clearExclusions(String templateCode) {
+        NodeRef template = getTemplateByCode(templateCode);
+        if (template != null) {
+            List<AssociationRef> exclusionEmployees = nodeService.getTargetAssocs(template, ASSOC_NOTIFICATION_TEMPLATE_EXCLUSIONS_EMPLOYEE);
+            for (AssociationRef exclusionEmployee : exclusionEmployees) {
+                NodeRef affectedEmployee = exclusionEmployee.getTargetRef();
+                nodeService.removeAssociation(template, affectedEmployee, ASSOC_NOTIFICATION_TEMPLATE_EXCLUSIONS_EMPLOYEE);
+            }
+        }
+    }
+
+    private boolean setTemplateNotificationStatusForEmployee(String templateCode, NodeRef employee, boolean isEnabledStatus) {
+        boolean result = false;
+        final NodeRef template = getTemplateByCode(templateCode);
+        final NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
+        if (template != null) {
+            if (employee == null) {
+                employee = currentEmployee;
+            }
+            boolean isEnabled = isTemplateSendEnabled(template);
+            boolean isExclusionEmployee = isEmployeeHasExclusionForTemplate(template, employee);
+
+            if (isExclusionEmployee && ((isEnabled && isEnabledStatus) || (!isEnabled && !isEnabledStatus))) {
+                nodeService.removeAssociation(template, employee, ASSOC_NOTIFICATION_TEMPLATE_EXCLUSIONS_EMPLOYEE);
+                result = true;
+            }
+            if (!isExclusionEmployee && ((isEnabled && !isEnabledStatus) || (!isEnabled && isEnabledStatus))) {
+                nodeService.createAssociation(template, employee, ASSOC_NOTIFICATION_TEMPLATE_EXCLUSIONS_EMPLOYEE);
+                result = true;
+            }
+            if (result) {
+                List<String> objects = new ArrayList<>();
+                objects.add(employee.toString());
+                String employeeText = employee.equals(currentEmployee) ? "для себя" : "для #object1";
+
+                if (isEnabledStatus) {
+                    businessJournalService.log(template, "CREATE_TEMPLATE_EXCLUSION", "#initiator отменил " + employeeText + " отключение уведомлений типа #mainobject", objects);
+                } else {
+                    businessJournalService.log(template, "CREATE_TEMPLATE_EXCLUSION", "#initiator отключил " + employeeText + " прием уведомлений типа #mainobject", objects);
+                }
+            }
+        }
+        return result;
+    }
+
+    private NodeRef getTemplateByCode(String code) {
+        if (code != null) {
+            return dictionaryService.getRecordByParamValue(NOTIFICATION_TEMPLATE_DICTIONARY_NAME, ContentModel.PROP_NAME, code);
+        } else {
+            return null;
+        }
+    }
+
+    private boolean isEmployeeHasExclusionForTemplate(NodeRef template, NodeRef employee) {
+        boolean isExclusionEmployee = false;
+        if (template != null && employee != null) {
+            List<AssociationRef> exclusionEmployees = nodeService.getTargetAssocs(template, ASSOC_NOTIFICATION_TEMPLATE_EXCLUSIONS_EMPLOYEE);
+            for (AssociationRef exclusionEmployee : exclusionEmployees) {
+                NodeRef affectedEmployee = exclusionEmployee.getTargetRef();
+                if (employee.equals(affectedEmployee)) {
+                    isExclusionEmployee = true;
+                    break;
+                }
+            }
+        }
+        return isExclusionEmployee;
+    }
+
+    private boolean isTemplateSendEnabled(NodeRef template) {
+        if (template != null) {
+            Serializable isEnabledObj = nodeService.getProperty(template, PROP_NOTIFICATION_TEMPLATE_SEND_ENABLE);
+            return (isEnabledObj == null || Boolean.valueOf(isEnabledObj.toString()));
+        }
+        return true;
+    }
+
+    @Override
+    public boolean isTemplateNotificationsEnabled(final String templateCode) {
+        return isTemplateNotificationsEnabled(templateCode, orgstructureService.getCurrentEmployee());
+    }
+
+    @Override
+    public boolean isTemplateNotificationsEnabled(NodeRef template) {
+        return isTemplateNotificationsEnabled(template, orgstructureService.getCurrentEmployee());
+    }
 
     private class NotificationTransactionListener implements TransactionListener {
 

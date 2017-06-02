@@ -1,0 +1,8 @@
+<webscript>
+	<shortname>Subscribe Notification Template</shortname>
+	<description>Subscribe Notification Template</description>
+	<url>/lecm/notifications/template/subscribe?template={template}&amp;employee={employee}</url>
+	<authentication>user</authentication>
+	<format default="json"/>
+	<transaction>required</transaction>
+</webscript>

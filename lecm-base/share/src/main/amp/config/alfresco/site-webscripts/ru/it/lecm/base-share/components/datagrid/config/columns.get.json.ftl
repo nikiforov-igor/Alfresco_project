@@ -9,7 +9,7 @@
 		{
 		"type": "${col.type}",
 		"name": "${col.name}",
-		"formsName": "<#if col.type == "association">assoc<#else>prop</#if>_${col.name?replace(":", "_")}",
+		"formsName": "<#if col.type == "association">assoc_<#elseif col.type == "property">prop_</#if>${col.name?replace(":", "_")}",
 		"label": "${col.label!""}",
 			<#if col.nameSubstituteString??>
 			"nameSubstituteString":"${col.nameSubstituteString}",
