@@ -731,6 +731,7 @@
                     <show id="change-errand-type-script" force="true"/>
                     <show id="report-required-handler-script" force="true"/>
                     <show id="errands-create-form-script" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script3" force="true"/>
 
                     <!-- Buttons -->
                     <show id="save-draft-button" force="true"/>
@@ -936,6 +937,11 @@
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/components/lecm-errands-create-form.js</control-param>
                             <control-param name="scriptLoadedFireAction">errandsCreateFormScriptLoaded</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-base-dummy-aspects:script3" set="exist-business-role">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-errands/errands-reinit-executors.js</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -1211,6 +1217,7 @@
                     <show id="change-errand-type-script" force="true"/>
                     <show id="report-required-handler-script" force="true"/>
                     <show id="errands-workflow-form-script" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script3" force="true"/>
 
                     <!-- Buttons -->
                     <show id="save-draft-button" force="true"/>
@@ -1432,6 +1439,11 @@
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/components/lecm-errands-create-form.js</control-param>
                             <control-param name="scriptLoadedFireAction">errandsCreateFormScriptLoaded</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-base-dummy-aspects:script3" set="exist-business-role">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-errands/errands-reinit-executors.js</control-param>
                         </control>
                     </field>
                     <field id="errands-process-other-auto-close-script">
