@@ -41,13 +41,13 @@
 
     var author = document.assocs["lecm-document:author-assoc"][0];
     var primaryUnit = orgstructure.getPrimaryOrgUnit(author);
-	if(primaryUnit) {
+	if (primaryUnit) {
         units.push(primaryUnit);
     }
 
     recipients = document.assocs["lecm-eds-document:recipients-assoc"];
     var notificationRecipients = [];
-    if (recipients) {
+    if (recipients && recipients.length) {
         var additionalUnits = [];
         for each (var recipient in recipients) {
             var unit = orgstructure.getPrimaryOrgUnit(recipient);
@@ -70,35 +70,41 @@
     /* Выставляем права на ответы */
     var answersTable = document.assocs["lecm-internal-table-structure:answers-assoc"][0];
     var answers = answersTable.getChildren();
-    for each (var answer in answers) {
-        var employee = answer.assocs["lecm-internal-table-structure:employee-assoc"][0];
-        var unit = orgstructure.getPrimaryOrgUnit(employee);
 
+    try {
         lecmPermission.pushAuthentication();
         lecmPermission.setRunAsUserSystem();
-        if (primaryUnit != null) {
-            var initiatorAuthority = orgstructure.getOrgstructureUnitAuthority(primaryUnit, false); 
-            answer.setPermission("LECM_BASIC_PG_Reader", initiatorAuthority);
+        for each (var answer in answers) {
+            var employee = answer.assocs["lecm-internal-table-structure:employee-assoc"][0];
+            var unit = orgstructure.getPrimaryOrgUnit(employee);
+
+            if (primaryUnit) {
+                var initiatorAuthority = orgstructure.getOrgstructureUnitAuthority(primaryUnit, false); 
+                answer.setPermission("LECM_BASIC_PG_Reader", initiatorAuthority);
+            }
+            if (unit) {
+                var recipientAuthority = orgstructure.getOrgstructureUnitAuthority(unit, false);
+                answer.setPermission("LECM_BASIC_PG_Reader", recipientAuthority);
+            }
         }
-        if (unit != null) {
-            var recipientAuthority = orgstructure.getOrgstructureUnitAuthority(unit, false);
-            answer.setPermission("LECM_BASIC_PG_Reader", recipientAuthority);
-        }
+    } catch (exception) {
+        throw exception;
+    } finally {
         lecmPermission.popAuthentication();
     }
 
     var signerAssoc = document.assocs["lecmSignAspects:signerEmployeeAssoc"];
-    if (signerAssoc) {
+    if (signerAssoc && signerAssoc.length) {
         notificationRecipients.push(signerAssoc[0]);
         members.push(signerAssoc[0]);
     }
     var registratorAssoc = document.assocs["lecm-document-aspects:registrator-assoc"];
-    if (registratorAssoc) {
+    if (registratorAssoc && registratorAssoc.length) {
         notificationRecipients.push(registratorAssoc[0]);
         members.push(registratorAssoc[0]);
     }
     var executorAssoc = document.assocs["lecm-eds-document:executor-assoc"];
-    if (executorAssoc) {
+    if (executorAssoc && executorAssoc.length) {
         notificationRecipients.push(executorAssoc[0]);
     }
     for each (var member in members) {
