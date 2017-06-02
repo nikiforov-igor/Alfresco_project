@@ -256,13 +256,13 @@ public interface NotificationsService {
 	/**
 	 * @return Включена или выключена отправка уведомлений по шаблону
 	 */
-	boolean isTemplateNotificationsEnable(String templateCode);
+	boolean isTemplateNotificationsEnabled(String templateCode);
 
-	boolean isTemplateNotificationsEnable(NodeRef template);
+	boolean isTemplateNotificationsEnabled(NodeRef template);
 
-	boolean isTemplateNotificationsEnable(String templateCode, NodeRef employee);
+	boolean isTemplateNotificationsEnabled(String templateCode, NodeRef employee);
 
-	boolean isTemplateNotificationsEnable(NodeRef template, NodeRef employee);
+	boolean isTemplateNotificationsEnabled(NodeRef template, NodeRef employee);
 
 	/**
 	 * @return Включить отправку уведомлений по шаблону для сотрудника

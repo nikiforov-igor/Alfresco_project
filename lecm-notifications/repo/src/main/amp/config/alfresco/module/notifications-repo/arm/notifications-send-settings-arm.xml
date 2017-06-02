@@ -6,11 +6,11 @@
                 <items>
                     <item name="cm:Другие настройки" type="lecm-arm:accordion">
                         <items>
-                            <item name="cm:Настройки отправки уведомлений" type="lecm-arm:html-node">
+                            <item name="cm:Настройка отправки уведомлений" type="lecm-arm:html-node">
                                 <property name="lecm-arm:order"><![CDATA[60]]></property>
                                 <property name="lecm-arm:html-url">
                                     <![CDATA[page/notification-templates-send-settings]]></property>
-                                <property name="cm:name"><![CDATA[Настройки отправки уведомлений]]></property>
+                                <property name="cm:name"><![CDATA[Настройка отправки уведомлений]]></property>
                                 <property name="lecm-arm:expression"><![CDATA[user.isAdmin()]]></property>
                             </item>
                         </items>

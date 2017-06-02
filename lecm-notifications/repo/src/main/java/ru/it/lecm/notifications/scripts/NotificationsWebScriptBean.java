@@ -454,7 +454,7 @@ public class NotificationsWebScriptBean extends BaseWebScript {
 
 	}
 
-	public boolean isTemplateEnableForCurrentEmployee(String templateCode) {
-		return service.isTemplateNotificationsEnable(templateCode, orgstructureService.getCurrentEmployee());
+	public boolean isTemplateEnabledForCurrentEmployee(String templateCode) {
+		return service.isTemplateNotificationsEnabled(templateCode, orgstructureService.getCurrentEmployee());
 	}
 }
