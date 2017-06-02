@@ -525,32 +525,41 @@
                             if (this.options.minLimit) {
                                 minLimitDate = Alfresco.util.fromISO8601(this.options.minLimit);
                             }
+                            var maxLimitDate = null;
+                            if (this.options.maxLimit) {
+                                maxLimitDate = Alfresco.util.fromISO8601(this.options.maxLimit);
+                                maxLimitDate.setHours(23);
+                                maxLimitDate.setMinutes(59);
+                                maxLimitDate.setSeconds(59);
+                            }
 
-                            if ((parsedDate != null && minLimitDate == null) ||
-                                (parsedDate != null && minLimitDate != null && parsedDate >= minLimitDate)) {
-                                if (me.options.disabled) {
-                                    Dom.removeClass(me.id + "-date", "invalid");
-                                } else {
-                                    me.widgets.calendar.cfg.setProperty("selected", [[parsedDate.getFullYear(), parsedDate.getMonth() + 1, parsedDate.getDate()]])
-                                    var isoValue = Alfresco.util.toISO8601(parsedDate, {"milliseconds": true});
-                                    Dom.get(me.currentValueHtmlId).value = isoValue;
-                                    var selectedDates = me.widgets.calendar.getSelectedDates();
-                                    if (selectedDates.length > 0) {
-                                        Dom.removeClass(me.id + "-date", "invalid");
-                                        var firstDate = selectedDates[0];
-                                        me.widgets.calendar.cfg.setProperty("pagedate", (firstDate.getMonth() + 1) + "/" + firstDate.getFullYear());
-                                        me.widgets.calendar.render();
+                            if (parsedDate && (!minLimitDate && !maxLimitDate) ||
+                               (minLimitDate && !maxLimitDate && parsedDate >= minLimitDate) ||
+                               (!minLimitDate && maxLimitDate && parsedDate <= maxLimitDate) ||
+                               (minLimitDate && maxLimitDate && parsedDate >= minLimitDate && parsedDate <= maxLimitDate)) {
+                               if (me.options.disabled) {
+                                   Dom.removeClass(me.id + "-date", "invalid");
+                               } else {
+                                   me.widgets.calendar.cfg.setProperty("selected", [[parsedDate.getFullYear(), parsedDate.getMonth() + 1, parsedDate.getDate()]])
+                                   var isoValue = Alfresco.util.toISO8601(parsedDate, {"milliseconds": true});
+                                   Dom.get(me.currentValueHtmlId).value = isoValue;
+                                   var selectedDates = me.widgets.calendar.getSelectedDates();
+                                   if (selectedDates.length > 0) {
+                                       Dom.removeClass(me.id + "-date", "invalid");
+                                       var firstDate = selectedDates[0];
+                                       me.widgets.calendar.cfg.setProperty("pagedate", (firstDate.getMonth() + 1) + "/" + firstDate.getFullYear());
+                                       me.widgets.calendar.render();
 
-                                        // NOTE: we don't need to check the time value in here as the _handlePickerChange
-                                        //       function gets called as well as a result of rendering the picker above,
-                                        //       that's also why we don't update the hidden field in here either.
-                                    }
-                                    if (me.options.changeFireAction) {
-                                        Bubbling.fire(me.options.changeFireAction, {
-                                            date: isoValue
-                                        });
-                                    }
-                                }
+                                       // NOTE: we don't need to check the time value in here as the _handlePickerChange
+                                       //       function gets called as well as a result of rendering the picker above,
+                                       //       that's also why we don't update the hidden field in here either.
+                                   }
+                                   if (me.options.changeFireAction) {
+                                       Bubbling.fire(me.options.changeFireAction, {
+                                           date: isoValue
+                                       });
+                                   }
+                               }
                             }
                             else {
                                 Dom.addClass(me.id + "-date", "invalid");
