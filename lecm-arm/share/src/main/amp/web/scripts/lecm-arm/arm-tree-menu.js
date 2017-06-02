@@ -895,10 +895,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 var armChildren = childNode.children.filter(function (node) {
                     return !!node.data.nodeRef;
                 });
-                if ((childNode.expanded && childNode.data.realChildrenCount > childNode.data.maxItems &&
-                    childNode.data.maxItems > 0 && childNode.data.realChildrenCount > armChildren.length &&
-                    !childNode.data.insituEditor) ||
-                    childNode.data.afterSearch && !childNode.data.insituEditor) {
+                if ((childNode.expanded && childNode.data.maxItems > 0 || childNode.data.afterSearch) && !childNode.data.insituEditor) {
 
                     childNode.data.config.treeNode = childNode;
                     childNode.data.config.container = childNode.getContentEl();
@@ -935,7 +932,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             var armChildren = node.children.filter(function (node) {
                 return !!node.data.nodeRef;
             });
-            if ((node.data.realChildrenCount > node.data.maxItems && node.data.maxItems > 0 && node.data.realChildrenCount > armChildren.length) || node.data.afterSearch) {
+            if (node.data.maxItems > 0 || node.data.afterSearch) {
                 var tableEl = YAHOO.util.Selector.query('#' + node.getEl().id + ' > table.ygtvtable')[0];
                 if (node.expanded) {
                     var serviceNodesCount = this._getServiceNodes(node).length;
