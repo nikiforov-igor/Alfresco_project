@@ -45,12 +45,11 @@ public class ArmDictionaryChildRule extends ArmBaseChildRule {
         sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
         sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
         String query = "PATH:\"" + path.toPrefixString(namespaceService) + "/*\" AND NOT @lecm\\-dic\\:active:false";
-        String preparedSearchTerm;
-        if (request.getSearchTerm() != null && request.getSearchTerm().length() > 0) {
-            if (request.getSearchTerm().contains("*")) {
-                preparedSearchTerm = request.getSearchTerm();
-            } else {
-                preparedSearchTerm = "*" + request.getSearchTerm() + "*";
+
+        String preparedSearchTerm = request.getSearchTerm();
+        if (preparedSearchTerm != null && preparedSearchTerm.length() > 0) {
+            if (!preparedSearchTerm.contains("*")) {
+                preparedSearchTerm = "*" + preparedSearchTerm + "*";
             }
             query += " AND @cm\\:name:\"" + preparedSearchTerm + "\"";
         }

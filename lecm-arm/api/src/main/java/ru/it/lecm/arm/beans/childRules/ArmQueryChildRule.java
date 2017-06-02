@@ -49,12 +49,10 @@ public class ArmQueryChildRule extends ArmBaseChildRule {
             sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
             sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
             String queryString = service.formatQuery(listQuery, request.getNodeRef());
-            String preparedSearchTerm;
-            if (request.getSearchTerm() != null && request.getSearchTerm().length() > 0) {
-                if (request.getSearchTerm().contains("*")) {
-                    preparedSearchTerm = request.getSearchTerm();
-                } else {
-                    preparedSearchTerm = "*" + request.getSearchTerm() + "*";
+            String preparedSearchTerm = request.getSearchTerm();
+            if (preparedSearchTerm != null && preparedSearchTerm.length() > 0) {
+                if (!preparedSearchTerm.contains("*")) {
+                    preparedSearchTerm = "*" + preparedSearchTerm + "*";
                 }
                 queryString += " AND @cm\\:name:\"" + preparedSearchTerm + "\"";
             }
