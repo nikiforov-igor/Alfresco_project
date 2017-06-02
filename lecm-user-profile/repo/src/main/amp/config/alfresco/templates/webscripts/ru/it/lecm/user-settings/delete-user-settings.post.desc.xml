@@ -1,0 +1,8 @@
+<webscript>
+	<shortname>Удалить настройки пользователя</shortname>
+	<description>Удалить настройки пользователя</description>
+	<url>/lecm/user-settings/delete</url>
+	<authentication>user</authentication>
+	<format default="json"/>
+	<transaction>required</transaction>
+</webscript>
