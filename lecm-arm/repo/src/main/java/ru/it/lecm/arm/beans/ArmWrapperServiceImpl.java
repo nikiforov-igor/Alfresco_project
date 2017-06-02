@@ -103,7 +103,14 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
                 ArmNode stNode = wrapArmNodeAsObject(staticChild, false, request.isOnlyMeta());
                 if (stNode.getNodeQuery() != null) {
                     ArmChildrenResponse queriedChilds = stNode.getNodeQuery().build(this, stNode, request);
-                    return queriedChilds;
+                    //Если у нас на узле используется нода с постраничным выводом, то остальные ноды игнорируются
+                    if (request.getMaxItems() != -1) {
+                        return queriedChilds;
+                    } else {
+                        for (ArmNode queriedChild : queriedChilds.getNodes()) {
+                            result.add(queriedChild);
+                        }
+                    }
                 } else {
                     result.add(stNode);
                 }
