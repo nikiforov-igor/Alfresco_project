@@ -4,7 +4,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 LogicECM.module = LogicECM.module || {};
 
-LogicECM.module.ARM = LogicECM.module.ARM|| {};
+LogicECM.module.ARM = LogicECM.module.ARM || {};
 
 (function () {
     var Dom = YAHOO.util.Dom,
@@ -383,7 +383,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
                     if (node.data.realChildrenCount > node.data.maxItems && node.data.maxItems > 0 && node.data.realChildrenCount > node.children.length) {
                         var loadNextBlockNode = new YAHOO.widget.TextNode({
-                            label: 'Открыть ещё ...',
+                            label: Alfresco.util.message("label.arm.node.open"),
                             labelStyle: 'load-next-block-node',
                             isLeaf: true,
                             isAggregate: false
@@ -849,8 +849,10 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 var inputField = document.createElement('input'),
                     contentEl = node.getContentEl();
                 inputField.setAttribute('id', node.id + '-arm-tree-attached-input-field');
-                inputField.setAttribute('placeholder', 'Введите слово...');
-                node.data.afterSearch && inputField.setAttribute('value', node.data.searchTerm);
+                inputField.setAttribute('placeholder', Alfresco.util.message("label.arm.node.search.input"));
+                if (node.data.afterSearch) {
+                    inputField.setAttribute('value', node.data.searchTerm);
+                }
                 Dom.addClass(inputField, 'arm-tree-attached-input-field');
                 // TODO: Заглушка. Переделать.
                 Event.removeListener(node.tree.getEl(), 'keydown', node.tree._onKeyDownEvent);
@@ -864,12 +866,16 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     }
                 };
                 inputField.onblur = function (event) {
-                    contentEl && (contentEl.removeChild(inputField));
+                    if (contentEl) {
+                        contentEl.removeChild(inputField)
+                    }
                 };
                 inputField.onfocus = function (event) {
                     this.value = this.value;
                 };
-                contentEl && (contentEl.appendChild(inputField));
+                if (contentEl) {
+                    contentEl.appendChild(inputField)
+                }
                 inputField.focus();
             }
         },
@@ -900,10 +906,14 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     childNode.data.config.treeNode = childNode;
                     childNode.data.config.container = childNode.getContentEl();
                     childNode.data.config.context = childNode.getContentEl().parentElement;
-                    childNode.data.config && (childNode.data.config.title = 'Поиск');
+                    if (childNode.data.config) {
+                        childNode.data.config.title = Alfresco.util.message("label.arm.node.search");
+                    }
                     childNode.data.insituEditor = new Alfresco.widget.SearchButton(null, childNode.data.config);
                     if (!childNode.data.resetButton && childNode.data.afterSearch) {
-                        childNode.data.config && (childNode.data.config.title = 'Сбросить');
+                        if (childNode.data.config) {
+                            childNode.data.config.title = Alfresco.util.message("label.arm.node.reset");
+                        }
                         childNode.data.resetButton = new Alfresco.widget.ResetButton(null, childNode.data.config);
                     }
                 }
@@ -939,13 +949,27 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     if (node.data.afterSearch) {
                         Dom.removeClass(tableEl, 'arm-tree-icon-container-expanded');
                         Dom.addClass(tableEl, 'arm-tree-icon-container-after-search');
-                        var title = 'Показаны первые ' + (node.children.length - serviceNodesCount) + ' элементов из ' + node.data.realChildrenCount + ' по запросу "' + node.data.searchTerm + '"';
-                        node.data.insituEditor && node.data.insituEditor.editIcon.setAttribute('title', title);
-                        tableEl && (tableEl.setAttribute('title', title));
+                        var title = YAHOO.lang.substitute(Alfresco.util.message("label.arm.node.search.tooltip"), {
+                            "0": node.children.length - serviceNodesCount,
+                            "1": node.data.realChildrenCount,
+                            "2": node.data.searchTerm
+                        });
+                        if (node.data.insituEditor) {
+                            node.data.insituEditor.editIcon.setAttribute('title', title);
+                        }
+                        if (tableEl) {
+                            tableEl.setAttribute('title', title);
+                        }
                     } else {
                         Dom.removeClass(tableEl, 'arm-tree-icon-container-after-search');
                         Dom.addClass(tableEl, 'arm-tree-icon-container-expanded');
-                        tableEl && (tableEl.setAttribute('title', 'Показаны первые ' + (node.children.length - serviceNodesCount) + ' элементов из ' + node.data.realChildrenCount));
+                        if (tableEl) {
+                            var title = YAHOO.lang.substitute(Alfresco.util.message("label.arm.node.tooltip"), {
+                                "0": node.children.length - serviceNodesCount,
+                                "1": node.data.realChildrenCount
+                            });
+                            tableEl.setAttribute('title', title);
+                        }
                     }
                 } else {
                     Dom.removeClass(tableEl, 'arm-tree-icon-container-after-search');
@@ -968,7 +992,9 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         span.innerHTML = '&nbsp;&nbsp;&nbsp;&nbsp;';
         this.params.container.appendChild(span);
         var contentEl = this.params.treeNode.getContentEl();
-        contentEl && Dom.addClass(contentEl, 'arm-tree-node-to-attach');
+        if (contentEl) {
+            Dom.addClass(contentEl, 'arm-tree-node-to-attach');
+        }
         return this;
     };
 
