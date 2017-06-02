@@ -87,8 +87,6 @@
                 answer.setPermission("LECM_BASIC_PG_Reader", recipientAuthority);
             }
         }
-    } catch (exception) {
-        throw exception;
     } finally {
         lecmPermission.popAuthentication();
     }
