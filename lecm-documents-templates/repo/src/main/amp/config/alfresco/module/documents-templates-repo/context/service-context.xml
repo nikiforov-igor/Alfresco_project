@@ -35,6 +35,16 @@
 		</property>
 	</bean>
 
+	<bean id="documents.templates.dictionaries.bootstrap"
+		  parent="lecmDictionaryBootstrap"
+		  depends-on="documents.templates.model.bootstrap">
+		<property name="dictionaries">
+			<list>
+				<value>alfresco/module/${artifactId}/dictionaries/documents-templates-br-items.xml</value>
+			</list>
+		</property>
+	</bean>
+
 	<util:constant id="documentTemplateFolderId" static-field="ru.it.lecm.documents.templates.DocumentTemplateServiceImpl.DOCUMENT_TEMPLATE_FOLDER_ID"/>
 	<bean id="documentTemplateService" class="ru.it.lecm.documents.templates.DocumentTemplateServiceImpl"
 		  depends-on="documents.templates.model.bootstrap, serviceOrgstructure"

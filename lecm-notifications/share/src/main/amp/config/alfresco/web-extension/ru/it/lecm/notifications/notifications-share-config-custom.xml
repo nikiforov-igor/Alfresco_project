@@ -106,6 +106,38 @@
 					</field>
 				</appearance>
 			</form>
+			<form id="editSendMode">
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="lecm-notification-template:send-enable"/>
+					<show id="lecm-notification-template:temp-exclusion"/>
+				</field-visibility>
+				<appearance>
+					<field id="cm:name" read-only="true" label-id="lecm-notification-template-code">
+						<control>
+							<control-param name="mandatory">false</control-param>
+						</control>
+					</field>
+					<field id="lecm-notification-template:send-enable">
+						<control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+					</field>
+					<field id="lecm-notification-template:temp-exclusion" label-id="label.template-exclusions-list">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+							<control-param name="itemType">lecm-notification-template:template</control-param>
+							<control-param name="overrideSortingWith">true</control-param>
+							<control-param name="jsDependencies">scripts/lecm-notifications/send-exclusions-datagrid.js</control-param>
+							<control-param name="cssDependencies">css/lecm-notifications/notifications-send-settings.css</control-param>
+							<control-param name="jsObjectName">LogicECM.module.Notifications.sendExclusionsDataGrid</control-param>
+							<control-param name="allowEdit">false</control-param>
+							<control-param name="datagridFormId">exclusions-datagrid</control-param>
+							<control-param name="ds">/lecm/notifications/ds/exclusions-history</control-param>
+							<!--<control-param name="pageSize">10</control-param>
+							<control-param name="usePagination">false</control-param>-->
+							<control-param name="createItemBtnMsg">label.create.new.exclusion</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
 		</forms>
 	</config>
 
@@ -155,6 +187,19 @@
 				</appearance>
 			</form>
 
+			<form id="send-settings-datagrid">
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="lecm-notification-template:send-enable"/>
+					<show id="lecm-notification-template:exclusions-list"/>
+				</field-visibility>
+				<appearance>
+					<field id="cm:name" label-id="lecm-notification-template-code"/>
+					<field id="lecm-notification-template:send-enable" label-id="lecm-notification-template-send-mode"/>
+					<field id="lecm-notification-template:exclusions-list" label-id="lecm-notification-template-send-exclusions"/>
+				</appearance>
+			</form>
+
             <form id="search">
                 <field-visibility>
                     <show id="cm:name"/>
@@ -176,7 +221,39 @@
                     </field>
                 </appearance>
             </form>
-
+			<form id="search-in-settings">
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="lecm-notification-template:exclusion-employee"/>
+				</field-visibility>
+				<appearance>
+					<field id="cm:name" mandatory="false" label-id="lecm-notification-template-code">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+							<control-param name="nameSuffix">-strong-constant</control-param>
+						</control>
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+						</constraint-handlers>
+					</field>
+				</appearance>
+			</form>
+			<form id="exclusions-datagrid">
+				<field-visibility>
+					<show id="employee" force="true"/>
+					<show id="created" force="true"/>
+					<show id="creator" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="employee" label-id="title.template-exclusion-employee"/>
+					<field id="created" label-id="title.template-exclusion-created"/>
+					<field id="creator" label-id="title.template-exclusion-creator"/>
+				</appearance>
+			</form>
+			<form id="create-exclusions">
+				<field-visibility>
+					<show id="lecm-notification-template:exclusion-employee"/>
+				</field-visibility>
+			</form>
         </forms>
 	</config>
 

@@ -6,7 +6,7 @@
     }
     var hasRole = false;
     for (var i = 0; i < rolesList.length; i++) {
-        if (rolesList[i].id == "DA_ENGINEER") {
+        if (rolesList[i].id == "TMPL_ENGINEER") {
             hasRole = true;
             break;
         }

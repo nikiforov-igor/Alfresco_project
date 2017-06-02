@@ -17,9 +17,6 @@ import ru.it.lecm.notifications.beans.NotificationsService;
 
 import java.io.Serializable;
 import java.util.*;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
-import org.springframework.context.ApplicationEvent;
 
 /**
  * User: AIvkin Date: 17.01.13 Time: 15:19
@@ -86,6 +83,7 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
         properties.put(NotificationsService.PROP_AUTOR, notification.getAutor());
         properties.put(NotificationsService.PROP_DESCRIPTION, notification.getDescription());
         properties.put(NotificationsService.PROP_FORMING_DATE, notification.getFormingDate());
+        properties.put(NotificationsService.PROP_FROM_TEMPLATE, notification.getTemplate());
         properties.put(PROP_IS_READ, false);
 
         NodeRef rootRef = getRootRef();
@@ -207,9 +205,9 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
 //
 //                int result = isRead1.compareTo(isRead2);
 //                if (result == 0) {
-                    Date formingDate1 = (Date) nodeService.getProperty(o1, NotificationsService.PROP_FORMING_DATE);
-                    Date formingDate2 = (Date) nodeService.getProperty(o2, NotificationsService.PROP_FORMING_DATE);
-                    return formingDate2.compareTo(formingDate1);
+                Date formingDate1 = (Date) nodeService.getProperty(o1, NotificationsService.PROP_FORMING_DATE);
+                Date formingDate2 = (Date) nodeService.getProperty(o2, NotificationsService.PROP_FORMING_DATE);
+                return formingDate2.compareTo(formingDate1);
 //
 //                    result = -formingDate1.compareTo(formingDate2);
 //                }

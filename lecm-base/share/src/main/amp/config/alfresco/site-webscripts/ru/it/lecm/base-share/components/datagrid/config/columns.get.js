@@ -254,7 +254,7 @@ function main()
                     label: "",
                     dataType: "",
                     sortable: false
-                }
+                };
             }
 
             var formField = formConfig.fields[obj];
@@ -273,6 +273,10 @@ function main()
                     //забираем форматную строку
                     if (formField.attributes.substituteString != null && formField.attributes.substituteString != "") {
                         colDef.nameSubstituteString = formField.attributes.substituteString;
+                    }
+					//Это счётчик?
+                    if (!!formField.attributes.isCounter) {
+                        colDef.type = "counter";
                     }
                 }
             }

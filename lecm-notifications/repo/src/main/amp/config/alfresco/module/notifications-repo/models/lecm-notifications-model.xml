@@ -179,6 +179,12 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
+				<property name="lecm-notf:from-template">
+					<title>Notification Template</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="false"/>
+				</property>
 			</properties>
 			<associations>
 				<!-- Ссылка на адресата "сотрудник" -->
