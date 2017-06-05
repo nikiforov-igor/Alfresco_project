@@ -21,13 +21,12 @@ public class UserSettingsWebScriptBean extends BaseWebScript {
     /**
      * Получить сохраненные настройки
      *
-     * @param user - логин пользователя
      * @param key  - ключ настройки
      * @return json object с полем value, содержащим значение настройки
      */
-    public Object getSettings(String user, String key) {
+    public Object getSettings(String key) {
         JSONObject result = new JSONObject();
-        String settings = service.getSettings(user, key);
+        String settings = service.getSettings(key);
         try {
             if (settings != null) {
                 Object tokener = new JSONTokener(settings).nextValue();
@@ -48,26 +47,24 @@ public class UserSettingsWebScriptBean extends BaseWebScript {
     /**
      * Сохранить настройки для пользователя
      *
-     * @param user  - логин пользователя
      * @param key   - ключ настройки
      * @param value - значение для сохранения
      */
-    public boolean setSettings(String user, String key, Object value) {
-        return service.setSettings(user, key, value);
+    public boolean setSettings(String key, Object value) {
+        return service.setSettings(key, value);
     }
 
     /**
      * Удалить настройки для пользователя
      *
-     * @param user     - логин пользователя
      * @param category - категория/раздел для сохранения
      * @param key      - ключ настройки
      */
-    public boolean deleteSettings(String user, String category, String key) {
+    public boolean deleteSettings(String category, String key) {
         if (category != null) {
-            return service.deleteSettings(user, category, key);
+            return service.deleteSettings(key);
         } else {
-            return service.deleteSettings(user, key);
+            return service.deleteSettings(key);
         }
     }
 }
