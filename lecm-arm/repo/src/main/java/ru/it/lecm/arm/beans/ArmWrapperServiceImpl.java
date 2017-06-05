@@ -500,7 +500,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         String query = getFullQuery(node, true, true);
         NodeRef employeeRef = node.getRunAsEmployee();
         if (employeeRef != null) {
-            query = query.replaceAll("#current-user", "#boss-ref")
+            query = query.replaceAll("#current-user", employeeRef.toString())
                     .replaceAll("#boss-ref", employeeRef.toString());
         }
         return execSearchQuery(query);
