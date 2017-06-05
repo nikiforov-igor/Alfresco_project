@@ -33,7 +33,6 @@
 		<property name="userSettingsCache" ref="useSettings.cache"/>
 		<property name="contentService" ref="contentService"/>
 		<property name="directoriesDeep" value="3"/>
-		<property name="orgstructureService" ref="serviceOrgstructure"/>
 		<property name="folders">
 			<map>
 				<entry key="USER_SETTINGS_ID" value="Настройки пользователей"/>
