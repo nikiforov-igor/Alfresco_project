@@ -69,7 +69,7 @@ public class UserSettingsServiceImpl extends BaseBean implements UserSettingsSer
      * @return ID ноды с настройками или NULL - если ноды с настройками не существует
      */
     public NodeRef getUserSettingsFile(final String user, final String category) throws WriteTransactionNeededException {
-        NodeRef userFolder = getUserSettingsFolder(user);
+        NodeRef userFolder = getUserSettingsFolder(user, false);
         if (userFolder != null) {
             return nodeService.getChildByName(userFolder, ContentModel.ASSOC_CONTAINS, category);
         }
@@ -178,7 +178,7 @@ public class UserSettingsServiceImpl extends BaseBean implements UserSettingsSer
         return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Boolean>() {
             @Override
             public Boolean doWork() throws Exception {
-                final NodeRef userFolder = getUserSettingsFolder(user);
+                final NodeRef userFolder = getUserSettingsFolder(user, true);
                 if (userFolder != null) {
                     JsonNode settingsJSON;
 
@@ -317,13 +317,13 @@ public class UserSettingsServiceImpl extends BaseBean implements UserSettingsSer
         return valueToConvert;
     }
 
-    private NodeRef getUserSettingsFolder(String user) {
+    private NodeRef getUserSettingsFolder(String user, boolean createIfNotExists) {
         List<String> directoryPaths = getUserFolderPath(user);
         NodeRef userSettingsDir = getFolder(getServiceRootFolder(), directoryPaths);
-        if (null == userSettingsDir) {
+        if (null == userSettingsDir && createIfNotExists) {
             logger.debug("User settings folder not found. Trying to create.");
             userSettingsDir = createPath(getServiceRootFolder(), directoryPaths);
-            logger.debug("Folder created. Ref=\"" + userSettingsDir.toString() + "\"");
+            logger.debug("Folder created. Ref=\"{}\"", userSettingsDir);
         }
         return userSettingsDir;
     }
