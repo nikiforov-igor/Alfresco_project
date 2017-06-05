@@ -29,12 +29,15 @@ public class UserSettingsWebScriptBean extends BaseWebScript {
         JSONObject result = new JSONObject();
         String settings = service.getSettings(user, key);
         try {
-            result.put("value", "");
             if (settings != null) {
                 Object tokener = new JSONTokener(settings).nextValue();
                 if (tokener != null) {
                     result.put("value", tokener);
+                } else {
+                    result.put("value", settings);
                 }
+            } else {
+                result.put("value", "");
             }
         } catch (JSONException ignored) {
         }

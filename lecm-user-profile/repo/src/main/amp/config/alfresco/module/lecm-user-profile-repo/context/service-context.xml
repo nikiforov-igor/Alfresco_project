@@ -30,7 +30,7 @@
 		<property name="service" ref="userSettingsService"/>
 	</bean>
 
-	<bean id="userSettingsService" class="ru.it.lecm.user.profile.beans.UserSettingsService" parent="baseBean">
+	<bean id="userSettingsService" class="ru.it.lecm.user.profile.beans.UserSettingsServiceImpl" parent="baseBean">
 		<property name="userSettingsCache" ref="useSettings.cache"/>
 		<property name="contentService" ref="contentService"/>
 		<property name="directoriesDeep" value="3"/>
