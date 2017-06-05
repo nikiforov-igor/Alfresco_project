@@ -9,6 +9,7 @@ import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.AuthorityType;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -314,9 +315,8 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
         return result;
     }
 
-    public List<NodeRef> getArmRunAsBossNodes(NodeRef accordion) {
-        List<NodeRef> result = new ArrayList<>();
-        Map<NodeRef, Set<String>> nodesRunAs = new TreeMap<>(comparatorByName);
+    public Set<Pair<NodeRef, NodeRef>> getArmRunAsBossNodes(NodeRef accordion) {
+        Set<Pair<NodeRef, NodeRef>> result = new HashSet<>();
         String userName = AuthenticationUtil.getFullyAuthenticatedUser();
         NodeRef currentEmployee = orgstructureBean.getEmployeeByPerson(userName);
         if (currentEmployee != null) {
@@ -326,27 +326,18 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
                 AssociationRef associationRef = associationRefs.get(0);
                 delegationRootNode = associationRef.getTargetRef();
             }
-            List<NodeRef> chiefsList = secretaryService.getChiefs(currentEmployee);
-            List<NodeRef> delegationOwners = delegationService.getDelegationOwnersByTrustee(currentEmployee, true);
-            chiefsList.addAll(delegationOwners);
-            for (NodeRef chief : chiefsList) {
-                Set<String> roles = new HashSet<>();
-                String secretaryRoleCode = getAutorityForSecretary(chief);
-                roles.add(secretaryRoleCode);
-                String delegatRoleCode = getAuthorityForDelegat(chief);
-                roles.add(delegatRoleCode);
-                if (delegationRootNode != null) {
-                    nodesRunAs.put(new NodeRef(delegationRootNode.getStoreRef(), delegationRootNode.getId() + "_" + chief.getId()), roles);
-                }
-            }
-        }
-        //Дополнительная проверка на тот случай, если сотрудник назначен секретарем, но реальных прав нет (не выдались из-за ошибки и т.д)
-        Set<String> auth = authorityService.getAuthoritiesForUser(userName);
-        for (Map.Entry<NodeRef, Set<String>> accEntry : nodesRunAs.entrySet()) {
-            for (String accRole : accEntry.getValue()) {
-                if (auth.contains(accRole)) {
-                    result.add(accEntry.getKey());
-                    break;
+            if (delegationRootNode != null) {
+                List<NodeRef> chiefsList = secretaryService.getChiefs(currentEmployee);
+                List<NodeRef> delegationOwners = delegationService.getDelegationOwnersByTrustee(currentEmployee, true);
+                chiefsList.addAll(delegationOwners);
+                Set<String> auth = authorityService.getAuthoritiesForUser(userName);
+                for (NodeRef chief : chiefsList) {
+                    String secretaryRoleCode = getAutorityForSecretary(chief);
+                    String delegatRoleCode = getAuthorityForDelegat(chief);
+                    //Дополнительная проверка на тот случай, если сотрудник назначен секретарем, но реальных прав нет (не выдались из-за ошибки и т.д)
+                    if (auth.contains(secretaryRoleCode) || auth.contains(delegatRoleCode)) {
+                        result.add(new Pair<>(delegationRootNode, chief));
+                    }
                 }
             }
         }
@@ -377,17 +368,17 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
     public boolean isArmDelegationRootNode(NodeRef node, NodeRef currentSection) {
         Map<QName, Serializable> sectionProperties = getCachedProperties(currentSection);
         boolean isDelegationNode = Boolean.TRUE.equals(sectionProperties.get(ArmService.PROP_IS_FOR_SECRETARIES));
-        boolean isDelegationRootNode = false;
-        List<AssociationRef> sourceAssocs = nodeService.getSourceAssocs(node, ArmService.ASSOC_ARM_ACCORDION_CHILDREN_STRUCTURE_SOURCE_NODE_ASSOC);
-        if (sourceAssocs != null && sourceAssocs.size() > 0) {
-            for (AssociationRef armAssoc : sourceAssocs) {
-                if (armAssoc.getSourceRef() != null && armAssoc.getSourceRef().equals(currentSection)) {
-                    isDelegationRootNode = true;
-                    break;
+        if (isDelegationNode) {
+            List<AssociationRef> sourceAssocs = nodeService.getSourceAssocs(node, ArmService.ASSOC_ARM_ACCORDION_CHILDREN_STRUCTURE_SOURCE_NODE_ASSOC);
+            if (sourceAssocs != null && sourceAssocs.size() > 0) {
+                for (AssociationRef armAssoc : sourceAssocs) {
+                    if (armAssoc.getSourceRef() != null && armAssoc.getSourceRef().equals(currentSection)) {
+                        return true;
+                    }
                 }
             }
         }
-        return isDelegationRootNode && isDelegationNode;
+        return false;
     }
 
     @Override

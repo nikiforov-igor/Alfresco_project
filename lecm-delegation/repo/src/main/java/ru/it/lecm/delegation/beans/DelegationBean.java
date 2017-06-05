@@ -1007,11 +1007,8 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 				if (!isArchive(delegationOpts)) {
 					NodeRef owner = findNodeByAssociationRef(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_OWNER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 					if (owner != null) {
-						if (isActivated) {
-							NodeRef absence = absenceService.getActiveAbsence(owner);
-							if (absence != null) {
-								results.add(owner);
-							}
+						if (isActivated && absenceService.getActiveAbsence(owner) != null) {
+							results.add(owner);
 							continue;
 						}
 						results.add(owner);

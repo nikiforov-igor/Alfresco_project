@@ -127,7 +127,6 @@
 					<show id="lecm-base-dummy-aspects:script" force="true" />
 				</field-visibility>
 				<appearance>
-					<set id="delegation-settings" template="/ru/it/lecm/ord/components/class-set.ftl"/>
 					<field id="lecm-arm:search-query">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
 					</field>
@@ -167,8 +166,8 @@
 							<control-param name="changeFireAction">armIsForSecretaryChanged</control-param>
 						</control>
 					</field>
-					<field id="lecm-arm:root-node-html-url" label-id="label.accordion.delegation.html-url" set="delegation-settings"/>
-					<field id="lecm-arm:children-structure-source-arm-assoc" label-id="label.accordion.delegation.structure-source-arm" set="delegation-settings">
+					<field id="lecm-arm:root-node-html-url" label-id="label.accordion.delegation.html-url"/>
+					<field id="lecm-arm:children-structure-source-arm-assoc" label-id="label.accordion.delegation.structure-source-arm">
 						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
 							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_АРМ/lecm-dic:Настройки_x0020_АРМ</control-param>
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
@@ -177,7 +176,7 @@
 							<control-param name="primaryCascading">true</control-param>
 						</control>
 					</field>
-					<field id="lecm-arm:children-structure-source-node-assoc" label-id="label.accordion.delegation.structure-source-node" set="delegation-settings">
+					<field id="lecm-arm:children-structure-source-node-assoc" label-id="label.accordion.delegation.structure-source-node">
 						<control template="/ru/it/lecm/base-share/components/controls/association-cascading-select-one-control.ftl">
 							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_АРМ/lecm-dic:Настройки_x0020_АРМ</control-param>
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
@@ -190,9 +189,14 @@
 							<control-param name="defaultLoadData">false</control-param>
 						</control>
 					</field>
-					<field id="lecm-base-dummy-aspects:script" set="delegation-settings">
+					<field id="lecm-base-dummy-aspects:script">
 						<control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+							<control-param name="scriptLoadedFireAction">armDelegationFieldsHandlerScriptLoaded</control-param>
+							<control-param name="bubblingName">armIsForSecretaryChanged</control-param>
 							<control-param name="scripts">scripts/lecm-arm/arm-delegation-fields-handler.js</control-param>
+							<control-param name="delegation_html_url_field">prop_lecm-arm_root-node-html-url</control-param>
+							<control-param name="delegation_source_arm_field">assoc_lecm-arm_children-structure-source-arm-assoc</control-param>
+							<control-param name="delegation_source_node_field">assoc_lecm-arm_children-structure-source-node-assoc</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -222,7 +226,6 @@
 					<show id="lecm-base-dummy-aspects:script" force="true" />
 				</field-visibility>
 				<appearance>
-					<set id="delegation-settings" template="/ru/it/lecm/ord/components/class-set.ftl"/>
 					<field id="lecm-arm:expression">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
 					</field>
@@ -256,8 +259,8 @@
 							<control-param name="changeFireAction">armIsForSecretaryChanged</control-param>
 						</control>
 					</field>
-					<field id="lecm-arm:root-node-html-url" label-id="label.accordion.delegation.html-url" set="delegation-settings"/>
-					<field id="lecm-arm:children-structure-source-arm-assoc" label-id="label.accordion.delegation.structure-source-arm" set="delegation-settings">
+					<field id="lecm-arm:root-node-html-url" label-id="label.accordion.delegation.html-url"/>
+					<field id="lecm-arm:children-structure-source-arm-assoc" label-id="label.accordion.delegation.structure-source-arm">
 						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
 							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_АРМ/lecm-dic:Настройки_x0020_АРМ</control-param>
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
@@ -266,7 +269,7 @@
 							<control-param name="primaryCascading">true</control-param>
 						</control>
 					</field>
-					<field id="lecm-arm:children-structure-source-node-assoc" label-id="label.accordion.delegation.structure-source-node" set="delegation-settings">
+					<field id="lecm-arm:children-structure-source-node-assoc" label-id="label.accordion.delegation.structure-source-node">
 						<control template="/ru/it/lecm/base-share/components/controls/association-cascading-select-one-control.ftl">
 							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_АРМ/lecm-dic:Настройки_x0020_АРМ</control-param>
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
@@ -279,9 +282,14 @@
 							<control-param name="defaultLoadData">false</control-param>
 						</control>
 					</field>
-					<field id="lecm-base-dummy-aspects:script" set="delegation-settings">
+					<field id="lecm-base-dummy-aspects:script">
 						<control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+							<control-param name="scriptLoadedFireAction">armDelegationFieldsHandlerScriptLoaded</control-param>
+							<control-param name="bubblingName">armIsForSecretaryChanged</control-param>
 							<control-param name="scripts">scripts/lecm-arm/arm-delegation-fields-handler.js</control-param>
+							<control-param name="delegation_html_url_field">prop_lecm-arm_root-node-html-url</control-param>
+							<control-param name="delegation_source_arm_field">assoc_lecm-arm_children-structure-source-arm-assoc</control-param>
+							<control-param name="delegation_source_node_field">assoc_lecm-arm_children-structure-source-node-assoc</control-param>
 						</control>
 					</field>
 				</appearance>

@@ -5,6 +5,7 @@ import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.Pair;
 import ru.it.lecm.arm.beans.childRules.ArmBaseChildRule;
 import ru.it.lecm.arm.beans.node.ArmNode;
 import ru.it.lecm.base.beans.SearchCounter;
@@ -86,21 +87,17 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
     public List<ArmNode> getChildNodes(NodeRef node, NodeRef parentRef, NodeRef currentSection, NodeRef runAsBoss) {
         Map<QName, Serializable> properties = service.getCachedProperties(node);
         boolean isForDelegation = Boolean.TRUE.equals(properties.get(ArmService.PROP_IS_FOR_SECRETARIES));
-        boolean isAccordion = isAccordion(node);
-        if (isForDelegation && isAccordion) {
+        if (isForDelegation && isAccordion(node)) {
             List<ArmNode> result = new ArrayList<>();
-            List<NodeRef> bossNodes = service.getArmRunAsBossNodes(node);
-            for (NodeRef bossNode : bossNodes) {
-                String[] refs = bossNode.getId().split("_");
-                NodeRef employeeRunAs = new NodeRef(bossNode.getStoreRef(), refs[1]);
-                NodeRef armAccordionRunAs = new NodeRef(bossNode.getStoreRef(), refs[0]);
-                result.add(wrapArmNodeAsObject(armAccordionRunAs, false, false, currentSection, employeeRunAs));
+            Set<Pair<NodeRef,NodeRef>> bossArmNodePairs = service.getArmRunAsBossNodes(node);
+            for (Pair<NodeRef,NodeRef> bossNodePair : bossArmNodePairs) {
+                result.add(wrapArmNodeAsObject(bossNodePair.getFirst(), false, false, currentSection, bossNodePair.getSecond()));
             }
             return result;
         }
         return getChildNodes(node, parentRef, false, currentSection, runAsBoss);
-
     }
+
     public boolean isArmDelegationRootNode(NodeRef node, NodeRef currentSection) {
        return service.isArmDelegationRootNode(node, currentSection);
     }
@@ -122,18 +119,23 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         } else { // узел справочника или какой-нить другой объект, то реальный родитель - берется последний узел из ARM
             parentFromArm = parent.getNodeRef();
         }
-        String runAsName = orgstructureBean.getEmployeeLogin(orgstructureBean.getCurrentEmployee());
-        if (runAsEmployee != null && nodeService.exists(runAsEmployee)) {
+        NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
+        String runAsName = null;
+        if (runAsEmployee != null && nodeService.exists(runAsEmployee) && !currentEmployee.equals(runAsEmployee)) {
             runAsName = orgstructureBean.getEmployeeLogin(runAsEmployee);
         }
         if (parentFromArm != null) {
             List<NodeRef> staticChilds = new ArrayList<>();
-            final String fullyAuthentificatedUser = AuthenticationUtil.getFullyAuthenticatedUser();
-            try {
-                AuthenticationUtil.setFullyAuthenticatedUser(runAsName);
-                staticChilds = service.getChildNodes(parentFromArm, runAsEmployee);
-            } finally {
-                AuthenticationUtil.setFullyAuthenticatedUser(fullyAuthentificatedUser);
+            if (runAsName != null) {
+                final String fullyAuthentificatedUser = AuthenticationUtil.getFullyAuthenticatedUser();
+                try {
+                    AuthenticationUtil.setFullyAuthenticatedUser(runAsName);
+                    staticChilds = service.getChildNodes(parentFromArm, runAsEmployee);
+                } finally {
+                    AuthenticationUtil.setFullyAuthenticatedUser(fullyAuthentificatedUser);
+                }
+            } else {
+                staticChilds = service.getChildNodes(parentFromArm);
             }
 
             // узлы АРМа
@@ -185,11 +187,14 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         } else { // узел справочника или какой-нить другой объект, то реальный родитель - берется последний узел из ARM
             parentFromArm = parentRef;
         }
-        String runAsName = orgstructureBean.getEmployeeLogin(orgstructureBean.getCurrentEmployee());
+        NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
+        String runAsName = null;
         NodeRef runAsEmployeeRef = null;
-        if (runAsEmployee != null && NodeRef.isNodeRef(runAsEmployee)){
+        if (runAsEmployee != null && NodeRef.isNodeRef(runAsEmployee)) {
             runAsEmployeeRef = new NodeRef(runAsEmployee);
-            runAsName = orgstructureBean.getEmployeeLogin(runAsEmployeeRef);
+            if (!currentEmployee.equals(runAsEmployeeRef)) {
+                runAsName = orgstructureBean.getEmployeeLogin(runAsEmployeeRef);
+            }
         }
 
         ArmBaseChildRule nodeQuery = service.getNodeChildRule(parentRef);
@@ -204,13 +209,17 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         }
 
         if (parentFromArm != null) {
-            final String fullyAuthentificatedUser = AuthenticationUtil.getFullyAuthenticatedUser();
             List<NodeRef> staticChilds = new ArrayList<>();
-            try {
-                AuthenticationUtil.setFullyAuthenticatedUser(runAsName);
-                staticChilds = service.getChildNodes(parentFromArm, runAsEmployeeRef); // узлы АРМа
-            } finally {
-                AuthenticationUtil.setFullyAuthenticatedUser(fullyAuthentificatedUser);
+            if (runAsName != null) {
+                final String fullyAuthentificatedUser = AuthenticationUtil.getFullyAuthenticatedUser();
+                try {
+                    AuthenticationUtil.setFullyAuthenticatedUser(runAsName);
+                    staticChilds = service.getChildNodes(parentFromArm, runAsEmployeeRef); // узлы АРМа
+                } finally {
+                    AuthenticationUtil.setFullyAuthenticatedUser(fullyAuthentificatedUser);
+                }
+            } else {
+                staticChilds = service.getChildNodes(parentFromArm);
             }
                 for (NodeRef staticChild : staticChilds) {
                     if (service.getNodeChildRule(staticChild) != null) {
@@ -255,22 +264,17 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
 
     public ArmNode wrapArmNodeAsObject(NodeRef nodeRef, boolean isAccordion, boolean onlyMeta, NodeRef currentSection, NodeRef employeeRunAs) {
         ArmNode node = new ArmNode();
-
         Map<QName, Serializable> properties = service.getCachedProperties(nodeRef);
-
         node.setNodeRef(nodeRef);
-        boolean isDelegationRootNode = false;
         boolean isForDelegation = false;
         Map<QName, Serializable> accordionProps = null;
         if (currentSection != null) {
-            isDelegationRootNode = isArmDelegationRootNode(nodeRef, currentSection);
             accordionProps = service.getCachedProperties(currentSection);
             isForDelegation = Boolean.TRUE.equals(accordionProps.get(ArmService.PROP_IS_FOR_SECRETARIES));
-            if (!isAccordion && isDelegationRootNode && accordionProps.get(ArmService.PROP_ROOT_NODE_HTML_URL) != null && accordionProps.get(ArmService.PROP_ROOT_NODE_HTML_URL).toString().length() > 0) {
+            if (!isAccordion && accordionProps.get(ArmService.PROP_ROOT_NODE_HTML_URL) != null && accordionProps.get(ArmService.PROP_ROOT_NODE_HTML_URL).toString().length() > 0 && isArmDelegationRootNode(nodeRef, currentSection)) {
                 node.setNodeType(ArmService.TYPE_ARM_HTML_NODE.toPrefixString(namespaceService));
                 node.setHtmlUrl((String) accordionProps.get(ArmService.PROP_ROOT_NODE_HTML_URL));
                 if (employeeRunAs != null) {
-                    node.setRunAsEmployee(employeeRunAs);
                     node.setTitle((String) service.getCachedProperties(employeeRunAs).get(OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME));
                 }
             } else {
@@ -288,6 +292,9 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         } else {
             node.setArmNodeRef(nodeRef);
         }
+        if (employeeRunAs != null) {
+            node.setRunAsEmployee(employeeRunAs);
+        }
 
         node.setNodeQuery(!isAccordion ? service.getNodeChildRule(nodeRef) : null);
         node.setTypes(getNodeTypes(nodeRef));
@@ -295,7 +302,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         String searchQuery = (String) properties.get(ArmService.PROP_SEARCH_QUERY);
         if (searchQuery != null) {
             if (isForDelegation) {
-                searchQuery = searchQuery.replaceAll("\\#current-user", "#boss-ref");
+                searchQuery = searchQuery.replaceAll("#current-user", "#boss-ref");
             }
             node.setSearchQuery(searchQuery.replaceAll("\\n", " ").replaceAll("\\r", " "));
         }
@@ -360,7 +367,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
             Map<QName,Serializable> accordionProps = service.getCachedProperties(currentSection);
             boolean isForDelegation = Boolean.TRUE.equals(accordionProps.get(ArmService.PROP_IS_FOR_SECRETARIES));
             if (isForDelegation) {
-                searchQueryString = searchQueryString.replaceAll("\\#current-user", "#boss-ref");
+                searchQueryString = searchQueryString.replaceAll("#current-user", "#boss-ref");
             }
         }
 
@@ -493,7 +500,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         String query = getFullQuery(node, true, true);
         NodeRef employeeRef = node.getRunAsEmployee();
         if (employeeRef != null) {
-            query = query.replaceAll("\\#current-user", "#boss-ref")
+            query = query.replaceAll("#current-user", "#boss-ref")
                     .replaceAll("#boss-ref", employeeRef.toString());
         }
         return execSearchQuery(query);

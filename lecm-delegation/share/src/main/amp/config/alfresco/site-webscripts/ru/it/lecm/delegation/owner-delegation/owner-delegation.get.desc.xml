@@ -5,4 +5,5 @@
 	<url>/lecm/delegation/owner/content</url>
 	<format default="html"/>
 	<authentication>user</authentication>
+	<transaction allow="readonly">required</transaction>
 </webscript>

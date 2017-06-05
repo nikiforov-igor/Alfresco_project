@@ -77,6 +77,7 @@
 				</property>
 				<property name="lecm-arm:root-node-html-url">
 					<type>d:text</type>
+					<index enabled="false"/>
 				</property>
 			</properties>
 			<associations>
