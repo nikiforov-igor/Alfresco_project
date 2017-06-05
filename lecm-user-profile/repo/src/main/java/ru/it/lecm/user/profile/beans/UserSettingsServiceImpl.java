@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ public class UserSettingsServiceImpl extends BaseBean implements UserSettingsSer
 
     private SimpleCache<String, String> userSettingsCache;
     private ContentService contentService;
+    private OrgstructureBean orgstructureService;
 
     public void setDirectoriesDeep(int directoriesDeep) {
         this.directoriesDeep = directoriesDeep;
@@ -48,6 +50,10 @@ public class UserSettingsServiceImpl extends BaseBean implements UserSettingsSer
 
     public void setUserSettingsCache(SimpleCache<String, String> userSettingsCache) {
         this.userSettingsCache = userSettingsCache;
+    }
+
+    public void setOrgstructureService(OrgstructureBean orgstructureService) {
+        this.orgstructureService = orgstructureService;
     }
 
     @Override
@@ -62,12 +68,18 @@ public class UserSettingsServiceImpl extends BaseBean implements UserSettingsSer
      * @param category - категория настроек
      * @return ID ноды с настройками или NULL - если ноды с настройками не существует
      */
-    public NodeRef getUserSettingsFile(String user, String category) throws WriteTransactionNeededException {
+    public NodeRef getUserSettingsFile(final String user, final String category) throws WriteTransactionNeededException {
         NodeRef userFolder = getUserSettingsFolder(user);
         if (userFolder != null) {
             return nodeService.getChildByName(userFolder, ContentModel.ASSOC_CONTAINS, category);
         }
         return null;
+    }
+
+    @Override
+    public NodeRef getUserSettingsFile(final NodeRef employee, final String category) throws WriteTransactionNeededException {
+        String login = orgstructureService.getEmployeeLogin(employee);
+        return getUserSettingsFile(login, category);
     }
 
     /**
@@ -77,14 +89,21 @@ public class UserSettingsServiceImpl extends BaseBean implements UserSettingsSer
      * @param key  - ключ настройки с префиксом-категорией. Формат: <код_категории>.<ключ_настройки>
      * @return сохраненное значение
      */
-    public String getSettings(String user, String key) {
+    public String getSettings(final String user, final String key) {
         String category = key.split("\\.")[0];
+        String actualKey = key;
         if (!category.equals(key)) {
-            key = key.substring(category.length() + 1);
+            actualKey = key.substring(category.length() + 1);
         } else {
             category = DEFAULT_ROOT;
         }
-        return getSettings(user, category, key);
+        return getSettings(user, category, actualKey);
+    }
+
+    @Override
+    public String getSettings(final NodeRef employee, final String key) {
+        String login = orgstructureService.getEmployeeLogin(employee);
+        return getSettings(login, key);
     }
 
     /**
@@ -95,7 +114,7 @@ public class UserSettingsServiceImpl extends BaseBean implements UserSettingsSer
      * @param key      - ключ настройки
      * @return сохраненное значение или NULL, если настройка не задана
      */
-    public String getSettings(String user, String category, String key) {
+    public String getSettings(final String user, final String category, final String key) {
         String settingsKey = getCashKey(user, category, key);
         if (userSettingsCache.contains(settingsKey)) {
             return userSettingsCache.get(settingsKey);
@@ -117,6 +136,12 @@ public class UserSettingsServiceImpl extends BaseBean implements UserSettingsSer
         return null;
     }
 
+    @Override
+    public String getSettings(final NodeRef employee, final String category, final String key) {
+        String login = orgstructureService.getEmployeeLogin(employee);
+        return getSettings(login, category, key);
+    }
+
     /**
      * Сохранить настройку для пользователя
      *
@@ -124,14 +149,21 @@ public class UserSettingsServiceImpl extends BaseBean implements UserSettingsSer
      * @param key   - ключ настройки с префиксом-категорией. Формат: <код_категории>.<ключ_настройки>
      * @param value - значение для сохранения
      */
-    public boolean setSettings(String user, String key, Object value) {
+    public boolean setSettings(final String user, final String key, final Object value) {
         String category = key.split("\\.")[0];
+        String actualKey = key;
         if (!category.equals(key)) {
-            key = key.substring(category.length() + 1);
+            actualKey = key.substring(category.length() + 1);
         } else {
             category = DEFAULT_ROOT;
         }
-        return setSettings(user, category, key, value);
+        return setSettings(user, category, actualKey, value);
+    }
+
+    @Override
+    public boolean setSettings(final NodeRef employee, final String key, final Object value) {
+        String login = orgstructureService.getEmployeeLogin(employee);
+        return setSettings(login, key, value);
     }
 
     /**
@@ -182,6 +214,12 @@ public class UserSettingsServiceImpl extends BaseBean implements UserSettingsSer
         });
     }
 
+    @Override
+    public boolean setSettings(final NodeRef employee, final String category, final String key, final Object value) throws WriteTransactionNeededException {
+        String login = orgstructureService.getEmployeeLogin(employee);
+        return setSettings(login, category, key, value);
+    }
+
     /**
      * Удалить настройку для пользователя
      *
@@ -190,6 +228,12 @@ public class UserSettingsServiceImpl extends BaseBean implements UserSettingsSer
      */
     public boolean deleteSettings(final String user, final String key) {
         return setSettings(user, key, jsonMapper.createObjectNode());
+    }
+
+    @Override
+    public boolean deleteSettings(final NodeRef employee, final String key) {
+        String login = orgstructureService.getEmployeeLogin(employee);
+        return deleteSettings(login, key);
     }
 
     /**
@@ -201,6 +245,12 @@ public class UserSettingsServiceImpl extends BaseBean implements UserSettingsSer
      */
     public boolean deleteSettings(final String user, final String category, final String key) throws WriteTransactionNeededException {
         return setSettings(user, category, key, jsonMapper.createObjectNode());
+    }
+
+    @Override
+    public boolean deleteSettings(final NodeRef employee, final String category, final String key) throws WriteTransactionNeededException {
+        String login = orgstructureService.getEmployeeLogin(employee);
+        return deleteSettings(login, category, key);
     }
 
     private List<String> getUserFolderPath(String user) {
@@ -255,7 +305,8 @@ public class UserSettingsServiceImpl extends BaseBean implements UserSettingsSer
         try {
             final ObjectMapper mapper = new ObjectMapper();
             return mapper.readTree(valueToConvert.toString());
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
 
         if (valueToConvert instanceof Date) {
             valueToConvert = DateFormatISO8601.format(valueToConvert);
