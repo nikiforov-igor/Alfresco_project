@@ -2,8 +2,7 @@ package ru.it.lecm.user.profile.scripts;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.json.JSONTokener;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.user.profile.beans.UserSettingsService;
 
@@ -30,9 +29,16 @@ public class UserSettingsWebScriptBean extends BaseWebScript {
         JSONObject result = new JSONObject();
         String settings = service.getSettings(user, key);
         try {
-            result.put("value", "");
-            JSONObject settingJSON = new JSONObject(settings);
-            result.put("value", settingJSON);
+            if (settings != null) {
+                Object tokener = new JSONTokener(settings).nextValue();
+                if (tokener != null) {
+                    result.put("value", tokener);
+                } else {
+                    result.put("value", settings);
+                }
+            } else {
+                result.put("value", "");
+            }
         } catch (JSONException ignored) {
         }
 
