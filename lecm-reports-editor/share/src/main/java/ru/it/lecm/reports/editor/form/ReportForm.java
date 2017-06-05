@@ -5,6 +5,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptException;
@@ -122,6 +123,21 @@ public class ReportForm extends LecmFormGet {
         String[] parameters = request.getParameterNames();
         for (String parameter : parameters) {
             arguments.put(parameter, request.getParameter(parameter));
+        }
+
+        String args = request.getParameter("args");
+        if (args != null) {
+            try {
+                JSONObject argsObject = new JSONObject(args);
+                Iterator<String> it = argsObject.keys();
+                while(it.hasNext()) {
+                    String key = it.next();
+                    String value = argsObject.getString(key);
+                    arguments.put(key, value);
+                }
+            } catch (JSONException e) {
+                logger.warn("Cannot parse input arguments");
+            }
         }
 
         arguments.put("current-date", DateFormatISO8601.format(new Date()));

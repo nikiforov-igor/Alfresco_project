@@ -32,97 +32,156 @@ LogicECM.module.Documents.Reports = LogicECM.module.Documents.Reports || {};
         loadReport();
     };
 
-        LogicECM.module.Documents.Reports.reportLinkClicked = function(element, param) {
-            if (doubleClickLock) {
-                return;
-            }
-            doubleClickLock = true;
+    LogicECM.module.Documents.Reports.reportLinkClicked = function (element, param) {
+        if (doubleClickLock) {
+            return;
+        }
+        doubleClickLock = true;
 
-            var reportCode = param.reportCode;
-            var documentRef = param.nodeRef;
+        var reportCode = param.reportCode;
+        var documentRef = param.nodeRef;
 
-            var actionUrl = null;
-            var doBeforeDialogShow = function (p_form, p_dialog) {
-                try {
-                    var defaultMsg = Alfresco.component.Base.prototype.msg("documents.report." + reportCode + ".title");
-                    if (defaultMsg == "documents.report." + reportCode + ".title"){
-                        defaultMsg = Alfresco.component.Base.prototype.msg("document.report.default.title");
+        Alfresco.util.Ajax.jsonRequest({
+            method: "GET",
+            url: Alfresco.constants.PROXY_URI + "lecm/user-settings/get",
+            dataObj: {
+                user: Alfresco.constants.USERNAME,
+                category: "reports",
+                key: reportCode + ".saved-params"
+            },
+            successCallback: {
+                fn: function (oResponse) {
+                    var lastSavedParams = [];
+                    if (oResponse.json && oResponse.json.value) {
+                        lastSavedParams = oResponse.json.value;
                     }
-                    Alfresco.util.populateHTML(
-                        [ p_dialog.id + "-form-container_h", defaultMsg ]
-                    );
 
-                    var formElement = Dom.get(p_form.formId);
-                    if (formElement) {
-                        actionUrl = formElement.action;
-                        if (actionUrl && actionUrl.indexOf("autoSubmit") > 0) {
-                            var data = {};
-                            if (documentRef) { // добавляем к параметрам ID - если задано
-                                data["ID"] = documentRef;
+                    var actionUrl = null;
+                    var doBeforeDialogShow = function (p_form, p_dialog) {
+                        try {
+                            var defaultMsg = Alfresco.component.Base.prototype.msg("documents.report." + reportCode + ".title");
+                            if (defaultMsg == "documents.report." + reportCode + ".title"){
+                                defaultMsg = Alfresco.component.Base.prototype.msg("document.report.default.title");
                             }
-                            p_dialog.dialog.subscribe('show', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
-                            LogicECM.module.Documents.Reports.openReport(actionUrl, data);
-                        } else {
-                            p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+                            Alfresco.util.populateHTML(
+                                [ p_dialog.id + "-form-container_h", defaultMsg ]
+                            );
+
+                            var formElement = Dom.get(p_form.formId);
+                            if (formElement) {
+                                actionUrl = formElement.action;
+                                if (actionUrl && actionUrl.indexOf("autoSubmit") > 0) {
+                                    var data = {};
+                                    if (documentRef) { // добавляем к параметрам ID - если задано
+                                        data["ID"] = documentRef;
+                                    }
+                                    p_dialog.dialog.subscribe('show', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+                                    LogicECM.module.Documents.Reports.openReport(actionUrl, data);
+                                } else {
+                                    p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+                                }
+                            }
+                        } catch (e) {
+                            Alfresco.logger.error("Error on load report form: ", e);
+                        } finally {
+                            doubleClickLock = false;
                         }
+                    };
+
+                    var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "/lecm/components/form/report";
+                    var templateRequestParams = {
+                        itemKind: "type",
+                        itemId: reportCode,
+                        formId: "printReportForm",
+                        mode: "create",
+                        submitType: "json",
+                        showCancelButton: true
+                    };
+
+                    if (lastSavedParams.length) {
+                        templateRequestParams.args = YAHOO.lang.JSON.stringify(lastSavedParams[lastSavedParams.length - 1].args);
                     }
-                } catch (e) {
-                    Alfresco.logger.error("Error on load report form: ", e);
-                } finally {
-                    doubleClickLock = false;
+
+                    var printReportForm = new Alfresco.module.SimpleDialog(reportCode + "-reportForm");
+
+                    printReportForm.setOptions({
+                        width: "50em",
+                        templateUrl: templateUrl,
+                        templateRequestParams: templateRequestParams,
+                        destroyOnHide: true,
+                        doBeforeDialogShow: {
+                            fn: doBeforeDialogShow,
+                            scope: this
+                        },
+                        ajaxSubmitMethod: "GET",
+                        doBeforeAjaxRequest: {
+                            fn: function (form) {
+                                var renameProperty = function (dataObj, name) {
+                                    if (name.indexOf("_removed") > 0 ||
+                                        name.indexOf("-selectedItems") > 0 ||
+                                        name.indexOf("-autocomplete-input") > 0) { //не может быть удаленных значений, да и они не нужны
+                                        delete dataObj[name];
+                                    } else if (name.indexOf("_added") > 0) { // что-то выбрано для ассоциаций
+                                        var newName = name.replace("_added", "");
+                                        dataObj[newName] = dataObj[name];
+                                        delete dataObj[name];
+                                    }
+                                };
+                                for (var property in form.dataObj) {
+                                    if (form.dataObj.hasOwnProperty(property)) {
+                                        renameProperty(form.dataObj, property);
+                                    }
+                                }
+                                if (documentRef) { // добавляем к параметрам ID - если задано
+                                    form.dataObj["ID"] = documentRef;
+                                }
+                                form.method = "GET";
+                                LogicECM.module.Documents.Reports.openReport(actionUrl, form.dataObj);
+
+
+                                var newParam = {
+                                    name: "lastParams-" + (lastSavedParams.length + 1),
+                                    created: Alfresco.util.toISO8601(new Date()),
+                                    args: form.dataObj
+                                };
+                                lastSavedParams.push(newParam);
+
+                                Alfresco.util.Ajax.jsonRequest({
+                                    method: "POST",
+                                    url: Alfresco.constants.PROXY_URI + "lecm/user-settings/save",
+                                    dataObj: {
+                                        value: YAHOO.lang.JSON.stringify(lastSavedParams),
+                                        user: Alfresco.constants.USERNAME,
+                                        category:"reports",
+                                        key: reportCode + ".saved-params"
+                                    },
+                                    successCallback: {
+                                        fn: function (oResponse) {
+                                            if (oResponse.json) {
+                                            }
+                                        }
+                                    },
+                                    failureCallback: {
+                                        fn: function (oResponse) {
+                                        }
+                                    },
+                                    scope: this,
+                                    execScripts: true
+                                });
+                                printReportForm.hide();
+                                return false;
+                            }
+                        }
+                    });
+                    printReportForm.show();
                 }
-            };
-
-            var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "/lecm/components/form/report";
-            var templateRequestParams = {
-                itemKind: "type",
-                itemId: reportCode,
-                formId: "printReportForm",
-                mode: "create",
-                submitType: "json",
-                showCancelButton: true
-            };
-
-            var printReportForm = new Alfresco.module.SimpleDialog(reportCode + "-reportForm");
-
-            printReportForm.setOptions({
-                width: "50em",
-                templateUrl: templateUrl,
-                templateRequestParams: templateRequestParams,
-                destroyOnHide: true,
-                doBeforeDialogShow: {
-                    fn: doBeforeDialogShow,
-                    scope: this
-                },
-                ajaxSubmitMethod: "GET",
-                doBeforeAjaxRequest: {
-                    fn: function (form) {
-                        var renameProperty = function (dataObj, name) {
-                            if (name.indexOf("_removed") > 0 ||
-                                name.indexOf("-selectedItems") > 0 ||
-                                name.indexOf("-autocomplete-input") > 0) { //не может быть удаленных значений, да и они не нужны
-                                delete dataObj[name];
-                            } else if (name.indexOf("_added") > 0) { // что-то выбрано для ассоциаций
-                                var newName = name.replace("_added", "");
-                                dataObj[newName] = dataObj[name];
-                                delete dataObj[name];
-                            }
-                        };
-                        for (var property in form.dataObj) {
-                            if (form.dataObj.hasOwnProperty(property)) {
-                                renameProperty(form.dataObj, property);
-                            }
-                        }
-                        if (documentRef) { // добавляем к параметрам ID - если задано
-                            form.dataObj["ID"] = documentRef;
-                        }
-                        form.method = "GET";
-                        LogicECM.module.Documents.Reports.openReport(actionUrl, form.dataObj);
-                        printReportForm.hide();
-                        return false;
-                    }
+            },
+            failureCallback: {
+                fn: function (oResponse) {
                 }
-            });
-            printReportForm.show();
-        };
+            },
+            scope: this,
+            execScripts: true
+        });
+    };
 })();
