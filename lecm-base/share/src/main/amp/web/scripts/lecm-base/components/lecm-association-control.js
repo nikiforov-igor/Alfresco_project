@@ -271,34 +271,34 @@ LogicECM.module = LogicECM.module || {};
 					this.options.prefixPickerId = this.options.controlId;
 				}
 				this.options.pickerId = this.options.prefixPickerId + '-picker';
-
+				var isDisabledOrReadOnly = this.options.disabled || this.readonly;
 				if (this.widgets.pickerButton != null) {
-					this.widgets.pickerButton.set('disabled', this.options.disabled || this.readonly);
+					this.widgets.pickerButton.set('disabled', isDisabledOrReadOnly);
 				}
 
                 var input = Dom.get(this.id);
                 if (input) {
-                    input.disabled = this.options.disabled || this.readonly;
+                    input.disabled = isDisabledOrReadOnly;
                 }
                 var added = Dom.get(this.options.controlId + "-added");
                 if (added) {
-                    added.disabled = this.options.disabled || this.readonly;
+                    added.disabled = isDisabledOrReadOnly;
                 }
                 var removed = Dom.get(this.options.controlId + "-removed");
                 if (removed) {
-                    removed.disabled = this.options.disabled || this.readonly;
+                    removed.disabled = isDisabledOrReadOnly;
                 }
 				var selectedItems = Dom.get(this.options.controlId + "-selectedItems");
 				if (selectedItems) {
-					selectedItems.disabled = this.options.disabled || this.readonly;
+					selectedItems.disabled = isDisabledOrReadOnly;
 				}
                 input = Dom.get(this.options.controlId + "-autocomplete-input");
 				if (input != null) {
-					input.disabled = this.options.disabled || this.options.lazyLoading || this.readonly;
+					input.disabled = isDisabledOrReadOnly || this.options.lazyLoading;
 				}
 
 				// Create button if control is enabled
-				if(!this.options.disabled && !this.readonly)
+				if(!isDisabledOrReadOnly)
 				{
 					if (this.widgets.pickerButton == null) {
 						var buttonOptions = {
