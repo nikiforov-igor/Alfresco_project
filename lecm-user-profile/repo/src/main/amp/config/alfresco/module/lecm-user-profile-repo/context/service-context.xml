@@ -24,8 +24,7 @@
 		<property name="name" value="ru.it.lecm.cache.user.settings"/>
 	</bean>
 
-	<bean id="userSettingsWebScript" parent="baseScript" class="ru.it.lecm.user.profile.scripts.UserSettingsWebScriptBean"
-		  depends-on="useSettings.cache">
+	<bean id="userSettingsWebScript" parent="baseScript" class="ru.it.lecm.user.profile.scripts.UserSettingsWebScriptBean">
 		<property name="extensionName" value="userSettings"/>
 		<property name="service" ref="userSettingsService"/>
 	</bean>
