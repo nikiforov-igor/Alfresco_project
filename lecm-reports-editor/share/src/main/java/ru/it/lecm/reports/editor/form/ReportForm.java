@@ -33,11 +33,14 @@ import java.util.*;
  */
 public class ReportForm extends LecmFormGet {
     public static final String TEMPLATE_CODE = "templateCode";
+    public static final String SAVED_PREFERENCES = "savedPreferences";
     public static final String TEMPLATES = "TEMPLATES";
+    public static final String REPORT_PREFERENCES = "REPORT_PREFERENCES";
     public static final String TEMPLATES_COLUMN_NAME = "Шаблон представления";
     private ReportManagerApi reportManager;
 
-    final protected DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    protected final DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    protected final String CURRENT_DATE_ARG = "current-date";
 
     private final static Log logger = LogFactory.getLog(ReportForm.class);
 
@@ -49,23 +52,23 @@ public class ReportForm extends LecmFormGet {
     protected Map<String, Object> generateModel(String itemKind, String itemId, WebScriptRequest request, Status status, Cache cache) {
         ReportDescriptor descriptor = getReportDescriptor(itemId);
 
-        final HashMap<String, Object> model = new HashMap<String, Object>();
-        final HashMap<String, Object> form = new HashMap<String, Object>();
+        final HashMap<String, Object> model = new HashMap<>();
+        final HashMap<String, Object> form = new HashMap<>();
         model.put(MODEL_FORM, form);
 
-        final ArrayList<Constraint> constraints = new ArrayList<Constraint>();
+        final ArrayList<Constraint> constraints = new ArrayList<>();
         form.put(MODEL_CONSTRAINTS, constraints);
 
-        final ArrayList<Set> sets = new ArrayList<Set>();
+        final ArrayList<Set> sets = new ArrayList<>();
         form.put(MODEL_STRUCTURE, sets);
         Set set = new Set("", "Набор параметров");
         sets.add(set);
 
-        final HashMap<String, Field> fields = new HashMap<String, Field>();
+        final HashMap<String, Field> fields = new HashMap<>();
         form.put(MODEL_FIELDS, fields);
 
         List<ColumnDescriptor> columns = descriptor.getDsDescriptor().getColumns();
-        List<ColumnDescriptor> params = new ArrayList<ColumnDescriptor>();
+        List<ColumnDescriptor> params = new ArrayList<>();
         for (ColumnDescriptor column : columns) {
             ParameterTypedValue typedValue = column.getParameterValue();
             if (typedValue != null) {
@@ -78,6 +81,19 @@ public class ReportForm extends LecmFormGet {
                 return o1.compareTo(o2);
             }
         });
+
+        if (!params.isEmpty()) {
+            ColumnDescriptor templateParam = new ColumnDescriptor(SAVED_PREFERENCES);
+            templateParam.setAlfrescoType(REPORT_PREFERENCES);
+
+            L18Value name = new L18Value();
+            name.regItem("ru", retrieveMessage("report.param.preferences.label"));
+            templateParam.setL18Name(name);
+
+            templateParam.setParameterValue(new ParameterTypedValueImpl(ParameterTypedValue.Type.VALUE.getMnemonic()));
+
+            params.add(0, templateParam);/*в начало списка*/
+        }
 
         if (descriptor.getReportTemplates() != null && descriptor.getReportTemplates().size() > 1) {
             ColumnDescriptor templateParam = new ColumnDescriptor(TEMPLATE_CODE);
@@ -118,7 +134,7 @@ public class ReportForm extends LecmFormGet {
             }
         }
 
-        final Map<String, Object> arguments = new HashMap<String, Object>();
+        final Map<String, Object> arguments = new HashMap<>();
 
         String[] parameters = request.getParameterNames();
         for (String parameter : parameters) {
@@ -139,8 +155,7 @@ public class ReportForm extends LecmFormGet {
                 logger.warn("Cannot parse input arguments");
             }
         }
-
-        arguments.put("current-date", DateFormatISO8601.format(new Date()));
+        arguments.put(CURRENT_DATE_ARG, DateFormatISO8601.format(new Date()));
 
         form.put(MODEL_MODE, Mode.CREATE);
         form.put(MODEL_ARGUMENTS, arguments);
