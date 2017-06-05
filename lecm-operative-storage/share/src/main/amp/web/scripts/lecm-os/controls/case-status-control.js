@@ -11,7 +11,7 @@ LogicECM.module.OS = LogicECM.module.OS || {};
 	LogicECM.module.OS.StatusControl = function (htmlId) {
 		LogicECM.module.OS.StatusControl.superclass.constructor.call(this, "LogicECM.module.OS.StatusControl", htmlId);
 		this.controlId = htmlId;
-
+        YAHOO.Bubbling.on("onSearchSuccess", this.prepare, this);
 		this.grid = Alfresco.util.ComponentManager.find({name: "LogicECM.module.Base.DataGrid_nomenclature"})[0];
 		return this;
 	}
@@ -76,12 +76,10 @@ LogicECM.module.OS = LogicECM.module.OS || {};
 								var fakeOwner = obj.fakeOwner;
 								var oData = obj.oData;
 								var grid = obj.grid;
-								var control = obj.srcContex;
 								if (typeof grid[fakeOwner.className] == "function") {
 									var confirmFunction = obj.confirmFn;
 									grid[fakeOwner.className].call(grid, oData, fakeOwner, grid.datagridMeta.actionsConfig, confirmFunction);
 								}
-								grid.afterDataGridUpdate.push(control.updateActions.bind(grid, control));
 								return true;
 							};
 
