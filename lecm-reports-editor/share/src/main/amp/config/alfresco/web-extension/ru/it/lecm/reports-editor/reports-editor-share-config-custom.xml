@@ -11,6 +11,7 @@
                 <type name="REPORT_PREFERENCES" template="/ru/it/lecm/reports-editor/controls/select-report-preferences-control.ftl">
                     <control-param name="notSelectedOptionLabelCode">report.param.preferences.new-value.title</control-param>
                     <control-param name="notSelectedOption">true</control-param>
+                    <control-param name="changeItemFireAction">updateReportForm</control-param>
                 </type>
                 <type name="datetime-limit" template="/ru/it/lecm/base-share/components/controls/date.ftl">
                     <control-param name="showTime">true</control-param>

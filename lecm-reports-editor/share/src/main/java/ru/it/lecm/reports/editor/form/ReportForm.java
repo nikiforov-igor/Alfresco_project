@@ -1,9 +1,11 @@
 package ru.it.lecm.reports.editor.form;
 
+import org.alfresco.util.ISO8601DateFormat;
 import org.alfresco.web.config.forms.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.extensions.webscripts.Cache;
@@ -82,7 +84,61 @@ public class ReportForm extends LecmFormGet {
             }
         });
 
+        final Map<String, Object> arguments = new HashMap<>();
+
         if (!params.isEmpty()) {
+            JSONArray preferences = getUserPreferencesForReport(itemId);
+
+            List<JSONObject> jsonValues = new ArrayList<>();
+            for (int i = 0; i < preferences.length(); i++) {
+                try {
+                    jsonValues.add(preferences.getJSONObject(i));
+                } catch (JSONException e) {
+                    logger.error(e.getMessage(), e);
+                }
+            }
+            Collections.sort(jsonValues, new Comparator<JSONObject>() {
+                private static final String KEY_CREATED = "created";
+
+                @Override
+                public int compare(JSONObject a, JSONObject b) {
+                    Date valA = null;
+                    Date valB = null;
+
+                    try {
+                        valA = ISO8601DateFormat.parse(String.valueOf(a.get(KEY_CREATED)));
+                        valB = ISO8601DateFormat.parse(String.valueOf(b.get(KEY_CREATED)));
+                    } catch (JSONException e) {
+                        //do something
+                    }
+                    if (valA == null && valB != null) {
+                        return -1;
+                    } else if (valA != null && valB == null) {
+                        return 1;
+                    } else if (valA != null) {
+                        return valA.compareTo(valB);
+                    }
+                    return 0;
+                }
+            });
+
+            if (!jsonValues.isEmpty()) {
+                JSONObject lastParameters = jsonValues.get(jsonValues.size() - 1);
+                try {
+                    JSONObject savedArgs = lastParameters.getJSONObject("args");
+
+                    Iterator keys = savedArgs.keys();
+                    while (keys.hasNext()) {
+                        String next = (String) keys.next();
+
+                        Object value = savedArgs.get(next);
+                        arguments.put(next, value);
+                    }
+                } catch (JSONException e) {
+                    logger.error(e.getMessage(), e);
+                }
+            }
+
             ColumnDescriptor templateParam = new ColumnDescriptor(SAVED_PREFERENCES);
             templateParam.setAlfrescoType(REPORT_PREFERENCES);
 
@@ -92,7 +148,10 @@ public class ReportForm extends LecmFormGet {
 
             templateParam.setParameterValue(new ParameterTypedValueImpl(ParameterTypedValue.Type.VALUE.getMnemonic()));
 
-            params.add(0, templateParam);/*в начало списка*/
+            Field field = generateFieldModel(templateParam, 0, descriptor);
+            if (field != null) {
+                form.put("preferencesControl", field);
+            }
         }
 
         if (descriptor.getReportTemplates() != null && descriptor.getReportTemplates().size() > 1) {
@@ -134,7 +193,7 @@ public class ReportForm extends LecmFormGet {
             }
         }
 
-        final Map<String, Object> arguments = new HashMap<>();
+
 
         String[] parameters = request.getParameterNames();
         for (String parameter : parameters) {
@@ -312,5 +371,14 @@ public class ReportForm extends LecmFormGet {
         } finally {
             IOUtils.closeQuietly(xmlStream);
         }
+    }
+
+    private JSONArray getUserPreferencesForReport(String reportCode) {
+        JSONArray preferences = new JSONArray();
+        try {
+            preferences = reportManager.getUserPreferencesForReport(reportCode);
+        } catch (RuntimeException ignored) {
+        }
+        return preferences;
     }
 }

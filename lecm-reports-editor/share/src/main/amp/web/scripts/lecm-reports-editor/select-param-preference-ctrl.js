@@ -8,217 +8,252 @@ LogicECM.module = LogicECM.module || {};
 LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
 
 (function () {
-    var Dom = YAHOO.util.Dom;
+    var Dom = YAHOO.util.Dom,
+        Event = YAHOO.util.Event;
 
-    LogicECM.module.ReportsEditor.SelectParamPreference = function (fieldHtmlId) {
-        LogicECM.module.ReportsEditor.SelectParamPreference.superclass.constructor.call(this, "LogicECM.module.ReportsEditor.SelectParamPreference", fieldHtmlId, [ "container", "resize", "datasource"]);
-        this.selectItemId = fieldHtmlId;
-        this.removedItemId = fieldHtmlId + "-removed";
-        this.addedItemId = fieldHtmlId + "-added";
-        this.controlId = fieldHtmlId;
-        this.currentDisplayValueId = fieldHtmlId + "-currentValueDisplay";
-
+    LogicECM.module.ReportsEditor.SelectParamPreference = function (id) {
+        LogicECM.module.ReportsEditor.SelectParamPreference.superclass.constructor.call(this, "LogicECM.module.ReportsEditor.SelectParamPreference", id);
+        this.id = id;
+        this.controlId = id + "-cntrl";
+        this.formId = id.substring(0, id.indexOf("_savedPreferences"));
         return this;
     };
 
     YAHOO.extend(LogicECM.module.ReportsEditor.SelectParamPreference, Alfresco.component.Base,
         {
             options: {
-                reportNodeRef: null,
-                fromParent: false,
-                itemType: "lecm-rpeditor:reportTemplate",
-                ctrlValue: "nodeRef",
-                mandatory: false,
-                selectedValue: "",
-                oldValue: "",
-                maxSearchResults: 30,
-                nameSubstituteString: "{cm:name} ({lecm-rpeditor:templateCode})",
+                reportCode: null,
                 fieldId: null,
                 notSelectedOptionShow: false,
                 notSelectedText: ""
             },
 
-            rootNode: null,
-
             controlId: null,
+            saveNewLink: null,
+            deleteLink: null,
 
-            selectItemId: null,
+            id: null,
 
-            removedItemId: null,
+            select: null,
 
-            addedItemId: null,
-
-            currentDisplayValueId: null,
-
-            selectItem: null,
-
-            currentDisplayValueElement: null,
-
-            dataSource: null,
-
-            doubleClickLock: false,
+            preferencesInSelect: [],
+            actualPreferences: [],
 
             onReady: function () {
-                this.selectItem = Dom.get(this.selectItemId);
-                if (this.selectItem) {
+                this.select = Dom.get(this.id);
+                if (this.select) {
                     this.populateSelect();
                 }
-                YAHOO.util.Event.on(this.selectItemId, "change", this.onSelectChange, this, true);
+                Event.on(this.select, "change", this.onSelectChange, this, true);
 
-                this.currentDisplayValueElement = Dom.get(this.currentDisplayValueId);
-                if (this.currentDisplayValueElement) {
-                    this.populateCurrentValue();
-                }
-            },
-
-            onSelectChange: function () {
-                var selectValue = this.selectItem.value;
-                var addedItem = "";
-                var removedItem = "";
-
-                if (selectValue != this.options.oldValue) {
-                    removedItem = this.options.oldValue;
-                    addedItem = selectValue;
-                }
-                Dom.get(this.removedItemId).value = removedItem;
-                Dom.get(this.addedItemId).value = addedItem;
-
-                if (this.options.mandatory) {
-                    YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
+                this.saveNewLink = Dom.get(this.controlId + "-create-new");
+                if (this.saveNewLink) {
+                    Event.on(this.controlId + "-create-new", "click", this.onSave, null, this);
                 }
 
-                YAHOO.Bubbling.fire("formValueChanged",
-                    {
-                        eventGroup: this,
-                        addedItems: addedItem,
-                        removedItems: removedItem,
-                        selectedItems: selectValue,
-                        selectedItemsMetaData: Alfresco.util.deepCopy(this.selectItem.value)
-                    });
-            },
-
-
-            destroy: function () {
-                LogicECM.module.ReportsEditor.SelectParamPreference.superclass.destroy.call(this);
-            },
-
-            loadDefaultValue: function () {
-                this.fillContent();
-            },
-
-            fillContent: function () {
-                var successHandler = function (sRequest, oResponse, oPayload) {
-                    if (this.options.notSelectedOptionShow) {
-                        var emptyOption = this.selectItem.options[0];
-                        var emptOpt = document.createElement('option');
-                        emptOpt.innerHTML = emptyOption.innerHTML;
-                        emptOpt.value = emptyOption.value;
-
-                        this.selectItem.innerHTML = "";
-                        this.selectItem.appendChild(emptOpt);
-                    }
-
-                    var results = oResponse.results;
-                    for (var i = 0; i < results.length; i++) {
-                        var node = results[i];
-                        var opt = document.createElement('option');
-                        opt.innerHTML = node.templateName;
-                        opt.value = this.options.ctrlValue == "nodeRef" ? node.nodeRef : node[this.options.ctrlValue];
-                        if (opt.value == this.options.selectedValue) {
-                            opt.selected = true;
-                        }
-                        this.selectItem.appendChild(opt);
-                    }
-
-                    this.onSelectChange();
-                }.bind(this);
-
-                var failureHandler = function (sRequest, oResponse) {
-                    if (oResponse.status == 401) {
-                        // Our session has likely timed-out, so refresh to offer the login page
-                        window.location.reload();
-                    }
-                    else {
-                        //todo show failure message
-                    }
-                }.bind(this);
-
-                this.dataSource.sendRequest("",
-                    {
-                        success: successHandler,
-                        failure: failureHandler,
-                        scope: this
-                    });
+                this.deleteLink = Dom.get(this.controlId + "-delete");
+                if (this.deleteLink) {
+                    Event.on(this.controlId + "-delete", "click", this.onDelete, null, this);
+                    Dom.addClass(this.deleteLink, "hidden");
+                }
             },
 
             populateSelect: function () {
-                this._createDataSource();
-                this.loadDefaultValue();
+                Alfresco.util.Ajax.jsonRequest({
+                    method: "GET",
+                    url: Alfresco.constants.PROXY_URI + "lecm/user-settings/get",
+                    dataObj: {
+                        category: "reports",
+                        key: this.options.reportCode + ".saved-preferences"
+                    },
+                    successCallback: {
+                        scope: this,
+                        fn: function (oResponse) {
+                            if (oResponse.json && oResponse.json.value) {
+                                this.preferencesInSelect = oResponse.json.value;
+                                this.actualPreferences = new Array(oResponse.json.value);
+                            }
+
+                            var select = this.select;
+                            while (select.firstChild) {
+                                select.removeChild(select.firstChild);
+                            }
+
+                            var option;
+                            if (this.options.notSelectedOptionShow) {
+                                option = document.createElement("option");
+                                option.value = '~CREATE-NEW~';
+                                option.innerHTML = this.options.notSelectedText;
+                                option.selected = !this.preferencesInSelect.length;
+                                select.appendChild(option);
+                            }
+
+                            if (this.options.needSort) {
+                                this.preferencesInSelect.sort(function (left, right) {
+                                    if (left['created'] > right['created']) {
+                                        return -1;
+                                    }
+                                    if (left['created'] < right['created']) {
+                                        return 1;
+                                    }
+                                    return 0;
+                                });
+                            }
+
+                            for (var i = 0; i < this.preferencesInSelect.length; i++) {
+                                var preference = this.preferencesInSelect[i];
+
+                                option = document.createElement("option");
+                                option.value = i;
+                                option.innerHTML = preference.name;
+                                if (i == (this.preferencesInSelect.length - 1)) {
+                                    option.selected = true;
+                                }
+                                select.appendChild(option);
+                            }
+
+                            this.onSelectChange();
+                        }
+                    },
+                    failureCallback: {
+                        scope: this,
+                        fn: function (oResponse) {
+                        }
+                    },
+                    scope: this,
+                    execScripts: true
+                });
             },
 
-            populateCurrentValue: function () {
-                if (this.options.selectedValue != null && this.options.selectedValue.length > 0 && this.options.ctrlValue == "nodeRef") {
-                    Alfresco.util.Ajax.jsonGet(
-                        {
-                            url: Alfresco.constants.PROXY_URI + "slingshot/doclib2/node/" + this.options.selectedValue.replace("://", "/"),
-                            successCallback: {
-                                fn: function (response) {
-                                    var properties = response.json.item.node.properties;
-                                    var name = this.options.nameSubstituteString;
-                                    for (var prop in properties) {
-                                        var propSubstName = "{" + prop + "}";
-                                        if (name.indexOf(propSubstName) != -1) {
-                                            name = name.replace(propSubstName, properties[prop]);
-                                        }
-                                    }
-                                    this.currentDisplayValueElement.innerHTML = name;
-                                },
-                                scope: this
-                            },
-                            failureCallback: {
-                                fn: function (response) {
-                                    //todo show error message
-                                },
-                                scope: this
-                            }
-                        });
-                } else if (this.options.notSelectedOptionShow) {
-                    this.currentDisplayValueElement.innerHTML = this.options.notSelectedText;
+            onSelectChange: function () {
+                if (this.select.value != "~CREATE-NEW~") {
+                    var argumentsObj = this.preferencesInSelect[this.select.value].args;
+
+                    var components = Alfresco.util.ComponentManager.list();
+
+                    var formId = this.formId;
+                    var controls = components.filter(function (item) {
+                        return item.id.indexOf(formId + "_") == 0
+                    });
+
+                    for (var i = 0; i < controls.length; i++) {
+                        var fieldName = controls[i].options.fieldId;
+                        if (argumentsObj && argumentsObj.hasOwnProperty(fieldName)) {
+                            LogicECM.module.Base.Util.reInitializeControl(formId, fieldName, {
+                                currentValue: argumentsObj[fieldName],
+                                defaultValue: argumentsObj[fieldName],
+                                resetValue: true
+                            });
+                        }
+                    }
+                    Dom.removeClass(this.deleteLink, "hidden");
+                } else {
+                    Dom.addClass(this.deleteLink, "hidden");
                 }
             },
 
-            _createDataSource: function () {
-                var me = this;
+            onSave: function () {
+                var newParam = {
+                    name: "lastParams-" + (this.actualPreferences.length + 1),
+                    created: Alfresco.util.toISO8601(new Date()),
+                    args: {}
+                };
 
-                var pickerChildrenUrl = Alfresco.constants.PROXY_URI + "lecm/reports-editor/report-templates?reportId=" + this.options.reportNodeRef + "&fromParent=" + this.options.fromParent;
-                this.dataSource = new YAHOO.util.DataSource(pickerChildrenUrl,
-                    {
-                        responseType: YAHOO.util.DataSource.TYPE_JSON,
-                        connXhrMode: "queueRequests",
-                        responseSchema: {
-                            resultsList: "templates"
+                var fr = Alfresco.util.ComponentManager.find({
+                    id: this.formId + "-form",
+                    name: "Alfresco.FormUI"
+                });
+
+                if (fr && fr.length) {
+                    var renameProperty = function (dataObj, name) {
+                        if (name.indexOf("_removed") > 0 ||
+                            name.indexOf("-selectedItems") > 0 ||
+                            name.indexOf("-autocomplete-input") > 0) {
+                            delete dataObj[name];
+                        } else if (name.indexOf("_added") > 0) {
+                            var newName = name.replace("_added", "");
+                            dataObj[newName] = dataObj[name];
+                            delete dataObj[name];
                         }
-                    });
-
-                this.dataSource.doBeforeParseData = function (oRequest, oFullResponse) {
-                    var updatedResponse = oFullResponse;
-
-                    if (oFullResponse) {
-                        var templates = oFullResponse.data.templates;
-
-                        if (me.options.maxSearchResults > -1 && templates.length > me.options.maxSearchResults) {
-                            templates = templates.slice(0, me.options.maxSearchResults - 1);
+                    };
+                    var formData = fr[0].formsRuntime.getFormData();
+                    for (var property in formData) {
+                        if (formData.hasOwnProperty(property)) {
+                            renameProperty(formData, property);
                         }
-
-                        updatedResponse =
-                        {
-                            parent: oFullResponse.data.report,
-                            templates: templates
-                        };
                     }
 
-                    return updatedResponse;
-                };
+                    newParam.args = formData;
+                }
+
+                this.actualPreferences.push(newParam);
+                this.preferencesInSelect.push(newParam);
+
+                Alfresco.util.Ajax.jsonRequest({
+                    method: "POST",
+                    url: Alfresco.constants.PROXY_URI + "lecm/user-settings/save",
+                    dataObj: {
+                        value: YAHOO.lang.JSON.stringify(this.actualPreferences),
+                        category: "reports",
+                        key: this.options.reportCode + ".saved-preferences"
+                    },
+                    successCallback: {
+                        scope: this,
+                        fn: function (oResponse) {
+                            if (oResponse.json) {
+                                var select = this.select;
+                                if (select) {
+                                    var option = document.createElement("option");
+                                    var lastIndex = this.preferencesInSelect.length - 1;
+                                    option.value = lastIndex;
+                                    option.innerHTML = this.preferencesInSelect[lastIndex].name;
+                                    option.selected = true;
+                                    select.appendChild(option);
+                                }
+                            }
+                        }
+                    },
+                    failureCallback: {
+                        fn: function (oResponse) {
+                        }
+                    },
+                    scope: this,
+                    execScripts: true
+                });
+            },
+
+            onDelete: function () {
+                if (this.select && this.select.value != "~CREATE-NEW~") {
+                    this.preferencesInSelect.splice(this.select.value, 1, {});
+                    this.actualPreferences.splice(this.select.value, 1);
+                }
+
+                Alfresco.util.Ajax.jsonRequest({
+                    method: "POST",
+                    url: Alfresco.constants.PROXY_URI + "lecm/user-settings/save",
+                    dataObj: {
+                        value: YAHOO.lang.JSON.stringify(this.actualPreferences),
+                        category: "reports",
+                        key: this.options.reportCode + ".saved-preferences"
+                    },
+                    successCallback: {
+                        scope: this,
+                        fn: function (oResponse) {
+                            if (oResponse.json) {
+                                var select = this.select;
+                                if (select) {
+                                    select.remove(select.selectedIndex);
+                                }
+                            }
+                        }
+                    },
+                    failureCallback: {
+                        fn: function (oResponse) {
+                        }
+                    },
+                    scope: this,
+                    execScripts: true
+                });
             }
         });
 })();
