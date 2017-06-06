@@ -73,6 +73,7 @@
         <property name="secretaryService" ref="secretaryService"/>
         <property name="scriptService" ref="scriptService"/>
         <property name="delegationService" ref="delegationService"/>
+        <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
 			<map>

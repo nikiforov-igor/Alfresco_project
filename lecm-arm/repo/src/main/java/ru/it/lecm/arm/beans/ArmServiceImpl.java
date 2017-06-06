@@ -25,6 +25,7 @@ import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.secretary.SecretaryService;
+import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.security.Types;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
@@ -49,6 +50,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
     private SecretaryService secretaryService;
     private ScriptService scriptService;
     private IDelegation delegationService;
+    private LecmPermissionService lecmPermissionService;
 
     private SimpleCache<String, List<ArmColumn>> columnsCache;
     private SimpleCache<NodeRef, List<ArmFilter>> filtersCache;
@@ -111,6 +113,10 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
 
     public ScriptService getScriptService() {
         return scriptService;
+    }
+
+    public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+        this.lecmPermissionService = lecmPermissionService;
     }
 
     public void setScriptService(ScriptService scriptService) {
@@ -333,7 +339,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
                 Set<String> auth = authorityService.getAuthoritiesForUser(userName);
                 for (NodeRef chief : chiefsList) {
                     String secretaryRoleCode = getAutorityForSecretary(chief);
-                    String delegatRoleCode = getAuthorityForDelegat(chief);
+                    String delegatRoleCode = lecmPermissionService.getAuthorityForDelegat(chief);
                     //Дополнительная проверка на тот случай, если сотрудник назначен секретарем, но реальных прав нет (не выдались из-за ошибки и т.д)
                     if (auth.contains(secretaryRoleCode) || auth.contains(delegatRoleCode)) {
                         result.add(new Pair<>(delegationRootNode, chief));
@@ -354,13 +360,6 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
         String chiefLogin = orgstructureBean.getEmployeeLogin(chief);
         Types.SGSecretaryOfUser sgSecretary = Types.SGKind.getSGSecretaryOfUser(chief.getId(), chiefLogin);
         String roleName = sgSecretary.getAlfrescoSuffix();
-        return authorityService.getName(AuthorityType.GROUP, roleName);
-    }
-
-    private String getAuthorityForDelegat(NodeRef owner) {
-        String chiefLogin = orgstructureBean.getEmployeeLogin(owner);
-        Types.SGPrivateMeOfUser sgMeOfUser = Types.SGKind.getSGMeOfUser(owner.getId(), chiefLogin);
-        String roleName = sgMeOfUser.getAlfrescoSuffix();
         return authorityService.getName(AuthorityType.GROUP, roleName);
     }
 

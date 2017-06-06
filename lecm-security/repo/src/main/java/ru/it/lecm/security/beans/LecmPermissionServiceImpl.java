@@ -960,4 +960,11 @@ public class LecmPermissionServiceImpl
 		}
 		return false;
     }
+
+	public String getAuthorityForDelegat(NodeRef owner) {
+		String chiefLogin = orgstructureService.getEmployeeLogin(owner);
+		Types.SGPrivateMeOfUser sgMeOfUser = Types.SGKind.getSGMeOfUser(owner.getId(), chiefLogin);
+		String roleName = sgMeOfUser.getAlfrescoSuffix();
+		return authorityService.getName(AuthorityType.GROUP, roleName);
+	}
 }
