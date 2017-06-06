@@ -6,7 +6,7 @@ function main() {
     var response = connector.get(uri);
     model.json = response;
     if (response.status == 200) {
-        var json = eval('(' + response + ')');
+        var json = JSON.parse(response);
 
         var ref = json.nodeRef;
         if (ref) {
@@ -25,14 +25,14 @@ function main() {
     };
     response = connector.post(uri, jsonUtils.toJSONString(postBody), "application/json");
     if (response.status == 200) {
-        var json = eval('(' + response + ')');
+        var json = JSON.parse(response);
         model.fio = json.formatString;
     }
 
     uri = "/lecm/orgstructure/api/getEmployeePositions?nodeRef=" + encodeURIComponent(ownerRef);
     response = connector.get(uri);
     if (response.status == 200) {
-        var positions = eval('(' + response + ')');
+        var positions = JSON.parse(response);
         if (positions) {
             uri = "/lecm/substitude/format/node";
             postBody = {
@@ -43,7 +43,7 @@ function main() {
                 postBody.nodeRef = position.nodeRef;
                 response = connector.post(uri, jsonUtils.toJSONString(postBody), "application/json");
                 if (response.status == 200) {
-                    var json = eval('(' + response + ')');
+                    var json = JSON.parse(response);
                     var department = json.formatString;
                     positionsObjects.push({
                         position: position.positionName,
@@ -58,14 +58,14 @@ function main() {
     uri = "/lecm/orgstructure/api/getCurrentEmployee";
     response = connector.get(uri);
     if (response.status == 200) {
-        var currentEmployee = eval('(' + response + ')');
+        var currentEmployee = JSON.parse(response);
         if (currentEmployee) {
             uri = "/lecm/substitude/format/node";
             postBody.nodeRef = ownerRef;
             postBody.substituteString = "{lecm-secretary-aspects:secretary-assoc-ref},{..lecm-d8n:delegation-opts-owner-assoc/lecm-d8n:delegation-opts-trustee-assoc(lecm-orgstr:employee-short-name=" + currentEmployee.shortName + ")/lecm-orgstr:employee-short-name},{..lecm-absence:abscent-employee-assoc(lecm-absence:activated=true)/lecm-absence:begin},{..lecm-absence:abscent-employee-assoc(lecm-absence:activated=true)/lecm-absence:end},{..lecm-absence:abscent-employee-assoc(lecm-absence:activated=true)/lecm-absence:unlimited}";
             response = connector.post(uri, jsonUtils.toJSONString(postBody), "application/json");
             if (response.status == 200) {
-                var json = eval('(' + response + ')');
+                var json = JSON.parse(response);
                 var formatString = json.formatString;
                 var delegations = formatString.split(",");
                 var secretary = delegations[0];
@@ -74,10 +74,10 @@ function main() {
                 var absenceEnd = delegations[3];
                 var absenceUnlimited = delegations[4] == "true";
                 if (secretary && secretary.indexOf(currentEmployee.nodeRef) != -1) {
-                    model.secretaryText = "Секретарь - бессрочный";
+                    model.secretaryText = this.msg.get("label.delegation.secretary-limitless");
                 }
                 if (delegation && absenceBegin) {
-                    model.delegationText = "Делегат -  c " + absenceBegin.substr(0, absenceBegin.length - 5) + "" + (absenceUnlimited ? "" : " по " + absenceEnd.substr(0, absenceEnd.length - 5));
+                    model.delegationText = this.msg.get("label.delegation.delegate") + " - " + this.msg.get("label.delegation.delegate.from") + " " + absenceBegin.substr(0, absenceBegin.length - 5) + " " + (absenceUnlimited ? "" : this.msg.get("label.delegation.delegate.to") + " " + absenceEnd.substr(0, absenceEnd.length - 5));
                 }
             }
         }

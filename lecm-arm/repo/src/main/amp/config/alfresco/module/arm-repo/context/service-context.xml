@@ -185,6 +185,9 @@
 	                    <value>lecm-arm:is-aggregation-node</value>
 	                    <value>lecm-arm:is-for-secretaries</value>
 	                    <value>lecm-arm:expression</value>
+                        <value>lecm-arm:root-node-html-url</value>
+                        <value>lecm-arm:children-structure-source-arm-assoc</value>
+                        <value>lecm-arm:children-structure-source-node-assoc</value>
                     </list>
                 </entry>
 <!--                <entry key="lecm-arm:accordion-runAs">
