@@ -1,6 +1,5 @@
 package ru.it.lecm.statemachine.action.document;
 
-import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
@@ -18,6 +17,7 @@ import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.LifecycleStateMachineHelper;
 import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.statemachine.action.StateMachineAction;
@@ -166,12 +166,11 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
 				@Override
 				public String execute() throws Throwable {
 					String login = null;
+					String documentModifierRef = null;
 
-					login = (String) nodeService.getProperty(documentNodeRef, ContentModel.PROP_MODIFIER);
-					
-					if (AuthenticationUtil.SYSTEM_USER_NAME.equals(login)) {
-						logger.warn("Modifier is System. Using admin instead");
-						login = AuthenticationUtil.getAdminUserName();
+					documentModifierRef = (String) nodeService.getProperty(documentNodeRef, DocumentService.PROP_DOCUMENT_MODIFIER_REF);
+					if (documentModifierRef != null && documentModifierRef.length() > 0) {
+						login = (String) nodeService.getProperty(new NodeRef(documentModifierRef), OrgstructureBean.PROP_EMPLOYEE_PERSON_LOGIN);
 					}
 					
 					return login;
