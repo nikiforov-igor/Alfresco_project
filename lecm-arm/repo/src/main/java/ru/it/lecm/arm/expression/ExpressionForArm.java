@@ -27,6 +27,12 @@ public class ExpressionForArm extends BaseSpellExpression {
         this.user = new ExpressionUser(armNode, serviceRegistry, orgstructureBean, documentService);
     }
 
+    public ExpressionForArm(NodeRef armNode, ApplicationContext applicationContext, NodeRef runAs) {
+        super(applicationContext);
+        this.armNode = new ExpressionArmNode(armNode, runAs);
+        this.user = new ExpressionUser(armNode, serviceRegistry, orgstructureBean, documentService);
+    }
+
     public ExpressionForArm() {
     }
 
