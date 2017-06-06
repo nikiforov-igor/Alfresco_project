@@ -30,7 +30,7 @@
     }
     if (reviewers && reviewers.length) {
 		notifications.sendNotificationFromCurrentUser({
-			reviewers: reviewers,
+			recipients: reviewers,
 			templateCode: 'REVIEW_CANCELED_ALL',
 			templateConfig: {
 				mainObject: document,
