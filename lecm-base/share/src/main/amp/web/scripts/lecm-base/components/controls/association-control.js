@@ -198,10 +198,10 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		onAddSelectedItem: function (layer, args) {
-			var nodeData, count;
+			var nodeData;
 			if (Alfresco.util.hasEventInterest(this, args)) {
-				nodeData = args[1].added,
-				count = this._renderSelectedItems([nodeData]);
+				nodeData = args[1].added;
+				this._renderSelectedItems([nodeData]);
 				this.fire('addSelectedItemToPicker', { /* Bubbling.fire */
 					added: nodeData,
 					key: nodeData.itemKey
@@ -251,7 +251,7 @@ LogicECM.module = LogicECM.module || {};
                 for (index in value) {
                     if (value.hasOwnProperty(index)) {
                         item = value[index];
-                        if (this.fieldValues.indexOf(item) === -1) {
+						if (this.fieldValues.indexOf(item) !== -1) {
                             added.push(item);
                         }
                     }
@@ -269,10 +269,10 @@ LogicECM.module = LogicECM.module || {};
 		onPickerClosed: function (layer, args) {
 			if (Alfresco.util.hasEventInterest(this, args)) {
                 var ACUtils = LogicECM.module.AssociationComplexControl.Utils,
-					selectedValues = [],
                     selectedKeys = Object.keys(args[1].selected),
                     removedKeys = Object.keys(args[1].removed),
-                    addedKeys = Object.keys(args[1].added);
+                    addedKeys = Object.keys(args[1].added),
+					selectedValues;
 
                 selectedValues = selectedKeys.map(function(key) {
 					return this[key];
