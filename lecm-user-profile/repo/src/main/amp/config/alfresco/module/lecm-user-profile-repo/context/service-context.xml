@@ -15,23 +15,22 @@
 		</property>
 	</bean>
 
-	<bean name="useSettings.shared.cache" factory-bean="cacheFactory" factory-method="createCache">
+	<bean name="userSettings.shared.cache" factory-bean="cacheFactory" factory-method="createCache">
 		<constructor-arg value="cache.user.settings.shared.cache"/>
 	</bean>
 
-	<bean name="useSettings.cache" class="org.alfresco.repo.cache.TransactionalCache">
-		<property name="sharedCache" ref="useSettings.shared.cache"/>
+	<bean name="userSettings.cache" class="org.alfresco.repo.cache.TransactionalCache">
+		<property name="sharedCache" ref="userSettings.shared.cache"/>
 		<property name="name" value="ru.it.lecm.cache.user.settings"/>
 	</bean>
 
-	<bean id="userSettingsWebScript" parent="baseScript" class="ru.it.lecm.user.profile.scripts.UserSettingsWebScriptBean"
-		  depends-on="useSettings.cache">
+	<bean id="userSettingsWebScript" parent="baseScript" class="ru.it.lecm.user.profile.scripts.UserSettingsWebScriptBean">
 		<property name="extensionName" value="userSettings"/>
 		<property name="service" ref="userSettingsService"/>
 	</bean>
 
 	<bean id="userSettingsService" class="ru.it.lecm.user.profile.beans.UserSettingsServiceImpl" parent="baseBean">
-		<property name="userSettingsCache" ref="useSettings.cache"/>
+		<property name="userSettingsCache" ref="userSettings.cache"/>
 		<property name="contentService" ref="contentService"/>
 		<property name="directoriesDeep" value="3"/>
 		<property name="folders">
