@@ -14,11 +14,12 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyMap;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
-import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class UserSettingsServiceImpl extends BaseBean implements UserSettingsSer
 
     private int directoriesDeep = 3;
 
-    private SimpleCache<String, String> userSettingsCache;
+    private SimpleCache<String, JSONObject> userSettingsCache;
     private ContentService contentService;
 
     public void setDirectoriesDeep(int directoriesDeep) {
@@ -47,7 +48,7 @@ public class UserSettingsServiceImpl extends BaseBean implements UserSettingsSer
         this.contentService = contentService;
     }
 
-    public void setUserSettingsCache(SimpleCache<String, String> userSettingsCache) {
+    public void setUserSettingsCache(SimpleCache<String, JSONObject> userSettingsCache) {
         this.userSettingsCache = userSettingsCache;
     }
 
@@ -76,7 +77,7 @@ public class UserSettingsServiceImpl extends BaseBean implements UserSettingsSer
      * @param key  - ключ настройки с префиксом-категорией. Формат: <код_категории>.<ключ_настройки>
      * @return сохраненное значение
      */
-    public String getSettings(final String key) {
+    public JSONObject getSettings(final String key) {
         String category = key.split("\\.")[0];
         String actualKey = key;
         if (!category.equals(key)) {
@@ -94,7 +95,7 @@ public class UserSettingsServiceImpl extends BaseBean implements UserSettingsSer
      * @param key      - ключ настройки
      * @return сохраненное значение или NULL, если настройка не задана
      */
-    public String getSettings(final String category, final String key) {
+    public JSONObject getSettings(final String category, final String key) {
         String settingsKey = getCashKey(AuthenticationUtil.getFullyAuthenticatedUser(), category, key);
         if (userSettingsCache.contains(settingsKey)) {
             return userSettingsCache.get(settingsKey);
@@ -107,10 +108,12 @@ public class UserSettingsServiceImpl extends BaseBean implements UserSettingsSer
         ContentReader configReader = contentService.getReader(settingsNode, ContentModel.PROP_CONTENT);
         String jsonContent = configReader.getContentString();
         try {
-            String value = getValueByKey(jsonMapper.readTree(jsonContent), key);
-            userSettingsCache.put(settingsKey, value);
-            return value;
-        } catch (IOException e) {
+            JSONObject value = getValueByKey(jsonMapper.readTree(jsonContent), key);
+            if (value != null) {
+                userSettingsCache.put(settingsKey, value);
+                return value;
+            }
+        } catch (IOException|JSONException e) {
             logger.error(e.getMessage(), e);
         }
         return null;
@@ -207,7 +210,7 @@ public class UserSettingsServiceImpl extends BaseBean implements UserSettingsSer
         return result;
     }
 
-    private String getValueByKey(JsonNode config, String keyValue) {
+    private JSONObject getValueByKey(JsonNode config, String keyValue) throws JSONException{
         String[] keysPath = keyValue.split("\\.");
         for (String key : keysPath) {
             JsonNode node = config.path(key);
@@ -216,7 +219,7 @@ public class UserSettingsServiceImpl extends BaseBean implements UserSettingsSer
             }
             config = node;
         }
-        return config.toString();
+        return new JSONObject(config.toString());
     }
 
     private JsonNode getUpdatedConfig(JsonNode config, String keyValue, Object value) {
@@ -232,32 +235,29 @@ public class UserSettingsServiceImpl extends BaseBean implements UserSettingsSer
                 }
                 innerConfig = node;
             } else {
-                Object valueToSave = convertValueToObject(value);
-                if (valueToSave instanceof JsonNode) {
-                    ((ObjectNode) innerConfig).put(key, (JsonNode) valueToSave);
-                } else {
-                    ((ObjectNode) innerConfig).put(key, valueToSave.toString());
-                }
+                ((ObjectNode) innerConfig).put(key, convertValueToObject(value));
             }
         }
 
         return config;
     }
 
-    private Object convertValueToObject(Object valueToConvert) {
+    private JsonNode convertValueToObject(Object valueToConvert) {
+        JsonNode result = jsonMapper.createObjectNode();
         try {
-            final ObjectMapper mapper = new ObjectMapper();
-            return mapper.readTree(valueToConvert.toString());
+            JsonNode valueNode = jsonMapper.readTree(valueToConvert.toString());
+            ((ObjectNode) result).put("value", valueNode);
+            return result;
         } catch (IOException ignored) {
         }
 
+        /*Если значение - не JSON или JSONArray*/
         if (valueToConvert instanceof Date) {
             valueToConvert = DateFormatISO8601.format(valueToConvert);
-        } else {
-            valueToConvert = valueToConvert.toString();
         }
 
-        return valueToConvert;
+        ((ObjectNode) result).put("value", valueToConvert.toString());
+        return result;
     }
 
     private NodeRef getUserSettingsFolder(String user, boolean createIfNotExists) {
