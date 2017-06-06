@@ -57,14 +57,9 @@ public class UserSettingsWebScriptBean extends BaseWebScript {
     /**
      * Удалить настройки для пользователя
      *
-     * @param category - категория/раздел для сохранения
      * @param key      - ключ настройки
      */
-    public boolean deleteSettings(String category, String key) {
-        if (category != null) {
-            return service.deleteSettings(key);
-        } else {
-            return service.deleteSettings(key);
-        }
+    public boolean deleteSettings(String key) {
+        return service.deleteSettings(key);
     }
 }
