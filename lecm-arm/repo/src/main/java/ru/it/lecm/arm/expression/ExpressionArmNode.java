@@ -34,6 +34,11 @@ public class ExpressionArmNode extends ExpressionNode {
         this.armNode = armWrapper.wrapArmNodeAsObject(nodeRef, armService.isArmAccordion(nodeRef));
     }
 
+    public ExpressionArmNode(NodeRef nodeRef, NodeRef runAs) {
+        super(nodeRef);
+        this.armNode = armWrapper.wrapArmNodeAsObject(nodeRef, armService.isArmAccordion(nodeRef), false, null, runAs);
+    }
+
     public ArmNode getArmNode() {
         return armNode;
     }

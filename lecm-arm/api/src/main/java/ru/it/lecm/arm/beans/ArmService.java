@@ -2,6 +2,7 @@ package ru.it.lecm.arm.beans;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.Pair;
 import ru.it.lecm.arm.beans.childRules.ArmBaseChildRule;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
@@ -9,6 +10,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
@@ -39,6 +41,7 @@ public interface ArmService {
 	QName PROP_COUNTER_QUERY = QName.createQName(ARM_NAMESPACE_URI, "counter-limitation");
 	QName PROP_COUNTER_DESCRIPTION = QName.createQName(ARM_NAMESPACE_URI, "counter-description");
 	QName PROP_HTML_URL = QName.createQName(ARM_NAMESPACE_URI, "html-url");
+	QName PROP_ROOT_NODE_HTML_URL = QName.createQName(ARM_NAMESPACE_URI, "root-node-html-url");
 	QName PROP_REPORT_CODES = QName.createQName(ARM_NAMESPACE_URI, "reportCodes");
 	QName ASSOC_NODE_COLUMNS = QName.createQName(ARM_NAMESPACE_URI, "fields-assoc");
 	QName ASSOC_NODE_FILTERS = QName.createQName(ARM_NAMESPACE_URI, "filters-assoc");
@@ -101,6 +104,7 @@ public interface ArmService {
 
 	QName PROP_ARM_SHOW_IN_MENU = QName.createQName(ARM_NAMESPACE_URI, "show-in-menu");
 	QName ASSOC_ARM_MENU_BUSINESS_ROLES = QName.createQName(ARM_NAMESPACE_URI, "menu-business-roles-assoc");
+	QName ASSOC_ARM_ACCORDION_CHILDREN_STRUCTURE_SOURCE_NODE_ASSOC = QName.createQName(ARM_NAMESPACE_URI, "children-structure-source-node-assoc");
 
 	Pattern MULTIPLE_NOT_QUERY = Pattern.compile("^NOT[\\s]+.*(?=\\sOR\\s|\\sAND\\s|\\s\\+|\\s\\-)");
 
@@ -240,4 +244,19 @@ public interface ArmService {
 	Map<QName, Serializable> getCachedProperties(NodeRef nodeRef);
 
 	String getNodeSearchQuery(NodeRef nodeRef);
+
+    /**
+     * Является ли узел корневым узлом арма делегирования
+     * @param node узел
+     * @param currentSection аккордион
+     * @return является ли узел корневым узлом арма делегирования
+     */
+	boolean isArmDelegationRootNode(NodeRef node, NodeRef currentSection);
+
+    /**
+     * Получение корневых узлов для арм делегирование
+     * @param node аккордион
+     * @return список корневых узлов арм делегирование
+     */
+    Set<Pair<NodeRef, NodeRef>> getArmRunAsBossNodes(NodeRef node);
 }

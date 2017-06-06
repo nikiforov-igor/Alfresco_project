@@ -343,4 +343,10 @@ public interface LecmPermissionService {
      */
     public List<String> getEmployeeRoles(NodeRef document, NodeRef employee);
 
+	/**
+	 * Получение имени авторити доверителя делегирования
+	 * @param owner доверитель
+	 * @return имя авторити доверителя
+     */
+	public String getAuthorityForDelegat(NodeRef owner);
 }
