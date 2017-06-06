@@ -1,0 +1,46 @@
+div.delegation-owner-content div.thumbnail-container {
+    float: left;
+    max-width: 100px;
+    max-height: 120px;
+    margin: 0;
+    padding: 20px;
+}
+
+div.delegation-owner-content div.thumbnail-container img {
+    max-width: 100px;
+    max-height: 120px;
+}
+
+.delegation-owner-content div.thumbnail-container .thumbnail-view-text,
+.delegation-owner-content div.thumbnail-container .thumbnail-edit-text {
+    width: 100px;
+    display: block;
+    padding: 25px 0;
+    border: 1px solid #8d8d8d;
+    border-radius: 10px;
+    text-align: center;
+    white-space: normal;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.delegation-owner-content .owner-employee-positions {
+    float: left;
+    padding: 20px 10px 20px 10px;
+}
+
+.delegation-owner-content .owner-employee-positions p {
+    word-wrap: break-word;
+}
+
+div p.delegation-page-title {
+    padding: 20px;
+}
+
+.delegation-info .delegation-content .dashlet-body p {
+    padding: 10px;
+}
+
+.delegation-info .delegation-content .dashlet-title {
+    background-color: #bbe6f3;
+}

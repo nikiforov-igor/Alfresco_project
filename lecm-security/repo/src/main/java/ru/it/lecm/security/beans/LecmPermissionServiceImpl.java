@@ -35,6 +35,8 @@ public class LecmPermissionServiceImpl
 
 	final static protected Logger logger = LoggerFactory.getLogger(LecmPermissionServiceImpl.class);
 
+	private final static String READER_PERMISSION_GROUP = "LECM_BASIC_PG_Reader";
+
 	private NodeService nodeService;
 	private PermissionService permissionService;
 	private AuthorityService authorityService;
@@ -960,4 +962,12 @@ public class LecmPermissionServiceImpl
 		}
 		return false;
     }
+
+	public String getAuthorityForDelegat(NodeRef owner) {
+		LecmPermissionService.LecmPermissionGroup pgGranting = findPermissionGroup(READER_PERMISSION_GROUP);
+		String chiefLogin = orgstructureService.getEmployeeLogin(owner);
+		Types.SGSpecialUserRole sgMeOfUser = Types.SGKind.getSGSpecialUserRole(owner.getId(), pgGranting, owner, chiefLogin);
+		String roleName = sgMeOfUser.getAlfrescoSuffix();
+		return authorityService.getName(AuthorityType.GROUP, roleName);
+	}
 }
