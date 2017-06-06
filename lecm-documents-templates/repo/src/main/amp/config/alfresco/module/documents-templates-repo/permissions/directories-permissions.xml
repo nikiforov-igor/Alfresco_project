@@ -3,7 +3,7 @@
     <BusinessRole id="*">
         <Permission object="." permissionGroup="LECM_BASIC_PG_Reader_Lite" />
     </BusinessRole>
-    <BusinessRole id="DA_ENGINEER">
+    <BusinessRole id="TMPL_ENGINEER">
         <Permission object="." permissionGroup="LECM_BASIC_PG_Owner" />
     </BusinessRole>
 </ReposioryPermissions>
