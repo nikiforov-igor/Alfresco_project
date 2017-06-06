@@ -15,9 +15,9 @@
     <#assign endpointMany = (params.endpointMany == "true")>
 </#if>
 
-<#assign autocompleteDataSourceMethodPost = false>
-<#if params.autocompleteDataSourceMethodPost?? && params.autocompleteDataSourceMethodPost == "true">
-	<#assign autocompleteDataSourceMethodPost = true>
+<#assign autocompleteDataSourceMethodPost = true>
+<#if params.autocompleteDataSourceMethodPost?? && params.autocompleteDataSourceMethodPost == "false">
+	<#assign autocompleteDataSourceMethodPost = false>
 </#if>
 
 <#assign items = endpointType?split(',')>
