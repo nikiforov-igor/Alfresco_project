@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<template-instance>
+    <template-type>ru/it/lecm/delegation/owner-delegation</template-type>
+    <components>
+        <component>
+            <region-id>owner-content</region-id>
+            <url>/lecm/delegation/owner/content</url>
+            <properties>
+                <owner>{runAs}</owner>
+            </properties>
+        </component>
+    </components>
+</template-instance>
