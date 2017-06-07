@@ -440,19 +440,19 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
             var sUrl = Alfresco.constants.PROXY_URI + "lecm/arm/tree-menu?armCode=" + LogicECM.module.ARM.SETTINGS.ARM_CODE + "&noCache=" + new Date().getTime();
             if (node.data.nodeRef != null) {
                 sUrl += "&nodeRef=" + encodeURI(node.data.nodeRef);
-                if (node.data.armNodeRef != null) {
+                if (node.data.armNodeRef) {
                     sUrl += "&armNodeRef=" + encodeURI(node.data.armNodeRef);
                 }
-                if (node.data.runAs != null) {
+                if (node.data.runAs) {
                     sUrl += "&runAs=" + encodeURI(node.data.runAs);
                 }
-                if (node.data.skipCount != null) {
+                if (node.data.skipCount) {
                     sUrl += "&skipCount=" + encodeURI(node.data.skipCount);
                 }
-                if (node.data.searchTerm != null && node.data.searchTerm.length > 0) {
+                if (node.data.searchTerm && node.data.searchTerm.length > 0) {
                     sUrl += "&searchTerm=" + encodeURI(node.data.searchTerm);
                 }
-                if (node.data.maxItems != null) {
+                if (node.data.maxItems) {
                     sUrl += "&maxItems=" + encodeURI(node.data.maxItems);
                 }
             }
@@ -854,7 +854,6 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
                     inputField.setAttribute('value', node.data.searchTerm);
                 }
                 Dom.addClass(inputField, 'arm-tree-attached-input-field');
-                // TODO: Заглушка. Переделать.
                 Event.removeListener(node.tree.getEl(), 'keydown', node.tree._onKeyDownEvent);
                 inputField.onkeydown = function (event) {
                     if (event.keyCode == 13) {
@@ -898,9 +897,6 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 
         _createInsituEditors: function (node) {
             node.children.forEach(function (childNode) {
-                var armChildren = childNode.children.filter(function (node) {
-                    return !!node.data.nodeRef;
-                });
                 if ((childNode.expanded && childNode.data.maxItems > 0 || childNode.data.afterSearch) && !childNode.data.insituEditor) {
 
                     childNode.data.config.treeNode = childNode;
@@ -939,9 +935,6 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
         },
 
         _toggleNodeVisualStyle: function (node) {
-            var armChildren = node.children.filter(function (node) {
-                return !!node.data.nodeRef;
-            });
             if (node.data.maxItems > 0 || node.data.afterSearch) {
                 var tableEl = YAHOO.util.Selector.query('#' + node.getEl().id + ' > table.ygtvtable')[0];
                 if (node.expanded) {
@@ -949,11 +942,11 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
                     if (node.data.afterSearch) {
                         Dom.removeClass(tableEl, 'arm-tree-icon-container-expanded');
                         Dom.addClass(tableEl, 'arm-tree-icon-container-after-search');
-                        var title = YAHOO.lang.substitute(Alfresco.util.message("label.arm.node.search.tooltip"), {
-                            "0": node.children.length - serviceNodesCount,
-                            "1": node.data.realChildrenCount,
-                            "2": node.data.searchTerm
-                        });
+                        var title = YAHOO.lang.substitute(Alfresco.util.message("label.arm.node.search.tooltip"), [
+                            node.children.length - serviceNodesCount,
+                            node.data.realChildrenCount,
+                            node.data.searchTerm
+                        ]);
                         if (node.data.insituEditor) {
                             node.data.insituEditor.editIcon.setAttribute('title', title);
                         }
@@ -964,10 +957,10 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
                         Dom.removeClass(tableEl, 'arm-tree-icon-container-after-search');
                         Dom.addClass(tableEl, 'arm-tree-icon-container-expanded');
                         if (tableEl) {
-                            var title = YAHOO.lang.substitute(Alfresco.util.message("label.arm.node.tooltip"), {
-                                "0": node.children.length - serviceNodesCount,
-                                "1": node.data.realChildrenCount
-                            });
+                            var title = YAHOO.lang.substitute(Alfresco.util.message("label.arm.node.tooltip"), [
+                                node.children.length - serviceNodesCount,
+                                node.data.realChildrenCount
+                            ]);
                             tableEl.setAttribute('title', title);
                         }
                     }

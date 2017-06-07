@@ -96,14 +96,6 @@ public class ArmXPathChildRule extends ArmBaseChildRule {
 				query.append(" AND (").append(filter).append(")");
 			}
 
-			String preparedSearchTerm = request.getSearchTerm();
-			if (preparedSearchTerm != null && preparedSearchTerm.length() > 0) {
-				if (!preparedSearchTerm.contains("*")) {
-					preparedSearchTerm = "*" + preparedSearchTerm + "*";
-				}
-				query.append(" AND @cm\\:name:\"" + preparedSearchTerm + "\"");
-			}
-
 			String searchQuery = getSearchQuery(request.getSearchTerm());
 			if (StringUtils.isNotEmpty(searchQuery)) {
 				query.append(" AND ").append(searchQuery);

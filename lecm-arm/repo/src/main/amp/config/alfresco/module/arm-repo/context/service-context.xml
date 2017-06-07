@@ -280,9 +280,6 @@
                         <value>lecm-arm:statuses-rule</value>
                         <value>lecm-arm:selected-statuses</value>
                         <value>lecm-arm:child-rule-substitute-string</value>
-                        <value>lecm-arm:node-rule-page-count</value>
-                        <value>lecm-arm:node-rule-search-template</value>
-                        <value>lecm-arm:node-rule-sort-config</value>
                     </list>
                 </entry>
                 <entry key="lecm-arm:xpath-child-rule">
@@ -302,9 +299,6 @@
                         <value>cm:name</value>
                         <value>lecm-arm:script-child-rule-root</value>
                         <value>lecm-arm:child-rule-substitute-string</value>
-                        <value>lecm-arm:node-rule-page-count</value>
-                        <value>lecm-arm:node-rule-search-template</value>
-                        <value>lecm-arm:node-rule-sort-config</value>
                     </list>
                 </entry>
                 <entry key="lecm-arm:filter">
