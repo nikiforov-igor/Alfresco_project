@@ -265,6 +265,9 @@
                         <value>cm:name</value>
                         <value>lecm-arm:list-query-child-rule</value>
                         <value>lecm-arm:child-rule-substitute-string</value>
+                        <value>lecm-arm:node-rule-page-count</value>
+                        <value>lecm-arm:node-rule-search-template</value>
+                        <value>lecm-arm:node-rule-sort-config</value>
                     </list>
                 </entry>
                 <entry key="lecm-arm:dictionary-child-rule">
