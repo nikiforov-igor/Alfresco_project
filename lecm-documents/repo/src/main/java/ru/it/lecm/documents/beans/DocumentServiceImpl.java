@@ -432,14 +432,14 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
                 for (ResultSetRow row : results) {
                     records.add(row.getNodeRef());
                 }
+
+                hasNodes = results.length() > 0;
+                skipCountOffset += results.length();
             } finally {
                 if (results != null) {
                     results.close();
                 }
             }
-
-            hasNodes = results.length() > 0;
-            skipCountOffset += results.length();
         }
 
         return records;
