@@ -416,35 +416,6 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
         return records;
     }
 
-    @Override
-    public List<NodeRef> getDocumentsByFilterUnlimited(List<QName> docTypes, List<String> paths, List<String> statuses, String filterQuery, List<SortDefinition> sortDefinition) {
-        SearchParameters sp = buildDocumentsSearcParametersByFilter(docTypes, paths, statuses, filterQuery, sortDefinition);
-
-        ResultSet results = null;
-        List<NodeRef> records = new ArrayList<>();
-        int skipCountOffset = 0;
-        boolean hasNodes = true;
-        while (hasNodes) {
-            sp.setSkipCount(skipCountOffset);
-
-            try {
-                results = searchService.query(sp);
-                for (ResultSetRow row : results) {
-                    records.add(row.getNodeRef());
-                }
-
-                hasNodes = results.length() > 0;
-                skipCountOffset += results.length();
-            } finally {
-                if (results != null) {
-                    results.close();
-                }
-            }
-        }
-
-        return records;
-    }
-
     private SearchParameters buildDocumentsSearcParametersByFilter(List<QName> docTypes, List<String> paths, List<String> statuses, String filterQuery, List<SortDefinition> sortDefinition) {
         SearchParameters sp = new SearchParameters();
         sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
