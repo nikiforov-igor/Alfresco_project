@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Process Upload Large Attachments</shortname>
+    <description>Processing upload large attachments</description>
+    <url>/lecm/document/attachments/complex</url>
+    <authentication>user</authentication>
+    <transaction>none</transaction>
+    <format default="json"/>
+</webscript>

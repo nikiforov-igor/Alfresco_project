@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Get Complex Attachment Work Files</shortname>
+    <description>Get nodes of work files and total num</description>
+    <url>/lecm/document/api/complex-attachments?nodeRef={nodeRef}</url>
+    <authentication>user</authentication>
+    <transaction>none</transaction>
+    <format default="json"/>
+</webscript>

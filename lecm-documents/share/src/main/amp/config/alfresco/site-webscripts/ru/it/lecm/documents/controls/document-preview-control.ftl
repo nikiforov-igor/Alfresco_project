@@ -27,6 +27,7 @@
 				'extras/components/preview/ElementQueries.js',
                 'extras/components/preview/l10n.js',
                 'extras/components/preview/viewer.js',
+                'scripts/components/preview/ComplexAttachment.js',
 	            'extras/components/preview/web-preview-extend.js',
 	            'extras/components/preview/PdfJs.js',
 	            'extras/components/preview/Embed.js',

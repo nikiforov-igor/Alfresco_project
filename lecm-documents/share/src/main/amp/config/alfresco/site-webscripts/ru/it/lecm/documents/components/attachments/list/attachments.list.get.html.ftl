@@ -62,6 +62,13 @@
 		                                  </span>
 		                               </span>
 		                            </div>
+                                    <div class="large-file-upload">
+		                               <span id="${categoryId}-largeFileUpload-button" class="yui-button yui-push-button">
+		                                  <span class="first-child">
+		                                     <button name="largeFileUpload">${msg("button.upload.large-file")}</button>
+		                                  </span>
+		                               </span>
+                                    </div>
 			                        <#--<div class="add-link">-->
 		                               <#--<span id="${categoryId}-addLink-button" class="yui-button yui-push-button">-->
 		                                  <#--<span class="first-child">-->

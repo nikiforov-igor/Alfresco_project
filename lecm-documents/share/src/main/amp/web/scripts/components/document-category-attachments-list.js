@@ -196,6 +196,12 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			            value: "CreateChildren"
 		            });
 
+                Alfresco.util.createYUIButton(this, "largeFileUpload-button", this.onLargeFileUpload,
+                    {
+                        disabled: false,
+                        value: "CreateChildren"
+                    });
+
 //	            Alfresco.util.createYUIButton(this, "addLink-button", this.onAddLink,
 //		            {
 //			            disabled: false,
@@ -265,6 +271,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			        {
 				        fn: function() {
                             YAHOO.Bubbling.fire("listRefresh",{});
+                            YAHOO.Bubbling.fire("previewControlRefresh",{});
                         },
 				        scope: this
 			        },
@@ -278,6 +285,65 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				}
 		        Event.preventDefault(e);
 	        },
+
+            onLargeFileUpload: function DocumentAttachmentsList_onLargeFileUpload(e, obj)
+            {
+                var uploaderDialogTitle = YAHOO.lang.substitute(this.options.uploaderDialogHeaderTemplate, {
+                    categoryName: this.options.categoryName
+                });
+
+                if (this.fileUpload == null)
+                {
+                    this.fileUpload = Alfresco.getFileUploadInstance();
+                }
+
+                var multiUploadConfig =
+                {
+                    destination: this.options.nodeRef,
+                    filter: [],
+                    mode: this.fileUpload.MODE_MULTI_UPLOAD,
+                    thumbnails: "doclib",
+                    onFileUploadComplete:
+                    {
+                        fn: function() {
+                            YAHOO.Bubbling.fire("listRefresh",{});
+                            var files = this.fileUpload.uploader.fileStore;
+                            this.processUploadedLargeFiles(files);
+                        },
+                        scope: this
+                    },
+                    suppressRefreshEvent: true
+                };
+                this.fileUpload.show(multiUploadConfig);
+                if (this.fileUpload.uploader.titleText) {
+                    this.fileUpload.uploader.titleText.innerHTML = uploaderDialogTitle;
+                } else if (this.fileUpload.uploader.widgets && this.fileUpload.uploader.widgets.panel) {
+                    this.fileUpload.uploader.widgets.panel.setHeader(uploaderDialogTitle);
+                }
+                Event.preventDefault(e);
+            },
+
+            processUploadedLargeFiles : function (filesObj) {
+                var files = [];
+
+                for (var key in filesObj) {
+                    files.push(filesObj[key]);
+                }
+
+                Alfresco.util.Ajax.jsonRequest({
+                    method: 'POST',
+                    url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/document/attachments/complex',
+                    dataObj: {
+                        files: files
+                    },
+                    successCallback: {
+                        fn: function() {
+                            YAHOO.Bubbling.fire("previewControlRefresh",{});
+                        },
+                        scope: this
+                    }
+                });
+            },
 
 	        onAddLink: function() {
 		        var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
