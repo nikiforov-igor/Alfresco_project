@@ -88,15 +88,15 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
     public ArmChildrenResponse getChildNodes(ArmChildrenRequest request) {
         List<ArmNode> result = new ArrayList<>();
 
-        Map<QName, Serializable> properties = service.getCachedProperties(node);
+        Map<QName, Serializable> properties = service.getCachedProperties(request.getNodeRef());
         boolean isForDelegation = Boolean.TRUE.equals(properties.get(ArmService.PROP_IS_FOR_SECRETARIES));
-        if (isForDelegation && isAccordion(node)) {
-            List<ArmNode> result = new ArrayList<>();
-            Set<Pair<NodeRef,NodeRef>> bossArmNodePairs = service.getArmRunAsBossNodes(node);
+        if (isForDelegation && isAccordion(request.getNodeRef())) {
+            List<ArmNode> children = new ArrayList<>();
+            Set<Pair<NodeRef,NodeRef>> bossArmNodePairs = service.getArmRunAsBossNodes(request.getNodeRef());
             for (Pair<NodeRef,NodeRef> bossNodePair : bossArmNodePairs) {
-                result.add(wrapArmNodeAsObject(bossNodePair.getFirst(), false, false, currentSection, bossNodePair.getSecond()));
+                children.add(wrapArmNodeAsObject(bossNodePair.getFirst(), false, false, request.getCurrentSection(), bossNodePair.getSecond()));
             }
-            return result;
+            return new ArmChildrenResponse(children, children.size());
         }
         
         ArmNode parent = wrapArmNodeAsObject(request.getParentRef(), false, request.isOnlyMeta());
@@ -110,8 +110,8 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         }
         NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
         String runAsName = null;
-        if (runAsEmployee != null && nodeService.exists(runAsEmployee) && !currentEmployee.equals(runAsEmployee)) {
-            runAsName = orgstructureBean.getEmployeeLogin(runAsEmployee);
+        if (request.getRunAsEmployee() != null && nodeService.exists(request.getRunAsEmployee()) && !currentEmployee.equals(request.getRunAsEmployee())) {
+            runAsName = orgstructureBean.getEmployeeLogin(request.getRunAsEmployee());
         }
         if (parentFromArm != null) {
             List<NodeRef> staticChilds = new ArrayList<>();
@@ -119,7 +119,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
                 final String fullyAuthentificatedUser = AuthenticationUtil.getFullyAuthenticatedUser();
                 try {
                     AuthenticationUtil.setFullyAuthenticatedUser(runAsName);
-                    staticChilds = service.getChildNodes(parentFromArm, runAsEmployee);
+                    staticChilds = service.getChildNodes(parentFromArm, request.getRunAsEmployee());
                 } finally {
                     AuthenticationUtil.setFullyAuthenticatedUser(fullyAuthentificatedUser);
                 }
@@ -129,7 +129,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
 
             // узлы АРМа
             for (NodeRef staticChild : staticChilds) {
-                ArmNode stNode = wrapArmNodeAsObject(staticChild, false, onlyMeta, currentSection, runAsEmployee);
+                ArmNode stNode = wrapArmNodeAsObject(staticChild, false, request.isOnlyMeta(), request.getCurrentSection(), request.getRunAsEmployee());
                 if (stNode.getNodeQuery() != null) {
                     ArmChildrenResponse queriedChilds = stNode.getNodeQuery().build(this, stNode, request);
                     //Если у нас на узле используется нода с постраничным выводом, то остальные ноды игнорируются
@@ -152,7 +152,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
             List<NodeRef> children = parent.getNodeQuery().getChildren(request.getNodeRef());
             if (children != null) {
                 for (NodeRef dicChild : children) {
-                    result.add(wrapAnyNodeAsObject(dicChild, parent, parent.getNodeQuery().getSubstituteString(), onlyMeta, null, currentSection));
+                    result.add(wrapAnyNodeAsObject(dicChild, parent, parent.getNodeQuery().getSubstituteString(), request.isOnlyMeta(), null, request.getCurrentSection()));
                 }
 
                 Collections.sort(result, new Comparator<ArmNode>() {
@@ -169,7 +169,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
     @Override
     public boolean hasChildNodes(ArmNode node) {
             return hasChildNodes(node.getNodeRef(), node.getArmNodeRef(), null) ||
-                    (node.getNodeQuery() != null && !node.getNodeQuery().build(this, node).isEmpty());
+                    (node.getNodeQuery() != null && !node.getNodeQuery().build(this, node, new ArmChildrenRequest(node.getNodeRef(), node.getArmNodeRef())).getNodes().isEmpty());
     }
 
     private boolean hasChildNodes(NodeRef node, NodeRef parentRef, String runAsEmployee) {
@@ -230,13 +230,10 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         }        
         return false;
     }
+
     @Override
     public boolean hasChildNodes(ArmNode node, String runAs) {
         return hasChildNodes(node.getNodeRef(), node.getArmNodeRef(), runAs) ||
-                (node.getNodeQuery() != null && !node.getNodeQuery().build(this, node, new ArmChildrenRequest(node.getNodeRef(), node.getArmNodeRef())).isEmpty());
-
-    public boolean hasChildNodes(ArmNode node) {
-        return hasChildNodes(node.getNodeRef(), node.getArmNodeRef()) ||
                 (node.getNodeQuery() != null && !node.getNodeQuery().build(this, node, new ArmChildrenRequest(node.getNodeRef(), node.getArmNodeRef())).getNodes().isEmpty());
     }
 

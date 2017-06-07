@@ -438,7 +438,7 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 
         _prepareUrl: function (node) {
             var sUrl = Alfresco.constants.PROXY_URI + "lecm/arm/tree-menu?armCode=" + LogicECM.module.ARM.SETTINGS.ARM_CODE + "&noCache=" + new Date().getTime();
-            if (node.data.nodeRef != null) {
+            if (node.data.nodeRef) {
                 sUrl += "&nodeRef=" + encodeURI(node.data.nodeRef);
                 if (node.data.armNodeRef) {
                     sUrl += "&armNodeRef=" + encodeURI(node.data.armNodeRef);

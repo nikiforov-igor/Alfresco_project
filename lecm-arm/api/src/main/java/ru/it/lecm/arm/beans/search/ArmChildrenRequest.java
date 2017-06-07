@@ -15,6 +15,8 @@ public class ArmChildrenRequest {
     private int maxItems = -1;
     private int skipCount = 0;
     private String searchTerm = "";
+    private NodeRef runAsEmployee = null;
+    private NodeRef currentSection = null;
 
     public ArmChildrenRequest(NodeRef nodeRef, NodeRef parentRef) {
         this.nodeRef = nodeRef;
@@ -73,5 +75,21 @@ public class ArmChildrenRequest {
 
     public void setSearchTerm(String searchTerm) {
         this.searchTerm = searchTerm;
+    }
+
+    public NodeRef getRunAsEmployee() {
+        return runAsEmployee;
+    }
+
+    public void setRunAsEmployee(NodeRef runAsEmployee) {
+        this.runAsEmployee = runAsEmployee;
+    }
+
+    public NodeRef getCurrentSection() {
+        return currentSection;
+    }
+
+    public void setCurrentSection(NodeRef currentSection) {
+        this.currentSection = currentSection;
     }
 }

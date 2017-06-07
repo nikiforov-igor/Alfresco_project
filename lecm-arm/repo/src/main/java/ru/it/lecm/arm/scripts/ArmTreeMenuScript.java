@@ -162,16 +162,18 @@ public class ArmTreeMenuScript extends AbstractWebScript {
                 request.setMaxItems(maxItems);
                 request.setSkipCount(skipCount);
                 request.setSearchTerm(searchTerm);
-                ArmChildrenResponse childs = service.getChildNodes(request);
                 if (runAsBoss != null && NodeRef.isNodeRef(runAsBoss)) {
                     runAsEmployee = new NodeRef(runAsBoss);
                 }
+                request.setRunAsEmployee(runAsEmployee);
                 NodeRef currentSectionRef = null;
                 if (currentSection != null && NodeRef.isNodeRef(currentSection)) {
                     currentSectionRef = new NodeRef(currentSection);
                 }
-                List<ArmNode> childs = service.getChildNodes(new NodeRef(nodeRef), new NodeRef(armNodeRef), currentSectionRef, runAsEmployee);
-                for (ArmNode child : childs) {
+                request.setCurrentSection(currentSectionRef);
+
+                ArmChildrenResponse childs = service.getChildNodes(request);
+                for (ArmNode child : childs.getNodes()) {
                     nodes.add(toJSON(child, false, null, runAsBoss));
                 }
                 long realChildrenCount = childs.getChildCount();
