@@ -125,7 +125,7 @@ public class ArmStatusesChildRule extends ArmBaseChildRule {
                 nodes.add(childNode);
             }
         }
-        return new ArmChildrenResponse(nodes, nodes.size());
+        return new ArmChildrenResponse(nodes);
     }
 
     @Override

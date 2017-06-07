@@ -15,28 +15,33 @@ public class ArmChildrenResponse {
     /**
      * Коллекция нод согласно условиям поиска
      */
-    private List<ArmNode> nodes;
+    private List<ArmNode> page;
     /**
      * Полное количество нод получаемых запросом, а не количество текущей выборки ограниченной флагами maxItems и skipCount
      */
-    private long childCount;
+    private long totalCount;
 
-    public ArmChildrenResponse(List<ArmNode> nodes, long childCount) {
-        this.nodes = nodes;
-        this.childCount = childCount;
+    public ArmChildrenResponse(List<ArmNode> page) {
+        this.page = page;
+        this.totalCount = page.size();
+    }
+
+    public ArmChildrenResponse(List<ArmNode> page, long totalCount) {
+        this.page = page;
+        this.totalCount = totalCount;
     }
 
     /**
      * Коллекция нод в результате выполнения запроса
      */
-    public List<ArmNode> getNodes() {
-        return nodes;
+    public List<ArmNode> getPage() {
+        return page;
     }
 
     /**
      * Полное количество нод получаемых запросом, а не количество текущей выборки ограниченной флагами maxItems и skipCount
      */
-    public long getChildCount() {
-        return childCount;
+    public long getTotalCount() {
+        return totalCount;
     }
 }

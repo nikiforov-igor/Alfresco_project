@@ -3,7 +3,6 @@ package ru.it.lecm.arm.scripts;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.mozilla.javascript.Scriptable;
@@ -43,7 +42,7 @@ public class ArmWrapperWebScriptBean extends BaseWebScript {
     public List<JSONObject> getArmNodeChilds(ScriptNode node, boolean withOwnQueryOnly) {
         List<JSONObject> nodes = new ArrayList<>();
         ArmChildrenResponse childNodes = armWrapperService.getChildNodes(new ArmChildrenRequest(node.getNodeRef(), nodeService.getPrimaryParent(node.getNodeRef()).getParentRef(), false));
-        for (ArmNode childNode : childNodes.getNodes()) {
+        for (ArmNode childNode : childNodes.getPage()) {
             String ownQuery = getFullQuery(childNode, false, false);
             if ((!withOwnQueryOnly || (ownQuery != null && !"".equals(ownQuery.trim()))) && childNode.getNodeType().equals("lecm-arm:node")) {
                 JSONObject result = new JSONObject();

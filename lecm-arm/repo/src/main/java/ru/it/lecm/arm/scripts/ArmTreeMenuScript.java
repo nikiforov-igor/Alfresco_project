@@ -173,10 +173,10 @@ public class ArmTreeMenuScript extends AbstractWebScript {
                 request.setCurrentSection(currentSectionRef);
 
                 ArmChildrenResponse childs = service.getChildNodes(request);
-                for (ArmNode child : childs.getNodes()) {
+                for (ArmNode child : childs.getPage()) {
                     nodes.add(toJSON(child, false, null, runAsBoss));
                 }
-                long realChildrenCount = childs.getChildCount();
+                long realChildrenCount = childs.getTotalCount();
                 try {
                     parentNodeInfo.put("parentNodeRealChildrenCount", realChildrenCount);
                 } catch (JSONException e) {

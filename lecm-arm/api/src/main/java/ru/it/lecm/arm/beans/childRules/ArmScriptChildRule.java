@@ -58,7 +58,7 @@ public class ArmScriptChildRule extends ArmBaseChildRule {
                 nodes.add(rowNode);
             }
         }
-        return new ArmChildrenResponse(nodes, nodes.size());
+        return new ArmChildrenResponse(nodes);
     }
 
     private ArrayList<NodeRef> runScript(String macrosString, NodeRef documentNode, NodeRef currentEmployee) {

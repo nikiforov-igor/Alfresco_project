@@ -334,7 +334,7 @@ public class ArmWebScriptBean extends BaseWebScript implements ApplicationContex
                         for (int i = 1; i < splitPath.length; i++) {
                             boolean isFind = false;
                             ArmChildrenResponse nodes =  armWrapperService.getChildNodes(new ArmChildrenRequest(prevNode, parentNode, true));
-                            for (ArmNode node : nodes.getNodes()) {
+                            for (ArmNode node : nodes.getPage()) {
                                 if (!node.getNodeType().equals("lecm-arm:accordion") && node.getTitle().equals(splitPath[i])) {
                                     isFind = true;
                                     parentNode = prevNode;

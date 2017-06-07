@@ -95,7 +95,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
             for (Pair<NodeRef,NodeRef> bossNodePair : bossArmNodePairs) {
                 result.add(wrapArmNodeAsObject(bossNodePair.getFirst(), false, false, request.getCurrentSection(), bossNodePair.getSecond()));
             }
-            return new ArmChildrenResponse(result, result.size());
+            return new ArmChildrenResponse(result);
         }
         
         ArmNode parent = wrapArmNodeAsObject(request.getParentRef(), false, request.isOnlyMeta());
@@ -135,7 +135,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
                     if (request.getMaxItems() > 0) {
                         return queriedChilds;
                     } else {
-                        for (ArmNode queriedChild : queriedChilds.getNodes()) {
+                        for (ArmNode queriedChild : queriedChilds.getPage()) {
                             result.add(queriedChild);
                         }
                     }
@@ -162,13 +162,13 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
                 });
             }
         }
-        return new ArmChildrenResponse(result, result.size());
+        return new ArmChildrenResponse(result);
     }
 
     @Override
     public boolean hasChildNodes(ArmNode node) {
             return hasChildNodes(node.getNodeRef(), node.getArmNodeRef(), null) ||
-                    (node.getNodeQuery() != null && !node.getNodeQuery().build(this, node, new ArmChildrenRequest(node.getNodeRef(), node.getArmNodeRef())).getNodes().isEmpty());
+                    (node.getNodeQuery() != null && !node.getNodeQuery().build(this, node, new ArmChildrenRequest(node.getNodeRef(), node.getArmNodeRef())).getPage().isEmpty());
     }
 
     private boolean hasChildNodes(NodeRef node, NodeRef parentRef, String runAsEmployee) {
@@ -218,7 +218,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
                 if (service.getNodeChildRule(staticChild) != null) {
                     ArmNode stNode = wrapArmNodeAsObject(staticChild);
                     ArmChildrenResponse queriedChilds = stNode.getNodeQuery().build(this, stNode, new ArmChildrenRequest(node, parentRef));
-                    if (!queriedChilds.getNodes().isEmpty()) {
+                    if (!queriedChilds.getPage().isEmpty()) {
                         return true;
                     }
                 } else {
@@ -233,7 +233,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
     @Override
     public boolean hasChildNodes(ArmNode node, String runAs) {
         return hasChildNodes(node.getNodeRef(), node.getArmNodeRef(), runAs) ||
-                (node.getNodeQuery() != null && !node.getNodeQuery().build(this, node, new ArmChildrenRequest(node.getNodeRef(), node.getArmNodeRef())).getNodes().isEmpty());
+                (node.getNodeQuery() != null && !node.getNodeQuery().build(this, node, new ArmChildrenRequest(node.getNodeRef(), node.getArmNodeRef())).getPage().isEmpty());
     }
 
     @Override
