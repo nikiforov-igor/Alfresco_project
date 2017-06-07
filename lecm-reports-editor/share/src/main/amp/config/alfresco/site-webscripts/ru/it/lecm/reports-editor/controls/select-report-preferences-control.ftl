@@ -16,11 +16,14 @@
     <#assign notSelectedOption = field.control.params.notSelectedOption == "true">
 </#if>
 
-<div class="control select-report-template-control editmode">
+<div class="control select-report-preferences-control editmode">
     <div class="label-div">
         <label for="${fieldHtmlId}">${field.label?html}:</label>
     </div>
     <div class="container">
+        <div class="value-div preferences-select">
+            <select id="${fieldHtmlId}" name="-"></select>
+        </div>
         <div class="buttons-div">
             <span class="create-new-preference">
                 <a href="javascript:void(0);" id="${controlId}-create-new">${msg("report.param.preferences.save")}</a>
@@ -29,22 +32,16 @@
                 <a href="javascript:void(0);" id="${controlId}-delete">${msg("report.param.preferences.delete")}</a>
             </span>
         </div>
-        <div class="value-div">
-            <select id="${fieldHtmlId}" name="-" tabindex="0"
-                    <#if field.description??>title="${field.description}"</#if>
-                    <#if field.control.params.styleClass??>class="${field.control.params.styleClass}"</#if>
-                    <#if field.control.params.style??>style="${field.control.params.style}"</#if>>
-            </select>
-        </div>
     </div>
 </div>
 <div class="clear"></div>
 
 <script type="text/javascript">//<![CDATA[
 (function () {
-    LogicECM.module.Base.Util.loadScripts([
+    LogicECM.module.Base.Util.loadResources([
         'scripts/lecm-reports-editor/select-param-preference-ctrl.js'
-    ], createControl);
+    ],
+    ['css/lecm-reports-editor/select-report-preferences-control.css'], createControl);
 
     function createControl() {
 
@@ -52,10 +49,18 @@
         control.setOptions({
             reportCode: <#if field.control.params.reportId??>"${field.control.params.reportId}"<#else>"${form.arguments.itemId}"</#if>,
             maxSearchResults: 30,
+            formId: "${args.htmlid}",
+            fieldId: "${field.configName}",
             notSelectedOptionShow: ${notSelectedOption?string},
             notSelectedText: "${notSelectedText?string}",
             changeItemFireAction: "${field.control.params.changeItemFireAction!''?string}",
-            fieldId: "${fieldId}"
+            <#if field.control.params.currentValue?has_content>
+                currentValue: "${field.control.params.currentValue}",
+            </#if>
+            <#if field.control.params.preferencesValue?has_content>
+                preferencesValue: "${field.control.params.preferencesValue?json_string}",
+                needSort: false,
+            </#if>
         });
 
     }

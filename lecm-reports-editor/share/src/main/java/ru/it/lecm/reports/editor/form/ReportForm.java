@@ -8,10 +8,18 @@ import org.apache.commons.logging.LogFactory;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.extensions.surf.RequestContext;
+import org.springframework.extensions.surf.ServletUtil;
+import org.springframework.extensions.surf.exception.ConnectorServiceException;
+import org.springframework.extensions.surf.support.ThreadLocalRequestContext;
 import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
+import org.springframework.extensions.webscripts.connector.Connector;
+import org.springframework.extensions.webscripts.connector.ConnectorService;
+import org.springframework.extensions.webscripts.connector.Response;
+import org.springframework.extensions.webscripts.connector.ResponseStatus;
 import org.springframework.util.StringUtils;
 import ru.it.lecm.base.forms.LecmFormGet;
 import ru.it.lecm.reports.api.model.ParameterType;
@@ -23,6 +31,7 @@ import ru.it.lecm.reports.model.impl.L18Value;
 import ru.it.lecm.reports.model.impl.ParameterTypedValueImpl;
 import ru.it.lecm.reports.xml.DSXMLProducer;
 
+import javax.servlet.http.HttpSession;
 import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -40,6 +49,7 @@ public class ReportForm extends LecmFormGet {
     public static final String REPORT_PREFERENCES = "REPORT_PREFERENCES";
     public static final String TEMPLATES_COLUMN_NAME = "Шаблон представления";
     private ReportManagerApi reportManager;
+    private ConnectorService connectorService;
 
     protected final DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     protected final String CURRENT_DATE_ARG = "current-date";
@@ -48,6 +58,10 @@ public class ReportForm extends LecmFormGet {
 
     public void setReportManager(ReportManagerApi reportManager) {
         this.reportManager = reportManager;
+    }
+
+    public void setConnectorService(ConnectorService connectorService) {
+        this.connectorService = connectorService;
     }
 
     @Override
@@ -98,7 +112,7 @@ public class ReportForm extends LecmFormGet {
                 }
             }
             Collections.sort(jsonValues, new Comparator<JSONObject>() {
-                private static final String KEY_CREATED = "created";
+                final String KEY_CREATED = "created";
 
                 @Override
                 public int compare(JSONObject a, JSONObject b) {
@@ -112,20 +126,21 @@ public class ReportForm extends LecmFormGet {
                         //do something
                     }
                     if (valA == null && valB != null) {
-                        return -1;
-                    } else if (valA != null && valB == null) {
                         return 1;
+                    } else if (valA != null && valB == null) {
+                        return -1;
                     } else if (valA != null) {
-                        return valA.compareTo(valB);
+                        return -valA.compareTo(valB);
                     }
                     return 0;
                 }
             });
 
+            String lastPreferenceName = null;
             if (!jsonValues.isEmpty()) {
-                JSONObject lastParameters = jsonValues.get(jsonValues.size() - 1);
                 try {
-                    JSONObject savedArgs = lastParameters.getJSONObject("args");
+                    JSONObject savedArgs = jsonValues.get(0).getJSONObject("args");
+                    lastPreferenceName = jsonValues.get(0).getString("name");
 
                     Iterator keys = savedArgs.keys();
                     while (keys.hasNext()) {
@@ -150,7 +165,13 @@ public class ReportForm extends LecmFormGet {
 
             Field field = generateFieldModel(templateParam, 0, descriptor);
             if (field != null) {
-                form.put("preferencesControl", field);
+                field.getControl().getParams().put("preferencesValue", preferences.toString());
+                if (lastPreferenceName != null) {
+                    field.getControl().getParams().put("currentValue", lastPreferenceName);
+                }
+                fields.put(templateParam.getColumnName(), field);
+                FieldPointer fieldPointer = new FieldPointer(field.getId());
+                set.addChild(fieldPointer);
             }
         }
 
@@ -374,11 +395,25 @@ public class ReportForm extends LecmFormGet {
     }
 
     private JSONArray getUserPreferencesForReport(String reportCode) {
-        JSONArray preferences = new JSONArray();
+        final String url = "/lecm/user-settings/get?key=reports." + reportCode + ".saved-preferences";
         try {
-            preferences = reportManager.getUserPreferencesForReport(reportCode);
-        } catch (RuntimeException ignored) {
+            RequestContext requestContext = ThreadLocalRequestContext.getRequestContext();
+            String currentUserId = requestContext.getUserId();
+            HttpSession currentSession = ServletUtil.getSession(true);
+            Connector connector = connectorService.getConnector("alfresco", currentUserId, currentSession);
+            Response response = connector.call(url);
+            if (ResponseStatus.STATUS_OK == response.getStatus().getCode()) {
+                JSONObject json = new JSONObject(response.getResponse());
+                return new JSONArray(json.getString("value"));
+            } else {
+                logger.error("Cannot get response for " + url);
+            }
+        } catch (ConnectorServiceException ex) {
+            logger.error("Cannot get connector for " + url, ex);
+        } catch (JSONException ex) {
+            logger.error("Cannot parse json response for " + url, ex);
         }
-        return preferences;
+
+        return new JSONArray();
     }
 }
