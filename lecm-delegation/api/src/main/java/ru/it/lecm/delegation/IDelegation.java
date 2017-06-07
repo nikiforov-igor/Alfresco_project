@@ -378,4 +378,22 @@ public interface IDelegation {
 	 * @return актуальный сотрудник или тотже самый сотрудник
 	 */
 	NodeRef getEffectiveEmployee(final NodeRef employeeRef, final String workflowDynRole);
+
+	/**
+	 * Получение доверителей для которых указанный сотрудник является полным делегатом
+	 * @param employee сотрудник - полный делегат
+     * @param isActivated активное делегирование
+	 * @return список доверителей
+     */
+	List<NodeRef> getDelegationOwnersByTrustee(NodeRef employee, boolean isActivated);
+
+	/**
+	 * Получение списка доверителей по указанной бизнесс роли для сотрудника
+	 *
+	 * @param effectiveEmployee делегат
+	 * @param workflowDynRole   бизнесс роль
+	 * @param isActive          активное делегирование
+	 * @return список доверителей по указанной роли для сотрудника
+	 */
+	List<NodeRef> getDelegationOwnersByEffectiveEmployee(NodeRef effectiveEmployee, String workflowDynRole, boolean isActive);
 }

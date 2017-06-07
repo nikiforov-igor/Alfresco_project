@@ -536,10 +536,6 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 				sgNotifierService.notifyBRDelegationChanged(sourceEmployeeBusinessRole, sourceEmployee, bossAssistant, created);
 			}
 
-			if (created) {
-				delegateTasks(sourceEmployee, bossAssistant);
-			}
-
 			//Предаем права на группу "Участник"
 			LecmPermissionService.LecmPermissionGroup pgGranting = lecmPermissionService.findPermissionGroup(READER_PERMISSION_GROUP);
 			sgNotifierService.notifySpecDelegationChanged(pgGranting, sourceEmployee, bossAssistant, created);
@@ -996,5 +992,64 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 			effectiveEmployeeRef = employeeRef;
 		}
 		return effectiveEmployeeRef;
+	}
+
+	@Override
+	public List<NodeRef> getDelegationOwnersByTrustee(NodeRef employee, boolean isActivated) {
+		List<NodeRef> results = new ArrayList<>();
+		List<NodeRef> delegationOptsList = findNodesByAssociationRef(employee, IDelegation.ASSOC_DELEGATION_OPTS_TRUSTEE, IDelegation.TYPE_DELEGATION_OPTS, ASSOCIATION_TYPE.SOURCE);
+		if (delegationOptsList != null) {
+			for (NodeRef delegationOpts : delegationOptsList) {
+				if (!isArchive(delegationOpts)) {
+					NodeRef owner = findNodeByAssociationRef(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_OWNER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+					if (owner != null) {
+						if (isActivated && absenceService.getActiveAbsence(owner) != null) {
+							results.add(owner);
+							continue;
+						}
+						results.add(owner);
+					}
+				}
+			}
+		}
+		return results;
+	}
+
+	@Override
+	public List<NodeRef> getDelegationOwnersByEffectiveEmployee(NodeRef effectiveEmployee, String workflowDynRole, boolean isActive) {
+		List<NodeRef> results = new ArrayList<>();
+		boolean delegateAll = workflowDynRole == null;
+		if (delegateAll) {
+			return getDelegationOwnersByTrustee(effectiveEmployee, isActive);
+		} else {
+			NodeRef businessRoleNodeRef = orgstructureService.getBusinessRoleByIdentifier(workflowDynRole);
+			if (businessRoleNodeRef != null) {
+				List<NodeRef> employeeProcuracies = findNodesByAssociationRef(effectiveEmployee, IDelegation.ASSOC_PROCURACY_TRUSTEE, IDelegation.TYPE_PROCURACY, ASSOCIATION_TYPE.SOURCE);
+				if (employeeProcuracies != null && employeeProcuracies.size() > 0) {
+					for (NodeRef procuracy : employeeProcuracies) {
+						List<NodeRef> businessRoles = findNodesByAssociationRef(procuracy, IDelegation.ASSOC_PROCURACY_BUSINESS_ROLE, OrgstructureBean.TYPE_BUSINESS_ROLE, ASSOCIATION_TYPE.TARGET);
+						if (businessRoles != null && businessRoles.size() > 0) {
+							if (businessRoles.contains(businessRoleNodeRef)) {
+								List<ChildAssociationRef> delegationOptAssocs = nodeService.getParentAssocs(procuracy, IDelegation.ASSOC_DELEGATION_OPTS_PROCURACY,  RegexQNamePattern.MATCH_ALL);
+								if (delegationOptAssocs != null && delegationOptAssocs.size() > 0) {
+									NodeRef delegationOpts = delegationOptAssocs.get(0).getParentRef();
+									NodeRef procuracyOwner = findNodeByAssociationRef(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_OWNER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+									if (procuracyOwner != null) {
+										if (isActive && isDelegationActive(delegationOpts)) {
+											results.add(procuracyOwner);
+											continue;
+										}
+										results.add(procuracyOwner);
+									}
+								}
+							}
+						}
+					}
+				}
+			} else {
+				return getDelegationOwnersByTrustee(effectiveEmployee, isActive);
+			}
+		}
+		return results;
 	}
 }

@@ -12,6 +12,7 @@ import org.alfresco.service.cmr.workflow.*;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.actions.bean.GroupActionsService;
+import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.documents.beans.DocumentFrequencyAnalysisService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -35,6 +36,7 @@ public class UserActionsServiceImpl implements UserActionsService {
     private DocumentFrequencyAnalysisService frequencyAnalysisService;
     private OrgstructureBean orgstructureService;
     private SecretaryService secretaryService;
+    private IDelegation delegationService;
     private DocumentService documentService;
     private AuthenticationService authService;
     private LecmPermissionService lecmPermissionService;
@@ -47,6 +49,8 @@ public class UserActionsServiceImpl implements UserActionsService {
     private final static QName PROP_FORM_INPUT_FROM_TYPE = QName.createQName(STATEMACHINE_EDITOR_URI, "formInputFromType");
     private final static QName PROP_FORM_INPUT_FROM_VALUE = QName.createQName(STATEMACHINE_EDITOR_URI, "formInputFromValue");
     private final static QName PROP_DUE_DATE = QName.createQName(NamespaceService.BPM_MODEL_1_0_URI, "dueDate");
+    private final static QName PROP_WORKFLOW_DYN_ROLE = QName.createQName(null, "workflowDynRole");
+    private final static QName PROP_REGISTAR_ROLE = QName.createQName(null, "registrarDynamicRole");
 
     public void setStateMachineService(LifecycleStateMachineHelper stateMachineService) {
         this.stateMachineService = stateMachineService;
@@ -84,6 +88,10 @@ public class UserActionsServiceImpl implements UserActionsService {
         this.groupActionsService = groupActionsService;
     }
 
+    public void setDelegationService(IDelegation delegationService) {
+        this.delegationService = delegationService;
+    }
+
     @Override
     public HashMap<String, Object> getActions(final NodeRef nodeRef) {
         HashMap<String, Object> result = new HashMap<>();
@@ -91,6 +99,7 @@ public class UserActionsServiceImpl implements UserActionsService {
         NodeService nodeService = serviceRegistry.getNodeService();
         final WorkflowService workflowService = serviceRegistry.getWorkflowService();
         final String currentUserName = authService.getCurrentUserName();
+        NodeRef currentEmployee = orgstructureService.getEmployeeByPerson(currentUserName);
 
         Map<String, Long> counts = getActionsCounts(nodeRef);
         final List<WorkflowTask> activeTasks = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<List<WorkflowTask>>() {
@@ -103,6 +112,7 @@ public class UserActionsServiceImpl implements UserActionsService {
         boolean hasExecutionPermission = stateMachineService.isFinal(nodeRef) || (lecmPermissionService.hasPermission("_lecmPerm_ActionExec", nodeRef, currentUserName)
                 || (lecmPermissionService.hasPermission("LECM_BASIC_PG_Initiator", nodeRef, currentUserName) && stateMachineService.isDraft(nodeRef)));
 
+        List<String> taskWorkflowRoles = new ArrayList<>();
 
         for (WorkflowTask activeTask : activeTasks) {
             WorkflowTaskQuery query = new WorkflowTaskQuery();
@@ -134,10 +144,29 @@ public class UserActionsServiceImpl implements UserActionsService {
 
                 actionsList.add(taskStruct);
             }
+            Map<QName, Serializable> taskProps = activeTask.getProperties();
+            String workflowDynRole = (String) taskProps.get(PROP_WORKFLOW_DYN_ROLE);
+            String registrarDynRole = (String) taskProps.get(PROP_REGISTAR_ROLE);
+            if (workflowDynRole != null) {
+                taskWorkflowRoles.add(workflowDynRole);
+            }
+            if (registrarDynRole != null) {
+                taskWorkflowRoles.add(registrarDynRole);
+            }
+
         }
 
-        NodeRef currentEmployee = orgstructureService.getEmployeeByPerson(currentUserName);
-        List<NodeRef> chiefNodeRefList = secretaryService.getChiefs(currentEmployee);
+        Set<NodeRef> chiefNodeRefList = new HashSet<>();
+        if (taskWorkflowRoles.size() > 0) {
+            for (String role : taskWorkflowRoles) {
+                List<NodeRef> procuracyOwners = delegationService.getDelegationOwnersByEffectiveEmployee(currentEmployee, role, true);
+                if (procuracyOwners.size() > 0) {
+                    chiefNodeRefList.addAll(procuracyOwners);
+                }
+            }
+        }
+        chiefNodeRefList.addAll(delegationService.getDelegationOwnersByTrustee(currentEmployee, true));
+        chiefNodeRefList.addAll(secretaryService.getChiefs(currentEmployee));
         for (NodeRef chiefNodeRef : chiefNodeRefList) {
             final String chiefLogin = orgstructureService.getEmployeeLogin(chiefNodeRef);
             final String chiefShortName = (String) nodeService.getProperty(chiefNodeRef, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);

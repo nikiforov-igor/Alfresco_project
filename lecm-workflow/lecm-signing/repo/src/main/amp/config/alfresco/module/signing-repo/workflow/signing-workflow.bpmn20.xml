@@ -56,7 +56,9 @@
   var effectiveEmployee;
   /* проверяем активно ли делегирование и настроено ли оно вообще */
   /* если (signerEmployee == effectiveEmployee), то делегирование или не настроено или не активно */
-  effectiveEmployee = delegation.getEffectiveEmployee(signerEmployee, 'LECM_SIGNER_DYN');
+  /*effectiveEmployee = delegation.getEffectiveEmployee(signerEmployee, 'LECM_SIGNER_DYN');*/
+  effectiveEmployee = signerEmployee;
+  task.setVariableLocal("workflowDynRole", 'LECM_SIGNER_DYN');
   if(effectiveEmployee == null || signerEmployee.nodeRef.equals(effectiveEmployee.nodeRef)) {
     /* так как делегирование или неактивно или не настроено, то получаем секретаря ответственного за задачи */
     /* update: начиная с 1.8.3 секретарь работает с задачами, назначенными непосредственно на руководителя */
