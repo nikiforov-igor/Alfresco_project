@@ -25,23 +25,8 @@ public class UserSettingsWebScriptBean extends BaseWebScript {
      * @return json object с полем value, содержащим значение настройки
      */
     public Object getSettings(String key) {
-        JSONObject result = new JSONObject();
-        String settings = service.getSettings(key);
-        try {
-            if (settings != null) {
-                Object tokener = new JSONTokener(settings).nextValue();
-                if (tokener != null) {
-                    result.put("value", tokener);
-                } else {
-                    result.put("value", settings);
-                }
-            } else {
-                result.put("value", "");
-            }
-        } catch (JSONException ignored) {
-        }
-
-        return result;
+        JSONObject result = service.getSettings(key);
+        return result != null ? result : new JSONObject();
     }
 
     /**

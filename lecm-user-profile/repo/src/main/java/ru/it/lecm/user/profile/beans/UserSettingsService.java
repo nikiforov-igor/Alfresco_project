@@ -1,6 +1,7 @@
 package ru.it.lecm.user.profile.beans;
 
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.json.JSONObject;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
@@ -26,7 +27,7 @@ public interface UserSettingsService {
      * @param key  - ключ настройки с префиксом-категорией. Формат: <код_категории>.<ключ_настройки>
      * @return сохраненное значение
      */
-    String getSettings(final String key);
+    JSONObject getSettings(final String key);
 
     /**
      * Получить сохраненную настройку
@@ -35,7 +36,7 @@ public interface UserSettingsService {
      * @param key      - ключ настройки
      * @return сохраненное значение или NULL, если настройка не задана
      */
-    String getSettings(String category, String key);
+    JSONObject getSettings(String category, String key);
 
     /**
      * Сохранить настройку для пользователя
