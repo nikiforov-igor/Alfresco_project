@@ -1112,7 +1112,6 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
 
 	@Override
 	public NodeRef getDocumentSearchObject(final NodeRef documentRef) {
-        logger.trace("DocumentServiceImpl.getDocumentSearchObject");
 		NodeRef result = null;
 		Object extPresentString = nodeService.getProperty(documentRef, DocumentService.PROP_EXT_PRESENT_STRING);
 		if (extPresentString != null) {
