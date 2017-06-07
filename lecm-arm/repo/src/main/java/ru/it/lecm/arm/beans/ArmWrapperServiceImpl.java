@@ -91,12 +91,11 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         Map<QName, Serializable> properties = service.getCachedProperties(request.getNodeRef());
         boolean isForDelegation = Boolean.TRUE.equals(properties.get(ArmService.PROP_IS_FOR_SECRETARIES));
         if (isForDelegation && isAccordion(request.getNodeRef())) {
-            List<ArmNode> children = new ArrayList<>();
             Set<Pair<NodeRef,NodeRef>> bossArmNodePairs = service.getArmRunAsBossNodes(request.getNodeRef());
             for (Pair<NodeRef,NodeRef> bossNodePair : bossArmNodePairs) {
-                children.add(wrapArmNodeAsObject(bossNodePair.getFirst(), false, false, request.getCurrentSection(), bossNodePair.getSecond()));
+                result.add(wrapArmNodeAsObject(bossNodePair.getFirst(), false, false, request.getCurrentSection(), bossNodePair.getSecond()));
             }
-            return new ArmChildrenResponse(children, children.size());
+            return new ArmChildrenResponse(result, result.size());
         }
         
         ArmNode parent = wrapArmNodeAsObject(request.getParentRef(), false, request.isOnlyMeta());
