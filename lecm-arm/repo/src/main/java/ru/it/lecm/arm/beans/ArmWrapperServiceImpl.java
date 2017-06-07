@@ -298,6 +298,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
             if (isForDelegation) {
                 searchQuery = searchQuery.replaceAll("#current-user", "#boss-ref");
             }
+            searchQuery = formatQuery(searchQuery, nodeRef);
             node.setSearchQuery(searchQuery.replaceAll("\\n", " ").replaceAll("\\r", " "));
         }
         node.setReportCodes((String) properties.get(ArmService.PROP_REPORT_CODES));
@@ -375,7 +376,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
             }
         }
 
-        node.setSearchQuery(searchQueryString);
+        node.setSearchQuery(formatQuery(searchQueryString, nodeRef));
 
         node.setHtmlUrl(parentNode.getHtmlUrl());
         node.setMaxItemsCount(parentNode.getMaxItemsCount());
