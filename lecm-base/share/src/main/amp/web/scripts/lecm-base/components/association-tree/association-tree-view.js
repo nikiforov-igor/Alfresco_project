@@ -1057,7 +1057,7 @@ LogicECM.module = LogicECM.module || {};
                                 this._loadSelectedItems(this.options.clearFormsOnStart, true);
 
                                 if (this.options.showCreateNewButton && this.widgets.createNewButton != null) {
-                                    this.widgets.createNewButton.set("disabled", !oResults.hasPermAddChildren);
+                                    this.widgets.createNewButton.set("disabled", !oResults.hasPermAddChildren || !!this.readonly);
                                 }
 
                             }
@@ -2130,6 +2130,9 @@ LogicECM.module = LogicECM.module || {};
 				this.readonly = args[1].readonly;
 				if (this.widgets.pickerButton) {
 					this.widgets.pickerButton.set('disabled', args[1].readonly);
+				}
+				if (this.widgets.createNewButton) {
+                    this.widgets.createNewButton.set('disabled', args[1].readonly);
 				}
 				if (!args[1].readonly && this.widgets.dialog) {
 					this.widgets.dialog.hide();
