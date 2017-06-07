@@ -421,26 +421,27 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
         SearchParameters sp = buildDocumentsSearcParametersByFilter(docTypes, paths, statuses, filterQuery, sortDefinition);
 
         ResultSet results = null;
-        List<NodeRef> records = new ArrayList<NodeRef>();
+        List<NodeRef> records = new ArrayList<>();
         int skipCountOffset = 0;
         boolean hasNodes = true;
-        try {
-            while (hasNodes) {
-                sp.setSkipCount(skipCountOffset);
+        while (hasNodes) {
+            sp.setSkipCount(skipCountOffset);
 
+            try {
                 results = searchService.query(sp);
                 for (ResultSetRow row : results) {
                     records.add(row.getNodeRef());
                 }
+            } finally {
+                if (results != null) {
+                    results.close();
+                }
+            }
 
-                hasNodes = results.length() > 0;
-                skipCountOffset += results.length();
-            }
-        } finally {
-            if (results != null) {
-                results.close();
-            }
+            hasNodes = results.length() > 0;
+            skipCountOffset += results.length();
         }
+
         return records;
     }
 
@@ -1111,7 +1112,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
 
 	@Override
 	public NodeRef getDocumentSearchObject(final NodeRef documentRef) {
-		logger.debug("ДОКУМЕНТ. getDocumentSearchObject");
+        logger.trace("DocumentServiceImpl.getDocumentSearchObject");
 		NodeRef result = null;
 		Object extPresentString = nodeService.getProperty(documentRef, DocumentService.PROP_EXT_PRESENT_STRING);
 		if (extPresentString != null) {
