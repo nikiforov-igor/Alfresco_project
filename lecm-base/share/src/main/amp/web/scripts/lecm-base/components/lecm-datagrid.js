@@ -837,9 +837,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                             html += "<a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'"+ oRecord.getData("nodeRef") + "\', title:\'" + scope.options.viewFormTitleMsg+"\'})\">" + columnContent + "</a>";
                                         } else if (scope.options.attributeForOpen != null && datalistColumn.name == scope.options.attributeForOpen) {
                                             html += "<a ";
-											if (scope.options.openInNewWindow==true) {
-												html += 'target="_blank" ';
-											}
+                                            if (scope.options.openInNewWindow == true) {
+                                                html += 'target="_blank" ';
+                                            }
 											html += " href=\'" + window.location.protocol + '//' + window.location.host + Alfresco.constants.URL_PAGECONTEXT + 'document?nodeRef=' + oRecord.getData("nodeRef") + "\'\">" + columnContent + "</a>";
                                         } else {
                                             html += columnContent;
