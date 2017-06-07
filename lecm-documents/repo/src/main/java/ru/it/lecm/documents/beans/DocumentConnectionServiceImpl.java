@@ -296,28 +296,31 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 
 	@Override
 	public List<NodeRef> getConnectionsWithDocument(NodeRef documentRef, String connectionTypeCode) {
+		NodeRef connectionType = null;
+		if (connectionTypeCode != null) {
+			connectionType = dictionaryService.getDictionaryValueByParam(
+					DocumentConnectionService.DOCUMENT_CONNECTION_TYPE_DICTIONARY_NAME,
+					DocumentConnectionService.PROP_CONNECTION_TYPE_CODE,
+					connectionTypeCode);
+		}
+		return getConnectionsWithDocument(documentRef, connectionType);
+	}
+
+	@Override
+	public List<NodeRef> getConnectionsWithDocument(NodeRef documentRef, NodeRef connectionType) {
 		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, documentRef);
 
 		List<NodeRef> results = new ArrayList<NodeRef>();
 
 		List<AssociationRef> connections = nodeService.getSourceAssocs(documentRef, ASSOC_CONNECTED_DOCUMENT);
 		if (connections != null) {
-			NodeRef connectionType = null;
-
-			if (connectionTypeCode != null) {
-				connectionType = dictionaryService.getDictionaryValueByParam(
-						DocumentConnectionService.DOCUMENT_CONNECTION_TYPE_DICTIONARY_NAME,
-						DocumentConnectionService.PROP_CONNECTION_TYPE_CODE,
-						connectionTypeCode);
-			}
-
 			for (AssociationRef assocRef : connections) {
 				NodeRef connectionRef = assocRef.getSourceRef();
                 List<AssociationRef> primary = nodeService.getTargetAssocs(connectionRef, ASSOC_PRIMARY_DOCUMENT);
                 if (!primary.isEmpty() && !isArchive(connectionRef) && this.lecmPermissionService.hasReadAccess(connectionRef)) {
 					List<AssociationRef> connectionTypeAssoc = nodeService.getTargetAssocs(connectionRef, ASSOC_CONNECTION_TYPE);
 					if (connectionTypeAssoc != null && connectionTypeAssoc.size() == 1
-							&& (connectionTypeCode == null || (connectionType != null && connectionTypeAssoc.get(0).getTargetRef().equals(connectionType)))) {
+							&& (connectionType == null || connectionTypeAssoc.get(0).getTargetRef().equals(connectionType))) {
 						results.add(connectionRef);
 					}
 				}
@@ -424,21 +427,30 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		return getConnectedDocuments(documentRef, connectionTypeCode, connectedDocumentType, false);
 	}
 
-	public List<NodeRef> getConnectedDocuments(NodeRef documentRef, String connectionTypeCode, QName connectedDocumentType, boolean onlySystem) {
+	@Override
+	public List<NodeRef> getConnectedDocuments(NodeRef documentRef, NodeRef connectionType, QName connectedDocumentType) {
+		return getConnectedDocuments(documentRef, connectionType, connectedDocumentType, false);
+	}
+
+	@Override
+	public List<NodeRef> getConnectedDocuments(NodeRef documentRef, String connectionTypeCode){
+		return getConnectedDocuments(documentRef, connectionTypeCode, null);
+	}
+
+	@Override
+	public List<NodeRef> getConnectedDocuments(NodeRef documentRef, NodeRef connectionType){
+		return getConnectedDocuments(documentRef, connectionType, null);
+	}
+
+
+	@Override
+	public List<NodeRef> getConnectedDocuments(NodeRef documentRef, NodeRef connectionType, QName connectedDocumentType, boolean onlySystem) {
 		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, documentRef);
 
 		List<NodeRef> results = new ArrayList<NodeRef>();
 
 		List<AssociationRef> connections = nodeService.getSourceAssocs(documentRef, ASSOC_PRIMARY_DOCUMENT);
 		if (connections != null) {
-			NodeRef connectionType = null;
-
-			if (connectionTypeCode != null) {
-				connectionType = dictionaryService.getDictionaryValueByParam(
-						DocumentConnectionService.DOCUMENT_CONNECTION_TYPE_DICTIONARY_NAME,
-						DocumentConnectionService.PROP_CONNECTION_TYPE_CODE,
-						connectionTypeCode);
-			}
 
 			for (AssociationRef assocRef : connections) {
 				NodeRef connectionRef = assocRef.getSourceRef();
@@ -448,12 +460,12 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 					if (!onlySystem || system) {
 						List<AssociationRef> connectionTypeAssoc = nodeService.getTargetAssocs(connectionRef, ASSOC_CONNECTION_TYPE);
 						if (connectionTypeAssoc != null && connectionTypeAssoc.size() == 1
-								&& (connectionTypeCode == null || (connectionType != null && connectionTypeAssoc.get(0).getTargetRef().equals(connectionType)))) {
+								&& (connectionType == null || connectionTypeAssoc.get(0).getTargetRef().equals(connectionType))) {
 							List<AssociationRef> connectedDocumentAssoc = nodeService.getTargetAssocs(connectionRef, ASSOC_CONNECTED_DOCUMENT);
 							if (connectedDocumentAssoc != null && connectedDocumentAssoc.size() == 1) {
 								NodeRef connectedDocument = connectedDocumentAssoc.get(0).getTargetRef();
 								if (!isArchive(connectedDocument) && this.lecmPermissionService.hasReadAccess(connectedDocument)
-										&& nodeService.getType(connectedDocument).equals(connectedDocumentType)) {
+										&& (null == connectedDocumentType || nodeService.getType(connectedDocument).equals(connectedDocumentType))) {
 									results.add(connectedDocument);
 								}
 							}
@@ -467,8 +479,25 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 	}
 
 	@Override
+	public List<NodeRef> getConnectedDocuments(NodeRef documentRef, String connectionTypeCode, QName connectedDocumentType, boolean onlySystem) {
+		NodeRef connectionType = null;
+		if (connectionTypeCode != null) {
+			connectionType = dictionaryService.getDictionaryValueByParam(
+					DocumentConnectionService.DOCUMENT_CONNECTION_TYPE_DICTIONARY_NAME,
+					DocumentConnectionService.PROP_CONNECTION_TYPE_CODE,
+					connectionTypeCode);
+		}
+		return getConnectedDocuments(documentRef, connectionType, connectedDocumentType, onlySystem);
+	}
+
+	@Override
 	public List<NodeRef> getConnectedWithDocument(NodeRef documentRef, QName connectedDocumentType) {
-		return getConnectedWithDocument(documentRef, null, connectedDocumentType);
+		return getConnectedWithDocument(documentRef, (NodeRef)null, connectedDocumentType);
+	}
+
+	@Override
+	public List<NodeRef> getConnectedWithDocument(NodeRef documentRef, NodeRef connectionType, QName connectedDocumentType) {
+		return getConnectedWithDocument(documentRef, connectionType, connectedDocumentType, false);
 	}
 
 	@Override
@@ -478,48 +507,48 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 
 	@Override
 	public List<NodeRef> getConnectedWithDocument(NodeRef documentRef, boolean onlySystem) {
-		return getConnectedWithDocument(documentRef, null, null, false);
+		return getConnectedWithDocument(documentRef, (NodeRef)null, null, false);
 	}
 
 	@Override
 	public List<NodeRef> getConnectedWithDocument(NodeRef documentRef, String connectionTypeCode, QName connectedDocumentType, boolean onlySystem) {
+		NodeRef connectionType = null;
+
+		if (connectionTypeCode != null) {
+			connectionType = dictionaryService.getDictionaryValueByParam(
+					DocumentConnectionService.DOCUMENT_CONNECTION_TYPE_DICTIONARY_NAME,
+					DocumentConnectionService.PROP_CONNECTION_TYPE_CODE,
+					connectionTypeCode);
+		}
+		return getConnectedWithDocument(documentRef, connectionType, connectedDocumentType, onlySystem);
+	}
+
+	@Override
+	public List<NodeRef> getConnectedWithDocument(NodeRef documentRef, NodeRef connectionType, QName connectedDocumentType, boolean onlySystem) {
 		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, documentRef);
 
 		List<NodeRef> results = new ArrayList<NodeRef>();
 
-		List<NodeRef> connections = getConnectionsWithDocument(documentRef);
+		List<NodeRef> connections = getConnectionsWithDocument(documentRef, connectionType);
 		if (connections != null) {
-			NodeRef connectionType = null;
-
-			if (connectionTypeCode != null) {
-				connectionType = dictionaryService.getDictionaryValueByParam(
-						DocumentConnectionService.DOCUMENT_CONNECTION_TYPE_DICTIONARY_NAME,
-						DocumentConnectionService.PROP_CONNECTION_TYPE_CODE,
-						connectionTypeCode);
-			}
-
 			for (NodeRef connectionRef : connections) {
 
 				if (!isArchive(connectionRef) && this.lecmPermissionService.hasReadAccess(connectionRef)) {
 					boolean system = (Boolean) nodeService.getProperty(connectionRef, PROP_IS_SYSTEM);
 					if (!onlySystem || system) {
-						List<AssociationRef> connectionTypeAssoc = nodeService.getTargetAssocs(connectionRef, ASSOC_CONNECTION_TYPE);
-						if (connectionTypeAssoc != null && connectionTypeAssoc.size() == 1
-								&& (connectionTypeCode == null || (connectionType != null && connectionTypeAssoc.get(0).getTargetRef().equals(connectionType)))) {
-							List<AssociationRef> connectedDocumentAssoc = nodeService.getTargetAssocs(connectionRef, ASSOC_PRIMARY_DOCUMENT);
-							if (connectedDocumentAssoc != null && connectedDocumentAssoc.size() == 1) {
-								NodeRef connectedDocument = connectedDocumentAssoc.get(0).getTargetRef();
-								if (!isArchive(connectedDocument) && this.lecmPermissionService.hasReadAccess(connectedDocument)
-										&& (connectedDocumentType == null || nodeService.getType(connectedDocument).equals(connectedDocumentType))) {
-									results.add(connectedDocument);
-								}
+						List<AssociationRef> connectedDocumentAssoc = nodeService.getTargetAssocs(connectionRef, ASSOC_PRIMARY_DOCUMENT);
+						if (connectedDocumentAssoc != null && connectedDocumentAssoc.size() == 1) {
+							NodeRef connectedDocument = connectedDocumentAssoc.get(0).getTargetRef();
+							if (!isArchive(connectedDocument) && this.lecmPermissionService.hasReadAccess(connectedDocument)
+									&& (connectedDocumentType == null || nodeService.getType(connectedDocument).equals(connectedDocumentType))) {
+								results.add(connectedDocument);
 							}
 						}
+
 					}
 				}
 			}
 		}
-
 		return results;
 	}
 
