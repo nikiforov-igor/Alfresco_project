@@ -438,7 +438,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
     }
 
     private String injectURLToBody(Notification template, NodeRef employeeRef, String templateBody) {
-        if (templateBody.contains("#unsubscribeURL")) {
+        if (templateBody != null && templateBody.contains("#unsubscribeURL")) {
             StringBuilder url = new StringBuilder();
             url.append(getUrlService().getServerShareUrl()).append("/page/unsubscribeTemplate");
 

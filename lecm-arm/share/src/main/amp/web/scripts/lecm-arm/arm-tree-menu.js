@@ -455,6 +455,9 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
                 if (node.data.maxItems) {
                     sUrl += "&maxItems=" + encodeURI(node.data.maxItems);
                 }
+                if (node.tree.root && node.tree.root.data.nodeRef) {
+                    sUrl += "&currentSection=" + encodeURI(node.tree.root.data.nodeRef);
+                }
             }
             return sUrl;
         },

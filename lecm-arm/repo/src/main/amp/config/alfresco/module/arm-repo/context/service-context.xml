@@ -72,6 +72,8 @@
         <property name="childRulesCache" ref="arm.rules.cache"/>
         <property name="secretaryService" ref="secretaryService"/>
         <property name="scriptService" ref="scriptService"/>
+        <property name="delegationService" ref="delegationService"/>
+        <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
         <property name="searchCounter" ref="searchCounterBean"/>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
@@ -128,6 +130,7 @@
 		<property name="dictionaryBean" ref="serviceDictionary"/>
 		<property name="searchCounter" ref="searchCounterBean"/>
 		<property name="namespaceService" ref="namespaceService"/>
+        <property name="orgstructureBean" ref="serviceOrgstructure"/>
 	</bean>
 
 	<bean id="armAggregateQueryPolicy" class="ru.it.lecm.arm.policy.ArmAggregateQueryPolicy"
@@ -184,6 +187,9 @@
 	                    <value>lecm-arm:is-aggregation-node</value>
 	                    <value>lecm-arm:is-for-secretaries</value>
 	                    <value>lecm-arm:expression</value>
+                        <value>lecm-arm:root-node-html-url</value>
+                        <value>lecm-arm:children-structure-source-arm-assoc</value>
+                        <value>lecm-arm:children-structure-source-node-assoc</value>
                     </list>
                 </entry>
 <!--                <entry key="lecm-arm:accordion-runAs">
@@ -259,9 +265,6 @@
                         <value>cm:name</value>
                         <value>lecm-arm:list-query-child-rule</value>
                         <value>lecm-arm:child-rule-substitute-string</value>
-                        <value>lecm-arm:node-rule-page-count</value>
-                        <value>lecm-arm:node-rule-search-template</value>
-                        <value>lecm-arm:node-rule-sort-config</value>
                     </list>
                 </entry>
                 <entry key="lecm-arm:dictionary-child-rule">

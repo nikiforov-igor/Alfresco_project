@@ -157,7 +157,7 @@ public class LecmPermissionWebScript extends BaseWebScript {
      */
     public void setRunAsUserSystem(){
         AuthenticationUtil.setRunAsUserSystem();
-        AuthenticationUtil.setAdminUserAsFullyAuthenticatedUser();
+        AuthenticationUtil.setFullyAuthenticatedUser(AuthenticationUtil.SYSTEM_USER_NAME);
     }
 
     /**

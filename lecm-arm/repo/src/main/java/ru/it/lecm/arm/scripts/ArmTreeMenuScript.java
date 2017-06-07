@@ -65,6 +65,7 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 	public static final String REPORT_CODES = "reportCodes";
 
     public static final String RUN_AS = "runAs";
+    public static final String CURRENT_SECTION = "currentSection";
     public static final String MAX_ITEMS = "maxItems";
     public static final String SKIP_COUNT = "skipCount";
     public static final String SEARCH_TERM = "searchTerm";
@@ -131,6 +132,7 @@ public class ArmTreeMenuScript extends AbstractWebScript {
         String armNodeRef = req.getParameter(ARM_NODE_REF);
         String armCode = req.getParameter(ARM_CODE);
         String runAsBoss = req.getParameter(RUN_AS);
+        String currentSection = req.getParameter(CURRENT_SECTION);
         String searchTerm = req.getParameter(SEARCH_TERM);
         int maxItems = -1, skipCount = 0;
         try {
@@ -155,12 +157,21 @@ public class ArmTreeMenuScript extends AbstractWebScript {
         } else {
             // получение списка дочерних элементов
             if (NodeRef.isNodeRef(nodeRef)) {
+                NodeRef runAsEmployee = null;
                 ArmChildrenRequest request = new ArmChildrenRequest(new NodeRef(nodeRef), new NodeRef(armNodeRef));
                 request.setMaxItems(maxItems);
                 request.setSkipCount(skipCount);
                 request.setSearchTerm(searchTerm);
                 ArmChildrenResponse childs = service.getChildNodes(request);
-                for (ArmNode child : childs.getNodes()) {
+                if (runAsBoss != null && NodeRef.isNodeRef(runAsBoss)) {
+                    runAsEmployee = new NodeRef(runAsBoss);
+                }
+                NodeRef currentSectionRef = null;
+                if (currentSection != null && NodeRef.isNodeRef(currentSection)) {
+                    currentSectionRef = new NodeRef(currentSection);
+                }
+                List<ArmNode> childs = service.getChildNodes(new NodeRef(nodeRef), new NodeRef(armNodeRef), currentSectionRef, runAsEmployee);
+                for (ArmNode child : childs) {
                     nodes.add(toJSON(child, false, null, runAsBoss));
                 }
                 long realChildrenCount = childs.getChildCount();
@@ -215,7 +226,7 @@ public class ArmTreeMenuScript extends AbstractWebScript {
             result.put(COLUMNS, getColumnsJSON(node.getColumns()));
             result.put(LABEL, node.getTitle());
             if (!isAccordionNode) {
-                result.put(IS_LEAF, !service.hasChildNodes(node));
+                result.put(IS_LEAF, !service.hasChildNodes(node, runAs));
                 boolean isAggregate = false;
                 if (node.getNodeRef() != null) {
                     Object isAggregationNode = armService.getCachedProperties(node.getNodeRef()).get(ArmService.PROP_IS_AGGREGATION_NODE);
