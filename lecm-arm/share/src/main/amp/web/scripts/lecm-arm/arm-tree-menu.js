@@ -513,12 +513,8 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 
                     curElement.expanded = node.expanded && this._isNodeExpanded(curElement.id);
 
-                    if (this.menuState.selected.length > 0) {
-                        if (this.menuState.selected == nodeId) {
-                            this._treeNodeSelected(curElement)
-                        }
-                    } else {
-                        this._treeNodeSelected(curElement);
+                    if (!this.menuState.selected || this.menuState.selected == nodeId) {
+                        this._treeNodeSelected(curElement)
                     }
 
                     //отрисовка счетчика, если нужно
