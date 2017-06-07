@@ -170,12 +170,20 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
                     Date end = new Date();
                     if (!"".equals(dates[0])) {
                         start = parseDate(dates[0]);
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(start);
+                        calendar.set(Calendar.HOUR_OF_DAY, 0);
+                        calendar.set(Calendar.MINUTE, 0);
+                        calendar.set(Calendar.SECOND, 0);
+                        start = calendar.getTime();
                     }
                     if (dates.length > 1 && !"".equals(dates[1])) {
                         end = parseDate(dates[1]);
                         Calendar calendar = Calendar.getInstance();
                         calendar.setTime(end);
-                        calendar.add(Calendar.DAY_OF_MONTH, 1);
+                        calendar.set(Calendar.HOUR_OF_DAY, 23);
+                        calendar.set(Calendar.MINUTE, 59);
+                        calendar.set(Calendar.SECOND, 59);
                         end = calendar.getTime();
                     }
                     value = DateFormatISO8601.format(start) + "|" + DateFormatISO8601.format(end);

@@ -287,7 +287,7 @@
 })();
 //]]></script>
 
-
+<div id="${fieldHtmlId}-parent">
 <#if disabled>
 <div class="control association-autocomplete viewmode">
     <div class="label-div<#if hideLabel> hidden</#if>">
@@ -333,4 +333,5 @@
     <@renderTreePickerDialogHTML controlId true showSearch/>
 </div>
 </#if>
+</div>
 <div class="clear"></div>
