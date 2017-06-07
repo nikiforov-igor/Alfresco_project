@@ -527,7 +527,6 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
                             obj.context.drawCounterValue(obj.node.data, obj.context.getSearchQuery(obj.node), obj.node.getLabelEl());
                         }, {node: curElement, context: this}, this);
                     }
-                    // otree.queryChildrenCount(node);
                 }
 
                 if (node.data.realChildrenCount > node.data.maxItems && node.data.maxItems > 0 && node.data.realChildrenCount > node.children.length) {
