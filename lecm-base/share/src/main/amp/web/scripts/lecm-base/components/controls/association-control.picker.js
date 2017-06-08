@@ -160,16 +160,15 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		onAddSelectedItem: function (layer, args) {
 			var nodeData, key;
 			if (Alfresco.util.hasEventInterest(this, args)) {
-					nodeData = args[1].added;
-					key = args[1].key;
+				nodeData = args[1].added;
+				key = args[1].key;
+				// добавляем в добавленные
+				this.added[nodeData.nodeRef] = nodeData;
+				// если есть в удаленных, то удаляем из удаленных
 				if (this.removed.hasOwnProperty(nodeData.nodeRef)) {
                     delete this.removed[nodeData.nodeRef];
                 }
-                if (this.original.hasOwnProperty(nodeData.nodeRef)) {
-                    delete this.added[nodeData.nodeRef];
-                } else {
-                    this.added[nodeData.nodeRef] = nodeData;
-                }
+				// добавляем в выбранные
 				this.selected[nodeData.nodeRef] = nodeData;
 				this.selected[nodeData.nodeRef].key = key;
 				this.selected[nodeData.nodeRef].index = Object.keys(this.selected).length - 1;
@@ -187,7 +186,9 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				for (prop in original) {
 					original[prop].key = key;
 				}
+				// при инициализации picker'а, все элементы пришедшие в original считаются уже добавленными и выбранными
 				this.original = YAHOO.lang.merge(this.original, original);
+				this.added = YAHOO.lang.merge(this.added, original);
 				this.selected = YAHOO.lang.merge(this.selected, original);
 
 				if (!this.optionsMap[key]) {
@@ -201,35 +202,29 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			if (Alfresco.util.hasEventInterest(this, args)) {
 				var original = args[1].original,
 					selected = args[1].selected,
-					key = args[1].key,
-					originalKeys, selectedKeys, addedKeys, removedKeys;
+					removed = {},
+					key = args[1].key;
 
+				// очищаем выделенные/удаленные/добавленные для переданного ключа
 				this._clearObjectPropsByKey(this.selected, key);
 				this._clearObjectPropsByKey(this.removed, key);
 				this._clearObjectPropsByKey(this.added, key);
 
+				// совмещаем выделенные (для других ключей), с выделением для переданного ключа
 				this.selected = YAHOO.lang.merge(this.selected, selected);
-				this.added = {};
-				this.removed = {};
 
-				originalKeys = Object.keys(original);
-				selectedKeys = Object.keys(selected);
+				// добавленные = все выбранные
+				// совмещаем добавленные (для других ключей), с выделением для переданного ключа
+				this.added = YAHOO.lang.merge(this.added, selected);
 
-				addedKeys = selectedKeys.filter(function (prop) {
-					return !this.original[prop];
+				// удаленные = что есть в оригинале, но нет в выбранных
+				Object.keys(original).forEach(function (prop) {
+					if (!selected[prop]) {
+						removed[prop] = original[prop];
+					}
 				}, this);
-
-				removedKeys = originalKeys.filter(function (prop) {
-					return !this.selected[prop];
-				}, this);
-
-				addedKeys.forEach(function (prop) {
-					this.added[prop] = this.selected[prop];
-				}, this);
-
-				removedKeys.forEach(function (prop) {
-					this.removed[prop] = this.original[prop];
-				}, this);
+				// совмещаем удаленные (для других ключей), с удаленными для переданного ключа
+				this.removed = YAHOO.lang.merge(this.removed, removed);
 
 				this.cancelDeferred.fulfil(key);
 			}
@@ -247,12 +242,12 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				nodeData = args[1].removed;
 				id = this.id + '-' + nodeData.nodeRef.replace(/:|\//g, '_');
 				if (this.selected.hasOwnProperty(nodeData.nodeRef)) {
-
+					// удаляем из выбранных
 					delete this.selected[nodeData.nodeRef];
-
-					if (this.added.hasOwnProperty(nodeData.nodeRef)) {
-						delete this.added[nodeData.nodeRef];
-					} else if (this.original.hasOwnProperty(nodeData.nodeRef)) {
+					// удаляем из добавленных
+					delete this.added[nodeData.nodeRef];
+					// если есть в оригинальных, то добавляем в удаленных
+					if (this.original.hasOwnProperty(nodeData.nodeRef)) {
 						this.removed[nodeData.nodeRef] = nodeData;
 					}
 
@@ -267,9 +262,6 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 						this.widgets.items.removeChild(el.parentNode.parentNode);
 					}, this);
 				}
-
-
-
 			}
 		},
 
