@@ -652,11 +652,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
 
         if (showNode != null && result != null && !returnRealTypes) {//если возвращаем строку и надо обернуть как ссылку
             if (wrapAsLink && !result.toString().isEmpty()) {
-                if (documentService.isDocument(showNode)) {
-                    result = documentService.wrapAsDocumentLink(showNode);
-                } else {
-                    result = getUrlService().wrapperLink(showNode.toString(), result.toString());
-                }
+                result = getUrlService().wrapperLink(showNode.toString(), result.toString());
             }
         }
 
