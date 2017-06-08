@@ -18,7 +18,7 @@ function main() {
 		model.attachmentDetailsJSON = jsonUtils.toJSONString(attachmentDetails);
 		doclibCommon();
 	}
-}
+};
 
 function getDocumentByAttachments(nodeRef, defaultValue) {
 	var url = '/lecm/document/attachments/api/getDocumentByAttachment?nodeRef=' + nodeRef;

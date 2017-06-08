@@ -109,7 +109,7 @@ Alfresco.WebPreview.prototype.Plugins.ComplexAttachment.prototype =
 
     onNoWorkFiles: function () {
         var container = Selector.query(".message", this.wp.id, true);
-        container.innerHTML = "Не загружены рабочии копии для отображения документа.";
+        container.innerHTML = Alfresco.util.message('lecm.complex.not.upload.files');
         this.deferredCreateWorkFilesUploadButton = new Alfresco.util.Deferred(['onCheckHasStatemachine', 'onCheckHasAddAttachmentPerm', 'onCheckCategoryReadOnly'], {
             scope: this,
             fn: function () {
@@ -177,24 +177,24 @@ Alfresco.WebPreview.prototype.Plugins.ComplexAttachment.prototype =
             this.maxPageSpan.className = "total-page-span";
             this.maxPageSpan.innerHTML = ' / ' + this.totalPageNum;
 
-            var prevBtn = this.createToolbarButton('prev-btn', 'Предыдущая', this.goPrevPage);
+            var prevBtn = this.createToolbarButton('prev-btn', Alfresco.util.message('lecm.complex.prev'), this.goPrevPage);
             prevBtn.className += " backLink";
             this.toolbar.appendChild(prevBtn);
-            var nextBtn = this.createToolbarButton('next-btn', 'Следующая', this.goNextPage);
+            var nextBtn = this.createToolbarButton('next-btn', Alfresco.util.message('lecm.complex.next'), this.goNextPage);
             nextBtn.className += " forwardLink";
             this.toolbar.appendChild(nextBtn);
             this.toolbar.appendChild(spinnerSpan);
             this.toolbar.appendChild(this.maxPageSpan);
-            var openInNewTabBtn = this.createToolbarButton('in-new-tab-btn', 'Просмотреть страницу в браузере', this.openCurrentPageInNewTab);
+            var openInNewTabBtn = this.createToolbarButton('in-new-tab-btn', Alfresco.util.message('lecm.complex.show.in.browser'), this.openCurrentPageInNewTab);
             this.toolbar.appendChild(openInNewTabBtn);
-            var openDetailViewBtn = this.createToolbarButton('detail-view-btn', 'Открыть страницу', this.openCurrentPageDetailView);
+            var openDetailViewBtn = this.createToolbarButton('detail-view-btn', Alfresco.util.message('lecm.complex.open.page'), this.openCurrentPageDetailView);
             this.toolbar.appendChild(openDetailViewBtn);
 
             this.deferredCreateWorkFilesUploadButton = new Alfresco.util.Deferred(['onCheckHasStatemachine', 'onCheckHasAddAttachmentPerm', 'onCheckCategoryReadOnly'], {
                 scope: this,
                 fn: function () {
                     if (this.hasStatemachine && this.hasAddAttachmentPerm && !this.categoryReadOnly) {
-                        var uploadBtn = this.createToolbarButton('upload-btn', 'Загрузить рабочие файлы', this.uploadLargeFiles);
+                        var uploadBtn = this.createToolbarButton('upload-btn', Alfresco.util.message('lecm.complex.upload.files'), this.uploadLargeFiles);
                         this.toolbar.insertBefore(uploadBtn, openInNewTabBtn);
                     }
                 }
@@ -270,7 +270,7 @@ Alfresco.WebPreview.prototype.Plugins.ComplexAttachment.prototype =
     },
 
     uploadLargeFiles: function (e) {
-        var uploaderDialogTitle = YAHOO.lang.substitute('Загрузить рабочие файлы');
+        var uploaderDialogTitle = YAHOO.lang.substitute(Alfresco.util.message('lecm.complex.upload.files'));
 
         if (this.fileUpload == null) {
             this.fileUpload = Alfresco.getFileUploadInstance();

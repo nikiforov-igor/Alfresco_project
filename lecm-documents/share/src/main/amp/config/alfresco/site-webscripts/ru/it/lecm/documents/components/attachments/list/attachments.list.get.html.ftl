@@ -62,7 +62,7 @@
 		                                  </span>
 		                               </span>
 		                            </div>
-                                    <div id="${categoryId}-largeFileUpload-container" class="large-file-upload hidden">
+                                    <div id="${categoryId}-largeFileUpload-container" class="large-file-upload hidden1">
 		                               <span id="${categoryId}-largeFileUpload-button" class="yui-button yui-push-button">
 		                                  <span class="first-child">
 		                                     <button name="largeFileUpload">${msg("button.upload.large-file")}</button>

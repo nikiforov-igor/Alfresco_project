@@ -9,11 +9,12 @@
     function process(file) {
         var nodeRef = file.get("nodeRef");
         var node = search.findNode(nodeRef);
-
-        node.addAspect('lecm-document-aspects:complex-attachment');
-        var folder = node.parent.createFolder(node.properties['cm:name'] + '_complex_attachment_pages');
-        node.createAssociation(folder, 'lecm-document-aspects:complex-attachment-folder');
-        node.properties.content.mimetype = 'complex-attachment';
-        node.save();
+        if (node) {
+            node.addAspect('lecm-document-aspects:complex-attachment');
+            var folder = node.parent.createFolder(node.properties['cm:name'] + '_complex_attachment_pages');
+            node.createAssociation(folder, 'lecm-document-aspects:complex-attachment-folder');
+            node.properties.content.mimetype = 'complex-attachment';
+            node.save();
+        }
     }
 })();

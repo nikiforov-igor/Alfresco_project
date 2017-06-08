@@ -710,7 +710,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     if (oFullResponse.isComplex) {
                         var button = Dom.get(me.id + "-largeFileUpload-container");
                         if (button) {
-                            Dom.removeClass(button, "hidden");
+                            Dom.removeClass(button, "hidden1");
                             Alfresco.util.createYUIButton(me, "largeFileUpload-button", me.onLargeFileUpload,
                                 {
                                     disabled: false,
