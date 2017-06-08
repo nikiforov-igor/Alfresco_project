@@ -696,6 +696,14 @@
                     <field id="cm:name"/>
                 </appearance>
             </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="lecm-document:present-string"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-document:present-string"/>
+                </appearance>
+            </form>
             <form id="last-documents-list">
                 <field-visibility>
                     <show id="cm:created" force="true"/>    //небольшой хак - выводится будет другое значение, от этого требуется только тип

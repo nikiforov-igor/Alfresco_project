@@ -27,6 +27,8 @@ public class ArmNode {
     private boolean hasChilds = false;
 	private List<String> createTypes;
 	private String htmlUrl;
+    private Integer maxItemsCount;
+    private Integer realChildrenCount;
 	private String reportCodes;
     private NodeRef runAsEmployee;
 
@@ -78,6 +80,14 @@ public class ArmNode {
 
     public ArmCounter getCounter(){
         return counter;
+    }
+
+    public Integer getRealChildrenCount() {
+        return realChildrenCount;
+    }
+
+    public void setRealChildrenCount(Integer realChildrenCount) {
+        this.realChildrenCount = realChildrenCount;
     }
 
     @Override
@@ -150,6 +160,14 @@ public class ArmNode {
 	public void setHtmlUrl(String htmlUrl) {
 		this.htmlUrl = htmlUrl;
 	}
+
+    public Integer getMaxItemsCount() {
+        return maxItemsCount;
+    }
+
+    public void setMaxItemsCount(Integer maxItemsCount) {
+        this.maxItemsCount = maxItemsCount;
+    }
 
     public String getReportCodes() {
         return reportCodes;

@@ -3,7 +3,6 @@ package ru.it.lecm.arm.scripts;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.mozilla.javascript.Scriptable;
@@ -12,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.arm.beans.ArmService;
 import ru.it.lecm.arm.beans.ArmWrapperService;
 import ru.it.lecm.arm.beans.node.ArmNode;
+import ru.it.lecm.arm.beans.search.ArmChildrenRequest;
+import ru.it.lecm.arm.beans.search.ArmChildrenResponse;
 import ru.it.lecm.base.beans.BaseWebScript;
 
 import java.util.ArrayList;
@@ -40,8 +41,8 @@ public class ArmWrapperWebScriptBean extends BaseWebScript {
     @SuppressWarnings("unused")
     public List<JSONObject> getArmNodeChilds(ScriptNode node, boolean withOwnQueryOnly) {
         List<JSONObject> nodes = new ArrayList<>();
-        List<ArmNode> childNodes = armWrapperService.getChildNodes(node.getNodeRef(), nodeService.getPrimaryParent(node.getNodeRef()).getParentRef(), false);
-        for (ArmNode childNode : childNodes) {
+        ArmChildrenResponse childNodes = armWrapperService.getChildNodes(new ArmChildrenRequest(node.getNodeRef(), nodeService.getPrimaryParent(node.getNodeRef()).getParentRef(), false));
+        for (ArmNode childNode : childNodes.getPage()) {
             String ownQuery = getFullQuery(childNode, false, false);
             if ((!withOwnQueryOnly || (ownQuery != null && !"".equals(ownQuery.trim()))) && childNode.getNodeType().equals("lecm-arm:node")) {
                 JSONObject result = new JSONObject();

@@ -2,6 +2,8 @@ package ru.it.lecm.arm.beans;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.arm.beans.node.ArmNode;
+import ru.it.lecm.arm.beans.search.ArmChildrenRequest;
+import ru.it.lecm.arm.beans.search.ArmChildrenResponse;
 
 import java.util.List;
 
@@ -26,9 +28,8 @@ public interface ArmWrapperService {
     /**
      * возвращает списко объектов Аккордеон по коду АРма
      */
-    List<ArmNode> getChildNodes(NodeRef armNode, NodeRef parentNode);
-    List<ArmNode> getChildNodes(NodeRef armNode, NodeRef parentNode, boolean onlyMeta);
-    List<ArmNode> getChildNodes(NodeRef node, NodeRef parentRef, NodeRef currentSection, NodeRef runAsBoss);
+    ArmChildrenResponse getChildNodes(ArmChildrenRequest request);
+
     /**
      * проверяет, есть ли у узла дочерние элементы
      */

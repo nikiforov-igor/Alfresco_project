@@ -2,12 +2,15 @@ package ru.it.lecm.arm.beans;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.service.cmr.repository.*;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.Pair;
 import ru.it.lecm.arm.beans.childRules.ArmBaseChildRule;
 import ru.it.lecm.arm.beans.node.ArmNode;
+import ru.it.lecm.arm.beans.search.ArmChildrenRequest;
+import ru.it.lecm.arm.beans.search.ArmChildrenResponse;
 import ru.it.lecm.base.beans.SearchCounter;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
@@ -78,51 +81,37 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         return result;
     }
 
-    @Override
-    public List<ArmNode> getChildNodes(NodeRef armNode, NodeRef parentNode) {
-        return getChildNodes(armNode, parentNode, false);
-    }
-
-    @Override
-    public List<ArmNode> getChildNodes(NodeRef node, NodeRef parentRef, NodeRef currentSection, NodeRef runAsBoss) {
-        Map<QName, Serializable> properties = service.getCachedProperties(node);
-        boolean isForDelegation = Boolean.TRUE.equals(properties.get(ArmService.PROP_IS_FOR_SECRETARIES));
-        if (isForDelegation && isAccordion(node)) {
-            List<ArmNode> result = new ArrayList<>();
-            Set<Pair<NodeRef,NodeRef>> bossArmNodePairs = service.getArmRunAsBossNodes(node);
-            for (Pair<NodeRef,NodeRef> bossNodePair : bossArmNodePairs) {
-                result.add(wrapArmNodeAsObject(bossNodePair.getFirst(), false, false, currentSection, bossNodePair.getSecond()));
-            }
-            return result;
-        }
-        return getChildNodes(node, parentRef, false, currentSection, runAsBoss);
-    }
-
     public boolean isArmDelegationRootNode(NodeRef node, NodeRef currentSection) {
-       return service.isArmDelegationRootNode(node, currentSection);
+        return service.isArmDelegationRootNode(node, currentSection);
     }
 
     @Override
-    public List<ArmNode> getChildNodes(NodeRef armNode, NodeRef parentNode, boolean onlyMeta) {
-        return getChildNodes(armNode, parentNode, onlyMeta, null, null);
-    }
-
-    public List<ArmNode> getChildNodes(NodeRef node, NodeRef parentRef, boolean onlyMeta, NodeRef currentSection, NodeRef runAsEmployee) {
+    public ArmChildrenResponse getChildNodes(ArmChildrenRequest request) {
         List<ArmNode> result = new ArrayList<>();
 
-        ArmNode parent = wrapArmNodeAsObject(parentRef, false, onlyMeta);
+        Map<QName, Serializable> properties = service.getCachedProperties(request.getNodeRef());
+        boolean isForDelegation = Boolean.TRUE.equals(properties.get(ArmService.PROP_IS_FOR_SECRETARIES));
+        if (isForDelegation && isAccordion(request.getNodeRef())) {
+            List<Pair<NodeRef,NodeRef>> bossArmNodePairs = service.getArmRunAsBossNodes(request.getNodeRef());
+            for (Pair<NodeRef,NodeRef> bossNodePair : bossArmNodePairs) {
+                result.add(wrapArmNodeAsObject(bossNodePair.getFirst(), false, false, request.getCurrentSection(), bossNodePair.getSecond()));
+            }
+            return new ArmChildrenResponse(result);
+        }
+        
+        ArmNode parent = wrapArmNodeAsObject(request.getParentRef(), false, request.isOnlyMeta());
 
         // 1. Дочерние статические элементы из настроек ARM
         NodeRef parentFromArm;
-        if (isArmElement(node)) {
-            parentFromArm = node;
+        if (isArmElement(request.getNodeRef())) {
+            parentFromArm = request.getNodeRef();
         } else { // узел справочника или какой-нить другой объект, то реальный родитель - берется последний узел из ARM
             parentFromArm = parent.getNodeRef();
         }
         NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
         String runAsName = null;
-        if (runAsEmployee != null && nodeService.exists(runAsEmployee) && !currentEmployee.equals(runAsEmployee)) {
-            runAsName = orgstructureBean.getEmployeeLogin(runAsEmployee);
+        if (request.getRunAsEmployee() != null && nodeService.exists(request.getRunAsEmployee()) && !currentEmployee.equals(request.getRunAsEmployee())) {
+            runAsName = orgstructureBean.getEmployeeLogin(request.getRunAsEmployee());
         }
         if (parentFromArm != null) {
             List<NodeRef> staticChilds = new ArrayList<>();
@@ -130,7 +119,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
                 final String fullyAuthentificatedUser = AuthenticationUtil.getFullyAuthenticatedUser();
                 try {
                     AuthenticationUtil.setFullyAuthenticatedUser(runAsName);
-                    staticChilds = service.getChildNodes(parentFromArm, runAsEmployee);
+                    staticChilds = service.getChildNodes(parentFromArm, request.getRunAsEmployee());
                 } finally {
                     AuthenticationUtil.setFullyAuthenticatedUser(fullyAuthentificatedUser);
                 }
@@ -140,11 +129,16 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
 
             // узлы АРМа
             for (NodeRef staticChild : staticChilds) {
-                ArmNode stNode = wrapArmNodeAsObject(staticChild, false, onlyMeta, currentSection, runAsEmployee);
+                ArmNode stNode = wrapArmNodeAsObject(staticChild, false, request.isOnlyMeta(), request.getCurrentSection(), request.getRunAsEmployee());
                 if (stNode.getNodeQuery() != null) {
-                    List<ArmNode> queriedChilds = stNode.getNodeQuery().build(this, stNode);
-                    for (ArmNode queriedChild : queriedChilds) {
-                        result.add(queriedChild);
+                    ArmChildrenResponse queriedChilds = stNode.getNodeQuery().build(this, stNode, request);
+                    //Если у нас на узле используется нода с постраничным выводом, то остальные ноды игнорируются
+                    if (request.getMaxItems() > 0) {
+                        return queriedChilds;
+                    } else {
+                        for (ArmNode queriedChild : queriedChilds.getPage()) {
+                            result.add(queriedChild);
+                        }
                     }
                 } else {
                     result.add(stNode);
@@ -154,11 +148,11 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
 
         //2. Добавить реальных дочерних узлов для иерархического справочника!
         // в остальных случаях у нас не может быть дочерних элементов
-        if (node != null && !isArmElement(node)){
-            List<NodeRef> children = parent.getNodeQuery().getChildren(node);
+        if (request.getNodeRef() != null && !isArmElement(request.getNodeRef())){
+            List<NodeRef> children = parent.getNodeQuery().getChildren(request.getNodeRef());
             if (children != null) {
                 for (NodeRef dicChild : children) {
-                    result.add(wrapAnyNodeAsObject(dicChild, parent, parent.getNodeQuery().getSubstituteString(), onlyMeta, null, currentSection));
+                    result.add(wrapAnyNodeAsObject(dicChild, parent, parent.getNodeQuery().getSubstituteString(), request.isOnlyMeta(), null, request.getCurrentSection()));
                 }
 
                 Collections.sort(result, new Comparator<ArmNode>() {
@@ -169,13 +163,13 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
                 });
             }
         }
-        return result;
+        return new ArmChildrenResponse(result);
     }
 
     @Override
     public boolean hasChildNodes(ArmNode node) {
             return hasChildNodes(node.getNodeRef(), node.getArmNodeRef(), null) ||
-                    (node.getNodeQuery() != null && !node.getNodeQuery().build(this, node).isEmpty());
+                    (node.getNodeQuery() != null && !node.getNodeQuery().build(this, node, new ArmChildrenRequest(node.getNodeRef(), node.getArmNodeRef())).getPage().isEmpty());
     }
 
     private boolean hasChildNodes(NodeRef node, NodeRef parentRef, String runAsEmployee) {
@@ -221,25 +215,26 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
             } else {
                 staticChilds = service.getChildNodes(parentFromArm);
             }
-                for (NodeRef staticChild : staticChilds) {
-                    if (service.getNodeChildRule(staticChild) != null) {
-                        ArmNode stNode = wrapArmNodeAsObject(staticChild);
-                        List<ArmNode> queriedChilds = stNode.getNodeQuery().build(this, stNode);
-                        if (!queriedChilds.isEmpty()) {
-                            return true;
-                        }
-                    } else {
+            for (NodeRef staticChild : staticChilds) {
+                if (service.getNodeChildRule(staticChild) != null) {
+                    ArmNode stNode = wrapArmNodeAsObject(staticChild);
+                    ArmChildrenResponse queriedChilds = stNode.getNodeQuery().build(this, stNode, new ArmChildrenRequest(node, parentRef));
+                    if (!queriedChilds.getPage().isEmpty()) {
                         return true;
                     }
+                } else {
+                    return true;
                 }
-                return false;
-        }
+            }
+            return false;
+        }        
         return false;
     }
+
     @Override
     public boolean hasChildNodes(ArmNode node, String runAs) {
         return hasChildNodes(node.getNodeRef(), node.getArmNodeRef(), runAs) ||
-                (node.getNodeQuery() != null && !node.getNodeQuery().build(this, node).isEmpty());
+                (node.getNodeQuery() != null && !node.getNodeQuery().build(this, node, new ArmChildrenRequest(node.getNodeRef(), node.getArmNodeRef())).getPage().isEmpty());
     }
 
     @Override
@@ -309,6 +304,16 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         node.setReportCodes((String) properties.get(ArmService.PROP_REPORT_CODES));
         node.setSearchType((String) properties.get(ArmService.PROP_SEARCH_TYPE));
 
+        node.setMaxItemsCount(-1);
+        List<NodeRef> dynamicNodes = service.getChildNodes(nodeRef);
+        for (NodeRef dynamicNode : dynamicNodes) {
+            ArmBaseChildRule stNode = service.getNodeChildRule(dynamicNode);
+            if (stNode != null && stNode.getMaxItems() > 0) {
+                node.setMaxItemsCount(stNode.getMaxItems());
+                break;
+            }
+        }
+        
         if (!onlyMeta) {
             node.setCounter(service.getNodeCounter(nodeRef));
             node.setColumns(getNodeColumns(nodeRef));
@@ -371,9 +376,11 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
             }
         }
 
-        node.setSearchQuery(searchQueryString);
+        node.setSearchQuery(formatQuery(searchQueryString, nodeRef));
 
         node.setHtmlUrl(parentNode.getHtmlUrl());
+        node.setMaxItemsCount(parentNode.getMaxItemsCount());
+
         node.setReportCodes(parentNode.getReportCodes());
         node.setSearchType(parentNode.getSearchType());
 
