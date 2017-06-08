@@ -373,12 +373,12 @@ public class DocumentPolicy extends BaseBean
 	            }
 	        }
 
-		    NodeRef documentSearchObject = getDocumentSearchObject(nodeRef);
+		    NodeRef documentSearchObject = documentService.getDocumentSearchObject(nodeRef);
 
 		    updatePresentString(nodeRef);
 
 		    if (documentSearchObject == null) {
-			    documentSearchObject = getDocumentSearchObject(nodeRef);
+			    documentSearchObject = documentService.getDocumentSearchObject(nodeRef);
 		    }
 		    if (documentSearchObject != null) {
 			    behaviourFilter.disableBehaviour(documentSearchObject, RenditionModel.ASPECT_RENDITIONED);
@@ -580,7 +580,7 @@ public class DocumentPolicy extends BaseBean
             disableNodeIndex(attachmentsRef);
         }
 
-        NodeRef documentSearchObject = getDocumentSearchObject(childAssocRef.getChildRef());
+        NodeRef documentSearchObject = documentService.getDocumentSearchObject(childAssocRef.getChildRef());
         if (documentSearchObject != null) {
             updateDocumentSearchObject(childAssocRef.getChildRef(), documentSearchObject);
         }
@@ -590,66 +590,6 @@ public class DocumentPolicy extends BaseBean
 	@Override
 	public NodeRef getServiceRootFolder() {
 		return null;
-	}
-
-	public NodeRef getDocumentSearchObject(final NodeRef documentRef) {
-		logger.debug("ДОКУМЕНТ. getDocumentSearchObject");
-		NodeRef result = null;
-		Object extPresentString = nodeService.getProperty(documentRef, DocumentService.PROP_EXT_PRESENT_STRING);
-		if (extPresentString != null) {
-			final String fileName = FileNameValidator.getValidFileName((String) extPresentString);
-			result = nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, fileName);
-			if (result == null) {
-				AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-					@Override
-					public NodeRef doWork() throws Exception {
-//						TODO: Метод явно вызывается только в onUpdateProperties и onCreateNode, транзакция уже должна быть открыта
-						QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-						QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, (fileName.length() > QName.MAX_LENGTH) ? fileName.substring(fileName.length()-QName.MAX_LENGTH, fileName.length()) : fileName);
-						QName nodeTypeQName = ContentModel.TYPE_CONTENT;
-
-						Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-						properties.put(ContentModel.PROP_NAME, fileName);
-						ChildAssociationRef associationRef = nodeService.createNode(documentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
-
-                        return associationRef.getChildRef();
-
-//						return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-//							@Override
-//							public NodeRef execute() throws Throwable {
-//								NodeRef result = nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, fileName);
-//                                if (result == null) {
-//                                    QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-//                                    QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, (fileName.length() > QName.MAX_LENGTH) ? fileName.substring(fileName.length()-QName.MAX_LENGTH, fileName.length()) : fileName);
-//                                    QName nodeTypeQName = ContentModel.TYPE_CONTENT;
-//
-//                                    Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-//                                    properties.put(ContentModel.PROP_NAME, fileName);
-//                                    ChildAssociationRef associationRef = nodeService.createNode(documentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
-//                                    result = associationRef.getChildRef();
-//                                }
-//								return result;
-//							}
-//						});
-					}
-				};
-				result = AuthenticationUtil.runAsSystem(raw);
-			}
-            //Добавляем аспект с организацией для вложения
-            List<AssociationRef> unitRefs = nodeService.getTargetAssocs(documentRef, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
-            if (!unitRefs.isEmpty()) {
-                if (!nodeService.hasAspect(result, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION)) {
-                    nodeService.addAspect(result, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION, null);
-                }
-                List<AssociationRef> units =  nodeService.getTargetAssocs(result, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
-                for (AssociationRef unit : units) {
-                    nodeService.removeAssociation(result, unit.getTargetRef(), OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
-                }
-                nodeService.createAssociation(result, unitRefs.get(0).getTargetRef(), OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
-            }
-        }
-
-		return result;
 	}
 
     public void updateDocumentSearchObject(final NodeRef documentRef, final NodeRef objectRef) {

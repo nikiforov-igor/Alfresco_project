@@ -3,6 +3,7 @@
 	"nodeRef": "${routesContainer}",
 	"routeType": "${routeType}",
 	"stageType": "${stageType}",
-	"stageItemType": "${stageItemType}"
+	"stageItemType": "${stageItemType}",
+	"isEngineer": ${isEngineer?string}
 }
 </#escape>

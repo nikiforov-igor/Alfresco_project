@@ -962,6 +962,7 @@
                                 <property name="cm:name"><![CDATA[Избранное]]></property>
                                 <property name="lecm-arm:order"><![CDATA[60]]></property>
                                 <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:expression"><![CDATA[armNode.getArmNode().getRunAsEmployee() == null]]></property>
                                 <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                                 <property name="lecm-arm:search-query"><![CDATA[{{FAVOURITES}}]]></property>
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
@@ -1039,6 +1040,7 @@
                             </item>
                             <item name="cm:Последние просмотренные" type="lecm-arm:html-node">
                                 <property name="cm:name"><![CDATA[Последние просмотренные]]></property>
+                                <property name="lecm-arm:expression"><![CDATA[armNode.getArmNode().getRunAsEmployee() == null]]></property>
                                 <property name="lecm-arm:order"><![CDATA[50]]></property>
                                 <property name="lecm-arm:html-url"><![CDATA[service/lecm/documents/last]]></property>
                             </item>
@@ -6275,7 +6277,7 @@
                         <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                         <property name="cm:name"><![CDATA[Делегирование]]></property>
                         <property name="lecm-arm:search-type"><![CDATA[]]></property>
-                        <property name="lecm-arm:expression"><![CDATA[]]></property>
+                        <property name="lecm-arm:expression"><![CDATA[@delegationService.getDelegationOwnersByTrustee(user.currentUser().getEmployee(), true).size() > 0 || @secretaryService.getPrimaryChiefs(user.currentUser().getEmployee()).size() > 0]]></property>
                         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                         <property name="lecm-arm:order"><![CDATA[180]]></property>
                         <property name="lecm-arm:is-for-secretaries"><![CDATA[true]]></property>

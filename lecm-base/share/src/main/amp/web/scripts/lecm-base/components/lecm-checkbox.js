@@ -28,6 +28,8 @@ LogicECM.module = LogicECM.module || {};
 		YAHOO.Bubbling.on("readonlyControl", this.onReadonlyControl, this);
 	    YAHOO.Bubbling.on("disableControl", this.onDisableControl, this);
 	    YAHOO.Bubbling.on("enableControl", this.onEnableControl, this);
+	    YAHOO.Bubbling.on("hideControl", this.onHideControl, this);
+	    YAHOO.Bubbling.on("showControl", this.onShowControl, this);
 	    YAHOO.Bubbling.on("disableRelatedFields", this.onDisableRelatedFields, this);
         return this;
     };
@@ -216,6 +218,18 @@ LogicECM.module = LogicECM.module || {};
 					}
 				},
 				
+	            onHideControl: function (layer, args) {
+		            if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+						YAHOO.util.Dom.addClass(this.id + '-parent', 'hidden');
+					}
+				},
+
+	            onShowControl: function (layer, args) {
+		            if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+						YAHOO.util.Dom.removeClass(this.id + '-parent', 'hidden');
+					}
+				},
+
 	            onDisableControl: function (layer, args) {
 		            if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
 			            if (this.checkbox != null) {

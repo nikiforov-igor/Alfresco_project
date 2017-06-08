@@ -40,6 +40,7 @@ import ru.it.lecm.security.LecmPermissionService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
+import ru.it.lecm.orgstructure.beans.OrgstructureAspectsModel;
 
 /**
  * Created with IntelliJ IDEA. User: AIvkin Date: 28.02.13 Time: 16:28
@@ -1079,4 +1080,45 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
         String label = I18NUtil.getMessage(key, I18NUtil.getLocale());
         return label != null ? label : key;
     }
+
+	@Override
+	public NodeRef getDocumentSearchObject(final NodeRef documentRef) {
+		NodeRef result = null;
+		Object extPresentString = nodeService.getProperty(documentRef, DocumentService.PROP_EXT_PRESENT_STRING);
+		if (extPresentString != null) {
+			final String fileName = FileNameValidator.getValidFileName((String) extPresentString).trim();
+			result = nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, fileName);
+			if (result == null) {
+				AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
+					@Override
+					public NodeRef doWork() throws Exception {
+						QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+						QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, (fileName.length() > QName.MAX_LENGTH) ? fileName.substring(fileName.length()-QName.MAX_LENGTH, fileName.length()) : fileName);
+						QName nodeTypeQName = ContentModel.TYPE_CONTENT;
+
+						Map<QName, Serializable> properties = new HashMap<>(1);
+						properties.put(ContentModel.PROP_NAME, fileName);
+						ChildAssociationRef associationRef = nodeService.createNode(documentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+
+                        return associationRef.getChildRef();
+					}
+				};
+				result = AuthenticationUtil.runAsSystem(raw);
+			}
+            //Добавляем аспект с организацией для вложения
+            List<AssociationRef> unitRefs = nodeService.getTargetAssocs(documentRef, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
+            if (!unitRefs.isEmpty()) {
+                if (!nodeService.hasAspect(result, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION)) {
+                    nodeService.addAspect(result, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION, null);
+                }
+                List<AssociationRef> units =  nodeService.getTargetAssocs(result, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
+                for (AssociationRef unit : units) {
+                    nodeService.removeAssociation(result, unit.getTargetRef(), OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
+                }
+                nodeService.createAssociation(result, unitRefs.get(0).getTargetRef(), OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
+            }
+        }
+
+		return result;
+	}
 }

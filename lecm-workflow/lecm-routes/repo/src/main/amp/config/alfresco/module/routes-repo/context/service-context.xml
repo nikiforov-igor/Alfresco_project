@@ -6,23 +6,24 @@
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-	<util:list id="routes.models">
-		<value>alfresco/module/${artifactId}/models/lecm-routes-macros-model.xml</value>
-		<value>alfresco/module/${artifactId}/models/lecm-routes-model.xml</value>
-	</util:list>
-	<util:list id="routes.labels">
-		<value>alfresco/module/${artifactId}/messages/lecm-routes</value>
-		<value>alfresco/module/${artifactId}/messages/lecm-routes-macros</value>
-	</util:list>
-
 	<bean id="routes.model.bootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="dictionaryBootstrap,
 					  ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
 					  ru.it.lecm.contractors.lecm-contractors-repo.contractors-model-bootstrap,
-					  lecm.approval3.helper.model.bootstrap"
-		  p:models-ref="routes.models"
-		  p:labels-ref="routes.labels"
-	/>
+					  lecm.approval3.helper.model.bootstrap">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-routes-macros-model.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-routes-model.xml</value>
+			</list>
+		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/lecm-routes</value>
+				<value>alfresco/module/${artifactId}/messages/lecm-routes-macros</value>
+			</list>
+		</property>
+	</bean>
 
 	<bean id="routes.dictionaries.bootstrap"
 		  parent="lecmDictionaryBootstrap"
@@ -35,20 +36,21 @@
 	</bean>
 
 	<util:constant id="routesServiceFolderID" static-field="ru.it.lecm.workflow.routes.beans.RoutesServiceImpl.ROUTES_FOLDER_ID"/>
-	<util:map id="routes.folders.map">
-		<entry key="#{routesServiceFolderID}" value="Сервис маршрутов"/>
-	</util:map>
 	<bean id="routesService" class="ru.it.lecm.workflow.routes.beans.RoutesServiceImpl"
 		  parent="baseBean" depends-on="routes.model.bootstrap"
-		  init-method="init"
-		  p:folders-ref="routes.folders.map"
-		  p:approvalService-ref="approvalWorkflowService"
-		  p:orgstructureService-ref="serviceOrgstructure"
-		  p:searchService-ref="searchService"
-		  p:copyService-ref="copyService"
-		  p:documentService-ref="documentService"
-		  p:scriptService-ref="scriptService"
-	/>
+		  init-method="init">
+		<property name="approvalService" ref="approvalWorkflowService"/>
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
+		<property name="searchService" ref="searchService"/>
+		<property name="copyService" ref="copyService"/>
+		<property name="documentService" ref="documentService"/>
+		<property name="scriptService" ref="scriptService"/>
+		<property name="folders">
+			<map>
+				<entry key="#{routesServiceFolderID}" value="Сервис маршрутов"/>
+			</map>
+		</property>
+	</bean>
 
 	<bean id="routes.delete.temp.schedule"
 	  class="ru.it.lecm.workflow.routes.schedule.DeleteTempRoutesSchedule" parent="baseTransactionalSchedule"
