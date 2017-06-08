@@ -101,5 +101,6 @@ public class ReportManagerApi {
 		}
 		throw new RuntimeException(errmsg);
 	}
+
 }
 
