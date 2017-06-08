@@ -146,17 +146,26 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                     }
 
                     var components = Alfresco.util.ComponentManager.list();
-
-                    var controls = components.filter(function (item) {
-                        return item.id.indexOf(this.options.formId + "_") == 0
-                    }, this);
+                    var form = Alfresco.util.ComponentManager.get(this.options.formId + "-form");
+                    var formIndex = components.indexOf(form);
+                    var controls = [];
+                    while (formIndex > 0) {
+                        formIndex++;
+                        var component = components[formIndex];
+                        if (component && component.name != "Alfresco.FormUI") {
+                            controls.push(component);
+                        } else {
+                            formIndex = -1;
+                        }
+                    }
 
                     for (var i = 0; i < controls.length; i++) {
-                        var fieldName = controls[i].options.fieldId; //TODO Убедиться, что во всех контролах тут есть данные
-                        if (arguments.hasOwnProperty(fieldName) && !(fieldName == this.options.fieldId)) {
+                        var fieldName = controls[i].options.fieldId;
+                        if (fieldName && arguments.hasOwnProperty(fieldName) && !(fieldName == this.options.fieldId)) {
                             LogicECM.module.Base.Util.reInitializeControl(this.options.formId, fieldName, {
                                 currentValue: arguments[fieldName],
                                 defaultValue: arguments[fieldName],
+                                fieldValues: arguments[fieldName] ? arguments[fieldName].split(",") : [],
                                 resetValue: !arguments[fieldName]
                             });
                         }
