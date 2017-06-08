@@ -12,7 +12,6 @@ import org.alfresco.util.ParameterCheck;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.mozilla.javascript.NativeArray;
 import org.mozilla.javascript.NativeObject;
 import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
@@ -25,6 +24,8 @@ import ru.it.lecm.arm.beans.ArmService;
 import ru.it.lecm.arm.beans.ArmWrapperServiceImpl;
 import ru.it.lecm.arm.beans.filters.ArmDocumentsFilter;
 import ru.it.lecm.arm.beans.node.ArmNode;
+import ru.it.lecm.arm.beans.search.ArmChildrenRequest;
+import ru.it.lecm.arm.beans.search.ArmChildrenResponse;
 import ru.it.lecm.arm.filters.BaseQueryArmFilter;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
@@ -332,8 +333,8 @@ public class ArmWebScriptBean extends BaseWebScript implements ApplicationContex
                         NodeRef parentNode = armRef;
                         for (int i = 1; i < splitPath.length; i++) {
                             boolean isFind = false;
-                            List<ArmNode> nodes =  armWrapperService.getChildNodes(prevNode, parentNode, true);
-                            for (ArmNode node : nodes) {
+                            ArmChildrenResponse nodes =  armWrapperService.getChildNodes(new ArmChildrenRequest(prevNode, parentNode, true));
+                            for (ArmNode node : nodes.getPage()) {
                                 if (!node.getNodeType().equals("lecm-arm:accordion") && node.getTitle().equals(splitPath[i])) {
                                     isFind = true;
                                     parentNode = prevNode;
