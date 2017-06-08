@@ -17,10 +17,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import ru.it.lecm.arm.beans.childRules.*;
 import ru.it.lecm.arm.expression.ExpressionForArm;
-import ru.it.lecm.base.beans.BaseBean;
-import ru.it.lecm.base.beans.SearchQueryProcessorService;
-import ru.it.lecm.base.beans.TransactionNeededException;
-import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import ru.it.lecm.base.beans.*;
 import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -712,8 +709,6 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
                     if (TYPE_QUERY_CHILD_RULE.equals(queryType)) {
                         result = new ArmQueryChildRule();
                         ((ArmQueryChildRule) result).setListQuery((String) props.get(PROP_LIST_QUERY_CHILD_RULE));
-                        ((ArmQueryChildRule) result).setSearchService(searchService);
-                        ((ArmQueryChildRule) result).setProcessorService(processorService);
                     } else if (TYPE_DICTIONARY_CHILD_RULE.equals(queryType)) {
                         result = new ArmDictionaryChildRule();
                         NodeRef dictionary = findNodeByAssociationRef(query, ASSOC_DICTIONARY_CHILD_RULE, null, ASSOCIATION_TYPE.TARGET);
@@ -747,9 +742,6 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
 						if(filter != null && !filter.isEmpty()) {
 							((ArmXPathChildRule) result).setFilter(filter);
 						}
-                        ((ArmXPathChildRule) result).setSearchService(searchService);
-                        ((ArmXPathChildRule) result).setNodeService(nodeService);
-						((ArmXPathChildRule) result).setProcessorService(processorService);
                     } else if (TYPE_SCRIPT_CHILD_RULE.equals(queryType)) {
                         result = new ArmScriptChildRule();
                         ((ArmScriptChildRule) result).setScript((String) props.get(PROP_ROOT_SCRIPT));
@@ -757,6 +749,23 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
                         ((ArmScriptChildRule) result).setOrgstructureService(orgstructureBean);
                     }
 					result.setSubstituteString((String) props.get(PROP_CHILD_RULE_SUBSTITUTE_STRING));
+                    //Инициализируем общие параметры
+                    Integer maxItems = (Integer) props.get(PROP_MAX_ITEMS);
+                    if (maxItems != null) {
+                        result.setMaxItems(maxItems);
+                    }
+                    String searchTemplate = (String) props.get(PROP_SEARCH_TEMPLATE);
+                    if (searchTemplate != null) {
+                        result.setSearchTemplate(searchTemplate);
+                    }
+                    String sortConfig = (String) props.get(PROP_SORT_CONFIG);
+                    if (sortConfig != null) {
+                        result.setSortConfig(sortConfig);
+                    }
+                    result.setNamespaceService(namespaceService);
+                    result.setNodeService(nodeService);
+                    result.setProcessorService(processorService);
+                    result.setSearchService(searchService);
                 }
                 childRulesCache.put(node, result == null ? ArmBaseChildRule.NULL_RULE : result);
             }

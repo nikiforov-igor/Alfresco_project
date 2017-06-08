@@ -264,6 +264,9 @@
                         <value>cm:name</value>
                         <value>lecm-arm:list-query-child-rule</value>
                         <value>lecm-arm:child-rule-substitute-string</value>
+                        <value>lecm-arm:node-rule-page-count</value>
+                        <value>lecm-arm:node-rule-search-template</value>
+                        <value>lecm-arm:node-rule-sort-config</value>
                     </list>
                 </entry>
                 <entry key="lecm-arm:dictionary-child-rule">
@@ -271,6 +274,9 @@
                         <value>cm:name</value>
                         <value>lecm-arm:child-rule-dictionary-assoc</value>
                         <value>lecm-arm:child-rule-substitute-string</value>
+                        <value>lecm-arm:node-rule-page-count</value>
+                        <value>lecm-arm:node-rule-search-template</value>
+                        <value>lecm-arm:node-rule-sort-config</value>
                     </list>
                 </entry>
                 <entry key="lecm-arm:statuses-child-rule">
@@ -288,6 +294,9 @@
                         <value>lecm-arm:xpath-child-rule-types</value>
                         <value>lecm-arm:xpath-child-rule-filter</value>
                         <value>lecm-arm:child-rule-substitute-string</value>
+                        <value>lecm-arm:node-rule-page-count</value>
+                        <value>lecm-arm:node-rule-search-template</value>
+                        <value>lecm-arm:node-rule-sort-config</value>
                     </list>
                 </entry>
                 <entry key="lecm-arm:script-child-rule">

@@ -8,8 +8,11 @@ import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
+import org.apache.commons.lang.StringUtils;
 import ru.it.lecm.arm.beans.ArmWrapperService;
 import ru.it.lecm.arm.beans.node.ArmNode;
+import ru.it.lecm.arm.beans.search.ArmChildrenRequest;
+import ru.it.lecm.arm.beans.search.ArmChildrenResponse;
 import ru.it.lecm.base.beans.SearchQueryProcessorService;
 
 import java.util.ArrayList;
@@ -68,8 +71,9 @@ public class ArmXPathChildRule extends ArmBaseChildRule {
 	}
 
 	@Override
-	public List<ArmNode> build(ArmWrapperService service, ArmNode node) {
+	public ArmChildrenResponse build(ArmWrapperService service, ArmNode node, ArmChildrenRequest request) {
 		List<ArmNode> nodes = new ArrayList<>();
+		long totalChildren = -1;
 		//шаблонный запрос из верхнего узла
 		if (rootXPath != null) {
 			SearchParameters sp = new SearchParameters();
@@ -92,10 +96,20 @@ public class ArmXPathChildRule extends ArmBaseChildRule {
 				query.append(" AND (").append(filter).append(")");
 			}
 
-			String processedQuery = processorService.processQuery(query.toString());
+			String searchQuery = getSearchQuery(request.getSearchTerm());
+			if (StringUtils.isNotEmpty(searchQuery)) {
+				query.append(" AND ").append(searchQuery);
+			}
 
+			String processedQuery = processorService.processQuery(query.toString());
 			sp.setQuery(processedQuery);
-			sp.addSort("@" + ContentModel.PROP_NAME, true);
+
+			if (request.getMaxItems() != -1) {
+				sp.setSkipCount(request.getSkipCount());
+				sp.setMaxItems(request.getMaxItems());
+			}
+
+			addSort(sp);
 
 			ResultSet results = null;
 			try {
@@ -104,6 +118,7 @@ public class ArmXPathChildRule extends ArmBaseChildRule {
 					ArmNode rowNode = service.wrapAnyNodeAsObject(row.getNodeRef(), node, getSubstituteString());
 					nodes.add(rowNode);
 				}
+				totalChildren = results.getNumberFound();
 			} finally {
 				if (results != null) {
 					results.close();
@@ -117,8 +132,7 @@ public class ArmXPathChildRule extends ArmBaseChildRule {
 				}
 			});
 		}
-
-		return nodes;
+		return new ArmChildrenResponse(nodes, totalChildren == -1 ? nodes.size() : totalChildren);
 	}
 
 	@Override
