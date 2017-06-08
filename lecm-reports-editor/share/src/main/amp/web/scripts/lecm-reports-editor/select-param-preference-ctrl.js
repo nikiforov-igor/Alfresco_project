@@ -157,7 +157,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                             LogicECM.module.Base.Util.reInitializeControl(this.options.formId, fieldName, {
                                 currentValue: arguments[fieldName],
                                 defaultValue: arguments[fieldName],
-                                resetValue: true
+                                resetValue: !arguments[fieldName]
                             });
                         }
                     }
@@ -176,7 +176,6 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                         input: "text",
                         modal: true,
                         close: true,
-                        constraintoviewport: false,
                         buttons: [
                             {
                                 text: Alfresco.util.message("button.ok"),
@@ -226,12 +225,9 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                 if (fr && fr.length) {
                     var renameProperty = function (dataObj, name) {
                         if (name.indexOf("_removed") > 0 ||
+                            name.indexOf("_added") > 0 ||
                             name.indexOf("-selectedItems") > 0 ||
                             name.indexOf("-autocomplete-input") > 0) {
-                            delete dataObj[name];
-                        } else if (name.indexOf("_added") > 0) {
-                            var newName = name.replace("_added", "");
-                            dataObj[newName] = dataObj[name];
                             delete dataObj[name];
                         }
                     };

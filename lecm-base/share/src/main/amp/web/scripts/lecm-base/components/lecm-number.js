@@ -50,6 +50,7 @@ LogicECM.module = LogicECM.module || {};
 		YAHOO.Bubbling.on("readonlyControl", this.onReadonlyControl, this);
 		YAHOO.Bubbling.on("disableControl", this.onDisableControl, this);
 		YAHOO.Bubbling.on("enableControl", this.onEnableControl, this);
+		YAHOO.Bubbling.on("reInitializeControl", this.onReInitializeControl, this);
 		return this;
 	};
 
@@ -60,7 +61,8 @@ LogicECM.module = LogicECM.module || {};
 				options: {
 					formId: null,
 					fieldId: null,
-                    disabled: false
+                    disabled: false,
+					currentValue: null
 				},
 				onReadonlyControl: function (layer, args) {
 					var input, fn;
@@ -93,7 +95,26 @@ LogicECM.module = LogicECM.module || {};
 				},
 				onReady: function () {
 					LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
-				}
+					this.init();
+				},
 
+				init : function () {
+					if (this.options.currentValue) {
+						var input = Dom.get(this.controlId);
+						if (input) {
+							input.value = this.options.currentValue;
+						}
+					}
+				},
+
+				onReInitializeControl: function (layer, args) {
+					if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+						var options = args[1].options;
+						if (options != null) {
+							this.setOptions(options);
+						}
+						this.init();
+					}
+				}
 			});
 })();

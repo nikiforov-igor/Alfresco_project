@@ -16,6 +16,7 @@ LogicECM.module = LogicECM.module || {};
         YAHOO.Bubbling.on("showControl", this.onShowControl, this);
         YAHOO.Bubbling.on("disableControl", this.onDisableControl, this);
         YAHOO.Bubbling.on("enableControl", this.onEnableControl, this);
+        YAHOO.Bubbling.on("reInitializeControl", this.onReInitializeControl, this);
         return this;
     };
 
@@ -40,7 +41,8 @@ LogicECM.module = LogicECM.module || {};
                 checkInArchive: false,
                 validationType: 'keyup',
                 validationMessageId: "LogicECM.constraints.isUnique.message",
-                validationFn: null
+                validationFn: null,
+                currentValue: null
             },
 
 			onReadonlyControl: function (layer, args) {
@@ -111,6 +113,26 @@ LogicECM.module = LogicECM.module || {};
                             );
                         }
                     }
+                }
+                this.init();
+            },
+
+            init : function () {
+                if (this.options.currentValue) {
+                    var input = Dom.get(this.controlId);
+                    if (input) {
+                        input.value = this.options.currentValue;
+                    }
+                }
+            },
+
+            onReInitializeControl: function (layer, args) {
+                if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+                    var options = args[1].options;
+                    if (options != null) {
+                        this.setOptions(options);
+                    }
+                    this.init();
                 }
             }
         });

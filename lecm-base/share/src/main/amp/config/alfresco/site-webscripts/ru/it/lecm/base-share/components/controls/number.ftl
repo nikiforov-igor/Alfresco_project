@@ -51,6 +51,9 @@
 				control.setOptions({
 					fieldId: "${field.configName}",
 					formId: "${args.htmlid}",
+					<#if defaultValue?has_content>
+                        currentValue: "${defaultValue}",
+					</#if>
                     disabled: ${disabled?string}
 				});
 			<#if readonly>

@@ -68,7 +68,7 @@
         Bubbling.on("showControl", this.onShowControl, this);
 	    Bubbling.on("handleFieldChange", this.onHandleFieldChange, this);
 	    Bubbling.on("showDatePicker", this.hidePickerWhenAnotherIsOpening, this);
-		
+        Bubbling.on("reInitializeControl", this.onReInitializeControl, this);
         // ALFFIVE-139
         // Изначально загружается версия 1.6.2 с плагином inputmask
         // Однако, потом отрабатывает dojo и перекрывает версию на 1.11		
@@ -279,15 +279,6 @@
 
                         // setup events
                         me.widgets.calendar.selectEvent.subscribe(me._handlePickerChange, me, true);
-
-                        // если в body уже есть календарь(и) с таким id, нужно удалить
-                        var samePickers = Selector.query("body > #" + me.id);
-                        if (samePickers && !samePickers.isEmpty) {
-                            var body = Selector.query('body')[0];
-                            for (var i = 0; i < samePickers.length; i++) {
-                                body.removeChild(samePickers[i]);
-                            }
-                        }
 
                         // render the calendar control
                         me.widgets.calendar.render();
@@ -664,6 +655,25 @@
 		            if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
 			            this._handleFieldChange();
 		            }
-	            }
+	            },
+
+                onReInitializeControl: function (layer, args) {
+                    if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+                        var options = args[1].options;
+                        if (options != null) {
+                            this.setOptions(options);
+                        }
+                        for (var i in this.widgets) {
+                            if (this.widgets.hasOwnProperty(i)) {
+                                var w = this.widgets[i];
+
+                                if (YAHOO.lang.isFunction(w.destroy)) {
+                                    w.destroy();
+                                }
+                            }
+                        }
+                        this.draw();
+                    }
+                }
             };
 })();

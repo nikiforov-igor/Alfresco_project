@@ -42,6 +42,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
         this.currentFromDate = "";
         this.currentToDate = "";
 
+        YAHOO.Bubbling.on("reInitializeControl", this.onReInitializeControl, this);
+
 		// ALFFIVE-139
         // Изначально загружается версия 1.6.2 с плагином inputmask
         // Однако, потом отрабатывает dojo и перекрывает версию на 1.11		
@@ -85,7 +87,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 fromDateDefault: "LAST_MONTH",
                 fillDates: false,
                 mask: "dd.mm.yyyy",
-                placeholder: Alfresco.util.message("lecm.form.control.date-picker.display.date.format")
+                placeholder: Alfresco.util.message("lecm.form.control.date-picker.display.date.format"),
+                fieldId: null,
+                formId: false,
+                defaultValue: null
             },
 
             /**
@@ -98,6 +103,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 var toDate = this._getDateByKey("NOW");
                 var fromDate = this._getDateByKey("NOW");
 
+                if (this.options.defaultValue) {
+                    Dom.get(this.valueHtmlId).value = this.options.defaultValue;
+                }
                 if (Dom.get(this.valueHtmlId).value) {
                     var fullDate = Dom.get(this.valueHtmlId).value.split("|");
                     if (fullDate[0]) {
@@ -105,12 +113,18 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 	                    fromDate = Alfresco.util.fromISO8601(fullDate[0]);
                         Dom.get(this.id + "-date-from").value = fromDate.toString(this._msg("form.control.date-picker.entry.date.format"));
                         this.currentFromDate = fullDate[0];
+                    } else {
+                        Dom.get(this.id + "-date-from").value = "";
+                        this.currentFromDate = "";
                     }
                     if (fullDate[1]) {
                         // Use Date.parse to support non ISO8601 date defaults
 	                    toDate = Alfresco.util.fromISO8601(fullDate[1]);
 	                    Dom.get(this.id + "-date-to").value = toDate.toString(this._msg("form.control.date-picker.entry.date.format"));
                         this.currentToDate = fullDate[1];
+                    } else {
+                        Dom.get(this.id + "-date-to").value = "";
+                        this.currentToDate = "";
                     }
                 } else {
                     if (this.options.fillDates) {
@@ -293,6 +307,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
                 // initial validation
                 this.validate();
+                LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
             },
 
             _getDateByKey: function (key) {
@@ -658,6 +673,28 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this.widgets.calendarTo);
                 }
                 return valid;
+            },
+
+            onReInitializeControl: function (layer, args) {
+                if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+                    var options = args[1].options;
+                    if (options != null) {
+                        this.setOptions(options);
+                    }
+                    this.currentFromDate = "";
+                    this.currentToDate = "";
+
+                    for (var i in this.widgets) {
+                        if (this.widgets.hasOwnProperty(i)) {
+                            var w = this.widgets[i];
+
+                            if (YAHOO.lang.isFunction(w.destroy)) {
+                                w.destroy();
+                            }
+                        }
+                    }
+                    this.onReady();
+                }
             }
         });
 })();
