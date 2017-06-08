@@ -21,6 +21,8 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import ru.it.lecm.arm.beans.*;
 import ru.it.lecm.arm.beans.node.ArmNode;
+import ru.it.lecm.arm.beans.search.ArmChildrenRequest;
+import ru.it.lecm.arm.beans.search.ArmChildrenResponse;
 import ru.it.lecm.base.beans.LecmTransactionHelper;
 import ru.it.lecm.base.beans.evaluators.ValueEvaluatorsManager;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -64,6 +66,10 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 
     public static final String RUN_AS = "runAs";
     public static final String CURRENT_SECTION = "currentSection";
+    public static final String MAX_ITEMS = "maxItems";
+    public static final String SKIP_COUNT = "skipCount";
+    public static final String SEARCH_TERM = "searchTerm";
+    public static final String REAL_CHILDREN_COUNT = "realChildrenCount";
 
     private ArmWrapperServiceImpl service;
 	private DictionaryService dictionaryService;
@@ -120,13 +126,28 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 	@Override
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         List<JSONObject> nodes = new ArrayList<JSONObject>();
+        JSONObject result = new JSONObject();
 
         String nodeRef = req.getParameter(NODE_REF);
         String armNodeRef = req.getParameter(ARM_NODE_REF);
         String armCode = req.getParameter(ARM_CODE);
         String runAsBoss = req.getParameter(RUN_AS);
         String currentSection = req.getParameter(CURRENT_SECTION);
+        String searchTerm = req.getParameter(SEARCH_TERM);
+        int maxItems = -1, skipCount = 0;
+        try {
+            maxItems = Integer.parseInt(req.getParameter(MAX_ITEMS));
+        } catch (NumberFormatException e) {
+            logger.warn("### maxItems were not provided and set to default");
+        }
 
+        try {
+            skipCount = Integer.parseInt(req.getParameter(SKIP_COUNT));
+        } catch (NumberFormatException e) {
+            logger.warn("### skipCount were not provided and set to default");
+        }
+
+        JSONObject parentNodeInfo = new JSONObject();
         if (nodeRef == null) { // получаем список корневых узлов - аккордеонов для заданного АРМ
             List<ArmNode> accordions = service.getAccordionsByArmCode(armCode);
 	        Map<String, Boolean> isStarterHash = new HashMap<String, Boolean>();
@@ -137,23 +158,42 @@ public class ArmTreeMenuScript extends AbstractWebScript {
             // получение списка дочерних элементов
             if (NodeRef.isNodeRef(nodeRef)) {
                 NodeRef runAsEmployee = null;
+                ArmChildrenRequest request = new ArmChildrenRequest(new NodeRef(nodeRef), new NodeRef(armNodeRef));
+                request.setMaxItems(maxItems);
+                request.setSkipCount(skipCount);
+                request.setSearchTerm(searchTerm);
                 if (runAsBoss != null && NodeRef.isNodeRef(runAsBoss)) {
                     runAsEmployee = new NodeRef(runAsBoss);
                 }
+                request.setRunAsEmployee(runAsEmployee);
                 NodeRef currentSectionRef = null;
                 if (currentSection != null && NodeRef.isNodeRef(currentSection)) {
                     currentSectionRef = new NodeRef(currentSection);
                 }
-                List<ArmNode> childs = service.getChildNodes(new NodeRef(nodeRef), new NodeRef(armNodeRef), currentSectionRef, runAsEmployee);
-                for (ArmNode child : childs) {
+                request.setCurrentSection(currentSectionRef);
+
+                ArmChildrenResponse childs = service.getChildNodes(request);
+                for (ArmNode child : childs.getPage()) {
                     nodes.add(toJSON(child, false, null, runAsBoss));
+                }
+                long realChildrenCount = childs.getTotalCount();
+                try {
+                    parentNodeInfo.put("parentNodeRealChildrenCount", realChildrenCount);
+                } catch (JSONException e) {
+                    logger.error(e.getMessage(), e);
                 }
             }
         }
         try {
+            result.put("parentNodeInfo", parentNodeInfo);
+            result.put("children", nodes);
+        } catch (JSONException e) {
+            logger.error(e.getMessage(), e);
+        }
+        try {
             res.setContentType("application/json");
             res.setContentEncoding(Charset.defaultCharset().displayName());
-            res.getWriter().write(nodes.toString());
+            res.getWriter().write(result.toString());
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -220,6 +260,8 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 		        result.put(CREATE_TYPES, getCreateTypes(node, isStarterHash));
 	        }
 	        result.put(HTML_URL,node.getHtmlUrl());
+            result.put(MAX_ITEMS, node.getMaxItemsCount());
+            result.put(REAL_CHILDREN_COUNT, node.getRealChildrenCount());
 	        result.put(REPORT_CODES,node.getReportCodes());
 	        result.put(SEARCH_TYPE,node.getSearchType());
 

@@ -10,7 +10,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
@@ -41,6 +40,9 @@ public interface ArmService {
 	QName PROP_COUNTER_QUERY = QName.createQName(ARM_NAMESPACE_URI, "counter-limitation");
 	QName PROP_COUNTER_DESCRIPTION = QName.createQName(ARM_NAMESPACE_URI, "counter-description");
 	QName PROP_HTML_URL = QName.createQName(ARM_NAMESPACE_URI, "html-url");
+	QName PROP_MAX_ITEMS = QName.createQName(ARM_NAMESPACE_URI, "node-rule-page-count");
+	QName PROP_SEARCH_TEMPLATE = QName.createQName(ARM_NAMESPACE_URI, "node-rule-search-template");
+	QName PROP_SORT_CONFIG = QName.createQName(ARM_NAMESPACE_URI, "node-rule-sort-config");
 	QName PROP_ROOT_NODE_HTML_URL = QName.createQName(ARM_NAMESPACE_URI, "root-node-html-url");
 	QName PROP_REPORT_CODES = QName.createQName(ARM_NAMESPACE_URI, "reportCodes");
 	QName ASSOC_NODE_COLUMNS = QName.createQName(ARM_NAMESPACE_URI, "fields-assoc");
@@ -258,5 +260,5 @@ public interface ArmService {
      * @param node аккордион
      * @return список корневых узлов арм делегирование
      */
-    Set<Pair<NodeRef, NodeRef>> getArmRunAsBossNodes(NodeRef node);
+    List<Pair<NodeRef, NodeRef>> getArmRunAsBossNodes(NodeRef node);
 }

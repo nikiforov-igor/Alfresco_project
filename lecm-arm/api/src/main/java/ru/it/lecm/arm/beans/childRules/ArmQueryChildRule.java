@@ -7,8 +7,11 @@ import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
+import org.apache.commons.lang.StringUtils;
 import ru.it.lecm.arm.beans.ArmWrapperService;
 import ru.it.lecm.arm.beans.node.ArmNode;
+import ru.it.lecm.arm.beans.search.ArmChildrenRequest;
+import ru.it.lecm.arm.beans.search.ArmChildrenResponse;
 import ru.it.lecm.base.beans.SearchQueryProcessorService;
 
 import java.util.ArrayList;
@@ -38,17 +41,30 @@ public class ArmQueryChildRule extends ArmBaseChildRule {
     }
 
     @Override
-    public List<ArmNode> build(ArmWrapperService service, ArmNode node) {
-        List<ArmNode> nodes = new ArrayList<ArmNode>();
+    public ArmChildrenResponse build(ArmWrapperService service, ArmNode node, ArmChildrenRequest request) {
+        List<ArmNode> nodes = new ArrayList<>();
+        long totalChildren = -1;
 
         if (listQuery != null) {
             SearchParameters sp = new SearchParameters();
             sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
             sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
+            String queryString = service.formatQuery(listQuery, request.getNodeRef());
 
-            String processedQuery = processorService.processQuery(listQuery);
+            String searchQuery = getSearchQuery(request.getSearchTerm());
+            if (StringUtils.isNotEmpty(searchQuery)) {
+                queryString += " AND " + searchQuery;
+            }
+
+            String processedQuery = processorService.processQuery(queryString);
             sp.setQuery(processedQuery);
-            sp.addSort("@" + ContentModel.PROP_NAME, true);
+
+            if (request.getMaxItems() != -1) {
+                sp.setSkipCount(request.getSkipCount());
+                sp.setMaxItems(request.getMaxItems());
+            }
+
+            addSort(sp);
 
             ResultSet results = null;
             try {
@@ -57,14 +73,14 @@ public class ArmQueryChildRule extends ArmBaseChildRule {
                     ArmNode rowNode = service.wrapAnyNodeAsObject(row.getNodeRef(), node, getSubstituteString());
                     nodes.add(rowNode);
                 }
+                totalChildren = results.getNumberFound();
             } finally {
                 if (results != null) {
                     results.close();
                 }
             }
         }
-
-        return nodes;
+        return new ArmChildrenResponse(nodes, totalChildren == -1 ? nodes.size() : totalChildren);
     }
 
     @Override
