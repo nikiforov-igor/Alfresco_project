@@ -1027,22 +1027,9 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 				List<NodeRef> employeeProcuracies = findNodesByAssociationRef(effectiveEmployee, IDelegation.ASSOC_PROCURACY_TRUSTEE, IDelegation.TYPE_PROCURACY, ASSOCIATION_TYPE.SOURCE);
 				if (employeeProcuracies != null && employeeProcuracies.size() > 0) {
 					for (NodeRef procuracy : employeeProcuracies) {
-						List<NodeRef> businessRoles = findNodesByAssociationRef(procuracy, IDelegation.ASSOC_PROCURACY_BUSINESS_ROLE, OrgstructureBean.TYPE_BUSINESS_ROLE, ASSOCIATION_TYPE.TARGET);
-						if (businessRoles != null && businessRoles.size() > 0) {
-							if (businessRoles.contains(businessRoleNodeRef)) {
-								List<ChildAssociationRef> delegationOptAssocs = nodeService.getParentAssocs(procuracy, IDelegation.ASSOC_DELEGATION_OPTS_PROCURACY,  RegexQNamePattern.MATCH_ALL);
-								if (delegationOptAssocs != null && delegationOptAssocs.size() > 0) {
-									NodeRef delegationOpts = delegationOptAssocs.get(0).getParentRef();
-									NodeRef procuracyOwner = findNodeByAssociationRef(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_OWNER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
-									if (procuracyOwner != null) {
-										if (isActive && isDelegationActive(delegationOpts)) {
-											results.add(procuracyOwner);
-											continue;
-										}
-										results.add(procuracyOwner);
-									}
-								}
-							}
+						NodeRef procuracyOwner = getProcuracyOwnerByBusinessRole(procuracy, businessRoleNodeRef, isActive);
+						if (procuracyOwner != null) {
+							results.add(procuracyOwner);
 						}
 					}
 				}
@@ -1051,5 +1038,36 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 			}
 		}
 		return results;
+	}
+
+	/**
+	 * Получение доверителя из настроек доверенности по бизнесс роли.
+	 * @param procuracy доверенность
+	 * @param businessRoleNodeRef бизнесс роль
+	 * @param isActive
+     * @return
+     */
+	private NodeRef getProcuracyOwnerByBusinessRole(NodeRef procuracy, NodeRef businessRoleNodeRef, boolean isActive) {
+		List<NodeRef> businessRoles = findNodesByAssociationRef(procuracy, IDelegation.ASSOC_PROCURACY_BUSINESS_ROLE, OrgstructureBean.TYPE_BUSINESS_ROLE, ASSOCIATION_TYPE.TARGET);
+		if (businessRoles != null && businessRoles.size() > 0) {
+			if (businessRoles.contains(businessRoleNodeRef)) {
+				List<ChildAssociationRef> delegationOptAssocs = nodeService.getParentAssocs(procuracy, IDelegation.ASSOC_DELEGATION_OPTS_PROCURACY,  RegexQNamePattern.MATCH_ALL);
+				if (delegationOptAssocs != null && delegationOptAssocs.size() > 0) {
+					NodeRef delegationOpts = delegationOptAssocs.get(0).getParentRef();
+					NodeRef procuracyOwner = findNodeByAssociationRef(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_OWNER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+					if (procuracyOwner != null) {
+						if (isActive) {
+							if (isDelegationActive(delegationOpts)) {
+								return procuracyOwner;
+							} else {
+								return null;
+							}
+						}
+						return procuracyOwner;
+					}
+				}
+			}
+		}
+		return null;
 	}
 }
