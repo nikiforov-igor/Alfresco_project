@@ -10,7 +10,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
@@ -261,5 +260,5 @@ public interface ArmService {
      * @param node аккордион
      * @return список корневых узлов арм делегирование
      */
-    Set<Pair<NodeRef, NodeRef>> getArmRunAsBossNodes(NodeRef node);
+    List<Pair<NodeRef, NodeRef>> getArmRunAsBossNodes(NodeRef node);
 }

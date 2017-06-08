@@ -106,6 +106,31 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
             return result;
         }
     };
+
+    private Comparator<NodeRef> listComparatorByName = new Comparator<NodeRef>() {
+        @Override
+        public int compare(NodeRef o1, NodeRef o2) {
+            int result = 0;
+            try {
+                String order1 = (String) nodeService.getProperty(o1, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
+                String order2 = (String) nodeService.getProperty(o2, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
+                if (order1 == null && order2 != null) {
+                    return -1;
+                } else if (order1 != null && order2 == null) {
+                    return 1;
+                } else if (order1 != null) {
+                    result = order1.compareTo(order2);
+                }
+                if (result == 0) {
+                    result = o1.getId().compareTo(o2.getId());  //позволяет иметь ноды с одинаковым порядком
+                }
+            } catch (Exception ex) {
+                logger.error(ex.getMessage(), ex);
+            }
+            return result;
+        }
+    };
+
     private StateMachineServiceBean stateMachineService;
 
     public ScriptService getScriptService() {
@@ -318,8 +343,8 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
         return result;
     }
 
-    public Set<Pair<NodeRef, NodeRef>> getArmRunAsBossNodes(NodeRef accordion) {
-        Set<Pair<NodeRef, NodeRef>> result = new HashSet<>();
+    public List<Pair<NodeRef, NodeRef>> getArmRunAsBossNodes(NodeRef accordion) {
+        List<Pair<NodeRef, NodeRef>> result = new ArrayList<>();
         String userName = AuthenticationUtil.getFullyAuthenticatedUser();
         NodeRef currentEmployee = orgstructureBean.getEmployeeByPerson(userName);
         if (currentEmployee != null) {
@@ -330,11 +355,11 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
                 delegationRootNode = associationRef.getTargetRef();
             }
             if (delegationRootNode != null) {
-                List<NodeRef> chiefsList = secretaryService.getChiefs(currentEmployee);
-                List<NodeRef> delegationOwners = delegationService.getDelegationOwnersByTrustee(currentEmployee, true);
-                chiefsList.addAll(delegationOwners);
+                Set<NodeRef> chiefSet = new TreeSet<>(listComparatorByName);
+                chiefSet.addAll(secretaryService.getChiefs(currentEmployee));
+                chiefSet.addAll(delegationService.getDelegationOwnersByTrustee(currentEmployee, true));
                 Set<String> auth = authorityService.getAuthoritiesForUser(userName);
-                for (NodeRef chief : chiefsList) {
+                for (NodeRef chief : chiefSet) {
                     String secretaryRoleCode = getAutorityForSecretary(chief);
                     String delegatRoleCode = lecmPermissionService.getAuthorityForDelegat(chief);
                     //Дополнительная проверка на тот случай, если сотрудник назначен секретарем, но реальных прав нет (не выдались из-за ошибки и т.д)
