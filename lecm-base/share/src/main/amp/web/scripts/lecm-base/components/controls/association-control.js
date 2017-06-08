@@ -217,10 +217,8 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		onRemoveSelectedItem: function (layer, args) {
-			var nodeData, id, el, value, idx, added=[], removed=[], item, index;
 			if (Alfresco.util.hasEventInterest(this, args) && !this.options.disabled && !this.readonly) {
-				nodeData = args[1].removed;
-				id = this.id + '-' + nodeData.nodeRef.replace(/:|\//g, '_');
+				var id = this.id + '-' + args[1].removed.nodeRef.replace(/:|\//g, '_');
 				Selector.query('[id="' + id + '"]', this.widgets.selected).forEach(function (el) {
 					Event.removeListener(el, 'click');
 					this.widgets.selected.removeChild(el.parentNode.parentNode);
@@ -232,31 +230,13 @@ LogicECM.module = LogicECM.module || {};
 						Dom.removeClass(this.widgets.autocomplete.getInputEl(), 'hidden');
 					}
 				}
-				el = Dom.get(this.id);
-				value = el.value.split(',');
-				idx = value.indexOf(nodeData.nodeRef);
-				if (idx > -1) {
-					value.splice(idx, 1);
-					el.value = value.join(',');
+				Dom.get(this.id).value = Alfresco.util.encodeHTML(Object.keys(this.widgets.picker.selected).join(","));
+				if (this.widgets.added) {
+                	this.widgets.added.value = Alfresco.util.encodeHTML(Object.keys(this.widgets.picker.added).join(","));
 				}
-                for (index in this.fieldValues) {
-                    if (this.fieldValues.hasOwnProperty(index)) {
-                        item = this.fieldValues[index];
-                        if (value.indexOf(item) === -1) {
-                            removed.push(item);
-                        }
-                    }
-                }
-                this.widgets.removed.value = removed.join(',');
-                for (index in value) {
-                    if (value.hasOwnProperty(index)) {
-                        item = value[index];
-						if (this.fieldValues.indexOf(item) !== -1) {
-                            added.push(item);
-                        }
-                    }
-                }
-                this.widgets.added.value = added.join(',');
+				if (this.widgets.removed) {
+                	this.widgets.removed.value = Alfresco.util.encodeHTML(Object.keys(this.widgets.picker.removed).join(","));
+				}
 			}
 		},
 
