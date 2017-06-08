@@ -597,6 +597,9 @@
 				<field-visibility>
 					<show id="lecm-arm:list-query-child-rule" force="true"/>
 					<show id="lecm-arm:child-rule-substitute-string" force="true"/>
+					<show id="lecm-arm:node-rule-page-count" force="true"/>
+					<show id="lecm-arm:node-rule-search-template" force="true"/>
+					<show id="lecm-arm:node-rule-sort-config" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-arm:list-query-child-rule">
@@ -616,6 +619,9 @@
 				<field-visibility>
 					<show id="lecm-arm:list-query-child-rule" force="true"/>
 					<show id="lecm-arm:child-rule-substitute-string" force="true"/>
+					<show id="lecm-arm:node-rule-page-count" force="true"/>
+					<show id="lecm-arm:node-rule-search-template" force="true"/>
+					<show id="lecm-arm:node-rule-sort-config" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-arm:list-query-child-rule">
@@ -636,6 +642,9 @@
 				<field-visibility>
 					<show id="lecm-arm:child-rule-dictionary-assoc" force="true"/>
 					<show id="lecm-arm:child-rule-substitute-string" force="true"/>
+					<show id="lecm-arm:node-rule-page-count" force="true"/>
+					<show id="lecm-arm:node-rule-search-template" force="true"/>
+					<show id="lecm-arm:node-rule-sort-config" force="true"/>
 				</field-visibility>
 			</form>
 		</forms>
@@ -647,6 +656,9 @@
 				<field-visibility>
 					<show id="lecm-arm:child-rule-dictionary-assoc" force="true"/>
 					<show id="lecm-arm:child-rule-substitute-string" force="true"/>
+					<show id="lecm-arm:node-rule-page-count" force="true"/>
+					<show id="lecm-arm:node-rule-search-template" force="true"/>
+					<show id="lecm-arm:node-rule-sort-config" force="true"/>
 				</field-visibility>
 			</form>
 		</forms>
@@ -708,6 +720,9 @@
 					<show id="lecm-arm:xpath-child-rule-types" force="true"/>
 					<show id="lecm-arm:xpath-child-rule-filter" force="true"/>
 					<show id="lecm-arm:child-rule-substitute-string" force="true"/>
+					<show id="lecm-arm:node-rule-page-count" force="true"/>
+					<show id="lecm-arm:node-rule-search-template" force="true"/>
+					<show id="lecm-arm:node-rule-sort-config" force="true"/>
 				</field-visibility>
 			</form>
 		</forms>
@@ -721,6 +736,9 @@
 					<show id="lecm-arm:xpath-child-rule-types" force="true"/>
 					<show id="lecm-arm:xpath-child-rule-filter" force="true"/>
 					<show id="lecm-arm:child-rule-substitute-string" force="true"/>
+					<show id="lecm-arm:node-rule-page-count" force="true"/>
+					<show id="lecm-arm:node-rule-search-template" force="true"/>
+					<show id="lecm-arm:node-rule-sort-config" force="true"/>
 				</field-visibility>
 			</form>
 		</forms>
