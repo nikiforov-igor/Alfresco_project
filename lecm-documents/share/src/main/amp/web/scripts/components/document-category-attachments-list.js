@@ -707,6 +707,19 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     // Finally set the innerHTML of the main node as the text string of the YUI datatable
                     me.widgets.dataTable.set("MSG_EMPTY", main.innerHTML);
 
+                    if (oFullResponse.isComplex) {
+                        var button = Dom.get(me.id + "-largeFileUpload-container");
+                        if (button) {
+                            Dom.removeClass(button, "hidden");
+                            Alfresco.util.createYUIButton(me, "largeFileUpload-button", me.onLargeFileUpload,
+                                {
+                                    disabled: false,
+                                    value: "CreateChildren"
+                                });
+                        }
+                    }
+
+
                     return oParsedResponse;
                 };
             },

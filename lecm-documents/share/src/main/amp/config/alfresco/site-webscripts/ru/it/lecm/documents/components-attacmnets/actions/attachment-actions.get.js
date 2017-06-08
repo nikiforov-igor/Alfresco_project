@@ -16,30 +16,7 @@ function main() {
 	if (attachmentDetails) {
 		model.document = getDocumentByAttachments(model.nodeRef);
 		model.attachmentDetailsJSON = jsonUtils.toJSONString(attachmentDetails);
-		RemoveActionForComplexAttachment(attachmentDetails);
 		doclibCommon();
-	}
-}
-
-function RemoveActionForComplexAttachment(nodeDetails) {
-	if (nodeDetails != null && nodeDetails.item != null && nodeDetails.item.node != null) {
-		var aspects = nodeDetails.item.node.aspects;
-        var isComplexAttachment = false;
-		if (aspects != null) {
-			for (var i = 0; i < aspects.length; i++) {
-				if (aspects[i] == "lecm-document-aspects:complex-attachment") {
-					isComplexAttachment = true;
-					break;
-				}
-			}
-		}
-
-		if (isComplexAttachment) {
-			var index = showActions.indexOf("document-view-content");
-			if (index > -1) {
-				showActions.splice(index, 1);
-			}
-		}
 	}
 }
 

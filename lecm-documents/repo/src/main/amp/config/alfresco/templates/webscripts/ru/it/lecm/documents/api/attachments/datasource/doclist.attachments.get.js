@@ -29,6 +29,8 @@ function getAttachmentslist() {
 		category: categoryNode ? categoryNode.nodeRef.toString() : ""
 	};
 
+	model.isComplex = base.getGlobalProperty("lecm.complex.attachment.enable", "false") == "true";
+
 	// Loop through and evaluate each node in this result set
 	for each(node in allNodes) {
 		// Get evaluated properties.
