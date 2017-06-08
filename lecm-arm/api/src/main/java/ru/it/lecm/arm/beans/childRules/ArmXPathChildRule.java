@@ -105,7 +105,6 @@ public class ArmXPathChildRule extends ArmBaseChildRule {
 			sp.setQuery(processedQuery);
 
 			if (request.getMaxItems() != -1) {
-				totalChildren = searchCounter.query(sp, false, 0, 0);
 				sp.setSkipCount(request.getSkipCount());
 				sp.setMaxItems(request.getMaxItems());
 			}
@@ -119,6 +118,7 @@ public class ArmXPathChildRule extends ArmBaseChildRule {
 					ArmNode rowNode = service.wrapAnyNodeAsObject(row.getNodeRef(), node, getSubstituteString());
 					nodes.add(rowNode);
 				}
+				totalChildren = results.getNumberFound();
 			} finally {
 				if (results != null) {
 					results.close();

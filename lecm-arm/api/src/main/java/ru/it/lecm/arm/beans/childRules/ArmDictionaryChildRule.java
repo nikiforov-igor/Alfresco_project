@@ -54,9 +54,7 @@ public class ArmDictionaryChildRule extends ArmBaseChildRule {
 
         query = processorService.processQuery(query);
         sp.setQuery(query);
-        long totalChildren = -1;
         if (request.getMaxItems() != -1) {
-            totalChildren = searchCounter.query(sp, false, 0, 0);
             sp.setSkipCount(request.getSkipCount());
             sp.setMaxItems(request.getMaxItems());
         }
@@ -65,11 +63,13 @@ public class ArmDictionaryChildRule extends ArmBaseChildRule {
 
         ResultSet resultSet = searchService.query(sp);
 
+        long totalChildren = -1;
         List<ArmNode> nodes = new ArrayList<>();
         if (resultSet != null) {
             for (ResultSetRow row : resultSet) {
                 nodes.add(service.wrapAnyNodeAsObject(row.getNodeRef(), node, getSubstituteString()));
             }
+            totalChildren = resultSet.getNumberFound();
         }
         return new ArmChildrenResponse(nodes, totalChildren == -1 ? nodes.size() : totalChildren);
     }

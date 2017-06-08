@@ -52,7 +52,6 @@ public abstract class ArmBaseChildRule {
 
     protected NodeService nodeService;
     protected NamespaceService namespaceService;
-    protected SearchCounter searchCounter;
     protected SearchService searchService;
     protected SearchQueryProcessorService processorService;
 
@@ -62,10 +61,6 @@ public abstract class ArmBaseChildRule {
 
     public void setNamespaceService(NamespaceService namespaceService) {
         this.namespaceService = namespaceService;
-    }
-
-    public void setSearchCounter(SearchCounter searchCounter) {
-        this.searchCounter = searchCounter;
     }
 
     public void setSearchService(SearchService searchService) {

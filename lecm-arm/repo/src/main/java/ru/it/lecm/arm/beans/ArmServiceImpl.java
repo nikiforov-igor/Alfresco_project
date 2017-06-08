@@ -48,7 +48,6 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
     private ScriptService scriptService;
     private IDelegation delegationService;
     private LecmPermissionService lecmPermissionService;
-    private SearchCounter searchCounter;
 
     private SimpleCache<String, List<ArmColumn>> columnsCache;
     private SimpleCache<NodeRef, List<ArmFilter>> filtersCache;
@@ -171,10 +170,6 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
 
     public void setProcessorService(SearchQueryProcessorService processorService) {
         this.processorService = processorService;
-    }
-
-    public void setSearchCounter(SearchCounter searchCounter) {
-        this.searchCounter = searchCounter;
     }
 
     public void setDelegationService(IDelegation delegationService) {
@@ -745,7 +740,6 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
                     result.setNamespaceService(namespaceService);
                     result.setNodeService(nodeService);
                     result.setProcessorService(processorService);
-                    result.setSearchCounter(searchCounter);
                     result.setSearchService(searchService);
                 }
                 childRulesCache.put(node, result == null ? ArmBaseChildRule.NULL_RULE : result);
