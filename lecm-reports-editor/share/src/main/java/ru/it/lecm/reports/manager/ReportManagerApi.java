@@ -101,20 +101,5 @@ public class ReportManagerApi {
 		}
 		throw new RuntimeException(errmsg);
 	}
-
-	@SuppressWarnings("unused")
-	public JSONArray getUserPreferencesForReport(String reportCode) {
-		final String url = "/lecm/user-settings/get?key=reports."+ reportCode + ".saved-preferences";
-		final Response response = scriptRemote.connect("alfresco").get(url);
-		final String errmsg = String.format( "Cannot get preferences for report '%s'", reportCode);
-		try {
-			if (response.getStatus().getCode() == ResponseStatus.STATUS_OK) {
-				return new JSONArray(response.getResponse());
-			}
-		} catch (JSONException e) {
-			logger.warn( errmsg, e);
-		}
-		throw new RuntimeException( errmsg);
-	}
 }
 
