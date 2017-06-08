@@ -89,7 +89,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         boolean isForDelegation = Boolean.TRUE.equals(properties.get(ArmService.PROP_IS_FOR_SECRETARIES));
         if (isForDelegation && isAccordion(node)) {
             List<ArmNode> result = new ArrayList<>();
-            Set<Pair<NodeRef,NodeRef>> bossArmNodePairs = service.getArmRunAsBossNodes(node);
+            List<Pair<NodeRef,NodeRef>> bossArmNodePairs = service.getArmRunAsBossNodes(node);
             for (Pair<NodeRef,NodeRef> bossNodePair : bossArmNodePairs) {
                 result.add(wrapArmNodeAsObject(bossNodePair.getFirst(), false, false, currentSection, bossNodePair.getSecond()));
             }
