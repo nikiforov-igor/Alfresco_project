@@ -90,7 +90,7 @@
 	YAHOO.util.Event.onDOMReady(init);
 })();
 //]]></script>
-
+<div id="${fieldHtmlId}-parent">
 <#if form.mode == "view">
 	<div class="control checkbox-control viewmode">
 		<div class="label-div">
@@ -129,4 +129,5 @@
 		</div>
 	</div>
 </#if>
+</div>
 <div class="clear"></div>

@@ -264,7 +264,7 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
                 },
                 onSuccess: {
                     fn: function (response) {
-                        Bubbling.fire("datagridRefresh", {
+                        YAHOO.Bubbling.fire("datagridRefresh", {
                             bubblingLabel: me.options.bubblingLabel
                         });
                         Alfresco.util.PopupManager.displayMessage({

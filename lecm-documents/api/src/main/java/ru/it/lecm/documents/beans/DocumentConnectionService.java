@@ -159,7 +159,8 @@ public interface DocumentConnectionService {
 	 * @param connectionTypeCode тип связи
 	 * @return Список ссылок на связи
 	 */
-	public List<NodeRef> getConnectionsWithDocument(NodeRef documentRef, String connectionTypeCode);
+	List<NodeRef> getConnectionsWithDocument(NodeRef documentRef, String connectionTypeCode);
+	List<NodeRef> getConnectionsWithDocument(NodeRef documentRef, NodeRef connectionTypeRef);
 
 	/**
 	 * Получение документов, связанных с документом
@@ -226,7 +227,10 @@ public interface DocumentConnectionService {
 	 * @param connectedDocumentType Тип связанного документа
 	 * @return Связанные документы
 	 */
-	public List<NodeRef> getConnectedDocuments(NodeRef documentRef, String connectionTypeCode, QName connectedDocumentType);
+	List<NodeRef> getConnectedDocuments(NodeRef documentRef, String connectionTypeCode, QName connectedDocumentType);
+	List<NodeRef> getConnectedDocuments(NodeRef documentRef, NodeRef connectionType, QName connectedDocumentType);
+	List<NodeRef> getConnectedDocuments(NodeRef documentRef, String connectionTypeCode);
+	List<NodeRef> getConnectedDocuments(NodeRef documentRef, NodeRef connectionTypeRef);
 
 	/**
 	 * Получение связанных документов
@@ -236,7 +240,8 @@ public interface DocumentConnectionService {
 	 * @param onlySystem Только системные связи
 	 * @return Связанные документы
 	 */
-	public List<NodeRef> getConnectedDocuments(NodeRef documentRef, String connectionTypeCode, QName connectedDocumentType, boolean onlySystem);
+	List<NodeRef> getConnectedDocuments(NodeRef documentRef, String connectionTypeCode, QName connectedDocumentType, boolean onlySystem);
+	List<NodeRef> getConnectedDocuments(NodeRef documentRef, NodeRef connectionType, QName connectedDocumentType, boolean onlySystem);
 
 	/**
 	 * Удаление связи
@@ -251,8 +256,10 @@ public interface DocumentConnectionService {
 	List<NodeRef> getNotAvailableConnectionTypes(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef);
 	List<NodeRef> getNotAvailableConnectionTypes(NodeRef primaryDocumentRef, QName connectedDocumentType);
 
-	public List<NodeRef> getConnectedWithDocument(NodeRef documentRef, String connectionTypeCode, QName connectedDocumentType, boolean onlySystem);
-	public List<NodeRef> getConnectedWithDocument(NodeRef documentRef, String connectionTypeCode, QName connectedDocumentType);
-	public List<NodeRef> getConnectedWithDocument(NodeRef documentRef, QName connectedDocumentType);
-	public List<NodeRef> getConnectedWithDocument(NodeRef documentRef, boolean onlySystem);
+	List<NodeRef> getConnectedWithDocument(NodeRef documentRef, NodeRef connectionType, QName connectedDocumentType, boolean onlySystem);
+	List<NodeRef> getConnectedWithDocument(NodeRef documentRef, String connectionTypeCode, QName connectedDocumentType, boolean onlySystem);
+	List<NodeRef> getConnectedWithDocument(NodeRef documentRef, NodeRef connectionType, QName connectedDocumentType);
+	List<NodeRef> getConnectedWithDocument(NodeRef documentRef, String connectionTypeCode, QName connectedDocumentType);
+	List<NodeRef> getConnectedWithDocument(NodeRef documentRef, QName connectedDocumentType);
+	List<NodeRef> getConnectedWithDocument(NodeRef documentRef, boolean onlySystem);
 }
