@@ -35,8 +35,11 @@ public abstract class BaseBean extends AbstractLifecycleBean implements Initiali
 
     public static final String DICTIONARY_NAMESPACE = "http://www.it.ru/lecm/dictionary/1.0";
     public static final String LINKS_NAMESPACE = "http://www.it.ru/logicECM/links/1.0";
+    public static final String ASPECTS_NAMESPACE = "http://www.it.ru/logicECM/base-aspects/1.0";
     public static final QName IS_ACTIVE = QName.createQName(DICTIONARY_NAMESPACE, "active");
     public static final QName ASPECT_ACTIVE = QName.createQName(DICTIONARY_NAMESPACE, "aspect_active");
+    public static final QName ASPECT_ORDERABLE = QName.createQName(ASPECTS_NAMESPACE, "orderable");
+    public static final QName PROP_ORDER = QName.createQName(ASPECTS_NAMESPACE, "order");
 
     private static final Logger logger = LoggerFactory.getLogger(BaseBean.class);
 

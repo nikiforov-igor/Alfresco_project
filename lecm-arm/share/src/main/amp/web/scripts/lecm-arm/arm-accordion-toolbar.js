@@ -47,7 +47,7 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
         },
 		onNewRow: function(p_sType, p_aArgs, p_oItem) {
 			var attributes = p_oItem.attributes ? p_oItem.attributes : [];
-			if (this.currentNodeArgs.nodeType !== 'lecm-arm:node') {
+			if (this.currentNodeArgs && this.currentNodeArgs.nodeType !== 'lecm-arm:node') {
 				attributes.push({
 					initial: {
 						formsName: "selectedArmTreeNode",
