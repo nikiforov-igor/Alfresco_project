@@ -2,7 +2,8 @@ package ru.it.lecm.arm.beans;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.service.cmr.repository.*;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.Pair;
@@ -298,7 +299,6 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
             if (isForDelegation) {
                 searchQuery = searchQuery.replaceAll("#current-user", "#boss-ref");
             }
-            searchQuery = formatQuery(searchQuery, nodeRef);
             node.setSearchQuery(searchQuery.replaceAll("\\n", " ").replaceAll("\\r", " "));
         }
         node.setReportCodes((String) properties.get(ArmService.PROP_REPORT_CODES));
