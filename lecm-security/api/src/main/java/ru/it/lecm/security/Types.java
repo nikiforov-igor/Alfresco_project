@@ -244,8 +244,8 @@ public final class Types {
 		public static SGRole getSGRole(String itemId, String role) {
 			return getSGRole(itemId, role, null);
 		}
-		public static SGRole getSGRole(String folderId, String role, String displayName) {
-			return new SGRole(folderId, role, displayName);
+		public static SGRole getSGRole(String itemId, String role, String displayName) {
+			return new SGRole(itemId, role, displayName);
 		}
 	}
 
