@@ -3,6 +3,6 @@
     <description>Processing upload large attachments</description>
     <url>/lecm/document/attachments/complex</url>
     <authentication>user</authentication>
-    <transaction>required</transaction>
+    <transaction allow="readwrite">required</transaction>
     <format default="json"/>
 </webscript>
