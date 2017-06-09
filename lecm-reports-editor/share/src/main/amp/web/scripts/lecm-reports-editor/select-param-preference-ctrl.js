@@ -38,6 +38,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
             id: null,
 
             select: null,
+            firstSelectOption: null,
 
             preferences: [],
 
@@ -127,6 +128,9 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                     option.innerHTML = preference.name;
                     option.selected = (i == 0) || (this.options.currentValue && this.options.currentValue == preference.name);
                     select.appendChild(option);
+                    if (!this.firstSelectOption) {
+                        this.firstSelectOption = option;
+                    }
                 }
                 if (fireChangeEvent) {
                     this.onSelectChange();
@@ -270,7 +274,13 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                                     option.value = this.preferences[0].name;
                                     option.innerHTML = this.preferences[0].name;
                                     option.selected = true;
-                                    select.appendChild(option);
+
+                                    if (this.firstSelectOption) {
+                                        Dom.insertBefore(option, this.firstSelectOption);
+                                    } else {
+                                        select.appendChild(option);
+                                        this.firstSelectOption = option;
+                                    }
                                 }
                             }
                         }

@@ -103,44 +103,12 @@ public class ReportForm extends LecmFormGet {
         if (!params.isEmpty()) {
             JSONArray preferences = getUserPreferencesForReport(itemId);
 
-            List<JSONObject> jsonValues = new ArrayList<>();
-            for (int i = 0; i < preferences.length(); i++) {
-                try {
-                    jsonValues.add(preferences.getJSONObject(i));
-                } catch (JSONException e) {
-                    logger.error(e.getMessage(), e);
-                }
-            }
-            Collections.sort(jsonValues, new Comparator<JSONObject>() {
-                final String KEY_CREATED = "created";
-
-                @Override
-                public int compare(JSONObject a, JSONObject b) {
-                    Date valA = null;
-                    Date valB = null;
-
-                    try {
-                        valA = ISO8601DateFormat.parse(String.valueOf(a.get(KEY_CREATED)));
-                        valB = ISO8601DateFormat.parse(String.valueOf(b.get(KEY_CREATED)));
-                    } catch (JSONException e) {
-                        //do something
-                    }
-                    if (valA == null && valB != null) {
-                        return 1;
-                    } else if (valA != null && valB == null) {
-                        return -1;
-                    } else if (valA != null) {
-                        return -valA.compareTo(valB);
-                    }
-                    return 0;
-                }
-            });
-
             String lastPreferenceName = null;
-            if (!jsonValues.isEmpty()) {
+            if (preferences.length() > 0) {
                 try {
-                    JSONObject savedArgs = jsonValues.get(0).getJSONObject("args");
-                    lastPreferenceName = jsonValues.get(0).getString("name");
+                    JSONObject lastParams = preferences.getJSONObject(0);
+                    JSONObject savedArgs = lastParams.getJSONObject("args");
+                    lastPreferenceName = lastParams.getString("name");
 
                     Iterator keys = savedArgs.keys();
                     while (keys.hasNext()) {
