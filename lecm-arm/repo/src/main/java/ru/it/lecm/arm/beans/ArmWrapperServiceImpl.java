@@ -305,6 +305,13 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         node.setSearchType((String) properties.get(ArmService.PROP_SEARCH_TYPE));
 
         node.setMaxItemsCount(-1);
+
+        if (!onlyMeta) {
+            node.setCounter(service.getNodeCounter(nodeRef));
+            node.setColumns(getNodeColumns(nodeRef));
+            node.setAvaiableFilters(getNodeFilters(nodeRef));
+            node.setCreateTypes(getNodeCreateTypes(nodeRef));
+
         List<NodeRef> dynamicNodes = service.getChildNodes(nodeRef);
         for (NodeRef dynamicNode : dynamicNodes) {
             ArmBaseChildRule stNode = service.getNodeChildRule(dynamicNode);
@@ -313,12 +320,6 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
                 break;
             }
         }
-        
-        if (!onlyMeta) {
-            node.setCounter(service.getNodeCounter(nodeRef));
-            node.setColumns(getNodeColumns(nodeRef));
-            node.setAvaiableFilters(getNodeFilters(nodeRef));
-            node.setCreateTypes(getNodeCreateTypes(nodeRef));
         }
         return node;
     }
@@ -495,7 +496,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
                 QName parentType = nodeService.getType(parentNode);
                 if (parentType.equals(ArmService.TYPE_ARM_NODE)
                         || parentType.equals(ArmService.TYPE_ARM_ACCORDION)) {
-                    String parentQuery = getFullQuery(wrapArmNodeAsObject(parentNode, service.isArmAccordion(parentNode)), includeTypes, true);
+                    String parentQuery = getFullQuery(wrapArmNodeAsObject(parentNode, service.isArmAccordion(parentNode), true), includeTypes, true);
                     insertQueryToBuffer(builder, parentQuery);
                 }
             }
