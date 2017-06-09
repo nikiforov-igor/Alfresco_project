@@ -78,6 +78,11 @@
     <#assign useDeferedReinit = true>
 </#if>
 
+<#assign blockChangeItemOnInit = false>
+<#if params.blockChangeItemOnInit?? && params.blockChangeItemOnInit == "true">
+	<#assign blockChangeItemOnInit = true>
+</#if>
+
 <#assign allowedScript = ""/>
 <#if (field.control.params.allowedNodesScript?? && field.control.params.allowedNodesScript != "")>
     <#assign allowedScript = field.control.params.allowedNodesScript/>
@@ -318,7 +323,8 @@
 				checkType: ${checkType?string},
 				useDeferedReinit: ${useDeferedReinit?string},
 				fieldId: "${field.configName}",
-				formId: "${args.htmlid}"
+				formId: "${args.htmlid}",
+                blockChangeItemOnInit: ${blockChangeItemOnInit?string}
 			}).setMessages( ${messages} );
 			<#if readonly>
 				LogicECM.module.Base.Util.readonlyControl('${args.htmlid}', '${field.configName}', true);

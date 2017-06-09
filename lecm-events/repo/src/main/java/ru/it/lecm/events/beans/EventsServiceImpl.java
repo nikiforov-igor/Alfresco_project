@@ -34,7 +34,6 @@ import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.io.Serializable;
 import java.util.*;
-import org.springframework.context.ApplicationEvent;
 
 /**
  * User: AIvkin Date: 25.03.2015 Time: 14:44
@@ -884,7 +883,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 				if (i > 0) {
 					result.append(" OR ");
 				}
-				result.append("@").append(prop.replaceAll("-", "\\\\-").replaceAll(":", "\\\\:")).append(": \"*").append(currentEmployee).append("*\"");
+				result.append("@").append(prop.replaceAll("-", "\\\\-").replaceAll(":", "\\\\:")).append("\\-ref: \"*").append(currentEmployee).append("*\"");
 				i++;
 			}
 			result.append(")");

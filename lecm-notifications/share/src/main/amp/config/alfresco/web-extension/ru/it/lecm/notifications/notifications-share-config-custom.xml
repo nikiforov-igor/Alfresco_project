@@ -253,6 +253,9 @@
 				<field-visibility>
 					<show id="lecm-notification-template:exclusion-employee"/>
 				</field-visibility>
+				<appearance>
+					<field id="lecm-notification-template:exclusion-employee" mandatory="true" label-id="title.template-exclusion-employees"/>
+				</appearance>
 			</form>
         </forms>
 	</config>

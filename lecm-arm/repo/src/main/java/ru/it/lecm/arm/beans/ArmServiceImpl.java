@@ -17,10 +17,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import ru.it.lecm.arm.beans.childRules.*;
 import ru.it.lecm.arm.expression.ExpressionForArm;
-import ru.it.lecm.base.beans.BaseBean;
-import ru.it.lecm.base.beans.SearchQueryProcessorService;
-import ru.it.lecm.base.beans.TransactionNeededException;
-import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import ru.it.lecm.base.beans.*;
 import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -109,6 +106,31 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
             return result;
         }
     };
+
+    private Comparator<NodeRef> listComparatorByName = new Comparator<NodeRef>() {
+        @Override
+        public int compare(NodeRef o1, NodeRef o2) {
+            int result = 0;
+            try {
+                String order1 = (String) nodeService.getProperty(o1, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
+                String order2 = (String) nodeService.getProperty(o2, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
+                if (order1 == null && order2 != null) {
+                    return -1;
+                } else if (order1 != null && order2 == null) {
+                    return 1;
+                } else if (order1 != null) {
+                    result = order1.compareTo(order2);
+                }
+                if (result == 0) {
+                    result = o1.getId().compareTo(o2.getId());  //позволяет иметь ноды с одинаковым порядком
+                }
+            } catch (Exception ex) {
+                logger.error(ex.getMessage(), ex);
+            }
+            return result;
+        }
+    };
+
     private StateMachineServiceBean stateMachineService;
 
     public ScriptService getScriptService() {
@@ -321,8 +343,8 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
         return result;
     }
 
-    public Set<Pair<NodeRef, NodeRef>> getArmRunAsBossNodes(NodeRef accordion) {
-        Set<Pair<NodeRef, NodeRef>> result = new HashSet<>();
+    public List<Pair<NodeRef, NodeRef>> getArmRunAsBossNodes(NodeRef accordion) {
+        List<Pair<NodeRef, NodeRef>> result = new ArrayList<>();
         String userName = AuthenticationUtil.getFullyAuthenticatedUser();
         NodeRef currentEmployee = orgstructureBean.getEmployeeByPerson(userName);
         if (currentEmployee != null) {
@@ -333,11 +355,11 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
                 delegationRootNode = associationRef.getTargetRef();
             }
             if (delegationRootNode != null) {
-                List<NodeRef> chiefsList = secretaryService.getChiefs(currentEmployee);
-                List<NodeRef> delegationOwners = delegationService.getDelegationOwnersByTrustee(currentEmployee, true);
-                chiefsList.addAll(delegationOwners);
+                Set<NodeRef> chiefSet = new TreeSet<>(listComparatorByName);
+                chiefSet.addAll(secretaryService.getChiefs(currentEmployee));
+                chiefSet.addAll(delegationService.getDelegationOwnersByTrustee(currentEmployee, true));
                 Set<String> auth = authorityService.getAuthoritiesForUser(userName);
-                for (NodeRef chief : chiefsList) {
+                for (NodeRef chief : chiefSet) {
                     String secretaryRoleCode = getAutorityForSecretary(chief);
                     String delegatRoleCode = lecmPermissionService.getAuthorityForDelegat(chief);
                     //Дополнительная проверка на тот случай, если сотрудник назначен секретарем, но реальных прав нет (не выдались из-за ошибки и т.д)
@@ -687,8 +709,6 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
                     if (TYPE_QUERY_CHILD_RULE.equals(queryType)) {
                         result = new ArmQueryChildRule();
                         ((ArmQueryChildRule) result).setListQuery((String) props.get(PROP_LIST_QUERY_CHILD_RULE));
-                        ((ArmQueryChildRule) result).setSearchService(searchService);
-                        ((ArmQueryChildRule) result).setProcessorService(processorService);
                     } else if (TYPE_DICTIONARY_CHILD_RULE.equals(queryType)) {
                         result = new ArmDictionaryChildRule();
                         NodeRef dictionary = findNodeByAssociationRef(query, ASSOC_DICTIONARY_CHILD_RULE, null, ASSOCIATION_TYPE.TARGET);
@@ -722,9 +742,6 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
 						if(filter != null && !filter.isEmpty()) {
 							((ArmXPathChildRule) result).setFilter(filter);
 						}
-                        ((ArmXPathChildRule) result).setSearchService(searchService);
-                        ((ArmXPathChildRule) result).setNodeService(nodeService);
-						((ArmXPathChildRule) result).setProcessorService(processorService);
                     } else if (TYPE_SCRIPT_CHILD_RULE.equals(queryType)) {
                         result = new ArmScriptChildRule();
                         ((ArmScriptChildRule) result).setScript((String) props.get(PROP_ROOT_SCRIPT));
@@ -732,6 +749,23 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
                         ((ArmScriptChildRule) result).setOrgstructureService(orgstructureBean);
                     }
 					result.setSubstituteString((String) props.get(PROP_CHILD_RULE_SUBSTITUTE_STRING));
+                    //Инициализируем общие параметры
+                    Integer maxItems = (Integer) props.get(PROP_MAX_ITEMS);
+                    if (maxItems != null) {
+                        result.setMaxItems(maxItems);
+                    }
+                    String searchTemplate = (String) props.get(PROP_SEARCH_TEMPLATE);
+                    if (searchTemplate != null) {
+                        result.setSearchTemplate(searchTemplate);
+                    }
+                    String sortConfig = (String) props.get(PROP_SORT_CONFIG);
+                    if (sortConfig != null) {
+                        result.setSortConfig(sortConfig);
+                    }
+                    result.setNamespaceService(namespaceService);
+                    result.setNodeService(nodeService);
+                    result.setProcessorService(processorService);
+                    result.setSearchService(searchService);
                 }
                 childRulesCache.put(node, result == null ? ArmBaseChildRule.NULL_RULE : result);
             }

@@ -390,4 +390,6 @@ public interface DocumentService {
     String getDocumentUrl(NodeRef document);
 
     String getDocumentTypeLabel(String docType);
+
+	NodeRef getDocumentSearchObject(NodeRef documentRef);
 }

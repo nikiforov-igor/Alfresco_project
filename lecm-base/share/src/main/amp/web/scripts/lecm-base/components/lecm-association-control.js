@@ -242,7 +242,9 @@ LogicECM.module = LogicECM.module || {};
 
                 onlyTreeNodeSelectable: false,
 
-				noValueLabel: "form.control.novalue"
+				noValueLabel: "form.control.novalue",
+
+                blockChangeItemOnInit: false
 			},
 
 			onReady: function () {
@@ -766,6 +768,7 @@ LogicECM.module = LogicECM.module || {};
                             this.selectedItems[node.nodeRef] = node;
                             this.singleSelectedItem = node;
 
+                            this.options.blockChangeItemOnInit = false;
                             this.updateFormFields();
                             this.updateSelectedItems();
                             this.updateAddButtons();
@@ -797,6 +800,7 @@ LogicECM.module = LogicECM.module || {};
 							this.selectedItems[node.nodeRef] = node;
 							this.singleSelectedItem = node;
 
+                            this.options.blockChangeItemOnInit = false;
 							this.updateFormFields();
 							this.updateSelectedItems();
 							this.updateAddButtons();
@@ -869,6 +873,7 @@ LogicECM.module = LogicECM.module || {};
 				if (e) {
 					Event.preventDefault(e);
 				}
+                this.options.blockChangeItemOnInit = false;
 				// Update parent form
 				this.updateFormFields();
 				if (this.options.fireAction.ok != null) {
@@ -2257,13 +2262,15 @@ LogicECM.module = LogicECM.module || {};
 						});
 				}
                 if (changeItemsFireAction && this.options.changeItemsFireAction != null && this.options.changeItemsFireAction != "") {
-					YAHOO.Bubbling.fire(this.options.changeItemsFireAction, {
-						selectedItems: this.selectedItems,
-						formId: this.options.formId,
-						fieldId: this.options.fieldId,
-						control: this
-					});
-				}
+                    if (!(el && el.defaultValue == this.defaultValue) || !this.options.blockChangeItemOnInit) {
+                        YAHOO.Bubbling.fire(this.options.changeItemsFireAction, {
+                            selectedItems: this.selectedItems,
+                            formId: this.options.formId,
+                            fieldId: this.options.fieldId,
+                            control: this
+                        });
+                    }
+                }
 			},
 
 			canAutocompleteInputShow: function() {

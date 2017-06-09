@@ -425,6 +425,27 @@
 					<index enabled="false">
 					</index>
 				</property>
+				<!--Максимальное количество отображаемых узлов в дереве-->
+				<property name="lecm-arm:node-rule-page-count">
+					<type>d:int</type>
+					<mandatory>false</mandatory>
+					<default>-1</default>
+					<index enabled="false" />
+				</property>
+				<!-- Шаблон поиска дочерних узлов -->
+				<property name="lecm-arm:node-rule-search-template">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<default></default>
+					<index enabled="false" />
+				</property>
+				<!-- Сортировка дочерних узлов -->
+				<property name="lecm-arm:node-rule-sort-config">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<default></default>
+					<index enabled="false" />
+				</property>
 			</properties>
 		</type>
 		<type name="lecm-arm:query-child-rule">
