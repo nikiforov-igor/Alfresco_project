@@ -174,6 +174,54 @@ LogicECM.module.Notifications = LogicECM.module.Notifications || {};
             YAHOO.util.Dom.setStyle(this.id + "-body", "visibility", "visible");
 
             YAHOO.Bubbling.fire("datagridVisible", this);
+        },
+
+        getCustomCellFormatter: function (grid, elCell, oRecord, oColumn, oData) {
+            var html = '';
+            if (!oRecord) {
+                oRecord = this.getRecord(elCell);
+            }
+            if (!oColumn) {
+                oColumn = this.getColumn(elCell.parentNode.cellIndex);
+            }
+
+            if (oRecord && oColumn) {
+                if (!oData) {
+                    oData = oRecord.getData('itemData')[oColumn.field];
+                }
+
+                var datalistColumn = grid.datagridColumns[oColumn.key];
+                if (datalistColumn) {
+                    if (oData) {
+                        oData = YAHOO.lang.isArray(oData) ? oData : [oData];
+                        for (var i = 0, ii = oData.length, data; i < ii; i++) {
+                            data = oData[i];
+
+                            var columnContent = '';
+                            switch (datalistColumn.name) { //  меняем отрисовку для конкретных колонок
+                                case 'employee':
+                                    columnContent += grid.getEmployeeView(data.value, data.displayValue);
+                                    break;
+                                case 'creator':
+                                    columnContent += grid.getEmployeeView(data.value, data.displayValue);
+                                    break;
+                                case 'created':
+                                    columnContent += Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), grid.msg("lecm.date-format.defaultDateOnly"));
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            if (i < ii - 1) {
+                                html += "<br />";
+                            }
+
+                            html += columnContent;
+                        }
+                    }
+                }
+            }
+            return html.length > 0 ? html : null;  // возвращаем NULL чтобы выызвался основной метод отрисовки
         }
     }, true);
 
