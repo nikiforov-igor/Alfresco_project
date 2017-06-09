@@ -615,3 +615,7 @@ body .attachment-list tr.yui-dt-highlighted
 .attachment-list .large-file-upload {
 	display: inline-block;
 }
+
+.attachment-list .large-file-upload.hidden1 {
+	display: none;
+}
