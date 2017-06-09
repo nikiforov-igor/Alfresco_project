@@ -116,7 +116,7 @@ public final class Types {
 		, SG_BR(SFX_BR, "Business Role Point")		// группа бизнес-роли
 		, SG_BRME(SFX_BRME, "Private User Business Role Point")	// личная группа Сотрудника-пользователя для конкретной бизнес-роли
 
-		, SG_ROLE(SFX_ROLE, "Business role of group for item") // Группа Роль-сущность
+		, SG_ROLE(SFX_ROLE, "Business role of group for item") // Группа для произвольного набора сотрудников объединенных в роль
 		, SG_SPEC(SFX_SPEC, "Individual user access for node") // индивидуальный доступ Сотрудника на конкретный узел
 		, SG_SECRETARY(SFX_SECRETARY, "Secretary point") //личная группа "руководителя" для его секретарей
 		;
@@ -476,7 +476,7 @@ public final class Types {
 	{
 		public SGSpecialUserRole(String employeeId, NodeRef nodeRef,
 				LecmPermissionGroup permissionGroup, String userLogin) {
-			super( SGKind.SG_SPEC, permissionGroup.getName()
+			super(SGKind.SG_SPEC, permissionGroup.getName()
 					, /*displayInfo*/ String.format("user <%s> individual access <%s>", userLogin, permissionGroup.getName())// по-идее главное тут пользователь и группа, а сам узел nodeRef.getId() не важен
 					, employeeId, userLogin);
 		}
