@@ -53,6 +53,7 @@ public final class Types {
 
 	final static public String SFX_BRME = "$BRME" + SFX_DELIM;   // by id user & id role
 	final static public String SFX_SPEC = "$SPEC" + SFX_DELIM;   // by id user & low-level permission group name
+	final static public String SFX_ROLE = "$ROLE" + SFX_DELIM;   // by id
 
 	final static public String SFX_SECRETARY = "$SECRETARY" + SFX_DELIM; //by id user
 
@@ -115,6 +116,7 @@ public final class Types {
 		, SG_BR(SFX_BR, "Business Role Point")		// группа бизнес-роли
 		, SG_BRME(SFX_BRME, "Private User Business Role Point")	// личная группа Сотрудника-пользователя для конкретной бизнес-роли
 
+		, SG_ROLE(SFX_ROLE, "Business role group for item") // Группа Роль-сущность
 		, SG_SPEC(SFX_SPEC, "Individual user access for node") // индивидуальный доступ Сотрудника на конкретный узел
 		, SG_SECRETARY(SFX_SECRETARY, "Secretary point") //личная группа "руководителя" для его секретарей
 		;
@@ -176,6 +178,10 @@ public final class Types {
 				return new SGBusinessRole(objId, displayName);
 			if (this == SG_SPEC)
 				return new SGSpecialCustom(objId, displayName);
+			if (this == SG_ROLE) {
+				logger.warn("use special method getSGRole() instead of getSGPos() ...");
+				return new SGRole(objId, null, displayName); // (!) use getSGSecretaryOfUser(...)
+			}
 			if (this == SG_SECRETARY) {
 				logger.warn("use special method getSGSecretaryOfUser() instead of getSGPos() ...");
 				return new SGSecretaryOfUser(objId, null, displayName); // (!) use getSGSecretaryOfUser(...)
@@ -233,6 +239,13 @@ public final class Types {
 
 		public static SGSecretaryOfUser getSGSecretaryOfUser(String employeeId, String userLogin) {
 			return getSGSecretaryOfUser(employeeId, userLogin, null);
+		}
+
+		public static SGRole getSGRole(String itemId, String role) {
+			return getSGRole(itemId, role, null);
+		}
+		public static SGRole getSGRole(String folderId, String role, String displayName) {
+			return new SGRole(folderId, role, displayName);
 		}
 	}
 
@@ -516,7 +529,7 @@ public final class Types {
 		}
 
 		public SGSpecialCustom(String id, String displayInfo) {
-			super( SGKind.SG_SPEC, id, displayInfo);
+			super(SGKind.SG_SPEC, id, displayInfo);
 		}
 	}
 
@@ -612,7 +625,7 @@ public final class Types {
 	 */
 	public static class SGBusinessRole extends SGPosition {
 		private SGBusinessRole(String businessRoleId) {
-			super( SGKind.SG_BR, businessRoleId);
+			super(SGKind.SG_BR, businessRoleId);
 		}
 
 		private SGBusinessRole(String businessRoleId, String displayName) {
@@ -692,4 +705,35 @@ public final class Types {
 			return (info != null) ? info : String.format("Secretary group for user <%s> of employee <%s>", this.userLogin, this.getId());
 		}
 	}
+
+	public static class SGRole extends SGPosition {
+
+		private String role;
+
+		public SGRole(String itemId, String role, String displayName) {
+			super(SGKind.SG_ROLE, itemId, displayName);
+			this.role = role;
+		}
+
+		public String getRole() {
+			return role;
+		}
+
+		public void setRole(String role) {
+			this.role = role;
+		}
+
+		@Override
+		public String getDisplayInfo() {
+			final String info = super.getDisplayInfo();
+			return (info != null) ? info : String.format("<%s> role group for folder <%s>", this.getRole(), this.getId());
+		}
+
+		@Override
+		public String getAlfrescoSuffix() {
+			return super.getAlfrescoSuffix() + SFX_DELIM + this.getRole();
+		}
+
+	}
+
 }
