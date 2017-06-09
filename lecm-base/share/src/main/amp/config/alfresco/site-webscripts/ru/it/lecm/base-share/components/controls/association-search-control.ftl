@@ -1,5 +1,5 @@
 <#--This association-search-control.ftl is deprecated!
-    Use association-control.ftl instead
+    Use association-complex-inline-control.ftl instead
 !-->
 
 <#include "/org/alfresco/components/component.head.inc">
