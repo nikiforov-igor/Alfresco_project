@@ -4,7 +4,8 @@ var node = search.findNode(nodeRef);
 if (node) {
     var folderAssocs = node.assocs["lecm-document-aspects:complex-attachment-folder"];
     if (folderAssocs && folderAssocs.length) {
-        var nodes = folderAssocs[0].getChildren();
+        var folder = folderAssocs[0];
+        var nodes = folder.getChildren();
         nodes.sort(function (a, b) {
             if (a.properties['cm:name'] > b.properties['cm:name']) {
                 return 1;
