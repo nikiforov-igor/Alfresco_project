@@ -32,7 +32,7 @@
                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
                                 <property name="lecm-arm:expression">
                                     <![CDATA[user.currentUser().hasBusinessRole("RVZ") OR armNode.count() > 0]]></property>
-                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
                                 <property name="lecm-arm:order"><![CDATA[20]]></property>
                                 <property name="lecm-arm:types"><![CDATA[lecm-errands:document]]></property>
                                 <items>
@@ -145,8 +145,8 @@
                                         <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                         <property name="cm:name"><![CDATA[Рассмотрение]]></property>
                                         <property name="lecm-arm:search-type"><![CDATA[]]></property>
-                                        <property name="lecm-arm:expression"><![CDATA[]]></property>
-                                        <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                        <property name="lecm-arm:expression"><![CDATA[armNode.count() > 0]]></property>
+                                        <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                         <property name="lecm-arm:types"><![CDATA[]]></property>
                                     </item>
@@ -157,8 +157,8 @@
                                         <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                         <property name="cm:name"><![CDATA[Передано на исполнение]]></property>
                                         <property name="lecm-arm:search-type"><![CDATA[]]></property>
-                                        <property name="lecm-arm:expression"><![CDATA[]]></property>
-                                        <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                        <property name="lecm-arm:expression"><![CDATA[armNode.count() > 0]]></property>
+                                        <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
                                         <property name="lecm-arm:order"><![CDATA[10]]></property>
                                         <property name="lecm-arm:types"><![CDATA[]]></property>
                                     </item>
