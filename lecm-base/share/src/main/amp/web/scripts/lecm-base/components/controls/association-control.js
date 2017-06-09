@@ -490,7 +490,12 @@ LogicECM.module = LogicECM.module || {};
 					}, this);
 
 					if (options.fieldValues && options.fieldValues.length) {
-						this.fieldValues = options.fieldValues;
+						if (options.fieldValues instanceof Array) {
+							this.fieldValues = options.fieldValues;
+						}
+						if (options.fieldValues instanceof String || typeof(options.fieldValues) === 'string') {
+							this.fieldValues = options.fieldValues.split(',');
+						}
 					}
 				}
 				this.searchProperties = [];
