@@ -9,6 +9,10 @@ function main() {
 	if (documentDetails) {
 		model.document = documentDetails;
 
+		if (documentDetails.item.node.properties["cm:workingCopyMode"] == "offlineEditing") {
+			model.allowMetaDataUpdate = false;
+			return;
+		}
 		var category = getCategoryByAttachments(model.nodeRef);
 		var mayEditMetadata = hasPermission(model.nodeRef, PERM_ATTR_EDIT);
 		model.allowMetaDataUpdate = category != null && !category.isReadOnly && mayEditMetadata;
