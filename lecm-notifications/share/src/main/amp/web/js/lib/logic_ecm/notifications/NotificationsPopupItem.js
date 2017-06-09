@@ -111,6 +111,7 @@ define(['dojo/_base/declare',
 				}).then(lang.hitch(this, function(success) {
 					this.updateOnSuccess(true);
 				}), lang.hitch(this, function(failure) {
+					this._changeButtonStatus(this, false);
 					Alfresco.util.PopupManager.displayMessage({
 						text: this.message('message.notifications.subscribe.failure', this.params.item.template)
 					});
@@ -131,6 +132,7 @@ define(['dojo/_base/declare',
 				}).then(lang.hitch(this, function(success) {
 					this.updateOnSuccess(false);
 				}), lang.hitch(this, function(failure) {
+					this._changeButtonStatus(this, true);
 					Alfresco.util.PopupManager.displayMessage({
 						text: this.message('message.notifications.unsubscribe.failure', this.params.item.template)
 					});
