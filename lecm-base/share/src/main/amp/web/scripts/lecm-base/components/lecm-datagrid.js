@@ -2892,10 +2892,14 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 var columns = this.datagridColumns;
                 var fields = "";
                 for (var i = 0; i < columns.length; i++) {
-                    if (columns[i].dataType == "text" || columns[i].dataType == "mltext") {
+                    var dataType = columns[i].dataType;
+                    if (dataType == "text" || dataType == "mltext") {
                         fields += columns[i].name + ",";
                     } else if (columns[i].type == "association") {
                         fields += columns[i].name + "-text-content" + ",";
+                    } else if (dataType == "date" || dataType == "datetime") {
+                        // date fields should be prefixed with date$
+                        fields += 'date$' + columns[i].name + ",";
                     }
                 }
                 if (fields.length > 1) {
