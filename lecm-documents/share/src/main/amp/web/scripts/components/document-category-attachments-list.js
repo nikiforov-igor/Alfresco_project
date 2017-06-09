@@ -196,12 +196,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			            value: "CreateChildren"
 		            });
 
-                Alfresco.util.createYUIButton(this, "largeFileUpload-button", this.onLargeFileUpload,
-                    {
-                        disabled: false,
-                        value: "CreateChildren"
-                    });
-
 //	            Alfresco.util.createYUIButton(this, "addLink-button", this.onAddLink,
 //		            {
 //			            disabled: false,
