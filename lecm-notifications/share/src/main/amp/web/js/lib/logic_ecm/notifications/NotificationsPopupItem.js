@@ -101,7 +101,7 @@ define(['dojo/_base/declare',
 
 			_onEnableClick: function(evt) {
 				event.stop(evt);
-
+				this._changeButtonStatus(this, true);
 				xhr.post(Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/notifications/template/subscribe', {
 					handleAs: 'json',
 					headers: {'Content-Type': 'application/json'},
@@ -121,6 +121,7 @@ define(['dojo/_base/declare',
 
 			_onDisableClick: function(evt) {
 				event.stop(evt);
+				this._changeButtonStatus(this, false);
 				xhr.post(Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/notifications/template/unsubscribe', {
 					handleAs: 'json',
 					headers: {'Content-Type': 'application/json'},
@@ -140,7 +141,6 @@ define(['dojo/_base/declare',
 
 			updateOnSuccess: function (setEnabled) {
 				this.params.item.isEnabled = setEnabled;
-				this._changeButtonStatus(this, setEnabled);
 				array.forEach(this.params.notificationsPopup.rootWidget.getChildren(), function (notificationItem) {
 					if (notificationItem.params.item.template == this.params.item.template) {
 						this.params.item.isEnabled = setEnabled;
