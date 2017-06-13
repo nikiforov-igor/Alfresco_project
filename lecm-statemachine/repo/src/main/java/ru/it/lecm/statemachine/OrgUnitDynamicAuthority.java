@@ -1,7 +1,7 @@
 package ru.it.lecm.statemachine;
 
 
-import org.alfresco.repo.cache.SimpleCache;
+import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.repo.security.permissions.DynamicAuthority;
@@ -15,10 +15,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureAspectsModel;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.util.List;
 import java.util.Set;
-import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 public class OrgUnitDynamicAuthority implements DynamicAuthority, InitializingBean {
     final static protected Logger logger = LoggerFactory.getLogger(OrgUnitDynamicAuthority.class);
@@ -60,7 +60,7 @@ public class OrgUnitDynamicAuthority implements DynamicAuthority, InitializingBe
 
             public Boolean doWork() throws Exception {
                 boolean result = true;
-                if (userName.equalsIgnoreCase("System") || userName.equalsIgnoreCase("workflow")) {
+                if (userName.equalsIgnoreCase("System") || userName.equalsIgnoreCase("workflow") || nodeService.hasAspect(nodeRef, ContentModel.ASPECT_PENDING_DELETE)) {
                     result = false;
                 } else {
                     if (nodeService.hasAspect(nodeRef, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION)) {
