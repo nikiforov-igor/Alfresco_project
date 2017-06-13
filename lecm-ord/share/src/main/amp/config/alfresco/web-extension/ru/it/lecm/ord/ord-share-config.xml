@@ -62,6 +62,7 @@
                             <control-param name="additionalFilter">((TYPE:\"lecm-ord:document\" AND @lecm\\-statemachine\\:status:\"Исполнен\") OR (TYPE:\"lecm-nd:document\" AND (@lecm\\-statemachine\\:status:\"Действует\" OR @lecm\\-statemachine\\:status:\"Введен в действие\"))) </control-param>
                             <control-param name="showSearch">true</control-param>
                             <control-param name="plane">true</control-param>
+                            <control-param name="showPath">false</control-param>
                         </control>
                     </field>
                     <field id="lecm-ord:accepted-assoc">

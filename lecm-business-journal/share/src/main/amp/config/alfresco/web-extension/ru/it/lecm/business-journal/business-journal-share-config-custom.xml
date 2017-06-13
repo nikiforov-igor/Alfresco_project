@@ -361,6 +361,7 @@
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
 							<control-param name="showSearch">true</control-param>
                             <control-param name="plane">true</control-param>
+							<control-param name="showPath">false</control-param>
 						</control>
 					</field>
 				</appearance>

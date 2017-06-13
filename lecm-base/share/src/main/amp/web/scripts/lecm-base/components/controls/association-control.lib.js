@@ -65,7 +65,6 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				sortProp: options.sortProp,
 				selectedItemsNameSubstituteString: LogicECM.module.AssociationComplexControl.Utils.getSelectedItemsNameSubstituteString(options),
 				additionalFilter: additionalFilter,
-				pathRoot: options.rootLocation,
 				pathNameSubstituteString: options.treeNodeSubstituteString,
 				onlyInSameOrg: (!!options.useStrictFilterByOrg).toString(),
 				doNotCheckAccess: (!!options.doNotCheckAccess).toString(),
@@ -75,6 +74,11 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				skipCount: forAutocomplete ? undefined : skipItemsCount.toString(),
 				elementsParams: LogicECM.module.AssociationComplexControl.Utils.getElementsParams(context, forAutocomplete)
 			};
+			if (options.showPath) {
+				paramsObj.pathRoot = options.rootLocation;
+			} else if (!paramsObj.xpath) {
+				paramsObj.xpath =  options.rootLocation;
+			}
 
 			return options.autocompleteDataSourceMethodPost ? YAHOO.lang.JSON.stringify(paramsObj) : Alfresco.util.toQueryString(paramsObj);
 		},

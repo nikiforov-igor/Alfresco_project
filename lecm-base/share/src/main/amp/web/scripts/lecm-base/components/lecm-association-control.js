@@ -1991,7 +1991,6 @@ LogicECM.module = LogicECM.module || {};
 					"&sortProp=" + encodeURIComponent(this.options.sortProp) +
 					"&selectedItemsNameSubstituteString=" + encodeURIComponent(this.getSelectedItemsNameSubstituteString()) +
 					"&additionalFilter=" + encodeURIComponent(additionalFilter) +
-					"&pathRoot=" + encodeURIComponent(this.options.rootLocation) +
 					"&pathNameSubstituteString=" + encodeURIComponent(this.options.treeNodeSubstituteString) +
 					"&onlyInSameOrg=" + encodeURIComponent("" + this.options.useStrictFilterByOrg) +
 					'&doNotCheckAccess=' + encodeURIComponent("" + this.options.doNotCheckAccess) +
@@ -2002,6 +2001,11 @@ LogicECM.module = LogicECM.module || {};
 					params += "&xpath=" + encodeURIComponent(this.options.rootLocation);
 				} else {
 					params += "&skipCount=" + this.skipItemsCount;
+				}
+				if (this.options.showPath) {
+					params += "&pathRoot=" + encodeURIComponent(this.options.rootLocation);
+				} else if (!forAutocomplete) {
+					params += "&xpath=" + encodeURIComponent(this.options.rootLocation);
 				}
 
 				return params;

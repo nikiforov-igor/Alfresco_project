@@ -325,6 +325,7 @@
 		            <control-param name="changeItemsFireAction">changeConnectedDocument</control-param>
                     <control-param name="showSearch">true</control-param>
                     <control-param name="plane">true</control-param>
+                    <control-param name="showPath">false</control-param>
                 </type>
                 <type name="STATUS" template="/ru/it/lecm/documents/controls/select-status-control.ftl">
                     <control-param name="multiply">false</control-param>
@@ -525,6 +526,7 @@
 	                        <control-param name="additionalFilter">NOT @lecm\-statemachine\-aspects\:is\-draft:true</control-param>
                             <control-param name="showSearch">true</control-param>
                             <control-param name="plane">true</control-param>
+                            <control-param name="showPath">false</control-param>
                         </control>
                     </field>
                     <field id="lecm-connect:connection-type-assoc">
@@ -554,6 +556,7 @@
                             <control-param name="additionalFilter">NOT @lecm\-statemachine\-aspects\:is\-draft:true</control-param>
                             <control-param name="showSearch">true</control-param>
                             <control-param name="plane">true</control-param>
+                            <control-param name="showPath">false</control-param>
                         </control>
                     </field>
                     <field id="lecm-connect:connection-type-assoc">
@@ -593,6 +596,7 @@
                             <control-param name="plane">true</control-param>
                             <control-param name="showSearch">true</control-param>
                             <control-param name="additionalFilter">NOT @lecm\-statemachine\-aspects\:is\-draft:true</control-param>
+                            <control-param name="showPath">false</control-param>
                         </control>
                     </field>
                     <field id="lecm-connect:connection-type-assoc">
@@ -1083,7 +1087,8 @@
 							<control-param name="changeItemsFireAction">changeAttachToDocument</control-param>
                             <control-param name="plane">true</control-param>
                             <control-param name="showSearch">true</control-param>
-						</control>
+                            <control-param name="showPath">false</control-param>
+                        </control>
 					</field>
 					<field id="category" label-id="label.attach-to-document.category" set="set">
 						<control template="/ru/it/lecm/documents/controls/select-document-category-control.ftl">

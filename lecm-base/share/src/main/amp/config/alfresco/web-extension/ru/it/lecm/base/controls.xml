@@ -276,6 +276,7 @@
 					<param id="changeItemsFireAction">changeConnectedDocument</param>
                     <param id="plane">true</param>
                     <param id="showSearch">true</param>
+					<param id="showPath">false</param>
 				</control>
 			</field-type>
 
