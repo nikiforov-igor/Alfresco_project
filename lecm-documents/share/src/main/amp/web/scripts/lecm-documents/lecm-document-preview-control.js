@@ -285,7 +285,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 
         loadAttachmentAddMenu: function DocumentPreviewControl_loadAttachmentAddMenu() {
             var attachmentAddEl = Dom.get(this.id + "-attachment-add");
-            if (attachmentAddEl) {
+            if (attachmentAddEl && this.options.categories) {
                 var addAttachmentActions = [];
                 if (this.widgets.addAttachmentMenuButton) {
                     this.widgets.addAttachmentMenuButton.destroy();

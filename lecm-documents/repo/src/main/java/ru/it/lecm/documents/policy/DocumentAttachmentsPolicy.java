@@ -124,7 +124,7 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 		NodeRef category = childAssocRef.getParentRef();
 
 		final NodeRef document = this.documentAttachmentsService.getDocumentByCategory(category);
-		if (document != null) {
+		if (document != null && nodeService.exists(attachmentRef)) {
 			if (!nodeService.hasAspect(attachmentRef, ContentModel.ASPECT_WORKING_COPY) && AlfrescoTransactionSupport.getResource(ATTACHMENT_CREATING_WORKING_COPY) == null) {
 				boolean assocExist = false;
 				List<AssociationRef> existAssocs = nodeService.getTargetAssocs(category, DocumentAttachmentsService.ASSOC_CATEGORY_ATTACHMENTS);

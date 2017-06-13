@@ -302,6 +302,9 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 
 	public NodeRef getCategoryByAttachment(NodeRef attachRef) {
 		if (nodeService.exists(attachRef)) {
+			if (nodeService.hasAspect(attachRef, ContentModel.ASPECT_WORKING_COPY)) {
+				attachRef = findNodeByAssociationRef(attachRef, ContentModel.ASSOC_ORIGINAL, ContentModel.TYPE_CONTENT, ASSOCIATION_TYPE.TARGET);
+			}
 			return findNodeByAssociationRef(attachRef, ASSOC_CATEGORY_ATTACHMENTS, TYPE_CATEGORY, ASSOCIATION_TYPE.SOURCE);
 		} else {
 			return null;

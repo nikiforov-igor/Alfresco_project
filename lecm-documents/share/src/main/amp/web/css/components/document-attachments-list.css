@@ -610,3 +610,12 @@ body .attachment-list tr.yui-dt-highlighted
 	font-size: 16px;
 	margin-left: 10px;
 }
+
+.attachment-list .file-upload,
+.attachment-list .large-file-upload {
+	display: inline-block;
+}
+
+.attachment-list .large-file-upload.hidden1 {
+	display: none;
+}

@@ -1,0 +1,33 @@
+.previewer-toolbar {
+    height: inherit;
+}
+
+.previewer-toolbar .spinner-span {
+    margin-left: 1px;
+    margin-right: 1px;
+    font-size: 11px;
+}
+
+.previewer-toolbar .spinner-span input {
+    width: 3em;
+}
+
+.previewer-toolbar .total-page-span {
+    margin-left: 1px;
+    margin-right: 1px;
+    font-size: 11px;
+}
+
+.previewer-toolbar .toolbar-element {
+    margin-left: 1px;
+    margin-right: 1px;
+    font-size: 10px;
+    background-color: white;
+    border: solid white 1px;
+}
+
+.previewer-toolbar .toolbar-element:hover {
+    cursor: pointer;
+    border: solid darkgray 1px;
+    border-radius: 3px;
+}
