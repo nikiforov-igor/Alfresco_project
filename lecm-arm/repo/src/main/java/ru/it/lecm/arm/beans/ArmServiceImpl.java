@@ -356,7 +356,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
             }
             if (delegationRootNode != null) {
                 Set<NodeRef> chiefSet = new TreeSet<>(listComparatorByName);
-                chiefSet.addAll(secretaryService.getChiefs(currentEmployee));
+                chiefSet.addAll(secretaryService.getPrimaryChiefs(currentEmployee));
                 chiefSet.addAll(delegationService.getDelegationOwnersByTrustee(currentEmployee, true));
                 Set<String> auth = authorityService.getAuthoritiesForUser(userName);
                 for (NodeRef chief : chiefSet) {

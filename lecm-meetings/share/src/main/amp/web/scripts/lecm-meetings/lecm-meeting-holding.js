@@ -96,7 +96,7 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 				if (form && form.runtime.formId !== this.HOLDING_MEETING + "-form" && form.isDirty()) {
 					form.submit(immediate);
 				}
-			}, this);
+			}, this, true);
 		},
 
 		onSubmit: function() {
