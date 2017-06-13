@@ -53,19 +53,9 @@
             <activiti:string><![CDATA[(function() { /* create */
   var document = bpm_package.children[0];
   var signerEmployee = execution.getVariableLocal('signerEmployee');
-  var effectiveEmployee;
-  /* проверяем активно ли делегирование и настроено ли оно вообще */
-  /* если (signerEmployee == effectiveEmployee), то делегирование или не настроено или не активно */
-  effectiveEmployee = delegation.getEffectiveEmployee(signerEmployee, 'LECM_SIGNER_DYN');
-  if(effectiveEmployee == null || signerEmployee.nodeRef.equals(effectiveEmployee.nodeRef)) {
-    /* так как делегирование или неактивно или не настроено, то получаем секретаря ответственного за задачи */
-    /* update: начиная с 1.8.3 секретарь работает с задачами, назначенными непосредственно на руководителя */
-    /*effectiveEmployee = secretaryService.getEffectiveEmployee(signerEmployee);*/
-  }
+  task.setVariableLocal("workflowDynRole", 'LECM_SIGNER_DYN');
   task.setVariableLocal('originalEmployee', base.getWorkflowNodeConverter().convertNode(signerEmployee.nodeRef));
-  task.setVariableLocal('effectiveEmployee', base.getWorkflowNodeConverter().convertNode(effectiveEmployee.nodeRef));
-  userName = orgstructure.getEmployeeLogin(effectiveEmployee);
-
+  userName = orgstructure.getEmployeeLogin(signerEmployee);
   task.setAssignee(userName);
 })();]]></activiti:string>
           </activiti:field>
@@ -80,7 +70,7 @@
     task.setVariableLocal('previousAssignee', assignee);
     document = bpm_package.children[0];
     employee = orgstructure.getEmployeeByLogin(assignee);
-    task.setVariableLocal('effectiveEmployee', base.getWorkflowNodeConverter().convertNode(employee.nodeRef));
+    task.setVariableLocal('originalEmployee', base.getWorkflowNodeConverter().convertNode(employee.nodeRef));
     /* добавляем актуального исполнителя в динамическую бизнес роль из переменной workflowDynRole */
     lecmPermission.grantDynamicRole(document, employee, 'LECM_SIGNER_DYN', 'LECM_BASIC_PG_ResponsibleEmployee');
     /* уведомление актуальному исполнителю */
@@ -101,14 +91,14 @@
   var document = bpm_package.children[0];
   var decision = task.getVariableLocal('lecmSign2_decision');
   var comment = task.getVariableLocal('bpm_comment');
-  var effectiveEmployee = task.getVariableLocal('effectiveEmployee');
+  var originalEmployee = task.getVariableLocal('originalEmployee');
   execution.setVariableLocal('employeeDecision', decision);
   execution.setVariableLocal('employeeComment', comment);
-  execution.setVariableLocal('effectiveEmployee', effectiveEmployee);
+  execution.setVariableLocal('originalEmployee', originalEmployee);
   /* отбираем ранее нарезанные права */
-  lecmPermission.revokeDynamicRole(document, effectiveEmployee, 'LECM_SIGNER_DYN');
+  lecmPermission.revokeDynamicRole(document, originalEmployee, 'LECM_SIGNER_DYN');
   /* добавляем в участники как читателя */
-  documentMembers.addMemberWithoutCheckPermission(document, effectiveEmployee, 'LECM_BASIC_PG_Reader', true);
+  documentMembers.addMemberWithoutCheckPermission(document, originalEmployee, 'LECM_BASIC_PG_Reader', true);
 })();]]></activiti:string>
           </activiti:field>
         </activiti:taskListener>
@@ -122,7 +112,7 @@
   var document = bpm_package.children[0];
   var initiator = execution.getVariable('initiatorEmployee');
   var signerEmployee = execution.getVariableLocal('signerEmployee');
-  var effectiveEmployee = execution.getVariableLocal('effectiveEmployee');
+  var originalEmployee = execution.getVariableLocal('originalEmployee');
   var decision = '' + execution.getVariableLocal('employeeDecision');
   var comment = (execution.getVariableLocal('employeeComment') != null) ? '' + execution.getVariableLocal('employeeComment') : null;
   var isSigned = 'SIGNED' == decision;
@@ -135,7 +125,7 @@
     document.properties['lecmSignAspects:signingDate'] = base.getValueConverter().convertValueForJava(new Date());
     document.save();
     document.removeAssociation(signerEmployee, 'lecmSignAspects:signerEmployeeAssoc');
-    document.createAssociation(effectiveEmployee, 'lecmSignAspects:signerEmployeeAssoc');
+    document.createAssociation(originalEmployee, 'lecmSignAspects:signerEmployeeAssoc');
   } else {
     wrapped = documentScript.wrapperTitle('отклонил подписание', comment);
     bjMsg = 'Сотрудник #object1 ' + wrapped + ' документа #mainobject';
@@ -148,12 +138,12 @@
     templateCode: 'SIGNING_RESOLUTION',
     templateConfig: {
         mainObject: document,
-        signer: effectiveEmployee,
+        signer: originalEmployee,
         isSigned: isSigned,
         comment: comment
     }
   });
-  businessJournal.log(document.nodeRef.toString(), 'SIGNING', bjMsg, [effectiveEmployee.nodeRef.toString()]);
+  businessJournal.log(document.nodeRef.toString(), 'SIGNING', bjMsg, [originalEmployee.nodeRef.toString()]);
 })();]]></activiti:string>
         </activiti:field>
         <activiti:field name="runAs">

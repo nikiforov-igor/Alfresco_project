@@ -248,7 +248,7 @@
       stageItem.createAssociation(employee, 'lecmWorkflowRoutes:stageItemEmployeeAssoc');
     }
 
-    task.setVariableLocal('effectiveEmployee', base.getWorkflowNodeConverter().convertNode(employee.nodeRef));
+    task.setVariableLocal('originalEmployee', base.getWorkflowNodeConverter().convertNode(employee.nodeRef));
     /* добавляем актуального исполнителя в динамическую бизнес роль из переменной workflowDynRole */
     lecmPermission.grantDynamicRole(document, employee, 'LECM_APPROVER_DYN', 'LECM_BASIC_PG_Reviewer');
     /* уведомление актуальному исполнителю */
@@ -272,21 +272,13 @@
   var currentStage = realExecution.getVariable('currentStage');
   var stageItem = realExecution.getVariableLocal('currentStageItem');
   var employees = stageItem.assocs['lecmWorkflowRoutes:stageItemEmployeeAssoc'];
-  var effectiveEmployee, userName, term, dueDate,
+  var userName, term, dueDate,
       currentDate = base.getValueConverter().convertValueForJava(new Date());
   /* вычисление userName */
   if (employees && employees.length) {
-    /* проверяем активно ли делегирование и настроено ли оно вообще */
-    /* если (employees[0] == effectiveEmployee), то делегирование или не настроено или не активно */
-    effectiveEmployee = delegation.getEffectiveEmployee(employees[0], 'LECM_APPROVER_DYN');
-    if(effectiveEmployee == null || employees[0].nodeRef.equals(effectiveEmployee.nodeRef)) {
-      /* так как делегирование или неактивно или не настроено, то получаем секретаря ответственного за задачи */
-      /* update: начиная с 1.8.3 секретарь работает с задачами, назначенными непосредственно на руководителя */
-      /*effectiveEmployee = secretaryService.getEffectiveEmployee(employees[0]);*/
-    }
+    task.setVariableLocal("workflowDynRole", 'LECM_APPROVER_DYN');
     task.setVariableLocal('originalEmployee', base.getWorkflowNodeConverter().convertNode(employees[0].nodeRef));
-    task.setVariableLocal('effectiveEmployee', base.getWorkflowNodeConverter().convertNode(effectiveEmployee.nodeRef));
-    userName = orgstructure.getEmployeeLogin(effectiveEmployee);
+    userName = orgstructure.getEmployeeLogin(employees[0]);
 
     /* вычисление dueDate */
     term = stageItem.properties['lecmWorkflowRoutes:stageItemTerm'];
@@ -298,12 +290,12 @@
     stageItem.properties['lecmWorkflowRoutes:stageItemDueDate'] = dueDate;
     stageItem.save();
     stageItem.removeAssociation(employees[0], 'lecmWorkflowRoutes:stageItemEmployeeAssoc');
-    stageItem.createAssociation(effectiveEmployee, 'lecmWorkflowRoutes:stageItemEmployeeAssoc');
+    stageItem.createAssociation(employees[0], 'lecmWorkflowRoutes:stageItemEmployeeAssoc');
     document.properties['lecmApproveAspects:currentTaskStartDate'] = currentDate;
     document.save();
 
     /* подготовка переменных для таймера */
-    realExecution.setVariableLocal('localAssignee', base.getWorkflowNodeConverter().convertNode(effectiveEmployee.nodeRef));
+    realExecution.setVariableLocal('localAssignee', base.getWorkflowNodeConverter().convertNode(employees[0].nodeRef));
     realExecution.setVariableLocal('localDueDate', dueDate);
 
     task.setDueDate(dueDate);
@@ -323,7 +315,7 @@
   var stageItem = realExecution.getVariableLocal('currentStageItem');
   var notifyAboutEveryDecision = realExecution.getVariable('routeNotifyAboutEveryDecision').booleanValue();
   var document = bpm_package.children[0];
-  var employee = task.getVariableLocal('effectiveEmployee');
+  var employee = task.getVariableLocal('originalEmployee');
   var initiator;
   /* внутрь stageItem перемещаем загруженный файл с комментарием */
   if (attachment) {
@@ -470,7 +462,7 @@
       currentStageItem.createAssociation(employee, 'lecmWorkflowRoutes:stageItemEmployeeAssoc')
     }
 
-    task.setVariableLocal('effectiveEmployee', base.getWorkflowNodeConverter().convertNode(employee.nodeRef));
+    task.setVariableLocal('originalEmployee', base.getWorkflowNodeConverter().convertNode(employee.nodeRef));
     /* добавляем актуального исполнителя в динамическую бизнес роль из переменной workflowDynRole */
     lecmPermission.grantDynamicRole(document, employee, 'LECM_APPROVER_DYN', 'LECM_BASIC_PG_Reviewer');
     /* уведомление актуальному исполнителю */
@@ -493,23 +485,15 @@
   var document = bpm_package.children[0];
   var currentStage = realExecution.getVariable('currentStage');
   var employees = currentStageItem.assocs['lecmWorkflowRoutes:stageItemEmployeeAssoc'];
-  var effectiveEmployee, userName, term, dueDate,
+  var userName, term, dueDate,
       currentDate = base.getValueConverter().convertValueForJava(new Date());
   /* пометка как активного */
   currentStageItem.properties['lecmApproveAspects:approvalState'] = 'ACTIVE';
   currentStageItem.save();
   if (employees && employees.length) {
-    /* проверяем активно ли делегирование и настроено ли оно вообще */
-    /* если (employees[0] == effectiveEmployee), то делегирование или не настроено или не активно */
-    effectiveEmployee = delegation.getEffectiveEmployee(employees[0], 'LECM_APPROVER_DYN');
-    if(effectiveEmployee == null || employees[0].nodeRef.equals(effectiveEmployee.nodeRef)) {
-      /* так как делегирование или неактивно или не настроено, то получаем секретаря ответственного за задачи */
-      /* update: начиная с 1.8.3 секретарь работает с задачами, назначенными непосредственно на руководителя */
-      /*effectiveEmployee = secretaryService.getEffectiveEmployee(employees[0]);*/
-    }
+    task.setVariableLocal("workflowDynRole", 'LECM_APPROVER_DYN');
     task.setVariableLocal('originalEmployee', base.getWorkflowNodeConverter().convertNode(employees[0].nodeRef));
-    task.setVariableLocal('effectiveEmployee', base.getWorkflowNodeConverter().convertNode(effectiveEmployee.nodeRef));
-    userName = orgstructure.getEmployeeLogin(effectiveEmployee);
+    userName = orgstructure.getEmployeeLogin(employees[0]);
 
     /* вычисление dueDate */
     term = currentStageItem.properties['lecmWorkflowRoutes:stageItemTerm'];
@@ -521,12 +505,12 @@
     currentStageItem.properties['lecmWorkflowRoutes:stageItemDueDate'] = dueDate;
     currentStageItem.save();
     currentStageItem.removeAssociation(employees[0], 'lecmWorkflowRoutes:stageItemEmployeeAssoc');
-    currentStageItem.createAssociation(effectiveEmployee, 'lecmWorkflowRoutes:stageItemEmployeeAssoc');
+    currentStageItem.createAssociation(employees[0], 'lecmWorkflowRoutes:stageItemEmployeeAssoc');
     document.properties['lecmApproveAspects:currentTaskStartDate'] = currentDate;
     document.save();
 
     /* подготовка переменных для таймера */
-    realExecution.setVariableLocal('localAssignee', base.getWorkflowNodeConverter().convertNode(effectiveEmployee.nodeRef));
+    realExecution.setVariableLocal('localAssignee', base.getWorkflowNodeConverter().convertNode(employees[0].nodeRef));
     realExecution.setVariableLocal('localDueDate', dueDate);
 
     task.setDueDate(dueDate);
@@ -547,7 +531,7 @@
 	var isCompleted = routeInterruptAfterReject && decision == 'REJECTED';
 	var notifyAboutEveryDecision = realExecution.getVariable('routeNotifyAboutEveryDecision').booleanValue();
 	var document = bpm_package.children[0];
-	var employee = task.getVariableLocal('effectiveEmployee');
+	var employee = task.getVariableLocal('originalEmployee');
 	var initiator;
 	task.setVariable('isCompleted', isCompleted);
 	/* внутрь stageItem перемещаем загруженный файл с комментарием */

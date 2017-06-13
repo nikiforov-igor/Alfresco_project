@@ -258,6 +258,7 @@
 		<property name="authService" ref="authenticationService"/>
 		<property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
 		<property name="stateMachineService" ref="lifecycleStateMachineHelper"/>
+		<property name="delegationService" ref="delegationService"/>
 	</bean>
 
 	<bean id="webscript.ru.it.lecm.statemachine.actions.get"
