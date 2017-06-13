@@ -78,6 +78,15 @@
 		</property>
 	</bean>
 
+	<bean id="evaluator.documents.isComplexContext" parent="evaluator.doclib.metadata.hasAspect">
+		<property name="aspects">
+			<list>
+				<value>lecm-document-aspects:complex-attachment</value>
+			</list>
+		</property>
+	</bean>
+
+
 	<bean id="evaluator.documents.isWritableCategory" class="ru.it.lecm.documents.evaluators.IsWritableCategory">
 		<property name="evaluatorsUtil" ref="evaluators.documents.util"/>
 	</bean>

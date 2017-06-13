@@ -1,6 +1,7 @@
 <#import "/org/alfresco/slingshot/documentlibrary-v2/item.lib.ftl" as itemLib />
 <#escape x as jsonUtils.encodeJSONString(x)>
 {
+	"isComplex": ${isComplex?string},
 	"metadata": {},
 	"items":
 		[

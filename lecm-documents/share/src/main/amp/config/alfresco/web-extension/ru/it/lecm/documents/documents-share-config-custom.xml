@@ -61,6 +61,7 @@
                 </action>
                 <action index="150" id="document-view-content" appendEvaluators="true">
                     <evaluator>evaluator.documents.mayViewAttachment</evaluator>
+                    <evaluator negate="true">evaluator.documents.isComplexContext</evaluator>
                 </action>
                 <action index="160" id="document-edit-properties" appendEvaluators="true">
                     <evaluator>evaluator.documents.mayEditAttachment</evaluator>
@@ -80,6 +81,7 @@
                 </action>
                 <action index="130" id="document-view-content" appendEvaluators="true">
                     <evaluator>evaluator.documents.mayViewAttachment</evaluator>
+                    <evaluator negate="true">evaluator.documents.isComplexContext</evaluator>
                 </action>
                 <action index="140" id="document-edit-properties" appendEvaluators="true">
                     <evaluator>evaluator.documents.mayEditAttachment</evaluator>
@@ -117,6 +119,7 @@
                 </action>
                 <action index="190" id="document-view-content" appendEvaluators="true">
                     <evaluator>evaluator.documents.mayViewAttachment</evaluator>
+                    <evaluator negate="true">evaluator.documents.isComplexContext</evaluator>
                 </action>
                 <action index="200" id="document-cancel-editing" appendEvaluators="true">
                     <evaluator>evaluator.documents.mayEditAttachment</evaluator>
@@ -173,6 +176,7 @@
                 </action>
                 <action index="180" id="document-view-content" appendEvaluators="true">
                     <evaluator>evaluator.documents.mayViewAttachment</evaluator>
+                    <evaluator negate="true">evaluator.documents.isComplexContext</evaluator>
                 </action>
                 <action index="190" id="document-cancel-editing" appendEvaluators="true">
                     <evaluator>evaluator.documents.mayEditAttachment</evaluator>
