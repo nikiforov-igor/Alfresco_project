@@ -655,7 +655,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             getCounterCellFormatter: function DataGrid_getCounterCellFormatter(column) {
 				var scope = this;
 				return function(elCell, oRecord, oColumn, oData) {
-					var searchQuery = scope.datagridColumns[oColumn.key] ? scope.datagridColumns[oColumn.key].nameSubstituteString : '';
+                    var key = oColumn.key.replace(':', '_');
+                    var searchQuery = scope.datagridColumns[key] ? scope.datagridColumns[key].nameSubstituteString : '';
 					if (oRecord){
 						var data = oRecord.getData();
 						if (searchQuery && data) {
