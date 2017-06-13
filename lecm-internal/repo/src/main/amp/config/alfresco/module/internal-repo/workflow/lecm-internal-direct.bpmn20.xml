@@ -60,18 +60,8 @@
                         var document = bpm_package.children[0];
                         var table = document.assocs["lecm-internal-table-structure:answers-assoc"][0];
                         var employee = orgstructure.getEmployeeByLogin(task.getVariable("assignee"));
-
-                        /* проверяем активно ли делегирование и настроено ли оно вообще */
-                        /* если (employee == effectiveEmployee), то делегирование или не настроено или не активно */
-                        var effectiveEmployee = delegation.getEffectiveEmployee(employee, 'DA_RECIPIENT_DYN');
-                        if(effectiveEmployee == null || employee.nodeRef.equals(effectiveEmployee.nodeRef)) {
-                          /* так как делегирование или неактивно или не настроено, то получаем секретаря ответственного за задачи */
-                          /* update: начиная с 1.8.3 секретарь работает с задачами, назначенными непосредственно на руководителя */
-						  /*effectiveEmployee = secretaryService.getEffectiveEmployee(employee);*/
-                        }
-
-                        employee = effectiveEmployee;
-                        var userName = orgstructure.getEmployeeLogin(effectiveEmployee);
+                        task.setVariableLocal("workflowDynRole", 'DA_RECIPIENT_DYN');
+                        var userName = orgstructure.getEmployeeLogin(employee);
 
 
                         var businessRole = (("" + edsGlobalSettings.isHidePropsForRecipients()) == "true") ? "LECM_BASIC_PG_ActionPerformer_Lite" : "LECM_BASIC_PG_ActionPerformer"; 

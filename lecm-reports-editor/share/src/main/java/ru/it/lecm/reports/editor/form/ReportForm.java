@@ -1,14 +1,25 @@
 package ru.it.lecm.reports.editor.form;
 
+import org.alfresco.util.ISO8601DateFormat;
 import org.alfresco.web.config.forms.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
+import org.springframework.extensions.surf.RequestContext;
+import org.springframework.extensions.surf.ServletUtil;
+import org.springframework.extensions.surf.exception.ConnectorServiceException;
+import org.springframework.extensions.surf.support.ThreadLocalRequestContext;
 import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
+import org.springframework.extensions.webscripts.connector.Connector;
+import org.springframework.extensions.webscripts.connector.ConnectorService;
+import org.springframework.extensions.webscripts.connector.Response;
+import org.springframework.extensions.webscripts.connector.ResponseStatus;
 import org.springframework.util.StringUtils;
 import ru.it.lecm.base.forms.LecmFormGet;
 import ru.it.lecm.reports.api.model.ParameterType;
@@ -20,6 +31,7 @@ import ru.it.lecm.reports.model.impl.L18Value;
 import ru.it.lecm.reports.model.impl.ParameterTypedValueImpl;
 import ru.it.lecm.reports.xml.DSXMLProducer;
 
+import javax.servlet.http.HttpSession;
 import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -32,11 +44,15 @@ import java.util.*;
  */
 public class ReportForm extends LecmFormGet {
     public static final String TEMPLATE_CODE = "templateCode";
+    public static final String SAVED_PREFERENCES = "savedPreferences";
     public static final String TEMPLATES = "TEMPLATES";
+    public static final String REPORT_PREFERENCES = "REPORT_PREFERENCES";
     public static final String TEMPLATES_COLUMN_NAME = "Шаблон представления";
     private ReportManagerApi reportManager;
+    private ConnectorService connectorService;
 
-    final protected DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    protected final DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    protected final String CURRENT_DATE_ARG = "current-date";
 
     private final static Log logger = LogFactory.getLog(ReportForm.class);
 
@@ -44,27 +60,31 @@ public class ReportForm extends LecmFormGet {
         this.reportManager = reportManager;
     }
 
+    public void setConnectorService(ConnectorService connectorService) {
+        this.connectorService = connectorService;
+    }
+
     @Override
     protected Map<String, Object> generateModel(String itemKind, String itemId, WebScriptRequest request, Status status, Cache cache) {
         ReportDescriptor descriptor = getReportDescriptor(itemId);
 
-        final HashMap<String, Object> model = new HashMap<String, Object>();
-        final HashMap<String, Object> form = new HashMap<String, Object>();
+        final HashMap<String, Object> model = new HashMap<>();
+        final HashMap<String, Object> form = new HashMap<>();
         model.put(MODEL_FORM, form);
 
-        final ArrayList<Constraint> constraints = new ArrayList<Constraint>();
+        final ArrayList<Constraint> constraints = new ArrayList<>();
         form.put(MODEL_CONSTRAINTS, constraints);
 
-        final ArrayList<Set> sets = new ArrayList<Set>();
+        final ArrayList<Set> sets = new ArrayList<>();
         form.put(MODEL_STRUCTURE, sets);
         Set set = new Set("", "Набор параметров");
         sets.add(set);
 
-        final HashMap<String, Field> fields = new HashMap<String, Field>();
+        final HashMap<String, Field> fields = new HashMap<>();
         form.put(MODEL_FIELDS, fields);
 
         List<ColumnDescriptor> columns = descriptor.getDsDescriptor().getColumns();
-        List<ColumnDescriptor> params = new ArrayList<ColumnDescriptor>();
+        List<ColumnDescriptor> params = new ArrayList<>();
         for (ColumnDescriptor column : columns) {
             ParameterTypedValue typedValue = column.getParameterValue();
             if (typedValue != null) {
@@ -77,6 +97,51 @@ public class ReportForm extends LecmFormGet {
                 return o1.compareTo(o2);
             }
         });
+
+        final Map<String, Object> arguments = new HashMap<>();
+
+        if (!params.isEmpty()) {
+            JSONArray preferences = getUserPreferencesForReport(itemId);
+
+            String lastPreferenceName = null;
+            if (preferences.length() > 0) {
+                try {
+                    JSONObject lastParams = preferences.getJSONObject(0);
+                    JSONObject savedArgs = lastParams.getJSONObject("args");
+                    lastPreferenceName = lastParams.getString("name");
+
+                    Iterator keys = savedArgs.keys();
+                    while (keys.hasNext()) {
+                        String next = (String) keys.next();
+
+                        Object value = savedArgs.get(next);
+                        arguments.put(next, value);
+                    }
+                } catch (JSONException e) {
+                    logger.error(e.getMessage(), e);
+                }
+            }
+
+            ColumnDescriptor templateParam = new ColumnDescriptor(SAVED_PREFERENCES);
+            templateParam.setAlfrescoType(REPORT_PREFERENCES);
+
+            L18Value name = new L18Value();
+            name.regItem("ru", retrieveMessage("report.param.preferences.label"));
+            templateParam.setL18Name(name);
+
+            templateParam.setParameterValue(new ParameterTypedValueImpl(ParameterTypedValue.Type.VALUE.getMnemonic()));
+
+            Field field = generateFieldModel(templateParam, 0, descriptor);
+            if (field != null) {
+                field.getControl().getParams().put("preferencesValue", preferences.toString());
+                if (lastPreferenceName != null) {
+                    field.getControl().getParams().put("currentValue", lastPreferenceName);
+                }
+                fields.put(templateParam.getColumnName(), field);
+                FieldPointer fieldPointer = new FieldPointer(field.getId());
+                set.addChild(fieldPointer);
+            }
+        }
 
         if (descriptor.getReportTemplates() != null && descriptor.getReportTemplates().size() > 1) {
             ColumnDescriptor templateParam = new ColumnDescriptor(TEMPLATE_CODE);
@@ -117,14 +182,28 @@ public class ReportForm extends LecmFormGet {
             }
         }
 
-        final Map<String, Object> arguments = new HashMap<String, Object>();
+
 
         String[] parameters = request.getParameterNames();
         for (String parameter : parameters) {
             arguments.put(parameter, request.getParameter(parameter));
         }
 
-        arguments.put("current-date", DateFormatISO8601.format(new Date()));
+        String args = request.getParameter("args");
+        if (args != null) {
+            try {
+                JSONObject argsObject = new JSONObject(args);
+                Iterator<String> it = argsObject.keys();
+                while(it.hasNext()) {
+                    String key = it.next();
+                    String value = argsObject.getString(key);
+                    arguments.put(key, value);
+                }
+            } catch (JSONException e) {
+                logger.warn("Cannot parse input arguments");
+            }
+        }
+        arguments.put(CURRENT_DATE_ARG, DateFormatISO8601.format(new Date()));
 
         form.put(MODEL_MODE, Mode.CREATE);
         form.put(MODEL_ARGUMENTS, arguments);
@@ -281,5 +360,28 @@ public class ReportForm extends LecmFormGet {
         } finally {
             IOUtils.closeQuietly(xmlStream);
         }
+    }
+
+    private JSONArray getUserPreferencesForReport(String reportCode) {
+        final String url = "/lecm/user-settings/get?key=reports." + reportCode + ".saved-preferences";
+        try {
+            RequestContext requestContext = ThreadLocalRequestContext.getRequestContext();
+            String currentUserId = requestContext.getUserId();
+            HttpSession currentSession = ServletUtil.getSession(true);
+            Connector connector = connectorService.getConnector("alfresco", currentUserId, currentSession);
+            Response response = connector.call(url);
+            if (ResponseStatus.STATUS_OK == response.getStatus().getCode()) {
+                JSONObject json = new JSONObject(response.getResponse());
+                return new JSONArray(json.getString("value"));
+            } else {
+                logger.error("Cannot get response for " + url);
+            }
+        } catch (ConnectorServiceException ex) {
+            logger.error("Cannot get connector for " + url, ex);
+        } catch (JSONException ex) {
+            logger.error("Cannot parse json response for " + url, ex);
+        }
+
+        return new JSONArray();
     }
 }

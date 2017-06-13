@@ -22,6 +22,8 @@
 	<#elseif form.arguments['readonly_' + field.name]?has_content>
 		<#assign defaultValue=form.arguments['readonly_' + field.name]>
 		<#assign readonly = true>
+    <#elseif field.control.params.defaultValue??>
+        <#assign defaultValue=field.control.params.defaultValue>
     </#if>
 </#if>
 

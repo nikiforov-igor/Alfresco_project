@@ -31,6 +31,7 @@ LogicECM.module = LogicECM.module || {};
 	    YAHOO.Bubbling.on("hideControl", this.onHideControl, this);
 	    YAHOO.Bubbling.on("showControl", this.onShowControl, this);
 	    YAHOO.Bubbling.on("disableRelatedFields", this.onDisableRelatedFields, this);
+        YAHOO.Bubbling.on("reInitializeControl", this.onReInitializeControl, this);
         return this;
     };
 
@@ -66,14 +67,23 @@ LogicECM.module = LogicECM.module || {};
                             });
                     return this;
                 },
-                onReady: function()
-                {
+                onReady: function () {
+                    this.checkbox = Dom.get(this.checkboxId);
+                    if (this.checkbox) {
+                        YAHOO.util.Event.addListener(this.checkbox, "click", this.onChange, this, true);
+                    }
+
+                    LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
+
+                    this.init();
+                },
+
+                init: function () {
                     this.checkbox = Dom.get(this.checkboxId);
                     if (this.checkbox) {
                         if (this.options.mode == "create") {
                             this.loadDefaultValue();
                         }
-                        YAHOO.util.Event.addListener(this.checkbox, "click", this.onChange, this, true);
                         this.initValue = this.checkbox.checked;
 
                         this.onChange();
@@ -81,8 +91,6 @@ LogicECM.module = LogicECM.module || {};
                     } else {
                         this.hideRelatedFields();
                     }
-
-	                LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
                 },
                 loadDefaultValue: function AssociationSelectOne__loadDefaultValue() {
                     if (this.options.defaultValue) {
@@ -252,6 +260,16 @@ LogicECM.module = LogicECM.module || {};
 		            if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
 			            this.checkDisableRelatedFields();
 		            }
-	            }
+	            },
+                onReInitializeControl: function (layer, args) {
+                    if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+                        var options = args[1].options;
+                        if (options != null) {
+                            this.setOptions(options);
+                        }
+                        this.initValue = null;
+                        this.init();
+                    }
+                }
             });
 })();

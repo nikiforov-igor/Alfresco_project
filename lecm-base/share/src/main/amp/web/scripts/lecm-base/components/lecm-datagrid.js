@@ -655,7 +655,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             getCounterCellFormatter: function DataGrid_getCounterCellFormatter(column) {
 				var scope = this;
 				return function(elCell, oRecord, oColumn, oData) {
-					var searchQuery = scope.datagridColumns[oColumn.key] ? scope.datagridColumns[oColumn.key].nameSubstituteString : '';
+                    var key = oColumn.key.replace(':', '_');
+                    var searchQuery = scope.datagridColumns[key] ? scope.datagridColumns[key].nameSubstituteString : '';
 					if (oRecord){
 						var data = oRecord.getData();
 						if (searchQuery && data) {
@@ -2892,10 +2893,14 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 var columns = this.datagridColumns;
                 var fields = "";
                 for (var i = 0; i < columns.length; i++) {
-                    if (columns[i].dataType == "text" || columns[i].dataType == "mltext") {
+                    var dataType = columns[i].dataType;
+                    if (dataType == "text" || dataType == "mltext") {
                         fields += columns[i].name + ",";
                     } else if (columns[i].type == "association") {
                         fields += columns[i].name + "-text-content" + ",";
+                    } else if (dataType == "date" || dataType == "datetime") {
+                        // date fields should be prefixed with date$
+                        fields += 'date$' + columns[i].name + ",";
                     }
                 }
                 if (fields.length > 1) {

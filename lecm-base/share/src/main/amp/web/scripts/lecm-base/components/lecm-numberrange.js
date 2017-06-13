@@ -30,13 +30,15 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
     * @return {LogicECM.NumberRange} The new NumberRange instance
     * @constructor
     */
-   LogicECM.NumberRange = function(htmlId, valueHtmlId)
-   {
-      LogicECM.NumberRange.superclass.constructor.call(this, "LogicECM.NumberRange", htmlId);
+   LogicECM.NumberRange = function (htmlId, valueHtmlId) {
+       LogicECM.NumberRange.superclass.constructor.call(this, "LogicECM.NumberRange", htmlId);
 
-      this.valueHtmlId = valueHtmlId;
+       this.valueHtmlId = valueHtmlId;
+       this.currentMinNumber = "";
+       this.currentMaxNumber = "";
 
-      return this;
+       YAHOO.Bubbling.on("reInitializeControl", this.onReInitializeControl, this);
+       return this;
    };
 
    YAHOO.extend(LogicECM.NumberRange, Alfresco.component.Base,
@@ -58,7 +60,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
       currentMaxNumber: "",
 
        options: {
-           onlyPositive: false
+           onlyPositive: false,
+           fieldId: null,
+           formId: false,
+           defaultValue: null
        },
 
        /**
@@ -67,25 +72,49 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
        *
        * @method onReady
        */
-      onReady: function NumberRange_onReady() {
-          // Add listener for input fields to keep the generated range value up-to-date
-          Event.addListener(this.id + "-min", "keyup", this._handleFieldChange, this, true);
-          YAHOO.Bubbling.fire("registerValidationHandler",
-              {
-                  fieldId: this.id + "-min",
-                  handler: this._changeNumber,
-                  when: "keyup"
-              });
+       onReady: function NumberRange_onReady() {
+           // Add listener for input fields to keep the generated range value up-to-date
+           Event.addListener(this.id + "-min", "keyup", this._handleFieldChange, this, true);
+           YAHOO.Bubbling.fire("registerValidationHandler",
+               {
+                   fieldId: this.id + "-min",
+                   handler: this._changeNumber,
+                   when: "keyup"
+               });
 
-          Event.addListener(this.id + "-max", "keyup", this._handleFieldChange, this, true);
-          YAHOO.Bubbling.fire("registerValidationHandler",
-              {
-                  fieldId: this.id + "-max",
-                  handler: this._changeNumber,
-                  when: "keyup"
-              });
+           Event.addListener(this.id + "-max", "keyup", this._handleFieldChange, this, true);
+           YAHOO.Bubbling.fire("registerValidationHandler",
+               {
+                   fieldId: this.id + "-max",
+                   handler: this._changeNumber,
+                   when: "keyup"
+               });
+           this.init();
+           LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
+       },
 
-      },
+       init: function () {
+           if (this.options.defaultValue) {
+               Dom.get(this.valueHtmlId).value = this.options.defaultValue;
+           }
+           if (Dom.get(this.valueHtmlId).value) {
+               var fullNumbers = Dom.get(this.valueHtmlId).value.split("|");
+               if (fullNumbers[0]) {
+                   Dom.get(this.id + "-min").value = fullNumbers[0];
+                   this.currentMinNumber = fullNumbers[0];
+               } else {
+                   Dom.get(this.id + "-min").value = "";
+                   this.currentMinNumber = "";
+               }
+               if (fullNumbers[1]) {
+                   Dom.get(this.id + "-max").value = fullNumbers[1];
+                   this.currentMaxNumber = fullNumbers[1];
+               } else {
+                   Dom.get(this.id + "-max").value = "";
+                   this.currentMaxNumber = "";
+               }
+           }
+       },
 
       /**
        * Updates the currently stored range value in the hidden form field.
@@ -163,6 +192,18 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                valid = !(value < 0);
            }
            return valid;
+       },
+
+       onReInitializeControl: function (layer, args) {
+           if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+               var options = args[1].options;
+               if (options != null) {
+                   this.setOptions(options);
+               }
+               this.currentMinNumber = "";
+               this.currentMaxNumber = "";
+               this.init();
+           }
        }
    });
 })();

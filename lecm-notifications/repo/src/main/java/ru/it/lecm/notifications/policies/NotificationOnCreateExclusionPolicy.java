@@ -7,6 +7,7 @@ import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.util.ISO8601DateFormat;
 import org.alfresco.util.PropertyCheck;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,7 +18,6 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -26,7 +26,6 @@ import java.util.Date;
  * Time: 13:51
  */
 public class NotificationOnCreateExclusionPolicy extends BaseBean implements NodeServicePolicies.OnCreateAssociationPolicy, NodeServicePolicies.OnDeleteAssociationPolicy {
-    private final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     private final static Logger logger = LoggerFactory.getLogger(NotificationOnCreateExclusionPolicy.class);
     private PolicyComponent policyComponent;
     private OrgstructureBean orgstructureBean;
@@ -64,7 +63,7 @@ public class NotificationOnCreateExclusionPolicy extends BaseBean implements Nod
 
             JSONObject newExclusion = new JSONObject();
             newExclusion.put("employee", employee);
-            newExclusion.put("created", formatter.format(new Date()));
+            newExclusion.put("created", ISO8601DateFormat.format(new Date()));
             NodeRef creator = orgstructureBean.getEmployeeByPerson(AuthenticationUtil.getFullyAuthenticatedUser());
             newExclusion.put("creator", creator);
             rows.put(newExclusion);
