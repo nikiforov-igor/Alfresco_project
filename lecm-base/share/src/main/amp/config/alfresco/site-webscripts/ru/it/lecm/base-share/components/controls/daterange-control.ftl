@@ -84,7 +84,12 @@
                     minFromLimit: "${minFromLimit?string}",
                     maxFromLimit: "${maxFromLimit?string}",
                     minToLimit: "${minToLimit?string}",
-                    maxToLimit: "${maxToLimit?string}"
+                    maxToLimit: "${maxToLimit?string}",
+                    <#if defaultDate?has_content>
+                        defaultValue: "${defaultDate?string}",
+                    </#if>
+                    fieldId: "${field.configName}-date-range",
+                    formId: "${args.htmlid}"
                 }
         ).setMessages(${messages});
     }

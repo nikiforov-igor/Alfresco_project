@@ -2203,7 +2203,7 @@ LogicECM.module = LogicECM.module || {};
 				this.isSearch = false;
 				this.allowedNodes = null;
 				this.allowedNodesScript = null;
-
+                this.options.selectedValue = null;
 				this.init();
 			}
 		}

@@ -938,6 +938,7 @@ LogicECM.module = LogicECM.module || {};
 			        this.allowedNodes = null;
 			        this.allowedNodesScript = null;
 			        this.searchProperties = {};
+                    this.options.selectedValueNodeRef = null;
 
 			        this.onReady();
 		        }

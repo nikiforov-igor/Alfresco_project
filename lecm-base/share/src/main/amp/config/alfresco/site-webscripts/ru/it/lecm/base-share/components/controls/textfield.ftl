@@ -113,7 +113,9 @@
             fieldId: "${field.configName}",
             formId: "${args.htmlid}",
             disabled: ${disabled?string},
-
+            <#if defaultValue?has_content>
+                currentValue: "${defaultValue}",
+            </#if>
             isUniqueValue: ${field.control.params.isUniqueValue!false?string},
             checkInArchive: ${field.control.params.checkInArchive!false?string},
             validationMessageId: "${field.control.params.validationMessageId!'LogicECM.constraints.isUnique.message'}",

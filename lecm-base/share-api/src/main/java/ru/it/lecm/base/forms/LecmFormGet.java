@@ -24,7 +24,8 @@ public abstract class LecmFormGet extends FormUIGet {
 
     protected enum CustomTypes {
         STATUS,
-        TEMPLATES
+        TEMPLATES,
+        REPORT_PREFERENCES
     }
 
     protected enum RangeableTypes {
