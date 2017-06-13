@@ -114,7 +114,7 @@
             formId: "${args.htmlid}",
             disabled: ${disabled?string},
             <#if defaultValue?has_content>
-                currentValue: "${defaultValue}",
+                currentValue: "${defaultValue?js_string}",
             </#if>
             isUniqueValue: ${field.control.params.isUniqueValue!false?string},
             checkInArchive: ${field.control.params.checkInArchive!false?string},
