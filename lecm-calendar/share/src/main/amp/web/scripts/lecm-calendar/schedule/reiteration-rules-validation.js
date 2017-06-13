@@ -7,18 +7,14 @@ LogicECM.module.WCalendar = LogicECM.module.WCalendar || {};
 LogicECM.module.WCalendar.Schedule = LogicECM.module.WCalendar.Schedule || {};
 
 (function() {
-	LogicECM.module.WCalendar.Schedule.reiterationRulesValidation = function Schedule_reiterationRulesValidation() {
+	LogicECM.module.WCalendar.Schedule.reiterationRulesValidation = function Schedule_reiterationRulesValidation(field, args, event, form, silent, message) {
 		var valid = true;
-		var errorMessage;
+		var errorMessage = message;
 	
 		var reiterationType = YAHOO.util.Dom.getElementsBy(function(el) {
 			return (el.name === 'reiteration-type' && el.checked);
 		}, 'input', 'control-buttons', null, null, null, true);
-	
-	
-		var errorContainer = YAHOO.util.Dom.get('reiteration-rules-error-container');
-		errorContainer.innerHTML = "";
-	
+
 		if (reiterationType.value === "week-days") {
 			var daysChecked = YAHOO.util.Dom.getElementsBy(function(el) {
 				return (el.type === 'checkbox' && el.checked);
@@ -49,9 +45,8 @@ LogicECM.module.WCalendar.Schedule = LogicECM.module.WCalendar.Schedule || {};
 			valid = false;
 			errorMessage = Alfresco.component.Base.prototype.msg("message.error.schedule.reiteration-rules-validation.reiteration-type");
 		}
-	
-		if (!valid && errorMessage.length) {
-			errorContainer.innerHTML = errorMessage;
-		}
+
+		this.message = errorMessage;
+		return valid;
 	};
 })();
