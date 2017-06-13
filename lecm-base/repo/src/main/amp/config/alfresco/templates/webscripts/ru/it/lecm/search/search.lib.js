@@ -26,6 +26,7 @@
 
 /*Блок констант*/
 var NOT_SINGLE_QUERY_PATTERN = /^NOT[\s]+.*(?=\sOR\s|\sAND\s|\s\+|\s\-)/i;
+var DATE_PATTERN = /(\d+)[\.\-\/](\d+)[\.\-\/](\d+)/; /*25.04.2015 or 25-04-2015 or 25/04/2015 */
 
 /**
  * Processes the search results. Filters out unnecessary nodes
@@ -317,12 +318,28 @@ function getSearchQuery(params) {
 				logger.log("ftsFields = " + ftsFields);
 				var searchTerm = fullTextSearchJson["searchTerm"];
 				logger.log("searchTerm = " + searchTerm);
-				if (ftsFields != null && ftsFields.length > 0 && searchTerm != null && searchTerm.length > 0) {
+
+                var dateTerms = [];
+				if (ftsFields && ftsFields.length && searchTerm && searchTerm.length) {
                     var searchTermsArray = searchTerm.split(" ");
                     searchTerm = "";
                     for (var k = 0; k < searchTermsArray.length; k++) {
                         var newSearchTerm = searchTermsArray[k];
-                        if (newSearchTerm != null && newSearchTerm != "") {
+                        if (newSearchTerm) {
+                            if (newSearchTerm.match(DATE_PATTERN)) {
+                                logger.log("Date term: " + newSearchTerm);
+                                try {
+                                    var date = new Date(newSearchTerm.replace(DATE_PATTERN, '$2/$1/$3'));
+                                    // date is valid
+                                    // if not, continue as regular string
+                                    if (date && !isNaN(date)) {
+                                        dateTerms.push(date);
+                                    }
+                                } catch (e) {
+                                    logger.log("Error parsing: " + e);
+                                    // ignoring. continue
+                                }
+                            }
                             if (k > 0) {
                                 searchTerm += ' AND ';
                             }
@@ -332,9 +349,19 @@ function getSearchQuery(params) {
 					var columns = ftsFields.split(",");
 					var fieldsQuery = "";
 
-                    if (searchTerm != "") {
+                    var column, columnQName, dateStr;
+                    if (searchTerm) {
                         for (var i = 0; i < columns.length; i++) {
-                            fieldsQuery += this.escapeQName(columns[i]) + ':(' + searchTerm + ') OR ';
+                            column = columns[i];
+                            if (column.indexOf("date$") > -1) {// date columns are prefixed with date$
+                                columnQName = this.escapeQName(column.split('$')[1]);
+                                for (var j = 0; j < dateTerms.length; j++) {
+                                    dateStr = utils.toISO8601(dateTerms[j]).split("T")[0];
+                                    fieldsQuery += '@' + columnQName + ':"' + dateStr + '" OR ';
+                                }
+                            } else if (searchTerm) {
+                                fieldsQuery += this.escapeQName(column) + ':(' + searchTerm + ') OR ';
+                            }
                         }
                     }
 					if (fieldsQuery.length > 5) {

@@ -82,7 +82,7 @@ function processResults(exclusions, startIndex, maxResults, total) {
 		var nodeData = {};
 		nodeData["prop_employee"] = {
 			type: "text",
-			value: employeeShortName,
+			value: employeeNode ? employeeNode.nodeRef.toString() : "",
 			displayValue: employeeShortName
 		};
 		nodeData["prop_created"] = {
@@ -92,7 +92,7 @@ function processResults(exclusions, startIndex, maxResults, total) {
 		};
 		nodeData["prop_creator"] = {
 			type: "text",
-			value: creatorShortName,
+			value: creatorNode ? creatorNode.nodeRef.toString() : "",
 			displayValue: creatorShortName
 		};
 		results.push({

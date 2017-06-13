@@ -386,4 +386,14 @@ public interface IDelegation {
 	 * @return список доверителей
      */
 	List<NodeRef> getDelegationOwnersByTrustee(NodeRef employee, boolean isActivated);
+
+	/**
+	 * Получение списка доверителей по указанной бизнесс роли для сотрудника
+	 *
+	 * @param effectiveEmployee делегат
+	 * @param workflowDynRole   бизнесс роль
+	 * @param isActive          активное делегирование
+	 * @return список доверителей по указанной роли для сотрудника
+	 */
+	List<NodeRef> getDelegationOwnersByEffectiveEmployee(NodeRef effectiveEmployee, String workflowDynRole, boolean isActive);
 }

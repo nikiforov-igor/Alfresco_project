@@ -80,31 +80,8 @@
 							/* Если роль не указана, то ориентируемся на делегирование всего */
 							var delegateAll = workflowRole == null;
 							var employee = assignee;
-							var delegationOpts = delegation.getDelegationOpts(employee.nodeRef.toString());
-							if (delegationOpts) {
-								var isDelegationActive = delegation.isDelegationActive(delegationOpts.nodeRef.toString());
-								if (isDelegationActive) {
-							        var effectiveEmployee;
-							        if (delegateAll) {
-							            effectiveEmployee = getEffectiveEmployee(delegationOpts);
-							        } else {
-							            effectiveEmployee = delegation.getEffectiveExecutor(employee.nodeRef.toString(), workflowRole);
-							            /* Если эффективного исполнителя не нашли по бизнес-ролям, то поискать его через параметры делегирования */
-							            if (employee && effectiveEmployee && employee.nodeRef.equals(effectiveEmployee.nodeRef)) {
-							                effectiveEmployee = getEffectiveEmployee(delegationOpts);
-							            }
-							        }
-							        if (effectiveEmployee) {
-							            /* Приводим к jsString */
-							            var effectiveUserName = '' + orgstructure.getEmployeeLogin(effectiveEmployee);
-							            if (effectiveUserName) {
-							                task.setAssignee(effectiveUserName);
-							                task.setOwner(effectiveUserName);
-							            }
-							            task.setVariableLocal('assumeExecutor', employee.nodeRef.toString());
-							        }
-                                }
-							}
+							task.setVariableLocal('assumeExecutor', employee.nodeRef.toString());
+
 
                             /* Set the message for the reservation task */
                             var currentEmployee = orgstructure.getCurrentEmployee();

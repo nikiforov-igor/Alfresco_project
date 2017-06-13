@@ -3,27 +3,16 @@
 <#assign controlId = fieldHtmlId + "-cntrl">
 <#if field.control.params.onlyPositive?? && field.control.params.onlyPositive == "true"><#assign onlyPositive=true><#else><#assign onlyPositive=false></#if>
 
-<script type="text/javascript">//<![CDATA[
-(function()
-{
-    function init() {
-        LogicECM.module.Base.Util.loadScripts([
-            'scripts/lecm-base/components/lecm-numberrange.js'
-        ], createNumberRange);
-    }
-
-    function createNumberRange(){
-        var control = new LogicECM.NumberRange("${controlId}", "${fieldHtmlId}").setMessages(
-        ${messages}
-        );
-        control.setOptions({
-            onlyPositive: ${onlyPositive?string}
-        });
-    }
-
-    YAHOO.util.Event.onDOMReady(init);
-})();
-//]]></script>
+<#assign defaultValue>
+    <#if (field.control.params.defaultFrom?? || field.control.params.defaultTo??)>
+    ${field.control.params.defaultFrom!""}|${field.control.params.defaultTo!""}
+    </#if>
+</#assign>
+<#if form.mode == "create" && defaultValue?string == "">
+    <#if form.arguments[field.name + "-number-range"]?has_content>
+        <#assign defaultValue=form.arguments[field.name + "-number-range"]>
+    </#if>
+</#if>
 
 <div class="control numberrange-control viewmode">
     <div class="label-div">
@@ -57,3 +46,31 @@
     </div>
 </div>
 <div class="clear"></div>
+
+<script type="text/javascript">//<![CDATA[
+(function()
+{
+    function init() {
+        LogicECM.module.Base.Util.loadScripts([
+            'scripts/lecm-base/components/lecm-numberrange.js'
+        ], createNumberRange);
+    }
+
+    function createNumberRange(){
+        var control = new LogicECM.NumberRange("${controlId}", "${fieldHtmlId}").setMessages(
+        ${messages}
+        );
+        control.setOptions({
+            onlyPositive: ${onlyPositive?string},
+        <#if defaultValue?has_content>
+            defaultValue: "${defaultValue?string}",
+        </#if>
+            fieldId: "${field.configName}-number-range",
+            formId: "${args.htmlid}"
+        });
+    }
+
+    YAHOO.util.Event.onDOMReady(init);
+})();
+//]]></script>
+

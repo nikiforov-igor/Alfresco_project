@@ -136,8 +136,6 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 	
 	@Override
 	public void assignTask(final NodeRef assignee, final DelegateTask task) {
-		actualizeReservationTask(assignee, task);
-
 		NodeRef bpmPackage = ((ScriptNode) task.getVariable("bpm_package")).getNodeRef();
 		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
 		grantDynamicRole(employeeRef, bpmPackage, (String) task.getVariable("registrarDynamicRole"));
