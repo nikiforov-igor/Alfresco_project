@@ -8,10 +8,14 @@ function main() {
 	var documentDetails = AlfrescoUtil.getNodeDetails(model.nodeRef, model.site);
 	if (documentDetails) {
 		model.document = documentDetails;
-
-		var category = getCategoryByAttachments(model.nodeRef);
-		var mayEditMetadata = hasPermission(model.nodeRef, PERM_ATTR_EDIT);
-		model.allowMetaDataUpdate = category != null && !category.isReadOnly && mayEditMetadata;
+		var isLocked = documentDetails.item.node.isLocked;
+        if (isLocked) {
+            model.allowMetaDataUpdate = false;
+        } else {
+            var category = getCategoryByAttachments(model.nodeRef);
+            var mayEditMetadata = hasPermission(model.nodeRef, PERM_ATTR_EDIT);
+            model.allowMetaDataUpdate = category != null && !category.isReadOnly && mayEditMetadata;
+        }
 	}
 }
 
