@@ -156,6 +156,7 @@
 
 .exec-block {
     text-align: right;
+    float: right;
 }
 
 .control-of-execution {
