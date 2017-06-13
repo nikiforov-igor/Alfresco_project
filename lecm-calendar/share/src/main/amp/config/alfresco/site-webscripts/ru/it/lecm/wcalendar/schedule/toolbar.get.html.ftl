@@ -28,7 +28,6 @@ LogicECM.module.WCalendar.Schedule = LogicECM.module.WCalendar.Schedule || {};
             'scripts/lecm-base/components/lecm-toolbar.js',
             'scripts/lecm-calendar/schedule/schedule-toolbar.js',
             'scripts/lecm-calendar/schedule/schedule-limit-validation.js',
-            'scripts/lecm-calendar/schedule/reiteration-rules-validation.js',
             'scripts/lecm-calendar/schedule/time-validation.js'
         ], [
             'components/data-lists/toolbar.css',
