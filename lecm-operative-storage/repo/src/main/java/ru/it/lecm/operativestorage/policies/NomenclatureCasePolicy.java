@@ -5,21 +5,8 @@
  */
 package ru.it.lecm.operativestorage.policies;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.node.NodeServicePolicies.OnAddAspectPolicy;
-import org.alfresco.repo.node.NodeServicePolicies.OnCreateAssociationPolicy;
-import org.alfresco.repo.node.NodeServicePolicies.OnCreateChildAssociationPolicy;
-import org.alfresco.repo.node.NodeServicePolicies.OnCreateNodePolicy;
-import org.alfresco.repo.node.NodeServicePolicies.OnDeleteAssociationPolicy;
-import org.alfresco.repo.node.NodeServicePolicies.OnUpdatePropertiesPolicy;
+import org.alfresco.repo.node.NodeServicePolicies.*;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
@@ -34,6 +21,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.operativestorage.beans.OperativeStorageService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  *
@@ -263,7 +253,7 @@ public class NomenclatureCasePolicy implements OnCreateNodePolicy,
 				}
 			}
 		}
-		if (!caseIndexBefore.equals(caseIndexAfter)) {
+		if (caseIndexBefore != null && caseIndexAfter != null && !caseIndexBefore.equals(caseIndexAfter)) {
 			nodeService.setProperty(nodeRef, OperativeStorageService.PROP_NOMENCLATURE_COMMON_INDEX, caseIndexAfter);
 		}
 	}
