@@ -186,6 +186,10 @@
 		  p:policyComponent-ref="policyComponent"
 		  p:nodeService-ref="nodeService"/>
 
+	<bean id="unitSectionPolicy" init-method="init" class="ru.it.lecm.operativestorage.policies.UnitSectionPolicy">
+		  <property name="policyComponent" ref="policyComponent"/>
+		  <property name="nodeService" ref="NodeService"/>
+	</bean>
 
 	<bean parent="lecmDictionaryBootstrap" depends-on="groupActionsService"
 		  p:rootPath="/Business platform/LECM/Сервис Групповые операции"
