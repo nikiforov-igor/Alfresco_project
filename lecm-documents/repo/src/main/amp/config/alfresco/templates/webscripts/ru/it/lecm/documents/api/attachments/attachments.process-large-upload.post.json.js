@@ -11,7 +11,7 @@
         var node = search.findNode(nodeRef);
         if (node) {
             node.addAspect('lecm-document-aspects:complex-attachment');
-            var folder = node.parent.createFolder(node.properties['cm:name'] + '_complex_attachment_pages');
+            var folder = node.parent.createFolder(node.nodeRef.getId() + '_complex_attachment_pages');
             node.createAssociation(folder, 'lecm-document-aspects:complex-attachment-folder');
             node.properties.content.mimetype = 'complex-attachment';
             node.save();
