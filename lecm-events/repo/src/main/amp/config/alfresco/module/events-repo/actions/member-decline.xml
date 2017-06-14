@@ -8,7 +8,10 @@
         <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
         <property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
         <property name="lecm-group-actions:script"><![CDATA[ if (document) {
-   var memberRow = events.getCurrentEmployeeEventMemberRow(document);
+   var currentEmployee = orgstructure.getCurrentEmployee();
+   var memberRow = events.getEmployeeEventMemberRow(document.nodeRef.toString(), currentEmployee.nodeRef.toString());
+   lecmPermission.pushAuthentication();
+   lecmPermission.setRunAsUserSystem();
    if (memberRow) {
      memberRow.properties["lecm-events-ts:members-status"] = "DECLINED";
      memberRow.properties["lecm-events-ts:members-decline-reason"] = memberDeclineReason;
@@ -18,7 +21,7 @@
    var repeatableEvents = events.getRepetableEvents(document, "ALL");
    if (repeatableEvents) {
      for (var i = 0; i < repeatableEvents.length; i++) {
-       memberRow = events.getCurrentEmployeeEventMemberRow(repeatableEvents[i]);
+       memberRow = events.getEmployeeEventMemberRow(repeatableEvents[i].nodeRef.toString(), currentEmployee.nodeRef.toString());
        if (memberRow) {
          memberRow.properties["lecm-events-ts:members-status"] = "DECLINED";
          memberRow.properties["lecm-events-ts:members-decline-reason"] = memberDeclineReason;
@@ -26,8 +29,8 @@
        }
      }
    }
+    lecmPermission.popAuthentication();
 
-   var currentEmployee = orgstructure.getCurrentEmployee();
    var initiator = document.assocs["lecm-events:initiator-assoc"][0];
 
    if (currentEmployee && initiator) {
