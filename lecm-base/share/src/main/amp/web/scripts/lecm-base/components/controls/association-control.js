@@ -570,6 +570,15 @@ LogicECM.module = LogicECM.module || {};
 					correctScope:true,
 					fn: this.onAutocomplete
 				}, 'keydown');
+
+				/*ловим уплывающий контейнер*/
+				var dialogContainer = Dom.get(this.options.formId + "-form-container_c");
+				if (dialogContainer) {
+					var autocompleteContainer = Dom.get(this.id + '-autocomplete-container');
+					if (autocompleteContainer) {
+						Dom.setStyle(autocompleteContainer, "zIndex", (dialogContainer.style.zIndex + 1));
+					}
+				}
 			}
 
 			BaseUtil.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
