@@ -475,6 +475,8 @@ LogicECM.module = LogicECM.module || {};
 								itemKey: controlItems[0].itemKey,
 								options: options ? options : {}
 							});
+					}  else {
+						itemsOptions = controlItems;
 					}
 					for (var i = 0; i < this.options.itemsOptions.length; i++) {
 						itemsOptions.forEach(function (itemOptions) {
