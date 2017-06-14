@@ -235,6 +235,7 @@
 							<constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
 						</constraint-handlers>
 					</field>
+					<field id="lecm-notification-template:exclusion-employee" label-id="title.template-exclusion-employees"/>
 				</appearance>
 			</form>
 			<form id="exclusions-datagrid">
