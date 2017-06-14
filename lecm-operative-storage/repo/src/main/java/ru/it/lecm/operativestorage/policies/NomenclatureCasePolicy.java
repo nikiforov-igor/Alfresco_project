@@ -246,20 +246,25 @@ public class NomenclatureCasePolicy implements OnCreateNodePolicy,
 	public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
 		Boolean sharedFlagBefore = (Boolean) before.get(OperativeStorageService.PROP_NOMENCLATURE_CASE_IS_SHARED);
 		Boolean sharedFlagAfter = (Boolean) after.get(OperativeStorageService.PROP_NOMENCLATURE_CASE_IS_SHARED);
+		String caseIndexBefore = (String) before.get(OperativeStorageService.PROP_NOMENCLATURE_CASE_INDEX);
+		String caseIndexAfter = (String) after.get(OperativeStorageService.PROP_NOMENCLATURE_CASE_INDEX);
 		if(sharedFlagBefore == null || sharedFlagAfter == null) {
 			return;
 		}
-		if(!sharedFlagAfter.equals(sharedFlagBefore)) {
+		if (!sharedFlagAfter.equals(sharedFlagBefore)) {
 
 			NodeRef docFolder = operativeStorageService.getDocuemntsFolder(nodeRef);
 
 			List<AssociationRef> assocs = nodeService.getTargetAssocs(nodeRef, OperativeStorageService.ASSOC_NOMENCLATURE_CASE_VISIBILITY_UNIT);
-			if(assocs != null) {
+			if (assocs != null) {
 				for (AssociationRef assoc : assocs) {
 					operativeStorageService.revokePermFromUnit(docFolder, assoc.getTargetRef(), sharedFlagBefore);
 					operativeStorageService.grantPermToUnit(docFolder, assoc.getTargetRef(), sharedFlagAfter);
 				}
 			}
+		}
+		if (!caseIndexBefore.equals(caseIndexAfter)) {
+			nodeService.setProperty(nodeRef, OperativeStorageService.PROP_NOMENCLATURE_COMMON_INDEX, caseIndexAfter);
 		}
 	}
 
