@@ -127,6 +127,46 @@ LogicECM.module.Notifications = LogicECM.module.Notifications || {};
             fnPrompt.call(this, fnActionDeleteConfirm);
         },
 
+        onDeleteAll: function () {
+            var scope = this;
+            Alfresco.util.PopupManager.displayPrompt(
+                {
+                    title: scope.msg("title.delete-all-exclusions"),
+                    text: scope.msg("delete-all-exclusions.prompt.description"),
+                    buttons: [
+                        {
+                            text: scope.msg("button.delete"),
+                            handler: function () {
+                                this.destroy();
+                                Alfresco.util.Ajax.jsonPost({
+                                    url: Alfresco.constants.PROXY_URI + "lecm/notifications/template/clearAllExclusions",
+                                    dataObj: {
+                                        template: scope.argumentsItemId
+                                    },
+                                    successCallback: {
+                                        fn: function () {
+                                            YAHOO.Bubbling.fire("datagridRefresh",
+                                                {
+                                                    bubblingLabel: scope.options.bubblingLabel
+                                                });
+                                        },
+                                        scope: scope
+                                    },
+                                    failureMessage: scope.msg("message.failure")
+                                });
+                            }
+                        },
+                        {
+                            text: scope.msg("button.cancel"),
+                            handler: function () {
+                                this.destroy();
+                            },
+                            isDefault: true
+                        }
+                    ]
+                });
+        },
+
         onDataGridColumns: function DataGrid_onDataGridColumns(response) {
             this.datagridColumns = response.json.columns;
             // DataSource set-up and event registration
@@ -149,24 +189,7 @@ LogicECM.module.Notifications = LogicECM.module.Notifications || {};
                 del.innerHTML = this.msg("title.delete-all-exclusions");
                 toolbar.appendChild(del);
 
-                YAHOO.util.Event.addListener(del, "click", function(event) {
-                    Alfresco.util.Ajax.jsonPost({
-                        url: Alfresco.constants.PROXY_URI + "lecm/notifications/template/clearAllExclusions",
-                        dataObj: {
-                            template: this.argumentsItemId
-                        },
-                        successCallback: {
-                            fn: function (response) {
-                                YAHOO.Bubbling.fire("datagridRefresh",
-                                    {
-                                        bubblingLabel: this.options.bubblingLabel
-                                    });
-                            },
-                            scope: this
-                        },
-                        failureMessage: this.msg("message.failure")
-                    });
-                }.bind(this));
+                YAHOO.util.Event.addListener(del, "click", this.onDeleteAll.bind(this));
             }
 
             YAHOO.util.Dom.setStyle(this.id + "-toolbar", "display", "block");
