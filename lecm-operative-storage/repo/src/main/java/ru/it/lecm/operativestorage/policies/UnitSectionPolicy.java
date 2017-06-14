@@ -39,7 +39,7 @@ public class UnitSectionPolicy implements NodeServicePolicies.OnUpdateProperties
         String unitSectionIndexBefore = (String) before.get(OperativeStorageService.PROP_NOMENCLATURE_UNIT_SECTION_INDEX);
         String unitSectionIndexAfter = (String) after.get(OperativeStorageService.PROP_NOMENCLATURE_UNIT_SECTION_INDEX);
 
-        if (unitSectionIndexBefore != null && unitSectionIndexAfter != null && !unitSectionIndexBefore.equals(unitSectionIndexAfter)) {
+        if ((unitSectionIndexBefore != null && unitSectionIndexAfter != null && !unitSectionIndexBefore.equals(unitSectionIndexAfter)) || !(unitSectionIndexBefore == null && unitSectionIndexAfter == null)) {
             nodeService.setProperty(nodeRef, OperativeStorageService.PROP_NOMENCLATURE_COMMON_INDEX, unitSectionIndexAfter);
         }
     }

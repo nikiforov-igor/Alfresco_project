@@ -253,7 +253,7 @@ public class NomenclatureCasePolicy implements OnCreateNodePolicy,
 				}
 			}
 		}
-		if (caseIndexBefore != null && caseIndexAfter != null && !caseIndexBefore.equals(caseIndexAfter)) {
+		if ((caseIndexBefore != null && caseIndexAfter != null && !caseIndexBefore.equals(caseIndexAfter)) || !(caseIndexBefore == null && caseIndexAfter == null)) {
 			nodeService.setProperty(nodeRef, OperativeStorageService.PROP_NOMENCLATURE_COMMON_INDEX, caseIndexAfter);
 		}
 	}
