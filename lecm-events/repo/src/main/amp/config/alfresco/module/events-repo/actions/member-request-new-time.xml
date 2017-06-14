@@ -8,7 +8,10 @@
         <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
         <property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
         <property name="lecm-group-actions:script"><![CDATA[if (document) {
-  var memberRow = events.getCurrentEmployeeEventMemberRow(document);
+          var currentEmployee = orgstructure.getCurrentEmployee();
+   lecmPermission.pushAuthentication();
+   lecmPermission.setRunAsUserSystem();
+     var memberRow = events.getEmployeeEventMemberRow(document.nodeRef.toString(), currentEmployee.nodeRef.toString());
   if (memberRow) {
     memberRow.properties["lecm-events-ts:members-status"] = "REQUEST_NEW_TIME";
     memberRow.properties["lecm-events-ts:members-from-date"] = requestNewTimeFromDate;
@@ -18,7 +21,7 @@
   var repeatableEvents = events.getRepetableEvents(document, "ALL");
   if (repeatableEvents) {
     for (var i = 0; i < repeatableEvents.length; i++) {
-      memberRow = events.getCurrentEmployeeEventMemberRow(repeatableEvents[i]);
+      memberRow = events.getEmployeeEventMemberRow(repeatableEvents[i].nodeRef.toString(), currentEmployee.nodeRef.toString());
       if (memberRow) {
         memberRow.properties["lecm-events-ts:members-status"] = "REQUEST_NEW_TIME";
         memberRow.properties["lecm-events-ts:members-from-date"] = requestNewTimeFromDate;
@@ -27,7 +30,7 @@
     }
   }
 
-  var currentEmployee = orgstructure.getCurrentEmployee();
+  lecmPermission.popAuthentication();
   var initiator = document.assocs["lecm-events:initiator-assoc"][0];
 
   if (currentEmployee && initiator) {
