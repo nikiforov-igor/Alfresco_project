@@ -1289,7 +1289,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer_Lite]]></value>
                                             </property>
                                         </properties>
                                         <aspects>

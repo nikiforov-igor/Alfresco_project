@@ -139,7 +139,7 @@
 	                        <control-param name="defaultValueUseOnce">true</control-param>
                             <!-- autocomplete options-->
                             <control-param name="autoCompleteJsName">select-representative-autoComplete</control-param>
-                            <control-param name="treeViewJsName">select-representative-treeView</control-param>
+                            <control-param name="treeViewJsName">select-representative-treeView-default</control-param>
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="employeeAbsenceMarker">true</control-param>
@@ -251,7 +251,7 @@
 	                        <control-param name="defaultValueUseOnce">true</control-param>
                             <!-- autocomplete options-->
                             <control-param name="autoCompleteJsName">select-representative-autoComplete</control-param>
-                            <control-param name="treeViewJsName">select-representative-treeView</control-param>
+                            <control-param name="treeViewJsName">select-representative-treeView-document</control-param>
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="employeeAbsenceMarker">true</control-param>
@@ -379,7 +379,7 @@
 	                        <control-param name="defaultValueUseOnce">true</control-param>
                             <!-- autocomplete options-->
                             <control-param name="autoCompleteJsName">select-representative-autoComplete</control-param>
-                            <control-param name="treeViewJsName">select-representative-treeView</control-param>
+                            <control-param name="treeViewJsName">select-representative-treeView-dashlet</control-param>
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="employeeAbsenceMarker">true</control-param>

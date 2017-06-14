@@ -159,8 +159,11 @@ public class GroupActionExecutor extends DeclarativeWebScript {
                             String message;
 							itemResult.put("withErrors", false);
                             try {
-                                message = returnModel.get("message") == null ? substitudeBean.getObjectDescription(item) : returnModel.get("message").toString();
+                                message = substitudeBean.getObjectDescription(item);
                                 scriptProcessor.executeScript(scriptContent, scriptModel);
+                                if (returnModel.get("message") != null) {
+                                    message = returnModel.get("message").toString();
+                                }
                             } catch (Exception e) {
                                 logger.error("Error while execute script: ", e);
                                 result.put("withErrors", true);

@@ -4,27 +4,46 @@
 
 <script type="text/javascript">//<![CDATA[
 (function() {
-		function checkPointExecutedStatus (){
-			Alfresco.util.Ajax.jsonRequest({
-				method: "GET",
-				url: Alfresco.constants.PROXY_URI_RELATIVE + '/lecm/protocol/CheckPointExecutedStatus',
-				dataObj: {
-					pointRef: "${form.arguments.itemId}"
-				},
-				successCallback: {
-					fn: function(response) {
-							if (response) {
-								var isExecuted = response.json.isExecuted;
-								if ("true" !== isExecuted){
-									createExecutedPointButton();
-								}
-							}
-					}
-				},
-				failureMessage: "${msg('message.failure')}",
-				execScripts: true,
-				scope: this
-			});
+		function isExecuteAvailable (){
+            Alfresco.util.Ajax.jsonPost({
+                url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
+                dataObj: {
+                    nodeRef: "${form.arguments.itemId}",
+                    substituteString: "{lecm-protocol-ts:errand-assoc/sys:node-uuid}"
+                },
+                successCallback: {
+                    fn: function (response) {
+                        if (response) {
+                            if (!response.json.formatString) {
+                                Alfresco.util.Ajax.jsonRequest({
+                                    method: "GET",
+                                    url: Alfresco.constants.PROXY_URI_RELATIVE + '/lecm/protocol/CheckPointExecutedStatus',
+                                    dataObj: {
+                                        pointRef: "${form.arguments.itemId}"
+                                    },
+                                    successCallback: {
+                                        fn: function (response) {
+                                            if (response) {
+                                                var isExecuted = response.json.isExecuted;
+                                                if ("true" !== isExecuted) {
+                                                    createExecutedPointButton();
+                                                }
+                                            }
+                                        }
+                                    },
+                                    failureMessage: "${msg('message.failure')}",
+                                    execScripts: true,
+                                    scope: this
+                                });
+                            }
+                        }
+                    },
+                    scope: this
+                },
+                failureMessage: "${msg('message.failure')}",
+                scope: this
+            });
+
 		}
 
 		function executePoint (){
@@ -70,7 +89,7 @@
 			</#if>
 		}
 
-		YAHOO.util.Event.onDOMReady(checkPointExecutedStatus);
+		YAHOO.util.Event.onDOMReady(isExecuteAvailable);
 
 })();
 //]]></script>

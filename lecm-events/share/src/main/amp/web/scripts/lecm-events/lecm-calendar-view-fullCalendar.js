@@ -325,7 +325,7 @@
                                 description: $html(event.description),
                                 title: event.title,
                                 where: $html(event.where),
-                                url: Alfresco.constants.URL_CONTEXT + "event?nodeRef=" + event.nodeRef,
+                                url: Alfresco.constants.URL_PAGECONTEXT + "event?nodeRef=" + event.nodeRef,
                                 className: className
                              }, event));
                       });

@@ -558,6 +558,11 @@
                             <control-param name="selectedItemsFormArgs">lecm-document-aspects:response-to-assoc</control-param>
                         </control>
                     </field>
+                    <field id="lecm-document:subject-assoc">
+                        <control>
+                            <control-param name="selectedItemsFormArgs">lecm-document:subject-assoc</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-eds-document:file-register-assoc"/>
                     <field id="lecm-document-aspects:attachments-temp-assoc" label-id="label.attachments.title">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control-with-preview.ftl">
@@ -690,6 +695,11 @@
                             <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
                             <control-param name="itemType">lecm-internal:document</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-document:subject-assoc">
+                        <control>
+                            <control-param name="selectedItemsFormArgs">lecm-document:subject-assoc</control-param>
                         </control>
                     </field>
                     <field id="lecm-eds-document:file-register-assoc"/>
