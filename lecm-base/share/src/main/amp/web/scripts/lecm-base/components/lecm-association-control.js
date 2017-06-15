@@ -1521,6 +1521,9 @@ LogicECM.module = LogicECM.module || {};
 			{
 				// DataSource definition
 				var pickerChildrenUrl = Alfresco.constants.PROXY_URI + this.options.childrenDataSource + "/node";
+				if (this.controlAutoComplete) {
+					this.controlAutoComplete.dataSource.liveData = pickerChildrenUrl + "/children";
+				}
 				this.widgets.dataSource = new YAHOO.util.DataSource(pickerChildrenUrl,
 					{
 						responseType: YAHOO.util.DataSource.TYPE_JSON,
