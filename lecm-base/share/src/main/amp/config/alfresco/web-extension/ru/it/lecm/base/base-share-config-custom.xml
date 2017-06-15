@@ -53,6 +53,7 @@
 				</action>
 				<action name="assertOrigin">
 					<param name="always">false</param>
+					<param name="origin">null</param><!--Порядок проверки: пустой заголовок, origin совпадает, origin равен заданному -->
 				</action>
 			</rule>
 		</filter>
