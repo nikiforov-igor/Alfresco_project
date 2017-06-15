@@ -1487,6 +1487,7 @@
                     <show id="lecm-errands:reiteration-count"/>
                     <show id="reiteration-count-label" force="true"/>
                     <show id="lecm-base-dummy-aspects:script2" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script3" force="true"/>
                     <!-- Закрывать вышестоящее поручение -->
                     <show id="lecm-errands:auto-close"/>
                     <!-- Контролер-->
@@ -1581,6 +1582,11 @@
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
                         </constraint-handlers>
+                    </field>
+                    <field id="lecm-base-dummy-aspects:script3" set="exist-business-role">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-errands/errands-reinit-executors.js</control-param>
+                        </control>
                     </field>
                     <field id="lecm-errands:limitation-date-radio" set="limitation-date"  mandatory="true">
                         <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
