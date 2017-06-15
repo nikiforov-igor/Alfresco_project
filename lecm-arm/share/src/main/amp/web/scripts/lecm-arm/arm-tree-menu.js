@@ -295,6 +295,7 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
             root.data.searchQuery  = node.searchQuery;
             root.data.searchType  = node.searchType;
 	        root.data.runAs  = node.runAs;
+	        root.data.baseNodeId  = node.id;
             root.id  = node.id;
             this._loadTree(root);
 

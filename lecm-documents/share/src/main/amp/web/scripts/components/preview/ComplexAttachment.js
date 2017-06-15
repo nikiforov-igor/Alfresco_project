@@ -137,7 +137,9 @@ Alfresco.WebPreview.prototype.Plugins.ComplexAttachment.prototype =
                 htmlid: this.id
             },
             successCallback: {
-                fn: function () {
+                fn: function (response) {
+                    Dom.get(this.id).innerHTML = response.serverResponse.responseText;
+                    this.currentPage = 1;
                     this.afterSubPreviewerRendered();
                 },
                 scope: this
@@ -253,11 +255,9 @@ Alfresco.WebPreview.prototype.Plugins.ComplexAttachment.prototype =
                         htmlid: this.id
                     },
                     successCallback: {
-                        fn: function () {
-                            var previewerDiv = Dom.get(this.id + "-previewer-div");
-                            previewerDiv.innerHTML = "<div class='message'></div>";
-                            previewerDiv.className = "previewer ComplexAttachment";
-                            previewerDiv.style = "";
+                        fn: function (response) {
+                            Dom.get(this.id).innerHTML = response.serverResponse.responseText;
+                            this.afterSubPreviewerRendered();
                             this.setCurrentPage(page);
                             this.pageSwitchLocked = false;
                         },
@@ -300,12 +300,7 @@ Alfresco.WebPreview.prototype.Plugins.ComplexAttachment.prototype =
 
                         return 0;
                     });
-                    var previewerDiv = Dom.get(this.id + "-previewer-div");
-                    previewerDiv.innerHTML = "<div class='message'></div>";
-                    previewerDiv.className = "previewer ComplexAttachment";
-                    previewerDiv.style = "";
                     this.renderPreview(this.workFilesNodes, this.totalPageNum);
-                    this.onPageSelect(1);
                 },
                 scope: this
             },
