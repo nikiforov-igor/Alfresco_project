@@ -684,6 +684,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     this.currentFromDate = "";
                     this.currentToDate = "";
 
+                    if (options.resetValue) {
+                        Dom.get(this.valueHtmlId).value = "|";
+                    }
+
                     for (var i in this.widgets) {
                         if (this.widgets.hasOwnProperty(i)) {
                             var w = this.widgets[i];
