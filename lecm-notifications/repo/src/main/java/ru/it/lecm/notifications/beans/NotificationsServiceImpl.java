@@ -275,11 +275,11 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
                     List<AssociationRef> templateAssocs = nodeService.getTargetAssocs(templateDicRec, ASSOC_NOTIFICATION_TEMPLATE_TEMPLATE_ASSOC);
                     NodeRef templateRef = null;
                     if (templateAssocs ==  null || templateAssocs.size() == 0) {
-                        SearchParameters sp = new SearchParameters();
-                        sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-                        sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
-                        sp.setQuery("PATH:\"/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl\"");
-                        ResultSet resultSetRows = searchService.query(sp);
+                        SearchParameters searchParametersp = new SearchParameters();
+                        searchParametersp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+                        searchParametersp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
+                        searchParametersp.setQuery("PATH:\"/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl\"");
+                        ResultSet resultSetRows = searchService.query(searchParametersp);
                         if (resultSetRows != null && resultSetRows.length() == 1) {
                             templateRef = resultSetRows.getRow(0).getNodeRef();
                             String name = (String) nodeService.getProperty(templateDicRec, ContentModel.PROP_NAME);
