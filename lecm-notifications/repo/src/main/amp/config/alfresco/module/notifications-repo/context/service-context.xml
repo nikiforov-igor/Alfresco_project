@@ -122,6 +122,7 @@
 		<property name="threadPoolExecutor" ref="notificationsAsyncThreadPool"/>
 		<property name="secretaryService" ref="secretaryService"/>
 		<property name="businessJournalService" ref="businessJournalService"/>
+		<property name="searchService" ref="searchService"/>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
 			<map>

@@ -8,6 +8,10 @@ import org.alfresco.repo.transaction.TransactionListener;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.StoreRef;
+import org.alfresco.service.cmr.search.ResultSet;
+import org.alfresco.service.cmr.search.SearchParameters;
+import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.codec.binary.Base64;
@@ -57,6 +61,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
     private DictionaryBean dictionaryService;
     private SubstitudeBean substituteService;
 	private SecretaryService secretaryService;
+    private SearchService searchService;
 
 	private Map<NodeRef, NotificationChannelBeanBase> channels;
 	private Map<String, NodeRef> channelsNodeRefs;
@@ -107,6 +112,10 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 
     public void setBusinessJournalService(BusinessJournalService businessJournalService) {
         this.businessJournalService = businessJournalService;
+    }
+
+    public void setSearchService(SearchService searchService) {
+        this.searchService = searchService;
     }
 
     public Map<NodeRef, NotificationChannelBeanBase> getChannels() {
@@ -264,7 +273,21 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
                     String template = (String) nodeService.getProperty(templateDicRec, PROP_NOTIFICATION_TEMPLATE);
                     String subject = (String) nodeService.getProperty(templateDicRec, PROP_NOTIFICATION_TEMPLATE_SUBJECT);
                     List<AssociationRef> templateAssocs = nodeService.getTargetAssocs(templateDicRec, ASSOC_NOTIFICATION_TEMPLATE_TEMPLATE_ASSOC);
-                    NodeRef templateRef = templateAssocs.isEmpty() ? null : templateAssocs.get(0).getTargetRef();
+                    NodeRef templateRef = null;
+                    if (templateAssocs ==  null || templateAssocs.size() == 0) {
+                        SearchParameters sp = new SearchParameters();
+                        sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+                        sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
+                        sp.setQuery("PATH:\"/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl\"");
+                        ResultSet resultSetRows = searchService.query(sp);
+                        if (resultSetRows != null && resultSetRows.length() == 1) {
+                            templateRef = resultSetRows.getRow(0).getNodeRef();
+                            String name = (String) nodeService.getProperty(templateDicRec, ContentModel.PROP_NAME);
+                            logger.warn("Для уведомления " + name + " не задан шаблон! Использован шаблон по умолчанию!");
+                        }
+                    } else {
+                        templateRef = templateAssocs.isEmpty() ? null : templateAssocs.get(0).getTargetRef();
+                    }
 
                     generalizedNotification.setTemplate(template);
                     generalizedNotification.setSubject(subject);
