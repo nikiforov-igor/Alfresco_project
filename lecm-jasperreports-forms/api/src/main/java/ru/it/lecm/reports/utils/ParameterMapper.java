@@ -109,33 +109,35 @@ public class ParameterMapper {
                     if ((isDateRange || isNumberRange)) {
                         if (args.containsKey(argParamName)) {
                             final String[] paramValue = args.get(argParamName).split("\\|");
-                            if (isDateRange) {
-                                bound1 = getDateValue(paramValue[0]);
-                                if (bound1 != null) {
-                                    Calendar bound1Calendar = Calendar.getInstance();
-                                    bound1Calendar.setTime((Date) bound1);
-                                    bound1Calendar.set(Calendar.HOUR_OF_DAY, 0);
-                                    bound1Calendar.set(Calendar.MINUTE, 0);
-                                    bound1Calendar.set(Calendar.SECOND, 0);
+                            if (paramValue.length > 0) {
+                                if (isDateRange) {
+                                    bound1 = getDateValue(paramValue[0]);
+                                    if (bound1 != null) {
+                                        Calendar bound1Calendar = Calendar.getInstance();
+                                        bound1Calendar.setTime((Date) bound1);
+                                        bound1Calendar.set(Calendar.HOUR_OF_DAY, 0);
+                                        bound1Calendar.set(Calendar.MINUTE, 0);
+                                        bound1Calendar.set(Calendar.SECOND, 0);
 
-                                    bound1 = bound1Calendar.getTime();
-                                }
-                                if (paramValue.length >= 2) {
-                                    bound2 = getDateValue(paramValue[1]);
-                                    if (bound2 != null) {
-                                        Calendar bound2Calendar = Calendar.getInstance();
-                                        bound2Calendar.setTime((Date) bound2);
-                                        bound2Calendar.set(Calendar.HOUR_OF_DAY, 23);
-                                        bound2Calendar.set(Calendar.MINUTE, 59);
-                                        bound2Calendar.set(Calendar.SECOND, 59);
-
-                                        bound2 = bound2Calendar.getTime();
+                                        bound1 = bound1Calendar.getTime();
                                     }
-                                }
-                            } else {
-                                bound1 = getNumericAutoTypedValue(paramValue[0]);
-                                if (paramValue.length >= 2) {
-                                    bound2 = getNumericAutoTypedValue(paramValue[1]);
+                                    if (paramValue.length >= 2) {
+                                        bound2 = getDateValue(paramValue[1]);
+                                        if (bound2 != null) {
+                                            Calendar bound2Calendar = Calendar.getInstance();
+                                            bound2Calendar.setTime((Date) bound2);
+                                            bound2Calendar.set(Calendar.HOUR_OF_DAY, 23);
+                                            bound2Calendar.set(Calendar.MINUTE, 59);
+                                            bound2Calendar.set(Calendar.SECOND, 59);
+
+                                            bound2 = bound2Calendar.getTime();
+                                        }
+                                    }
+                                } else {
+                                    bound1 = getNumericAutoTypedValue(paramValue[0]);
+                                    if (paramValue.length >= 2) {
+                                        bound2 = getNumericAutoTypedValue(paramValue[1]);
+                                    }
                                 }
                             }
                         }
