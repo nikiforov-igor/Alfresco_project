@@ -364,22 +364,23 @@ public class ReportForm extends LecmFormGet {
 
     private JSONArray getUserPreferencesForReport(String reportCode) {
         final String url = "/lecm/user-settings/get?key=reports." + reportCode + ".saved-preferences";
+        String currentUserId = null;
         try {
             RequestContext requestContext = ThreadLocalRequestContext.getRequestContext();
-            String currentUserId = requestContext.getUserId();
+            currentUserId = requestContext.getUserId();
             HttpSession currentSession = ServletUtil.getSession(true);
             Connector connector = connectorService.getConnector("alfresco", currentUserId, currentSession);
             Response response = connector.call(url);
             if (ResponseStatus.STATUS_OK == response.getStatus().getCode()) {
                 JSONObject json = new JSONObject(response.getResponse());
-                return new JSONArray(json.getString("value"));
+                if (json.has("value")) {
+                    return new JSONArray(json.getString("value"));
+                }
             } else {
                 logger.error("Cannot get response for " + url);
             }
-        } catch (ConnectorServiceException ex) {
-            logger.error("Cannot get connector for " + url, ex);
-        } catch (JSONException ex) {
-            logger.error("Cannot parse json response for " + url, ex);
+        } catch (ConnectorServiceException | JSONException ex) {
+            logger.warn("Cannot get report settings for user = " + currentUserId, ex);
         }
 
         return new JSONArray();

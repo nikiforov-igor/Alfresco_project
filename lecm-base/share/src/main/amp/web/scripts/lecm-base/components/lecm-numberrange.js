@@ -122,9 +122,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
        * @method _updateCurrentValue
        * @private
        */
-      _updateCurrentValue: function NumberRange__updateCurrentValue()
-      {
-         Dom.get(this.valueHtmlId).value = this.currentMinNumber + "|" + this.currentMaxNumber;
+      _updateCurrentValue: function NumberRange__updateCurrentValue() {
+          var value = this.currentMinNumber + "|" + this.currentMaxNumber;
+          value = value == "|" ? "" : value;
+          Dom.get(this.valueHtmlId).value = value;
       },
 
       /**
@@ -202,6 +203,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                }
                this.currentMinNumber = "";
                this.currentMaxNumber = "";
+
+               if (options.resetValue) {
+                   Dom.get(this.valueHtmlId).value = "|";
+               }
                this.init();
            }
        }
