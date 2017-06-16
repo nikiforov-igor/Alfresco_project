@@ -145,15 +145,15 @@
 </div>
 <#elseif !multiValued>
         <#assign currentValue = defaultValue?js_string>
-        <#if  !currentValue?has_content && !disabled >
-             <#assign currentValue = field.control.params.defaultValue!""?js_string>
-             <#if currentValue == "now">
-                    <#if field.control.params.defaultTime?? >
-                        <#assign currentValue = .now?string("yyyy-MM-dd'T'" + field.control.params.defaultTime + ":00.000")>
-                    <#else>
-                        <#assign currentValue = .now?string("yyyy-MM-dd")>
-                    </#if>
-             </#if>
+        <#if !disabled >
+            <#assign currentValue = field.control.params.defaultValue!""?js_string>
+            <#if currentValue == "now">
+                <#if field.control.params.defaultTime?? >
+                    <#assign currentValue = .now?string("yyyy-MM-dd'T'" + field.control.params.defaultTime + ":00.000")>
+                <#else>
+                    <#assign currentValue = .now?string("yyyy-MM-dd")>
+                </#if>
+            </#if>
         </#if>
         <script type="text/javascript">//<![CDATA[
         (function () {
