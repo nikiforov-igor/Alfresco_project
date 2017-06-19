@@ -122,7 +122,8 @@
 		<property name="threadPoolExecutor" ref="notificationsAsyncThreadPool"/>
 		<property name="secretaryService" ref="secretaryService"/>
 		<property name="businessJournalService" ref="businessJournalService"/>
-		<property name="fileFolderService" ref="fileFolderService"/>
+		<property name="searchService" ref="searchService"/>
+		<property name="namespaceService" ref="namespaceService"/>
 		<property name="defaultEmailTemplatePath" value="${notifications.notificationsService.defaultEmailTemplatePath}"/>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
