@@ -434,7 +434,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
             }
         }
         String templateName = (String) nodeService.getProperty(templateDictionaryRef, ContentModel.PROP_NAME);
-        logger.warn(String.format("Для уведомления %s не задан шаблон письма! Использован шаблон по умолчанию!", templateName));
+        logger.warn(String.format("For notification %s is not set a default letter template! Default template used!", templateName));
         return defaultEmailTemplate;
     }
 
