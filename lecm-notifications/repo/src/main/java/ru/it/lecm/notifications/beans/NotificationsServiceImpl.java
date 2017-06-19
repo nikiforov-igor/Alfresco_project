@@ -283,9 +283,10 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
                     List<AssociationRef> templateAssocs = nodeService.getTargetAssocs(templateDicRec, ASSOC_NOTIFICATION_TEMPLATE_TEMPLATE_ASSOC);
                     NodeRef templateRef = null;
                     if (templateAssocs ==  null || templateAssocs.size() == 0) {
-                        templateRef = getDefaultEmailTemplate(templateCode);
+                        templateRef = getDefaultEmailTemplate();
+                        logger.warn(String.format("For notification %s is not set a default letter template! Default template used!", templateCode));
                     } else {
-                        templateRef = templateAssocs.isEmpty() ? null : templateAssocs.get(0).getTargetRef();
+                        templateRef = templateAssocs.get(0).getTargetRef();
                     }
 
                     generalizedNotification.setTemplate(template);
@@ -426,14 +427,13 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
         return result;
     }
 
-    private NodeRef getDefaultEmailTemplate(String templateCode) {
+    private NodeRef getDefaultEmailTemplate() {
         if (defaultEmailTemplate == null) {
             List<NodeRef> nodeRefs = searchService.selectNodes(repositoryStructureHelper.getCompanyHomeRef(), defaultEmailTemplatePath, null, namespaceService, false);
             if (nodeRefs != null || nodeRefs.size() == 1) {
                 defaultEmailTemplate = nodeRefs.get(0);
             }
         }
-        logger.warn(String.format("For notification %s is not set a default letter template! Default template used!", templateCode));
         return defaultEmailTemplate;
     }
 
