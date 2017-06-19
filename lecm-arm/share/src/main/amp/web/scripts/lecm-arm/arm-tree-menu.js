@@ -937,6 +937,11 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
             if (node.data.maxItems > 0 || node.data.afterSearch) {
                 var tableEl = YAHOO.util.Selector.query('#' + node.getEl().id + ' > table.ygtvtable')[0];
                 if (node.expanded) {
+                    if (node.data.insituEditor) {
+                        node.data.insituEditor.disabled = false;
+                        Dom.setStyle(node.data.insituEditor.editIcon, "visibility", "visible");
+                    }
+
                     var serviceNodesCount = this._getServiceNodes(node).length;
                     if (node.data.afterSearch) {
                         Dom.removeClass(tableEl, 'arm-tree-icon-container-expanded');
@@ -966,6 +971,10 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
                 } else {
                     Dom.removeClass(tableEl, 'arm-tree-icon-container-after-search');
                     Dom.removeClass(tableEl, 'arm-tree-icon-container-expanded');
+                    if (node.data.insituEditor) {
+                        node.data.insituEditor.disabled = true;
+                        Dom.setStyle(node.data.insituEditor.editIcon, "visibility", "hidden");
+                    }
                 }
             }
         },

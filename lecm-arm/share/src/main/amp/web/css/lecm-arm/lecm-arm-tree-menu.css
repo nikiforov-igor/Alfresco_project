@@ -8,12 +8,13 @@
 
 .tree .arm-tree-node-to-attach {
     position: relative;
+    padding-top: 3px;
+    display: block;
 }
 
 .tree .arm-tree-node-to-attach .arm-tree-attached-input-field {
-    position: absolute;
-    top: 23px;
-    left: 7px;
+    display: block;
+    margin-bottom: 3px;
 }
 
 .tree .accordion-content span.insitu-search-on-node {
@@ -56,6 +57,18 @@
 .tree .arm-tree-icon-container-expanded .ygtvtmh,
 .tree .arm-tree-icon-container-expanded .ygtvlm,
 .tree .arm-tree-icon-container-expanded .ygtvlmh {
+    vertical-align: top;
+    background: none;
+}
+
+.tree .arm-tree-icon-container-expanded .ygtvtp a,
+.tree .arm-tree-icon-container-expanded .ygtvtph a,
+.tree .arm-tree-icon-container-expanded .ygtvlp a,
+.tree .arm-tree-icon-container-expanded .ygtvlph a,
+.tree .arm-tree-icon-container-expanded .ygtvtm a,
+.tree .arm-tree-icon-container-expanded .ygtvtmh a,
+.tree .arm-tree-icon-container-expanded .ygtvlm a,
+.tree .arm-tree-icon-container-expanded .ygtvlmh a {
     background: url(/share/images/lecm-arm/show-more-16.png) no-repeat center center;
 }
 
