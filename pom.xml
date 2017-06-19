@@ -59,7 +59,7 @@
     </repositories>
     <pluginRepositories>
         <pluginRepository>
-            <id>alfresco-public</id>
+            <id>lecm-repo</id>
             <url>http://maven.datateh.ru:8081/nexus/content/groups/public</url>
         </pluginRepository>
     </pluginRepositories>
