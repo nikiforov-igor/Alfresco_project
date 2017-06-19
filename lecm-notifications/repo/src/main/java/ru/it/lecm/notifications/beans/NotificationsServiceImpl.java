@@ -273,17 +273,17 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
         logger.trace("createAtomicNotifications start: {}", start);
         Set<NotificationUnit> result = new HashSet<>();
         if (generalizedNotification != null) {
+            String templateCode = generalizedNotification.getTemplateCode();
+            if (templateCode != null) {
 
-            if (generalizedNotification.getTemplateCode() != null) {
-
-                NodeRef templateDicRec = dictionaryService.getRecordByParamValue(NOTIFICATION_TEMPLATE_DICTIONARY_NAME, ContentModel.PROP_NAME, generalizedNotification.getTemplateCode());
+                NodeRef templateDicRec = dictionaryService.getRecordByParamValue(NOTIFICATION_TEMPLATE_DICTIONARY_NAME, ContentModel.PROP_NAME, templateCode);
                 if (templateDicRec != null) {
                     String template = (String) nodeService.getProperty(templateDicRec, PROP_NOTIFICATION_TEMPLATE);
                     String subject = (String) nodeService.getProperty(templateDicRec, PROP_NOTIFICATION_TEMPLATE_SUBJECT);
                     List<AssociationRef> templateAssocs = nodeService.getTargetAssocs(templateDicRec, ASSOC_NOTIFICATION_TEMPLATE_TEMPLATE_ASSOC);
                     NodeRef templateRef = null;
                     if (templateAssocs ==  null || templateAssocs.size() == 0) {
-                        templateRef = getDefaultEmailTemplate(templateDicRec);
+                        templateRef = getDefaultEmailTemplate(templateCode);
                     } else {
                         templateRef = templateAssocs.isEmpty() ? null : templateAssocs.get(0).getTargetRef();
                     }
@@ -292,7 +292,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
                     generalizedNotification.setSubject(subject);
                     generalizedNotification.setTemplateRef(templateRef);
                 } else {
-                    throw new TemplateNotFoundException("Не найден шаблон уведомления: " + generalizedNotification.getTemplateCode());
+                    throw new TemplateNotFoundException("Не найден шаблон уведомления: " + templateCode);
                 }
             }
 
@@ -412,7 +412,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 
 							newNotificationUnit.setTypeRef(typeRef);
 							newNotificationUnit.setRecipientRef(tasksSecretary);
-							newNotificationUnit.setTemplate(generalizedNotification.getTemplateCode());
+							newNotificationUnit.setTemplate(templateCode);
 							result.add(newNotificationUnit);
 						}
 					}
@@ -426,15 +426,14 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
         return result;
     }
 
-    private NodeRef getDefaultEmailTemplate(NodeRef templateDictionaryRef) {
+    private NodeRef getDefaultEmailTemplate(String templateCode) {
         if (defaultEmailTemplate == null) {
             List<NodeRef> nodeRefs = searchService.selectNodes(repositoryStructureHelper.getCompanyHomeRef(), defaultEmailTemplatePath, null, namespaceService, false);
             if (nodeRefs != null || nodeRefs.size() == 1) {
                 defaultEmailTemplate = nodeRefs.get(0);
             }
         }
-        String templateName = (String) nodeService.getProperty(templateDictionaryRef, ContentModel.PROP_NAME);
-        logger.warn(String.format("For notification %s is not set a default letter template! Default template used!", templateName));
+        logger.warn(String.format("For notification %s is not set a default letter template! Default template used!", templateCode));
         return defaultEmailTemplate;
     }
 
