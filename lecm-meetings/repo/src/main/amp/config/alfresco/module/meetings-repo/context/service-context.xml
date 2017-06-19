@@ -259,7 +259,6 @@
 		<value>lecm-events:invited-members-assoc</value>
 		<value>lecm-events:temp-resources-assoc</value>
 		<value>lecm-events:subject-assoc</value>
-		<value>lecm-meetings:temp-items-assoc</value>
 	</util:list>
 
 	<bean id="meetings.copySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings"
