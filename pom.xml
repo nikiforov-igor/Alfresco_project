@@ -71,7 +71,7 @@
            which is typically environment independent
         -->
         <env>local</env>
-        <alfresco.version>5.2.a-EA</alfresco.version>
+        <alfresco.version>5.1.g</alfresco.version>
         <spring.version>3.2.14.RELEASE</spring.version>
         <activiti.version>5.19.0.1</activiti.version>
         <dependency.surf.version>6.5</dependency.surf.version>
