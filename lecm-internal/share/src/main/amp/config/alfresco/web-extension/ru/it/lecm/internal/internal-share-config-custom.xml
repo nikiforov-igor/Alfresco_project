@@ -507,6 +507,7 @@
                     </field>
                     <field id="lecm-document:subject-assoc">
                         <control>
+                            <!--Не удалять! Оставлено для совместимости со старыми документами-->
                             <control-param name="selectedItemsFormArgs">lecm-document:subject-assoc</control-param>
                         </control>
                     </field>
@@ -613,6 +614,7 @@
                     </field>
                     <field id="lecm-document:subject-assoc">
                         <control>
+                            <!--Не удалять! Оставлено для совместимости со старыми документами-->
                             <control-param name="selectedItemsFormArgs">lecm-document:subject-assoc</control-param>
                         </control>
                     </field>
