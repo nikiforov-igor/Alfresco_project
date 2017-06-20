@@ -3,6 +3,7 @@
 		<forms>
 			<default-controls>
 				<type name="association:lecm-review-ts:reviewers" template="/ru/it/lecm/base-share/components/controls/association-complex-inline-control.ftl">
+					<control-param name="showLabel">false</control-param>
 					<control-param name="endpointType">cm:cmobject</control-param>
 					<control-param name="items">employee,orgUnit,workGroup,reviewItem</control-param>
                     <control-param name="endpointMany">true</control-param>

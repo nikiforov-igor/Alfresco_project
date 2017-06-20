@@ -71,14 +71,15 @@
                     <field id="lecm-orgstr:employee-fio-g" set="commonOther"/>
                     <field id="lecm-orgstr:employee-fio-d" set="commonOther"/>
                     <field id="lecm-orgstr:employee-person-assoc" set="commonOther">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/sys:system/sys:people</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                            <control-param name="rootLocation">/sys:system/sys:people</control-param>
                             <control-param name="nameSubstituteString">{cm:firstName} {cm:lastName} ({cm:userName})</control-param>
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="itemType">cm:person</control-param>
                             <control-param name="additionalFilter">NOT ASPECT: \"cm:personDisabled\"</control-param>
                             <control-param name="childrenDataSource">lecm/orgstructure/employee/person/picker</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-subscr-aspects" set="commonOther"/>
@@ -275,14 +276,15 @@
                     <field id="lecm-orgstr:employee-fio-g" set="commonOther"/>
                     <field id="lecm-orgstr:employee-fio-d" set="commonOther"/>
                     <field id="lecm-orgstr:employee-person-assoc" set="commonOther">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/sys:system/sys:people</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                            <control-param name="rootLocation">/sys:system/sys:people</control-param>
                             <control-param name="nameSubstituteString">{cm:firstName} {cm:lastName} ({cm:userName})</control-param>
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="itemType">cm:person</control-param>
                             <control-param name="additionalFilter">NOT ASPECT: \"cm:personDisabled\"</control-param>
                             <control-param name="childrenDataSource">lecm/orgstructure/employee/person/picker</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
                     <field id="cm:name" set="commonOther">
@@ -698,13 +700,14 @@
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
                     </field>
                     <field id="lecm-orgstr:element-member-position-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Роли_x0020_для_x0020_рабочих_x0020_групп</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Роли_x0020_для_x0020_рабочих_x0020_групп</control-param>
                             <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
                             <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
 	                        <control-param name="showCreateNewLink">false</control-param>
 	                        <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="itemType">lecm-orgstr:workRole</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -724,13 +727,14 @@
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
                     </field>
                     <field id="lecm-orgstr:element-member-position-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Роли_x0020_для_x0020_рабочих_x0020_групп</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Роли_x0020_для_x0020_рабочих_x0020_групп</control-param>
                             <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
                             <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
 	                        <control-param name="showCreateNewLink">false</control-param>
 	                        <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="itemType">lecm-orgstr:workRole</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -766,13 +770,14 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-orgstr:element-member-position-assoc" label-id="lecm-orgstr_employee-main-position">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Должностные_x0020_позиции</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Должностные_x0020_позиции</control-param>
                             <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
                             <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
 	                        <control-param name="showCreateNewLink">false</control-param>
 	                        <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="itemType">lecm-orgstr:staffPosition</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-orgstr:staff-list-description">
@@ -796,13 +801,14 @@
                         <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
                     </field>
 	                <field id="lecm-orgstr:element-member-position-assoc" label-id="lecm-orgstr_employee-main-position">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Должностные_x0020_позиции</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Должностные_x0020_позиции</control-param>
                             <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
                             <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
 	                        <control-param name="showCreateNewLink">false</control-param>
 	                        <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="itemType">lecm-orgstr:staffPosition</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-orgstr:staff-list-description">
@@ -1097,13 +1103,14 @@
                 </field-visibility>
                 <appearance>
 	                <field id="lecm-orgstr:employee-link-employee-assoc">
-		                <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-			                <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+		                <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+			                <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
 			                <control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 			                <control-param name="showCreateNewLink">false</control-param>
 			                <control-param name="showCreateNewButton">false</control-param>
 			                <control-param name="employeeAbsenceMarker">true</control-param>
 			                <control-param name="useStrictFilterByOrg">false</control-param>
+                            <control-param name="plane">true</control-param>
 		                </control>
                     </field>
                 </appearance>
@@ -1114,13 +1121,14 @@
                 </field-visibility>
 	            <appearance>
 		            <field id="lecm-orgstr:employee-link-employee-assoc">
-			            <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-				            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+			            <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+				            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
 				            <control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 				            <control-param name="showCreateNewLink">false</control-param>
 				            <control-param name="showCreateNewButton">false</control-param>
 				            <control-param name="employeeAbsenceMarker">true</control-param>
 				            <control-param name="useStrictFilterByOrg">false</control-param>
+                            <control-param name="plane">true</control-param>
 			            </control>
 		            </field>
 	            </appearance>
@@ -1136,13 +1144,14 @@
                 </field-visibility>
 	            <appearance>
 		            <field id="lecm-orgstr:employee-link-employee-assoc">
-			            <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-				            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+			            <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+				            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
 				            <control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 				            <control-param name="showCreateNewLink">false</control-param>
 				            <control-param name="showCreateNewButton">false</control-param>
 				            <control-param name="employeeAbsenceMarker">true</control-param>
 				            <control-param name="useStrictFilterByOrg">false</control-param>
+                            <control-param name="plane">true</control-param>
 			            </control>
 		            </field>
 	            </appearance>
@@ -1157,13 +1166,14 @@
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.OrgStructure.Absence.employeeHasNoAbsenceValidation" event="change" message-id="message.perfom-action.fail"/>
                             <constraint type="INVALID" validation-handler="LogicECM.module.OrgStructure.employeeNotHasAnotherOrganizationValidation" event="change" message-id="message.assign-employee.fail.more-organization"/>
                         </constraint-handlers>
-	                    <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-		                    <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+	                    <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+		                    <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
 		                    <control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 		                    <control-param name="showCreateNewLink">false</control-param>
 		                    <control-param name="showCreateNewButton">false</control-param>
 		                    <control-param name="employeeAbsenceMarker">true</control-param>
 		                    <control-param name="useStrictFilterByOrg">false</control-param>
+                            <control-param name="plane">true</control-param>
 	                    </control>
                     </field>
                 </appearance>
@@ -1267,23 +1277,23 @@
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.OrgStructure.Absence.noderefsHasNoAbsenceValidation" event="change" message-id="message.has-active-absence"/>
                         </constraint-handlers>
-						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
 							<control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="employeeAbsenceMarker">true</control-param>
 							<control-param name="useStrictFilterByOrg">false</control-param>
+                            <control-param name="plane">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-orgstr:business-role-organization-element-assoc" mandatory="true">
-						<control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="plane">false</control-param>
 							<control-param name="showSearch">false</control-param>
-							<control-param name="showSelectedItemsPath">false</control-param>
 							<control-param name="treeItemType">lecm-orgstr:organization-unit</control-param>
 						    <control-param name="checkType">false</control-param>
                             <control-param name="useStrictFilterByOrg">true</control-param>
@@ -1297,7 +1307,7 @@
                         </constraint-handlers>
 					</field>
 					<field id="lecm-orgstr:business-role-organization-element-member-assoc" mandatory="true">
-						<control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
 							<control-param name="nameSubstituteString">{lecm-orgstr:element-member-position-assoc/cm:name} {lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-employee-assoc/cm:name}</control-param>
 							<control-param name="selectedItemsNameSubstituteString">{lecm-orgstr:element-member-position-assoc/cm:name} {../lecm-orgstr:element-short-name} {lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-employee-assoc/cm:name}</control-param>

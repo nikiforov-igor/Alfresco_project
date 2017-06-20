@@ -54,22 +54,27 @@
                     <field id="lecm-document:subject-assoc"/>
                     <field id="lecm-eds-document:file-register-assoc" mandatory="true"/>
                     <field id="lecm-ord:canceled-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-search-control-with-dialog.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                             <control-param name="rootLocation">/app:company_home</control-param>
                             <control-param name="itemType">lecm-eds-document:base</control-param>
                             <control-param name="checkType">false</control-param>
                             <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
                             <control-param name="additionalFilter">((TYPE:\"lecm-ord:document\" AND @lecm\\-statemachine\\:status:\"Исполнен\") OR (TYPE:\"lecm-nd:document\" AND (@lecm\\-statemachine\\:status:\"Действует\" OR @lecm\\-statemachine\\:status:\"Введен в действие\"))) </control-param>
+                            <control-param name="showSearch">true</control-param>
+                            <control-param name="plane">true</control-param>
+                            <control-param name="showPath">false</control-param>
                         </control>
                     </field>
                     <field id="lecm-ord:accepted-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-search-control-with-dialog.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
                             <control-param name="itemType">lecm-nd:document</control-param>
                             <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
                             <control-param name="additionalFilter">(@lecm\\-statemachine\\:status:\"Зарегистрирован\")</control-param>
+                            <control-param name="showSearch">true</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
 
@@ -152,21 +157,25 @@
                         </control>
                     </field>
                     <field id="lecm-ord:canceled-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-search-control-with-dialog.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                             <control-param name="rootLocation">/app:company_home</control-param>
                             <control-param name="itemType">lecm-eds-document:base</control-param>
                             <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
                             <control-param name="additionalFilter">((TYPE:\"lecm-ord:document\" AND @lecm\\-statemachine\\:status:\"Исполнен\") OR (TYPE:\"lecm-nd:document\" AND (@lecm\\-statemachine\\:status:\"Действует\" OR @lecm\\-statemachine\\:status:\"Введен в действие\"))) </control-param>
+                            <control-param name="showSearch">true</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-ord:accepted-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-search-control-with-dialog.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
                             <control-param name="itemType">lecm-nd:document</control-param>
                             <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
                             <control-param name="additionalFilter">(@lecm\\-statemachine\\:status:\"Зарегистрирован\")</control-param>
+                            <control-param name="showSearch">true</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
 					<field id="lecmSignAspects:signerEmployeeAssoc">
@@ -423,22 +432,26 @@
                     <field id="lecm-eds-document:file-register-assoc" mandatory="true" set="ord-document-form-common-set"/>
 
                     <field id="lecm-ord:canceled-assoc" set="ord-document-form-common-set">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-search-control-with-dialog.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                             <control-param name="rootLocation">/app:company_home</control-param>
                             <control-param name="itemType">lecm-eds-document:base</control-param>
                             <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
                             <control-param name="additionalFilter">((TYPE:\"lecm-ord:document\" AND @lecm-statemachine\\:status:\"Исполнен\") OR (TYPE:\"lecm-nd:document\" AND (@lecm-statemachine\\:status:\"Действует\" OR @lecm-statemachine\\:status:\"Введен в действие\"))) </control-param>
                             <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
+                            <control-param name="showSearch">true</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-ord:accepted-assoc" set="ord-document-form-common-set">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-search-control-with-dialog.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
                             <control-param name="itemType">lecm-nd:document</control-param>
                             <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
                             <control-param name="additionalFilter">(@lecm\\-statemachine\\:status:\"Зарегистрирован\")</control-param>
+                            <control-param name="showSearch">true</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
 

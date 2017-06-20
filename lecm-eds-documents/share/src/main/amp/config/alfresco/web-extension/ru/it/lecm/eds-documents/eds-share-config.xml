@@ -20,10 +20,11 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-eds-globset:potential-role-business-role-assoc">
-						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
+						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
+							<control-param name="plane">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-eds-globset:potential-role-organization-element-assoc">
@@ -32,7 +33,7 @@
 							<control-param name="plane">false</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
-							<control-param name="showSelectedItemsPath">false</control-param>
+							<control-param name="showPath">false</control-param>
 							<control-param name="showSearch">false</control-param>
 							<control-param name="checkType">false</control-param>
 							<control-param name="endpointType">lecm-orgstr:organization-unit</control-param>
@@ -52,10 +53,11 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-eds-globset:potential-role-business-role-assoc">
-						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
+						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
+							<control-param name="plane">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-eds-globset:potential-role-organization-element-assoc">

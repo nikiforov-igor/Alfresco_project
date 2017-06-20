@@ -3,12 +3,18 @@
 
 <#assign controlId = fieldHtmlId + "-cntrl">
 <#assign params = field.control.params>
-
+<#assign controlJsName = "AssociationControl">
+<#if params.controlJsName??>
+    <#assign controlJsName = params.controlJsName?string>
+</#if>
 <#assign plane = false>
 <#if params.plane?? && params.plane == "true">
 	<#assign plane = true>
 </#if>
-
+<#assign onlyTree = false>
+<#if params.onlyTree?? && params.onlyTree == "true">
+	<#assign onlyTree = true>
+</#if>
 <#assign showPath = true>
 <#if params.showPath?? && params.showPath == "false">
 	<#assign showPath = false>
@@ -18,7 +24,10 @@
 <#if params.showPath?? && params.showPath == "false">
 	<#assign showPath = false>
 </#if>
-
+<#assign hideLabel = false/>
+<#if field.control.params.hideLabel?? && field.control.params.hideLabel == "true">
+	<#assign hideLabel = true/>
+</#if>
 <#assign showAutocomplete = true>
 <#if params.showAutocomplete?? && params.showAutocomplete == "false">
 	<#assign showAutocomplete = false>
@@ -99,7 +108,7 @@
 
 <#if disabled>
 <div id="${controlId}" class="control association-control viewmode">
-	<div class="label-div">
+	<div class="label-div<#if hideLabel> hidden</#if>">
 		<#if showViewIncompleteWarning && (field.endpointMandatory!false || field.mandatory!false) && field.value == "">
 		<span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png" title="${msg("form.field.incomplete")}"/><span>
 		</#if>
@@ -114,7 +123,7 @@
 </div>
 <#else>
 <div id="${controlId}-edt" class="control association-control editmode">
-	<div class="label-div">
+	<div class="label-div<#if hideLabel> hidden</#if>">
 		<label for="${controlId}">
 		${field.label?html}:
 			<#if field.endpointMandatory!false || field.mandatory!false>
@@ -182,18 +191,22 @@
 
 	(function() {
 		function init() {
-			LogicECM.module.Base.Util.loadScripts([
+			LogicECM.module.Base.Util.loadResources([
 				'scripts/lecm-base/components/lecm-association-control.js',
 				'modules/simple-dialog.js'
-			], createControl);
+			], [
+                'css/lecm-base/components/controls/association-control-picker.css'
+            ], createControl);
 		}
 		function createControl(){
-			new LogicECM.module.AssociationControl("${fieldHtmlId}").setOptions({
+			new LogicECM.module.AssociationControl("${fieldHtmlId}", "${controlJsName}").setOptions({
 			<#if disabled>
 				disabled: true,
 			</#if>
-			<#if params.rootLocation??>
-				rootLocation: "${params.rootLocation}",
+			<#if params.rootLocationArg??>
+                rootLocation: "${form.arguments[params.rootLocationArg]}",
+			<#elseif params.rootLocation??>
+                rootLocation: "${params.rootLocation}",
 			</#if>
                 showParentNodeInTreeView: ${showParentNodeInTreeView?string},
 			<#if field.mandatory??>
@@ -279,6 +292,10 @@
 			<#if defaultValue?has_content>
 				defaultValue: "${defaultValue?string}",
 			</#if>
+			<#if params.rootNodeScript??>
+                rootNodeScript: "${params.rootNodeScript}",
+			</#if>
+        		onlyTreeNodeSelectable: ${onlyTree?string},
 			<#if params.fireAction?? && params.fireAction != "">
 				fireAction: {
 					<#list params.fireAction?split(optionSeparator) as typeValue>
@@ -294,7 +311,13 @@
 					</#list>
 				},
 			</#if>
-				itemType: "${params.endpointType ! field.endpointType}",
+			<#if field.control.params.showInaccessible ??>
+                showInaccessible: ${field.control.params.showInaccessible?string},
+			</#if>
+			<#if field.control.params.viewUrl??>
+                viewUrl: "${field.control.params.viewUrl}",
+			</#if>
+				itemType: "${params.endpointType ! params.itemType ! field.endpointType}",
 				additionalFilter: "${params.additionalFilter!''}",
 				showAssocViewForm: ${showAssocViewForm?string},
 				checkType: ${checkType?string},

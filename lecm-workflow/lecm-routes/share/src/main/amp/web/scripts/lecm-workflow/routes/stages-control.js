@@ -250,7 +250,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
         _createNewStageItem: function (dialogType, destination) {
             var itemType = LogicECM.module.Routes.Const.ROUTES_CONTAINER.stageItemType,
                 createStageItemDialog = new Alfresco.module.SimpleDialog(this.id + '-createStageItemDialog'),
-                formID, dialogHeader,
+                formID, dialogHeader, allowedNodeScript,
                 actionUrl = Alfresco.constants.PROXY_URI_RELATIVE + '/lecm/workflow/routes/CreateStageItemInQueue?resolveMacros=' + !!this.options.isApprovalListContext,
                 expandedBubblingLabel = destination.replace(/:|\//g, "_") + "-dtgrd"; // см. datagridId в stage-expanded.get.html.ftl
 
@@ -258,6 +258,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
                 case 'employee' :
                     formID = 'createNewStageItemForEmployee';
                     dialogHeader = Alfresco.util.message('lecm.routers.add.employee.to.stage');
+                    allowedNodeScript = "lecm/workflow/routes/getEmployeesForStage?stage=" + encodeURIComponent(destination) + (this.routeOrganization ? "&organization=" + encodeURIComponent(this.routeOrganization) : "");
                     break;
                 case 'macros' :
                     formID = 'createNewStageItemForMacros';
@@ -281,7 +282,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
                     submitType: 'json',
                     showCancelButton: true,
                     routeOrganization: this.routeOrganization ? this.routeOrganization : null,
-                    allowedNodesScript: "lecm/workflow/routes/getEmployeesForStage?stage=" + destination + (this.routeOrganization ? "&organization=" + this.routeOrganization : ""),
+                    allowedNodesScript: allowedNodeScript || "",
 					showCaption: false
                 },
                 destroyOnHide: true,

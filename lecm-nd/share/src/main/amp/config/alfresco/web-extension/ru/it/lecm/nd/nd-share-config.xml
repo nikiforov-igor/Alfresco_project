@@ -41,7 +41,7 @@
                         </control>
                     </field>
                     <field id="lecm-document-aspects:additional-organization-unit-assoc" mandatory="true">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
                             <control-param name="nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
                             <control-param name="showCreateNewLink">false</control-param>
@@ -392,7 +392,7 @@
                         </control>
                     </field>
                     <field id="lecm-document-aspects:additional-organization-unit-assoc" set="common" mandatory="true">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>

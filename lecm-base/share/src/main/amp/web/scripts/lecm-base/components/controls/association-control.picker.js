@@ -40,6 +40,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		Bubbling.on('loadOriginalItems', this.onLoadOriginalItems, this);
 		Bubbling.on('afterChange', this.onAfterChange, this);
 		Bubbling.on('restorePreviousValues', this.onRestorePreviousValues, this);
+		Bubbling.on('reInitializeControlPicker', this.onReInitializeControlPicker, this);
 		return this;
 	};
 
@@ -272,7 +273,9 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 
 					var params = {
 						selectedItems: this.selected,
-						marker: null
+						marker: null,
+						formId: this.options.formId || null,
+						fieldId: this.options.fieldId || null
 					};
 
 					if (selectedItems.length === 1) {
@@ -305,7 +308,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		},
 
 		onSelectButtonClick: function (type, args, menuItem) {
-			this.widgets.selectButton.set('label', menuItem.value.options.label);
+			this.widgets.selectButton.set('label', Alfresco.util.message(menuItem.value.options.label));
 			this.fire('hide', {});
 			this.fire('show', {
 				itemKey: menuItem.value.itemKey
@@ -357,7 +360,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 
 				menu = this.options.itemsOptions.map(function (obj) {
 					return {
-						text: obj.options.label,
+						text: Alfresco.util.message(obj.options.label),
 						value: obj,
 						onclick: {
 							scope: this,
@@ -378,6 +381,22 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 
 			this.widgets.items = Dom.get(this.id + '-items');
 			this.fire('pickerReady', {});
+		},
+		onReInitializeControlPicker: function(layer, args) {
+			if (Alfresco.util.hasEventInterest(this, args)) {
+				var options = args[1].options;
+				if (options) {
+					this.setOptions(options);
+				}
+				this.added = {};
+				this.removed = {};
+				this.original = {};
+				this.selected = {};
+				this.originalItemsDeferred = new Alfresco.util.Deferred(LogicECM.module.AssociationComplexControl.Utils.getItemKeys(this.options.itemsOptions), {
+					scope: this,
+					fn: this._onOriginalItemsDeferred
+				});
+			}
 		}
 	}, true);
 })();

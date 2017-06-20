@@ -25,12 +25,6 @@ LogicECM.module = LogicECM.module || {};
         YAHOO.Bubbling.on('formValueChanged', this.onControlRegistered, this);
 
         this.previousSelected = null;
-        this.controlsDeferred = new Alfresco.util.Deferred(["AssociationTreeViewer"], {
-            scope: this,
-            fn: function (oParams) {
-                this._updateControlsOnDeferred();
-            }
-        });
         this.options.contractorSelectEvent = contractorSelectEvent;
         this.options.organizationSelectEvent = organizationSelectEvent;
 
@@ -39,8 +33,7 @@ LogicECM.module = LogicECM.module || {};
 
     YAHOO.extend(LogicECM.module.DoubleSelectRepresentativeForContractor, Alfresco.component.Base, {
         previousSelected: null,
-        controlsDeferred: null,
-
+        jsControl: null,
         options: {
             employeesByOrgDS: "lecm/employees/byOrg/{organization}/picker",
             representativesByContrDS: "lecm/representatives/{contractor}/picker",
@@ -69,7 +62,10 @@ LogicECM.module = LogicECM.module || {};
             showAssocViewForm: false,
             markers: null,
 	        defaultValueUseOnce: false,
-            doNotCheckAccess: false
+            doNotCheckAccess: false,
+            controlJsName: "select-representative-associationControl",
+            formId: null,
+            fieldId: null
         },
 
         onReady: function SelectRepresentativeForContractor_onReady() {
@@ -78,36 +74,20 @@ LogicECM.module = LogicECM.module || {};
         onControlRegistered: function (layer, args) {
             var obj = args[1];
             var control = obj.eventGroup;
-            if (control.id === this.options.fieldHtmlId) {
-                this.controlsDeferred.fulfil(control.name);
+            if (control.id === this.options.fieldHtmlId && this.options.controlName == control.name) {
+                this.jsControl = control;
+                if (this.previousSelected == null) {
+                    LogicECM.module.Base.Util.disableControl(this.options.formId, this.options.fieldId);
+                }
+                YAHOO.Bubbling.unsubscribe('formValueChanged', this.onControlRegistered, this);
             }
         },
 
         onSelect: function (layer, args) {
             var initDatatasources = function(scope) {
                 if (marker == 'contractor') {
-                    var autocompleteConf,
-                        treeConf;
-                    autocompleteConf = {
-                        startLocation: scope.options.representativesLocation,
-                        itemType: scope.options.representativesType,
-                        childrenDataSource: YAHOO.lang.substitute(scope.options.representativesByContrDS,
-                            {
-                                contractor: selectedContractor != null ? new Alfresco.util.NodeRef(selectedContractor).uri : ""
-                            }),
-                        defaultValueDataSource: YAHOO.lang.substitute(scope.options.representativesDefaultValueDS,
-                            {
-                                contractor: selectedContractor
-                            }),
-                        nameSubstituteString: scope.options.representativesSubstitute,
-                        selectedValueNodeRef: "",
-                        lazyLoading: false,
-                        disabled: false,
-                        showAssocViewForm: scope.options.showAssocViewForm,
-                        doNotCheckAccess: scope.options.doNotCheckAccess
-                    };
-
-                    treeConf = {
+                    var controlConfig;
+                    controlConfig = {
                         rootLocation: scope.options.representativesLocation,
                         itemType: scope.options.representativesType,
                         childrenDataSource: YAHOO.lang.substitute(scope.options.representativesByContrDS,
@@ -124,30 +104,15 @@ LogicECM.module = LogicECM.module || {};
                         initialized: false,
                         lazyLoading: false,
                         disabled: false,
-                        doNotCheckAccess: scope.options.doNotCheckAccess
+                        doNotCheckAccess: scope.options.doNotCheckAccess,
+                        additionalFilter: "",
+                        showAssocViewForm: scope.options.showAssocViewForm
                     }
-                    scope._updateControls(selectedContractor, resetValue, autocompleteConf, treeConf);
+                    scope._updateControls(selectedContractor, resetValue, controlConfig);
                 } else {
                     scope.isCurrentUserFromSelectedOrgUnit(selectedContractor, updateControls);
                     function updateControls(showAssocViewForm) {
-                        autocompleteConf = {
-                            startLocation: scope.options.employeesLocation,
-                            itemType: scope.options.employeesType,
-                            childrenDataSource: YAHOO.lang.substitute(scope.options.employeesByOrgDS, {
-                                organization: selectedContractor != null ? new Alfresco.util.NodeRef(selectedContractor).uri : ""
-                            }),
-                            defaultValueDataSource: scope.options.employeesDefaultValueDS != null ? YAHOO.lang.substitute(scope.options.employeesDefaultValueDS, {
-                                organization: selectedContractor
-                            }) : null,
-                            nameSubstituteString: scope.options.employeesNameSubstitute,
-                            lazyLoading: false,
-                            disabled: false,
-                            showAssocViewForm: showAssocViewForm,
-                            doNotCheckAccess: scope.options.doNotCheckAccess,
-                            additionalFilter: '@lecm\-orgstr\-aspects\:linked\-organization\-assoc\-ref:"' + selectedContractor + '\"'
-                        };
-
-                        treeConf = {
+                        controlConfig = {
                             showAssocViewForm: showAssocViewForm,
                             rootLocation: scope.options.employeesLocation,
                             itemType: scope.options.employeesType,
@@ -165,7 +130,7 @@ LogicECM.module = LogicECM.module || {};
                             doNotCheckAccess: scope.options.doNotCheckAccess,
                             additionalFilter: '@lecm\-orgstr\-aspects\:linked\-organization\-assoc\-ref:"' + selectedContractor + '\"'
                         }
-                        scope._updateControls(selectedContractor, resetValue, autocompleteConf, treeConf);
+                        scope._updateControls(selectedContractor, resetValue, controlConfig);
                     }
                 }
             };
@@ -199,13 +164,12 @@ LogicECM.module = LogicECM.module || {};
                 initDatatasources(this, selectedContractor, marker);
             } else {
                 if (marker != 'contractor') {
-                    var treeControl = LogicECM.CurrentModules[this.options.treeViewJsName];
-                    if (treeControl) {
-                        this.isCurrentUserFromSelectedOrgUnit(selectedContractor, function(showAssocViewForm){
-                            treeControl.options.showAssocViewForm = showAssocViewForm;
-                            treeControl.updateFormFields();
+                    this.isCurrentUserFromSelectedOrgUnit(selectedContractor, function(showAssocViewForm){
+                        LogicECM.module.Base.Util.reInitializeControl(this.options.formId, this.options.fieldId, {
+                            showAssocViewForm: showAssocViewForm
                         });
-                    }
+                        this.options.defaultValueLoaded = true;
+                    });
                 }
             }
         },
@@ -258,72 +222,22 @@ LogicECM.module = LogicECM.module || {};
             }
         },
 
-        _updateControls: function (selectedContractor, reset, autocompleteConf, treeConf) {
-            var control = LogicECM.CurrentModules[this.options.autoCompleteJsName];
+        _updateControls: function (selectedContractor, resetValue, options) {
+            var control = this.jsControl;
             if (control) {
-                if (reset) {
-                    control.dataArray = [];
+                if (this.options.defaultValueLoaded || !this.options.currentValue) {
                     control.selectedItems = {};
                     control.defaultValue = null;
-
-                    control.updateSelectedItems();
-                    control.updateFormFields();
-                    control.updateInputUI();
-                    control.setOptions({
-                        loadDefault: false,
-                        disabled: true
-                    });
-                    control.onReady();
+                    options.selectedValue = "";
                 }
-                control.setOptions({
-                    selectedValueNodeRef: "",
-                    lazyLoading: (selectedContractor != null)
-                });
-                
-                if (selectedContractor) {
-                    if (autocompleteConf) {
-                        control.setOptions(autocompleteConf);
-                    } else {
-                        control.options.disabled = false;
-                    }
-                    if (!control.options.currentValue && this.options.defaultValue && !this.options.defaultValueLoaded) {
-                        control.options.selectedValueNodeRef = this.options.defaultValue;
-                    }
-                } else {
-                    control.options.disabled = true;
+                options.noValueLabel = '';
+                control.updateFormFields(true);
+                if (!selectedContractor) {
+                    options.disabled = true;
                 }
-                control.onReady();
-            }
-            var treeControl = LogicECM.CurrentModules[this.options.treeViewJsName];
-            if (treeControl) {
-                if (reset) {
-                    treeControl.selectedItems = null;
-                    treeControl.defaultValue = null;
-                    treeControl.setOptions({
-                        loadDefault: false,
-                        disabled: true
-                    });
-                    treeControl.init();
-                }
-                treeControl.setOptions({
-                    selectedValue: null
-                });
-                
-                if (selectedContractor) {
-                    if (treeConf) {
-                        treeControl.setOptions(treeConf);
-                    } else {
-                        treeControl.options.disabled = false;
-                    }
-                    if (!treeControl.options.currentValue && this.options.defaultValue && !this.options.defaultValueLoaded) {
-                        treeControl.options.selectedValue = this.options.defaultValue;
-                        this.options.defaultValueLoaded = true;
-                    }
-                } else {
-                    treeControl.options.disabled = true;
-                }
-
-                treeControl.init();
+                control.setOptions(options);
+                control.init();
+                this.options.defaultValueLoaded = true;
             }
         }
     });

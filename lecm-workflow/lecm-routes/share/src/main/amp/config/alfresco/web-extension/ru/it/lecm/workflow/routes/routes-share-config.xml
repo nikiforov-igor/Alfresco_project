@@ -371,13 +371,14 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecmWorkflowRoutes:stageItemMacrosAssoc" mandatory="true">
-						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Макросы_x0020_участников_x0020_маршрута</control-param>
+						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Макросы_x0020_участников_x0020_маршрута</control-param>
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="employeeAbsenceMarker">false</control-param>
 							<control-param name="endpointMany">true</control-param>
+							<control-param name="plane">true</control-param>
 						</control>
 					</field>
 				</appearance>

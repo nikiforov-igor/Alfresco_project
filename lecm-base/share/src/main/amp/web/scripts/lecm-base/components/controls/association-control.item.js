@@ -29,13 +29,14 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		});
 		this._loadRootNode();
 		this._loadSearchProperties();
-		this._loadOriginalValues(fieldValues);
+		this._initValues(fieldValues);
 
 		Bubbling.on('show', this.onShow, this);
 		Bubbling.on('hide', this.onHide, this);
 		Bubbling.on('addItemToControlItems', this.onAddSelectedItem, this);
 		Bubbling.on('removeSelectedItem', this.onRemoveSelectedItem, this);
 		Bubbling.on('removeSelectedItemFromPicker', this.onRemoveSelectedItemFromPicker, this);
+		Bubbling.on('reInitializeControlItem', this.onReInitializeControlItem, this);
 
 		return this;
 	};
@@ -77,19 +78,24 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			allowedNodesScript: null,
 			minSearchTermLength: 3,
 			sortProp: 'cm:name',
-			nameSubstituteString: 'cm:name',
+			nameSubstituteString: '{cm:name}',
 			additionalFilter: '',
 			endpointMany: false,
 			useObjectDescription: false,
 			checkType: true,
 			pickerItemsScript: 'lecm/forms/picker/items',
 			showCreateNewLink: false,
+			showCreateNewButton: false,
 			hasAspects: null,
 			hasNoAspects: null,
 			showExSearch: false,
 			fillFormFromSearch: false,
-			showEditButton: false
-		},
+			showEditButton: false,
+			defaultValue: null,
+			defaultValueDataSource: null,
+			showInaccessible: false,
+			viewUrl: null
+        },
 
 		widgets: {
 			search: null,
@@ -101,7 +107,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			exSearchListener: null,
 			treeView: null,
 			datatable: null,
-			datasource: null
+			datasource: null,
+			createNewButton: null
 		},
 
 		stateParams: {
@@ -115,7 +122,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			/* this == this.widgets.datatable */
 			function renderItem (item, template) {
 				return YAHOO.lang.substitute(template, item, function (key, value, metadata) {
-					return Alfresco.util.encodeHTML(value);
+					return value;
 				});
 			}
 
@@ -341,7 +348,37 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				}
 			});
 		},
-
+		_initValues: function(fieldValues) {
+			if (fieldValues && fieldValues.length) {
+				this._loadOriginalValues(fieldValues);
+			} else if (this.options.defaultValueDataSource) {
+				this._loadDefaultValue();
+			} else {
+				this._loadOriginalValues([]);
+			}
+		},
+		_loadDefaultValue: function AssociationComplex__loadDefaultValue() {
+            Alfresco.util.Ajax.jsonGet({
+				url: Alfresco.constants.PROXY_URI + this.options.defaultValueDataSource,
+				successCallback: {
+					scope: this,
+					fn: function (oResponse) {
+						var oResults = oResponse.json;
+						var defaultValues = [];
+                        if (oResults && oResults instanceof Array) {
+                            defaultValues = oResults.map(function (res) {
+								return res.nodeRef ? res.nodeRef : res;
+							});
+                        } else if (oResults && oResults.nodeRef) {
+							defaultValues.push(oResults.nodeRef);
+						}
+						this.parentControl.defaultValues = this.parentControl.defaultValues.concat(defaultValues);
+						this._loadOriginalValues(defaultValues);
+					}
+				},
+				failureMessage: this.msg("message.failure")
+			});
+		},
 		_loadOriginalValues: function (fieldValues) {
 
 			function onSuccess(successResponse) {
@@ -350,8 +387,14 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 					itemType = this.options.itemType;
 
 				this.currentState.original = {};
-
-				items.forEach(function (item, i) {
+				var values = [];
+				if (this.parentControl.options.dataSourceLogic == "AND" || (this.parentControl.options.dataSourceLogic == "OR" && ACUtils.isKeySelectedOrEmpty(this.key, this.parentControl))) {
+					values = items;
+				}
+				if (!this.parentControl.options.endpointMany && values.length) {
+					values = [values[0]];
+				}
+				values.forEach(function (item, i) {
 					if (!checkType || item.type === itemType) {
 						item.index = i;
 						this.currentState.original[item.nodeRef] = item;
@@ -376,8 +419,10 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 					selectedItemsNameSubstituteString: ACUtils.getSelectedItemsNameSubstituteString(this.options),
 					pathRoot: this.options.rootLocation,
 					pathNameSubstituteString: this.options.treeNodeSubstituteString,
-					useObjectDescription: this.options.useObjectDescription
-				},
+					useObjectDescription: this.options.useObjectDescription,
+                    showInaccessible: this.options.showInaccessible,
+					substituteParent: this.options.substituteParent || "none"
+                },
 				successCallback: {
 					scope: this,
 					fn: onSuccess
@@ -808,44 +853,111 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				this.widgets.treeRoot.setDynamicLoad(this.bind(this._loadNodes));
 				Dom.addClass(this.widgets.treeView.id, 'treeview');
 			}
-			this.widgets.datasource = new YAHOO.util.DataSource(Alfresco.constants.PROXY_URI_RELATIVE + this.options.childrenDataSource + '/node/', {
-				responseType: YAHOO.util.DataSource.TYPE_JSON,
-				connXhrMode: 'queueRequests',
-				responseSchema: {
-					resultsList: 'items',
-					metaFields: {
-						parent: 'parent'
-					}
-				}
-			});
-			this.widgets.datasource.doBeforeParseData = this.bind(this.doBeforeParseData);
-			var columnDefinitions =
-				[
-					{key: 'name', label: 'Item', sortable: false, formatter: this._nameFormatter, className: 'name-td'},
-					{key: 'add', label: 'Add', sortable: false, minWidth: 16, width: 16, formatter: this._addFormatter, className: 'add-td'}
-				];
-			if (this.options.showEditButton) {
-				columnDefinitions.push({
-					key: "edit",
-					label: "Edit",
-					sortable: false,
-					formatter: this._editFormatter,
-					width: 16,
-					className: 'edit-td'
+			if (this.options.showCreateNewButton && !this.widgets.createNewButton) {
+				this.widgets.createNewButton = new Alfresco.util.createYUIButton(this.parentControl, 'btn-create', this._fnCreateNewItemHandler.bind(this, "addSelectedItem"), {
+					disabled: this.options.disabled,
+					type: 'push'
+				});
+				this.parentControl.widgets.createNewButton = this.widgets.createNewButton;
+			}
+            this.widgets.datasource = new YAHOO.util.DataSource(Alfresco.constants.PROXY_URI_RELATIVE + this.options.childrenDataSource + '/node/', {
+                responseType: YAHOO.util.DataSource.TYPE_JSON,
+                connXhrMode: 'queueRequests',
+                responseSchema: {
+                    resultsList: 'items',
+                    metaFields: {
+                        parent: 'parent'
+                    }
+                }
+            });
+            this.widgets.datasource.doBeforeParseData = this.bind(this.doBeforeParseData);
+            var columnDefinitions =
+                [
+                    {key: 'name', label: 'Item', sortable: false, formatter: this._nameFormatter, className: 'name-td'},
+                    {key: 'add', label: 'Add', sortable: false, minWidth: 16, width: 16, formatter: this._addFormatter, className: 'add-td'}
+                ];
+            if (this.options.showEditButton) {
+                columnDefinitions.push({
+                    key: "edit",
+                    label: "Edit",
+                    sortable: false,
+                    formatter: this._editFormatter,
+                    width: 16,
+                    className: 'edit-td'
+                });
+            }
+            this.widgets.datatable = new YAHOO.widget.ScrollingDataTable(this.id + '-datatable', columnDefinitions, this.widgets.datasource, {
+                height: '150px',
+                renderLoopSize: 100,
+                initialLoad: false,
+                MSG_EMPTY: this.msg('logicecm.base.select-tree-element')
+            });
+            this.widgets.datatable.owner = this;
+//			this.widgets.datatable.on('renderEvent', this.onDatatableRendered, null, this);
+            this.widgets.datatable.on('cellClickEvent', this.onClick, null, this);
+            this.widgets.datatable.on('tableScrollEvent', this.onDatatableScroll, null, this);
+			this.loadAllowedNodes();
+            this.loadHelper.fulfil('ready');
+        },
+		loadAllowedNodes: function() {
+			if (this.options.allowedNodesScript) {
+				Alfresco.util.Ajax.request({
+					method: "GET",
+					requestContentType: "application/json",
+					responseContentType: "application/json",
+					url: Alfresco.constants.PROXY_URI_RELATIVE + this.options.allowedNodesScript,
+					successCallback: {
+						fn: function (response) {
+							this.options.allowedNodes = response.json.nodes;
+							this.parentControl.options.allowedNodes = this.parentControl.options.allowedNodes ? this.parentControl.options.allowedNodes.concat(this.options.allowedNodes) : this.options.allowedNodes;
+						},
+						scope: this
+					},
+					failureCallback: {
+						fn: function onFailure(response) {
+							this.options.allowedNodes = null;
+						},
+						scope: this
+					},
+					execScripts: true
 				});
 			}
-			this.widgets.datatable = new YAHOO.widget.ScrollingDataTable(this.id + '-datatable', columnDefinitions, this.widgets.datasource, {
-				height: '150px',
-				renderLoopSize: 100,
-				initialLoad: false,
-				MSG_EMPTY: this.msg('logicecm.base.select-tree-element')
-			});
-			this.widgets.datatable.owner = this;
-//			this.widgets.datatable.on('renderEvent', this.onDatatableRendered, null, this);
-			this.widgets.datatable.on('cellClickEvent', this.onClick, null, this);
-			this.widgets.datatable.on('tableScrollEvent', this.onDatatableScroll, null, this);
+		},
+		onReInitializeControlItem: function(layer, args) {
+			if (Alfresco.util.hasEventInterest(this, args) && this.key == args[1].itemKey) {
+				var options = args[1].options;
+				var fieldValues = args[1].fieldValues;
+				if (options) {
+					this.setOptions(options);
+				}
+				this.currentState = {
+					original: {},
+					selected: {},
+					temporarySelected: {},
+					nodeData: null,
+					skipItemsCount: null,
+					searchTerm: null,
+					exSearchFilter: null,
+					exSearchFormId: null,
+					loadingInProcess: false
+				};
+				this.searchProperties = [];
+				this.rootNodeData = null;
 
-			this.loadHelper.fulfil('ready');
+				this.loadHelper = new Alfresco.util.Deferred(['rootNode', 'searchProperties', 'ready', 'show'], {
+					scope: this,
+					fn: this.loadData
+				});
+				this._loadRootNode();
+
+				this._initValues(fieldValues);
+
+				this._loadSearchProperties();
+
+				this.loadAllowedNodes();
+                this.widgets.datasource.liveData = Alfresco.constants.PROXY_URI_RELATIVE + this.options.childrenDataSource + '/node/';
+                this.loadHelper.fulfil('ready');
+            }
 		},
 
 		_loadSearchForm: function () {
@@ -905,11 +1017,17 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			};
 		},
 
-		_fnCreateNewItemHandler: function() {
+		_fnCreateNewItemHandler: function(bubblingLabel) {
 			if (this.stateParams.doubleClickLock) return;
 			this.stateParams.doubleClickLock = true;
-
-			var templateRequestParams = this._generateCreateNewParams(this.currentState.nodeData.nodeRef, this.options.itemType);
+			var nodeData = this.currentState.nodeData;
+			if (!nodeData) {
+				nodeData = this.rootNodeData;
+			}
+			if (!bubblingLabel) {
+				bubblingLabel = "addSelectedItemToPicker";
+			}
+			var templateRequestParams = this._generateCreateNewParams(nodeData.nodeRef, this.options.itemType);
 			templateRequestParams["createNewMessage"] = this.options.createNewMessage;
 
 			new Alfresco.module.SimpleDialog("create-form-dialog-" + this.eventGroup).setOptions({
@@ -958,7 +1076,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 									var items =successResponse.json.data.items;
 
 									if (items && items[0]) {
-										this.fire('addSelectedItemToPicker', { /* Bubbling.fire */
+										this.fire(bubblingLabel, { /* Bubbling.fire */
 											added: items[0],
 											options: this.options,
 											key: this.key
