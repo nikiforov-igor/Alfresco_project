@@ -430,8 +430,10 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
     private NodeRef getDefaultEmailTemplate() {
         if (defaultEmailTemplate == null) {
             List<NodeRef> nodeRefs = searchService.selectNodes(repositoryStructureHelper.getCompanyHomeRef(), defaultEmailTemplatePath, null, namespaceService, false);
-            if (nodeRefs != null || nodeRefs.size() == 1) {
+            if (nodeRefs != null && nodeRefs.size() == 1) {
                 defaultEmailTemplate = nodeRefs.get(0);
+            } else {
+                logger.error("By the specified path will not find the default template for the notification letter!");
             }
         }
         return defaultEmailTemplate;
