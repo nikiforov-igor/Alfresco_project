@@ -111,11 +111,13 @@
                     </field>
 
                     <field id="lecm-document-aspects:response-to-assoc" set="common">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-search-control-with-dialog.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
                             <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
                             <control-param name="itemType">lecm-internal:document</control-param>
+                            <control-param name="showSearch">true</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
 
@@ -452,7 +454,7 @@
                     <set id="attachment" appearance=""/>
                     <set id="date" appearance=""/>
                     <field id="lecm-internal-answers:typical-answer-assoc" set="answerAndAuthor">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Типовые_x0020_ответы</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
                             <control-param name="showCreateNewLink">true</control-param>
@@ -550,16 +552,19 @@
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
                     <field id="lecm-document-aspects:response-to-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-search-control-with-dialog.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
                             <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
                             <control-param name="itemType">lecm-internal:document</control-param>
                             <control-param name="selectedItemsFormArgs">lecm-document-aspects:response-to-assoc</control-param>
+                            <control-param name="showSearch">true</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-document:subject-assoc">
                         <control>
+                            <!--Не удалять! Оставлено для совместимости со старыми документами-->
                             <control-param name="selectedItemsFormArgs">lecm-document:subject-assoc</control-param>
                         </control>
                     </field>
@@ -690,15 +695,18 @@
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
                     <field id="lecm-document-aspects:response-to-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-search-control-with-dialog.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
                             <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
                             <control-param name="itemType">lecm-internal:document</control-param>
+                            <control-param name="showSearch">true</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-document:subject-assoc">
                         <control>
+                            <!--Не удалять! Оставлено для совместимости со старыми документами-->
                             <control-param name="selectedItemsFormArgs">lecm-document:subject-assoc</control-param>
                         </control>
                     </field>

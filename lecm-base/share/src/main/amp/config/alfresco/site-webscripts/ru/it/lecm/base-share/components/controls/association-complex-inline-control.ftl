@@ -44,7 +44,10 @@
 
 <#assign disabled = 'view' == form.mode || (field.disabled && !(params.forceEditable?? && 'true' == params.forceEditable?lower_case))>
 <#assign isComplex = items?size gt 1>
-
+<#assign showLabel = true>
+<#if params.showLabel?? && params.showLabel == "false">
+    <#assign showLabel = false>
+</#if>
 <#if 'view' == form.mode>
 	<#assign value>
 		<input type='hidden' id='${fieldHtmlId}' name='${field.name}' value='${fieldValue?html}'>
@@ -53,6 +56,16 @@
 	<@components.baseControl field=field name='association-inline-control' classes='association-inline-control viewmode' value=value disabled=disabled/>
 <#else>
 	<div id='${fieldHtmlId}-association-inline-control' class='control association-inline-control'>
+		<#if showLabel>
+            <div class="label-div">
+                <label for="${fieldHtmlId}">
+				${field.label?html}:
+					<#if field.endpointMandatory!false || field.mandatory!false>
+                        <span class="mandatory-indicator">${msg("form.required.fields.marker")}</span>
+					</#if>
+                </label>
+            </div>
+		</#if>
 		<div class='container'>
 			<div class='value-div'>
 				<@components.baseControlValue field=field fieldValue=fieldValue showAutocomplete=false isDefaultValue=defaultValue?has_content/>
@@ -103,7 +116,7 @@
 							itemType: '${i}',
 							</#if>
 							<#if args.ignoreNodes??>
-								ignoreNodes: '${args.ignoreNodes?split(',')}',
+                                ignoreNodes: '${args.ignoreNodes}'.split(','),
 							<#else>
 								ignoreNodes: [],
 							</#if>
@@ -117,6 +130,9 @@
 									'${key}': <#if isNotBoolean>'</#if>${params[key]}<#if isNotBoolean>'</#if>,
 								</#if>
 							</#list>
+                            <#if !params?keys?seq_contains("endpointMany") && !params?keys?seq_contains(itemKey + "_endpointMany")>
+                                'endpointMany': ${endpointMany?string},
+                            </#if>
 						}
 					}<#if i_has_next>,</#if>
 					</#list>

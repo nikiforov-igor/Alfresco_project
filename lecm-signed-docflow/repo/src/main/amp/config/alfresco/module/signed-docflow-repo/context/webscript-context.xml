@@ -26,10 +26,6 @@
 		  p:documentAttachmentsService-ref="documentAttachmentsService"
 		  p:dictionaryService-ref="dictionaryService"/>
 
-	<bean parent="webscript" id="webscript.ru.it.lecm.signed.docflow.unicloud.api.post"
-		  class="ru.it.lecm.signed.docflow.webscripts.UnicloudWebscript"
-		  p:unicloudService-ref="unicloudService"/>
-
 	<bean parent="webscript" id="webscript.ru.it.lecm.signed.docflow.config.api.post"
 		  class="ru.it.lecm.signed.docflow.webscripts.SignConfigWebscript"
 		  p:nodeService-ref="nodeService"
@@ -38,10 +34,6 @@
 	<bean parent="webscript" id="webscript.ru.it.lecm.signed.docflow.signing.api.post"
 		  class="ru.it.lecm.signed.docflow.webscripts.SigningWebscript"
 		  p:signedDocflowService-ref="signedDocflowService"/>
-
-	<bean parent="webscript" id="webscript.ru.it.lecm.signed.docflow.sendContentToPartner.sendContentToPartner.post"
-		  class="ru.it.lecm.signed.docflow.webscripts.SendContentToPartnerWebscript"
-		  p:sendContentToPartnerService-ref="sendContentToPartnerService"/>
 
 	<bean id="webscript.ru.it.lecm.signed.docflow.loadSign.loadSign.post" class="ru.it.lecm.signed.docflow.webscripts.LoadSignWebscript"
 		  parent="webscript"
@@ -59,13 +51,6 @@
 
 	<bean id="webscript.ru.it.lecm.signed.docflow.getContractorInfoBySendedContent.getContractorInfoBySendedContent.get" class="ru.it.lecm.signed.docflow.webscripts.GetContractorInfoBySendedContent"
 		  parent="webscript"
-		  p:nodeService-ref="nodeService"/>
-
-	<bean id="webscript.ru.it.lecm.signed.docflow.getSignedContentFromPartner.getSignedContentFromPartner.get" class="ru.it.lecm.signed.docflow.webscripts.GetSignedContentFromPartnerWebscript"
-		  parent="webscript"
-		  p:receiveContentByEmailService-ref="receiveContentByEmailService"
-		  p:unicloudService-ref="unicloudService"
-		  p:documentAttachmentsService-ref="documentAttachmentsService"
 		  p:nodeService-ref="nodeService"/>
 
 	<bean id="webscript.ru.it.lecm.signed.docflow.getHashes.getHashes.post" class="ru.it.lecm.signed.docflow.webscripts.GetHashesWebscript"

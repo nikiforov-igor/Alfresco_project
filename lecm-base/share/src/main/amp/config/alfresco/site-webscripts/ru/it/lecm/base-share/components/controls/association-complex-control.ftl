@@ -15,9 +15,9 @@
     <#assign endpointMany = (params.endpointMany == "true")>
 </#if>
 
-<#assign autocompleteDataSourceMethodPost = false>
-<#if params.autocompleteDataSourceMethodPost?? && params.autocompleteDataSourceMethodPost == "true">
-	<#assign autocompleteDataSourceMethodPost = true>
+<#assign autocompleteDataSourceMethodPost = true>
+<#if params.autocompleteDataSourceMethodPost?? && params.autocompleteDataSourceMethodPost == "false">
+	<#assign autocompleteDataSourceMethodPost = false>
 </#if>
 
 <#assign items = endpointType?split(',')>
@@ -67,7 +67,10 @@
 <#if params.sortSelected?? && params.sortSelected == "true">
 	<#assign  sortSelected = true>
 </#if>
-
+<#assign showCreateNewButton = false>
+<#if params.showCreateNewButton?? && params.showCreateNewButton == "true" && !isComplex>
+	<#assign showCreateNewButton = true>
+</#if>
 <#if 'view' == form.mode>
 	<#assign value>
 		<input type='hidden' id='${fieldHtmlId}' name='${field.name}' value='${fieldValue?html}'>
@@ -75,7 +78,7 @@
 	</#assign>
 	<@components.baseControl field=field name='association-control' classes='association-control viewmode' value=value disabled=disabled/>
 <#else>
-	<#assign buttons><@components.baseControlBtns field=field renderCreateBtn=false/></#assign>
+	<#assign buttons><@components.baseControlBtns field=field renderCreateBtn=showCreateNewButton/></#assign>
 	<#assign value><@components.baseControlValue field=field fieldValue=fieldValue showAutocomplete=showAutocomplete isDefaultValue=defaultValue?has_content/></#assign>
 	<@components.baseControl field=field name='association-control' classes='association-control' buttons=buttons value=value>
 		<#if showAutocomplete>
@@ -108,6 +111,7 @@
 				</#if>
                 endpointMany: ${endpointMany?string},
                 showAssocViewForm: ${showAssocViewForm?string},
+                showCreateNewButton: ${showCreateNewButton?string},
                 sortSelected: ${sortSelected?string},
 				itemsOptions: [
 					<#list items as i>
@@ -122,7 +126,7 @@
 							itemType: '${i}',
 							</#if>
 							<#if args.ignoreNodes??>
-								ignoreNodes: '${args.ignoreNodes?split(',')}',
+								ignoreNodes: '${args.ignoreNodes}'.split(','),
 							<#else>
 								ignoreNodes: [],
 							</#if>
@@ -142,6 +146,17 @@
 									'${key}': <#if isNotBoolean>'</#if>${params[key]}<#if isNotBoolean>'</#if>,
 								</#if>
 							</#list>
+							<#if !params?keys?seq_contains("endpointMany") && !params?keys?seq_contains(itemKey + "_endpointMany")>
+							    'endpointMany': ${endpointMany?string},
+							</#if>
+							<#if params[itemKey + "_rootLocationArg"]?? && form.arguments[params[itemKey + "_rootLocationArg"]]??>
+								'rootLocation': '${form.arguments[params[itemKey + "_rootLocationArg"]]}',
+							<#elseif params.rootLocationArg?? && form.arguments[params.rootLocationArg]??>
+								'rootLocation': '${form.arguments[params.rootLocationArg]}',
+							</#if>
+							<#if params.substituteParent?? && params.substituteParent == "true">
+                                'substituteParent':"${form.arguments.itemId!""}",
+							</#if>
 						}
 					}<#if i_has_next>,</#if>
 					</#list>
@@ -165,6 +180,11 @@
 		], [
 			'css/lecm-base/components/controls/association-control.css',
 			'css/lecm-base/components/controls/association-control.picker.css'
+			<#if params.additionalStyles?has_content>
+				<#list params.additionalStyles?split(",") as css>
+					,'${css}'
+				</#list>
+			</#if>
 		], initAssociationControl);
 	})();
 //]]></script>

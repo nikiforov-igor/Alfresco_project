@@ -1,21 +1,22 @@
 div.delegation-owner-content div.thumbnail-container {
     float: left;
-    max-width: 100px;
-    max-height: 120px;
+    max-width: 120px;
+    max-height: 160px;
     margin: 0;
-    padding: 20px;
+    padding: 0 10px 20px 10px;
 }
 
 div.delegation-owner-content div.thumbnail-container img {
-    max-width: 100px;
-    max-height: 120px;
+    width: 90px;
+    height: 120px;
 }
 
 .delegation-owner-content div.thumbnail-container .thumbnail-view-text,
 .delegation-owner-content div.thumbnail-container .thumbnail-edit-text {
-    width: 100px;
+    width: 90px;
+    height: 120px;
     display: block;
-    padding: 25px 0;
+    padding: 40px 0;
     border: 1px solid #8d8d8d;
     border-radius: 10px;
     text-align: center;
@@ -24,9 +25,13 @@ div.delegation-owner-content div.thumbnail-container img {
     box-sizing: border-box;
 }
 
+div.delegation-content > div{
+    padding-top: 20px;
+}
+
 .delegation-owner-content .owner-employee-positions {
     float: left;
-    padding: 20px 10px 20px 10px;
+    padding: 0 10px 20px 30px;
 }
 
 .delegation-owner-content .owner-employee-positions p {
@@ -35,12 +40,30 @@ div.delegation-owner-content div.thumbnail-container img {
 
 div p.delegation-page-title {
     padding: 20px;
+    font-weight: bold;
 }
 
-.delegation-info .delegation-content .dashlet-body p {
+.delegation-content .delegation-info .dashlet-body p {
     padding: 10px;
 }
 
-.delegation-info .delegation-content .dashlet-title {
+.delegation-content .delegation-info div {
+    padding-top: 20px;
+}
+
+.delegation-content .dashlet-title {
     background-color: #bbe6f3;
+    font-weight: bold;
+}
+
+.delegation-content.dashlet {
+    margin-top: 40px;
+}
+
+.delegation-content .delegation-owner-content {
+    width: 64%;
+}
+
+.delegation-content .delegation-info {
+    width: 34%;
 }

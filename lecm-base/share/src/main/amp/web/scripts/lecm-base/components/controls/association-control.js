@@ -36,6 +36,9 @@ LogicECM.module = LogicECM.module || {};
 		Bubbling.on('pickerClosed', this.onPickerClosed, this);
         Bubbling.on('loadAllOriginalItems', this.onLoadAllOriginalItems, this);
         Bubbling.on('readonlyControl', this.onReadonlyControl, this);
+		Bubbling.on('disableControl', this.toggleControl, this);
+		Bubbling.on('enableControl', this.toggleControl, this);
+		Bubbling.on("reInitializeControl", this.onReInitializeControl, this);
 
 		return this;
 	};
@@ -60,7 +63,7 @@ LogicECM.module = LogicECM.module || {};
 			additionalFilter: '',
 			isComplex: null,
 			autocompleteDataSource: 'lecm/autocomplete/complex/picker',
-			autocompleteDataSourceMethodPost: false,
+			autocompleteDataSourceMethodPost: true,
 			dataSourceLogic: 'AND',
 			maxSearchAutocompleteResults: 10,
 			showAutocomplete: null,
@@ -169,12 +172,49 @@ LogicECM.module = LogicECM.module || {};
 				this.widgets[i].setMessages(messages);
 			}
 		},
-
+		toggleControl: function (layer, args) {
+			if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+				var disableEvent = layer == "disableControl";
+				if (!this.options.disabled || disableEvent) {
+					if (this.widgets.pickerButton) {
+						this.widgets.pickerButton.set('disabled', disableEvent);
+                        if (this.widgets.picker &&  this.widgets.picker.widgets.picker && !disableEvent) {
+                            this.widgets.picker.widgets.picker.hide();
+                        }
+					}
+					if (this.widgets.createNewButton) {
+						this.widgets.createNewButton.set('disabled', disableEvent);
+					}
+					if (this.widgets.autocomplete) {
+						autocompleteInput = this.widgets.autocomplete.getInputEl();
+						if (disableEvent) {
+							autocompleteInput.setAttribute('disabled', '');
+						} else {
+							autocompleteInput.removeAttribute('disabled');
+						}
+					}
+					if (this.widgets.added) {
+						this.widgets.added.disabled = disableEvent;
+					}
+					if (this.widgets.removed) {
+						this.widgets.removed.disabled = disableEvent;
+					}
+					var input = Dom.get(this.id);
+					if (input) {
+						input.disabled = disableEvent;
+					}
+				}
+				this.tempDisabled = disableEvent;
+			}
+		},
 		onReadonlyControl: function(layer, args) {
 			var autocompleteInput, fn;
 			if (!this.options.disabled && this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
 				this.readonly = args[1].readonly;
 				this.widgets.pickerButton.set('disabled', args[1].readonly);
+				if (this.widgets.createNewButton) {
+					this.widgets.createNewButton.set('disabled', args[1].readonly);
+				}
 				if (this.widgets.autocomplete) {
 					autocompleteInput = this.widgets.autocomplete.getInputEl();
 					fn = args[1].readonly ? autocompleteInput.setAttribute : autocompleteInput.removeAttribute;
@@ -186,6 +226,17 @@ LogicECM.module = LogicECM.module || {};
 		onLoadAllOriginalItems: function(layer, args) {
 			if (Alfresco.util.hasEventInterest(this, args)) {
                 this.optionsMap = args[1].optionsMap;
+				if (this.defaultValues.length && args[1].selected.length) {
+					if (!Dom.get(this.id).value) {
+						var nodeRefs = args[1].selected.map(function(node) {
+							return node.nodeRef;
+						});
+						Dom.get(this.id).value = Alfresco.util.encodeHTML(nodeRefs);
+						if (this.widgets.added) {
+							this.widgets.added.value = Alfresco.util.encodeHTML(nodeRefs);
+						}
+					}
+				}
                 this._renderSelectedItems(args[1].selected);
 			}
 		},
@@ -408,6 +459,70 @@ LogicECM.module = LogicECM.module || {};
 		onPickerButtonClick: function (evt, target) {
             this.widgets.picker.show();
 		},
+		onReInitializeControl: function (layer, args) {
+			if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+				var options = args[1].options;
+				var controlItems = this.options.itemsOptions;
+				var itemsOptions = [];
+				this.fieldValues = [];
+				this.defaultValues = [];
+				if (options) {
+					if (options.itemsOptions && options.itemsOptions.length) {
+						itemsOptions = options.itemsOptions;
+					} else if (!this.options.isComplex) {
+						itemsOptions.push(
+							{
+								itemKey: controlItems[0].itemKey,
+								options: options ? options : {}
+							});
+					}  else {
+						itemsOptions = controlItems;
+					}
+					for (var i = 0; i < this.options.itemsOptions.length; i++) {
+						itemsOptions.forEach(function (itemOptions) {
+							if (itemOptions.itemKey == this.options.itemsOptions[i].itemKey) {
+								this.options.itemsOptions[i].options = YAHOO.lang.merge(this.options.itemsOptions[i].options, itemOptions.options);
+							}
+						}, this)
+					}
+					Object.keys(options).forEach(function(key) {
+						if (key != "itemsOptions" && key != "plane") {
+							this.options[key] = options[key];
+						}
+					}, this);
+
+					if (options.fieldValues && options.fieldValues.length) {
+						if (options.fieldValues instanceof Array) {
+							this.fieldValues = options.fieldValues;
+						}
+						if (options.fieldValues instanceof String || typeof(options.fieldValues) === 'string') {
+							this.fieldValues = options.fieldValues.split(',');
+						}
+					}
+				}
+				this.searchProperties = [];
+
+				Dom.get(this.widgets.selected).innerHTML = "";
+				if (this.widgets.autocomplete) {
+					Dom.removeClass(this.widgets.autocomplete.getInputEl(), 'hidden');
+				}
+				if (this.widgets.picker.widgets.items) {
+					Dom.get(this.widgets.picker.widgets.items).innerHTML = "";
+				}
+
+                this.widgets.datasource.liveData = Alfresco.constants.PROXY_URI_RELATIVE + this.options.autocompleteDataSource + '/node/children';
+				this.fire('reInitializeControlPicker', {
+					options: this.options
+				});
+				itemsOptions.forEach(function(itemOptions){
+					this.fire('reInitializeControlItem', {
+						itemKey: itemOptions.itemKey,
+						options: itemOptions.options,
+						fieldValues: this.fieldValues
+					})
+				}, this);
+			}
+		},
 
 		onReady: function () {
 			/* загрузка данных по field.value и передача их в picker и в items. Отрисовка selectedItems здесь и в пикере */
@@ -455,6 +570,15 @@ LogicECM.module = LogicECM.module || {};
 					correctScope:true,
 					fn: this.onAutocomplete
 				}, 'keydown');
+
+				/*ловим уплывающий контейнер*/
+				var dialogContainer = Dom.get(this.options.formId + "-form-container_c");
+				if (dialogContainer) {
+					var autocompleteContainer = Dom.get(this.id + '-autocomplete-container');
+					if (autocompleteContainer) {
+						Dom.setStyle(autocompleteContainer, "zIndex", (dialogContainer.style.zIndex + 1));
+					}
+				}
 			}
 
 			BaseUtil.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);

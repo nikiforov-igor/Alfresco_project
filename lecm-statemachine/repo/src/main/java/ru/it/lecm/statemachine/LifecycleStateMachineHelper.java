@@ -592,7 +592,7 @@ public class LifecycleStateMachineHelper extends BaseBean implements StateMachin
     public List<NodeRef> getDocumentsWithActiveTasks(String employeeLogin, Set<String> tasksNames, Integer remainingDays) {
         Set<NodeRef> documents = new HashSet<NodeRef>();
 
-        List<WorkflowTask> tasks = getAssignedAndPooledTasks(employeeLogin);
+        List<WorkflowTask> tasks = getAssignedAndPooledTasks(employeeLogin, true);
         for (WorkflowTask task : tasks) {
             if (tasksNames == null || tasksNames.isEmpty() || tasksNames.contains(task.getDefinition().getId())) {
 	            NodeRef doc = getTaskDocument(task, null);

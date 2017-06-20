@@ -323,6 +323,12 @@
 			<artifactId>freemarker</artifactId>
 			<version>2.3.18-alfresco-patched</version>
 		</dependency>-->
+		<dependency>
+			<groupId>de.fmaul</groupId>
+			<artifactId>javascript-console-share</artifactId>
+			<version>${jsconsole.version}</version>
+			<type>amp</type>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -655,6 +661,11 @@
 						<overlay>
 							<groupId>ru.it.lecm.reporting</groupId>
 							<artifactId>reporting-share</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>de.fmaul</groupId>
+							<artifactId>javascript-console-share</artifactId>
 							<type>amp</type>
 						</overlay>
 					</overlays>
@@ -996,6 +1007,11 @@
 								<overlay>
 									<groupId>ru.it.lecm.reporting</groupId>
 									<artifactId>reporting-share</artifactId>
+									<type>amp</type>
+								</overlay>
+								<overlay>
+									<groupId>de.fmaul</groupId>
+									<artifactId>javascript-console-share</artifactId>
 									<type>amp</type>
 								</overlay>
 

@@ -1,6 +1,10 @@
-<#include "/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+<#include "/ru/it/lecm/base-share/components/controls/association-control.ftl">
 <#assign params = field.control.params>
 <#assign doNotCheckAccess = true/>
+<#assign fieldValue = defaultValue/>
+<#if fieldValue == "">
+    <#assign fieldValue = field.value>
+</#if>
 <#if params.doNotCheckAccess?? && params.doNotCheckAccess == "false">
     <#assign doNotCheckAccess = false/>
 </#if>
@@ -24,7 +28,7 @@
                 </#if>
                     disabled: ${disabled?string},
                     currentValue: "${field.value!''}",
-                    defaultValue: "${fieldValue}",
+                    defaultValue: "${fieldValue!''}",
                 <#if params.employeesByOrgDS??>
                     employeesByOrgDS: "${params.employeesByOrgDS}",
                 </#if>
@@ -50,6 +54,9 @@
                 <#if params.treeViewJsName??>
                     treeViewJsName: "${params.treeViewJsName}",
                 </#if>
+                <#if params.controlJsName??>
+                    controlName: "${params.controlJsName}",
+                </#if>
                 <#if params.representativesDefaultValueDS?? && params.representativesDefaultValueDS != "">
                     representativesDefaultValueDS: "${params.representativesDefaultValueDS}",
                 </#if>
@@ -59,6 +66,8 @@
                     employeesType: "${params.employeesType!"lecm-orgstr:employee"}",
                     representativesType: "${params.representativesType!"lecm-representative:representative-type"}",
 					fieldHtmlId: "${fieldHtmlId}",
+                    fieldId: "${field.configName}",
+                    formId: "${args.htmlid}",
                     doNotCheckAccess: ${doNotCheckAccess?string}
                 });
     }

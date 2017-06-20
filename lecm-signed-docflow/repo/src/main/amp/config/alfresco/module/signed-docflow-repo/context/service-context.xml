@@ -5,15 +5,6 @@
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-	<bean id="unicloudService" class="ru.it.lecm.signed.docflow.UnicloudService" init-method="init">
-		<!--<property name="gateWcfService" ref="gateWcfService.https"/>-->
-		<property name="gateWcfService" ref="gateWcfService.http"/>
-		<property name="orgstructureService" ref="serviceOrgstructure"/>
-		<property name="nodeService" ref="nodeService"/>
-		<property name="contentService" ref="contentService"/>
-		<property name="signedDocflowService" ref="signedDocflowService"/>
-	</bean>
-
 	<bean id="lecm.signed-docflow.model-bootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">
 		<property name="models">
 			<list>
@@ -91,38 +82,12 @@
         <property name="dsignExchangeEnabled" value="${dsign.exchange.enabled}"/>
 	</bean>
 
-	<bean id="sendContentToPartnerService" class="ru.it.lecm.signed.docflow.SendContentToPartnerService" init-method="init"
-		  depends-on="lecm.signed-docflow.mail-templates-bootstrap">
-		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
-		<property name="nodeService" ref="nodeService"/>
-		<property name="unicloudService" ref="unicloudService"/>
-		<property name="businessJournalService" ref="businessJournalService"/>
-		<property name="mailService" ref="mailService"/>
-		<property name="templateService" ref="templateService"/>
-		<property name="signedDocflowService" ref="signedDocflowService"/>
-		<property name="fileFolderService" ref="fileFolderService"/>
-		<property name="zipSignedContentService" ref="zipSignedContentService"/>
-		<property name="regNumbersService" ref="regNumbersService"/>
-		<property name="defaultFromEmail" value="${mail.from.default}"/>
-	</bean>
-
 	<bean id="zipSignedContentService" class="ru.it.lecm.signed.docflow.ZipSignedContentService"
 		  parent="baseBean" init-method="init">
 		<property name="fileFolderService" ref="fileFolderService"/>
 		<property name="signedDocflowService" ref="signedDocflowService"/>
 		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
 		<property name="dictionaryService" ref="dictionaryService"/>
-	</bean>
-
-	<bean id="receiveContentByEmailService" class="ru.it.lecm.signed.docflow.ReceiveContentByEmailService"
-		  parent="baseBean" init-method="init">
-		<property name="zipSignedContentService" ref="zipSignedContentService"/>
-		<property name="mailHost" value="imap.googlemail.com"/>
-		<property name="mailUsername" value="datateh.alfresco"/>
-		<property name="mailPassword" value="ZSE4zse4"/>
-		<property name="mailProtocol" value="imaps"/>
-		<property name="mailInboxFolder" value="INBOX"/>
-		<property name="mailDestinationFolder" value="signedDocflowProcessedMail"/>
 	</bean>
 
 </beans>

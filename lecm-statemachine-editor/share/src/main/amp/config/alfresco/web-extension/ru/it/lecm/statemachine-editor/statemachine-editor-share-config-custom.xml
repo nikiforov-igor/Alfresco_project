@@ -1086,11 +1086,12 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:role-assoc">
-						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
+						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="additionalFilter">@lecm\\-orgstr\\:business\\-role\\-is\\-dynamic:\"false\"</control-param>
+							<control-param name="plane">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-stmeditor:isCreator" />
@@ -1104,11 +1105,12 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:role-assoc">
-						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
+						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="additionalFilter">@lecm\\-orgstr\\:business\\-role\\-is\\-dynamic:\"false\"</control-param>
+							<control-param name="plane">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-stmeditor:static-role-privilege">
@@ -1133,10 +1135,11 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:role-assoc">
-						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
+						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
+							<control-param name="plane">true</control-param>
 							<control-param name="additionalFilter">@lecm\\-orgstr\\:business\\-role\\-is\\-dynamic:\"false\"</control-param>
 						</control>
 					</field>
@@ -1157,10 +1160,11 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:role-assoc">
-						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
+						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
+							<control-param name="plane">true</control-param>
 							<control-param name="additionalFilter">@lecm\\-orgstr\\:business\\-role\\-is\\-dynamic:\"false\"</control-param>
 						</control>
 					</field>
@@ -1192,11 +1196,12 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-stmeditor:role-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="additionalFilter">@lecm\\-orgstr\\:business\\-role\\-is\\-dynamic:\"true\"</control-param>
+							<control-param name="plane">true</control-param>
+							<control-param name="additionalFilter">@lecm\\-orgstr\\:business\\-role\\-is\\-dynamic:\"true\"</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -1212,11 +1217,12 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-stmeditor:role-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="additionalFilter">@lecm\\-orgstr\\:business\\-role\\-is\\-dynamic:\"true\"</control-param>
+							<control-param name="plane">true</control-param>
+							<control-param name="additionalFilter">@lecm\\-orgstr\\:business\\-role\\-is\\-dynamic:\"true\"</control-param>
                         </control>
                     </field>
                 </appearance>

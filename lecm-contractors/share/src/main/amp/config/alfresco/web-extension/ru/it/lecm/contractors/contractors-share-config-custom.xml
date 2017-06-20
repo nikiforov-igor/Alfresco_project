@@ -66,12 +66,13 @@
                     <control-param name="person_getExtSearchQuery">LogicECM.getExtQueryForPerson</control-param>
                     <control-param name="person_getArgumentsFromForm">LogicECM.getExtArgsForPerson</control-param>
                 </type>
-                <type name="association:lecm-representative:representative-type" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                    <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
+                <type name="association:lecm-representative:representative-type" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                    <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
                     <control-param name="showCreateNewLink">false</control-param>
                     <control-param name="showCreateNewButton">false</control-param>
                     <control-param name="nameSubstituteString">{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename}</control-param>
                     <control-param name="itemType">lecm-representative:representative-type</control-param>
+                    <control-param name="plane">true</control-param>
                 </type>
                 <type name="association:lecm-contractor:region-type" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                     <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Регионы</control-param>
@@ -169,7 +170,7 @@
                     <!-- Код контрагента -->
                     <field id="lecm-contractor:contractor-to-specialization-association" set="contacts"
                            mandatory="true">            <!-- FK Специализация -->
-                        <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                             <control-param name="rootLocation">
                                 /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Специализации
                             </control-param>
@@ -184,8 +185,8 @@
                     <field id="lecm-contractor:contractor-to-legalform-association" set="contacts"
                            mandatory="true">                 <!-- FK ОПФ -->
                         <control
-                                template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">
+                                template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                            <control-param name="rootLocation">
                                 /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Организационно-правовые_x0020_формы
                             </control-param>
                             <control-param name="showCreateNewLink">true</control-param>
@@ -194,6 +195,7 @@
                                 {lecm-legalform:full-title}
                             </control-param>
                             <control-param name="createNewMessageId">label.new-legalform</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
 
@@ -330,7 +332,7 @@
                     <!-- Код контрагента -->
                     <field id="lecm-contractor:contractor-to-specialization-association" set="contacts"
                            mandatory="true">            <!-- FK Специализация -->
-                        <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                             <control-param name="rootLocation">
                                 /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Специализации
                             </control-param>
@@ -345,8 +347,8 @@
                     <field id="lecm-contractor:contractor-to-legalform-association" set="contacts"
                            mandatory="true">                 <!-- FK ОПФ -->
                         <control
-                                template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">
+                                template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                            <control-param name="rootLocation">
                                 /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Организационно-правовые_x0020_формы
                             </control-param>
                             <control-param name="showCreateNewLink">true</control-param>
@@ -355,6 +357,7 @@
                                 {lecm-legalform:full-title}
                             </control-param>
                             <control-param name="createNewMessageId">label.new-legalform</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
 
@@ -458,7 +461,7 @@
                         </constraint-handlers>
                     </field>
                     <field id="lecm-contractor:contractor-to-specialization-association">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                             <control-param name="rootLocation">
                                 /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Специализации
                             </control-param>
@@ -637,7 +640,7 @@
                     <!-- Код контрагента -->
                     <field id="lecm-contractor:contractor-to-specialization-association" set="contacts"
                            mandatory="true">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                             <control-param name="rootLocation">
                                 /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Специализации
                             </control-param>
@@ -652,8 +655,8 @@
                     <field id="lecm-contractor:contractor-to-legalform-association" set="contacts"
                            mandatory="true">                 <!-- ОПФ -->
                         <control
-                                template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">
+                                template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                            <control-param name="rootLocation">
                                 /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Организационно-правовые_x0020_формы
                             </control-param>
                             <control-param name="showCreateNewLink">true</control-param>
@@ -662,6 +665,7 @@
                                 {lecm-legalform:full-title}
                             </control-param>
                             <control-param name="createNewMessageId">label.new-legalform</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
 
@@ -811,7 +815,7 @@
                     <!-- Код контрагента -->
                     <field id="lecm-contractor:contractor-to-specialization-association" set="contacts"
                            mandatory="true">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                             <control-param name="rootLocation">
                                 /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Специализации
                             </control-param>
@@ -824,8 +828,8 @@
                     </field>
                     <field id="lecm-contractor:contractor-to-legalform-association" set="contacts" mandatory="true">                 <!-- ОПФ -->
                         <control
-                                template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">
+                                template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                            <control-param name="rootLocation">
                                 /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Организационно-правовые_x0020_формы
                             </control-param>
                             <control-param name="showCreateNewLink">false</control-param>
@@ -833,6 +837,7 @@
                             <control-param name="nameSubstituteString">{lecm-legalform:short-title},
                                 {lecm-legalform:full-title}
                             </control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
 
@@ -880,7 +885,7 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-contractor:contractor-to-specialization-association">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                             <control-param name="rootLocation">
                                 /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Специализации
                             </control-param>
@@ -906,11 +911,12 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-contractor:link-to-representative-association">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
                             <control-param name="showCreateNewLink">true</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="nameSubstituteString">{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename}</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -1186,7 +1192,7 @@
                     </field>
                     <field id="lecm-contractor:legal-address" label-id="title.physical_person_legal_address"/>
                     <field id="lecm-contractor:contractor-to-specialization-association">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                             <control-param name="rootLocation">
                                 /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Специализации
                             </control-param>
@@ -1342,7 +1348,7 @@
                     </field>
                     <field id="lecm-contractor:legal-address" label-id="title.physical_person_legal_address"/>
                     <field id="lecm-contractor:contractor-to-specialization-association">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                             <control-param name="rootLocation">
                                 /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Специализации
                             </control-param>

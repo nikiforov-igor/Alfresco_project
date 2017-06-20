@@ -2,12 +2,13 @@
     <config>
 		<forms>
             <default-controls>
-                <type name="association:lecm-arm:filter" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                    <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_АРМ/lecm-dic:Фильтры_x0020_АРМ</control-param>
+                <type name="association:lecm-arm:filter" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                    <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_АРМ/lecm-dic:Фильтры_x0020_АРМ</control-param>
                     <control-param name="nameSubstituteString">{cm:name}</control-param>
                     <control-param name="showCreateNewLink">false</control-param>
                     <control-param name="showCreateNewButton">false</control-param>
                     <control-param name="showViewIncompleteWarning">false</control-param>
+					<control-param name="plane">true</control-param>
                 </type>
             </default-controls>
 
@@ -47,13 +48,14 @@
 					<field id="lecm-arm:show-in-menu" set="menu-config"/>
 					<field id="lecm-arm:order" set="menu-config"/>
 					<field id="lecm-arm:menu-business-roles-assoc" set="menu-config">
-						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
+						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="showViewIncompleteWarning">false</control-param>
 							<control-param name="additionalFilter">@lecm\\-orgstr\\:business\\-role\\-is\\-dynamic:\"false\"</control-param>
+							<control-param name="plane">true</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -90,13 +92,14 @@
 					<field id="lecm-arm:show-in-menu" set="menu-config"/>
 					<field id="lecm-arm:order" set="menu-config"/>
 					<field id="lecm-arm:menu-business-roles-assoc" set="menu-config">
-						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
+						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="showViewIncompleteWarning">false</control-param>
 							<control-param name="additionalFilter">@lecm\\-orgstr\\:business\\-role\\-is\\-dynamic:\"false\"</control-param>
+							<control-param name="plane">true</control-param>
 						</control>
 					</field>
 				</appearance>

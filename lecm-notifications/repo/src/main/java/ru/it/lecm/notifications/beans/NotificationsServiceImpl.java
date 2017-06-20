@@ -8,6 +8,7 @@ import org.alfresco.repo.transaction.TransactionListener;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.codec.binary.Base64;
@@ -52,12 +53,16 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
     private static final int DEFAULT_N_DAYS = 5;
     private static final String DOCUMENT_LINK = "Документ {#mainObject.wrapAsLink(#mainObject.attribute(\"lecm-document:present-string\"))}";
     private static final String DEFAULT_NOTIFICATION_TEMPLATE = "При формировании уведомления произошла ошибка. За дополнительной информацией обратитесь к администратору. %s Ошибка: %s";
+    private NodeRef defaultEmailTemplate;
 
     private OrgstructureBean orgstructureService;
     private DictionaryBean dictionaryService;
     private SubstitudeBean substituteService;
 	private SecretaryService secretaryService;
 
+    private NamespaceService namespaceService;
+    private SearchService searchService;
+    private String defaultEmailTemplatePath;
 	private Map<NodeRef, NotificationChannelBeanBase> channels;
 	private Map<String, NodeRef> channelsNodeRefs;
 	private LecmPermissionService lecmPermissionService;
@@ -67,6 +72,18 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	private ApplicationContext applicationContext;
 	private NodeRef settingsNode;
     private BusinessJournalService businessJournalService;
+
+    public void setNamespaceService(NamespaceService namespaceService) {
+        this.namespaceService = namespaceService;
+    }
+
+    public void setSearchService(SearchService searchService) {
+        this.searchService = searchService;
+    }
+
+    public void setDefaultEmailTemplatePath(String defaultEmailTemplatePath) {
+        this.defaultEmailTemplatePath = defaultEmailTemplatePath;
+    }
 
 	public ApplicationContext getApplicationContext() {
 		return applicationContext;
@@ -124,7 +141,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
     }
 
     /**
-     * Метод инициализвции сервиса
+     * Метод инициализации сервиса
     */
     public void init() {
         transactionListener = new NotificationTransactionListener();
@@ -256,21 +273,27 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
         logger.trace("createAtomicNotifications start: {}", start);
         Set<NotificationUnit> result = new HashSet<>();
         if (generalizedNotification != null) {
+            String templateCode = generalizedNotification.getTemplateCode();
+            if (templateCode != null) {
 
-            if (generalizedNotification.getTemplateCode() != null) {
-
-                NodeRef templateDicRec = dictionaryService.getRecordByParamValue(NOTIFICATION_TEMPLATE_DICTIONARY_NAME, ContentModel.PROP_NAME, generalizedNotification.getTemplateCode());
+                NodeRef templateDicRec = dictionaryService.getRecordByParamValue(NOTIFICATION_TEMPLATE_DICTIONARY_NAME, ContentModel.PROP_NAME, templateCode);
                 if (templateDicRec != null) {
                     String template = (String) nodeService.getProperty(templateDicRec, PROP_NOTIFICATION_TEMPLATE);
                     String subject = (String) nodeService.getProperty(templateDicRec, PROP_NOTIFICATION_TEMPLATE_SUBJECT);
                     List<AssociationRef> templateAssocs = nodeService.getTargetAssocs(templateDicRec, ASSOC_NOTIFICATION_TEMPLATE_TEMPLATE_ASSOC);
-                    NodeRef templateRef = templateAssocs.isEmpty() ? null : templateAssocs.get(0).getTargetRef();
+                    NodeRef templateRef = null;
+                    if (templateAssocs ==  null || templateAssocs.size() == 0) {
+                        templateRef = getDefaultEmailTemplate();
+                        logger.warn("For notification {} is not set a default letter template! Default template used!", templateCode);
+                    } else {
+                        templateRef = templateAssocs.get(0).getTargetRef();
+                    }
 
                     generalizedNotification.setTemplate(template);
                     generalizedNotification.setSubject(subject);
                     generalizedNotification.setTemplateRef(templateRef);
                 } else {
-                    throw new TemplateNotFoundException("Не найден шаблон уведомления: " + generalizedNotification.getTemplateCode());
+                    throw new TemplateNotFoundException("Не найден шаблон уведомления: " + templateCode);
                 }
             }
 
@@ -390,7 +413,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 
 							newNotificationUnit.setTypeRef(typeRef);
 							newNotificationUnit.setRecipientRef(tasksSecretary);
-							newNotificationUnit.setTemplate(generalizedNotification.getTemplateCode());
+							newNotificationUnit.setTemplate(templateCode);
 							result.add(newNotificationUnit);
 						}
 					}
@@ -402,6 +425,19 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
             logger.debug("Atomic notifications. Current size: {}, time: {}", result.size(), System.currentTimeMillis() - start);
         }
         return result;
+    }
+
+    private NodeRef getDefaultEmailTemplate() {
+        if (defaultEmailTemplate == null) {
+            List<NodeRef> nodeRefs = searchService.selectNodes(repositoryStructureHelper.getCompanyHomeRef(), defaultEmailTemplatePath, null, namespaceService, false);
+            if (nodeRefs != null && nodeRefs.size() == 1) {
+                defaultEmailTemplate = nodeRefs.get(0);
+            } else {
+                logger.error("By the specified path: {}, will not find the default template for the notification letter!", defaultEmailTemplatePath);
+
+            }
+        }
+        return defaultEmailTemplate;
     }
 
     private Set<NotificationUnit> addNotificationUnits(Notification generalizedNotification, Set<NodeRef> employeeRefs, String templateBody, String templateDescription, String templateSubject) {

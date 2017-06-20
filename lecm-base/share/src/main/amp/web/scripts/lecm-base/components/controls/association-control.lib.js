@@ -65,7 +65,6 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				sortProp: options.sortProp,
 				selectedItemsNameSubstituteString: LogicECM.module.AssociationComplexControl.Utils.getSelectedItemsNameSubstituteString(options),
 				additionalFilter: additionalFilter,
-				pathRoot: options.rootLocation,
 				pathNameSubstituteString: options.treeNodeSubstituteString,
 				onlyInSameOrg: (!!options.useStrictFilterByOrg).toString(),
 				doNotCheckAccess: (!!options.doNotCheckAccess).toString(),
@@ -75,6 +74,11 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				skipCount: forAutocomplete ? undefined : skipItemsCount.toString(),
 				elementsParams: LogicECM.module.AssociationComplexControl.Utils.getElementsParams(context, forAutocomplete)
 			};
+			if (options.showPath) {
+				paramsObj.pathRoot = options.rootLocation;
+			} else if (!paramsObj.xpath) {
+				paramsObj.xpath =  options.rootLocation;
+			}
 
 			return options.autocompleteDataSourceMethodPost ? YAHOO.lang.JSON.stringify(paramsObj) : Alfresco.util.toQueryString(paramsObj);
 		},
@@ -245,8 +249,15 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			var titleName = (options.plane || !options.showPath) ? item.selectedName : item.path + item.selectedName;
 			var title = (options.showAssocViewForm && item.nodeRef != null) ? Alfresco.util.message('title.click.for.extend.info') : titleName;
 			var result = '<span class="not-person" title="' + title + '">';
-			if (options.showAssocViewForm && item.nodeRef != null) {
-				result += "<a href='javascript:void(0);' " + " onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'" + item.nodeRef + "\', title: \'logicecm.view\'})\">" + displayValue + "</a>";
+			if (options.showAssocViewForm && item.nodeRef && (!options.disabled || (options.disabled && item.hasAccess))) {
+				if (options.viewUrl) {
+					var href = YAHOO.lang.substitute(options.viewUrl, {
+						nodeRef: item.nodeRef
+					});
+					result += "<a href=\'" + href + "\'>" + displayValue + "</a>"
+				} else {
+					result += "<a href='javascript:void(0);' " + " onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'" + item.nodeRef + "\', title: \'logicecm.view\'})\">" + displayValue + "</a>";
+				}
 			} else {
 				result += displayValue;
 			}

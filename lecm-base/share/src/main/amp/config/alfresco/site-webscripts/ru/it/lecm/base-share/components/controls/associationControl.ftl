@@ -1,3 +1,6 @@
+<#--This associationControl.ftl is deprecated!
+    Use association-control.ftl instead
+!-->
 <#include "picker.inc.ftl" />
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as view/>
 <#assign controlId = fieldHtmlId + "-cntrl">

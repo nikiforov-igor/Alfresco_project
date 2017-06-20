@@ -352,6 +352,12 @@
 			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>-->
+		<dependency>
+			<groupId>de.fmaul</groupId>
+			<artifactId>javascript-console-repo</artifactId>
+			<version>${jsconsole.version}</version>
+			<type>amp</type>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -552,7 +558,6 @@
 							<excludes>
 								<exclude>WEB-INF/lib/poi-*-beta2-20130720.jar</exclude>
 								<exclude>WEB-INF/lib/xmlbeans-2.3.0.jar</exclude>
-								<exclude>WEB-INF/lib/XmlSchema-1.4.5.jar</exclude>
 							</excludes>
 						</overlay>
 						<!-- Add / order your AMPs here -->
@@ -751,6 +756,11 @@
 							<artifactId>mobile-repo</artifactId>
 							<type>amp</type>
 						</overlay>-->
+						<overlay>
+							<groupId>de.fmaul</groupId>
+							<artifactId>javascript-console-repo</artifactId>
+							<type>amp</type>
+						</overlay>
 					</overlays>
 					<archive>
 						<addMavenDescriptor>false</addMavenDescriptor>
@@ -988,7 +998,6 @@
 									<excludes>
 										<exclude>WEB-INF/lib/poi-*-beta2-20130720.jar</exclude>
 										<exclude>WEB-INF/lib/xmlbeans-2.3.0.jar</exclude>
-										<exclude>WEB-INF/lib/XmlSchema-1.4.5.jar</exclude>
 									</excludes>
                                 </overlay>
                                 <!-- Add / order your AMPs here -->
@@ -1192,6 +1201,11 @@
 									<artifactId>mobile-repo</artifactId>
 									<type>amp</type>
 								</overlay>-->
+                                <overlay>
+                                    <groupId>de.fmaul</groupId>
+                                    <artifactId>javascript-console-repo</artifactId>
+                                    <type>amp</type>
+                                </overlay>
 
                                 <!-- Дополнительные модули СЭД -->
                                 <overlay>

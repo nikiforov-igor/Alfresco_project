@@ -1,3 +1,6 @@
+<#--This association-autocomplete-control.ftl is deprecated!
+    Use association-control.ftl instead
+!-->
 <#include "/org/alfresco/components/form/controls/common/utils.inc.ftl" />
 <#include "association-tree-picker-dialog.inc.ftl">
 

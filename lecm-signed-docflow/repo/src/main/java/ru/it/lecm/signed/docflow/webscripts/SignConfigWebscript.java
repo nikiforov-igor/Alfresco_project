@@ -53,7 +53,7 @@ public class SignConfigWebscript extends DeclarativeWebScript {
 		result.put("aspect", aspect.toString());
 		if("get".equals(action)) {
 			result.put("enabled", nodeService.getAspects(node).contains(aspect));
-			Map<String, Object> properties = new HashMap<String, Object>();
+			Map<String, Object> properties = new HashMap<>();
 			Serializable lockOwner = nodeService.getProperty(node, ContentModel.PROP_LOCK_OWNER);
 			if (lockOwner != null) {
 				properties.put(ContentModel.PROP_LOCK_OWNER.toString(), lockOwner);
@@ -102,7 +102,7 @@ public class SignConfigWebscript extends DeclarativeWebScript {
 
 		final Content content = req.getContent();
 		if (content == null) {
-			String msg = "UnicloudWebscript was called with empty json content";
+			String msg = "SignConfigWebScript was called with empty json content";
 			logger.error("{}. Executed actor: {}", msg, actor);
 			throw new WebScriptException(String.format("%s. Executed actor: %s", msg, actor));
 		}
@@ -122,7 +122,7 @@ public class SignConfigWebscript extends DeclarativeWebScript {
 			throw new WebScriptException(null, ex);
 		}
 
-		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, Object> result = new HashMap<>();
 		result.put("result", responseJSON);
 		return result;
 	}

@@ -1,3 +1,7 @@
+<#--This association-search-control.ftl is deprecated!
+    Use association-complex-inline-control.ftl instead
+!-->
+
 <#include "/org/alfresco/components/component.head.inc">
 <#include "association-search-control-dialog.inc.ftl">
 
