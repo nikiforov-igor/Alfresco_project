@@ -65,4 +65,12 @@
 
 	<bean id="routesOnCreateAssocPolicy" class="ru.it.lecm.workflow.routes.policy.RoutesOnCreateAssocPolicy"
 		  init-method="init" parent="logicEcmAssociationPolicy"/>
+
+	<util:list id="routes.permissions">
+		<value>alfresco/module/${artifactId}/permissions/routes-permissions.xml</value>
+	</util:list>
+
+	<bean parent="ServiceFolderPermissionHelper" depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap"
+		  p:serviceBean-ref="routesService"
+		  p:permissionsList-ref="routes.permissions"/>
 </beans>
