@@ -57,8 +57,8 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                 this.select = Dom.get(this.id);
                 if (this.select) {
                     this.populateSelect();
+                    Event.on(this.select, "change", this.onSelectChange, this, true);
                 }
-                Event.on(this.select, "change", this.onSelectChange, this, true);
             },
 
             populateSelect: function () {
@@ -128,9 +128,9 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                     option.innerHTML = preference.name;
                     option.selected = (i == 0) || (this.options.currentValue && this.options.currentValue == preference.name);
                     select.appendChild(option);
-                    if (!this.firstSelectOption) {
-                        this.firstSelectOption = option;
-                    }
+                }
+                if (select.options.length > 1) {
+                    this.firstSelectOption = select.options[1];
                 }
                 if (fireChangeEvent) {
                     this.onSelectChange();
@@ -279,8 +279,9 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                                         Dom.insertBefore(option, this.firstSelectOption);
                                     } else {
                                         select.appendChild(option);
-                                        this.firstSelectOption = option;
                                     }
+                                    this.firstSelectOption = option;
+                                    Dom.removeClass(this.deleteLink, "hidden");
                                 }
                             }
                         }
@@ -311,7 +312,16 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                             if (oResponse.json) {
                                 var select = this.select;
                                 if (select) {
+                                    // сохраним удаляемое значение
+                                    var removingValue = select.value;
                                     select.remove(select.selectedIndex);
+                                    if (select.value === "~CREATE-NEW~") {
+                                        Dom.addClass(this.deleteLink, "hidden");
+                                    }
+                                    // если удаляемое значение являлось первым option'ом в select'е, то меняем firstSelectOption
+                                    if (removingValue == this.firstSelectOption.value) {
+                                        this.firstSelectOption = (select.options.length == 1) ? null : select.options[1];
+                                    }
                                 }
                             }
                         }
@@ -337,5 +347,6 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                 }
                 return -1;
             }
-        });
+        }
+    );
 })();
