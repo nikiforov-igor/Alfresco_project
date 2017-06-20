@@ -101,7 +101,7 @@
     </div>
     <div class="container">
         <input type="hidden" id="${fieldHtmlId}" name="-" value="${field.value?html}" />
-        <input type="hidden" id="${fieldHtmlId}-removed" name="${field.name}_removed" value="${fieldValue}"/>
+        <input type="hidden" id="${fieldHtmlId}-removed" name="${field.name}_removed"/>
 
         <div id="${fieldHtmlId}-controls" class="value-div">
             <select id="${fieldHtmlId}-added" name="${field.name}_added" tabindex="0"

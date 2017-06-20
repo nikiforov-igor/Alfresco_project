@@ -134,6 +134,16 @@ LogicECM.module = LogicECM.module || {};
             },
 
             onSelectChange: function AssociationTreeViewer_onSelectChange() {
+                var removedItem = "";
+                var selectValue = this.selectItem.value;
+                if (selectValue != this.options.selectedValueNodeRef) {
+                    removedItem = this.options.selectedValueNodeRef;
+                }
+                Dom.get(this.removedItemId).value = removedItem;
+                if (this.options.mandatory) {
+                    YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
+                }
+
                 Dom.get(this.controlId).value = this.selectItem.value;
                 this.options.selectedValueNodeRef = this.selectItem.value;
                 if (this.options.primaryCascading) {
