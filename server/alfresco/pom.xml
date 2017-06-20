@@ -352,6 +352,12 @@
 			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>-->
+		<dependency>
+			<groupId>de.fmaul</groupId>
+			<artifactId>javascript-console-repo</artifactId>
+			<version>${jsconsole.version}</version>
+			<type>amp</type>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -750,6 +756,11 @@
 							<artifactId>mobile-repo</artifactId>
 							<type>amp</type>
 						</overlay>-->
+						<overlay>
+							<groupId>de.fmaul</groupId>
+							<artifactId>javascript-console-repo</artifactId>
+							<type>amp</type>
+						</overlay>
 					</overlays>
 					<archive>
 						<addMavenDescriptor>false</addMavenDescriptor>
@@ -1183,6 +1194,11 @@
 									<artifactId>mobile-repo</artifactId>
 									<type>amp</type>
 								</overlay>-->
+                                <overlay>
+                                    <groupId>de.fmaul</groupId>
+                                    <artifactId>javascript-console-repo</artifactId>
+                                    <type>amp</type>
+                                </overlay>
 
                                 <!-- Дополнительные модули СЭД -->
                                 <overlay>
