@@ -250,6 +250,8 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams)
 				var simplePath = "/";
 
 				if (argsPathRoot) {
+                    lecmPermission.pushAuthentication();
+                    lecmPermission.setRunAsUserSystem();
 					var rootNodes = search.xpathSearch(argsPathRoot);
 					if (rootNodes.length) {
 						var pathRoot = rootNodes[0];
@@ -271,6 +273,7 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams)
 							temp = temp.parent;
 						}
 					}
+                    lecmPermission.popAuthentication();
 				}
 
 				resultObj.path = path;
