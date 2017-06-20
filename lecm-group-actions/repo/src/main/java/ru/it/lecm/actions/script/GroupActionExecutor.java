@@ -142,7 +142,7 @@ public class GroupActionExecutor extends DeclarativeWebScript {
                 result.put("postRedirect", returnModel.get("postRedirect"));
                 result.put("openWindow", returnModel.get("openWindow"));
                 result.put("showModalWindow", returnModel.get("showModalWindow"));
-                result.put("messageVar", returnModel.get("message")==null ? "" : returnModel.get("message").toString().replace("\"", "\\\""));
+                result.put("messageVar", returnModel.get("message") != null ? returnModel.get("message") : "");
             } else {
                 result.put("forCollection", false);
                 result.put("withErrors", false);
@@ -175,7 +175,7 @@ public class GroupActionExecutor extends DeclarativeWebScript {
 							itemResult.put("postRedirect", returnModel.get("postRedirect"));
 							itemResult.put("openWindow", returnModel.get("openWindow"));
 							itemResult.put("showModalWindow", returnModel.get("showModalWindow"));
-							itemResult.put("message", message == null ? message : message.replace("\"", "\\\""));
+							itemResult.put("message", message);
 							itemsResult.add(itemResult);
 						}
 						return null;
