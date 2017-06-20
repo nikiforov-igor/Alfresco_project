@@ -258,7 +258,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
                 case 'employee' :
                     formID = 'createNewStageItemForEmployee';
                     dialogHeader = Alfresco.util.message('lecm.routers.add.employee.to.stage');
-                    allowedNodeScript = encodeURIComponent("lecm/workflow/routes/getEmployeesForStage?stage=" + destination + (this.routeOrganization ? "&organization=" + this.routeOrganization : ""));
+                    allowedNodeScript = "lecm/workflow/routes/getEmployeesForStage?stage=" + encodeURIComponent(destination) + (this.routeOrganization ? "&organization=" + encodeURIComponent(this.routeOrganization) : "");
                     break;
                 case 'macros' :
                     formID = 'createNewStageItemForMacros';
