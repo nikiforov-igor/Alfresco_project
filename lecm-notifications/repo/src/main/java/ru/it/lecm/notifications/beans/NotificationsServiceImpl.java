@@ -284,7 +284,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
                     NodeRef templateRef = null;
                     if (templateAssocs ==  null || templateAssocs.size() == 0) {
                         templateRef = getDefaultEmailTemplate();
-                        logger.warn(String.format("For notification %s is not set a default letter template! Default template used!", templateCode));
+                        logger.warn("For notification {} is not set a default letter template! Default template used!", templateCode);
                     } else {
                         templateRef = templateAssocs.get(0).getTargetRef();
                     }
@@ -433,7 +433,8 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
             if (nodeRefs != null && nodeRefs.size() == 1) {
                 defaultEmailTemplate = nodeRefs.get(0);
             } else {
-                logger.error("By the specified path will not find the default template for the notification letter!");
+                logger.error("By the specified path: {}, will not find the default template for the notification letter!", defaultEmailTemplatePath);
+
             }
         }
         return defaultEmailTemplate;
