@@ -6279,7 +6279,7 @@
                         <property name="lecm-arm:search-type"><![CDATA[]]></property>
                         <property name="lecm-arm:expression"><![CDATA[@delegationService.getDelegationOwnersByTrustee(user.currentUser().getEmployee(), true).size() > 0 || @secretaryService.getPrimaryChiefs(user.currentUser().getEmployee()).size() > 0]]></property>
                         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-                        <property name="lecm-arm:order"><![CDATA[180]]></property>
+                        <property name="lecm-arm:order"><![CDATA[12]]></property>
                         <property name="lecm-arm:is-for-secretaries"><![CDATA[true]]></property>
                         <property name="lecm-arm:types"><![CDATA[]]></property>
                         <property name="lecm-arm:root-node-html-url"><![CDATA[page/owner-delegation]]></property>
