@@ -50,23 +50,14 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>ru.it.lecm.signed-docflow</groupId>
-			<artifactId>signed-docflow-unicloud-client</artifactId>
-			<version>${platform.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.sun.xml.bind</groupId>
-        			<artifactId>jaxb-impl</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.sun.xml.bind</groupId>
-					<artifactId>jaxb-xjc</artifactId>
-				</exclusion>
-				<exclusion>
-					  <groupId>org.codehaus.woodstox</groupId>
-					  <artifactId>woodstox-core-asl</artifactId>
-				</exclusion>
-			</exclusions>
+			<groupId>net.java.dev.jna</groupId>
+			<artifactId>jna</artifactId>
+			<version>4.2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>net.java.dev.jna</groupId>
+			<artifactId>jna-platform</artifactId>
+			<version>4.2.2</version>
 		</dependency>
 		<!--<dependency>
 			<groupId>org.slf4j</groupId>

@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.FileNameValidator;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
-import ru.it.lecm.csp.signing.client.exception.CryptoException;
+import ru.it.lecm.signed.docflow.csp.signing.exception.CryptoException;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.signed.docflow.SignedDocflowEventCategory;
@@ -535,24 +535,23 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
             throw new UnsupportedOperationException("getHashes() is disabled. Check property 'dsign.enabled' in 'alfresco-global.properties' file.");
         }
 		Map<String, Object> result = new HashMap<>();
-        for (NodeRef refToSignList : refsToSignList) {
-            String hash = generateHash(refToSignList);
+        for (NodeRef refToSign : refsToSignList) {
+            String hash = generateHash(refToSign);
             if (!hash.isEmpty()) {
-                result.put(hash, refToSignList);
+                result.put(hash, refToSign);
             }
         }
 		return result;
 	}
 
     /**
-	 * вычислить хэш файла по нодрефе
-	 *
-	 * @param refToSignList
+	 * Вычислить хэш файла по нодрефе
+	 * @param fileNodeRef нодрефа файла, для которого необходимо вычислить хэш
 	 * @return hashRef
 	 */
     @Override
-	public String generateHash(NodeRef refToSignList) {
-		ContentReader sourceReader = contentService.getReader(refToSignList, ContentModel.PROP_CONTENT);
+	public String generateHash(NodeRef fileNodeRef) {
+		ContentReader sourceReader = contentService.getReader(fileNodeRef, ContentModel.PROP_CONTENT);
 		try {
 			byte[] sourceContentBytes = IOUtils.toByteArray(sourceReader.getContentInputStream());
             byte[] targetContentBytes = CSPSigner.getProcessor(dsignWrapperPath).hashGostr3411(sourceContentBytes);

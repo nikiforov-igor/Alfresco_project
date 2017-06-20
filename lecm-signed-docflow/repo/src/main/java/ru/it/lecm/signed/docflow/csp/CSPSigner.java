@@ -5,9 +5,9 @@
  */
 package ru.it.lecm.signed.docflow.csp;
 
-import ru.it.lecm.csp.signing.client.cryptoapiwrapper.JavaCryptoApiWrapperMockImpl;
-import ru.it.lecm.csp.signing.client.signature.CryptoApiWrapperSignatureProcessor;
-import ru.it.lecm.csp.signing.client.signature.SignatureProcessor;
+import ru.it.lecm.signed.docflow.csp.signing.cryptoapiwrapper.JavaCryptoApiWrapperMockImpl;
+import ru.it.lecm.signed.docflow.csp.signing.signature.CryptoApiWrapperSignatureProcessor;
+import ru.it.lecm.signed.docflow.csp.signing.signature.SignatureProcessor;
 
 /**
  *
