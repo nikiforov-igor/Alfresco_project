@@ -142,7 +142,7 @@ public class GroupActionExecutor extends DeclarativeWebScript {
                 result.put("postRedirect", returnModel.get("postRedirect"));
                 result.put("openWindow", returnModel.get("openWindow"));
                 result.put("showModalWindow", returnModel.get("showModalWindow"));
-                result.put("messageVar", returnModel.get("message"));
+                result.put("messageVar", returnModel.get("message") != null ? returnModel.get("message") : "");
             } else {
                 result.put("forCollection", false);
                 result.put("withErrors", false);
