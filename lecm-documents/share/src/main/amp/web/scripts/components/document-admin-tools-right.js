@@ -90,11 +90,23 @@ LogicECM.module.Transfer = LogicECM.module.Transfer || {};
                                     fn: this.deleteDocument,
                                     scope: this
                                 }
+                            },
+                            {
+                                text: this.msg("menu.button.show.document.properties"),
+                                value: 5,
+                                onclick: {
+                                    fn: this.showAllDocumentProperties,
+                                    scope: this
+                                }
                             }
                         ],
                         disabled: false
                     }
                 );
+            },
+
+            showAllDocumentProperties: function() {
+                window.open(Alfresco.constants.URL_PAGECONTEXT + 'console/admin-console/node-browser#state=panel%3Dview%26nodeRef%3D' + encodeURIComponent(this.options.documentRef), '_blank');
             },
 
 			showServiceDocInfo: function()
