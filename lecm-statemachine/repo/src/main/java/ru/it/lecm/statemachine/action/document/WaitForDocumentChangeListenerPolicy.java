@@ -183,127 +183,114 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
 			if (logger.isDebugEnabled()) {
 				logger.debug("МАШИНА СОСТОЯНИЙ. Вызывается метод afterCommit");
 			}
-				for(final NodeRef nodeRef : getPostTxnNodes()) {
-//                    final NodeRef nodeRef = pendingDocs;
-//					if (nodeService.exists(nodeRef)) {
-//						Serializable state = nodeService.getProperty(nodeRef, QName.createQName("http://www.it.ru/logicECM/model/signing/aspects/1.0", "signingState"));
-//						logger.debug("МАШИНА СОСТОЯНИЙ. state полученный в методе afterCommit равен {}", state);
-						Runnable runnable = new Runnable() {
-							public void run() {
-								try {
-//									String modifier = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_MODIFIER);
-//									if (logger.isDebugEnabled()) {
-//										logger.debug("МАШИНА СОСТОЯНИЙ. Обработка изменений документа " + nodeRef + " пользователем " + modifier);
-//									}
-									final String modifier = getModifier(nodeRef);
-									AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Void>() {
-										@Override
-										public Void doWork() throws Exception {
-											return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-												@Override
-												public Void execute() throws Throwable {
-													if (nodeService.exists(nodeRef)) {
-														Serializable state = nodeService.getProperty(nodeRef, QName.createQName("http://www.it.ru/logicECM/model/signing/aspects/1.0", "signingState"));
-														if (logger.isDebugEnabled()) {
-															logger.debug("МАШИНА СОСТОЯНИЙ. state полученный в методе afterCommit равен {}", state);
-														}
-														if (logger.isDebugEnabled()) {
-															logger.debug("МАШИНА СОСТОЯНИЙ. Обработка изменений документа " + nodeRef + " пользователем " + modifier);
-														}
-														//TODO transaction in loop!!!
-														if (nodeService.hasAspect(nodeRef, StatemachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK)) {
-															final String taskId = (String) nodeService.getProperty(nodeRef, StatemachineModel.PROP_WORKFLOW_DOCUMENT_TASK_STATE_PROCESS);
-															if (logger.isDebugEnabled()) {
-																logger.debug("МАШИНА СОСТОЯНИЙ. Обработка изменений документа " + nodeRef + " таска: " + taskId);
-															}
-															List<StateMachineAction> actions = stateMachineHelper.getTaskActionsByName(taskId, StateMachineActionsImpl.getActionNameByClass(WaitForDocumentChangeAction.class));
-															if (logger.isDebugEnabled()) {
-																logger.debug("МАШИНА СОСТОЯНИЙ. Обработка изменений документа " + nodeRef + " actions: " + actions);
-															}
-															WaitForDocumentChangeAction.Expression result = null;
-															for (StateMachineAction action : actions) {
-																if (logger.isDebugEnabled()) {
-																	logger.debug("МАШИНА СОСТОЯНИЙ. Обработка изменений документа " + nodeRef + " action: " + action);
-																}
-																WaitForDocumentChangeAction documentChangeAction = (WaitForDocumentChangeAction) action;
-																List<WaitForDocumentChangeAction.Expression> expressions = documentChangeAction.getExpressions();
-																if (logger.isDebugEnabled()) {
-																	logger.debug("МАШИНА СОСТОЯНИЙ. Обработка изменений документа " + nodeRef + " expressions: " + expressions);
-																}
-																for (WaitForDocumentChangeAction.Expression expression : expressions) {
-																	if (logger.isDebugEnabled()) {
-																		logger.debug("МАШИНА СОСТОЯНИЙ. Обработка изменений документа " + nodeRef + " expression: " + expression);
-																	}
-																	if (documentService.execExpression(nodeRef, expression.getExpression())) {
-																		if (logger.isDebugEnabled()) {
-																			logger.debug("МАШИНА СОСТОЯНИЙ. Обработка изменений документа " + nodeRef + " execExpression: " + expression);
-																		}
-																		result = expression;
-																		break;
-																	}
-																}
-																if (result != null) {
-																	break;
-																}
-															}
+			final String currentUser = AuthenticationUtil.getFullyAuthenticatedUser();
+			for (final NodeRef nodeRef : getPostTxnNodes()) {
+				Runnable runnable = new Runnable() {
+					public void run() {
+						AuthenticationUtil.pushAuthentication();
+						try {
+							String newFullyAuthUser = currentUser;
+							if (newFullyAuthUser == null) {/*если пользователя нет - восстанавливаем*/
+								newFullyAuthUser = getModifier(nodeRef);
+							}
+							if (newFullyAuthUser != null) {
+								AuthenticationUtil.setFullyAuthenticatedUser(newFullyAuthUser);
+							}
 
-															if (result != null) {
-																if (logger.isDebugEnabled()) {
-																	logger.debug("МАШИНА СОСТОЯНИЙ. Обработка изменений документа " + nodeRef + " выражение: " + result.getExpression());
-																}
-																final String executionId = stateMachineHelper.getCurrentExecutionId(taskId);
-																if (result.getScript() != null && !"".equals(result.getScript())) {
-																	final String script = result.getScript();
-																	if (logger.isDebugEnabled()) {
-																		logger.debug("МАШИНА СОСТОЯНИЙ. Обработка изменений документа " + nodeRef + " скрипт: " + script);
-																	}
-		//   			                                           		AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
-		//                                                      		@Override
-		//                                                      		public Object doWork() throws Exception {
-																	stateMachineHelper.executeScript(script, executionId);
-		//                                                      		return null;
-		//                                                     			}
-		//                                                  			});
-																}
-																if (result.getOutputValue() != null && !"".equals(result.getOutputValue())) {
-																	//HashMap<String, Object> parameters = new HashMap<String, Object>();
-																	//parameters.put(result.getOutputVariable(), result.getOutputValue());
-																	final String messageName = result.getOutputVariable() + "_msg";
-																	//TODO может сразу execution? Или переписать на message?
-																	//stateMachineHelper.setExecutionParamentersByTaskId(taskId, parameters);
-																	if (result.isStopSubWorkflows()) {
-																		//TODO DONE nodeRef это и есть документ
-																		stateMachineHelper.stopDocumentSubWorkflows(nodeRef, null);
-																	}
-																	//stateMachineHelper.nextTransition(taskId);
-																	AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
-																		@Override
-																		public Void doWork() throws Exception {
-																			if (logger.isDebugEnabled()) {
-																				logger.debug("МАШИНА СОСТОЯНИЙ. Обработка изменений документа " + nodeRef + " executionId: " + executionId + " ,messageName: " + messageName);
-																			}
-																			stateMachineHelper.sendMessage(messageName, executionId);
-																			return null;
-																		}
-																	});
-																}
+							AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+								@Override
+								public Void doWork() throws Exception {
+									return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+										@Override
+										public Void execute() throws Throwable {
+											if (nodeService.exists(nodeRef)) {
+												Serializable state = nodeService.getProperty(nodeRef, QName.createQName("http://www.it.ru/logicECM/model/signing/aspects/1.0", "signingState"));
+												if (logger.isDebugEnabled()) {
+													logger.debug("МАШИНА СОСТОЯНИЙ. state полученный в методе afterCommit равен {}", state);
+												}
+												if (logger.isDebugEnabled()) {
+													logger.debug("МАШИНА СОСТОЯНИЙ. Обработка изменений документа " + nodeRef);
+												}
+												//TODO transaction in loop!!!
+												if (nodeService.hasAspect(nodeRef, StatemachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK)) {
+													final String taskId = (String) nodeService.getProperty(nodeRef, StatemachineModel.PROP_WORKFLOW_DOCUMENT_TASK_STATE_PROCESS);
+													if (logger.isDebugEnabled()) {
+														logger.debug("МАШИНА СОСТОЯНИЙ. Обработка изменений документа " + nodeRef + " таска: " + taskId);
+													}
+													List<StateMachineAction> actions = stateMachineHelper.getTaskActionsByName(taskId, StateMachineActionsImpl.getActionNameByClass(WaitForDocumentChangeAction.class));
+													if (logger.isDebugEnabled()) {
+														logger.debug("МАШИНА СОСТОЯНИЙ. Обработка изменений документа " + nodeRef + " actions: " + actions);
+													}
+													WaitForDocumentChangeAction.Expression result = null;
+													for (StateMachineAction action : actions) {
+														if (logger.isDebugEnabled()) {
+															logger.debug("МАШИНА СОСТОЯНИЙ. Обработка изменений документа " + nodeRef + " action: " + action);
+														}
+														WaitForDocumentChangeAction documentChangeAction = (WaitForDocumentChangeAction) action;
+														List<WaitForDocumentChangeAction.Expression> expressions = documentChangeAction.getExpressions();
+														if (logger.isDebugEnabled()) {
+															logger.debug("МАШИНА СОСТОЯНИЙ. Обработка изменений документа " + nodeRef + " expressions: " + expressions);
+														}
+														for (WaitForDocumentChangeAction.Expression expression : expressions) {
+															if (logger.isDebugEnabled()) {
+																logger.debug("МАШИНА СОСТОЯНИЙ. Обработка изменений документа " + nodeRef + " expression: " + expression);
 															}
-															logger.debug("МАШИНА СОСТОЯНИЙ. Конец");
+															if (documentService.execExpression(nodeRef, expression.getExpression())) {
+																if (logger.isDebugEnabled()) {
+																	logger.debug("МАШИНА СОСТОЯНИЙ. Обработка изменений документа " + nodeRef + " execExpression: " + expression);
+																}
+																result = expression;
+																break;
+															}
+														}
+														if (result != null) {
+															break;
 														}
 													}
-													return null;
+
+													if (result != null) {
+														if (logger.isDebugEnabled()) {
+															logger.debug("МАШИНА СОСТОЯНИЙ. Обработка изменений документа " + nodeRef + " выражение: " + result.getExpression());
+														}
+														final String executionId = stateMachineHelper.getCurrentExecutionId(taskId);
+														if (result.getScript() != null && !"".equals(result.getScript())) {
+															final String script = result.getScript();
+															if (logger.isDebugEnabled()) {
+																logger.debug("МАШИНА СОСТОЯНИЙ. Обработка изменений документа " + nodeRef + " скрипт: " + script);
+															}
+															stateMachineHelper.executeScript(script, executionId);
+														}
+														if (result.getOutputValue() != null && !"".equals(result.getOutputValue())) {
+															final String messageName = result.getOutputVariable() + "_msg";
+															//TODO может сразу execution? Или переписать на message?
+															//stateMachineHelper.setExecutionParamentersByTaskId(taskId, parameters);
+															if (result.isStopSubWorkflows()) {
+																//TODO DONE nodeRef это и есть документ
+																stateMachineHelper.stopDocumentSubWorkflows(nodeRef, null);
+															}
+															if (logger.isDebugEnabled()) {
+																logger.debug("МАШИНА СОСТОЯНИЙ. Обработка изменений документа " + nodeRef + " executionId: " + executionId + " ,messageName: " + messageName);
+															}
+															stateMachineHelper.sendMessage(messageName, executionId);
+														}
+													}
+													logger.debug("МАШИНА СОСТОЯНИЙ. Конец");
 												}
-											}, false, true);
+											}
+											return null;
 										}
-									}, modifier);
-								} catch (Exception e) {
-									logger.error("Error while execution change document action", e);
+									}, false, true);
 								}
-							}
-						};
-						threadPoolExecutor.execute(runnable);
-//					}
-				}
+							});
+						} catch (Exception e) {
+							logger.error("Error while execution change document action", e);
+						} finally {
+							AuthenticationUtil.popAuthentication();
+						}
+					}
+				};
+				threadPoolExecutor.execute(runnable);
+			}
 		}
 
 		@Override
