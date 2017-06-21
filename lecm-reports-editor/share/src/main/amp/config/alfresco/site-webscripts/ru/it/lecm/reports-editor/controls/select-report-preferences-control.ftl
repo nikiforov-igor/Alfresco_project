@@ -61,6 +61,7 @@
                 preferencesValue: "${field.control.params.preferencesValue?json_string}",
                 needSort: false,
             </#if>
+            defaultValues: {}
         });
 
     }
