@@ -141,18 +141,17 @@ abstract public class StateMachineAction {
 			props.put(ContentModel.PROP_NODE_UUID, uuid);
 		}
 		try {
-//			ChildAssociationRef childAssocRef = getServiceRegistry().getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<ChildAssociationRef>() {
-//				@Override
-//				public ChildAssociationRef execute() throws Throwable {
-					ChildAssociationRef childAssocRef = nodeService.createNode(
+			ChildAssociationRef childAssocRef = getServiceRegistry().getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<ChildAssociationRef>() {
+				@Override
+				public ChildAssociationRef execute() throws Throwable {
+					return nodeService.createNode(
 							parent,
 							ContentModel.ASSOC_CONTAINS,
 							QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)),
 							ContentModel.TYPE_FOLDER,
 							props);
-//					return childAssocRef;
-//				}
-//			}, false, true);
+				}
+			}, false, true);
 			logger.debug("!!!!!!!!!!! Создал ноду для стстуса "+name);
 			return childAssocRef.getChildRef();
 		} catch(DuplicateChildNodeNameException e) {
