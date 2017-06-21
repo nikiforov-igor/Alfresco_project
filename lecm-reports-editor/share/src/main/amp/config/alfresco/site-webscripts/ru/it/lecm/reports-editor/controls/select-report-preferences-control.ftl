@@ -53,7 +53,6 @@
             fieldId: "${field.configName}",
             notSelectedOptionShow: ${notSelectedOption?string},
             notSelectedText: "${notSelectedText?string}",
-            changeItemFireAction: "${field.control.params.changeItemFireAction!''?string}",
             <#if field.control.params.currentValue?has_content>
                 currentValue: "${field.control.params.currentValue}",
             </#if>
@@ -61,6 +60,7 @@
                 preferencesValue: "${field.control.params.preferencesValue?json_string}",
                 needSort: false,
             </#if>
+            changeItemFireAction: "${field.control.params.changeItemFireAction!''?string}"
         });
 
     }

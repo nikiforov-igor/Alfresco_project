@@ -250,26 +250,32 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams)
 				var simplePath = "/";
 
 				if (argsPathRoot) {
-					var rootNodes = search.xpathSearch(argsPathRoot);
-					if (rootNodes.length) {
-						var pathRoot = rootNodes[0];
-						var temp = result.parent;
-						while (temp && !temp.equals(pathRoot)) {
-							var pathNodeName;
-							if (argsPathNameSubstituteString) {
-								if (argsPathNameSubstituteString.length) {
-									pathNodeName = substitude.formatNodeTitle(temp, argsPathNameSubstituteString);
-								} else {
-									pathNodeName = substitude.getObjectDescription(temp);
-								}
-							} else {
-								pathNodeName = temp.name
-							}
+					try {
+                        lecmPermission.pushAuthentication();
+                        lecmPermission.setRunAsUserSystem();
+                        var rootNodes = search.xpathSearch(argsPathRoot);
+                        if (rootNodes.length) {
+                            var pathRoot = rootNodes[0];
+                            var temp = result.parent;
+                            while (temp && !temp.equals(pathRoot)) {
+                                var pathNodeName;
+                                if (argsPathNameSubstituteString) {
+                                    if (argsPathNameSubstituteString.length) {
+                                        pathNodeName = substitude.formatNodeTitle(temp, argsPathNameSubstituteString);
+                                    } else {
+                                        pathNodeName = substitude.getObjectDescription(temp);
+                                    }
+                                } else {
+                                    pathNodeName = temp.name
+                                }
 
-							path = "/" + pathNodeName + path;
-							simplePath = "/_" + simplePath;
-							temp = temp.parent;
-						}
+                                path = "/" + pathNodeName + path;
+                                simplePath = "/_" + simplePath;
+                                temp = temp.parent;
+                            }
+                        }
+                    } finally {
+                        lecmPermission.popAuthentication();
 					}
 				}
 
