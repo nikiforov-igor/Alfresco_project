@@ -49,6 +49,7 @@ public class ArchiveDocumentAction extends StateMachineAction implements Executi
     protected Expression archiveFolderAdditional;
 
     private String DEFAULT_ARCHIVE_PATH = "/Архив";
+    private final static Object lock = new Object();
 
     public void setArchiveFolder(Expression archiveFolder) {
         this.archiveFolder = archiveFolder;
@@ -239,12 +240,15 @@ public class ArchiveDocumentAction extends StateMachineAction implements Executi
             while (tokenizer.hasMoreTokens()) {
                 String folderName = tokenizer.nextToken();
                 if (!"".equals(folderName)) {
-                    NodeRef folder = nodeService.getChildByName(archiveFolder, ContentModel.ASSOC_CONTAINS, folderName);
-                    if (folder == null) {
-                        folder = createFolder(archiveFolder, folderName);
-                        isCreated = true;
+                    NodeRef folder;
+                    synchronized (lock) {
+                        folder = nodeService.getChildByName(archiveFolder, ContentModel.ASSOC_CONTAINS, folderName);
+                        if (folder == null) {
+                            folder = createFolder(archiveFolder, folderName);
+                            isCreated = true;
+                        }
+                        archiveFolder = folder;
                     }
-                    archiveFolder = folder;
                 }
             }
         } catch (Exception e) {
