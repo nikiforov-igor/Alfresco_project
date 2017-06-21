@@ -28,8 +28,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                 notSelectedText: "",
                 currentValue: null,
                 preferencesValue: null,
-                needSort: true,
-                defaultValues: {}
+                needSort: true
             },
 
             controlId: null,
@@ -338,22 +337,18 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
             _resetValues: function() {
                 this._initControls();
                 Dom.addClass(this.deleteLink, "hidden");
+                var formId = this.options.formId;
                 var fieldId = this.options.fieldId;
                 for (var i = 0; i < this.controls.length; i++) {
                     var control = this.controls[i];
-                    var fieldName = control.options.fieldId;
-                    if (fieldName && (fieldName != fieldId)) {
-                        var defaultValue = this.options.defaultValues[fieldName];
-                        var reset = false;
-                        if (!defaultValue) {
-                            defaultValue = (control.name == "LogicECM.module.Checkbox") ? "false" : "";
-                            reset = true;
-                        }
-                        LogicECM.module.Base.Util.reInitializeControl(this.options.formId, fieldName, {
+                    var controlFieldId = control.options.fieldId;
+                    if (controlFieldId && (controlFieldId != fieldId)) {
+                        var defaultValue = (control.name == "LogicECM.module.Checkbox") ? "false" : "";
+                        LogicECM.module.Base.Util.reInitializeControl(formId, controlFieldId, {
                             currentValue: defaultValue,
                             defaultValue: defaultValue,
                             fieldValues: defaultValue.split(","),
-                            resetValue: reset
+                            resetValue: true
                         });
                     }
                 }
@@ -374,6 +369,5 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                 }
                 return -1;
             }
-        }
-    );
+        });
 })();
