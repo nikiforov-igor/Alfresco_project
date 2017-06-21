@@ -149,14 +149,18 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                     this._initControls();
                     var argumentsObj = this._getPreferenceByName(this.select.value);
                     var arguments = argumentsObj ? argumentsObj.args : {};
+                    var formId = this.options.formId;
+                    var fieldId = this.options.fieldId;
                     for (var i = 0; i < this.controls.length; i++) {
-                        var fieldName = this.controls[i].options.fieldId;
-                        if (fieldName && arguments.hasOwnProperty(fieldName) && !(fieldName == this.options.fieldId)) {
-                            LogicECM.module.Base.Util.reInitializeControl(this.options.formId, fieldName, {
-                                currentValue: arguments[fieldName],
-                                defaultValue: arguments[fieldName],
-                                fieldValues: arguments[fieldName] ? arguments[fieldName].split(",") : [],
-                                resetValue: !arguments[fieldName]
+                        var controlFieldId = this.controls[i].options.fieldId;
+                        if (controlFieldId && arguments.hasOwnProperty(controlFieldId) && (controlFieldId != fieldId)) {
+                            var newValue = arguments[controlFieldId];
+                            LogicECM.module.Base.Util.reInitializeControl(formId, controlFieldId, {
+                                currentValue: newValue,
+                                defaultValue: newValue,
+                                fieldValues: newValue ? newValue.split(",") : [],
+                                resetValue: !newValue,
+                                selectCurrentValue: newValue
                             });
                         }
                     }
@@ -343,13 +347,25 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                     var control = this.controls[i];
                     var controlFieldId = control.options.fieldId;
                     if (controlFieldId && (controlFieldId != fieldId)) {
-                        var defaultValue = (control.name == "LogicECM.module.Checkbox") ? "false" : "";
-                        LogicECM.module.Base.Util.reInitializeControl(formId, controlFieldId, {
-                            currentValue: defaultValue,
-                            defaultValue: defaultValue,
-                            fieldValues: defaultValue.split(","),
-                            resetValue: true
-                        });
+                        var newControlOptions;
+                        var controlName = control.name;
+                        if (controlName == "LogicECM.module.Checkbox") {
+                            newControlOptions = {
+                                defaultValue: "false"
+                            };
+                        } else if (controlName == "LogicECM.module.SelectOneController") {
+                            newControlOptions = {
+                                selectCurrentValue: control.widgets.inputEl.options[0].value
+                            };
+                        } else {
+                            newControlOptions = {
+                                currentValue: "",
+                                defaultValue: "",
+                                fieldValues: "".split(","),
+                                resetValue: true
+                            };
+                        }
+                        LogicECM.module.Base.Util.reInitializeControl(formId, controlFieldId, newControlOptions);
                     }
                 }
             },
