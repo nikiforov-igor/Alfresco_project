@@ -201,6 +201,7 @@
                                 <property name="lecm-arm:counter-description"><![CDATA[]]></property>
                                 <property name="cm:name"><![CDATA[Черновики]]></property>
                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:expression"><![CDATA[armNode.getArmNode().getRunAsEmployee() == null]]></property>
                                 <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
                                 <property name="lecm-arm:order"><![CDATA[0]]></property>
                                 <property name="lecm-arm:types"><![CDATA[]]></property>
@@ -1477,12 +1478,6 @@
                                     <assoc type="lecm-arm:fields-assoc"
                                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения в работе/a98a9042-1614-4194-804e-c06b25989338"/>
                                 </assocs>
-                            </item>
-                            <item name="cm:4099526f-d2ca-4010-8935-5dbf337e27a7" type="lecm-arm:field">
-                                <property name="lecm-arm:order"><![CDATA[0]]></property>
-                                <property name="lecm-arm:field-name"><![CDATA[lecm-document:title]]></property>
-                                <property name="lecm-arm:field-title"><![CDATA[Заголовок]]></property>
-                                <property name="cm:name"><![CDATA[133bb11e-b80c-404c-8112-788b4bbadcd9]]></property>
                             </item>
                             <item name="cm:Избранное" type="lecm-arm:node">
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
