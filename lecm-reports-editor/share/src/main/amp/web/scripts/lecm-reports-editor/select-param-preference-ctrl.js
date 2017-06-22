@@ -347,25 +347,13 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                     var control = this.controls[i];
                     var controlFieldId = control.options.fieldId;
                     if (controlFieldId && (controlFieldId != fieldId)) {
-                        var newControlOptions;
-                        var controlName = control.name;
-                        if (controlName == "LogicECM.module.Checkbox") {
-                            newControlOptions = {
-                                defaultValue: "false"
-                            };
-                        } else if (controlName == "LogicECM.module.SelectOneController") {
-                            newControlOptions = {
-                                selectCurrentValue: control.widgets.inputEl.options[0].value
-                            };
-                        } else {
-                            newControlOptions = {
-                                currentValue: "",
-                                defaultValue: "",
-                                fieldValues: "".split(","),
-                                resetValue: true
-                            };
-                        }
-                        LogicECM.module.Base.Util.reInitializeControl(formId, controlFieldId, newControlOptions);
+                        LogicECM.module.Base.Util.reInitializeControl(formId, controlFieldId, {
+                            currentValue: "",
+                            defaultValue: "",
+                            fieldValues: "".split(","),
+                            resetValue: true,
+                            selectCurrentValue: ""
+                        });
                     }
                 }
             },
