@@ -143,10 +143,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                 if (fireChangeEvent) {
                     this.onSelectChange();
                 }
-                if (this.select.value !== "~CREATE-NEW~") {
-                    Dom.removeClass(this.deleteLink, "hidden");
-                    Dom.removeClass(this.saveNewLink, "hidden");
-                }
+                this._updateLinksVisibility();
                 this.preferences = preferences;
             },
 
@@ -168,9 +165,8 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                             });
                         }
                     }
-                    Dom.removeClass(this.deleteLink, "hidden");
-                    Dom.removeClass(this.saveNewLink, "hidden");
                 }
+                this._updateLinksVisibility();
             },
 
             onSaveClick: function () {
@@ -295,8 +291,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                                                 text: Alfresco.util.message('report.param.prereference.save-as.msg')
                                             }, Dom.get(this.options.formId + "-form"));
                                     }
-                                    Dom.removeClass(this.deleteLink, "hidden");
-                                    Dom.removeClass(this.saveNewLink, "hidden");
+                                    this._updateLinksVisibility();
                                 }
                             }
                         }
@@ -329,6 +324,8 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                                     // сохраним удаляемое значение
                                     var removingValue = select.value;
                                     select.remove(select.selectedIndex);
+                                    this._updateLinksVisibility();
+
                                     if (select.value === "~CREATE-NEW~") {
                                         this._resetValues();
                                     }
@@ -366,8 +363,6 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
 
             _resetValues: function() {
                 this._initControls();
-                Dom.addClass(this.deleteLink, "hidden");
-                Dom.addClass(this.saveNewLink, "hidden");
                 var formId = this.options.formId;
                 var fieldId = this.options.fieldId;
                 for (var i = 0; i < this.controls.length; i++) {
@@ -399,6 +394,16 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                     }
                 }
                 return -1;
+            },
+
+            _updateLinksVisibility: function () {
+                if (this.select && this.select.value !== "~CREATE-NEW~") {
+                    Dom.removeClass(this.deleteLink, "hidden");
+                    Dom.removeClass(this.saveNewLink, "hidden");
+                } else {
+                    Dom.addClass(this.deleteLink, "hidden");
+                    Dom.addClass(this.saveNewLink, "hidden");
+                }
             }
         });
 })();
