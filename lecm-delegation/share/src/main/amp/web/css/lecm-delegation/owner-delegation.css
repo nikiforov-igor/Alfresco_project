@@ -24,6 +24,10 @@ div.delegation-owner-content div.thumbnail-container img {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
+.delegation-page-content {
+    padding-left: 20px;
+    width: 700px;
+}
 
 div.delegation-content .dashlet-body {
     padding-top: 20px;
@@ -32,6 +36,7 @@ div.delegation-content .dashlet-body {
 .delegation-owner-content .owner-employee-positions {
     float: left;
     padding: 0 10px 20px 30px;
+    width: calc(100% - 150px);
 }
 
 .delegation-owner-content .owner-employee-positions p {

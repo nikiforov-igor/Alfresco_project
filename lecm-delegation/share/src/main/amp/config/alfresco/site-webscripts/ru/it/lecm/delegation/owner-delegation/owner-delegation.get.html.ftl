@@ -1,6 +1,6 @@
 <#assign id = args.htmlid?js_string>
 <#assign ownerRef = args.owner?string>
-<div id="${id}_delegation-content">
+<div id="${id}_delegation-content" class="delegation-page-content">
     <div class="dashlet bordered delegation-content">
         <div class="title dashlet-title">
             <span>${msg("label.owner-delegation.dashlet.title")}</span>
