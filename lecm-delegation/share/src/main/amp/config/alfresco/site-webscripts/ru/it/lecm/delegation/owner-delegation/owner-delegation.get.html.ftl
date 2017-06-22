@@ -45,7 +45,7 @@
             </div>
         </div>
     </div>
+    <p class="delegation-page-title">
+    ${msg("label.delegation.message.advanced-info")}
+    </p>
 </div>
-<p class="delegation-page-title">
-${msg("label.delegation.message.advanced-info")}
-</p>
