@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Base Datagrid</shortname>
-    <description>Base Datagrid</description>
-    <url>/lecm/arm/filters/datagrid</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

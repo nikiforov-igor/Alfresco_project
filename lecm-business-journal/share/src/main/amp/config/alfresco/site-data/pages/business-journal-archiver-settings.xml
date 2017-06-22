@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-    <title>Настройки автоматического архивирования</title>
-    <description>Настройки автоматического архивирования</description>
-    <template-instance>business-journal-archiver-settings</template-instance>
-    <authentication>user</authentication>
-</page>

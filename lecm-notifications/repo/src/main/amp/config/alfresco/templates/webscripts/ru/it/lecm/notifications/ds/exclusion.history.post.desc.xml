@@ -1,8 +1,0 @@
-<webscript>
-   <shortname>Notification Template Exclusion History</shortname>
-   <description>Notification Template Exclusion History</description>
-   <url>/lecm/notifications/ds/exclusions-history</url>
-   <format default="json">argument</format>
-   <authentication>user</authentication>
-   <transaction allow="readonly">required</transaction>
-</webscript>

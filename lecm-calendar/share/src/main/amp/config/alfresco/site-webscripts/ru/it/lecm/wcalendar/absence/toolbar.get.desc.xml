@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>wcalendar-abcense-toolbar</shortname>
-	<description>Absence: Toolbar</description>
-	<format default="html"/>
-	<url>/ru/it/lecm/wcalendar/absence/toolbar</url>
-	<authentication>user</authentication>
-</webscript>

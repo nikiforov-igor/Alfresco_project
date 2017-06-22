@@ -1,1 +1,0 @@
-model.forms = formsEditor.getModelForms(args["modelName"]);

@@ -1,9 +1,0 @@
-<webscript>
-    <shortname>Allowed Review Lists</shortname>
-    <description>Review lists allowed to current user</description>
-    <url>/lecm/review/ds/allowedReviewLists/{type}/{store_type}/{store_id}/{id}/children</url>
-    <url>/lecm/review/ds/allowedReviewLists/{type}/children</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

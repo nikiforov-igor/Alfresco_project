@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>routes-grid</shortname>
-	<description>Documents routes: Datagrid</description>
-	<format default="html"/>
-	<url>/ru/it/lecm/workflow/routes/routes-grid</url>
-	<authentication>user</authentication>
-</webscript>

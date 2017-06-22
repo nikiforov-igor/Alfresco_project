@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-    <shortname>Get current employee's info: current list's folder ref, employee's ref</shortname>
-    <description></description>
-    <url>/lecm/workflow/getCurrentEmployeeInfo</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-    <transaction>required</transaction>
-</webscript>

@@ -1,5 +1,0 @@
-<webscript>
-  <shortname>LECM Drag and drop upload</shortname>
-  <description>LECM Drag and drop upload component that shows the progress of uploading multiple files</description>
-  <url>/lecm/components/dnd-upload</url>
-</webscript>

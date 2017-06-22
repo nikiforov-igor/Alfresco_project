@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Validate template</shortname>
-	<description>Check if templatete passes sxyntax check at SpEL parser</description>
-	<url>/lecm/regNumbers/validateTemplate</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-	<transaction allow="readonly">required</transaction>
-</webscript>

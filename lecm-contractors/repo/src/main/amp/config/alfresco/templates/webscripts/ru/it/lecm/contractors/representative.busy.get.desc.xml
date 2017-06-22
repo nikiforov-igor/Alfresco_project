@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Representative Get Busy</shortname>
-	<description>Get list of representatives, who associated with some contractor</description>
-	<url>/lecm/contractors/representatives/busy</url>
-	<format default="json"/>
-	<authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>If interval suitable for abcence</shortname>
-	<description>Check if we can add abcence in given interval for given employee</description>
-	<url>/lecm/wcalendar/absence/get/isIntervalSuitableForAbsence</url>
-	<authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-	<format default="json"/>
-</webscript>

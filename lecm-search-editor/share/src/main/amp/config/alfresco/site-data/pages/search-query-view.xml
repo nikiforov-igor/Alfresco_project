@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-	<title>Поисковый запрос - просмотр</title>
-	<description>Поисковый запрос - просмотр</description>
-	<template-instance>search-query-view</template-instance>
-	<authentication>user</authentication>
-</page>

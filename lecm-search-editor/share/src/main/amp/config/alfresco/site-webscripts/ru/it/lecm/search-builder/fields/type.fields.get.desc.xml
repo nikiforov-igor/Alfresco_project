@@ -1,6 +1,0 @@
-<webscript>
-   <shortname>Type Fields</shortname>
-   <description>Type Fields Data Webscript</description>
-   <url>/lecm/components/type/fields</url>
-   <format default="json"></format>
-</webscript>

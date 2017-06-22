@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>orgstructure workgroups datagrid</shortname>
-    <description>Return orgstructure workgroups datagrid</description>
-    <url>/lecm/orgstructure/workgroups-datagrid</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

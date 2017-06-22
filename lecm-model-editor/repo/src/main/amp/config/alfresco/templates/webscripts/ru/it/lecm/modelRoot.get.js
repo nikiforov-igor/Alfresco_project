@@ -1,1 +1,0 @@
-model.rootFolder = formsEditor.getModelRootFolder(args["modelName"]);

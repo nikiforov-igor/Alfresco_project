@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>document-by-attachment</shortname>
-	<description>Get Document By Attachments</description>
-	<url>/lecm/document/attachments/api/getDocumentByAttachment?nodeRef={nodeRef}</url>
-	<authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-	<format default="json"/>
-</webscript>

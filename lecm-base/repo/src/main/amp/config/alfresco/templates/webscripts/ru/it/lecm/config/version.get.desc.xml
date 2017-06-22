@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>LECM Repo version</shortname>
-    <description>LECM Repo version</description>
-    <url>/lecm/version</url>
-    <format default="json">extension</format>
-    <authentication>none</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

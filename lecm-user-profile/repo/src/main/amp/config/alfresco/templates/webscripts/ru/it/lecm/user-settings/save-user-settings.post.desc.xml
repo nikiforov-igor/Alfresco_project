@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Сохранить настройку для пользователя</shortname>
-	<description>Сохранить настройку для пользователя</description>
-	<url>/lecm/user-settings/save</url>
-	<format default="json">argument</format>
-	<authentication>user</authentication>
-    <transaction allow="readwrite">required</transaction>
-</webscript>

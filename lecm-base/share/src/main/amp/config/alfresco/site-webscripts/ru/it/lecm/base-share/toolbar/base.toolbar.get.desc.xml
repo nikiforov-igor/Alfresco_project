@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Base Toolbar</shortname>
-    <description>Base Toolbar</description>
-    <url>/lecm/base/toolbar</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

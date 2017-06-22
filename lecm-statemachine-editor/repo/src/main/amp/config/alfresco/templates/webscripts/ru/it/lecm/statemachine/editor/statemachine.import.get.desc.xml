@@ -1,7 +1,0 @@
-<webscript>
-	<shortname>Statemachine Import</shortname>
-	<description>Statemachine Import</description>
-	<url>/lecm/statemachine/editor/import</url>
-	<format default="json">extension</format>
-	<authentication>user</authentication>
-</webscript>

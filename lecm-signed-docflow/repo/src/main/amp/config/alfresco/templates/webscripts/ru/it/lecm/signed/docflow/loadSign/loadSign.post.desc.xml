@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>loadSign</shortname>
-	<description>Load signature</description>
-	<url>/lecm/signed-docflow/loadSign</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-	<transaction>required</transaction>
-</webscript>

@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-	<title>График работы</title>
-	<title-id>page.schedule.title</title-id>
-	<description>График работы сотрудников</description>
-	<description-id>page.schedule.description</description-id>
-	<template-instance>schedule</template-instance>
-	<authentication>user</authentication>
-</page>

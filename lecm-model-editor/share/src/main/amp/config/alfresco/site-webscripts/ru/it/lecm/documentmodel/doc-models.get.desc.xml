@@ -1,6 +1,0 @@
-<webscript>
-  <shortname>Document list</shortname>
-  <description>Get all /api/blog/site/{site}/{container}/posts</description>
-  <url>/documentmodel/list</url>
-  <format default="json">argument</format>
-</webscript>

@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Получить список полей для типа</shortname>
-	<description>Получить список полей для типа</description>
-	<url>/lecm/components/type/fields?type={type}</url>
-	<format default="json"/>
-	<authentication>none</authentication>
-	<transaction allow="readonly">required</transaction>
-</webscript>

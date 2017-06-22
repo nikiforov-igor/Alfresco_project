@@ -1,7 +1,0 @@
-<webscript>
-	<shortname>Statemachine Editor Module Main page</shortname>
-	<description>Statemachine Editor Module Main page</description>
-	<url>/lecm/statemachine/main</url>
-	<format default="html">extension</format>
-	<authentication>user</authentication>
-</webscript>

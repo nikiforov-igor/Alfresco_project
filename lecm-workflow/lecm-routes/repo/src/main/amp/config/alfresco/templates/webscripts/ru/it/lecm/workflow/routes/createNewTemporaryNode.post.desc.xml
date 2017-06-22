@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Create get temp node with given type</shortname>
-	<description></description>
-	<url>/lecm/workflow/routes/createNewTemporaryNode</url>
-	<format default="json"/>
-	<authentication>user</authentication>
-	<transaction>required</transaction>
-</webscript>

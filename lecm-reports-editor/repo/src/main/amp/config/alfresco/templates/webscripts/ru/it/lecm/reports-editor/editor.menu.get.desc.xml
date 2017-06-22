@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Reports Editor Menu</shortname>
-    <description>Returns Reports Editor Menu</description>
-    <url>/lecm/reports-editor/menu</url>
-    <format default="json">extension</format>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

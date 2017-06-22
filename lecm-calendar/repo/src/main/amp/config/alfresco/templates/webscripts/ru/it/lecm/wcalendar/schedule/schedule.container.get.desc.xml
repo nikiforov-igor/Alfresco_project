@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Get Schedule container</shortname>
-	<description>Create and return folder for storing schedule</description>
-	<url>/lecm/wcalendar/schedule/get/container</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-</webscript>

@@ -1,7 +1,0 @@
-<webscript>
-	<shortname>BJ Archiver Settings</shortname>
-	<description>BJ Archiver Settings</description>
-	<url>/lecm/business-journal/api/switch-logging</url>
-    <authentication>user</authentication>
-    <format default="json"/>
-</webscript>

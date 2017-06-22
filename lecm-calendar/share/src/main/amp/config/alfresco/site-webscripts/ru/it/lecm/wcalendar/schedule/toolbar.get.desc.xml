@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>wcalendar-schedule-toolbar</shortname>
-	<description>Schedule: Toolbar</description>
-	<format default="html"/>
-	<url>/ru/it/lecm/wcalendar/schedule/toolbar</url>
-	<authentication>user</authentication>
-</webscript>

@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Delete Notification Template Exclusion</shortname>
-	<description>Delete Notification Template Exclusion</description>
-	<url>/lecm/notifications/template/deleteExclusion</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-	<transaction>required</transaction>
-</webscript>

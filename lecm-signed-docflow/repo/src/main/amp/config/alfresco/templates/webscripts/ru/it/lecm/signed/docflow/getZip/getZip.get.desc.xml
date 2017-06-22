@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>getZip</shortname>
-	<description>Get content with signatures as zip</description>
-	<url>/lecm/signed-docflow/getZip</url>
-	<authentication>user</authentication>
-</webscript>

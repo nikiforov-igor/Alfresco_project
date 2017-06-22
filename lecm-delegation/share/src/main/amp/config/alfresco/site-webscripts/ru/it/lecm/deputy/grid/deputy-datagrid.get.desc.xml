@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>deputy-datagrid</shortname>
-	<description>Returns datagrid with deputies</description>
-	<url>/lecm/deputy/deputy-datagrid</url>
-	<format default="html"/>
-	<authentication>user</authentication>
-</webscript>

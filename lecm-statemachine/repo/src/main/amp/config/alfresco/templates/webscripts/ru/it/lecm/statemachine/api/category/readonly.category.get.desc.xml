@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Check read only attachment category</shortname>
-	<description>Check read only attachment category</description>
-	<url>/lecm/statemachine/api/category/readonly</url>
-	<authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-	<format default="json"/>
-</webscript>

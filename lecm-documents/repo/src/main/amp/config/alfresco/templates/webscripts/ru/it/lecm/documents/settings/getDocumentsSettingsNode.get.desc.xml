@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Documents Global Settings Node</shortname>
-	<description>Documents Global Settings Node</description>
-	<url>/lecm/documents/global-settings/api/getSettingsNode</url>
-	<format default="json">extension</format>
-	<authentication>user</authentication>
-	<transaction allow="readonly">required</transaction>
-</webscript>

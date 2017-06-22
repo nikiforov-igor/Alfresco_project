@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-	<title>Меня нет в офисе</title>
-	<title-id>label.absence.create-instant-absence.title</title-id>
-	<description>Зафиксировать мое отсутствие в офисе</description>
-	<description-id>header.instant-absence.description</description-id>
-	<template-instance>instant-absence</template-instance>
-	<authentication>user</authentication>
-</page>

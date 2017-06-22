@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Get permissions change comments</shortname>
-    <description>Есть ли доступ на изменение комментария</description>
-    <url>/lecm/document/api/isChangeComment?nodeRef={nodeRef}</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

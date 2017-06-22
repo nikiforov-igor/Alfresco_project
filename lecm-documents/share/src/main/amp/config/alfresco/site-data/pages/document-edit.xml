@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-	<title>Страница редактирования документа</title>
-	<description>Страница редактирования документа</description>
-	<template-instance>document-edit</template-instance>
-	<authentication>user</authentication>
-</page>

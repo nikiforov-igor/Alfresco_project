@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-    <shortname>Contractor Get Parent</shortname>
-    <description>Returns a reference to the parent company if provided Contractor is an affiliate</description>
-    <url>/lecm/contractors/getparent</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

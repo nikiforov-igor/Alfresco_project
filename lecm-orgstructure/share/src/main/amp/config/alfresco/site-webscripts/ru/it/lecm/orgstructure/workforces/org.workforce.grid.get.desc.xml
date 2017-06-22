@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>orgstructure workforces datagrid</shortname>
-    <description>Return orgstructure workforces datagrid</description>
-    <url>/lecm/orgstructure/workforces-datagrid</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

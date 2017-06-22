@@ -1,9 +1,0 @@
-<webscript>
-	<shortname>Список пермиссий по типу</shortname>
-	<description>Список пермиссий, по которым предоставляется доступ к странице с документами заданного типа</description>
-	<url>/lecm/documents/accessPermissions?docType={docType}</url>
-	<format default="json"/>
-	<authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-    <internal>true</internal>
-</webscript>

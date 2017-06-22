@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Dictionary value</shortname>
-	<description>Get attributes of dictionary value</description>
-	<url>/lecm/dictionary/api/getValueAttributes</url>
-	<format default="xml">extension</format>
-	<authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

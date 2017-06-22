@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Import</shortname>
-    <description>Import</description>
-    <url>/lecm/orgstructure/import</url>
-    <format default="json">extension</format>
-    <authentication>user</authentication>
-</webscript>

@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-	<title>Настройка уведомлений</title>
-	<description>Настройка уведомлений</description>
-	<template-instance>my-notifications-settings</template-instance>
-	<authentication>user</authentication>
-</page>

@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Get working days list for subordinate employees</shortname>
-	<description>Get working days for current user employees</description>
-	<url>/lecm/wcalendar/workCalendar/getSubordinatesWorkingDaysList</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-</webscript>

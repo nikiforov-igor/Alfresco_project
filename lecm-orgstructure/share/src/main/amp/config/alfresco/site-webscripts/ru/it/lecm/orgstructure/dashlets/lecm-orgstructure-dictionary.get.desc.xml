@@ -1,6 +1,0 @@
-<webscript>
-   <shortname>Справочник Организации</shortname>
-   <description>Дашлет предназначен для просмотра информации о структуре Организации</description>
-   <family>user-dashlet</family>
-   <url>/lecm/orgstructure/dashlets/orgstructure-dictionary</url>
-</webscript>

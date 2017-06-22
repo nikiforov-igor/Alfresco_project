@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>document-create-content</shortname>
-    <description>document-create-content</description>
-	<url>/lecm/documents/create/content</url>
-	<format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

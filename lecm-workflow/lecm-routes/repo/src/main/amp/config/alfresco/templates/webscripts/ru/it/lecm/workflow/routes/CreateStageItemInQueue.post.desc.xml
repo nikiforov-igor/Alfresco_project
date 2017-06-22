@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Create new stage item in queue</shortname>
-	<description>Create new stage item in queue</description>
-	<url>/lecm/workflow/routes/CreateStageItemInQueue</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-	<transaction>required</transaction>
-</webscript>

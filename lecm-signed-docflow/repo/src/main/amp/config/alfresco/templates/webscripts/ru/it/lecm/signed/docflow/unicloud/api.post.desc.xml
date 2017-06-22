@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>unicloud gate api</shortname>
-	<description>Delegates invokations to unicloud gate webservice</description>
-	<url>/lecm/signed-docflow/unicloud/api/{action}</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-	<transaction>required</transaction>
-</webscript>

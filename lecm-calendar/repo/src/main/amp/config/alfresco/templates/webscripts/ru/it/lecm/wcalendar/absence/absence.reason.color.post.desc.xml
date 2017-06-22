@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Get color for absence reason</shortname>
-	<description>Get color for absence reason</description>
-	<url>/lecm/wcalendar/absence/get/absenceReasonColor</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-</webscript>

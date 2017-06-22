@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-   <shortname>List delegation options for current employee</shortname>
-   <description>List and filters delegation options for current employee. Employee must be a boss or have special business role &quot;Технолог&quot;</description>
-   <url>/lecm/delegation/list</url>
-   <authentication>user</authentication>
-   <format default="json"/>
-   <transaction allow="readwrite">required</transaction>
-</webscript>

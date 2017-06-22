@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>getNextWorkingDate</shortname>
-	<description>getNextWorkingDate</description>
-	<url>/lecm/wcalendar/workCalendar/getNextWorkingDate</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-</webscript>

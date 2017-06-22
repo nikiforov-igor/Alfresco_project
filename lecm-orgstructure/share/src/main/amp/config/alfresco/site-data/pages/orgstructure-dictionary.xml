@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-    <title>Справочник организации</title>
-    <description>>Справочник организации</description>
-    <template-instance>orgstructure-dictionary</template-instance>
-    <authentication>user</authentication>
-</page>

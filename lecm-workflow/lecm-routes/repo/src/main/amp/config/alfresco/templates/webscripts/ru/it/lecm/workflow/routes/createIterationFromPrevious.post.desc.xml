@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Create an iteration in document from previous iteration</shortname>
-	<url>/lecm/workflow/routes/createIterationFromPrevious</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-	<transaction>required</transaction>
-</webscript>

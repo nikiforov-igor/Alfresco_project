@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-    <title>Бизнес-журнал</title>
-    <description>Список записей бизнес-журнала</description>
-    <template-instance>business-journal</template-instance>
-    <authentication>user</authentication>
-</page>

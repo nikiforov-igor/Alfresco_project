@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>wcalendar-special-days-toolbar</shortname>
-	<description>Work Calendar: Special days Toolbar</description>
-	<format default="html"/>
-	<url>/ru/it/lecm/wcalendar/calendar/special-days-toolbar</url>
-	<authentication>user</authentication>
-</webscript>

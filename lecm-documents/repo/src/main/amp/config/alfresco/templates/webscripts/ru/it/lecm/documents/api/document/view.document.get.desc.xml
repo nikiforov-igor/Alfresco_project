@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Document Properties</shortname>
-    <description>Атрибуты документа</description>
-    <url>/lecm/document/api/getProperties?nodeRef={nodeRef}</url>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-    <format default="json"/>
-</webscript>

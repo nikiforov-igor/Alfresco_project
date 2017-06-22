@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Delete deputy</shortname>
-	<description>Delete deputy</description>
-	<url>/lecm/deputy/delete</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-</webscript>

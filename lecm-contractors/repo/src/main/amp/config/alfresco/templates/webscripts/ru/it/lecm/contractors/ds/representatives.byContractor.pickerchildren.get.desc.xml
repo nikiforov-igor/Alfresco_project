@@ -1,9 +1,0 @@
-<webscript>
-  <shortname>Contractor Representatives PickerList</shortname>
-  <description>Contractor Representatives PickerList</description>
-    <url>/lecm/representatives/{contractor_store}/{contractor_store_id}/{contractor_id}/picker/{type}/{store_type}/{store_id}/{id}/children</url>
-    <url>/lecm/representatives/{contractor_store}/{contractor_store_id}/{contractor_id}/picker/{type}/children</url>
-  <format default="json"/>
-  <authentication>user</authentication>
-  <transaction allow="readonly">required</transaction>
-</webscript>

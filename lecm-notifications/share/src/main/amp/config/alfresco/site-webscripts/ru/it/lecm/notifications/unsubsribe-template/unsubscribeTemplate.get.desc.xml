@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Notifications Unsubscribe Template</shortname>
-    <description>Notifications Unsubscribe Template</description>
-	<url>/lecm/notifications-unsubscribe/content</url>
-	<format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

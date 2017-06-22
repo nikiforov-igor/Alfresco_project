@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Notifications Module get default channels</shortname>
-	<description>Notifications Module get default channels</description>
-	<url>/lecm/notifications/getDefaultChannels</url>
-	<format default="json"/>
-	<authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

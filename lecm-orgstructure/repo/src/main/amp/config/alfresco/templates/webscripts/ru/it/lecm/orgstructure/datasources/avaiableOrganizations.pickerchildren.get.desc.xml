@@ -1,9 +1,0 @@
-<webscript>
-    <shortname>Organizations PickerList</shortname>
-    <description>Organizations PickerList</description>
-    <url>/lecm/orgstructure/getOrganizations/picker/{type}/{store_type}/{store_id}/{id}/children</url>
-    <url>/lecm/orgstructure/getOrganizations/picker/{type}/children</url>
-    <format default="json"/>
-    <authentication runas="admin">user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

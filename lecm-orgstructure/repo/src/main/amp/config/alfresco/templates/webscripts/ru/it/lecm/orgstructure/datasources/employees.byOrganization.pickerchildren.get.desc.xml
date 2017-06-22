@@ -1,9 +1,0 @@
-<webscript>
-    <shortname>Organization Employees PickerList</shortname>
-    <description>Organization Employees PickerList</description>
-    <url>/lecm/employees/byOrg/{organization_store}/{organization_store_id}/{organization_id}/picker/{type}/{store_type}/{store_id}/{id}/children</url>
-    <url>/lecm/employees/byOrg/{organization_store}/{organization_store_id}/{organization_id}/picker/{type}/children</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

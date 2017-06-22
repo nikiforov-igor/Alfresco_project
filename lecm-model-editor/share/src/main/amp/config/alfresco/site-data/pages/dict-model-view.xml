@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-   <title>Модель (только просмотр)</title>
-   <description>View Dictionary Model</description>
-   <template-instance>dict-model-view</template-instance>
-   <authentication>user</authentication>
-</page>

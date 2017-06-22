@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>signContent</shortname>
-	<description>Checks, if signature is valid and creates signature node</description>
-	<url>/lecm/signed-docflow/signContent</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-	<transaction>required</transaction>
-</webscript>

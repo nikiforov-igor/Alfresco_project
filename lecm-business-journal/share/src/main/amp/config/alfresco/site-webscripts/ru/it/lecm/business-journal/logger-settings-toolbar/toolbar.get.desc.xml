@@ -1,6 +1,0 @@
-<webscript>
-	<shortname>toolbar</shortname>
-	<description>Business Journal: Toolbar</description>
-	<url>/lecm/business-journal/logger-settings-toolbar</url>
-    <authentication>user</authentication>
-</webscript>

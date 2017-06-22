@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Orgstructure Role employees</shortname>
-    <description>Return all Orgstructure Role employees</description>
-    <url>/lecm/orgstructure/api/getOrgRoleEmployees?nodeRef={nodeRef}</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<webscript>
-    <shortname>Get document access info</shortname>
-    <description>Get document access info</description>
-    <url>/lecm/document/utils/access?nodeRef={nodeRef}&amp;user={user}</url>
-	<format default="json"/>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Document Edit Properties</shortname>
-    <description>Создание документа</description>
-    <url>/lecm/document/api/editDocument?nodeRef={nodeRef}</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-</webscript>

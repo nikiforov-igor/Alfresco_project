@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-	<title>Отсутствие</title>
-	<title-id>page.absence.title</title-id>
-	<description>Отсутствие на рабочем месте</description>
-	<description-id>page.absence.description</description-id>
-	<template-instance>absence</template-instance>
-	<authentication>user</authentication>
-</page>

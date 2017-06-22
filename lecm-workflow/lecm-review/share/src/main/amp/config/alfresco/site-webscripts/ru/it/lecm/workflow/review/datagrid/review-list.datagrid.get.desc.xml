@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Review list datagrid</shortname>
-    <description>Review list datagrid</description>
-    <url>/lecm/workflow/review/datagrid</url>
-    <format default="html"/>
-    <authentication>user</authentication>
-</webscript>

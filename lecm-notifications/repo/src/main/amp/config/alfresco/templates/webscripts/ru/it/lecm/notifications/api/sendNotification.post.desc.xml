@@ -1,9 +1,0 @@
-<webscript>
-	<shortname>Send notification</shortname>
-	<description>Send notification</description>
-	<url>/lecm/notifications/api/send</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-	<transaction>required</transaction>
-	<lifecycle>internal</lifecycle>
-</webscript>

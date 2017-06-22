@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-    <title>Events</title>
-    <title-id>page.events.title</title-id>
-    <description>Events Component</description>
-    <description-id>page.events.description</description-id>
-    <template-instance>event</template-instance>
-    <authentication>user</authentication>
-</page>

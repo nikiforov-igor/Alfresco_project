@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>employee person</shortname>
-    <description>Return employee person</description>
-    <url>/lecm/orgstructure/api/getEmployeePersonalData?nodeRef={nodeRef}</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

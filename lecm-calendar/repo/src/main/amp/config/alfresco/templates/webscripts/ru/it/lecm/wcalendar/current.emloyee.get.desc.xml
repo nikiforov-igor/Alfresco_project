@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Get current employee nodeRef</shortname>
-	<description>Get current employee nodeRef</description>
-	<url>/lecm/wcalendar/get/currentEmployee</url>
-	<authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-	<format default="json"/>
-</webscript>

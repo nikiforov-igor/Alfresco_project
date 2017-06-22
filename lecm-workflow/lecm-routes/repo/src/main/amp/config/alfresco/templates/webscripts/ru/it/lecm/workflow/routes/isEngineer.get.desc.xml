@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Checks if current employee has business role ROUTE_ENGINEER</shortname>
-	<description></description>
-	<url>/lecm/workflow/routes/isEngineer</url>
-	<format default="json"/>
-	<authentication>user</authentication>
-	<transaction allow="readonly">required</transaction>
-</webscript>

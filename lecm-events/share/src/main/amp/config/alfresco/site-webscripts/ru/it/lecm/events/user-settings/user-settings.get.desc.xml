@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>events-user-settings</shortname>
-    <description>Events user settings</description>
-	<url>/lecm/events-user-settings/content</url>
-	<format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

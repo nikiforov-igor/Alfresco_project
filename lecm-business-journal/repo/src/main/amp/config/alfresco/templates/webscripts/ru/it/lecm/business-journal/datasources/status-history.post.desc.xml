@@ -1,8 +1,0 @@
-<webscript>
-   <shortname>document status history</shortname>
-   <description>История статусов документа</description>
-   <url>/lecm/business-journal/ds/getStatusHistory</url>
-   <format default="json">argument</format>
-   <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

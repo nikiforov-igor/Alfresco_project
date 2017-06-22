@@ -1,1 +1,0 @@
-model.result = modelsList.getModel(args["doctype"]);

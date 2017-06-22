@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>unit boss</shortname>
-    <description>Return unit boss or empty if boss is absent</description>
-    <url>/lecm/orgstructure/api/getUnitBoss?nodeRef={nodeRef}</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

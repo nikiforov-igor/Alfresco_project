@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-    <shortname>Clear Due Dates in specified Assignees List</shortname>
-    <description></description>
-    <url>/lecm/workflow/clearDueDates</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-    <transaction>required</transaction>
-</webscript>

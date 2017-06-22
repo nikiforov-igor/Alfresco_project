@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-    <title>Роли для рабочих групп</title>
-    <description>Список ролей для рабочих групп</description>
-    <template-instance>org-roles</template-instance>
-    <authentication>user</authentication>
-</page>

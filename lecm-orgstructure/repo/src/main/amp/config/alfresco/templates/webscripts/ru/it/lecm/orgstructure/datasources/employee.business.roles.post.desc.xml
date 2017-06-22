@@ -1,9 +1,0 @@
-<webscript>
-    <shortname>Employee busines roles</shortname>
-    <description>Получение полного перечня бизнес ролей сотрудника</description>
-    <url>/lecm/orgstructure/ds/getEmployeeBusinessRoles</url>
-    <format default="json">extension</format>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-    <lifecycle>internal</lifecycle>
-</webscript>

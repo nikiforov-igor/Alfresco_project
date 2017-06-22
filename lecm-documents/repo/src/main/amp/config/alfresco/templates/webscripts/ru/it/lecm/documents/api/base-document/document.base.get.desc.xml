@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Get base document nodeRef</shortname>
-    <description>Получение nodeRef документа-основания (базового документа)</description>
-    <url>/lecm/document/api/base?nodeRef={nodeRef}&amp;baseDocAssocName={baseDocAssocName}</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

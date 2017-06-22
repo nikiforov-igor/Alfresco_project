@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-    <shortname>Get review initiating documents</shortname>
-    <description>Get review initiating documents</description>
-    <url>/lecm/workflow/review/getInitiatingDocuments?nodeRef={nodeRef}</url>
-    <authentication>user</authentication>
-    <format default="json"/>
-    <transaction allow="readonly">required</transaction>
-</webscript>

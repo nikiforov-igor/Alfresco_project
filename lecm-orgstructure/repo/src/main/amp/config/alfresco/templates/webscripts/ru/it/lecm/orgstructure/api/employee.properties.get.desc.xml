@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>employee properties</shortname>
-    <description>Return all employee properties</description>
-    <url>/lecm/orgstructure/api/getEmployeeProperties?nodeRef={nodeRef}</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

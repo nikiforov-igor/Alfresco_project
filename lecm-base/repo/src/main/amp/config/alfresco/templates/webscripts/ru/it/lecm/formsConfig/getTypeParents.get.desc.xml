@@ -1,9 +1,0 @@
-<webscript>
-   <shortname>GetParents</shortname>
-   <description>
-   Returns array of parents of type
-   </description>
-   <url>/lecm/formConfig/getParents</url>
-   <format default="json"></format>
-   <transaction allow="readonly">required</transaction>
-</webscript>

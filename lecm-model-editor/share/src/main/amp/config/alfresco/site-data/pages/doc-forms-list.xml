@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-	<title>Формы</title>
-	<description>Document forms list</description>
-	<template-instance>doc-forms-list</template-instance>
-	<authentication>user</authentication>
-</page>

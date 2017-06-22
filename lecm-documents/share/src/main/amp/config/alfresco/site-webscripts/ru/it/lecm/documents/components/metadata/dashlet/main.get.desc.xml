@@ -1,6 +1,0 @@
-<webscript>
-    <shortname>Основные сведения</shortname>
-    <description>Компонент "основные сведения"</description>
-    <family>document-dashlet</family>
-    <url>/lecm/components/dashlets/document-main</url>
-</webscript>

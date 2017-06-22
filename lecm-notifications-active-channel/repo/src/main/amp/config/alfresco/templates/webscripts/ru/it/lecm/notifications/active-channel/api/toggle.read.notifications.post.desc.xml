@@ -1,9 +1,0 @@
-<webscript>
-  <shortname>toggleRead</shortname>
-  <description>Toggle read notifications</description>
-  <url>/lecm/notifications/active-channel/api/toggle/read</url>
-  <format default="json">argument</format>
-  <authentication>user</authentication>
-  <transaction>required</transaction>
-  <lifecycle>internal</lifecycle>
-</webscript>

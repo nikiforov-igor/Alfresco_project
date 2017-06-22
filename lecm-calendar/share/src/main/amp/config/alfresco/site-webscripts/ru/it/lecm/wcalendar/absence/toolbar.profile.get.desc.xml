@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>wcalendar-abcense-toolbar-profile</shortname>
-	<description>Absence: Toolbar for User Profile</description>
-	<format default="html"/>
-	<url>/ru/it/lecm/wcalendar/absence/toolbar-profile</url>
-	<authentication>user</authentication>
-</webscript>

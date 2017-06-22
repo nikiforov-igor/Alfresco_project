@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>event-edit-content</shortname>
-    <description>event-edit-content</description>
-	<url>/lecm/events/edit/content</url>
-	<format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

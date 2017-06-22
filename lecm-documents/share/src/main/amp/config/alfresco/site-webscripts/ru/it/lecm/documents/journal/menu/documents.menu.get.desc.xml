@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>menu</shortname>
-    <description>Returns the documents journal menu.</description>
-    <url>/lecm/documents-journal/menu</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

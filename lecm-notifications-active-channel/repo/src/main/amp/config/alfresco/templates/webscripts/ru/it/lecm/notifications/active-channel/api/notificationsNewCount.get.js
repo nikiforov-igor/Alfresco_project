@@ -1,1 +1,0 @@
-model.newCount = "" + notificationsActiveChannel.getNewNotificationsCount();

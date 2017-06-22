@@ -1,7 +1,0 @@
-<webscript>
-	<shortname>ARM html node</shortname>
-	<description>Return ARM html node</description>
-	<url>/lecm/arm/htmlNode</url>
-	<format default="html">extension</format>
-	<authentication>user</authentication>
-</webscript>

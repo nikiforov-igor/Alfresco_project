@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-   <shortname>Get employee's procuracies and business roles</shortname>
-   <description>Get employee's procuracies and business roles</description>
-   <url>/lecm/delegation/get/procuracies</url>
-   <authentication>user</authentication>
-   <format default="json"/>
-   <transaction allow="readwrite">required</transaction>
-</webscript>

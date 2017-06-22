@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Get document attachments categories</shortname>
-    <description>Document Attachments Categories</description>
-    <url>/lecm/document/attachments/api/categories?documentNodeRef={documentNodeRef}</url>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-    <format default="json"/>
-</webscript>

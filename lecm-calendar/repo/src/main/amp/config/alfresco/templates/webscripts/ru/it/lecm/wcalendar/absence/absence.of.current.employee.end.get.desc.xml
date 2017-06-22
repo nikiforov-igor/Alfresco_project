@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>End Active Absence of Current Employee</shortname>
-	<description>Set end date of active ancsence of current employee to current date</description>
-	<url>/lecm/wcalendar/absence/set/endCurrentEmployeeActiveAbsence</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-</webscript>

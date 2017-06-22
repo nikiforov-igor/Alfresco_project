@@ -1,7 +1,0 @@
-<webscript>
-	<shortname>organizations list datagrid</shortname>
-	<description>Returns orgstructure organizations list datagrid</description>
-	<url>/lecm/orgstructure/organizations</url>
-	<format default="html"/>
-	<authentication>user</authentication>
-</webscript>

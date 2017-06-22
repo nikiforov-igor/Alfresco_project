@@ -1,6 +1,0 @@
-<webscript>
-   <shortname>Задачи подчинённых</shortname>
-   <description>Дашлет со списком задач, назначенных на подчинённых</description>
-   <family>user-dashlet</family>
-   <url>/lecm/base/dashlets/tasks-subordinates</url>
-</webscript>

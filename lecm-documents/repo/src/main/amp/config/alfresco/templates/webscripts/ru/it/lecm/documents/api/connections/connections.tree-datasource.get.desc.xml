@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Get Connections</shortname>
-	<description>Get Connections</description>
-	<url>/lecm/document/connections/api/tree-datasource?documentNodeRef={documentNodeRef}</url>
-	<authentication runas="admin">user</authentication>
-	<format default="json"/>
-	<transaction allow="readonly">required</transaction>
-</webscript>

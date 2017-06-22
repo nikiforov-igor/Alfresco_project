@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>ARM Tree Menu</shortname>
-    <description>Return ARM Tree Menu</description>
-    <url>/lecm/arm/documents-tree-menu</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

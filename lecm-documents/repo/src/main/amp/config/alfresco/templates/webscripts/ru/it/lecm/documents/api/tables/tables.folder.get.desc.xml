@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Get document tables data folder</shortname>
-    <description>Document Tables Data Folder</description>
-    <url>/lecm/document/tables/api/folder?nodeRef={documentNodeRef}</url>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-    <format default="json"/>
-</webscript>

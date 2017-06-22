@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Model editor: получение описания модели и типа</shortname>
-	<description>Получение описания модели и типа по ссылке на файл модели или по типу документа</description>
-	<url>/lecm/docmodels/item?type={type}&amp;nodeRef={nodeRef}</url>
-	<format default="json"/>
-	<authentication>user</authentication>
-	<transaction allow="readonly">required</transaction>
-</webscript>

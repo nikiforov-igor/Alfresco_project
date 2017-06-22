@@ -1,1 +1,0 @@
-model.result = modelsList.getParentAspects(args["nodeRef"], args["doctype"]);

@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<webscript>
-	<shortname>Лист согласование</shortname>
-	<description>Датагрид с содержимым листа согласования</description>
-	<url>/lecm/workflow/approval/deprecated/approvalListItemsDatagrid?nodeRef={nodeRef}&amp;approvalItemType={approvalItemType}</url>
-</webscript>

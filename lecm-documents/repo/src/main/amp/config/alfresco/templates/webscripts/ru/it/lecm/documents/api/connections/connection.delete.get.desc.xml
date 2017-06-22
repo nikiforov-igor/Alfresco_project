@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>delete-connection</shortname>
-	<description>Delete Connection</description>
-	<url>/lecm/document/connections/api/delete?nodeRef={nodeRef}</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-	<transaction>required</transaction>
-</webscript>

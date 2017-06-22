@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>getHashes</shortname>
-	<description>Gets JSON array of Hashes and it's NodeRefs</description>
-	<url>/lecm/signed-docflow/getHashes</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-</webscript>

@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>if nodeRefs have NO active absences</shortname>
-    <description>Return true if each of presented NodeRefs have NO active absences</description>
-    <url>/lecm/orgstructure/api/nodeRefsHasNoAbsences</url>
-    <format default="json" />
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

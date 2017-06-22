@@ -1,9 +1,0 @@
-<webscript>
-   <shortname>employee work roles</shortname>
-   <description>Employee Work Roles Data Webscript</description>
-   <url>/lecm/orgstructure/ds/employee-roles</url>
-   <format default="json">argument</format>
-   <authentication>user</authentication>
-   <transaction allow="readonly">required</transaction>
-   <lifecycle>internal</lifecycle>
-</webscript>

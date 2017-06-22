@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Approval Global Settings Node</shortname>
-	<description>Approval Global Settings Node</description>
-	<url>/lecm/approval/global-settings/settings</url>
-	<format default="json">extension</format>
-	<authentication>user</authentication>
-	<transaction allow="readonly">required</transaction>
-</webscript>

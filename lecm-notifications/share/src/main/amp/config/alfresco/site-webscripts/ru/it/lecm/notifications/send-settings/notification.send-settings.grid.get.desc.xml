@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Notification Send Settings Datagrid</shortname>
-    <description>Notification Send Settings Datagrid</description>
-    <url>/lecm/templates/send-settings-grid</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

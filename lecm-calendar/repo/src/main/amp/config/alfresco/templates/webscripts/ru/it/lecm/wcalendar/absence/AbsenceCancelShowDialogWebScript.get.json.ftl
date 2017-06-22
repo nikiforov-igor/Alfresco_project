@@ -1,3 +1,0 @@
-{
-	"showCancelAbsenceDialog": ${showCancelAbsenceDialog?string}
-}

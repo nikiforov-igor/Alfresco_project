@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>if employee has NO active absences</shortname>
-    <description>Return true if employee NO active absences</description>
-    <url>/lecm/orgstructure/api/employeeHasNoAbsences</url>
-    <format default="json" />
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Проверить на наличие дубликатов физического лица</shortname>
-	<description>Проверить на наличие физического лица</description>
-	<url>/lecm/physical-persons/hasDuplicate</url>
-	<format default="json">extension</format>
-	<authentication>user</authentication>
-	<transaction allow="readonly">required</transaction>
-</webscript>

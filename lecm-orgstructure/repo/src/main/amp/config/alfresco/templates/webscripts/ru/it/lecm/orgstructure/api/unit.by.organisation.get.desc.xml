@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Unit by organisation</shortname>
-    <description>Return unit by organisation</description>
-    <url>/lecm/orgstructure/api/getUnitByOrg</url>
-    <format default="json">extension</format>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

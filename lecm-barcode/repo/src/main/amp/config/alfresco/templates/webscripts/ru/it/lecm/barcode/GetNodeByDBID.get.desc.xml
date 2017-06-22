@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Get NodeRef by DbID</shortname>
-	<description>Get NodeRef by DbID</description>
-	<url>/lecm/barcode/getNodeByDBID?dbid={dbid}</url>
-	<format default="json">extension</format>
-	<authentication>user</authentication>
-	<transaction allow="readonly">required</transaction>
-</webscript>

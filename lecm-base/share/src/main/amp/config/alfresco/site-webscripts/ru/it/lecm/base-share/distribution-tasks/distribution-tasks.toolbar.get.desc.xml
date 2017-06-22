@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>distribution-tasks-toolbar</shortname>
-	<description>Distribution tasks:Toolbar for User Profile</description>
-	<format default="html"/>
-	<url>/lecm/distribution-tasks/toolbar</url>
-	<authentication>user</authentication>
-</webscript>

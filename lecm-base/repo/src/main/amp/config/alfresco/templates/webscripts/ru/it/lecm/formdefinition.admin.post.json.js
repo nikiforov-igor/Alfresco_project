@@ -1,1 +1,0 @@
-<import resource="classpath:/alfresco/templates/webscripts/org/alfresco/repository/forms/formdefinition.post.json.js">

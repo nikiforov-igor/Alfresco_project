@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Roots</shortname>
-    <description>Returns roots of organization strucuture</description>
-    <url>/lecm/orgstructure/diagram</url>
-    <format default="json">extension</format>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

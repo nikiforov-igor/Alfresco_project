@@ -1,7 +1,0 @@
-<webscript>
-	<shortname>Status Fields Save for Statemachine</shortname>
-	<description>Status Fields Save for Statemachine</description>
-	<url>/lecm/statemachine/editor/datagrid/fields</url>
-	<format default="json">extension</format>
-	<authentication>user</authentication>
-</webscript>

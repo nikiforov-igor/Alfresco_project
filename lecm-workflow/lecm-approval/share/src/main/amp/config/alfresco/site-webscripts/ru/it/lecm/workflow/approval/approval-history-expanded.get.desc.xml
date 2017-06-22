@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>approvalHistoryExpanded</shortname>
-	<description>Approval history: route expanded row for approval-history-datagrid-control</description>
-	<format default="html"/>
-	<url>/ru/it/lecm/workflow/approval/approvalHistoryExpanded</url>
-	<authentication>user</authentication>
-</webscript>

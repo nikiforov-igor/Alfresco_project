@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Model editor: получение информации о модели по имени</shortname>
-	<description>Возвращает nodeRef, nodeType и fileName для указанной модели</description>
-	<url>/lecm/docmodels/details?fileName={fileName}</url>
-	<format default="json"/>
-	<authentication>user</authentication>
-	<transaction allow="readonly">required</transaction>
-</webscript>

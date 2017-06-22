@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-	<title>Профиль пользователя (отсутствие)</title>
-	<title-id>page.user-profile.absence.title</title-id>
-	<description>Профиль пользователя. Управление параметрами отсутствия</description>
-	<description-id>page.user-profile.absence.description</description-id>
-	<template-instance>my-absence</template-instance>
-	<authentication>user</authentication>
-</page>

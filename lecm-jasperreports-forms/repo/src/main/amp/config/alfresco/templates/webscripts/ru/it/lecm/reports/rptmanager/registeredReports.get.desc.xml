@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Get ds-xml file</shortname>
-	<description>Get content from report ds-xml file by report code (mnemonic)</description>
-	<!-- 2 args: docType; reportType -->
-	<url>/lecm/reports/rptmanager/registeredReports</url>
-	<format default="json"/>
-    <authentication>user</authentication>
-</webscript>

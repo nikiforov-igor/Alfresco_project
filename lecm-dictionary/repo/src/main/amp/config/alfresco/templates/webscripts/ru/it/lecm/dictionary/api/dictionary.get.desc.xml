@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Dictionary</shortname>
-	<description>Dictionary</description>
-	<url>/lecm/dictionary/api/getDictionary</url>
-	<format default="json"/>
-	<authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

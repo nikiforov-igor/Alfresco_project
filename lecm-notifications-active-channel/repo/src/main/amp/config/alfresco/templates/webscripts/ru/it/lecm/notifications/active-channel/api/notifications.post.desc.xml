@@ -1,7 +1,0 @@
-<webscript>
-	<shortname>Notifications Active Channel</shortname>
-	<description>Notifications Active Channel</description>
-	<url>/lecm/notifications/active-channel/api/records</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-</webscript>

@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>menu</shortname>
-    <description>Returns the subscriptions menu.</description>
-    <url>/lecm/subscriptions/menu</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

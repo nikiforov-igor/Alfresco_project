@@ -1,9 +1,0 @@
-<alfresco-config>
-	<!--Ридер для кастомного корневого элемента типов полей-->
-	<plug-ins>
-		<element-readers>
-			<element-reader element-name="field-types" class="ru.it.lecm.base.formsConfig.elements.fieldsElement.FieldTypesReader"/>
-			<element-reader element-name="forms-info" class="ru.it.lecm.base.formsConfig.elements.formsInfoElement.FormsInfoElementReader"/>
-		</element-readers>
-	</plug-ins>
-</alfresco-config>

@@ -1,9 +1,0 @@
-<webscript>
-  <shortname>Attachments doclist</shortname>
-  <description>Document List v2 Component - doclist attachments webscript</description>
-  <url>/lecm/document/doclistAttachments/{type}/node/base-document-attachments/{store_type}/{store_id}/{id}/{baseDocAssocName}</url>
-  <format default="json">argument</format>
-  <authentication>user</authentication>
-  <transaction allow="readwrite" buffersize="0">required</transaction>
-  <lifecycle>internal</lifecycle>
-</webscript>

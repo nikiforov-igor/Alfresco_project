@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>employee boss</shortname>
-    <description>Return employee boss or empty if boss is absent</description>
-    <url>/lecm/orgstructure/api/getEmployeeBoss?nodeRef={nodeRef}</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

@@ -1,8 +1,0 @@
-<webscript>
-  <shortname>Current employee primary unit path</shortname>
-  <description>Current employee primary unit path</description>
-    <url>/lecm/secretary/unitPath</url>
-  <format default="json"/>
-  <authentication>user</authentication>
-  <transaction allow="readonly">required</transaction>
-</webscript>

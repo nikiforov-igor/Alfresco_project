@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Get information about several employees absences</shortname>
-	<description>Get information about several employees absences for employee picker</description>
-	<url>/lecm/wcalendar/absence/getEmployeesAvailabilityInformation</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-</webscript>

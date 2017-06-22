@@ -1,6 +1,0 @@
-<webscript>
-    <shortname>toolbar</shortname>
-    <description>Documents List: Toolbar</description>
-    <url>/lecm/documents/documents-list-toolbar</url>
-    <authentication>user</authentication>
-</webscript>

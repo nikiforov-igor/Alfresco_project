@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Получить директорию по ключу</shortname>
-	<description>Получить директорию для текущего пользователя по ключу</description>
-	<url>/lecm/repository/api/getRootDirectory</url>
-	<format default="json"/>
-	<authentication>user</authentication>
-	<transaction allow="readonly">required</transaction>
-</webscript>

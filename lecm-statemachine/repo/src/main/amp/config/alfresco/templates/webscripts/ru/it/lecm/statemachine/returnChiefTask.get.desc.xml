@@ -1,9 +1,0 @@
-<webscript>
-    <shortname>Return chief task to chief</shortname>
-    <description>Return chief task to chief</description>
-    <url>/lecm/statemachine/returnChiefTask</url>
-    <format default="json">extension</format>
-    <authentication>user</authentication>
-    <lifecycle>internal</lifecycle>
-    <transaction>required</transaction>
-</webscript>

@@ -1,6 +1,0 @@
-<webscript>
-    <shortname>Уведомления</shortname>
-    <description>Dashlet for Notification</description>
-    <family>dashlet</family>
-    <url>/components/dashlets/notifications</url>
-</webscript>

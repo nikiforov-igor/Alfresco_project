@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Get current employee primary unit</shortname>
-	<description>Get current employee primary unit</description>
-	<url>/lecm/orgstructure/getCurrentEmployeePrimaryUnit</url>
-	<format default="json"/>
-	<authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

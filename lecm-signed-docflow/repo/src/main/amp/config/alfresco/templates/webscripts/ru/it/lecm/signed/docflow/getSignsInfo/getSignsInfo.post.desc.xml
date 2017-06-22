@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Get Signs Info</shortname>
-	<description>Get Signs Info</description>
-	<url>/lecm/signed-docflow/getSignsInfo</url>
-    <authentication>user</authentication>
-	<format default="json"/>
-    <transaction>required</transaction>
-</webscript>

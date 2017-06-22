@@ -1,1 +1,0 @@
-model.unit = orgstructure.getUnitByStaff(args["nodeRef"]);

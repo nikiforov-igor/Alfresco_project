@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Signed docflow configuration api</shortname>
-	<description>Makes content signable and docflowable. Returns applet configuration</description>
-	<url>/lecm/signed-docflow/config/{actor}</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-	<transaction>required</transaction>
-</webscript>

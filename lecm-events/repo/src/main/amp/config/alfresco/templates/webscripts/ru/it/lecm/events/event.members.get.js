@@ -1,1 +1,0 @@
-model.members = events.getEventMembers(args['eventNodeRef']);

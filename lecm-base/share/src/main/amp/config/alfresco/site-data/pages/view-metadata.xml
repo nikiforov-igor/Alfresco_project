@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-    <title>Карточка объекта</title>
-    <description>Показать свойства объекта</description>
-    <template-instance>view-metadata</template-instance>
-    <authentication>user</authentication>
-</page>

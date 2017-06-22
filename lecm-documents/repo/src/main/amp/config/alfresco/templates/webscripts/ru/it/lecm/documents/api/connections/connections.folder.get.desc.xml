@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Get document connections folder</shortname>
-    <description>Document Connections Folder</description>
-    <url>/lecm/document/connections/api/folder?documentNodeRef={documentNodeRef}</url>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-    <format default="json"/>
-</webscript>

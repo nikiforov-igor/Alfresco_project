@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Start/stop delegation process for delegation-opts</shortname>
-	<description>Start/stop delegation process for delegation-opts. Parameter nodeRef must point to existing delegation-opts node in repository</description>
-	<url>/lecm/delegation/{action}?nodeRef={nodeRef}</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-</webscript>

@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Documents reports list datagrid</shortname>
-    <description>Return reports-list datagrid</description>
-    <url>/lecm/documents/reports-list-grid</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

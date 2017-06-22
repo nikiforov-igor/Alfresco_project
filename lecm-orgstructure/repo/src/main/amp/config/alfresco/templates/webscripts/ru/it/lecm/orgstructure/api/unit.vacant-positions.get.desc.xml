@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>unit staff list vacant positions</shortname>
-    <description>Return all unit vacant positions</description>
-    <url>/lecm/orgstructure/api/getUnitVacantPositions?nodeRef={nodeRef}</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

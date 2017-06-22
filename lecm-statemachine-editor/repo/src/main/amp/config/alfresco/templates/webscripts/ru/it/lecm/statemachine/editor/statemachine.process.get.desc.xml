@@ -1,7 +1,0 @@
-<webscript>
-	<shortname>Process of Statemachine</shortname>
-	<description>Process of Statemachine</description>
-	<url>/lecm/statemachine/editor/process</url>
-	<format default="json"/>
-	<authentication>user</authentication>
-</webscript>

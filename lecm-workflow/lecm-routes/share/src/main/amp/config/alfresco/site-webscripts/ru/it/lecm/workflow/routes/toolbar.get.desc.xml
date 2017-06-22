@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Documents routes toolbar</shortname>
-	<format default="html"/>
-	<url>/ru/it/lecm/workflow/routes/toolbar</url>
-	<authentication>user</authentication>
-</webscript>

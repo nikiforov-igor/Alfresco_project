@@ -1,1 +1,0 @@
-model.staffs = orgstructure.getPositionList(args["nodeRef"]);

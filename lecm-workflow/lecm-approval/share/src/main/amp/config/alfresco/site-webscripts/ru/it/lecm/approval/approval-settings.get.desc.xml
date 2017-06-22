@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<webscript>
-	<shortname>Admin Console Global Approval Settings</shortname>
-	<description>Administration Console - Global Approval Settings Tool</description>
-	<url>/ru/it/lecm/workflow/approval/approval-settings</url>
-</webscript>

@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Получить названия для типов</shortname>
-	<description>Получить названия для типов</description>
-	<url>/lecm/base/types/titles</url>
-	<format default="json">extension</format>
-	<authentication>none</authentication>
-	<transaction allow="readonly">required</transaction>
-</webscript>

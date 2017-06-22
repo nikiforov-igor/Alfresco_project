@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-	<title>Организации</title>
-	<description>Справочник организаций</description>
-	<template-instance>organizations</template-instance>
-	<authentication>user</authentication>
-</page>

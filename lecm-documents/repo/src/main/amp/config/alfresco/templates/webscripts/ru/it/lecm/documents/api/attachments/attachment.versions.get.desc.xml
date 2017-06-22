@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>attachment-versions</shortname>
-	<description>Attachment versions</description>
-	<url>/lecm/document/attachments/api/versions?nodeRef={nodeRef}</url>
-	<authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-	<format default="json"/>
-</webscript>

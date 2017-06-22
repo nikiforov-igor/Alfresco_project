@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-    <shortname>orgstructure business-roles datagrid</shortname>
-    <description>Returns orgstructure business-roles datagrid</description>
-    <url>/lecm/orgstructure/business-roles/datagrid</url>
-    <format default="html"/>
-    <authentication>user</authentication>
-</webscript>

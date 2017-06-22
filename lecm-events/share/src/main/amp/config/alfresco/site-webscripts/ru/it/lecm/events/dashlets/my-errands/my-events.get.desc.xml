@@ -1,6 +1,0 @@
-<webscript>
-    <shortname>Мои мероприятия</shortname>
-    <description>Dashlet for My Events</description>
-    <family>user-dashlet</family>
-    <url>/lecm/events/dashlets/my-events</url>
-</webscript>

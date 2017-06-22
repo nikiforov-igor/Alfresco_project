@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>wcalendar-absence</shortname>
-	<description>Work Calendar: Absence</description>
-	<format default="html"/>
-	<url>/ru/it/lecm/wcalendar/absence/absence</url>
-	<authentication>user</authentication>
-</webscript>

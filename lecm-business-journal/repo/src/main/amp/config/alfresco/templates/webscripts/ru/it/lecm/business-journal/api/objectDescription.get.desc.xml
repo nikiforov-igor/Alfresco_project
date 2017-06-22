@@ -1,9 +1,0 @@
-<webscript>
-	<shortname>BJ Directory</shortname>
-	<description>BJ Directory</description>
-	<url>/lecm/business-journal/api/objectDescription?objectRef={objectRef}</url>
-	<authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-	<format default="json"/>
-    <lifecycle>internal</lifecycle>
-</webscript>

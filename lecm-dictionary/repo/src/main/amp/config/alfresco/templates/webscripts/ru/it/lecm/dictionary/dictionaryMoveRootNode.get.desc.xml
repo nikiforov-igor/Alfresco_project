@@ -1,9 +1,0 @@
-<webscript>
-    <shortname>Get root node for dictionary move node</shortname>
-    <description>Get root node for dictionary move node</description>
-    <url>/lecm/dictionary/move/root/{store_type}/{store_id}/{id}</url>
-    <url>/lecm/dictionary/move/root</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

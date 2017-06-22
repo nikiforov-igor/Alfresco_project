@@ -1,7 +1,0 @@
-<webscript>
-	<shortname>Produce form</shortname>
-	<description>Produce form for node</description>
-	<url>/lecm/statemachine/choosestate</url>
-	<format default="json">extension</format>
-	<authentication>user</authentication>
-</webscript>

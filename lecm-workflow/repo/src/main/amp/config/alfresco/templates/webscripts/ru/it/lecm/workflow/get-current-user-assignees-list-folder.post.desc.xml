@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-    <shortname>Get current user's assignees lists folder</shortname>
-    <description></description>
-    <url>/lecm/workflow/getCurrentUserAssigneesListFolder</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-    <transaction>required</transaction>
-</webscript>

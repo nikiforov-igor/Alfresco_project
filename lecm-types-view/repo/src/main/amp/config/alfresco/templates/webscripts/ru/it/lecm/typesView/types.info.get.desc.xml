@@ -1,7 +1,0 @@
-<webscript>
-	<shortname>Type info</shortname>
-	<description>Get all type attributes</description>
-	<url>/lecm/typesView/info</url>
-	<format default="html">extension</format>
-	<authentication>admin</authentication>
-</webscript>

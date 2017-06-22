@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ReposioryPermissions>
-	<BusinessRole id="BR_SUBSCRIPTIONS_ENGINEER">
-		<Permission object="." permissionGroup="LECM_BASIC_PG_Owner"/>
-	</BusinessRole>
-	<BusinessRole id="*">
-		<Permission object="." permissionGroup="Collaborator"/>
-	</BusinessRole>
-</ReposioryPermissions>

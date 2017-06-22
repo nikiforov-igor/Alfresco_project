@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Get Schedule NodeRef for Parent Node</shortname>
-	<description>Get Schedule for Parent</description>
-	<url>/lecm/wcalendar/schedule/get/parentSchedule</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-	<!--<transaction>required</transaction>-->
-</webscript>

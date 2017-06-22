@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<webscript>
-  <shortname>Сообщение о недоступности вложения</shortname>
-  <description>Сообщает пользователю о том, что у него нет прав для просмотра вложения</description>
-  <url>/lecm/message/noPermissionsToReadAttachment</url>
-</webscript>

@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Post Actions for Document</shortname>
-    <description>Post Actions for Document</description>
-    <url>/lecm/documents/additionalParameters</url>
-    <format default="json">extension</format>
-    <authentication>user</authentication>
-</webscript>

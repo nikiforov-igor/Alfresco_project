@@ -1,1 +1,0 @@
-model.statuses = statemachine.getStatuses(args["docType"], ("" + args["active"] == "true"), ("" + args["final"] == "true"));

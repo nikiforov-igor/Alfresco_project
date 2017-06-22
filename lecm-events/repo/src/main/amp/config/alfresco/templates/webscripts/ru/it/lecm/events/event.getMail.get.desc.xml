@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Event actions after update</shortname>
-    <description>Event actions after update</description>
-    <url>/lecm/events/getMail</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-    <transaction>required</transaction>
-</webscript>

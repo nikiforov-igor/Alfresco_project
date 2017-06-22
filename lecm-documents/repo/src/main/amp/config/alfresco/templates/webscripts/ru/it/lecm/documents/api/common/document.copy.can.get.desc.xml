@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Can Document copy</shortname>
-    <description>Has document copy settings</description>
-    <url>/lecm/document/api/copy/can?nodeRef={nodeRef}</url>
-    <format default="json">argument</format>
-    <authentication>user</authentication>
-    <transaction readonly="true">required</transaction>
-</webscript>

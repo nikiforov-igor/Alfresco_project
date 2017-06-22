@@ -1,1 +1,0 @@
-model.result = modelsList.getAssocs(args["nodeRef"], args["doctype"]);

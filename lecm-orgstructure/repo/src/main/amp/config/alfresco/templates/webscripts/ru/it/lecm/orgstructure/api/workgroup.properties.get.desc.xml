@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>workgroup properties</shortname>
-    <description>Return all workgroup properties</description>
-    <url>/lecm/orgstructure/api/getWorkGroupProperties?nodeRef={nodeRef}</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

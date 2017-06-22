@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>unit staff employee link</shortname>
-    <description>Return staff-list employee-link</description>
-    <url>/lecm/orgstructure/api/getStaffEmployeeLink?nodeRef={nodeRef}</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

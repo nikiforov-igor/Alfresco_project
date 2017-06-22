@@ -1,9 +1,0 @@
-<webscript>
-  <shortname>makeBoss</shortname>
-  <description>Make boss</description>
-  <url>/lecm/orgstructure/action/makeBoss</url>
-  <format default="json">argument</format>
-  <authentication>user</authentication>
-  <transaction>required</transaction>
-  <lifecycle>internal</lifecycle>
-</webscript>

@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Get number of employee's working days</shortname>
-	<description>Get the number of all employee's working days at given period</description>
-	<url>/lecm/wcalendar/workCalendar/getEmployeeWorkingDaysNumber</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-</webscript>

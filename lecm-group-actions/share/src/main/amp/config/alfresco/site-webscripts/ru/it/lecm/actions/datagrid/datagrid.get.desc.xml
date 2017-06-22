@@ -1,6 +1,0 @@
-<webscript>
-    <shortname>group-actions-datagrid</shortname>
-    <description>Group Actions Datagrid Component</description>
-    <url>/lecm/groupActions/datagrid</url>
-    <authentication>user</authentication>
-</webscript>

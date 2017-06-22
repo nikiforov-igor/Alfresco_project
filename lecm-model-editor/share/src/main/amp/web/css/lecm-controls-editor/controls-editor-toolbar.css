@@ -1,9 +1,0 @@
-.datalist-toolbar .generate-controls span.first-child {
-	background: url(../../components/documentlibrary/images/create-content-16.png) no-repeat 12px 4px;
-	padding-left: 24px;
-}
-
-.datalist-toolbar .deploy-controls span.first-child {
-	background: url(../../themes/lecmTheme/images/refresh-16.png) no-repeat 12px 4px;
-	padding-left: 24px;
-}

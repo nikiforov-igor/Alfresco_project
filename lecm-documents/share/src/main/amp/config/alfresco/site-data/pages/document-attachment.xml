@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-	<title>Lecm Document Attachment Details</title>
-	<title-id>page.lecm.document.attachment.title</title-id>
-	<description>Lecm Document attachment details</description>
-	<description-id>page.lecm.document.attachment.description</description-id>
-	<template-instance>document-attachment</template-instance>
-	<authentication>user</authentication>
-</page>

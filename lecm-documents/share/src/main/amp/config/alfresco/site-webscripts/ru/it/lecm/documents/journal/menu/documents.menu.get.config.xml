@@ -1,8 +1,0 @@
-<menu>
-    <filtersSet>
-        <filter type="creator" label="По автору">
-            <record id="my" value="" label="Только мои"/>
-            <record id="all" value="all" label="Все"/>
-        </filter>
-    </filtersSet>
-</menu>

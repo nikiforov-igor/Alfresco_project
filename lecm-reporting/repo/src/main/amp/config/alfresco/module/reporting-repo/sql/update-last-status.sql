@@ -1,1 +1,0 @@
-UPDATE lastsuccessfulrun SET status='Done' WHERE status='Running';

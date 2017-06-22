@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-	<title>Сводная информация о работе сотрудников</title>
-	<title-id>page.working-days-summary.title</title-id>
-	<description>Сводная информация о рабочих днях сотрудников</description>
-	<description-id>page.working-days-summary.description</description-id>
-	<template-instance>working-days-summary</template-instance>
-	<authentication>user</authentication>
-</page>

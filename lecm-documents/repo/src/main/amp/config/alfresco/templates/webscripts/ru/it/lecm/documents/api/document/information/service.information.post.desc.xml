@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<webscript>
-    <shortname>Service information</shortname>
-    <description>Get document service information</description>
-    <url>/lecm/document/information/getServiceInformation</url>
-    <format default="json">extension</format>
-    <authentication>admin</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

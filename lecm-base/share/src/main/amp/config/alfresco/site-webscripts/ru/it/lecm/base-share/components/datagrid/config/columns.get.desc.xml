@@ -1,6 +1,0 @@
-<webscript>
-    <shortname>Datagrid: Columns configuration</shortname>
-    <description>Datagrid: Columns configuration webscript</description>
-    <url>/lecm/components/datagrid/config/columns</url>
-    <format default="json"></format>
-</webscript>

@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Users info</shortname>
-    <description>Diagnostic info about orgstructure</description>
-    <url>/lecm/orgstructure/api/getUsersInfo</url>
-    <format default="json"/>
-    <authentication>admin</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

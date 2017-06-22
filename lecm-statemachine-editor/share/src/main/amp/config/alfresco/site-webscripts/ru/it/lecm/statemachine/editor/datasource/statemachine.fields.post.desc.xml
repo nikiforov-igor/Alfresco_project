@@ -1,7 +1,0 @@
-<webscript>
-   <shortname>Status Fields</shortname>
-   <description>Status Fields Data Webscript</description>
-   <url>/lecm/statemachine/editor/ds/fields</url>
-   <format default="json"/>
-   <authentication>none</authentication>
-</webscript>

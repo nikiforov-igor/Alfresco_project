@@ -1,1 +1,0 @@
-model.results = groupActions.getTypes();

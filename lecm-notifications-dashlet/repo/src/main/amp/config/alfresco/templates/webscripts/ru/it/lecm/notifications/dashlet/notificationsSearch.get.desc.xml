@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Notifications search</shortname>
-    <description>Notifications search</description>
-    <url>/lecm/notifications/search</url>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-    <format default="json">extension</format>
-</webscript>
