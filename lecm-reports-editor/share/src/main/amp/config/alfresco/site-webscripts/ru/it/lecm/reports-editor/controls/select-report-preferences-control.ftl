@@ -28,6 +28,11 @@
             <span class="create-new-preference">
                 <a href="javascript:void(0);" id="${controlId}-create-new">${msg("report.param.preferences.save")}</a>
             </span>
+            <span>&nbsp;</span>
+            <span class="save-as-preference">
+                <a href="javascript:void(0);" id="${controlId}-save-as">${msg("report.param.preferences.save-as")}</a>
+            </span>
+            <span>&nbsp;</span>
             <span class="delete-preference">
                 <a href="javascript:void(0);" id="${controlId}-delete">${msg("report.param.preferences.delete")}</a>
             </span>
