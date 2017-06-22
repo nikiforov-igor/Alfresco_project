@@ -267,6 +267,9 @@ LogicECM.module = LogicECM.module || {};
                         if (options != null) {
                             this.setOptions(options);
                         }
+                        if (this.options.defaultValue == "") {
+                            this.options.defaultValue = "false";
+                        }
                         this.initValue = null;
                         this.init();
                     }

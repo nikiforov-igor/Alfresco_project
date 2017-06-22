@@ -205,13 +205,14 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 
         onAccordionClick : function(e, node) {
             if (this.shownAccordionItem == null || this.shownAccordionItem != node) {
-                if (!node.createdTree) {
+                if (!node.tree) {
                     if (node.id == "calendar") {
                         this._createCalendar();
                     } else {
                         this._createTree(node);
                     }
-                    node.createdTree = true;
+                } else {
+                    this.tree = node.tree;
                 }
                 if (this.shownAccordionItem != null) {
                     this.collapseAccordion(this.shownAccordionItem);
@@ -275,7 +276,8 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
         },
 
         _createTree: function (node) {
-            this.tree = new YAHOO.widget.TreeView("ac-content-" + node.id);
+            node.tree = new YAHOO.widget.TreeView("ac-content-" + node.id);
+            this.tree = node.tree;
             this.tree.singleNodeHighlight = true;
             this.tree.setDynamicLoad(this._loadTree.bind(this));
 

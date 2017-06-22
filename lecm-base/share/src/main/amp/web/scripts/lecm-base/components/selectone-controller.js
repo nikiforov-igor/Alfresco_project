@@ -81,10 +81,8 @@ LogicECM.module = LogicECM.module || {};
                     this.setOptions(options);
                 }
 
-                if (this.options.selectCurrentValue) {
-                    if (this.widgets.inputEl) {
-                        this.widgets.inputEl.value = this.options.selectCurrentValue;
-                    }
+                if (this.widgets.inputEl) {
+                    this.widgets.inputEl.value = this.options.selectCurrentValue ? this.options.selectCurrentValue : this.widgets.inputEl.options[0].value;
                 }
             }
         },
