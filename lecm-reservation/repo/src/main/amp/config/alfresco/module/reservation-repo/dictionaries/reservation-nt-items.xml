@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Шаблоны уведомлений" type="lecm-dic:dictionary">
+        <property name="cm:name"><![CDATA[Шаблоны уведомлений]]></property>
+        <property name="lecm-dic:attributeForShow"><![CDATA[cm:name]]></property>
+        <property name="lecm-dic:type"><![CDATA[lecm-notification-template:template]]></property>
+        <property name="lecm-dic:plane"><![CDATA[true]]></property>
+        <property name="lecm-dic:description"><![CDATA[Шаблоны уведомлений]]></property>
+        <items updateMode="CreateOrUpdate">
+            <item name="cm:RESERVATION_EMPTY_REGISTRARS" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[RESERVATION_EMPTY_REGISTRARS]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Нет доступных регистраторов для регистрации документа {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:ext-present-string"))}]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Резервирование номера. Нет доступных регистраторов]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
+			<item name="cm:RESERVATION_REQUEST_STARTED" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[RESERVATION_REQUEST_STARTED]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[{#employee.wrapAsLink(#employee.attribute("lecm-orgstr:employee-short-name"))} запросил резервирование номера для документа {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:ext-present-string"))}]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Резервирование номера. Запуск запроса резервирования рег.номера]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
+            <item name="cm:RESERVATION_REQUEST_FINISHED_REJECTED" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[RESERVATION_REQUEST_FINISHED_REJECTED]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Ваш запрос на резервирование регистрационного номера для документа {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:ext-present-string"))} отклонён]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Резервирование номера. Запрос на резервирование отклонен регистратором]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
+            <item name="cm:RESERVATION_REQUEST_FINISHED_APPROVED" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[RESERVATION_REQUEST_FINISHED_APPROVED]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Ваш запрос на резервирование регистрационного номера для документа {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:ext-present-string"))} выполнен]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Резервирование номера. Запрос на резервирование выполнен регистратором]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
+            <item name="cm:RESERVATION_REQUEST_FINISHED_APPROVED_WITH_DATE" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[RESERVATION_REQUEST_FINISHED_APPROVED_WITH_DATE]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Для документа {#mainObject.wrapAsLink(#mainObject.attribute("lecm-reservation-aspects:presentStringBeforeReservation"))} зарезервирован регистрационный номер {#regNumber} от {#reserveDate}]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Резервирование номера. Запрос на резервирование удовлетворен (с датой)]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
+            <item name="cm:RESERVATION_REQUEST_FINISHED_APPROVED_WITHOUT_DATE" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[RESERVATION_REQUEST_FINISHED_APPROVED_WITHOUT_DATE]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Для документа {#mainObject.wrapAsLink(#mainObject.attribute("lecm-reservation-aspects:presentStringBeforeReservation"))} зарезервирован регистрационный номер {#regNumber}]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Резервирование номера. Запрос на резервирование удовлетворен (без даты)]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
+        </items>
+    </item>
+</items>

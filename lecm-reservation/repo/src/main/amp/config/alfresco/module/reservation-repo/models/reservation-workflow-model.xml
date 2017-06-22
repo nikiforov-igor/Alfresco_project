@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="reservationWf:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+	<description>Logic ECM Reservation Document workflow model</description>
+	<author>Logic ECM</author>
+	<version>1.0</version>
+
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<import uri="http://www.alfresco.org/model/bpm/1.0" prefix="bpm"/>
+		<import uri="http://www.it.ru/logicECM/statemachine/aspects/1.0" prefix="lecm-statemachine-aspects"/>
+	</imports>
+
+	<namespaces>
+		<namespace uri="http://www.it.ru/logicECM/reservation/workflow/1.0" prefix="reservationWf"/>
+	</namespaces>
+
+	<constraints>
+		<constraint name="reservationWf:reservateOptions" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>NO_DECISION</value> <!-- зарезервировать номер для документа -->
+					<value>RESERVED</value> <!-- зарезервировать номер для документа -->
+					<value>REJECTED</value> <!-- отказать в резервировании номера -->
+				</list>
+			</parameter>
+		</constraint>
+	</constraints>
+
+	<types>
+		<type name="reservationWf:regnumReservationStart">
+			<parent>bpm:startTask</parent>
+			<mandatory-aspects>
+				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<type name="reservationWf:regnumReservationTask">
+			<parent>bpm:activitiOutcomeTask</parent>
+			<properties>
+				<property name="reservationWf:isReservate">
+					<type>d:text</type>
+					<default>NO_DECISION</default>
+					<constraints>
+						<constraint ref="reservationWf:reservateOptions"/>
+					</constraints>
+				</property>
+			</properties>
+			<overrides>
+				<property name="bpm:reassignable">
+					<default>false</default>
+				</property>
+				<property name="bpm:packageItemActionGroup">
+					<default>edit_package_item_actions</default>
+				</property>
+				<property name="bpm:outcomePropertyName">
+					<default>{http://www.it.ru/logicECM/reservation/workflow/1.0}isReservate</default>
+				</property>
+			</overrides>
+		</type>
+	</types>
+</model>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xmlns:p="http://www.springframework.org/schema/p"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<util:list id="reservation.workflow.share.configs">
+		<value>classpath:alfresco/web-extension/ru/it/lecm/workflow/reservation/reservation-share-config.xml</value>
+		<value>classpath:alfresco/web-extension/ru/it/lecm/workflow/reservation/lecm-regnumber-reservation-share-config.xml</value>
+	</util:list>
+
+	<bean id="reservation.workflow.share.bootstrap" init-method="register"
+		  class="org.springframework.extensions.config.ConfigBootstrap"
+		  p:configService-ref="web.config"
+		  p:configs-ref="reservation.workflow.share.configs"/>
+
+	<bean id="reservation.workflow.resource.bundle.bootstrap"
+		  class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent"
+		  p:resourceBundles="alfresco.web-extension.ru.it.lecm.workflow.reservation.reservation"/>
+</beans>

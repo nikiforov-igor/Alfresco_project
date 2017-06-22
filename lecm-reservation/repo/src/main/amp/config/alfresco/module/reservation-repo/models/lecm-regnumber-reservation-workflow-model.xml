@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="lecmRegnumRes:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+	<description>Workflow model for regnumber reservation</description>
+	<author>Logic ECM</author>
+	<version>1.0</version>
+
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+		<import uri="http://www.alfresco.org/model/bpm/1.0" prefix="bpm"/>
+	</imports>
+
+	<namespaces>
+		<namespace uri="http://www.it.ru/logicECM/model/regnum/reservation/workflow/1.0" prefix="lecmRegnumRes"/>
+	</namespaces>
+
+	<constraints>
+		<constraint name="lecmRegnumRes:decisionConstraint" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>NO_DECISION</value> <!-- зарезервировать номер для документа -->
+					<value>RESERVED</value> <!-- зарезервировать номер для документа -->
+					<value>REJECTED</value> <!-- отказать в резервировании номера -->
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="lecmRegnumRes:modeConstraint" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>REG_DATE</value>
+					<value>NO_REG_DATE</value>
+				</list>
+			</parameter>
+		</constraint>
+	</constraints>
+
+	<types>
+		<type name="lecmRegnumRes:startTask">
+			<parent>bpm:startTask</parent>
+			<properties>
+				<property name="lecmRegnumRes:mode">
+					<type>d:text</type>
+					<default>REG_DATE</default>
+					<constraints>
+						<constraint ref="lecmRegnumRes:modeConstraint" />
+					</constraints>
+				</property>
+				<property name="lecmRegnumRes:date">
+					<type>d:date</type>
+				</property>
+				<property name="lecmRegnumRes:regnumberTemplateCode">
+					<type>d:text</type>
+				</property>
+			</properties>
+		</type>
+
+		<type name="lecmRegnumRes:reserveTask">
+			<parent>bpm:activitiOutcomeTask</parent>
+			<properties>
+				<property name="lecmRegnumRes:decision">
+					<type>d:text</type>
+					<default>NO_DECISION</default>
+					<constraints>
+						<constraint ref="lecmRegnumRes:decisionConstraint"/>
+					</constraints>
+				</property>
+			</properties>
+			<associations>
+				<association name="lecmRegnumRes:commentAssoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>cm:content</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+			<overrides>
+				<property name="bpm:reassignable">
+					<default>false</default>
+				</property>
+				<property name="bpm:packageItemActionGroup">
+					<default>edit_package_item_actions</default>
+				</property>
+				<property name="bpm:outcomePropertyName">
+					<default>{http://www.it.ru/logicECM/model/regnum/reservation/workflow/1.0}decision</default>
+					<constraints>
+						<constraint ref="lecmRegnumRes:decisionConstraint"/>
+					</constraints>
+				</property>
+			</overrides>
+		</type>
+
+	</types>
+</model>

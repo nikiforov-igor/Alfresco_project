@@ -112,6 +112,7 @@
         <module>lecm-ord</module>
         <module>lecm-nd</module>
         <module>lecm-resolutions</module>
+        <module>lecm-reservation</module>
     </modules>
     <scm>
         <connection>scm:svn:https://svn.datateh.ru/alfrescoecm/Business Platform/trunk/</connection>
