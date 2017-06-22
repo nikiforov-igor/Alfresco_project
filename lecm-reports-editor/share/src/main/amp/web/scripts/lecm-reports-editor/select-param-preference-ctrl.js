@@ -350,7 +350,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                         LogicECM.module.Base.Util.reInitializeControl(formId, controlFieldId, {
                             currentValue: "",
                             defaultValue: "",
-                            fieldValues: "".split(","),
+                            fieldValues: [],
                             resetValue: true,
                             selectCurrentValue: ""
                         });
