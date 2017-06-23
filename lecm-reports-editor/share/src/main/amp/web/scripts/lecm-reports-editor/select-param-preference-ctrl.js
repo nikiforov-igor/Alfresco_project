@@ -33,6 +33,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
 
             controlId: null,
             saveNewLink: null,
+            saveAsLink: null,
             deleteLink: null,
             controls: null,
 
@@ -47,6 +48,12 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                 this.saveNewLink = Dom.get(this.controlId + "-create-new");
                 if (this.saveNewLink) {
                     Event.on(this.controlId + "-create-new", "click", this.onSaveClick, null, this);
+                    Dom.addClass(this.saveNewLink, "hidden");
+                }
+
+                this.saveAsLink = Dom.get(this.controlId + "-save-as");
+                if (this.saveAsLink) {
+                    Event.on(this.controlId + "-save-as", "click", this.onSaveAsClick, null, this);
                 }
 
                 this.deleteLink = Dom.get(this.controlId + "-delete");
@@ -136,9 +143,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                 if (fireChangeEvent) {
                     this.onSelectChange();
                 }
-                if (this.select.value !== "~CREATE-NEW~") {
-                    Dom.removeClass(this.deleteLink, "hidden");
-                }
+                this._updateLinksVisibility();
                 this.preferences = preferences;
             },
 
@@ -149,22 +154,30 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                     this._initControls();
                     var argumentsObj = this._getPreferenceByName(this.select.value);
                     var arguments = argumentsObj ? argumentsObj.args : {};
+                    var formId = this.options.formId;
+                    var fieldId = this.options.fieldId;
                     for (var i = 0; i < this.controls.length; i++) {
-                        var fieldName = this.controls[i].options.fieldId;
-                        if (fieldName && arguments.hasOwnProperty(fieldName) && !(fieldName == this.options.fieldId)) {
-                            LogicECM.module.Base.Util.reInitializeControl(this.options.formId, fieldName, {
-                                currentValue: arguments[fieldName],
-                                defaultValue: arguments[fieldName],
-                                fieldValues: arguments[fieldName] ? arguments[fieldName].split(",") : [],
-                                resetValue: !arguments[fieldName]
+                        var controlFieldId = this.controls[i].options.fieldId;
+                        if (controlFieldId && arguments.hasOwnProperty(controlFieldId) && (controlFieldId != fieldId)) {
+                            var newValue = arguments[controlFieldId];
+                            LogicECM.module.Base.Util.reInitializeControl(formId, controlFieldId, {
+                                currentValue: newValue,
+                                defaultValue: newValue,
+                                fieldValues: newValue ? newValue.split(",") : [],
+                                resetValue: !newValue,
+                                selectCurrentValue: newValue
                             });
                         }
                     }
-                    Dom.removeClass(this.deleteLink, "hidden");
                 }
+                this._updateLinksVisibility();
             },
 
             onSaveClick: function () {
+                this.onSave(this.select.value, false);
+            },
+
+            onSaveAsClick: function () {
                 var context = this;
                 Alfresco.util.PopupManager.getUserInput(
                     {
@@ -173,6 +186,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                         input: "text",
                         modal: true,
                         close: true,
+                        value: "",
                         buttons: [
                             {
                                 text: Alfresco.util.message("button.ok"),
@@ -180,16 +194,15 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                                     fn: function (event, obj) {
                                         var input = obj.body.children[2]; /*label,br,input*/
                                         if (input) {
-                                            var inputValue = input.value;
-                                            var indexInCurrentValues = context._getIndexByName(inputValue.trim());
-                                            if (indexInCurrentValues >= 0) {
+                                            var inputValue = input.value.trim();
+                                            if (context._getIndexByName(inputValue) >= 0) {
                                                 Alfresco.util.PopupManager.displayMessage(
                                                     {
                                                         text: Alfresco.util.message('report.param.prereference.save.not_unique')
                                                     }, Dom.get(obj.id));
                                                 return;
                                             } else {
-                                                context.onSave(inputValue);
+                                                context.onSave(inputValue, true);
                                                 this.destroy();
                                             }
                                         }
@@ -207,7 +220,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                     });
             },
 
-            onSave: function (name) {
+            onSave: function (name, saveAs) {
                 var newParam = {
                     name: name ? name : "lastParams-" + (this.preferences.length + 1),
                     created: Alfresco.util.toISO8601(new Date()),
@@ -238,7 +251,14 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                     newParam.args = formData;
                 }
 
-                this.preferences.unshift(newParam);
+                if (saveAs) {/*add*/
+                    this.preferences.unshift(newParam);
+                } else { /*replace*/
+                    var index = this._getIndexByName(this.select.value);
+                    if (index >= 0) {
+                        this.preferences[index] = newParam;
+                    }
+                }
 
                 Alfresco.util.Ajax.jsonRequest({
                     method: "POST",
@@ -254,18 +274,28 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                             if (oResponse.json) {
                                 var select = this.select;
                                 if (select) {
-                                    var option = document.createElement("option");
-                                    option.value = this.preferences[0].name;
-                                    option.innerHTML = this.preferences[0].name;
-                                    option.selected = true;
+                                    if (saveAs) {
+                                        var option = document.createElement("option");
+                                        option.value = this.preferences[0].name;
+                                        option.innerHTML = this.preferences[0].name;
+                                        option.selected = true;
 
-                                    if (this.firstSelectOption) {
-                                        Dom.insertBefore(option, this.firstSelectOption);
+                                        if (this.firstSelectOption) {
+                                            Dom.insertBefore(option, this.firstSelectOption);
+                                        } else {
+                                            select.appendChild(option);
+                                        }
+                                        this.firstSelectOption = option;
                                     } else {
-                                        select.appendChild(option);
+                                        select.options[select.selectedIndex].value = name;
+                                        select.options[select.selectedIndex].innerHTML = name;
+
+                                        Alfresco.util.PopupManager.displayMessage(
+                                            {
+                                                text: Alfresco.util.message('report.param.prereference.save-as.msg')
+                                            }, Dom.get(this.options.formId + "-form"));
                                     }
-                                    this.firstSelectOption = option;
-                                    Dom.removeClass(this.deleteLink, "hidden");
+                                    this._updateLinksVisibility();
                                 }
                             }
                         }
@@ -274,7 +304,6 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                     scope: this,
                     execScripts: true
                 });
-
             },
 
             onDeleteClick: function () {
@@ -299,6 +328,8 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                                     // сохраним удаляемое значение
                                     var removingValue = select.value;
                                     select.remove(select.selectedIndex);
+                                    this._updateLinksVisibility();
+
                                     if (select.value === "~CREATE-NEW~") {
                                         this._resetValues();
                                     }
@@ -336,19 +367,18 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
 
             _resetValues: function() {
                 this._initControls();
-                Dom.addClass(this.deleteLink, "hidden");
                 var formId = this.options.formId;
                 var fieldId = this.options.fieldId;
                 for (var i = 0; i < this.controls.length; i++) {
                     var control = this.controls[i];
                     var controlFieldId = control.options.fieldId;
                     if (controlFieldId && (controlFieldId != fieldId)) {
-                        var defaultValue = (control.name == "LogicECM.module.Checkbox") ? "false" : "";
                         LogicECM.module.Base.Util.reInitializeControl(formId, controlFieldId, {
-                            currentValue: defaultValue,
-                            defaultValue: defaultValue,
-                            fieldValues: defaultValue.split(","),
-                            resetValue: true
+                            currentValue: "",
+                            defaultValue: "",
+                            fieldValues: [],
+                            resetValue: true,
+                            selectCurrentValue: ""
                         });
                     }
                 }
@@ -368,6 +398,16 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor || {};
                     }
                 }
                 return -1;
+            },
+
+            _updateLinksVisibility: function () {
+                if (this.select && this.select.value !== "~CREATE-NEW~") {
+                    Dom.removeClass(this.deleteLink, "hidden");
+                    Dom.removeClass(this.saveNewLink, "hidden");
+                } else {
+                    Dom.addClass(this.deleteLink, "hidden");
+                    Dom.addClass(this.saveNewLink, "hidden");
+                }
             }
         });
 })();
