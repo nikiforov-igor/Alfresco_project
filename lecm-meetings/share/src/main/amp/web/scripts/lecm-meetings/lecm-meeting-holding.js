@@ -27,7 +27,7 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 		onReady: function () {
 			var actionSave = Dom.get(this.id + "-event-action-save");
 			if (actionSave != null) {
-				YAHOO.util.Event.addListener(actionSave, "click", this.saveForm, null, this);
+				YAHOO.util.Event.addListener(actionSave, "click", this.saveForm, true, this);
 			}
 
 			var actionFinish = Dom.get(this.id + "-event-action-finish");
@@ -91,16 +91,19 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 			args[1].runtime.setAJAXSubmit(true);
 		},
 
-		saveForm: function(immediate) {
-			this.forms.forEach(function(form) {
-				if (form && form.runtime.formId !== this.HOLDING_MEETING + "-form" && form.isDirty()) {
-					form.submit(immediate);
-				}
-			}, this, true);
+		saveForm: function(immediate, buttonAction) {
+			for (var index = 0, len = this.forms.length; index < len; index++) {
+				var form = this.forms[index];
+                if (form && form.runtime.formId !== this.HOLDING_MEETING + "-form" && form.isDirty()) {
+                    form.submit(immediate);
+                    if (!buttonAction) {
+                        break;
+					}
+			}}
 		},
 
 		onSubmit: function() {
-			this.saveDates();
+			this.saveDates(true);
 		},
 
 		loadItems: function() {
@@ -200,8 +203,8 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 
 		},
 
-		saveDates: function () {
-			this.saveForm(true);
+		saveDates: function (buttonAction) {
+			this.saveForm(true, buttonAction);
 
 			var arguments = {};
 			for (var i = 0; i < this.submitElements.length; i++) {
