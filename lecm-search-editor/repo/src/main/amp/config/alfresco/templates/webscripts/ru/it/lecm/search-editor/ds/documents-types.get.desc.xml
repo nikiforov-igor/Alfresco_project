@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Получить список зарегистрированных в системе типов документов</shortname>
-	<description>Получить список зарегистрированных в системе типов документов</description>
-	<url>/lecm/search-queries/types</url>
-	<format default="json"/>
-	<authentication>none</authentication>
-	<transaction allow="readonly">required</transaction>
-</webscript>

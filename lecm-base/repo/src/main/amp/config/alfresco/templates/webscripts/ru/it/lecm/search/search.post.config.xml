@@ -1,3 +1,0 @@
-<search>
-   <default-query-template>%(cm:name cm:title cm:description TEXT)</default-query-template>
-</search>

@@ -1,9 +1,0 @@
-<webscript>
-	<shortname>Create root folder for specified typename</shortname>
-	<description>Create root folder for specified typename</description>
-	<url>/lecm/controls-editor/createTypeRoot?doctype={doctype}</url>
-	<format default="json" />
-	<authentication>user</authentication>
-	<transaction>required</transaction>
-	<lifecycle>internal</lifecycle>
-</webscript>

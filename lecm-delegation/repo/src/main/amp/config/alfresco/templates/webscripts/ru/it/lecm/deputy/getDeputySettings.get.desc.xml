@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Get deputy settings</shortname>
-	<description>Get deputy settings</description>
-	<url>/lecm/deputy/getSettingsNode</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-</webscript>

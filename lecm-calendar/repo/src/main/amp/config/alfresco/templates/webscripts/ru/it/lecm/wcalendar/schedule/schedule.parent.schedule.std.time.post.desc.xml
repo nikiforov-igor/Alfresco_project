@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Get standart schedule time for Parent Node</shortname>
-	<description>Get standart schedule time for Parent</description>
-	<url>/lecm/wcalendar/schedule/get/parentScheduleStdTime</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-	<!--<transaction>required</transaction>-->
-</webscript>

@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Create new special schedule</shortname>
-	<description>Create new special schedule and it's elements</description>
-	<url>/lecm/wcalendar/schedule/set/createSpecialSchedule</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-	<transaction>required</transaction>
-</webscript>

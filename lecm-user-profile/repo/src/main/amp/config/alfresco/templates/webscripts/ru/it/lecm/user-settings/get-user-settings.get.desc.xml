@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Получить настройку для пользователя</shortname>
-	<description>Получить настройку для пользователя</description>
-	<url>/lecm/user-settings/get</url>
-	<format default="json">argument</format>
-	<authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

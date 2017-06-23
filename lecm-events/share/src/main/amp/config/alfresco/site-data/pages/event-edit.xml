@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-	<title>Редактирование атрибутов мероприятия</title>
-	<description>Редактирование атрибутов мероприятия</description>
-	<template-instance>event-edit</template-instance>
-	<authentication>user</authentication>
-</page>

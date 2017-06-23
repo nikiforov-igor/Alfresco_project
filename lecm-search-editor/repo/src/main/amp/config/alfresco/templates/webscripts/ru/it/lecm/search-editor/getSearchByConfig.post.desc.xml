@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Получение поискового запроса</shortname>
-    <description>Получение поискового запроса по конфигу</description>
-    <url>/lecm/components/search/query/byConfig</url>
-    <format default="json">extension</format>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-    <shortname>delegation-opts</shortname>
-    <description>Returns content for delegation options</description>
-	<url>/lecm/deputy/settings</url>
-	<format default="html"/>
-    <authentication>user</authentication>
-</webscript>

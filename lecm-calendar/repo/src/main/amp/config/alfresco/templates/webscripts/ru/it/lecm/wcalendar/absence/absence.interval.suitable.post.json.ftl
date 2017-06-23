@@ -1,3 +1,0 @@
-{
-	"isSuitable": ${isSuitable?string}
-}

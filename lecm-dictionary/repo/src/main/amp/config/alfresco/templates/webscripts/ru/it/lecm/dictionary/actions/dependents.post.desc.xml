@@ -1,9 +1,0 @@
-<webscript>
-    <shortname>Dependents</shortname>
-    <description>Check for dependents</description>
-    <url>/lecm/dictionary/action/isDependents</url>
-    <format default="json">argument</format>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-    <lifecycle>internal</lifecycle>
-</webscript>

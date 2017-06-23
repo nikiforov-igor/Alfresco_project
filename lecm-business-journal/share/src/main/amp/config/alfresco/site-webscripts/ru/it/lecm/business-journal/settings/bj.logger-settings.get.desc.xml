@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Настройки автоматического архивирования</shortname>
-    <description>Настройки автоматического архивирования</description>
-    <url>/lecm/business-journal/logger-settings</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

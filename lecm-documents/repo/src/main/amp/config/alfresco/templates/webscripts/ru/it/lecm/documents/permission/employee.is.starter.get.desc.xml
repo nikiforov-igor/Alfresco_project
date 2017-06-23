@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Пользователь - Инициатор?</shortname>
-	<description>Проверка, что текущий пользователь может быть инициатором</description>
-	<url>/lecm/documents/employeeIsStarter?docType={docType}</url>
-	<format default="json">extension</format>
-	<authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

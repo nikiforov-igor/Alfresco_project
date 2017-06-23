@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Deputy subjects grid</shortname>
-	<description>Deputy subjects grid</description>
-	<url>/lecm/deputy/subjects-grid</url>
-	<format default="html"/>
-	<authentication>user</authentication>
-</webscript>

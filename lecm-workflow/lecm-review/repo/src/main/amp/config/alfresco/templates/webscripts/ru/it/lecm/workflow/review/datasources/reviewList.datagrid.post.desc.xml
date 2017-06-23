@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Лист согласования</shortname>
-    <description>Лист согласования (дополнительный контроль прав)</description>
-    <url>/lecm/review/ds/reviewListDS</url>
-    <format default="json">argument</format>
-    <authentication>user</authentication>
-    <transaction>required</transaction>
-</webscript>

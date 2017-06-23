@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Organization</shortname>
-	<description>Organization</description>
-	<url>/lecm/orgstructure/api/getOrganizationBoss</url>
-	<format default="json"/>
-	<authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

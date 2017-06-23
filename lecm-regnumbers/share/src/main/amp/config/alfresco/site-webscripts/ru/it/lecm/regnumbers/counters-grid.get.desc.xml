@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>counters-grid</shortname>
-	<description>Documents counters: Datagrid</description>
-	<format default="html"/>
-	<url>/lecm/regnumbers/counters-grid</url>
-	<authentication>user</authentication>
-</webscript>

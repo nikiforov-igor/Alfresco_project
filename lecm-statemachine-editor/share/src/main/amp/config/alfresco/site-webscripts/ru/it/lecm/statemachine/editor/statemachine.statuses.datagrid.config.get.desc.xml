@@ -1,7 +1,0 @@
-<webscript>
-	<shortname>Statemachine Editor Datagrid Config</shortname>
-	<description>Statemachine Editor Datagrid Config</description>
-	<url>/lecm/statemachine/editor/datagrid/config</url>
-	<format default="json">extension</format>
-	<authentication>none</authentication>
-</webscript>

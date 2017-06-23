@@ -1,1 +1,0 @@
-model.objectDescription = businessJournal.getObjectDescription(args["objectRef"]);

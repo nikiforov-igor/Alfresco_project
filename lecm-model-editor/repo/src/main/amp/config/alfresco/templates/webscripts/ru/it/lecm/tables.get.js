@@ -1,1 +1,0 @@
-model.result = modelsList.getTables(args["doctype"]);

@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Document Default Expand View Title</shortname>
-    <description>Из global.properties по типу документа ищет название компоненты, которая должна быть раскрыта по умолчанию</description>
-    <url>/lecm/document/default-expand-view?docType={docType}</url>
-    <format default="json">extension</format>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

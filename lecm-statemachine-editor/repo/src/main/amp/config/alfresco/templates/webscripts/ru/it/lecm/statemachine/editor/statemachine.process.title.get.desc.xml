@@ -1,7 +1,0 @@
-<webscript>
-	<shortname>Process Title of Statemachine</shortname>
-	<description>Process Title of Statemachine</description>
-	<url>/lecm/statemachine/editor/title</url>
-	<format default="html">extension</format>
-	<authentication>user</authentication>
-</webscript>

@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Documents datagrid</shortname>
-    <description>Return documents-list datagrid</description>
-    <url>/lecm/documents/documents-list-grid</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

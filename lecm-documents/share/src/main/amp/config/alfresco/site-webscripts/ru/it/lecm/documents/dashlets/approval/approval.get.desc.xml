@@ -1,6 +1,0 @@
-<webscript>
-    <shortname>Согласование</shortname>
-    <description>Дашлет "Согласование"</description>
-    <family>document-dashlet</family>
-    <url>/lecm/components/dashlets/document-approval</url>
-</webscript>

@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Make secretary receive tasks or not</shortname>
-	<description>Make secretary receive tasks or not</description>
-	<url>/lecm/secretary/{store_type}/{store_id}/{id}/receiveTasks?chief={chief}</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-	<transaction allow="readwrite">required</transaction>
-</webscript>

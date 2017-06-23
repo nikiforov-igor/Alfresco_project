@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Reassign tasks</shortname>
-	<description>Reassign tasks</description>
-	<url>/lecm/document/action/addEmployeesToDynamicRole</url>
-	<format default="text">extension</format>
-	<authentication>user</authentication>
-	<transaction>required</transaction>
-</webscript>

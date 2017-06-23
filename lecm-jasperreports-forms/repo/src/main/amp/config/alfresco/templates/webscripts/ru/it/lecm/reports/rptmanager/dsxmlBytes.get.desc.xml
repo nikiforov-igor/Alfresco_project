@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Get ds-xml file</shortname>
-	<description>Get content from report ds-xml file by report code (mnemonic)</description>
-	<url>/lecm/reports/rptmanager/dsXmlBytes?reportCode={reportCode}</url>
-	<format default="json">extension</format>
-	<transaction allow="readonly">required</transaction>
-</webscript>

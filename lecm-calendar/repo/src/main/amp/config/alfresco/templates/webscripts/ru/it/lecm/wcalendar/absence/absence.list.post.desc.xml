@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-   <shortname>List absence options for current employee</shortname>
-   <description>List and filters absence options for current employee. Employee must be a boss or have special business role &quot;Технолог календарей&quot;</description>
-   <url>/lecm/wcalendar/absence/get/list/{context}</url>
-   <authentication>user</authentication>
-   <format default="json"/>
-   <transaction allow="readwrite">required</transaction>
-</webscript>

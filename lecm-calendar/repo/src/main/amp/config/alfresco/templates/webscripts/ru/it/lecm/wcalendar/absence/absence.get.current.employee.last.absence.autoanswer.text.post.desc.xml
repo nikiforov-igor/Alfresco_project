@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Get autoanswer text used in last absence of current employee</shortname>
-	<description>Get autoanswer text used in last absence of current employee</description>
-	<url>/lecm/wcalendar/absence/getCurrentEmployeeLastAbsenceAutoAnswer</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-</webscript>

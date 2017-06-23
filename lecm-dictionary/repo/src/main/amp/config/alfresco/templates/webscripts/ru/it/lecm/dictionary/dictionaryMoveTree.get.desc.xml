@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Get tree items for dictionary move node</shortname>
-	<description>Get tree items for dictionary move node</description>
-	<url>/lecm/dictionary/move/tree/{store_type}/{store_id}/{id}/items</url>
-	<format default="json"/>
-	<authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

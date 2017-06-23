@@ -1,1 +1,0 @@
-<#include "/org/alfresco/repository/forms/formdefinition.post.json.ftl"/>

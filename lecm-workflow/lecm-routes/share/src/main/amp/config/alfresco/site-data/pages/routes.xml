@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-	<title>Маршруты документов</title>
-	<title-id>page.routes.title</title-id>
-	<description>Управление маршрутами документов</description>
-	<description-id>page.routes.description</description-id>
-	<template-instance>routes</template-instance>
-	<authentication>user</authentication>
-</page>

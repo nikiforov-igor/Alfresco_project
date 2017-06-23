@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<webscript>
-	<shortname>Права на вложения</shortname>
-	<description>Проверка, что текущий пользователь может просматривать вложения документа</description>
-	<url>/lecm/documents/isEmpHasPermToReadAttachment</url>
-	<format default="json">extension</format>
-	<authentication runas="admin">none</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

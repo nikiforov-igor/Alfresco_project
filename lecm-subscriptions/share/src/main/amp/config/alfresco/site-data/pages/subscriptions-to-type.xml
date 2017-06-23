@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-    <title>Подписки на тип</title>
-    <description>Подписки на тип объекта</description>
-    <template-instance>subscriptions-to-type</template-instance>
-    <authentication>user</authentication>
-</page>

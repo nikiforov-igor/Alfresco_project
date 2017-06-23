@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>stageExpanded</shortname>
-	<description>Documents routes: stage expanded row for stages-control</description>
-	<format default="html"/>
-	<url>/ru/it/lecm/workflow/routes/stages/stageExpanded</url>
-	<authentication>user</authentication>
-</webscript>

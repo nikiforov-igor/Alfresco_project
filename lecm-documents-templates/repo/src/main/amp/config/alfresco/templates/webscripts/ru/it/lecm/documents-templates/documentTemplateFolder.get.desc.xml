@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Documents templates service folder</shortname>
-	<description>Documents templates service folder</description>
-	<url>/lecm/documents-templates/root</url>
-	<format default="json"/>
-	<authentication>user</authentication>
-	<transaction allow="readonly">required</transaction>
-</webscript>

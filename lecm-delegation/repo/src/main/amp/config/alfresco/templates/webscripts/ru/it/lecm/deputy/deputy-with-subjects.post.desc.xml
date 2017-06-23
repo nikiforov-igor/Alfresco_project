@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-   <shortname>List of deputy nodes with subjects</shortname>
-   <description>List of deputy nodes with subjects</description>
-   <url>/lecm/deputyWithSubjects/list</url>
-   <authentication>user</authentication>
-   <format default="json"/>
-   <transaction allow="readwrite">required</transaction>
-</webscript>

@@ -1,6 +1,0 @@
-<webscript>
-    <shortname>Lecm Document Forms: Toolbar</shortname>
-    <description>Lecm Document Forms: Toolbar component</description>
-    <url>/lecm/documentforms/toolbar</url>
-    <authentication>user</authentication>
-</webscript>

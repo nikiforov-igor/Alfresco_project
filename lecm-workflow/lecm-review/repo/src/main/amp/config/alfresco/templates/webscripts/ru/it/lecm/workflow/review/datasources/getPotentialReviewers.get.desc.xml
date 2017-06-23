@@ -1,9 +1,0 @@
-<webscript>
-    <shortname>Potential reviewers list</shortname>
-    <description>Potential reviewers list</description>
-    <url>/lecm/review/getPotentialReviewers/picker/{type}/{store_type}/{store_id}/{id}/children</url>
-    <url>/lecm/review/getPotentialReviewers/picker/{type}/children</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

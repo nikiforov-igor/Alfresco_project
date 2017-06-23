@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Dictionary data types attributes</shortname>
-	<description>Get dictionary data type attributes including cm:name and cm:title</description>
-	<url>/lecm/dictionary/attributes?dataType={dataType}</url>
-	<format default="json"/>
-	<authentication>user</authentication>
-	<transaction allow="readonly">required</transaction>
-</webscript>

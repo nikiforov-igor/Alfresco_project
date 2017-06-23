@@ -1,9 +1,0 @@
-<webscript>
-	<shortname>setRead all</shortname>
-	<description>Set read all notifications of current user</description>
-	<url>/lecm/notifications/active-channel/api/set/read/all</url>
-	<format default="json"/>
-	<authentication>user</authentication>
-	<transaction>required</transaction>
-</webscript>
-

@@ -1,1 +1,0 @@
-model.workGroups = orgstructure.getEmployeeWorkGroups(args["nodeRef"]);

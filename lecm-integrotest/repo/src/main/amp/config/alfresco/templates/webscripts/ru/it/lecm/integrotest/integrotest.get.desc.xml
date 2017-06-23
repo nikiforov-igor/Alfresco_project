@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>integrotest web script</shortname>
-	<description>This webscript is used for security groups integration testing</description>
-	<url>/lecm/integrotest</url>
-	<authentication>user</authentication>
-	<format default="html"/>
-	<transaction allow="readonly">required</transaction>
-</webscript>

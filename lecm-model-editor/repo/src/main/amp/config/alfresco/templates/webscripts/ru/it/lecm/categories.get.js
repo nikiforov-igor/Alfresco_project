@@ -1,1 +1,0 @@
-model.result = modelsList.getCategories(args["nodeRef"], args["doctype"]);

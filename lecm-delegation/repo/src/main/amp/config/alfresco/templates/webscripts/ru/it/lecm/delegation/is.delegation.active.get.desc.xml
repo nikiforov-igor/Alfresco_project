@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Check if delegation is active</shortname>
-	<description>Returns true if delegation is active, else returns false. Parameter nodeRef must point to delegation-opts existing NodeRef</description>
-	<url>/lecm/delegation/is/active?nodeRef={nodeRef}</url>
-	<authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-	<format default="json"/>
-</webscript>

@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>toolbar</shortname>
-	<description>Returns toolbar region content.</description>
-	<url>/lecm/delegation/list/toolbar</url>
-	<format default="html"/>
-	<authentication>user</authentication>
-</webscript>

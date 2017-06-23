@@ -1,1 +1,0 @@
-model.dictionary = arm.getDictionaryArmSettings();

@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>log-copy-attachment</shortname>
-	<description>Log Copy Document Attachment</description>
-	<url>/lecm/document/attachments/api/logCopy?originalNodeRef={originalNodeRef}&amp;copiedNodeRef=${copiedNodeRef}</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-	<transaction>required</transaction>
-</webscript>

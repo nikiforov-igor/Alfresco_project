@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Set document registration number</shortname>
-	<description>Generate registration number for document instance using given template and fill given document property with this number</description>
-	<url>/lecm/regNumbers/setDocumentNumber</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-	<transaction>required</transaction>
-</webscript>

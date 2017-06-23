@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>orgstructure staff-list tree</shortname>
-    <description>Return orgstructure staff-list tree</description>
-    <url>/lecm/orgstructure/staff-list-tree</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

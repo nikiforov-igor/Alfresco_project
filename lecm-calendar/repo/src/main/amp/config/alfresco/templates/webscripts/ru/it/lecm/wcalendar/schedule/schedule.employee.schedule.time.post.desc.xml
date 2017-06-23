@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Get standart schedule time for employee</shortname>
-	<description>Get standart schedule time for employee</description>
-	<url>/lecm/wcalendar/schedule/get/employeeScheduleStdTime</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-	<!--<transaction>required</transaction>-->
-</webscript>

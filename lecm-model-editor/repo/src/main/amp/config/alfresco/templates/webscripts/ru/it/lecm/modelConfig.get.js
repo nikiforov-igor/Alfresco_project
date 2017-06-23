@@ -1,1 +1,0 @@
-model.config = formsEditor.getModelConfigNode(args["modelName"]);

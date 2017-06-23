@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Get Workflows</shortname>
-	<description>Get Workflows</description>
-	<url>/lecm/statemachine/api/workflows</url>
-	<authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-	<format default="json"/>
-</webscript>

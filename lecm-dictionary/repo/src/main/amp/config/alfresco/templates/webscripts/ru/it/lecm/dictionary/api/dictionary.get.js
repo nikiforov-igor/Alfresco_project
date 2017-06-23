@@ -1,1 +1,0 @@
-model.dictionary = dictionary.getDictionaryByName(args["dicName"]);

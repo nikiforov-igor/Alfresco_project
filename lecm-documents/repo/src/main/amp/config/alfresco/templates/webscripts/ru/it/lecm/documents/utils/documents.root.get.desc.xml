@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Documents Journal Root Settings</shortname>
-    <description>Documents Journal Root Settings</description>
-    <url>/lecm/documents-journal/root</url>
-    <format default="json">extension</format>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

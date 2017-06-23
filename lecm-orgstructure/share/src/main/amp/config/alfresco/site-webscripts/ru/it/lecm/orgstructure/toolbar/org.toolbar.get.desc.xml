@@ -1,6 +1,0 @@
-<webscript>
-	<shortname>toolbar</shortname>
-	<description>Orgstructure: Toolbar</description>
-	<url>/lecm/orgstructure/toolbar</url>
-    <authentication>user</authentication>
-</webscript>

@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>document-connections</shortname>
-	<description>
-		Document Connections Component
-		excludeType - тип документа который мы хотим исключить из связанных
-	</description>
-	<url>/lecm/components/document/connections?excludeType={excludeType}</url>
-</webscript>

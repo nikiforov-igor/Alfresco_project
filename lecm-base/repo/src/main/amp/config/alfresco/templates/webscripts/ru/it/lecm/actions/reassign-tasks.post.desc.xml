@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Reassign tasks</shortname>
-	<description>Reassign tasks</description>
-	<url>/lecm/base/action/reassign-tasks</url>
-	<format default="text">extension</format>
-	<authentication>user</authentication>
-	<transaction>required</transaction>
-</webscript>

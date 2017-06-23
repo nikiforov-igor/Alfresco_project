@@ -1,8 +1,0 @@
-<webscript>
-  <shortname>Ignored staffs and unit path</shortname>
-  <description>Ignored staffs and unit path</description>
-    <url>/lecm/deputy/ignored</url>
-  <format default="json"/>
-  <authentication>user</authentication>
-  <transaction allow="readonly">required</transaction>
-</webscript>

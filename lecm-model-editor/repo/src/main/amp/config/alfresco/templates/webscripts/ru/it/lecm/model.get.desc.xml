@@ -1,7 +1,0 @@
-<webscript>
-	<shortname>Model editor: получение описания модели для редактора</shortname>
-	<description>Возвращает модель для редактора</description>
-	<url>/lecm/type/model</url>
-	<format default="json">extension</format>
-	<authentication>user</authentication>
-</webscript>

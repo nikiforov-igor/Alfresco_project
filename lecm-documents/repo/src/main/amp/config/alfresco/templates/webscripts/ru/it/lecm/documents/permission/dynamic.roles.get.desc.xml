@@ -1,9 +1,0 @@
-<webscript>
-    <shortname>Список динамических ролей для текущего пользователя для документа</shortname>
-    <description>Список динамических ролей для текущего пользователя для документа</description>
-    <url>/lecm/documents/dynamicRoles?nodeRef={nodeRef}</url>
-    <format default="json">extension</format>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-    <internal>true</internal>
-</webscript>

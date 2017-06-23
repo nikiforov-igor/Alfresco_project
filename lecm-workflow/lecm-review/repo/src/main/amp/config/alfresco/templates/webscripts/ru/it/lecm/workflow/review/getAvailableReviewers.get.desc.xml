@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Create new assignee item in queue</shortname>
-	<description>Create new assignee item in queue</description>
-	<url>/lecm/workflow/review/getAvailableReviewers?reviewListRef={reviewListRef}</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-	<transaction allow="readonly">required</transaction>
-</webscript>

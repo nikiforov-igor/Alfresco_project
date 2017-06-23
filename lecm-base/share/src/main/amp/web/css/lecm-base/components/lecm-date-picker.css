@@ -1,5 +1,0 @@
-.control.date .calendar-icon.icon-disabled,
-.control.date .calendar-icon.icon-readonly {
-    opacity: 0.4;
-    cursor: auto;
-}

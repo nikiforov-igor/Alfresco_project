@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Get all document types</shortname>
-	<description>Get all document types</description>
-	<url>/lecm/arm/settings/types</url>
-	<format default="json"/>
-	<authentication>user</authentication>
-	<transaction allow="readonly">required</transaction>
-</webscript>

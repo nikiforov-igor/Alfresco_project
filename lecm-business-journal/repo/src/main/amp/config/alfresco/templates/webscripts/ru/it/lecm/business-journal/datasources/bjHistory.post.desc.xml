@@ -1,8 +1,0 @@
-<webscript>
-   <shortname>business journal history</shortname>
-   <description>Business Journal History Webscript</description>
-   <url>/lecm/business-journal/ds/history</url>
-   <format default="json">argument</format>
-   <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

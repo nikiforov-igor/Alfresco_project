@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ReposioryPermissions>
-    <BusinessRole id="*">
-        <Permission object="." permissionGroup="ReadProperties" inheritPermissions="false"/>
-        <Permission object="." permissionGroup="ReadChildren" inheritPermissions="false"/>
-    </BusinessRole>
-</ReposioryPermissions>

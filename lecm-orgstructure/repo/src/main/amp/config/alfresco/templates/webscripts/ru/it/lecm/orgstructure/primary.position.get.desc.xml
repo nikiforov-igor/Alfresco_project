@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Main job</shortname>
-    <description>Returns primary position</description>
-    <url>/lecm/orgstructure/getPrimaryPosition</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

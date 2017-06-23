@@ -1,9 +1,0 @@
-<webscript>
-  <shortname>Document duplicate</shortname>
-  <description>Duplicate document</description>
-  <url>/lecm/document/api/duplicate/node/{store_type}/{store_id}/{id}</url>
-  <format default="json">argument</format>
-  <authentication>user</authentication>
-  <transaction>required</transaction>
-  <lifecycle>internal</lifecycle>
-</webscript>

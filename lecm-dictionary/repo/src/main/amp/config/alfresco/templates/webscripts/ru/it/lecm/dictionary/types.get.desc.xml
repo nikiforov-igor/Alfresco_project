@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Dictionary data types</shortname>
-	<description>Get dictionary data types avaliable for creation</description>
-	<url>/lecm/dictionary/dataTypes</url>
-	<format default="json"/>
-	<authentication>user</authentication>
-	<transaction allow="readonly">required</transaction>
-</webscript>

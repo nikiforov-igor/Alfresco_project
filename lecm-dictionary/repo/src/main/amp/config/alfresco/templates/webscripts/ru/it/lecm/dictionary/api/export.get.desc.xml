@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>ExportAPI</shortname>
-    <description>Export</description>
-    <url>/lecm/dictionary/api/export</url>
-    <format default="xml">extension</format>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

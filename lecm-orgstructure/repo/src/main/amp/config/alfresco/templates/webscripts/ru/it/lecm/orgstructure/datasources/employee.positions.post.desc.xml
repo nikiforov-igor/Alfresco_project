@@ -1,9 +1,0 @@
-<webscript>
-   <shortname>employee positions</shortname>
-   <description>Employee Positions Data Webscript</description>
-   <url>/lecm/orgstructure/ds/employee-positions</url>
-   <format default="json">argument</format>
-   <authentication>user</authentication>
-   <transaction allow="readonly">required</transaction>
-   <lifecycle>internal</lifecycle>
-</webscript>

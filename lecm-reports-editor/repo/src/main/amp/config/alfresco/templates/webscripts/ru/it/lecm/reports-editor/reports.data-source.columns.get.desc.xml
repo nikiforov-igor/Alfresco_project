@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Report Template</shortname>
-    <description>Report Template</description>
-    <url>/lecm/reports-editor/getDataSourceColumns?dataSourceId={dataSourceId}</url>
-    <format default="json"></format>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

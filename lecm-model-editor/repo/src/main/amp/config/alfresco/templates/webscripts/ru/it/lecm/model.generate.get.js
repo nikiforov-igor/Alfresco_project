@@ -1,1 +1,0 @@
-model.success = formsEditor.generateModelForms(args["modelName"]);

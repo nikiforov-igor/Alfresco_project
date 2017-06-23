@@ -19,9 +19,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>ru.it.lecm</groupId>
-    <artifactId>platform</artifactId>
+    <artifactId>eds</artifactId>
     <packaging>pom</packaging>
-    <name>Logic ECM Platform</name>
+    <name>Logic ECM EDS</name>
     <!--
        An Alfresco version number must be of the form 1.2.3.4. Using
        1.0-SNAPSHOT as the AMP version will create an exception. See
@@ -33,7 +33,7 @@
        buildnumber-maven-plugin. This requires a scm connection.
     -->
     <version>2.1-SNAPSHOT</version>
-    <description>Logic ECM Platform</description>
+    <description>Logic ECM EDS</description>
     <distributionManagement>
         <repository>
             <id>lecm-repo</id>
@@ -81,7 +81,8 @@
         <slf4j.version>1.7.12</slf4j.version>
         <spring.security.version>3.1.3.RELEASE</spring.security.version>
         <acegisecurity.version>0.8.2_patched</acegisecurity.version>
-        <platform.version>${project.version}</platform.version>
+        <platform.version>2.1-SNAPSHOT</platform.version>
+        <eds.version>${project.version}</eds.version>
         <buildNumber>0</buildNumber>
         <client.debug>false</client.debug>
         <module.log.level>info</module.log.level>
@@ -100,41 +101,18 @@
     </properties>
 
     <modules>
-        <module>lecm-base</module>
-        <module>lecm-security</module>
-        <module>lecm-orgstructure</module>
-        <module>lecm-jasperreports-forms</module>
-        <module>lecm-dictionary</module>
-        <module>lecm-statemachine</module>
-        <module>lecm-statemachine-editor</module>
-        <module>lecm-theme</module>
-        <module>lecm-delegation</module>
-        <module>lecm-subscriptions</module>
-        <module>lecm-notifications</module>
-        <module>lecm-notifications-email</module>
-        <module>lecm-notifications-dashlet</module>
-        <module>lecm-notifications-active-channel</module>
-        <module>lecm-business-journal</module>
-        <module>lecm-calendar</module>
-        <module>lecm-user-profile</module>
-        <module>lecm-documents</module>
-        <module>lecm-regnumbers</module>
-        <module>lecm-contractors</module>
-        <module>lecm-reports-editor</module>
-        <module>lecm-permission-exp</module>
-        <module>lecm-signed-docflow</module>
-        <module>lecm-documents-removal</module>
-		<module>lecm-model-editor</module>
-		<module>lecm-arm</module>
-		<module>lecm-workflow</module>
-		<module>lecm-group-actions</module>
-		<module>lecm-types-view</module>
-		<module>lecm-barcode</module>
-		<module>lecm-events</module>
-        <module>lecm-search-editor</module>
-        <module>lecm-documents-templates</module>
-        <module>lecm-reporting</module>
-        <!--<module>lecm-mobile</module>-->
+        <module>lecm-contracts</module>
+        <module>lecm-errands</module>
+        <module>lecm-eds-documents</module>
+        <module>lecm-operative-storage</module>
+        <module>lecm-meetings</module>
+        <module>lecm-incoming</module>
+        <module>lecm-outgoing</module>
+        <module>lecm-internal</module>
+        <module>lecm-ord</module>
+        <module>lecm-nd</module>
+        <module>lecm-resolutions</module>
+        <module>lecm-reservation</module>
     </modules>
     <scm>
         <connection>scm:svn:https://svn.datateh.ru/alfrescoecm/Business Platform/trunk/</connection>
@@ -163,42 +141,42 @@
             </dependency>
 
 			<dependency>
-                            <groupId>org.alfresco</groupId>
-                            <artifactId>alfresco-core</artifactId>
-                            <version>5.6</version>
-                            <scope>provided</scope>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.alfresco</groupId>
-                            <artifactId>alfresco-platform</artifactId>
-                            <version>${alfresco.version}</version>
-                            <classifier>classes</classifier>
-                            <scope>provided</scope>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.alfresco</groupId>
-                            <artifactId>alfresco-data-model</artifactId>
-                            <version>${alfresco.version}</version>
-                            <scope>provided</scope>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.alfresco</groupId>
-                            <artifactId>alfresco-remote-api</artifactId>
-                            <version>${alfresco.version}</version>
-                            <scope>provided</scope>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.alfresco</groupId>
-                            <artifactId>alfresco-repository</artifactId>
-                            <version>${alfresco.version}</version>
-                            <scope>provided</scope>
-                            <exclusions>
-			                	<exclusion>
-			                        <groupId>com.lowagie</groupId>
-			                        <artifactId>itext</artifactId>
-			                    </exclusion>
-			                </exclusions>
-                        </dependency>
+                <groupId>org.alfresco</groupId>
+                <artifactId>alfresco-core</artifactId>
+                <version>5.6</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.alfresco</groupId>
+                <artifactId>alfresco-platform</artifactId>
+                <version>${alfresco.version}</version>
+                <classifier>classes</classifier>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.alfresco</groupId>
+                <artifactId>alfresco-data-model</artifactId>
+                <version>${alfresco.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.alfresco</groupId>
+                <artifactId>alfresco-remote-api</artifactId>
+                <version>${alfresco.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.alfresco</groupId>
+                <artifactId>alfresco-repository</artifactId>
+                <version>${alfresco.version}</version>
+                <scope>provided</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.lowagie</groupId>
+                        <artifactId>itext</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
 
             <dependency>
                 <groupId>org.alfresco</groupId>
@@ -806,12 +784,6 @@
             </properties>
         </profile>
         <profile>
-            <id>lecmIM</id>
-            <modules>
-                <module>lecm-im</module>
-            </modules>
-        </profile>
-        <profile>
             <id>logger-all-debug</id>
             <properties>
                 <module.log.level>debug</module.log.level>
@@ -825,32 +797,5 @@
                 <redeploy.process.definitions>true</redeploy.process.definitions>
             </properties>
         </profile>
-		<profile>
-            <id>SED</id>
-            <modules>
-				<module>lecm-contracts</module>
-				<module>lecm-errands</module>
-				<module>lecm-eds-documents</module>
-				<module>lecm-operative-storage</module>
-				<module>lecm-meetings</module>
-                <module>lecm-incoming</module>
-                <module>lecm-outgoing</module>
-                <module>lecm-internal</module>
-                <module>lecm-ord</module>
-                <module>lecm-nd</module>
-                <module>lecm-resolutions</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>non-production-modules</id>
-            <modules>
-                <module>lecm-semantic-assist</module>
-                <module>lecm-iReferent-integration</module>
-                <module>lecm-experts</module>
-                <module>lecm-scaner</module>
-                <module>lecm-diagnostic-utility</module>
-            </modules>
-        </profile>
     </profiles>
-
 </project>

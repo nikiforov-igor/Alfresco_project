@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>current employee</shortname>
-	<description>Return current employee</description>
-	<url>/lecm/orgstructure/api/getCurrentEmployee</url>
-	<format default="json"/>
-	<authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

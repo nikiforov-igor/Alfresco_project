@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Roots</shortname>
-    <description>Returns roots of organization strucuture</description>
-    <url>/lecm/orgstructure/root/{root_type}</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

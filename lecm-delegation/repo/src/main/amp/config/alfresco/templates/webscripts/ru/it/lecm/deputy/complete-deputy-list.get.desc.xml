@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Get complete deputies list for employee</shortname>
-	<description>Get complete deputies list for employee</description>
-	<url>/lecm/deputy/getCompleteDeputiesList</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-</webscript>

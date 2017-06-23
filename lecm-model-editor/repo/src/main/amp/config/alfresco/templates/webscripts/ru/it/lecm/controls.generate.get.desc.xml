@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Controls editor: Генерация контролов</shortname>
-	<description>Генерация контролов для заданного типа данных</description>
-	<url>/lecm/controls/generate?typename={typename}</url>
-	<format default="json"/>
-	<authentication>admin</authentication>
-	<transaction>required</transaction>
-</webscript>

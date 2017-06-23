@@ -1,6 +1,0 @@
-<webscript>
-  <shortname>Config service</shortname>
-  <description>Reset config</description>
-  <url>/config</url>
-  <format default="json">argument</format>
-</webscript>

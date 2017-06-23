@@ -1,1 +1,0 @@
-model.result = arm.getAvailableNodeFields(args["nodeRef"]);

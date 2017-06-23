@@ -1,6 +1,0 @@
-<webscript>
-    <shortname>Group actions: получение корневого узла сервиса групповых операций</shortname>
-    <description>Возвращает корневой узел сервиса групповых операций</description>
-    <url>/lecm/groupActions/root</url>
-    <authentication>user</authentication>
-</webscript>

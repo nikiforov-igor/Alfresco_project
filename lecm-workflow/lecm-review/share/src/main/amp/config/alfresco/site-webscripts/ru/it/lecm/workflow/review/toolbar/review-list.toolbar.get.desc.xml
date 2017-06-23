@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Review list toolbar</shortname>
-    <description>Review list toolbar</description>
-    <url>/lecm/workflow/review/toolbar</url>
-    <format default="html"/>
-    <authentication>user</authentication>
-</webscript>

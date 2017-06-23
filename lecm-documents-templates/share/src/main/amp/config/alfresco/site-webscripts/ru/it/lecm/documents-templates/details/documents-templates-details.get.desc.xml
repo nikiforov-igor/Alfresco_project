@@ -1,7 +1,0 @@
-<webscript>
-	<shortname>Documents templates details</shortname>
-	<description>DetailsView showing current document template</description>
-	<url>/lecm/documents-templates/details</url>
-	<format default="html"/>
-	<authentication>user</authentication>
-</webscript>

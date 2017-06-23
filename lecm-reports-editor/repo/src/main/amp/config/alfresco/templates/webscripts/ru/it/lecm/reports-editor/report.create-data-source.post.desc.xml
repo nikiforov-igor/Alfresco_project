@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Create Report DS</shortname>
-    <description>Create Report DS</description>
-    <url>/lecm/reports-editor/create-report-source</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-</webscript>

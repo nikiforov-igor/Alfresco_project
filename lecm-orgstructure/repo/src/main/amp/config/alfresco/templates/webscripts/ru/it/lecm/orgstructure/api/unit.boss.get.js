@@ -1,1 +1,0 @@
-model.boss = orgstructure.findUnitBoss(args["nodeRef"]);

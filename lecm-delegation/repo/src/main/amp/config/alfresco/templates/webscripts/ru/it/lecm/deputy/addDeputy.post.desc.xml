@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-   <shortname>Add/remove deputies for employee</shortname>
-   <description>Add/remove deputies for employee</description>
-   <url>/lecm/deputy/{store_type}/{store_id}/{id}/add</url>
-   <authentication>user</authentication>
-   <format default="json"/>
-   <transaction allow="readwrite">required</transaction>
-</webscript>

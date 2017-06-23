@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>wcalendar-absence-summary-table-wrapper</shortname>
-	<description>Work Calendar: Absence Summary Table wrapped to reload dynamically</description>
-	<format default="html"/>
-	<url>/ru/it/lecm/wcalendar/absence/absence-summary-table-wrapper</url>
-	<authentication>user</authentication>
-</webscript>

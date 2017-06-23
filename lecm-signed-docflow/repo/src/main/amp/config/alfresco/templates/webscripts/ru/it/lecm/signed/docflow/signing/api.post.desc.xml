@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Signed docflow signing api</shortname>
-	<description>Provide methods for signing, retrieving information, updating signatures</description>
-	<url>/lecm/signed-docflow/signing/{actor}</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-	<transaction>required</transaction>
-</webscript>

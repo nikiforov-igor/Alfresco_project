@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<webscript>
-    <shortname>Динамические роли</shortname>
-    <description>Редактирование состава динамических ролей документа администратором</description>
-    <url>/lecm/document/admin/managementDynamicRoles</url>
-</webscript>

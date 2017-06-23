@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-   <shortname>Extended list of deputies of current user</shortname>
-   <description>Extended list of deputies of current user</description>
-   <url>/lecm/deputy/curUserExtended</url>
-   <authentication>user</authentication>
-   <format default="json"/>
-   <transaction allow="readwrite">required</transaction>
-</webscript>

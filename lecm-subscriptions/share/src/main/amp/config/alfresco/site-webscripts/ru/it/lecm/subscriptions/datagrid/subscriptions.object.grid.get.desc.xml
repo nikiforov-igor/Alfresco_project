@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Subscriptions to object datagrid</shortname>
-    <description>Return subscriptions to object datagrid</description>
-    <url>/lecm/subscriptions/to-object-datagrid</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

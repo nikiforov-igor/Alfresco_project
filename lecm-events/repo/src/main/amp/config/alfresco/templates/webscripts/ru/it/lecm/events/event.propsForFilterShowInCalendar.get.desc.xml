@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Return propsForFilterShowInCalendar, joined to string</shortname>
-    <description>Return propsForFilterShowInCalendar, joined to string</description>
-    <url>/lecm/events/getPropsForFilterShowInCalendar</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

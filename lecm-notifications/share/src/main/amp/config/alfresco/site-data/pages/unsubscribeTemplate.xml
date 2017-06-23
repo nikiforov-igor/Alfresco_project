@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-    <title>Отключение отправки уведомлений</title>
-    <description>Отключение отправки уведомлений</description>
-    <template-instance>unsubscribeTemplate</template-instance>
-    <authentication>user</authentication>
-</page>

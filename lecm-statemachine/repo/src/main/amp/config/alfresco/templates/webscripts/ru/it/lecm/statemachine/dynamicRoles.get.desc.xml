@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Список динамических ролей для документов</shortname>
-    <description>Получение списка динамических ролей для машины состояний документа</description>
-    <url>/lecm/statemachine/getDynamicRoles?nodeRef={nodeRef}</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

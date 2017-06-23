@@ -1,1 +1,0 @@
-model.link = orgstructure.getEmployeeLink(args["nodeRef"]);

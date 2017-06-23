@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Event Members. Return busy time for date and employee list</shortname>
-    <description>Event Members. Return busy time for date and employee list</description>
-    <url>/lecm/events/members/busytime</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

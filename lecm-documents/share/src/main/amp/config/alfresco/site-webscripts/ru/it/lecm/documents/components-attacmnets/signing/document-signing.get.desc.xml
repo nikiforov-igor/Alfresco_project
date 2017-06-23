@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<webscript>
-	<shortname>document-signing</shortname>
-	<description>Document Signing Component</description>
-	<url>/lecm/components/document/attachment/signing</url>
-</webscript>

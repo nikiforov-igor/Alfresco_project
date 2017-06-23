@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>wcalendar-absence-instant-page</shortname>
-	<description>Work Calendar: Instant absence viewed as a page</description>
-	<format default="html"/>
-	<url>/ru/it/lecm/wcalendar/absence/absence-instant-page</url>
-	<authentication>user</authentication>
-</webscript>

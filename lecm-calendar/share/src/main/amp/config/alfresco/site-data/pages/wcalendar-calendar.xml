@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-	<title>Рабочий календарь</title>
-	<title-id>page.wcalendar.title</title-id>
-	<description>Календарь рабочего времени</description>
-	<description-id>page.wcalendar.description</description-id>
-	<template-instance>wcalendar</template-instance>
-	<authentication>user</authentication>
-</page>

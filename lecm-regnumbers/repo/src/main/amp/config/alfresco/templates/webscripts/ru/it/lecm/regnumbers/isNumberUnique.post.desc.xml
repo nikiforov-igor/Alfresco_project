@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Check uniqueness of registation number</shortname>
-	<description>Check if some documents already have given registation number</description>
-	<url>/lecm/regNumbers/isNumberUnique</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-	<transaction allow="readonly">required</transaction>
-</webscript>

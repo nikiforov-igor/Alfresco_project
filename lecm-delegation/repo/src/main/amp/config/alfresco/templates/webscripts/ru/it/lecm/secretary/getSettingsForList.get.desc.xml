@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Get container for secretary options</shortname>
-	<description>Get container for secretary options</description>
-	<url>/lecm/secretary/getSettingsForList</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-</webscript>

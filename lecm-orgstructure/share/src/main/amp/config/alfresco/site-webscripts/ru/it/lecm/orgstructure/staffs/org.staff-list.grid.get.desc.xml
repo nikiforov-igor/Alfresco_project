@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>orgstructure staff-list datagrid</shortname>
-    <description>Return orgstructure staff-list datagrid</description>
-    <url>/lecm/orgstructure/staff-list-datagrid</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

@@ -1,7 +1,0 @@
-<webscript>
-	<shortname>Statemachine Editor Module Deploy page</shortname>
-	<description>Statemachine Editor Module Deploy page</description>
-	<url>/lecm/statemachine/deploy</url>
-	<format default="html">extension</format>
-	<authentication>user</authentication>
-</webscript>

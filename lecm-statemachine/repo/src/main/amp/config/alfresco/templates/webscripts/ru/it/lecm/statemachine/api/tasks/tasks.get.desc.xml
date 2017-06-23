@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Get Tasks</shortname>
-	<description>Get Tasks</description>
-	<url>/lecm/statemachine/api/tasks</url>
-	<authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-	<format default="json"/>
-</webscript>

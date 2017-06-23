@@ -1,3 +1,0 @@
-{
-    "assigneesListsFolderRef": "${assigneesListsFolderRef}"
-}

@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Set days to complete property</shortname>
-	<url>/lecm/workflow/setDaysToComplete</url>
-	<authentication>user</authentication>
-	<format default="json">extension</format>
-	<transaction>required</transaction>
-</webscript>

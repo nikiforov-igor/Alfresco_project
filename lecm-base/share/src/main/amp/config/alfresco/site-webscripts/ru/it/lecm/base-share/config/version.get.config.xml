@@ -1,4 +1,0 @@
-<versionRoot>
-    <share>${lecm.share.version}</share>
-    <buildVersion>${noSnapshotVersion}.${buildNumber}</buildVersion>
-</versionRoot>

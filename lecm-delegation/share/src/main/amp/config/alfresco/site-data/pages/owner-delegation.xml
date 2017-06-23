@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<page>
-    <title>Замещение</title>
-    <title-id>page.delegation.title</title-id>
-    <description>Замещение</description>
-    <description-id>page.delegation.description</description-id>
-    <template-instance>owner-delegation</template-instance>
-    <authentication>user</authentication>
-</page>

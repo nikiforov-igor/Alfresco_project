@@ -1,9 +1,0 @@
-<webscript>
-    <shortname>Zxcv</shortname>
-    <description>Asdf</description>
-    <url>/lecm/orgstructure/ds/getEmployeesByBusinessRoleId</url>
-    <format default="json">extension</format>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-    <lifecycle>internal</lifecycle>
-</webscript>

@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Get document page name</shortname>
-    <description>Document Page Name</description>
-    <url>/lecm/document/attachments/api/getDocumentPage?documentNodeRef={documentNodeRef}</url>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-    <format default="json"/>
-</webscript>

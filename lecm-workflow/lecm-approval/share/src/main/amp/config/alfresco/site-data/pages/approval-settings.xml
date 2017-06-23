@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<page>
-	<title>Настройки согласования</title>
-	<title-id>page.approval-settings.title</title-id>
-	<description>Глобальные настройки процесса согласования</description>
-	<description-id>page.approval-settings.description</description-id>
-	<template-instance>approval-settings</template-instance>
-	<authentication>user</authentication>
-</page>

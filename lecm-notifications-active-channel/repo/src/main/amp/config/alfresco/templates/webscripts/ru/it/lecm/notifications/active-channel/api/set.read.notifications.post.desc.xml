@@ -1,9 +1,0 @@
-<webscript>
-  <shortname>setRead</shortname>
-  <description>Set read notifications</description>
-  <url>/lecm/notifications/active-channel/api/set/read</url>
-  <format default="json">argument</format>
-  <authentication>user</authentication>
-  <transaction>required</transaction>
-  <lifecycle>internal</lifecycle>
-</webscript>

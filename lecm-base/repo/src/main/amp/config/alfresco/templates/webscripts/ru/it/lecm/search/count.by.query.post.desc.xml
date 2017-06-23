@@ -1,9 +1,0 @@
-<webscript>
-    <shortname>Counter Elements</shortname>
-    <description>Counter Elements Webscript</description>
-    <url>/lecm/count/by-query</url>
-    <format default="json">argument</format>
-    <authentication>user</authentication>
-    <transaction>required</transaction>
-    <lifecycle>internal</lifecycle>
-</webscript>

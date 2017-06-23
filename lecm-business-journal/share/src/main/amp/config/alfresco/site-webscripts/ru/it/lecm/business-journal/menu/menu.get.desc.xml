@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>menu</shortname>
-    <description>Returns the business journal menu.</description>
-    <url>/lecm/business-journal/menu</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

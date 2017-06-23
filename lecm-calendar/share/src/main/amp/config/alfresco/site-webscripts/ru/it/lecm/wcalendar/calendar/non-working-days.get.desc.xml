@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>wcalendar-calendar-non-working-days</shortname>
-	<description>Work Calendar: Non-working Days</description>
-	<format default="html"/>
-	<url>/ru/it/lecm/wcalendar/calendar/non-working-days</url>
-	<authentication>user</authentication>
-</webscript>

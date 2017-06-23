@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>orgstructure ARM tree</shortname>
-    <description>Return orgstructure ARM tree</description>
-    <url>/lecm/orgstructure/arm/tree</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

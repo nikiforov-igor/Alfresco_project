@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>orgstructure positions datagrid</shortname>
-    <description>Return orgstructure positions datagrid</description>
-    <url>/lecm/orgstructure/positions-datagrid</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

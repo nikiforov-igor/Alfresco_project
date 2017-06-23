@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>procuracy-datagrid</shortname>
-	<description>Returns datagrid with procuracies</description>
-	<url>/lecm/delegation/procuraciesDatagrid</url>
-	<format default="html"/>
-	<authentication>user</authentication>
-</webscript>

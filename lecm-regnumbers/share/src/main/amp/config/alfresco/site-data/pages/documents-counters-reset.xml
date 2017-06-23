@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-	<title>Сброс счетчиков документов</title>
-	<title-id>page.documents-counters-reset.title</title-id>
-	<description>Сброс счетчиков документов</description>
-	<description-id>page.documents-counters-reset.description</description-id>
-	<template-instance>documents-counters-reset</template-instance>
-	<authentication>user</authentication>
-</page>

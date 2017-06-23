@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Get employee working day with offset</shortname>
-	<description>Get employee working day with offset</description>
-	<url>/lecm/wcalendar/workCalendar/getEmployeeNextWorkingDay</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-</webscript>

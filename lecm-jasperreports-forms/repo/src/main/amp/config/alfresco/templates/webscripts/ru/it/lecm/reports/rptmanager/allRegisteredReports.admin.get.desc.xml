@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Get all registered reports for text-checkboxes-control.ftl</shortname>
-	<description>Get all registered reports for text-checkboxes-control.ftl</description>
-	<url>/lecm/reports/rptmanager/allRegisteredReports</url>
-	<format default="json"/>
-	<authentication>admin</authentication>
-	<transaction allow="readonly">required</transaction>
-</webscript>

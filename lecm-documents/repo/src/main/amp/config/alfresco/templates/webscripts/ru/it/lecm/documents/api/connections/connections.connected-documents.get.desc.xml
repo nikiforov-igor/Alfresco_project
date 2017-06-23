@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>connected-documents</shortname>
-	<description>Get Connected Documents</description>
-	<url>/lecm/document/connections/api/documents/connected?nodeRef={nodeRef}</url>
-	<authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-	<format default="json"/>
-</webscript>

@@ -1,7 +1,0 @@
-<webscript>
-	<shortname>Statemachine Export</shortname>
-	<description>Statemachine Export</description>
-	<url>/lecm/statemachine/editor/export</url>
-	<format default="json">extension</format>
-	<authentication>user</authentication>
-</webscript>

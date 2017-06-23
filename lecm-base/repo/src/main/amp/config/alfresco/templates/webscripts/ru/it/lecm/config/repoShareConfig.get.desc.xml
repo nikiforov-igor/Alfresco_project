@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>ExportAPI</shortname>
-    <description>Export</description>
-    <url>/lecm/base/getRepoShareConfig</url>
-    <authentication>none</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

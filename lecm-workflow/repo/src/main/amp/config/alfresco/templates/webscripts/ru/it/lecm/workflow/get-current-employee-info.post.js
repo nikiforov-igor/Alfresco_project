@@ -1,1 +1,0 @@
-model.result = lecmWorkflowService.getCurrentEmployeeInfo();

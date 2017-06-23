@@ -1,9 +1,0 @@
-<webscript>
-	<shortname>Restore Data Model</shortname>
-	<description>Restore Data Model</description>
-	<url>/lecm/models/restore?modelName=${modelName}</url>
-	<format default="json">argument</format>
-	<authentication>admin</authentication>
-	<transaction>required</transaction>
-	<lifecycle>internal</lifecycle>
-</webscript>

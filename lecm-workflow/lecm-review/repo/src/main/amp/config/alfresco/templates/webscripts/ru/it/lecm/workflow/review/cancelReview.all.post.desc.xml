@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Cancel all review by current user</shortname>
-	<description>Cancel all review by current user</description>
-	<url>/lecm/workflow/review/cancelReview/all</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-	<transaction>required</transaction>
-</webscript>

@@ -1,9 +1,0 @@
-<webscript>
-  <shortname>makePrimary</shortname>
-  <description>Make primary</description>
-  <url>/lecm/orgstructure/action/makePrimary</url>
-  <format default="json">argument</format>
-  <authentication>user</authentication>
-  <transaction>required</transaction>
-  <lifecycle>internal</lifecycle>
-</webscript>

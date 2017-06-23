@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-	<title>Настройка апплета для ЮЗД</title>
-	<title-id>Настройка апплета для ЮЗД</title-id>
-	<description>Профиль пользователя. Управление параметрами апплета для ЮЗД</description>
-	<description-id>Профиль пользователя. Управление параметрами апплета для ЮЗД</description-id>
-	<template-instance>my-applet-settings</template-instance>
-	<authentication>user</authentication>
-</page>

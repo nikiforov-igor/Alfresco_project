@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>wcalendar-schedule</shortname>
-	<description>Work Calendar: Schedule</description>
-	<format default="html"/>
-	<url>/ru/it/lecm/wcalendar/schedule/schedule</url>
-	<authentication>user</authentication>
-</webscript>

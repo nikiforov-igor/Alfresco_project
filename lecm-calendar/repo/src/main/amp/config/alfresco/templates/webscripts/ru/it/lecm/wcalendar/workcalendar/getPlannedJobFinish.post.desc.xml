@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>When some job will be finished</shortname>
-	<description>Get the date, when particular employee will finish some job, which takes given number of days</description>
-	<url>/lecm/wcalendar/workCalendar/getPlannedJobFinish</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-</webscript>

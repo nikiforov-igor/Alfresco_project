@@ -1,7 +1,0 @@
-<webscript>
-	<shortname>List of Statemachines</shortname>
-	<description>List of Statemachines</description>
-	<url>/lecm/statemachine/editor/list</url>
-	<format default="json">extension</format>
-	<authentication>user</authentication>
-</webscript>

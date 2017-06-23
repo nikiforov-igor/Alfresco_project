@@ -1,1 +1,0 @@
-model.photo = orgstructure.getEmployeePhoto(args["nodeRef"]);

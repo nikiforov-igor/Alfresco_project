@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>getEffectiveExecutor</shortname>
-	<description>Get exetutor for employee and business role</description>
-	<url>/lecm/delegation/getEffectiveExecutor?nodeRef={nodeRef}&amp;businessRole={businessRole}</url>
-	<format default="json"/>
-	<authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

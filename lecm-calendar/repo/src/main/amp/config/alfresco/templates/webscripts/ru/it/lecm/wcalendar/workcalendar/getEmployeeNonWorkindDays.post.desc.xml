@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Get non-working days of employee</shortname>
-	<description>Get the list of all non-working days of the employee at given period</description>
-	<url>/lecm/wcalendar/workCalendar/getEmployeeNonWorkingDays</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-</webscript>

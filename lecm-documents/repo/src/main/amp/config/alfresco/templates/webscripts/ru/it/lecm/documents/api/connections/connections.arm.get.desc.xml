@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-    <shortname>Разметка со связями для АРМ</shortname>
-    <description>Разметка со связями для АРМ</description>
-    <url>/lecm/document/connections/api/armPresentation</url>
-	<format default="html">argument</format>
-    <authentication>user</authentication>
-</webscript>

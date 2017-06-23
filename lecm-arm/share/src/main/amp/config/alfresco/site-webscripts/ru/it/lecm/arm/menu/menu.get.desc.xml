@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>ARM menu</shortname>
-    <description>Returns the ARM menu.</description>
-    <url>/lecm/arm/menu</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

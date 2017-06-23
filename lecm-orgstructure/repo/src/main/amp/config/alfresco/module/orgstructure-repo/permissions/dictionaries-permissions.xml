@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ReposioryPermissions>
-	<BusinessRole id="BR_ORGSTRUCTURE_ENGINEER">
-		<Permission object="Бизнес роли" permissionGroup="Collaborator"/>
-		<Permission object="Контрагенты" permissionGroup="Coordinator"/>
-		<Permission object="Должностные позиции" permissionGroup="Coordinator"/>
-		<Permission object="Роли для рабочих групп" permissionGroup="Coordinator"/>
-	</BusinessRole>
-</ReposioryPermissions>

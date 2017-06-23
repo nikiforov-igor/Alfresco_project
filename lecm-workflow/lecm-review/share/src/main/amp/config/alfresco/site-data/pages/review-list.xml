@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<page>
-    <title>Списки ознакомления</title>
-    <title-id>page.review-list.title</title-id>
-    <description>Списки ознакомления</description>
-    <description-id>page.review-list.description</description-id>
-    <template-instance>review-list</template-instance>
-    <authentication>user</authentication>
-</page>

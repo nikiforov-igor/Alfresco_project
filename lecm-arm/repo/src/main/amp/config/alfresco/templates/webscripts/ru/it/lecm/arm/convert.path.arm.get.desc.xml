@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>ARM: Преобразование пути из строки в набор идентификаторов</shortname>
-    <description>ARM: Преобразование пути из строки в набор идентификаторов</description>
-	<url>/lecm/arm/convert</url>
-	<format default="json">extension</format>
-	<authentication>user</authentication>
-	<transaction allow="readonly">required</transaction>
-</webscript>

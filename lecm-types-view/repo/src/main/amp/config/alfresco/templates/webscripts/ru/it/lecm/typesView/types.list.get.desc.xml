@@ -1,7 +1,0 @@
-<webscript>
-	<shortname>Types list</shortname>
-	<description>Show all types list</description>
-	<url>/lecm/typesView/list</url>
-	<format default="html">extension</format>
-	<authentication>admin</authentication>
-</webscript>

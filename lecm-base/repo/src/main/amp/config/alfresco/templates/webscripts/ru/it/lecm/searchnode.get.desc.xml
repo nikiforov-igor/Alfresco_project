@@ -1,9 +1,0 @@
-<webscript>
-    <shortname>Base: получение информации о ноде</shortname>
-    <description>Возвращает метаданные узла</description>
-    <url>/lecm/forms/node/search/{store_type}/{store_id}/{id}</url>
-    <url>/lecm/forms/node/search</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

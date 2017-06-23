@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Unregister Report</shortname>
-	<description>Unregister old report by descriptor mnemocode (also deletes ds-xml file)</description>
-	<url>/lecm/reports/rptmanager/undeployReport?reportCode={reportCode}</url>
-	<authentication>user</authentication>
-	<format default="json">extension</format>
-	<transaction>required</transaction>
-</webscript>

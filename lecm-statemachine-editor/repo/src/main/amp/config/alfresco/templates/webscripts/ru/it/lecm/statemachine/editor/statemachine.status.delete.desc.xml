@@ -1,7 +1,0 @@
-<webscript>
-	<shortname>User Statuses for Statemachine</shortname>
-	<description>User Statuses for Statemachine</description>
-	<url>/lecm/statemachine/editor/status</url>
-	<format default="json">extension</format>
-	<authentication>user</authentication>
-</webscript>

@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>create-connection</shortname>
-	<description>Create Document Connection</description>
-	<url>/lecm/document/connections/api/create?primaryDocumentNodeRef={primaryDocumentNodeRef}&amp;connectedDocumentNodeRef={connectedDocumentNodeRef}&amp;typeNodeRef={typeNodeRef}</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-	<transaction>required</transaction>
-</webscript>

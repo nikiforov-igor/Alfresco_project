@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Get reservation task message by nodeRef</shortname>
-	<description>et reservation task message by nodeRef</description>
-	<url>/lecm/workflow/reservation/GetReservationTaskMessageByNodeRef</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-	<transaction allow="readonly">required</transaction>
-</webscript>

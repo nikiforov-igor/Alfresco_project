@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>crypto-applet-user-settings</shortname>
-    <description>Crypto applet user settings</description>
-	<url>/lecm/signed/docflow/applet-settings</url>
-	<format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

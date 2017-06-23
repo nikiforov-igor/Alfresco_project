@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Org Dictionary Tree</shortname>
-    <description>Org Dictionary Tree</description>
-    <url>/lecm/orgstructure/dictionary/branch</url>
-    <format default="json">extension</format>
-    <authentication>user</authentication>
-    <transaction readonly="true">required</transaction>
-</webscript>

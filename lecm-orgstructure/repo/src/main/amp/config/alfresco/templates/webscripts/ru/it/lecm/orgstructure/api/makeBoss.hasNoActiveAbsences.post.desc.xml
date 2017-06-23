@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>if makeBoss target employees has NO active absences</shortname>
-    <description>Return true if both of employees (for target staff and source staff) has NO active absences</description>
-    <url>/lecm/orgstructure/api/makeBossHasNoAbsences</url>
-    <format default="json" />
-    <authentication>user</authentication>
-</webscript>

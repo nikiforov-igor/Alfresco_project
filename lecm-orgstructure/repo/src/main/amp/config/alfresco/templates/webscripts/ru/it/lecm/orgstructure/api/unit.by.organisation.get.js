@@ -1,1 +1,0 @@
-model.unit = orgstructure.getUnitByOrganization(search.findNode(args["nodeRef"]));

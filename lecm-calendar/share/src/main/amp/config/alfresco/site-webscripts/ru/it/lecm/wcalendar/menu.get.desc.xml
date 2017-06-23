@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-  <shortname>wcalendar-menu</shortname>
-  <description>Work Calendar: Menu</description>
-  <format default="html"/>
-  <url>/ru/it/lecm/wcalendar/menu</url>
-  <authentication>user</authentication>
-</webscript>

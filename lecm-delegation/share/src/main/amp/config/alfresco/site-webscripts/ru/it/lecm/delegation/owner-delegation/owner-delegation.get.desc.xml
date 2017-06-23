@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>owner-delegation</shortname>
-	<description>Returns owner delegation region content.</description>
-	<url>/lecm/delegation/owner/content</url>
-	<format default="html"/>
-	<authentication>user</authentication>
-	<transaction allow="readonly">required</transaction>
-</webscript>

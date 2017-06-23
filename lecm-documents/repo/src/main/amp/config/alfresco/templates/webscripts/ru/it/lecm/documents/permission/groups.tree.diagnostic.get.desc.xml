@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Дерево привилегий</shortname>
-    <description>Дерево привилегий </description>
-    <url>/lecm/documents/aclTree</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

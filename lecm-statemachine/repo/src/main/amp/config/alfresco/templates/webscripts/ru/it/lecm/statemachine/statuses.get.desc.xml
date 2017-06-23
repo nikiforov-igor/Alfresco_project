@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Список статусов для документов</shortname>
-    <description>Получение списка статусов для машины состояний документа"</description>
-    <url>/lecm/statemachine/getStatuses?docType={docType}&amp;active={active}&amp;final={final}</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

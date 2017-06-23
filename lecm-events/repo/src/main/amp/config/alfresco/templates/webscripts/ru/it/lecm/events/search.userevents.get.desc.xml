@@ -1,9 +1,0 @@
-<webscript>
-    <shortname>Search User Events</shortname>
-    <description>Search User Events</description>
-    <url>/lecm/events/search</url>
-    <format default="json">argument</format>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-    <lifecycle>internal</lifecycle>
-</webscript>

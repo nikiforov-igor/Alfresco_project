@@ -1,6 +1,0 @@
-<webscript>
-	<shortname>Reports Editor Module select source page</shortname>
-	<description>Reports Editor Module select source  page</description>
-	<url>/lecm/reports-editor/source-select</url>
-	<format default="html">extension</format>
-</webscript>

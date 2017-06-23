@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Get container for delegation options</shortname>
-	<description>Create and return folder for storing delegation options</description>
-	<url>/lecm/delegation/get/description/for/{page}?nodeRef={nodeRef?}</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-</webscript>

@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Document Member Create</shortname>
-	<description>Document MemberCreate</description>
-	<url>/lecm/document/api/member/add</url>
-    <authentication>user</authentication>
-    <format default="json"/>
-    <transaction>required</transaction>
-</webscript>

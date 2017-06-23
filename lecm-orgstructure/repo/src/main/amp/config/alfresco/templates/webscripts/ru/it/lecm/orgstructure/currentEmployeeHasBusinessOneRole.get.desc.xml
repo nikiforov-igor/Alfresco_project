@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Get permission</shortname>
-    <description>Get Permission</description>
-    <url>/lecm/orgstructure/isCurrentEmployeeHasBusinessOneRole?rolesId={rolesId}</url>
-    <format default="json">extension</format>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

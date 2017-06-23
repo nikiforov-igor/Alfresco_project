@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<webscript>
-  <shortname>Служебная информация</shortname>
-  <description>Страница для просмотра служебной информации документа</description>
-  <url>/lecm/document/information/showServiceInformation</url>
-</webscript>

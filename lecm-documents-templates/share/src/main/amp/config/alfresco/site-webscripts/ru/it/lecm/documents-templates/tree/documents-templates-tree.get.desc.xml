@@ -1,7 +1,0 @@
-<webscript>
-	<shortname>Documents templates tree</shortname>
-	<description>TreeView showing creation templates for various document types</description>
-	<url>/lecm/documents-templates/tree</url>
-	<format default="html"/>
-	<authentication>user</authentication>
-</webscript>

@@ -1,7 +1,0 @@
-<webscript>
-  <shortname>Получение разметки контрола</shortname>
-  <description>Скрипт для отображения контрола с заданными параметрами</description>
-  <url>/lecm/components/control</url>
-  <authentication>user</authentication>
-  <transaction allow="readonly">required</transaction>
-</webscript>

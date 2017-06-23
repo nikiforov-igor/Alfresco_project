@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>category-by-attachment</shortname>
-	<description>Get Attachments Category By Attachment</description>
-	<url>/lecm/document/attachments/api/getCategoryByAttachment?nodeRef={nodeRef}</url>
-	<authentication runas="admin">none</authentication>
-	<format default="json"/>
-    <transaction allow="readonly">required</transaction>
-</webscript>

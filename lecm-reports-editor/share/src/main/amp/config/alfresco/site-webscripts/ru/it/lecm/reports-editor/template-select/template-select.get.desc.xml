@@ -1,6 +1,0 @@
-<webscript>
-	<shortname>Reports Editor Module select template page</shortname>
-	<description>Reports Editor Module select template  page</description>
-	<url>/lecm/reports-editor/template-select</url>
-	<format default="html">extension</format>
-</webscript>

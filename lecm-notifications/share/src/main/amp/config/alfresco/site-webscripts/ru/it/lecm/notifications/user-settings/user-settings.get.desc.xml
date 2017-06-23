@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>notifications-user-settings</shortname>
-    <description>Notifications user settings</description>
-	<url>/lecm/notifications-user-settings/content</url>
-	<format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

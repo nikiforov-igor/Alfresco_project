@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Основной список</shortname>
-    <description>Основной список</description>
-    <url>/lecm/business-journal/ds/main</url>
-    <format default="json">argument</format>
-    <authentication>user</authentication>
-    <transaction>required</transaction>
-</webscript>

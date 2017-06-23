@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Nearest events for current Employee</shortname>
-    <description>Nearest events for current Employee</description>
-    <url>/lecm/events/nearest</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

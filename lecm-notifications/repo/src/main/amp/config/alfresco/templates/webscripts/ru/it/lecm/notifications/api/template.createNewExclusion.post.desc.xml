@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Create New Notification Template Exclusion</shortname>
-	<description>Create New Notification Template Exclusion</description>
-	<url>/lecm/notifications/template/createNewExclusion</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-	<transaction>required</transaction>
-</webscript>

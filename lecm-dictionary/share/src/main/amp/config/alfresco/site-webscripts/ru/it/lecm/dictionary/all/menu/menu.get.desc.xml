@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>menu</shortname>
-    <description>Returns the all dictionary menu.</description>
-    <url>/lecm/dictionary/all/menu</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

@@ -1,7 +1,0 @@
-<webscript>
-	<shortname>Create subscribe type</shortname>
-	<description>Create subscribe type</description>
-	<url>/lecm/subscriptions/api/createSubscribeType</url>
-	<format default="json"/>
-	<authentication>user</authentication>
-</webscript>

@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-	<title>Управление поисковым запросом</title>
-	<description>Управление поисковым запросом</description>
-	<template-instance>search-query-create</template-instance>
-	<authentication>user</authentication>
-</page>

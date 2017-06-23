@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>ARM reports</shortname>
-    <description>Return ARM reports</description>
-    <url>/lecm/arm/reports</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

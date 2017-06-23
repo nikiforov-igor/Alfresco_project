@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<webscript>
-	<shortname>Allowed employees</shortname>
-	<description>Get allowed employees by specified business role. </description>
-	<url>/lecm/orgstructure/employees/allowed?businessRoleId={businessRoleId}&amp;withDelegation={withDelegation}</url>
-	<format default="json">extension</format>
-	<authentication>user</authentication>
-	<transaction allow="readonly">required</transaction>
-</webscript>

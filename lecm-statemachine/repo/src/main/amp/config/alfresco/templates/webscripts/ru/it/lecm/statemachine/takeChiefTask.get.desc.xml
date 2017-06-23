@@ -1,9 +1,0 @@
-<webscript>
-    <shortname>Take chief task</shortname>
-    <description>Take chief task</description>
-    <url>/lecm/statemachine/takeChiefTask</url>
-    <format default="json">extension</format>
-    <authentication>user</authentication>
-    <lifecycle>internal</lifecycle>
-    <transaction>required</transaction>
-</webscript>

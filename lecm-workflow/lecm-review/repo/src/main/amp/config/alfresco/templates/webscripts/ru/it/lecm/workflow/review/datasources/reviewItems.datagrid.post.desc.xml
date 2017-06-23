@@ -1,9 +1,0 @@
-<webscript>
-	<shortname>Review items datasource</shortname>
-	<description>Review items datasource</description>
-	<url>/lecm/review/ds/reviewItemsDS</url>
-	<format default="json"/>
-	<authentication>user</authentication>
-	<transaction>required</transaction>
-</webscript>
-

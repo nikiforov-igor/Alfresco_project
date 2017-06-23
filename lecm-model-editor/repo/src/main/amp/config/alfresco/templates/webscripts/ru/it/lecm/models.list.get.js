@@ -1,1 +1,0 @@
-model.result = modelsList.getModelsList(args["parentType"]);

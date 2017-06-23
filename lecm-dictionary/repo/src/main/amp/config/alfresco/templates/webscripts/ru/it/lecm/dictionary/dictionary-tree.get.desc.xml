@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Dictionary</shortname>
-	<description>Dictionary</description>
-	<url>/lecm/dictionary/dictionary-tree</url>
-	<format default="json">extension</format>
-	<authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

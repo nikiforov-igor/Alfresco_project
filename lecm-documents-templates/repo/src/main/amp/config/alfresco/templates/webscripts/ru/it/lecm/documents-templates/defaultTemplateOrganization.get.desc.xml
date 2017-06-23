@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Default Template Organization</shortname>
-	<description>Return Default Template Organization</description>
-	<url>/lecm/documents-templates/defaultOrganization</url>
-	<format default="json"/>
-	<authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

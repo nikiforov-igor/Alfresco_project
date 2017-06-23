@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Report Templates</shortname>
-    <description>Report Templates</description>
-    <url>/lecm/reports-editor/report-templates?reportId={reportId}</url>
-    <format default="json">extension</format>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

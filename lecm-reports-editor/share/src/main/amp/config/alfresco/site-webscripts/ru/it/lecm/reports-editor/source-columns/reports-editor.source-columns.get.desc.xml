@@ -1,6 +1,0 @@
-<webscript>
-	<shortname>Reports Editor Module sources page</shortname>
-	<description>Reports Editor Module sources page</description>
-	<url>/lecm/reports-editor/source-columns</url>
-	<format default="html">extension</format>
-</webscript>

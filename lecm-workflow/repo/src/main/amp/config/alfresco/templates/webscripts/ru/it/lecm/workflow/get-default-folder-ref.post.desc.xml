@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-    <shortname>Workflow Get Default List NodeRef</shortname>
-    <description></description>
-    <url>/lecm/workflow/getDefaultAssigneesList</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-    <transaction>required</transaction>
-</webscript>

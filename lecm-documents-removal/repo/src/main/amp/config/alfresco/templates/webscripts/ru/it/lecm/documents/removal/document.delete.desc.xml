@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Delete LECM Document</shortname>
-	<description>Delete(purge) LECM Document and all it's dependencies</description>
-	<url>/lecm/document-removal/document/delete?nodeRef={nodeRef}</url>
-	<authentication>admin</authentication>
-	<format default="json"/>
-</webscript>

@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Produce report form by recortCode</shortname>
-    <description>Produce report form by recortCode</description>
-    <url>/lecm/report/{report}</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

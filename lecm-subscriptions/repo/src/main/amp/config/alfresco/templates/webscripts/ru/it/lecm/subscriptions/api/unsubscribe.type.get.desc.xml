@@ -1,7 +1,0 @@
-<webscript>
-	<shortname>Unsubscribe type</shortname>
-	<description>Unsubscribe type</description>
-	<url>/lecm/subscriptions/api/unsubscribeType?nodeRef={nodeRef}</url>
-	<format default="json"/>
-	<authentication>user</authentication>
-</webscript>

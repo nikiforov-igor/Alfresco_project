@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Review table structure items datagrid</shortname>
-	<description>Review table structure items datagrid</description>
-	<url>/lecm/workflow/review/ts/items/datagrid</url>
-	<format default="html"/>
-	<authentication>user</authentication>
-</webscript>
-

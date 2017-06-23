@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Get Signed Content from Patner</shortname>
-	<description>Get Signed Content from Parnter</description>
-	<url>/lecm/signed-docflow/getSignedContentFromPartner</url>
-    <authentication>user</authentication>
-	<format default="json"/>
-    <transaction>required</transaction>
-</webscript>

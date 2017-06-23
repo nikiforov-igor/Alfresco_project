@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>wcalendar-years-toolbar</shortname>
-	<description>Work Calendar: Years Toolbar</description>
-	<format default="html"/>
-	<url>/ru/it/lecm/wcalendar/calendar/years-toolbar</url>
-	<authentication>user</authentication>
-</webscript>

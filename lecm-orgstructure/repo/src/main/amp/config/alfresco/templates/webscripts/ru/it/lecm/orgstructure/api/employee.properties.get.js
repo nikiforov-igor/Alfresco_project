@@ -1,1 +1,0 @@
-model.employee = orgstructure.getEmployee(args["nodeRef"]);

@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Check event available</shortname>
-    <description>Check available location an members on create event</description>
-    <url>/lecm/events/event/checkAvailable</url>
-    <format default="json"/>
-    <authentication runas="admin">user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

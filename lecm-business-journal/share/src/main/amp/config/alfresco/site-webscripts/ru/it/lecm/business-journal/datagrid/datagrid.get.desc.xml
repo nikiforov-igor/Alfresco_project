@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>business journal dictionary datagrid</shortname>
-    <description>Return business journal dictionary datagrid</description>
-    <url>/lecm/business-journal/datagrid</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

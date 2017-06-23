@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<webscript>
-	<shortname>blocked label</shortname>
-	<description>info if content is blocked</description>
-	<url>/lecm/signed-docflow/extensions/blocked-label</url>
-</webscript>

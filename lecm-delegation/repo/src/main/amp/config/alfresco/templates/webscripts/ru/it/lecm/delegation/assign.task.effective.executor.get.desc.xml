@@ -1,7 +1,0 @@
-<webscript>
-	<shortname>assignTaskToEffectiveExecutor</shortname>
-	<description>Assign task to trustee of given employee an business role</description>
-	<url>/lecm/delegation/assignTaskToEffectiveExecutor?nodeRef={nodeRef}&amp;businessRole={businessRole}&amp;taskID={taskID}</url>
-	<format default="json"/>
-	<authentication>user</authentication>
-</webscript>

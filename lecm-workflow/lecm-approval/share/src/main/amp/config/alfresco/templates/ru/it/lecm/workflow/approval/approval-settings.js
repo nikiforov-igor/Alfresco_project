@@ -1,1 +1,0 @@
-model.allowEdit = user.isAdmin

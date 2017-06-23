@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-   <title>Создать модель документа</title>
-   <description>Create Document Model</description>
-   <template-instance>doc-model-create</template-instance>
-   <authentication>user</authentication>
-</page>

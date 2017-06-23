@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/regnumReservationExecution">
+    <process id="regnumReservationExecution" name="Резервирование регистрационного номера">
+        <extensionElements>
+            <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                <activiti:field name="script">
+                    <activiti:string><![CDATA[
+						var document = bpm_package.children[0];
+						document.properties['lecm-reservation-aspects:isReservationRunning'] = true;
+						document.save();
+					]]></activiti:string>
+                </activiti:field>
+            </activiti:executionListener>
+            <activiti:executionListener event="end" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                <activiti:field name="script">
+                    <activiti:string><![CDATA[
+						var document = bpm_package.children[0];
+						document.properties['lecm-reservation-aspects:isReservationRunning'] = false;
+						document.save();
+					]]></activiti:string>
+                </activiti:field>
+            </activiti:executionListener>
+        </extensionElements>
+        <startEvent id="startevent1" name="Start" activiti:formKey="lecmRegnumRes:startTask"></startEvent>
+
+        <receiveTask id="receivetask1" name="Receive Task"></receiveTask>
+
+        <serviceTask id="emptyScripttask1" name="Empty Script Task 1" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
+            <extensionElements>
+                <activiti:field name="script">
+                    <activiti:string><![CDATA[
+                    	(function () {})();
+                    ]]></activiti:string>
+                </activiti:field>
+            </extensionElements>
+        </serviceTask>
+
+        <serviceTask id="searchRegistrarsScripttask" name="Search registrars" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
+            <extensionElements>
+                <activiti:field name="script">
+                    <activiti:string><![CDATA[
+                        var document = bpm_package.children[0];
+                        var currentEmployee = orgstructure.getCurrentEmployee();
+                        var registrars = [];
+                        /* Централизованная ли регистрация */
+                        if (edsGlobalSettings.isRegistrationCenralized()) {
+                            registrars = orgstructure.getEmployeesByBusinessRoleId('DA_REGISTRARS', true);
+                        } else {
+                            /* Получаем основную должностную позицию */
+                            var primaryPosition = orgstructure.getPrimaryPosition(currentEmployee.nodeRef.toString());
+                            if (primaryPosition) {
+                                var unit = orgstructure.getUnitByStaff(primaryPosition.nodeRef.toString());
+                                registrars = edsGlobalSettings.getPotentialWorkers('DA_REGISTRARS', unit.nodeRef.toString());
+                            }
+                        }
+
+                        var registrarsListItems = base.getWorkflowNodeConverter().convertNodes(base.getValueConverter().convertValueForJava(registrars), true);
+						execution.setVariableLocal('registrarsList', registrarsListItems);
+                        execution.setVariable('reservateInitiator', base.getWorkflowNodeConverter().convertNode(currentEmployee.nodeRef));
+
+                        var logText = '#initiator отправил документ #mainobject на резервирование регистрационных данных';
+                        businessJournal.log(document.nodeRef.toString(), 'RESERVATION', logText, []);
+					]]></activiti:string>
+                </activiti:field>
+            </extensionElements>
+        </serviceTask>
+
+        <exclusiveGateway id="exclusiveGw" name="Check registars amount" />
+
+        <userTask id="regnumReservationTask" name="Резервирование" activiti:assignee="${assignee.properties['lecm-orgstr:employee-person-login']}" activiti:formKey="lecmRegnumRes:reserveTask">
+            <extensionElements>
+                <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+                    <activiti:field name="script">
+                        <activiti:string><![CDATA[
+							var document = bpm_package.children[0];
+							var workflowRole = task.getVariableLocal('registrarDynamicRole');
+
+							/* Если роль не указана, то ориентируемся на делегирование всего */
+							var delegateAll = workflowRole == null;
+							var employee = assignee;
+							task.setVariableLocal('assumeExecutor', employee.nodeRef.toString());
+
+
+                            /* Set the message for the reservation task */
+                            var currentEmployee = orgstructure.getCurrentEmployee();
+                            var employeeName = currentEmployee.properties['lecm-orgstr:employee-short-name'];
+                            var reserveTaskMessage = '';
+                            var resDate = task.getVariable('lecmRegnumRes_date');
+                            if (resDate) {
+                                /* Формат 'dd.MM.yyyy' */
+                                var month = resDate.getMonth() + 1;
+                                var year = resDate.getYear() + 1900;
+                                var reservationDate = resDate.getDate() + '.' + (month < 10 ? '0' : '') + month + '.' + year;
+                                reserveTaskMessage = 'Сотрудник ' + employeeName + ' запросил резервирование регистрационного номера на дату ' + reservationDate;
+                            } else {
+                                reserveTaskMessage = 'Сотрудник ' + employeeName + ' запросил резервирование регистрационного номера без указания желаемой даты регистрации.';
+                            }
+						    document.properties['lecm-reservation-aspects:reserveTaskMessage'] = reserveTaskMessage;
+						    document.save();
+
+                            notifications.sendNotification({
+                                recipients: [employee],
+                                templateCode: 'RESERVATION_REQUEST_STARTED',
+                                templateConfig: {
+                                    mainObject: document,
+                                    employee: currentEmployee
+                                }
+                            });
+
+                            function getEffectiveEmployee (delegationOpts) {
+                                var potentialEffectiveEmployee = delegationOpts.assocs['lecm-d8n:delegation-opts-trustee-assoc'][0];
+                                var potentialEffectiveEmployeeTypeShort = potentialEffectiveEmployee.typeShort + '';
+                                if (potentialEffectiveEmployeeTypeShort == 'lecm-orgstr:employee') {
+                                    return potentialEffectiveEmployee;
+                                } else {
+                                    return null;
+                                }
+                            }
+						]]></activiti:string>
+                    </activiti:field>
+                </activiti:taskListener>
+                <activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+                    <activiti:field name="script">
+                        <activiti:string><![CDATA[0
+                            var document = bpm_package.children[0];
+                            var employee = assignee;
+
+                            var workflowRole = task.getVariableLocal('registrarDynamicRole');
+                            var workflowRoleName = workflowRole ? workflowRole : 'LECM_REGISTRAR_DYN';
+                            lecmPermission.grantDynamicRole(document, employee, workflowRoleName, 'LECM_BASIC_PG_Employee');
+                            lecmPermission.grantDynamicRole(document, employee, 'RESERVATION_PERFORMER_DYN', 'LECM_BASIC_PG_Reader');
+						]]></activiti:string>
+                    </activiti:field>
+                </activiti:taskListener>
+                <activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+                    <activiti:field name="script">
+                        <activiti:string><![CDATA[
+                            var document = bpm_package.children[0];
+                            var employee = assignee;
+                            var reservateInitiator = execution.getVariable('reservateInitiator');
+
+							var comment = task.getVariableLocal('bpm_comment');
+							var decision = task.getVariableLocal('lecmRegnumRes_decision') ? task.getVariableLocal('lecmRegnumRes_decision') + '' : '';
+							var regDate = task.getVariable('lecmRegnumRes_date');
+							var regnumTemplateId = task.getVariable('lecmRegnumRes_regnumberTemplateCode');
+							var documentReservedNumber;
+
+							var templateCode;
+							var templateConfigObject = {
+							    mainObject: document
+							};
+
+							if (decision == 'RESERVED') {
+								regnumbers.registerDocument(document, regnumTemplateId, true);
+							    /* Делаем для того, чтобы из базы перечитались свойства после резервирования */
+							    document.reset();
+
+							    var presentString = document.properties['lecm-document:present-string'];
+							    document.properties['lecm-reservation-aspects:presentStringBeforeReservation'] = presentString;
+
+							    document.properties['lecm-reservation-aspects:isReserved'] = true;
+							    if (regDate) {
+							        document.properties['lecm-document-aspects:reg-data-date'] = regDate;
+							    }
+
+							    /* Запись в бизнес журнал если решение хорошее: */
+							    documentReservedNumber = document.properties['lecm-document-aspects:reg-data-number'];
+							    var regInfo = 'Зарезервирован номер: ' + documentReservedNumber;
+							    if (regDate) {
+							        /* Формат 'dd.MM.yyyy' */
+                                    var month = regDate.getMonth() + 1;
+                                    var year = regDate.getYear() + 1900;
+                                    var documentReservedDate = regDate.getDate() + '.' + (month < 10 ? '0' : '') + month + '.' + year;
+							        regInfo += ' от ' + documentReservedDate;
+							    }
+							    var bjMsg = '#initiator выполнил резервирование регистрационного номера для документа #mainobject ' + regInfo;
+							    businessJournal.log(document.nodeRef.toString(), 'RESERVATION', bjMsg, []);
+
+                                /* Подготовка уведомления */
+							    templateConfigObject.regNumber = documentReservedNumber ? documentReservedNumber : 'none';
+							    if (regDate) {
+							        /* Формат 'dd.MM.yyyy' */
+                                    var month = regDate.getMonth() + 1;
+                                    var year = regDate.getYear() + 1900;
+                                    var documentReservedDate = regDate.getDate() + '.' + (month < 10 ? '0' : '') + month + '.' + year;
+							        templateCode = 'RESERVATION_REQUEST_FINISHED_APPROVED_WITH_DATE';
+							        templateConfigObject.reserveDate = documentReservedDate;
+							    } else {
+							        templateCode = 'RESERVATION_REQUEST_FINISHED_APPROVED_WITHOUT_DATE';
+							    }
+							} else if (decision == 'REJECTED') {
+							    document.properties['lecm-reservation-aspects:isReserved'] = false;
+
+							    /* Запись в бизнес журнал если решение плохое: */
+							    var commentLink = "<a href='#' title=" + comment + ">отклонил</a>";
+							    var bjMsg = '#initiator ' + commentLink + ' запрос в резервировании номера документа #mainobject';
+							    businessJournal.log(document.nodeRef.toString(), 'RESERVATION', bjMsg, []);
+
+                                /* Подготовка уведомления */
+							    templateCode = 'RESERVATION_REQUEST_FINISHED_REJECTED';
+							}
+							lecmPermission.pushAuthentication();
+                            lecmPermission.setRunAsUserSystem();
+							document.save();
+							lecmPermission.popAuthentication();
+
+							/* Уведомление при окончании запроса на резервирование рег.номера: */
+                            notifications.sendNotification({
+                                recipients: [reservateInitiator],
+                                templateCode: templateCode,
+                                templateConfig: templateConfigObject
+                            });
+
+                            execution.setVariable('taskDecision', decision);
+  							lecmPermission.revokeDynamicRole(document, employee, 'LECM_REGISTRAR_DYN');
+  							lecmPermission.revokeDynamicRole(document, employee, 'RESERVATION_PERFORMER_DYN');
+  							documentMembers.addMemberWithoutCheckPermission(document, employee, 'LECM_BASIC_PG_Reader', true);
+						]]></activiti:string>
+                    </activiti:field>
+                </activiti:taskListener>
+            </extensionElements>
+            <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${registrarsList}" activiti:elementVariable="assignee">
+                <completionCondition>${"REJECTED" == taskDecision || "RESERVED" == taskDecision}</completionCondition>
+            </multiInstanceLoopCharacteristics>
+        </userTask>
+
+        <serviceTask id="emptyAsyncScriptTask" name="Alfresco Script Task" activiti:async="true" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
+            <extensionElements>
+                <activiti:field name="script">
+                    <activiti:string><![CDATA[(function() { /* empty script for breaking transaction */
+                    })();
+                ]]></activiti:string>
+                </activiti:field>
+            </extensionElements>
+        </serviceTask>
+
+        <serviceTask id="emptyRegistrarsList" name="Processing empty registrars list" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
+            <extensionElements>
+                <activiti:field name="script">
+                    <activiti:string><![CDATA[
+                        var document = bpm_package.children[0];
+
+						document.properties['lecm-document:regnum'] = '"нет доступных регистраторов"';
+						document.save();
+						var documentString = document.properties['lecm-document:present-string'];
+						logger.warn('Нет доступных регистраторов для документа "'+ documentString + '"');
+
+						var reservateInitiator = execution.getVariable('reservateInitiator');
+						notifications.sendNotification({
+							recipients: [reservateInitiator],
+							templateCode: 'RESERVATION_EMPTY_REGISTRARS',
+							templateConfig: {
+								mainObject: document
+							}
+						});
+					]]></activiti:string>
+                </activiti:field>
+            </extensionElements>
+        </serviceTask>
+
+        <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="emptyScripttask1"></sequenceFlow>
+        <sequenceFlow id="flow2" sourceRef="emptyScripttask1" targetRef="receivetask1"></sequenceFlow>
+        <sequenceFlow id="flow3" sourceRef="receivetask1" targetRef="searchRegistrarsScripttask"></sequenceFlow>
+        <sequenceFlow id="flow4" sourceRef="searchRegistrarsScripttask" targetRef="exclusiveGw"></sequenceFlow>
+        <sequenceFlow id="flow5" sourceRef="exclusiveGw" targetRef="regnumReservationTask">
+            <conditionExpression xsi:type="tFormalExpression">${registrarsList.size() > 0}</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="flow6" sourceRef="exclusiveGw" targetRef="emptyRegistrarsList">
+            <conditionExpression xsi:type="tFormalExpression">${registrarsList.size() == 0}</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="flow7" sourceRef="regnumReservationTask" targetRef="emptyAsyncScriptTask"> </sequenceFlow>
+        <sequenceFlow id="flow8" sourceRef="emptyAsyncScriptTask" targetRef="exclusiveGatewayEnd"> </sequenceFlow>
+        <sequenceFlow id="flow9" sourceRef="emptyRegistrarsList" targetRef="exclusiveGatewayEnd"> </sequenceFlow>
+	    <exclusiveGateway id="exclusiveGatewayEnd" name="Gates to the end"></exclusiveGateway>
+	    <sequenceFlow id="flow10" sourceRef="exclusiveGatewayEnd" targetRef="endevent1"> </sequenceFlow>
+        <endEvent id="endevent1" name="End"></endEvent>
+    </process>
+</definitions>

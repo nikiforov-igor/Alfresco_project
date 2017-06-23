@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-	<title>Формы</title>
-	<description>Dictionary forms list</description>
-	<template-instance>dict-forms-list</template-instance>
-	<authentication>user</authentication>
-</page>

@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Get document attachments update assocs</shortname>
-	<description>Get document attachments update assocs</description>
-	<url>/lecm/document/attachments/api/updateAssocs</url>
-	<authentication>user</authentication>
-	<transaction>required</transaction>
-	<format default="json"/>
-</webscript>

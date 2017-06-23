@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Search Queries Main Ccntent</shortname>
-    <description>Search Queries Main Content</description>
-    <url>/lecm/search-queries/main</url>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

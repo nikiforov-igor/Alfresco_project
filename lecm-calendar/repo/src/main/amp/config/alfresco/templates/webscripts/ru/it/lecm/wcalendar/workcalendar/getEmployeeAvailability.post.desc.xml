@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Is employee in office at this date</shortname>
-	<description>Check employees's schedule, working and non-working days and absences</description>
-	<url>/lecm/wcalendar/workCalendar/getEmployeeAvailability</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-</webscript>

@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Get Calendar container</shortname>
-	<description>Create and return folder for storing calendar</description>
-	<url>/lecm/wcalendar/calendar/get/container</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-</webscript>

@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Documents filters</shortname>
-    <description>Return documents filters</description>
-    <url>/lecm/documents/filters/author</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-    <title>Lecm Document Details</title>
-    <title-id>page.lecm.document.title</title-id>
-    <description>Lecm Document details</description>
-    <description-id>page.lecm.document.description</description-id>
-    <template-instance>document</template-instance>
-    <authentication>user</authentication>
-</page>

@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Get document table data</shortname>
-	<description>Document Table Data</description>
-	<url>/lecm/document/tables/api/getData?nodeRef={nodeRef}</url>
-	<authentication>user</authentication>
-	<transaction allow="readonly">required</transaction>
-	<format default="json"/>
-</webscript>

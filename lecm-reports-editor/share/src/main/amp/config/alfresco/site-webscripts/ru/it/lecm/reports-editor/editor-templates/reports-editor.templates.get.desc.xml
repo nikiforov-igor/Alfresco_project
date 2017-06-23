@@ -1,6 +1,0 @@
-<webscript>
-	<shortname>Reports Editor Module Templates page</shortname>
-	<description>Reports Editor Module Templates page</description>
-	<url>/lecm/reports-editor/templates</url>
-	<format default="html">extension</format>
-</webscript>

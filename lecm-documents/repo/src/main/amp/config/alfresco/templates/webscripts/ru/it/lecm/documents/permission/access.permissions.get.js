@@ -1,1 +1,0 @@
-model.permissions = documentScript.getAccessPermissionsList(args["docType"]);

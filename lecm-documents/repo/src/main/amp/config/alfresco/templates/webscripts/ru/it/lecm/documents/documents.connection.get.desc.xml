@@ -1,9 +1,0 @@
-<webscript>
-    <shortname>Post Actions for Document</shortname>
-    <description>Post Actions for Document</description>
-    <url>/lecm/documents/connection</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-    <lifecycle>internal</lifecycle>
-    <transaction>required</transaction>
-</webscript>

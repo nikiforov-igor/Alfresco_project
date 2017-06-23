@@ -1,1 +1,0 @@
-model.settingsNode = notifications.getGlobalSettingsNode();

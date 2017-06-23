@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-	<title>Перечень делегирования</title>
-	<description>Работа с перечнем делегирования</description>
-	<template-instance>delegation-list</template-instance>
-	<authentication>user</authentication>
-</page>

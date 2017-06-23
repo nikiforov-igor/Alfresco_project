@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Переместить табличную запись вверх</shortname>
-    <description>Перенестить табличную запись вверх</description>
-    <url>/lecm/document/tables/api/moveTableRowUp?nodeRef={nodeRef}</url>
-    <authentication>user</authentication>
-    <transaction>required</transaction>
-    <format default="json"/>
-</webscript>

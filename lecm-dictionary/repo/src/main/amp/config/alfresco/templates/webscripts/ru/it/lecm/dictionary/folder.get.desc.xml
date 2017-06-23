@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Folder</shortname>
-	<description>Folder</description>
-	<url>/lecm/dictionary/get/folder</url>
-	<format default="json"/>
-	<authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

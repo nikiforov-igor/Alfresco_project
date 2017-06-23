@@ -1,1 +1,0 @@
-model.roles = orgstructure.getCurrentEmployeeRoles();
