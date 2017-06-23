@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>ARM: получение нода указанного АРМ</shortname>
-	<description>Возвращает ноду указанного АРМ, принимает параметр:code</description>
-	<url>/lecm/arm/get?code={code}</url>
-	<format default="json">extension</format>
-	<authentication>user</authentication>
-	<transaction allow="readonly">required</transaction>
-</webscript>

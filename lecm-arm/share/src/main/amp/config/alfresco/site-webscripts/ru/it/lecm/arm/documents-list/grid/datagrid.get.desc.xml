@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>ARM datagrid</shortname>
-    <description>Return ARM datagrid</description>
-    <url>/lecm/arm/documents-grid</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

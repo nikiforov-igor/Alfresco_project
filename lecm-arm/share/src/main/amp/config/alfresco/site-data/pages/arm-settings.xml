@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-	<title>Настройки АРМ</title>
-	<description>Настройки АРМ</description>
-	<template-instance>arm-settings</template-instance>
-	<authentication>admin</authentication>
-</page>
