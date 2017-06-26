@@ -1,1 +1,0 @@
-integration.loadDocumentBr5(args["sDocument"]);

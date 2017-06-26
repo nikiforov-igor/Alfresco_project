@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Load Document</shortname>
-	<description>Load document to br5 service</description>
-	<url>/lecm/br5/semantic/load-document/load-document?sDocument={sDocument}</url>
-	<format default="json" />
-	<authentication>user</authentication>
-	<transaction>required</transaction>
-</webscript>

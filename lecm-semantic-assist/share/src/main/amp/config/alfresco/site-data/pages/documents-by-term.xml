@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-    <title>Documents by tag</title>
-    <title-id>page.semantic.document.term.title</title-id>
-    <description>Documents by tag</description>
-    <description-id>page.semantic.document.term.description</description-id>
-    <template-instance>documents-by-term</template-instance>
-    <authentication>user</authentication>
-</page>

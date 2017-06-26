@@ -1,5 +1,0 @@
-<webscript>
-	<shortname>Page LECM Resources</shortname>
-	<description>Component importing all the client side resources needed for the LECM page</description>
-	<url>/lecm/im/header/resources</url>
-</webscript>

@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Tags cloud</shortname>
-	<description>Get expert's tag's cloud from br5 service</description>
-	<url>/lecm/br5/semantic/cloud/tags-cloud?sExpert={sExpert}</url>
-	<format default="json" />
-	<authentication>user</authentication>
-	<transaction>required</transaction>
-</webscript>

@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Experts by LECM Document tags cloud</shortname>
-	<description>Get Experts by LECM document tag cloud</description>
-	<url>/lecm/br5/semantic/experts/lecm-experts-by-document?sDocument={sDocument}</url>
-	<format default="html" />
-	<authentication>user</authentication>
-	<transaction>required</transaction>
-</webscript>

@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Experts</shortname>
-    <description>Get experts from web service</description>
-    <url>/lecm/experts/get/byUri</url>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-    <format default="json"/>
-</webscript>

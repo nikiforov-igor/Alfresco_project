@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Refresh BR5-info</shortname>
-	<description>Refresh document's br5 information</description>
-	<url>/lecm/br5/semantic/refresh-document?nodeRef={nodeRef}</url>
-	<format default="json" />
-	<authentication>user</authentication>
-	<transaction>required</transaction>
-</webscript>

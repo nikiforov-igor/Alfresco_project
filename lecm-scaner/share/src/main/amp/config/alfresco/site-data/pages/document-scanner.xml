@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-	<title>Сканер</title>
-	<title-id>Сканер</title-id>
-	<description>Сканер</description>
-	<description-id>Сканер</description-id>
-	<template-instance>document-scanner</template-instance>
-	<authentication>user</authentication>
-</page>

@@ -1,1 +1,0 @@
-model.docList = integration.getSimilarDocumentsByTag(args["tag"],args["docType"]);

@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-    <shortname>HTTP Bind bosh proxy</shortname>
-    <description>HTTP Bind bosh proxy</description>
-    <url>/http-bind</url>
-    <format default="xml"/>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

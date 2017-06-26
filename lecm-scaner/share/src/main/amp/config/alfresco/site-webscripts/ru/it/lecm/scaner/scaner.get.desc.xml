@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>scaner</shortname>
-	<description>Scan document</description>
-	<format default="html"/>
-	<url>/ru/it/lecm/scaner</url>
-	<authentication>user</authentication>
-</webscript>

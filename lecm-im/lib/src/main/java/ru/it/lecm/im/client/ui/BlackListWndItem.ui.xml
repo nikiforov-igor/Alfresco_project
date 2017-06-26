@@ -1,7 +1,0 @@
-<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
-<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui">
-	<g:HTMLPanel styleName="ijab-blacklistwnd-item ui-helper-clearfix">
-		<span ui:field="nameText"></span>(<span ui:field="jidText"></span>)<a ui:field="removeElement" title="Remove from blacklist">Remove</a>
-	</g:HTMLPanel>
-</ui:UiBinder> 

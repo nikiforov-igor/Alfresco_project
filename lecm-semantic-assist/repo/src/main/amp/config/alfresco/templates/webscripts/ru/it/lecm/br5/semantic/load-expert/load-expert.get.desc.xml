@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Load Expert</shortname>
-	<description>Load expert to br5 service</description>
-	<url>/lecm/br5/semantic/load-expert/load-expert?sExpert={sExpert}</url>
-	<format default="json" />
-	<authentication>user</authentication>
-	<transaction>required</transaction>
-</webscript>

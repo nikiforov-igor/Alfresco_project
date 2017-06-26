@@ -1,9 +1,0 @@
-<webscript>
-   <shortname>Semantic Search</shortname>
-   <description>Semantic Search Component Data Webscript</description>
-   <url>/lecm/br5/semantic/search?term={term?}&amp;tag={tag?}&amp;site={site?}&amp;container={container?}&amp;sort={sort?}&amp;query={query?}&amp;repo={repo?}&amp;semanticTag={semanticTag?}&amp;semanticNodeRef={semanticNodeRef}&amp;semanticDocType={semanticDocType}</url>
-   <format default="json">argument</format>
-   <authentication>user</authentication>
-   <transaction allow="readonly">required</transaction>
-   <lifecycle>internal</lifecycle>
-</webscript>
