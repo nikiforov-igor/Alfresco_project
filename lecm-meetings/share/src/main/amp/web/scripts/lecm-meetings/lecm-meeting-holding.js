@@ -91,12 +91,12 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 			args[1].runtime.setAJAXSubmit(true);
 		},
 
-		saveForm: function(immediate, buttonAction) {
+		saveForm: function(immediate, isUserAction) {
 			for (var index = 0, len = this.forms.length; index < len; index++) {
 				var form = this.forms[index];
                 if (form && form.runtime.formId !== this.HOLDING_MEETING + "-form" && form.isDirty()) {
                     form.submit(immediate);
-                    if (!buttonAction) {
+                    if (!isUserAction) {
                         break;
 					}
 			}}
@@ -203,8 +203,8 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 
 		},
 
-		saveDates: function (buttonAction) {
-			this.saveForm(true, buttonAction);
+		saveDates: function (isUserAction) {
+			this.saveForm(true, isUserAction);
 
 			var arguments = {};
 			for (var i = 0; i < this.submitElements.length; i++) {
