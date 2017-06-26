@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-    <title>Expert term's cloud</title>
-    <title-id>page.semantic.expert.term.title</title-id>
-    <description>Expert term's cloud</description>
-    <description-id>page.semantic.expert.term.description</description-id>
-    <template-instance>expert-tags-cloud</template-instance>
-    <authentication>user</authentication>
-</page>

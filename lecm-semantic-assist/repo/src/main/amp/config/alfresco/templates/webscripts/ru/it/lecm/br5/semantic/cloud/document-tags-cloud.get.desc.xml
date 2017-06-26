@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Document tags cloud</shortname>
-	<description>Get document's tag's cloud</description>
-	<url>/lecm/br5/semantic/cloud/document-tags-cloud?sDocument={sDocument}</url>
-	<format default="json" />
-	<authentication>user</authentication>
-	<transaction>required</transaction>
-</webscript>

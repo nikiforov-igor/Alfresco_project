@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-    <shortname>BOSH Proxy</shortname>
-    <description>BOSH Proxy</description>
-    <url>/bosh</url>
-    <format default="xml"/>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

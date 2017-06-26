@@ -1,3 +1,0 @@
-{
-	"isAdmin": ${isAdmin?string}
-}

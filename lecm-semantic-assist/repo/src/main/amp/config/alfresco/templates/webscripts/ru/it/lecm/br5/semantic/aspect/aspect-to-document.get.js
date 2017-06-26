@@ -1,1 +1,0 @@
-integration.addBr5AspectToDocument(args["sDocument"]);

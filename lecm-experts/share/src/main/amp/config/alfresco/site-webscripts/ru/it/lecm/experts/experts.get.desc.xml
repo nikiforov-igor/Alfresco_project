@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Document Experts Block</shortname>
-    <description>Experts Block</description>
-    <url>/lecm/experts/get</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

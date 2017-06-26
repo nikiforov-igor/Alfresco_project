@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Documents by tag</shortname>
-	<description>Get documents by tag</description>
-	<url>/lecm/br5/semantic/documents/documents-by-tag?tag={tag}&amp;docType={docType}</url>
-	<format default="json" />
-	<authentication>user</authentication>
-	<transaction>required</transaction>
-</webscript>

@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Get permissions</shortname>
-	<description>Get Permissions</description>
-	<url>/lecm/security/api/getPermissions?nodeRef={nodeRef}&amp;permissions={permissions}</url>
-	<format default="json"/>
-	<authentication>user</authentication>
-	<transaction allow="readonly">required</transaction>
-</webscript>

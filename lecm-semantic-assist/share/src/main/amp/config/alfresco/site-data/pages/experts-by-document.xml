@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-    <title>Experts by document</title>
-    <title-id>page.semantic.experts.document.title</title-id>
-    <description>Experts by document</description>
-    <description-id>page.semantic.experts.document.description</description-id>
-    <template-instance>experts-by-document</template-instance>
-    <authentication>user</authentication>
-</page>

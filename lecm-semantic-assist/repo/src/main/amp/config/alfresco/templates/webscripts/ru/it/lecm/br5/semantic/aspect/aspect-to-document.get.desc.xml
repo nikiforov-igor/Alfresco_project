@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Aspect to document</shortname>
-	<description>Add br5 aspect to document</description>
-	<url>/lecm/br5/semantic/aspect/aspect-to-document?sDocument={sDocument}</url>
-	<format default="json" />
-	<authentication>user</authentication>
-	<transaction>required</transaction>
-</webscript>
