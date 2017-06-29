@@ -2535,6 +2535,13 @@
 					<show id="lecm-errands:user-settings-default-initiator-assoc"/>
 					<show id="lecm-errands:user-settings-default-subject-assoc"/>
 				</field-visibility>
+                <appearance>
+                    <field id="lecm-errands:user-settings-default-subject-assoc">
+                        <control>
+                            <control-param name="endpointMany">true</control-param>
+                        </control>
+                    </field>
+                </appearance>
 			</form>
 		</forms>
 	</config>
@@ -2546,6 +2553,13 @@
 					<show id="lecm-errands:user-settings-default-initiator-assoc"/>
 					<show id="lecm-errands:user-settings-default-subject-assoc"/>
 				</field-visibility>
+                <appearance>
+                    <field id="lecm-errands:user-settings-default-subject-assoc">
+                        <control>
+                            <control-param name="endpointMany">true</control-param>
+                        </control>
+                    </field>
+                </appearance>
 			</form>
 		</forms>
 	</config>
