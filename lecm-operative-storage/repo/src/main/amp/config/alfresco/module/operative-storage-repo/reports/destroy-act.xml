@@ -23,7 +23,7 @@
 						<property name="lecm-rpeditor:dataColumnExpression"><![CDATA[{ID}]]></property>
 						<property name="lecm-rpeditor:dataColumnCode"><![CDATA[section_ref]]></property>
 						<property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
-						<property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
+						<property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[checkType=false]]></property>
 						<property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[true]]></property>
 						<assocs>
 							<assoc type="lecm-rpeditor:columnTypeAssoc" path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>

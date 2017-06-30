@@ -215,6 +215,7 @@
                             <control-param name="reviewItem_nameSubstituteString">{cm:title}</control-param>
                             <control-param name="reviewItem_plane">true</control-param>
                             <control-param name="reviewItem_showSearch">true</control-param>
+                            <control-param name="reviewItem_showAssocViewForm">true</control-param>
                             <control-param name="reviewItem_childrenDataSource">lecm/review/ds/allowedReviewLists</control-param>
                             <control-param name="reviewItem_sortProp">cm:title</control-param>
                         </control>
@@ -439,12 +440,12 @@
                     </field>
                     <field id="lecm-resolutions:approved-outside-system" set="common"/>
                     <field id="lecm-resolutions:base-document-assoc" read-only="true" set="common">
-                        <control>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-search-control.ftl">
                             <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
                         </control>
                     </field>
                     <field id="lecm-resolutions:base-assoc" read-only="true" set="common">
-                        <control>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-search-control.ftl">
                             <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
                         </control>
                     </field>
@@ -517,6 +518,7 @@
                             <control-param name="reviewItem_nameSubstituteString">{cm:title}</control-param>
                             <control-param name="reviewItem_plane">true</control-param>
                             <control-param name="reviewItem_showSearch">true</control-param>
+                            <control-param name="reviewItem_showAssocViewForm">true</control-param>
                             <control-param name="reviewItem_childrenDataSource">lecm/review/ds/allowedReviewLists</control-param>
                             <control-param name="reviewItem_sortProp">cm:title</control-param>
                         </control>
@@ -538,8 +540,6 @@
             </form>
             <form id="editForm">
                 <field-visibility>
-                    <show id="lecm-resolutions:base-document-assoc"/>
-
                     <show id="lecm-document-aspects:is-on-control"/>
                     <show id="lecm-resolutions:approved-outside-system"/>
                     <show id="lecm-document:subject-assoc"/>
@@ -579,11 +579,6 @@
                     <set id="reviewers" parent="reviewers-fieldset" template="/org/alfresco/components/form/2-column-set.ftl"/>
                     <set id="end"/>
 
-                    <field id="lecm-resolutions:base-document-assoc" read-only="true" set="start">
-                        <control>
-                            <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
-                        </control>
-                    </field>
                     <field id="lecm-resolutions:approved-outside-system" set="start"/>
                     <field id="lecm-document:subject-assoc" set="start-left"/>
                     <field id="lecm-resolutions:author-assoc" set="start-left"/>
@@ -723,6 +718,7 @@
                             <control-param name="reviewItem_nameSubstituteString">{cm:title}</control-param>
                             <control-param name="reviewItem_plane">true</control-param>
                             <control-param name="reviewItem_showSearch">true</control-param>
+                            <control-param name="reviewItem_showAssocViewForm">true</control-param>
                             <control-param name="reviewItem_childrenDataSource">lecm/review/ds/allowedReviewLists</control-param>
                             <control-param name="reviewItem_sortProp">cm:title</control-param>
                         </control>
