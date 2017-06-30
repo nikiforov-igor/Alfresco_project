@@ -18,6 +18,11 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>ru.it.lecm</groupId>
+        <artifactId>platform</artifactId>
+        <version>2.1-SNAPSHOT</version>
+    </parent>
     <groupId>ru.it.lecm</groupId>
     <artifactId>eds</artifactId>
     <packaging>pom</packaging>
@@ -71,33 +76,8 @@
            which is typically environment independent
         -->
         <env>local</env>
-        <alfresco.version>5.1.g</alfresco.version>
-        <spring.version>3.2.14.RELEASE</spring.version>
-        <activiti.version>5.19.0.1</activiti.version>
-        <dependency.surf.version>6.5</dependency.surf.version>
-        <spring.surf.version>6.5</spring.surf.version>
-        <jasperreports.version>6.2.1</jasperreports.version>
-        <jasperreports.fonts.version>6.0.0</jasperreports.fonts.version>
-        <slf4j.version>1.7.12</slf4j.version>
-        <spring.security.version>3.1.3.RELEASE</spring.security.version>
-        <acegisecurity.version>0.8.2_patched</acegisecurity.version>
         <platform.version>2.1-SNAPSHOT</platform.version>
-        <eds.version>${project.version}</eds.version>
-        <buildNumber>0</buildNumber>
-        <client.debug>false</client.debug>
-        <module.log.level>info</module.log.level>
-        <redeploy.process.definitions>false</redeploy.process.definitions>
-        <repo.jscript>warn</repo.jscript>
-        <repo.jscript.ScriptLogger>info</repo.jscript.ScriptLogger>
-        <apache.cxf.version>2.7.5</apache.cxf.version>
-        <jersey.version>1.18.1</jersey.version>
-        <app.amp.output.folder>${project.build.directory}/amp</app.amp.output.folder>
-        <app.amp.folder>src/main/amp</app.amp.folder>
-        <maven.compiler.version>3.5</maven.compiler.version>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jsconsole.version>0.6</jsconsole.version>
+        <eds.version>2.1-SNAPSHOT</eds.version>
     </properties>
 
     <modules>
