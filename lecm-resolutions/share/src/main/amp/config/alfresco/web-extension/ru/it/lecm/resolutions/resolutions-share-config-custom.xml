@@ -215,6 +215,7 @@
                             <control-param name="reviewItem_nameSubstituteString">{cm:title}</control-param>
                             <control-param name="reviewItem_plane">true</control-param>
                             <control-param name="reviewItem_showSearch">true</control-param>
+                            <control-param name="reviewItem_showAssocViewForm">true</control-param>
                             <control-param name="reviewItem_childrenDataSource">lecm/review/ds/allowedReviewLists</control-param>
                             <control-param name="reviewItem_sortProp">cm:title</control-param>
                         </control>
@@ -517,6 +518,7 @@
                             <control-param name="reviewItem_nameSubstituteString">{cm:title}</control-param>
                             <control-param name="reviewItem_plane">true</control-param>
                             <control-param name="reviewItem_showSearch">true</control-param>
+                            <control-param name="reviewItem_showAssocViewForm">true</control-param>
                             <control-param name="reviewItem_childrenDataSource">lecm/review/ds/allowedReviewLists</control-param>
                             <control-param name="reviewItem_sortProp">cm:title</control-param>
                         </control>
@@ -723,6 +725,7 @@
                             <control-param name="reviewItem_nameSubstituteString">{cm:title}</control-param>
                             <control-param name="reviewItem_plane">true</control-param>
                             <control-param name="reviewItem_showSearch">true</control-param>
+                            <control-param name="reviewItem_showAssocViewForm">true</control-param>
                             <control-param name="reviewItem_childrenDataSource">lecm/review/ds/allowedReviewLists</control-param>
                             <control-param name="reviewItem_sortProp">cm:title</control-param>
                         </control>
