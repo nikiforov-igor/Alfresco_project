@@ -440,12 +440,12 @@
                     </field>
                     <field id="lecm-resolutions:approved-outside-system" set="common"/>
                     <field id="lecm-resolutions:base-document-assoc" read-only="true" set="common">
-                        <control>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-search-control.ftl">
                             <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
                         </control>
                     </field>
                     <field id="lecm-resolutions:base-assoc" read-only="true" set="common">
-                        <control>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-search-control.ftl">
                             <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
                         </control>
                     </field>
@@ -582,7 +582,7 @@
                     <set id="end"/>
 
                     <field id="lecm-resolutions:base-document-assoc" read-only="true" set="start">
-                        <control>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-search-control.ftl">
                             <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
                         </control>
                     </field>
