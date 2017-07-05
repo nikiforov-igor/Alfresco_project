@@ -67,14 +67,6 @@
             </item>
         </items>
         <assocs>
-            <assoc type="lecm-rpeditor:businessRolesAssoc"
-                   path="/Business platform/LECM/Сервис Справочники/Бизнес роли/Поручения.Инициатор"/>
-            <assoc type="lecm-rpeditor:businessRolesAssoc"
-                   path="/Business platform/LECM/Сервис Справочники/Бизнес роли/Поручения. Читатель"/>
-            <assoc type="lecm-rpeditor:businessRolesAssoc"
-                   path="/Business platform/LECM/Сервис Справочники/Бизнес роли/Поручения. Куратор"/>
-            <assoc type="lecm-rpeditor:businessRolesAssoc"
-                   path="/Business platform/LECM/Сервис Справочники/Бизнес роли/Поручения. Выбирающий инициатора"/>
             <assoc type="lecm-rpeditor:reportProviderAssoc"
                    path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип провайдера/Reporting SQLProvider"/>
             <assoc type="lecm-rpeditor:reportTemplateAssoc"
