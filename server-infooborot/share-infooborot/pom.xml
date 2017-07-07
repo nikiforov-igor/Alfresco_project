@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ru.it.lecm</groupId>
+		<artifactId>eds-server</artifactId>
+		<version>2.1-SNAPSHOT</version>
+	</parent>
+
+	<groupId>ru.it.lecm.server-infooborot</groupId>
+	<artifactId>eds-share-infooborot</artifactId>
+	<name>Alfresco Share client</name>
+	<packaging>war</packaging>
+	<description>SHARE customization meant to be the main Alfresco UI, which enables collaboration and easy ReST based remotable customization.</description>
+
+	<repositories>
+		<repository>
+			<id>alfresco-public</id>
+			<url>https://artifacts.alfresco.com/nexus/content/groups/public</url>
+		</repository>
+		<repository>
+			<id>alfresco-public-snapshots</id>
+			<url>https://artifacts.alfresco.com/nexus/content/groups/public-snapshots</url>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>alfresco-public</id>
+			<url>https://artifacts.alfresco.com/nexus/content/groups/public</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>alfresco-public-snapshots</id>
+			<url>https://artifacts.alfresco.com/nexus/content/groups/public-snapshots</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<properties>
+		<!--<env>local</env>-->
+		<!--<alfresco.edition>community</alfresco.edition>-->
+		<webapp.name>eds-share-infooborot</webapp.name>
+		<war.name>eds-share-infooborot.war</war.name>
+		<share.log.level>info</share.log.level>
+		<share.servlet.port>8080</share.servlet.port>
+		<surf.wiring.mode>development</surf.wiring.mode><!-- "production" is the other allowed value -->
+	</properties>
+
+	<!-- Alfresco dependencies -->
+	<dependencies>
+		<!--
+			Alfresco Dependencies. Use this dependency to switch SHARE version
+		-->
+		<dependency>
+			<groupId>ru.it.lecm.server-infooborot</groupId>
+			<artifactId>share-infooborot</artifactId>
+			<version>${platform.version}</version>
+			<type>war</type>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<scope>compile</scope>
+			<version>${slf4j.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ru.it.lecm.contracts</groupId>
+			<artifactId>contracts-share</artifactId>
+			<version>${eds.version}</version>
+			<type>amp</type>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.errands</groupId>
+			<artifactId>errands-share</artifactId>
+			<version>${eds.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.eds-documents</groupId>
+			<artifactId>eds-documents-share</artifactId>
+			<version>${eds.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.operative-storage</groupId>
+			<artifactId>operative-storage-share</artifactId>
+			<version>${eds.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.meetings</groupId>
+			<artifactId>meetings-share</artifactId>
+			<version>${eds.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.internal</groupId>
+			<artifactId>internal-share</artifactId>
+			<version>${eds.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.incoming</groupId>
+			<artifactId>incoming-share</artifactId>
+			<version>${eds.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.outgoing</groupId>
+			<artifactId>outgoing-share</artifactId>
+			<version>${eds.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.nd</groupId>
+			<artifactId>nd-share</artifactId>
+			<version>${eds.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.ord</groupId>
+			<artifactId>ord-share</artifactId>
+			<version>${eds.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.workflow.reservation</groupId>
+			<artifactId>reservation-share</artifactId>
+			<version>${eds.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.resolutions</groupId>
+			<artifactId>resolutions-share</artifactId>
+			<version>${eds.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>${webapp.name}</finalName>
+		<!-- Runtime properties file which is used to configure your Share instance. It's multi-environment aware (-Denv=yourEnv) -->
+		<!--<filters>-->
+		<!--<filter>${project.basedir}/src/main/properties/${env}/application.properties</filter>-->
+		<!--</filters>-->
+
+		<!--
+			Default profile to build as an Alfresco extension - resources are
+			copied into classpath
+		-->
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+			<!--
+				| Include application properties file in classpath: this allows
+				Spring contexts to have customization properties available at |
+				classpath:alfresco/extension/application.properties
+			-->
+			<!--<resource>-->
+			<!--<directory>src/main/properties/${env}</directory>-->
+			<!--<includes>-->
+			<!--<include>application.properties</include>-->
+			<!--</includes>-->
+			<!--&lt;!&ndash;-->
+			<!--This gets loaded to be the filter for spring runtime placeholding,-->
+			<!--so no need for build time filtering-->
+			<!--&ndash;&gt;-->
+			<!--<targetPath>alfresco/web-extension</targetPath>-->
+			<!--<filtering>true</filtering>-->
+			<!--</resource>-->
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.3</version>
+				<executions>
+					<!--<execution>-->
+						<!--<id>unpack-amps</id>-->
+						<!--<phase>process-resources</phase>-->
+						<!--<goals>-->
+							<!--<goal>unpack-dependencies</goal>-->
+						<!--</goals>-->
+						<!--<configuration>-->
+							<!--<includeTypes>amp</includeTypes>-->
+							<!--<outputDirectory>${project.build.directory}/${webapp.name}</outputDirectory>-->
+							<!--<excludes>META*</excludes>-->
+						<!--</configuration>-->
+					<!--</execution>-->
+					<execution>
+						<id>copy-share</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<includeTypes>amp</includeTypes>
+							<outputDirectory>${project.build.directory}/../../target/amps/share</outputDirectory>
+							<overWriteReleases>true</overWriteReleases>
+							<overWriteIfNewer>true</overWriteIfNewer>
+							<overWriteSnapshots>true</overWriteSnapshots>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-share-webapp</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>${project.groupId}</groupId>
+									<artifactId>${project.artifactId}</artifactId>
+									<version>${project.version}</version>
+									<type>${project.packaging}</type>
+									<destFileName>${war.name}</destFileName>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>${project.build.directory}/../../target/war</outputDirectory>
+							<overWriteReleases>true</overWriteReleases>
+							<overWriteIfNewer>true</overWriteIfNewer>
+							<overWriteSnapshots>true</overWriteSnapshots>
+						</configuration>
+					</execution>
+					<execution> 
+						<id>unpack</id> 
+						<phase>generate-sources</phase> 
+						<goals>
+							<goal>unpack-dependencies</goal>
+						</goals>
+						<configuration> 
+							<includeTypes>war</includeTypes> 
+							<includeGroupIds>org.alfresco</includeGroupIds> 
+							<includeArtifactIds>share</includeArtifactIds> 
+							<includes>META-INF/MANIFEST.MF</includes> 
+						</configuration> 
+					</execution> 
+				</executions>
+				<dependencies>
+
+						<!--This is required to be re-defined explicitly at plugin level as-->
+						<!--otherwise the 'amp' extension unArchiver won't be available to the-->
+						<!--maven-dependency-plugin-->
+
+							<dependency>
+									<groupId>org.alfresco.maven.plugin</groupId>
+									<artifactId>maven-amp-plugin</artifactId>
+									<version>3.0.4</version>
+							</dependency>
+					</dependencies>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<overlays>
+						<!-- Current project customizations -->
+						<overlay/>
+						<!-- The Alfresco WAR -->
+						<overlay>
+							<groupId>ru.it.lecm.server-infooborot</groupId>
+							<artifactId>share-infooborot</artifactId>
+							<type>war</type>
+							<excludes/>
+						</overlay>
+						<!-- Дополнительные модули СЭД -->
+                        <overlay>
+                            <groupId>ru.it.lecm.eds-documents</groupId>
+                            <artifactId>eds-documents-share</artifactId>
+                            <type>amp</type>
+                        </overlay>
+                        <overlay>
+                            <groupId>ru.it.lecm.contracts</groupId>
+                            <artifactId>contracts-share</artifactId>
+                            <type>amp</type>
+                        </overlay>
+                        <overlay>
+                            <groupId>ru.it.lecm.errands</groupId>
+                            <artifactId>errands-share</artifactId>
+                            <type>amp</type>
+                        </overlay>
+						<overlay>
+							<groupId>ru.it.lecm.internal</groupId>
+							<artifactId>internal-share</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.incoming</groupId>
+							<artifactId>incoming-share</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.outgoing</groupId>
+							<artifactId>outgoing-share</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.nd</groupId>
+							<artifactId>nd-share</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.ord</groupId>
+							<artifactId>ord-share</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.operative-storage</groupId>
+							<artifactId>operative-storage-share</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.meetings</groupId>
+							<artifactId>meetings-share</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.resolutions</groupId>
+							<artifactId>resolutions-share</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.workflow.reservation</groupId>
+							<artifactId>reservation-share</artifactId>
+							<type>amp</type>
+						</overlay>
+					</overlays>
+					<archive>
+						<addMavenDescriptor>false</addMavenDescriptor>
+						<manifestFile>${project.build.directory}/${webapp.name}/META-INF/MANIFEST.MF</manifestFile>
+					</archive>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.alfresco.maven.plugin</groupId>
+						<artifactId>alfresco-maven-plugin</artifactId>
+						<version>2.2.0</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+
+
+
+			<!-- Needed for cross OS compatibility in acp/zip encoding -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.5</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+					<!-- By default as per http://code.google.com/p/maven-alfresco-archetypes/issues/detail?id=7 FTL are not filtered to avoid corruption.
+					| This behavior can be relaxed (in case filtering is needed in the FTLs) by selecting which files are filtered and which not as described
+					| here http://code.google.com/p/maven-alfresco-archetypes/issues/detail?id=7#c3
+					-->
+					<nonFilteredFileExtensions>
+						<nonFilteredFileExtension>ftl</nonFilteredFileExtension>
+					</nonFilteredFileExtensions>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<!-- Custom behaviors -->
+	<profiles>
+	</profiles>
+
+</project>
