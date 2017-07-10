@@ -5,8 +5,8 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>ru.it.lecm.workflow</groupId>
-		<artifactId>workflow</artifactId>
+		<groupId>ru.it.lecm</groupId>
+		<artifactId>eds</artifactId>
 		<version>2.1-SNAPSHOT</version>
 	</parent>
 
