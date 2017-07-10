@@ -20,11 +20,11 @@
 	<parent>
 		<groupId>ru.it.lecm</groupId>
 		<artifactId>eds-server</artifactId>
-		<version>2.1-SNAPSHOT</version>
+		<version>2.1</version>
 	</parent>
 
-	<groupId>ru.it.lecm.server.eds</groupId>
-	<artifactId>server-alfresco</artifactId>
+	<groupId>ru.it.lecm.server</groupId>
+	<artifactId>eds-alfresco</artifactId>
 	<name>Alfresco extension</name>
 	<packaging>war</packaging>
 	<url></url>
@@ -35,7 +35,8 @@
 		<!-- Build environment ==> src/main/properties/<env>/alfresco-global.properties is loaded -->
 		<!--<env>local</env>-->
 		<!-- Webapp packaged name -->
-		<webapp.name>alfresco</webapp.name>
+		<webapp.name>eds-alfresco</webapp.name>
+		<war.name>eds-alfresco.war</war.name>
 		<!--
 		 | Empty log dir creates file alfresco.log in the current root folder.
 		 | You can also specify a meaningful log directory for the server (add a trailing slash, e.g. '/var/log/alfresco/' )
@@ -312,7 +313,7 @@
 									<artifactId>${project.artifactId}</artifactId>
 									<version>${project.version}</version>
 									<type>${project.packaging}</type>
-									<destFileName>alfresco.war</destFileName>
+									<destFileName>${war.name}</destFileName>
 								</artifactItem>
 							</artifactItems>
 							<outputDirectory>${project.build.directory}/../../target/war</outputDirectory>
@@ -348,19 +349,6 @@
 					</dependency>
 				</dependencies>
 			</plugin>
-<!--			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.1.1</version>
-				<configuration>
-					<archiveClasses>false</archiveClasses>
-					<webappDirectory>target/${webapp.name}</webappDirectory>
-					<warSourceExcludes>tools/**</warSourceExcludes>
-					<webResources>
-
-							</webResources>
-					</configuration>
-			</plugin>-->
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -445,7 +433,7 @@
 					</overlays>
 					<archive>
 						<addMavenDescriptor>false</addMavenDescriptor>
-						<manifestFile>${project.build.directory}/alfresco/META-INF/MANIFEST.MF</manifestFile>
+						<manifestFile>${project.build.directory}/${webapp.name}/META-INF/MANIFEST.MF</manifestFile>
 					</archive>
 				</configuration>
 				<dependencies>

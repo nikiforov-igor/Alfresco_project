@@ -6,7 +6,7 @@
     <parent>
         <groupId>ru.it.lecm.contracts</groupId>
         <artifactId>contracts</artifactId>
-        <version>2.1-SNAPSHOT</version>
+        <version>2.1</version>
     </parent>
 
     <artifactId>contracts-repo</artifactId>
@@ -60,19 +60,19 @@
 		<dependency>
 			<groupId>ru.it.lecm.orgstructure</groupId>
 			<artifactId>orgstructure-repo-api</artifactId>
-			<version>${project.version}</version>
+			<version>${platform.version}</version>
             <scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.business-journal</groupId>
 			<artifactId>business-journal-repo-api</artifactId>
-			<version>${project.version}</version>
+			<version>${platform.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<!-- <dependency>
 			<groupId>ru.it.lecm.security</groupId>
 			<artifactId>lecm-security-api</artifactId>
-			<version>${project.version}</version>
+			<version>${platform.version}</version>
 			<scope>provided</scope>
 		</dependency>
         <dependency>
@@ -82,13 +82,13 @@
         <dependency>
             <groupId>ru.it.lecm.base</groupId>
             <artifactId>base-repo-api</artifactId>
-            <version>${project.version}</version>
+            <version>${platform.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>ru.it.lecm.documents</groupId>
             <artifactId>documents-repo-api</artifactId>
-            <version>${project.version}</version>
+            <version>${platform.version}</version>
             <scope>provided</scope>
         </dependency>
         <!-- <dependency>
@@ -98,37 +98,37 @@
         <dependency>
             <groupId>ru.it.lecm.statemachine</groupId>
             <artifactId>statemachine-api</artifactId>
-            <version>${project.version}</version>
+            <version>${platform.version}</version>
             <scope>provided</scope>
         </dependency>
 	    <dependency>
 		    <groupId>ru.it.lecm.dictionary</groupId>
 		    <artifactId>dictionary-repo-api</artifactId>
-		    <version>${project.version}</version>
+		    <version>${platform.version}</version>
 		    <scope>provided</scope>
 	    </dependency>
 	    <dependency>
 		    <groupId>ru.it.lecm.regnumbers</groupId>
 		    <artifactId>lecm-regnumbers-repo-api</artifactId>
-		    <version>${project.version}</version>
+		    <version>${platform.version}</version>
 		    <scope>provided</scope>
 	    </dependency>-->
 	    <dependency>
 		    <groupId>ru.it.lecm.notifications</groupId>
 		    <artifactId>notifications-repo-api</artifactId>
-		    <version>${project.version}</version>
+		    <version>${platform.version}</version>
             <scope>provided</scope>
 	    </dependency>
 		<!-- <dependency>
 			<groupId>ru.it.lecm.reports</groupId>
 			<artifactId>lecm-reports-api</artifactId>
-			<version>${project.version}</version>
+			<version>${platform.version}</version>
                         <scope>provided</scope>
 		</dependency>
         <dependency>
             <groupId>ru.it.lecm.reports</groupId>
             <artifactId>lecm-reports-api</artifactId>
-            <version>${project.version}</version>
+            <version>${platform.version}</version>
             <scope>provided</scope>
         </dependency>-->
         <dependency>
@@ -140,13 +140,13 @@
 		<!--<dependency>
 			<groupId>ru.it.lecm.workflow</groupId>
 			<artifactId>workflow-repo-api</artifactId>
-			<version>${project.version}</version>
+			<version>${platform.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.workflow.approval</groupId>
 			<artifactId>approval-repo-api</artifactId>
-			<version>${project.version}</version>
+			<version>${platform.version}</version>
 			<scope>provided</scope>
 		</dependency> -->
     </dependencies>

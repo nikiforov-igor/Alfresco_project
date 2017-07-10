@@ -1,0 +1,546 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Licensed to the Apache Software Foundation (ASF) under one or more
+	contributor license agreements. See the NOTICE file distributed with
+	this work for additional information regarding copyright ownership.
+	The ASF licenses this file to You under the Apache License, Version
+	2.0 (the "License"); you may not use this file except in compliance
+	with the License. You may obtain a copy of the License at
+	http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+	applicable law or agreed to in writing, software distributed under the
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+	CONDITIONS OF ANY KIND, either express or implied. See the License for
+	the specific language governing permissions and limitations under the
+	License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>ru.it.lecm</groupId>
+        <artifactId>eds-server-infooborot</artifactId>
+        <version>2.1</version>
+    </parent>
+
+    <groupId>ru.it.lecm.server-infooborot</groupId>
+    <artifactId>eds-alfresco-infooborot</artifactId>
+    <name>Alfresco extension</name>
+    <packaging>war</packaging>
+    <url></url>
+
+    <description>Alfresco extension</description>
+    <!-- oOo SINGLE POINT OF CONFIGURATION FOR COMMON ALFRESCO PROPERTIES oOo -->
+    <properties>
+        <!-- Build environment ==> src/main/properties/<env>/alfresco-global.properties is loaded -->
+        <!--<env>local</env>-->
+        <!-- Webapp packaged name -->
+        <webapp.name>eds-alfresco-infooborot</webapp.name>
+        <war.name>eds-alfresco-infooborot.war</war.name>
+        <!--
+         | Empty log dir creates file alfresco.log in the current root folder.
+         | You can also specify a meaningful log directory for the server (add a trailing slash, e.g. '/var/log/alfresco/' )
+         | Jetty embedded run logs by default in ${project.basedir}/alfresco.log
+        -->
+        <log.dir></log.dir>
+        <!--
+        | By default the src/main/properties/local/alfresco-global.properties uses the property "alfresco.data.location" to specify where
+        | alf_data gets created. For env=local you can use this shortcut property below, which gets filtered in the alfresco-global.properties file
+        | DEFAULT: alf_data_jetty relativel to run dir
+        -->
+        <!-- For env=local DB is also configurable here. Of course keep in sync these two values otherwise you'll get integrity errors. Default Mysql-->
+        <alfresco.data.location>./alf_data_jetty</alfresco.data.location>
+        <alfresco.db.name>alfresco_dev</alfresco.db.name>
+        <alfresco.db.driver>com.mysql.jdbc.Driver</alfresco.db.driver>
+        <alfresco.db.username>alfresco</alfresco.db.username>
+        <alfresco.db.password>alfresco</alfresco.db.password>
+        <alfresco.db.params>MODE=PostgreSQL;AUTO_SERVER=TRUE;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=10000;MVCC=TRUE</alfresco.db.params>
+        <alfresco.db.url>jdbc:mysql://localhost/${alfresco.db.name}?useUnicode=yes&amp;characterEncoding=UTF-8</alfresco.db.url>
+        <alfresco.db.datasource.class>org.h2.jdbcx.JdbcDataSource</alfresco.db.datasource.class>
+
+        <!-- DEPRECATED -->
+        <desktop.action.package>org.alfresco.filesys.repo.desk</desktop.action.package>
+        <!--
+        | Uncomment this property together with the <scm> section downwards
+        |
+        | <svn.url> https://mycompany.com/repos/my-test-project </svn.url>
+        -->
+        <!--
+        | Uncomment this property together with the maven-release-plugin <plugin><configuration><tagBase/></configuration></plugin> section downwards
+        |  <svn.tags.url>${svn.url}/tags</svn.tags.url>
+        -->
+        <!--
+         These redundancies are due to filtering issues of Maven. See here
+         http://maven.apache.org/plugins/maven-site-plugin/usage.html
+        -->
+        <site_pom_description>${project.description}</site_pom_description>
+        <site_pom_url>${project.organization.url}</site_pom_url>
+        <site_pom_groupId>${project.groupId}</site_pom_groupId>
+        <site_pom_artifactId>${project.artifactId}</site_pom_artifactId>
+        <site_pom_version>${project.version}</site_pom_version>
+        <!--<site_tags_url>${svn.tags.url}</site_tags_url>-->
+        <!--<site_site_url>${site.url}</site_site_url>-->
+    </properties>
+
+
+    <!-- Alfresco dependencies -->
+    <dependencies>
+        <dependency>
+            <groupId>ru.it.lecm.server-infooborot</groupId>
+            <artifactId>alfresco-infooborot</artifactId>
+            <version>${platform.version}</version>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.contracts</groupId>
+            <artifactId>contracts-repo</artifactId>
+            <version>${eds.version}</version>
+            <scope>runtime</scope>
+            <type>amp</type>
+        </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.errands</groupId>
+            <artifactId>errands-repo</artifactId>
+            <version>${eds.version}</version>
+            <scope>runtime</scope>
+            <type>amp</type>
+        </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.eds-documents</groupId>
+            <artifactId>eds-documents-repo</artifactId>
+            <version>${eds.version}</version>
+            <scope>runtime</scope>
+            <type>amp</type>
+        </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.operative-storage</groupId>
+            <artifactId>operative-storage-repo</artifactId>
+            <version>${eds.version}</version>
+            <scope>runtime</scope>
+            <type>amp</type>
+        </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.meetings</groupId>
+            <artifactId>meetings-repo</artifactId>
+            <version>${eds.version}</version>
+            <scope>runtime</scope>
+            <type>amp</type>
+        </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.internal</groupId>
+            <artifactId>internal-repo</artifactId>
+            <version>${eds.version}</version>
+            <scope>runtime</scope>
+            <type>amp</type>
+        </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.incoming</groupId>
+            <artifactId>incoming-repo</artifactId>
+            <version>${eds.version}</version>
+            <scope>runtime</scope>
+            <type>amp</type>
+        </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.outgoing</groupId>
+            <artifactId>outgoing-repo</artifactId>
+            <version>${eds.version}</version>
+            <scope>runtime</scope>
+            <type>amp</type>
+        </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.nd</groupId>
+            <artifactId>nd-repo</artifactId>
+            <version>${eds.version}</version>
+            <scope>runtime</scope>
+            <type>amp</type>
+        </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.ord</groupId>
+            <artifactId>ord-repo</artifactId>
+            <version>${eds.version}</version>
+            <scope>runtime</scope>
+            <type>amp</type>
+        </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.workflow.reservation</groupId>
+            <artifactId>reservation-repo</artifactId>
+            <version>${eds.version}</version>
+            <scope>runtime</scope>
+            <type>amp</type>
+        </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.resolutions</groupId>
+            <artifactId>resolutions-repo</artifactId>
+            <version>${eds.version}</version>
+            <scope>runtime</scope>
+            <type>amp</type>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>${webapp.name}</finalName>
+        <!--
+         | In certain cases we do build time filtering with the single sourcing
+         | alfresco-global.properties
+        -->
+        <!--<filters>-->
+        <!--<filter>${project.basedir}/src/main/properties/${env}/alfresco-global.properties</filter>-->
+        <!--</filters>-->
+        <!--
+         | Default profile to build as an Alfresco extension - resources are
+         | copied into classpath
+        -->
+        <resources>
+            <!-- By default also no content is restored -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>**/restore-context.xml</exclude>
+                    <exclude>**/ldap-*.xml</exclude>
+                </excludes>
+            </resource>
+            <!--
+             | Include application properties file in classpath: this allows Spring contexts to have customization properties available at
+             | classpath:alfresco-global.properties
+            -->
+            <!--<resource>-->
+            <!--<directory>src/main/properties/${env}</directory>-->
+            <!--<includes>-->
+            <!--<include>alfresco-global.properties</include>-->
+            <!--</includes>-->
+            <!--<filtering>true</filtering>-->
+            <!--</resource>-->
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>log4j.properties</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>${project.basedir}/tools/mysql</directory>
+                <includes>
+                    <include>*.sql</include>
+                </includes>
+                <filtering>true</filtering>
+                <targetPath>tools/mysql</targetPath>
+            </resource>
+        </resources>
+
+        <plugins>
+            <!-- Needed for cross OS compatibility in acp/zip encoding -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.5</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <!-- By default as per http://code.google.com/p/maven-alfresco-archetypes/issues/detail?id=7 FTL are not filtered to avoid corruption.
+                     | This behavior can be relaxed (in case filtering is needed in the FTLs) by selecting which files are filtered and which not as described
+                     | here http://code.google.com/p/maven-alfresco-archetypes/issues/detail?id=7#c3
+                    -->
+                    <nonFilteredFileExtensions>
+                        <nonFilteredFileExtension>ftl</nonFilteredFileExtension>
+                    </nonFilteredFileExtensions>
+                </configuration>
+            </plugin>
+            <!--
+             | useful for eclipse project configuration. Run "mvn eclipse:eclipse"
+             | and hit "F5" on the project
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-eclipse-plugin</artifactId>
+                <version>2.8</version>
+                <!--
+                 | <configuration> <downloadSources>true</downloadSources>
+                 | </configuration>
+                -->
+            </plugin>
+            <!-- Add documentation locales here -->
+            <plugin>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.0</version>
+                <configuration>
+                    <locales>en</locales>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <!--<execution>-->
+                    <!--<id>unpack-amps</id>-->
+                    <!--<phase>process-resources</phase>-->
+                    <!--<goals>-->
+                    <!--<goal>unpack-dependencies</goal>-->
+                    <!--</goals>-->
+                    <!--<configuration>-->
+                    <!--<includeTypes>amp</includeTypes>-->
+                    <!--<outputDirectory>${project.build.directory}/${webapp.name}</outputDirectory>-->
+                    <!--<excludes>META*</excludes>-->
+                    <!--</configuration>-->
+                    <!--</execution>-->
+                    <execution>
+                        <id>copy-repo</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeTypes>amp</includeTypes>
+                            <outputDirectory>${project.build.directory}/../../target/amps/alfresco</outputDirectory>
+                            <overWriteReleases>true</overWriteReleases>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-repo-webapp</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>${project.artifactId}</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>${project.packaging}</type>
+                                    <destFileName>${war.name}</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>${project.build.directory}/../../target/war</outputDirectory>
+                            <overWriteReleases>true</overWriteReleases>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>unpack</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeTypes>war</includeTypes>
+                            <includeGroupIds>org.alfresco</includeGroupIds>
+                            <includeArtifactIds>alfresco</includeArtifactIds>
+                            <includes>META-INF/MANIFEST.MF</includes>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+
+                    <!--| This is required to be re-defined explicitly at plugin level as-->
+                    <!--| otherwise the 'amp' extension unArchiver won't be available to the-->
+                    <!--| maven-dependency-plugin-->
+
+                    <dependency>
+                        <groupId>org.alfresco.maven.plugin</groupId>
+                        <artifactId>maven-amp-plugin</artifactId>
+                        <version>3.0.4</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <overlays>
+                        <!-- Current project customizations -->
+                        <overlay/>
+                        <!-- The Alfresco WAR -->
+                        <overlay>
+                            <groupId>ru.it.lecm.server-infooborot</groupId>
+                            <artifactId>alfresco-infooborot</artifactId>
+                            <type>war</type>
+                            <excludes>
+                                <exclude>WEB-INF/lib/poi-*-beta2-20130720.jar</exclude>
+                                <exclude>WEB-INF/lib/xmlbeans-2.3.0.jar</exclude>
+                                <exclude>WEB-INF/lib/XmlSchema-1.4.5.jar</exclude>
+                            </excludes>
+                        </overlay>
+                        <!-- Дополнительные модули СЭД -->
+                        <overlay>
+                            <groupId>ru.it.lecm.eds-documents</groupId>
+                            <artifactId>eds-documents-repo</artifactId>
+                            <type>amp</type>
+                        </overlay>
+                        <overlay>
+                            <groupId>ru.it.lecm.errands</groupId>
+                            <artifactId>errands-repo</artifactId>
+                            <type>amp</type>
+                        </overlay>
+                        <overlay>
+                            <groupId>ru.it.lecm.contracts</groupId>
+                            <artifactId>contracts-repo</artifactId>
+                            <type>amp</type>
+                        </overlay>
+                        <overlay>
+                            <groupId>ru.it.lecm.internal</groupId>
+                            <artifactId>internal-repo</artifactId>
+                            <type>amp</type>
+                        </overlay>
+                        <overlay>
+                            <groupId>ru.it.lecm.incoming</groupId>
+                            <artifactId>incoming-repo</artifactId>
+                            <type>amp</type>
+                        </overlay>
+                        <overlay>
+                            <groupId>ru.it.lecm.outgoing</groupId>
+                            <artifactId>outgoing-repo</artifactId>
+                            <type>amp</type>
+                        </overlay>
+                        <overlay>
+                            <groupId>ru.it.lecm.nd</groupId>
+                            <artifactId>nd-repo</artifactId>
+                            <type>amp</type>
+                        </overlay>
+                        <overlay>
+                            <groupId>ru.it.lecm.ord</groupId>
+                            <artifactId>ord-repo</artifactId>
+                            <type>amp</type>
+                        </overlay>
+                        <overlay>
+                            <groupId>ru.it.lecm.operative-storage</groupId>
+                            <artifactId>operative-storage-repo</artifactId>
+                            <type>amp</type>
+                        </overlay>
+                        <overlay>
+                            <groupId>ru.it.lecm.meetings</groupId>
+                            <artifactId>meetings-repo</artifactId>
+                            <type>amp</type>
+                        </overlay>
+                        <overlay>
+                            <groupId>ru.it.lecm.resolutions</groupId>
+                            <artifactId>resolutions-repo</artifactId>
+                            <type>amp</type>
+                        </overlay>
+                        <overlay>
+                            <groupId>ru.it.lecm.workflow.reservation</groupId>
+                            <artifactId>reservation-repo</artifactId>
+                            <type>amp</type>
+                        </overlay>
+                    </overlays>
+                    <archive>
+                        <addMavenDescriptor>false</addMavenDescriptor>
+                        <manifestFile>${project.build.directory}/${webapp.name}/META-INF/MANIFEST.MF</manifestFile>
+                    </archive>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.alfresco.maven.plugin</groupId>
+                        <artifactId>alfresco-maven-plugin</artifactId>
+                        <version>2.2.0</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <configuration>
+                    <!-- useEditMode>true</useEditMode> -->
+                    <dryRun>true</dryRun>
+                    <preparationGoals>clean package</preparationGoals>
+                    <goals>install deploy cargo:undeploy cargo:deploy site:deploy</goals>
+                    <!-- <tagBase>${svn.tags.url}</tagBase> -->
+                </configuration>
+            </plugin>
+            <!--
+             | Adds support for books PDF and RTF generation for single sourced
+             | documentation
+            -->
+            <plugin>
+                <groupId>org.apache.maven.doxia</groupId>
+                <artifactId>doxia-maven-plugin</artifactId>
+                <version>1.2</version>
+                <executions>
+                    <execution>
+                        <phase>pre-site</phase>
+                        <goals>
+                            <goal>render-books</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!--
+                     | Target books dir: within the site so it can be linked and deployed
+                     | TODO: Use ${project.target.dir} or so similar property instead of
+                     | hard wiring 'target'
+                    -->
+                    <generatedDocs>target/site/books</generatedDocs>
+                    <books>
+                        <book>
+                            <directory>src/site</directory>
+                            <descriptor>src/books/manual.xml</descriptor>
+                            <formats>
+                                <format>
+                                    <id>xdoc</id>
+                                </format>
+                                <format>
+                                    <id>pdf</id>
+                                </format>
+                                <format>
+                                    <id>rtf</id>
+                                </format>
+                            </formats>
+                        </book>
+                    </books>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <reporting>
+        <plugins>
+            <!-- Targeting 1.7 -->
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.12</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.8.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jxr-maven-plugin</artifactId>
+                <version>2.0-beta-1</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-clover-plugin</artifactId>
+                <version>2.4</version>
+            </plugin>
+            <!--
+             | Enable this plugin only after setting SCM connection, otherwise mvn
+             | site will fail <plugin> <groupId>org.codehaus.mojo</groupId>
+             | <artifactId>changelog-maven-plugin</artifactId> </plugin>
+            -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>taglist-maven-plugin</artifactId>
+                <version>2.4</version>
+            </plugin>
+        </plugins>
+    </reporting>
+    <profiles>
+    </profiles>
+</project>
