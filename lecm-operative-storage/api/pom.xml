@@ -38,14 +38,14 @@
 		<dependency>
 			<groupId>ru.it.lecm.security</groupId>
 			<artifactId>lecm-security-api</artifactId>
-			<version>${project.version}</version>
+			<version>${platform.version}</version>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>ru.it.lecm.orgstructure</groupId>
 			<artifactId>orgstructure-repo-api</artifactId>
-			<version>${project.version}</version>
+			<version>${platform.version}</version>
 			<scope>provided</scope>
 		</dependency> -->
 

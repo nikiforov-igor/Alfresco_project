@@ -54,7 +54,7 @@
 		<dependency>
 			<groupId>ru.it.lecm.nd</groupId>
 			<artifactId>nd-repo-api</artifactId>
-			<version>${platform.version}</version>
+			<version>${eds.version}</version>
 		</dependency>
 		<!--<dependency>
 			<groupId>org.slf4j</groupId>
@@ -73,13 +73,13 @@
 		<dependency>
 			<groupId>ru.it.lecm.eds-documents</groupId>
 			<artifactId>eds-documents-repo-api</artifactId>
-			<version>${platform.version}</version>
+			<version>${eds.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.ord</groupId>
 			<artifactId>ord-repo-api</artifactId>
-			<version>${platform.version}</version>
+			<version>${eds.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

@@ -45,7 +45,7 @@
 		<dependency>
 			<groupId>ru.it.lecm.ord</groupId>
 			<artifactId>ord-repo-api</artifactId>
-			<version>${platform.version}</version>
+			<version>${eds.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.notifications</groupId>
@@ -62,7 +62,7 @@
 		<dependency>
 			<groupId>ru.it.lecm.eds-documents</groupId>
 			<artifactId>eds-documents-repo-api</artifactId>
-			<version>${platform.version}</version>
+			<version>${eds.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<!--<dependency>
@@ -72,7 +72,7 @@
 		<dependency>
 			<groupId>ru.it.lecm.errands</groupId>
 			<artifactId>errands-repo-api</artifactId>
-			<version>${platform.version}</version>
+			<version>${eds.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -134,13 +134,13 @@
 		<dependency>
 			<groupId>ru.it.lecm.base</groupId>
 			<artifactId>base-repo-api</artifactId>
-			<version>${project.version}</version>
+			<version>${platform.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.orgstructure</groupId>
 			<artifactId>orgstructure-repo-api</artifactId>
-			<version>${project.version}</version>
+			<version>${platform.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
