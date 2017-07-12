@@ -11,7 +11,7 @@
 		<property name="lecm-rpeditor:reportQueryPgSize"><![CDATA[-1]]></property>
 		<property name="lecm-rpeditor:loadColumnsFromSQL"><![CDATA[false]]></property>
 		<property name="lecm-rpeditor:reportDocType"><![CDATA[lecm-errands:document]]></property>
-		<property name="lecm-rpeditor:reportCode"><![CDATA[errands-barcode-generic]]></property>
+		<property name="lecm-rpeditor:reportCode"><![CDATA[errands-base-doc-barcode]]></property>
 		<property name="lecm-rpeditor:expression"><![CDATA[doc.assoc('lecm-errands:base-assoc') != null]]></property>
 		<property name="lecm-rpeditor:reportObjectsMultiplicity"><![CDATA[false]]></property>
 		<items>
