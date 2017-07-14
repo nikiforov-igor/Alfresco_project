@@ -666,7 +666,7 @@
                 <value>alfresco/module/${artifactId}/reports/exec-discipline-by-creator.xml</value>
                 <value>alfresco/module/${artifactId}/reports/exec-discipline-by-unit.xml</value>
                 <value>alfresco/module/${artifactId}/reports/exec-discipline-by-executor.xml</value>
-				<value>alfresco/module/${artifactId}/reports/errands-barcode-generic.xml</value>
+				<value>alfresco/module/${artifactId}/reports/errands-base-doc-barcode.xml</value>
                 <value>alfresco/module/${artifactId}/reports/errands-executed-out-of-time.xml</value>
             </list>
         </property>
@@ -682,7 +682,7 @@
                 <value>exec-discipline-by-creator</value>
                 <value>exec-discipline-by-unit</value>
                 <value>exec-discipline-by-executor</value>
-				<value>errands-barcode-generic</value>
+				<value>errands-base-doc-barcode</value>
                 <value>errands-executed-out-of-time</value>
             </list>
         </property>
