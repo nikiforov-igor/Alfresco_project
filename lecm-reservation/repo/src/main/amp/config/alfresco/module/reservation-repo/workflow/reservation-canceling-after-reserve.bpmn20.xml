@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:activiti="http://activiti.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.it.ru/logicECM/reservation/reservationRequestCancelingAfterReserve/1.0">
+    <process id="reservationRequestCancelingAfterReserve" name="Запрос отзыва номера(после резерва)">
+        <extensionElements>
+            <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                <activiti:field name="script">
+                    <activiti:string>
+                        var document = bpm_package.children[0];
+                        document.properties["lecm-reservation-aspects:isReservationCanceling"] = true;
+                        lecmPermission.pushAuthentication();
+                        lecmPermission.setRunAsUserSystem();
+                        document.save();
+                        lecmPermission.popAuthentication();
+                    </activiti:string>
+                </activiti:field>
+            </activiti:executionListener>
+            <activiti:executionListener event="end" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                <activiti:field name="script">
+                    <activiti:string>
+                        var document = bpm_package.children[0];
+                        document.properties["lecm-reservation-aspects:isReservationCanceling"] = false;
+                        lecmPermission.pushAuthentication();
+                        lecmPermission.setRunAsUserSystem();
+                        document.save();
+                        lecmPermission.popAuthentication();
+                    </activiti:string>
+                </activiti:field>
+            </activiti:executionListener>
+        </extensionElements>
+        <startEvent id="startRequestCancel" name="Start" activiti:formKey="lecmRegnumRes:requestReservationCancelingAfterReserve"></startEvent>
+        <receiveTask id="reservationReceiveTask" name="Receive Task"></receiveTask>
+
+        <serviceTask id="emptyScripttask1" name="Empty Script Task 1" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
+            <extensionElements>
+                <activiti:field name="script">
+                    <activiti:string><![CDATA[
+                        (function () {})();
+                    ]]></activiti:string>
+                </activiti:field>
+            </extensionElements>
+        </serviceTask>
+
+        <serviceTask id="searchRegistrarsScripttask" name="Search registrars" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
+            <extensionElements>
+                <activiti:field name="script">
+                    <activiti:string><![CDATA[
+                        var document = bpm_package.children[0];
+                        var currentEmployee = orgstructure.getCurrentEmployee();
+                        var registrars = [];
+                        if (document.typeShort != "lecm-contract:document") {
+                            /* Централизованная ли регистрация */
+                            if (edsGlobalSettings.isRegistrationCenralized()) {
+                                registrars = orgstructure.getEmployeesByBusinessRoleId('DA_REGISTRARS', true);
+                            } else {
+                                /* Получаем основную должностную позицию */
+                                var primaryPosition = orgstructure.getPrimaryPosition(currentEmployee.nodeRef.toString());
+                                if (primaryPosition) {
+                                    var unit = orgstructure.getUnitByStaff(primaryPosition.nodeRef.toString());
+                                    registrars = edsGlobalSettings.getPotentialWorkers('DA_REGISTRARS', unit.nodeRef.toString());
+                                }
+                            }
+                            if (!registrars) {
+                                    registrars.push(edsGlobalSettings.getDutyRegistrar());
+                            }
+                        } else {
+                            registrars = orgstructure.getEmployeesByBusinessRoleId('CONTRACT_RECORDER', true);
+                        }
+
+                        var registrarsListItems = base.getWorkflowNodeConverter().convertNodes(base.getValueConverter().convertValueForJava(registrars), true);
+                        execution.setVariableLocal('registrarsList', registrarsListItems);
+                        execution.setVariable('reservateInitiator', base.getWorkflowNodeConverter().convertNode(currentEmployee.nodeRef));
+                        var cancelReason = execution.getVariableLocal('lecmRegnumRes_cancelReasonAfterReserve');
+                        var cancelReasonLink = "<a href='#' title=" + cancelReason + ">отмену</a>";
+                        var logText = "#initiator запросил " + cancelReasonLink + " резерва регистрационных данных #mainobject";
+                        businessJournal.log(document.nodeRef.toString(), 'RESERVATION', logText, []);
+                    ]]></activiti:string>
+                </activiti:field>
+            </extensionElements>
+        </serviceTask>
+
+        <userTask id="requestCancelTask" name="Отмена резервирования" activiti:assignee="${assignee.properties['lecm-orgstr:employee-person-login']}" activiti:formKey="lecmRegnumRes:requestReservationCancelingAfterReserveTask">
+            <extensionElements>
+                <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+                    <activiti:field name="script">
+                        <activiti:string>
+                            var document = bpm_package.children[0];
+                            if (document) {
+                                var workflowRole = task.getVariableLocal('registrarDynamicRole');
+                                var employee = assignee;
+                                task.setVariableLocal('assumeExecutor', employee.nodeRef.toString());
+                                var cancelReason = task.getVariable('lecmRegnumRes_cancelReasonAfterReserve');
+                                var currentEmployee = orgstructure.getCurrentEmployee();
+                                var employeeName = currentEmployee.properties['lecm-orgstr:employee-short-name'];
+                                var reserveCancelTaskMessage = 'Сотрудник ' + employeeName + ' запросил отмену резерва регистрационных данных по причине:' + cancelReason;
+                                document.properties['lecm-reservation-aspects:reserveCancelTaskMessage'] = reserveCancelTaskMessage;
+                                lecmPermission.pushAuthentication();
+                                lecmPermission.setRunAsUserSystem();
+                                document.save();
+                                lecmPermission.popAuthentication();
+
+                                notifications.sendNotification({
+                                    recipients: [employee],
+                                    templateCode: 'RESERVATION_REQUEST_STARTED',
+                                    templateConfig: {
+                                        mainObject: document,
+                                        eventExecutor: currentEmployee
+                                    }
+                                });
+                            }
+                        </activiti:string>
+                    </activiti:field>
+                </activiti:taskListener>
+                <activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+                    <activiti:field name="script">
+                        <activiti:string><![CDATA[0
+                                var document = bpm_package.children[0];
+                                var employee = assignee;
+
+                                var workflowRole = task.getVariableLocal('registrarDynamicRole');
+                                var workflowRoleName = workflowRole ? workflowRole : 'LECM_REGISTRAR_DYN';
+                                lecmPermission.grantDynamicRole(document, employee, workflowRoleName, 'LECM_BASIC_PG_Employee');
+                                lecmPermission.grantDynamicRole(document, employee, 'RESERVATION_PERFORMER_DYN', 'LECM_BASIC_PG_Reader');
+                            ]]></activiti:string>
+                    </activiti:field>
+                </activiti:taskListener>
+                <activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+                    <activiti:field name="script">
+                        <activiti:string><![CDATA[
+                                var document = bpm_package.children[0];
+                                var employee = assignee;
+                                var reservateInitiator = execution.getVariable('reservateInitiator');
+
+                                var rejectReason = task.getVariableLocal('lecmRegnumRes_requestCancelRejectReason');
+                                var decision = task.getVariableLocal('lecmRegnumRes_requestCancelDecision') ? task.getVariableLocal('lecmRegnumRes_requestCancelDecision') + '' : '';
+                                var currentEmployee = orgstructure.getCurrentEmployee();
+                                var templateCode;
+                                var templateConfigObject = {
+                                    mainObject: document,
+                                    eventExecutor: currentEmployee
+                                };
+
+                                if (decision == 'APPROVED') {
+                                    var presentString = document.properties['lecm-document:present-string'];
+                                    document.properties['lecm-reservation-aspects:presentStringBeforeReservationCanceling'] = presentString;
+
+                                    var projectNumber = document.properties['lecm-document-aspects:reg-project-data-number'];
+                                    document.properties['lecm-reservation-aspects:isReserved'] = false;
+                                    document.properties['lecm-document-aspects:reg-data-date'] = null;
+                                    document.properties['lecm-document-aspects:reg-data-number'] = projectNumber;
+
+                                    var bjMsg = '#initiator отменил резервирование номера для документа #mainobject. Возвращен номер проекта документа:' + projectNumber;
+                                    businessJournal.log(document.nodeRef.toString(), 'RESERVATION', bjMsg, []);
+
+                                    /* Подготовка уведомления */
+                                    templateCode = 'RESERVATION_REQUEST_CANCEL_FINISHED_APPROVED';
+                                    templateConfigObject.projectNumber = projectNumber;
+                                } else if (decision == 'REJECTED') {
+
+                                    /* Запись в бизнес журнал если решение плохое: */
+                                    var rejectReasonLink = "<a href='#' title=" + rejectReason + ">отклонил</a>";
+                                    var bjMsg = '#initiator ' + rejectReasonLink + ' запрос на отмену зарезервированных регистрационных данных документа #mainobject';
+                                    businessJournal.log(document.nodeRef.toString(), 'RESERVATION', bjMsg, []);
+
+                                    /* Подготовка уведомления */
+                                    templateCode = 'RESERVATION_REQUEST_CANCEL_FINISHED_REJECTED';
+                                    templateConfigObject.reason = rejectReason;
+                                }
+                                lecmPermission.pushAuthentication();
+                                lecmPermission.setRunAsUserSystem();
+                                document.save();
+                                lecmPermission.popAuthentication();
+
+                                /* Уведомление при окончании запроса на резервирование рег.номера: */
+                                notifications.sendNotification({
+                                    recipients: [reservateInitiator],
+                                    templateCode: templateCode,
+                                    templateConfig: templateConfigObject
+                                });
+
+                                execution.setVariable('taskDecision', decision);
+                                for (var i=0; i < registrarsList.size(); i++) {
+                                    lecmPermission.revokeDynamicRole(document, registrarsList.get(i), 'LECM_REGISTRAR_DYN');
+                                    lecmPermission.revokeDynamicRole(document, registrarsList.get(i), 'RESERVATION_PERFORMER_DYN');
+                                }
+                                documentMembers.addMemberWithoutCheckPermission(document, employee, 'LECM_BASIC_PG_Reader', true);
+                            ]]></activiti:string>
+                    </activiti:field>
+                </activiti:taskListener>
+            </extensionElements>
+            <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${registrarsList}" activiti:elementVariable="assignee">
+                <completionCondition>${"REJECTED" == taskDecision || "APPROVED" == taskDecision}</completionCondition>
+            </multiInstanceLoopCharacteristics>
+        </userTask>
+        <endEvent id="endRequestCancel" name="End"></endEvent>
+        <sequenceFlow id="flow1" sourceRef="startRequestCancel" targetRef="emptyScripttask1"></sequenceFlow>
+        <sequenceFlow id="flow2" sourceRef="emptyScripttask1" targetRef="reservationReceiveTask"></sequenceFlow>
+        <sequenceFlow id="flow3" sourceRef="reservationReceiveTask" targetRef="searchRegistrarsScripttask"></sequenceFlow>
+        <sequenceFlow id="flow4" sourceRef="searchRegistrarsScripttask" targetRef="requestCancelTask"></sequenceFlow>
+        <sequenceFlow id="flow7" sourceRef="requestCancelTask" targetRef="endRequestCancel"> </sequenceFlow>
+    </process>
+</definitions>

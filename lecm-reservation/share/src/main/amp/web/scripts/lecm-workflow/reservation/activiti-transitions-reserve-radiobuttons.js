@@ -22,6 +22,12 @@ LogicECM.module = LogicECM.module || {};
 		 */
 		
 		transitionDecision: null,
+
+		options: {
+			decisionProp: 'prop_lecmRegnumRes_decision',
+			rejectReasonProp: 'prop_lecmRegnumRes_rejectReason',
+			positiveDecision: 'RESERVED'
+		},
 		
 		onReady: function ActivitiTransitions_onReady()
 		{
@@ -34,11 +40,11 @@ LogicECM.module = LogicECM.module || {};
 			// изначально скрываем причину отмены резервирования
 			var HIDE = false;
 			this.setCommentVisibility(HIDE);
-			
+
             YAHOO.Bubbling.fire("registerValidationHandler",
             		{
-            			fieldId: this.id.replace('prop_lecmRegnumRes_decision-container','prop_bpm_comment'),
-            			handler: this.checkComment,
+            			fieldId: this.id.replace(this.options.decisionProp + '-container', this.options.rejectReasonProp),
+            			handler: this.checkComment.bind(this),
             			when: "onchange",
             			message: this.msg('resevartion.reject.reason.not.set')
             		});
@@ -47,11 +53,11 @@ LogicECM.module = LogicECM.module || {};
 
 		checkComment: function checkComment(arg) {
 			var transitionDecision = '';
-			var decisionElement = Dom.get(arg.id.replace('prop_bpm_comment', 'prop_lecmRegnumRes_decision'));
+			var decisionElement = Dom.get(arg.id.replace(this.options.rejectReasonProp, this.options.decisionProp));
 			if (decisionElement != null) {
 				transitionDecision = decisionElement.value
 			}
-			if ((transitionDecision == 'RESERVED') || (arg && arg.value.trim() != '')) {
+			if ((transitionDecision == this.options.positiveDecision) || (arg && arg.value.trim() != '')) {
 				return true;
 			}
 			else {
@@ -150,7 +156,7 @@ LogicECM.module = LogicECM.module || {};
 			 * RESERVED - поле причины отмены скрыто
 			 * REJECTED - поле причины отмены показано
 			 */
-			if (transitionId == 'RESERVED') {
+			if (transitionId == this.options.positiveDecision) {
 				this.setCommentVisibility(HIDE);
 			}
 			else if (transitionId == 'REJECTED') {

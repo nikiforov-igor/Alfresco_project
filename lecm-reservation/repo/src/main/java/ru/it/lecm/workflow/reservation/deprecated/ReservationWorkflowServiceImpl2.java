@@ -152,7 +152,7 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 
 	@Override
 	public WorkflowTaskDecision completeTask(final NodeRef assignee, final DelegateTask task) {
-		String comment = (String) task.getVariableLocal("bpm_comment");
+		String comment = (String) task.getVariableLocal("lecmRegnumRes_rejectReason");
 		String decision = (String) task.getVariableLocal("lecmRegnumRes_decision");
 		Date regDate = (Date) task.getVariable("lecmRegnumRes_date");
 		NodeRef bpmPackage = ((ScriptNode) task.getVariable("bpm_package")).getNodeRef();
@@ -184,7 +184,7 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 					SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
 					String documentReservedDate = dateFormat.format(regDate);
 					regInfo += " от " + documentReservedDate;
-				}	
+				}
 				String bjMessage = "#initiator выполнил резервирование регистрационного номера для документа #mainobject " + regInfo;
 				String registrarLogin = orgstructureService.getEmployeeLogin(orgstructureService.getCurrentEmployee());
 				businessJournalService.log(registrarLogin, documentRef, "RESERVATION", bjMessage, null);

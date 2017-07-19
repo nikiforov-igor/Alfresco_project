@@ -1,6 +1,5 @@
 package ru.it.lecm.workflow.reservation.extensions;
 
-import java.util.List;
 import org.activiti.engine.delegate.DelegateTask;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
@@ -11,9 +10,11 @@ import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.workflow.WorkflowTaskDecision;
 import ru.it.lecm.workflow.reservation.DecisionResult;
 import ru.it.lecm.workflow.reservation.ReservationWorkflowService;
-import ru.it.lecm.workflow.WorkflowTaskDecision;
+
+import java.util.List;
 
 /**
  *
@@ -85,7 +86,7 @@ public class ReservationWorkflowJavascriptExtension2 extends BaseWebScript {
 
 	public void notifyReservationFinished(final ActivitiScriptNode bpmPackage, final DelegateTask task) {
 		String taskDecision = (String) task.getVariable("taskDecision");
-		String comment = (String) task.getVariable("bpm_comment");
+		String comment = (String) task.getVariable("lecmRegnumRes_rejectReason");
 		ScriptNode reservateInitiator = (ScriptNode)task.getVariable("reservateInitiator");
 		String decision;
 		if (DecisionResult.RESERVED.name().equals(taskDecision)) {

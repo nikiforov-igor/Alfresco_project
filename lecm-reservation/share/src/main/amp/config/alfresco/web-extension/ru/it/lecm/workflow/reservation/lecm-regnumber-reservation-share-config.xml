@@ -52,7 +52,7 @@
 					<show id="reservationWf:presentString" force="true" />
 					<show id="warning" force="true"/>
 					<show id="lecmRegnumRes:decision" />
-					<show id="bpm:comment" />
+					<show id="lecmRegnumRes:rejectReason" />
 					<show id="style" />
 					<show id="transitions" force="true" />
 				</field-visibility>
@@ -61,14 +61,83 @@
 						<control template="/ru/it/lecm/workflow/controls/document-present-string.ftl" />
 					</field>
 					<field id="warning">
-						<control template="/ru/it/lecm/workflow/reservation/controls/reserve-message-control.ftl" />
+						<control template="/ru/it/lecm/workflow/reservation/controls/reserve-message-control.ftl" >
+							<control-param name="formatString">{lecm-reservation-aspects:reserveTaskMessage}</control-param>
+						</control>
 					</field>
 					<field id="lecmRegnumRes:decision" mandatory="true">
 						<control template="/ru/it/lecm/workflow/reservation/controls/activiti-transitions-reserve-radiobuttons.ftl">
 							<control-param name="options">RESERVED|Одобрить запрос#alf#REJECTED|Отклонить запрос</control-param>
 						</control>
 					</field>
-					<field id="bpm:comment" label-id="ru.it.reservation.title.rejectReason">
+					<field id="lecmRegnumRes:rejectReason" label-id="ru.it.reservation.title.rejectReason">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+							<control-param name="rows">4</control-param>
+						</control>
+					</field>
+					<field id="style">
+						<control template="/ru/it/lecm/workflow/reservation/controls/dialog-narrow.ftl" />
+					</field>
+					<field id="transitions">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl">
+							<control-param name="fieldValue">Next</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="string-compare" condition="activiti$reservationRequestCancelingAfterReserve">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="packageItems"/>
+					<show id="lecmRegnumRes:cancelReasonAfterReserve"/>
+				</field-visibility>
+				<appearance>
+					<field id="packageItems">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+					</field>
+					<field id="lecmRegnumRes:cancelReasonAfterReserve" mandatory="true">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+							<control-param name="rows">4</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="task-type" condition="lecmRegnumRes:requestReservationCancelingAfterReserveTask">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="reservationWf:presentString" force="true" />
+					<show id="warning" force="true"/>
+					<show id="lecmRegnumRes:requestCancelDecision" />
+					<show id="lecmRegnumRes:requestCancelRejectReason" />
+					<show id="style" />
+					<show id="transitions" force="true" />
+				</field-visibility>
+				<appearance>
+					<field id="reservationWf:presentString">
+						<control template="/ru/it/lecm/workflow/controls/document-present-string.ftl" />
+					</field>
+					<field id="warning">
+						<control template="/ru/it/lecm/workflow/reservation/controls/reserve-message-control.ftl" >
+							<control-param name="formatString">{lecm-reservation-aspects:reserveCancelTaskMessage}</control-param>
+						</control>
+					</field>
+					<field id="lecmRegnumRes:requestCancelDecision" mandatory="true">
+						<control template="/ru/it/lecm/workflow/reservation/controls/activiti-transitions-reserve-radiobuttons.ftl">
+							<control-param name="options">APPROVED|Одобрить запрос#alf#REJECTED|Отклонить запрос</control-param>
+							<control-param name="positiveDecision">APPROVED</control-param>
+							<control-param name="rejectReasonProp">prop_lecmRegnumRes_requestCancelRejectReason</control-param>
+							<control-param name="decisionProp">prop_lecmRegnumRes_requestCancelDecision</control-param>
+						</control>
+					</field>
+					<field id="lecmRegnumRes:requestCancelRejectReason" label-id="ru.it.reservation.title.rejectReason">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
 							<control-param name="rows">4</control-param>
 						</control>
@@ -89,6 +158,7 @@
 	<config evaluator="string-compare" condition="Workflow">
 		<hidden-workflows>
 			<workflow name="activiti$regnumReservationExecution"/>
+			<workflow name="activiti$reservationRequestCancelingAfterReserve"/>
 		</hidden-workflows>
 	</config>
 

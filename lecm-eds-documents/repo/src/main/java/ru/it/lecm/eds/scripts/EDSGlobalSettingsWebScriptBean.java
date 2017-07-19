@@ -1,9 +1,5 @@
 package ru.it.lecm.eds.scripts;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.json.JSONException;
@@ -12,6 +8,11 @@ import org.mozilla.javascript.Scriptable;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.eds.api.EDSGlobalSettingsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  *
@@ -97,6 +98,14 @@ public class EDSGlobalSettingsWebScriptBean extends BaseWebScript {
 			}
 			edsGlobalSettingsService.savePotentialWorkers(businessRoleId, orgElementRef, employeesRefs);
 		}
+	}
+
+	/**
+	 * Получение дежурного регистратора
+	 * @return scriptNode дежурного регистратора
+     */
+	public ScriptNode getDutyRegistrar() {
+		return new ScriptNode(edsGlobalSettingsService.getDutyRegistrar(), serviceRegistry, getScope());
 	}
 
 	public ScriptNode getSettingsNode() {

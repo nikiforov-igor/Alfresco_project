@@ -13,6 +13,15 @@ function init() {
 		new LogicECM.module.ActivitiTransitionReserveRadiobuttons('${containerId}').setOptions({
 			currentValue: '${field.control.params.options?js_string}',
 			hiddenFieldName: '${hiddenFieldName}',
+		<#if field.control.params.decisionProp??>
+            decisionProp: '${field.control.params.decisionProp}',
+		</#if>
+		<#if field.control.params.decisionProp??>
+            rejectReasonProp: '${field.control.params.rejectReasonProp}',
+		</#if>
+		<#if field.control.params.decisionProp??>
+            positiveDecision: '${field.control.params.positiveDecision}',
+		</#if>
 			hiddenFieldId: '${hiddenFieldId}'
 		}).setMessages(${messages});
 	}

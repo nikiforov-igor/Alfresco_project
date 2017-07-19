@@ -85,6 +85,7 @@
 			<form>
 				<field-visibility>
                     <show id="lecm-eds-globset:centralized-registration"/>
+					<show id="lecm-eds-globset:duty-registrar-assoc"/>
                     <show id="lecm-eds-globset:arm-for-dashlet-assoc"/>
 				    <show id="lecm-eds-globset:arm-node-for-dashlet-assoc"/>
 				</field-visibility>
@@ -99,6 +100,11 @@
 							<control-param name="employeesLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
 							<control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name}</control-param>
 							<control-param name="selectedItemsNameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name}, {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}, {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+						</control>
+					</field>
+					<field id="lecm-eds-globset:duty-registrar-assoc">
+						<control>
+							<control-param name="allowedNodesScript"><![CDATA[lecm/orgstructure/employees/allowed?businessRoleId=DA_REGISTRARS&includeAdmin=true]]></control-param>
 						</control>
 					</field>
 				    <field id="lecm-eds-globset:arm-for-dashlet-assoc">
@@ -133,8 +139,9 @@
 			<form>
 				<field-visibility>
                     <show id="lecm-eds-globset:centralized-registration"/>
-                    <show id="lecm-eds-globset:arm-for-dashlet-assoc"/>
-				<show id="lecm-eds-globset:arm-node-for-dashlet-assoc"/>
+					<show id="lecm-eds-globset:duty-registrar-assoc"/>
+					<show id="lecm-eds-globset:arm-for-dashlet-assoc"/>
+					<show id="lecm-eds-globset:arm-node-for-dashlet-assoc"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-eds-globset:centralized-registration" label-id="label.centralized-registration">
@@ -147,6 +154,12 @@
 							<control-param name="employeesLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
 							<control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name}</control-param>
 							<control-param name="selectedItemsNameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name}, {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}, {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+						</control>
+					</field>
+					<field id="lecm-eds-globset:duty-registrar-assoc">
+						<control>
+							<control-param name="allowedNodesScript"><![CDATA[lecm/orgstructure/employees/allowed?businessRoleId=DA_REGISTRARS&includeAdmin=true]]></control-param>
+							<control-param name="defaultValueDataSource">lecm/orgstructure/api/getEmployee?login=admin</control-param>
 						</control>
 					</field>
                     <field id="lecm-eds-globset:arm-for-dashlet-assoc">
