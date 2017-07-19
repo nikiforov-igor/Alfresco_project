@@ -77,7 +77,9 @@
 		  p:namespaceService-ref="namespaceService"
 		  p:dictionaryService-ref="serviceDictionary"
 		  p:folders-ref="eds.global-settings.folders"
-		  p:documentGlobalSettingsService-ref="documents.global-settings.service"/>
+		  p:documentGlobalSettingsService-ref="documents.global-settings.service"
+          p:defaultDutyRegistrarName="${lecm.eds.globalSettings.dutyRegistrarName}"
+	/>
 
     <bean id="eds.reports.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="reportsEditorService,reportsEditor.LogicEcmDictionariesBootstrap,

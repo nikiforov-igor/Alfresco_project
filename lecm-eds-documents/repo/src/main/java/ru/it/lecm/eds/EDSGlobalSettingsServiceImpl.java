@@ -33,6 +33,15 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 	private DocumentGlobalSettingsService documentGlobalSettingsService;
 	private NodeRef settingsNode;
 	private NodeRef termsOfNotificationSettingsNode;
+    private String defaultDutyRegistrarName;
+
+    public String getDefaultDutyRegistrarName() {
+        return defaultDutyRegistrarName;
+    }
+
+    public void setDefaultDutyRegistrarName(String defaultDutyRegistrarName) {
+        this.defaultDutyRegistrarName = defaultDutyRegistrarName;
+    }
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;
@@ -219,10 +228,25 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 //		TODO: Метод разделён, создание вынесено в createSettingsNode
 		if (settingsNode == null) {
 			settingsNode = nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, EDS_GLOBAL_SETTINGS_NODE_NAME);
+			this.initDefaultDutyRegistrar(settingsNode);
 		}
 		return settingsNode;
 //		return nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, EDS_GLOBAL_SETTINGS_NODE_NAME);
 	}
+
+	private void initDefaultDutyRegistrar(NodeRef settings){
+		NodeRef registrar = findNodeByAssociationRef(settings, ASSOC_DUTY_REGISTRAR, null, ASSOCIATION_TYPE.TARGET);
+		if (registrar == null) {
+			if (defaultDutyRegistrarName == null || "".equals(defaultDutyRegistrarName)) {
+				defaultDutyRegistrarName = "admin";
+			}
+			registrar = orgstructureService.getEmployeeByPerson(defaultDutyRegistrarName);
+			if (registrar != null) {
+				nodeService.createAssociation(settings, registrar, ASSOC_DUTY_REGISTRAR);
+			}
+		}
+	}
+
 
         /**
          * создание ноды с настройками. создаётся при инициализации бина
@@ -249,7 +273,11 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
                 //settingsRef = createNode(getServiceRootFolder(), TYPE_SETTINGS, EDS_GLOBAL_SETTINGS_NODE_NAME, null);
 //            }
 //            return settingsRef;
-            return createNode(getServiceRootFolder(), TYPE_SETTINGS, EDS_GLOBAL_SETTINGS_NODE_NAME, null);
+
+			NodeRef settings = createNode(getServiceRootFolder(), TYPE_SETTINGS, EDS_GLOBAL_SETTINGS_NODE_NAME, null);
+			//Заполняем Дежурного регистратора по умолчанию.
+			this.initDefaultDutyRegistrar(settings);
+			return settings;
         }
 
 	@Override
@@ -260,6 +288,22 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
             return Boolean.TRUE.equals(isRegCenralized);
         }
         return false;
+    }
+
+    @Override
+    public NodeRef getDutyRegistrar() {
+        NodeRef settings = getSettingsNode();
+        NodeRef registrar = null;
+        if (settings != null) {
+            registrar = findNodeByAssociationRef(settings, ASSOC_DUTY_REGISTRAR, null, ASSOCIATION_TYPE.TARGET);
+        }
+        if (registrar == null) {
+            if (defaultDutyRegistrarName == null || "".equals(defaultDutyRegistrarName)) {
+                defaultDutyRegistrarName = "admin";
+            }
+            registrar = orgstructureService.getEmployeeByPerson(defaultDutyRegistrarName);
+        }
+        return registrar;
     }
 
 	@Deprecated

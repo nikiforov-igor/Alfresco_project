@@ -24,6 +24,15 @@
 				</list>
 			</parameter>
 		</constraint>
+		<constraint name="lecmRegnumRes:requestCancelDecisionConstraint" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>NO_DECISION</value> <!-- откатитить номер для документа -->
+					<value>APPROVED</value> <!-- откатить номер документа -->
+					<value>REJECTED</value> <!-- отказать в отмене номера -->
+				</list>
+			</parameter>
+		</constraint>
 		<constraint name="lecmRegnumRes:modeConstraint" type="LIST">
 			<parameter name="allowedValues">
 				<list>
@@ -31,6 +40,10 @@
 					<value>NO_REG_DATE</value>
 				</list>
 			</parameter>
+		</constraint>
+		<constraint name="lecmRegnumRes:reservationCancelreason" type='LENGTH'>
+			<parameter name='minLength'><value>0</value></parameter>
+			<parameter name='maxLength'><value>200</value></parameter>
 		</constraint>
 	</constraints>
 
@@ -64,6 +77,12 @@
 						<constraint ref="lecmRegnumRes:decisionConstraint"/>
 					</constraints>
 				</property>
+				<property name="lecmRegnumRes:rejectReason">
+					<type>d:text</type>
+					<constraints>
+						<constraint ref="lecmRegnumRes:reservationCancelreason"/>
+					</constraints>
+				</property>
 			</properties>
 			<associations>
 				<association name="lecmRegnumRes:commentAssoc">
@@ -94,5 +113,35 @@
 			</overrides>
 		</type>
 
+		<type name="lecmRegnumRes:requestReservationCancelingAfterReserve">
+			<parent>bpm:startTask</parent>
+			<properties>
+				<property name="lecmRegnumRes:cancelReasonAfterReserve">
+					<type>d:text</type>
+					<constraints>
+						<constraint ref="lecmRegnumRes:reservationCancelreason"/>
+					</constraints>
+				</property>
+			</properties>
+		</type>
+
+		<type name="lecmRegnumRes:requestReservationCancelingAfterReserveTask">
+			<parent>bpm:activitiOutcomeTask</parent>
+			<properties>
+				<property name="lecmRegnumRes:requestCancelDecision">
+					<type>d:text</type>
+					<default>NO_DECISION</default>
+					<constraints>
+						<constraint ref="lecmRegnumRes:requestCancelDecisionConstraint"/>
+					</constraints>
+				</property>
+				<property name="lecmRegnumRes:requestCancelRejectReason">
+					<type>d:text</type>
+					<constraints>
+						<constraint ref="lecmRegnumRes:reservationCancelreason"/>
+					</constraints>
+				</property>
+			</properties>
+		</type>
 	</types>
 </model>

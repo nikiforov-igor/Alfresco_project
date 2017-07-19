@@ -25,6 +25,15 @@
 				<property name="lecm-reservation-aspects:presentStringBeforeReservation">
 					<type>d:text</type>
 				</property>
+				<property name="lecm-reservation-aspects:isReservationCanceling">
+					<type>d:boolean</type>
+				</property>
+				<property name="lecm-reservation-aspects:reserveCancelTaskMessage">
+					<type>d:text</type>
+				</property>
+				<property name="lecm-reservation-aspects:presentStringBeforeReservationCanceling">
+					<type>d:text</type>
+				</property>
 			</properties>
 		</aspect>
 	</aspects>

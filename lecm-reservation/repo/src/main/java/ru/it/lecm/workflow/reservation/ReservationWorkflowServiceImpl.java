@@ -107,7 +107,7 @@ public class ReservationWorkflowServiceImpl extends WorkflowServiceAbstract impl
 
 	@Override
 	public WorkflowTaskDecision completeTask(final NodeRef assignee, final DelegateTask task) {
-		String comment = (String) task.getVariableLocal("bpm_comment");
+		String comment = (String) task.getVariableLocal("lecmRegnumRes_rejectReason");
 		String decision = (String) task.getVariableLocal("reservationWf_isReservate");
 		String regnumTemplateId = (String) task.getVariable("regnumTemplateId");
 		NodeRef bpmPackage = ((ScriptNode) task.getVariable("bpm_package")).getNodeRef();

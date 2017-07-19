@@ -43,7 +43,7 @@
 				    <mandatory>true</mandatory>
 				    <default>true</default>
 			    </property>
-                
+
                 <!-- Скрывать свойтсва для получателей -->
                 <!-- This property has been DEPRECATED: for backwards compatibility only -->
                 <property name="lecm-eds-globset:hide-properties-for-recipients">
@@ -79,6 +79,17 @@
                 <association name="lecm-eds-globset:arm-for-dashlet-assoc">
                     <target>
                         <class>lecm-arm:arm</class>
+                        <many>false</many>
+                    </target>
+                </association>
+                <association name="lecm-eds-globset:duty-registrar-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-orgstr:employee</class>
+                        <mandatory>true</mandatory>
                         <many>false</many>
                     </target>
                 </association>

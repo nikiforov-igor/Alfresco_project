@@ -18,20 +18,19 @@ function getReservationTaskMessageByTaskID() {
 			fn: function (response) {
 				var result = response.json;
 				if (result != null) {
-					Alfresco.util.Ajax.request({
-						method: "GET",
-						url: Alfresco.constants.PROXY_URI_RELATIVE + "/lecm/workflow/reservation/GetReservationTaskMessageByNodeRef?nodeRef=" + result.nodeRef,
-						requestContentType: "application/json",
-						responseContentType: "application/json",
-						successCallback: {
-							fn: function (response) {
-								var result = response.json;
-								if (result != null) {
-									outputNode.innerHTML = result.reservationTaskMessage;
-								}
-							},
-							scope: this
-						}
+					Alfresco.util.Ajax.jsonPost({
+                        url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
+                        dataObj: {
+                            nodeRef: result.nodeRef,
+                            substituteString: "${field.control.params.formatString!""}"
+                        },
+                        successCallback: {
+                            fn: function (response) {
+                                if (response.json != null && response.json.formatString != null) {
+                                    outputNode.innerHTML = response.json.formatString;
+                                }
+                            }
+                        }
 					});
 				}
 			},

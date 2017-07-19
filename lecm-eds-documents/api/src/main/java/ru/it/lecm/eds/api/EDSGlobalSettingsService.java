@@ -1,10 +1,11 @@
 package ru.it.lecm.eds.api;
 
-import java.util.Collection;
-import java.util.List;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -36,6 +37,7 @@ public interface EDSGlobalSettingsService {
 	QName ASSOC_POTENTIAL_ROLE_BUSINESS_ROLE = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "potential-role-business-role-assoc");
 	QName ASSOC_POTENTIAL_ROLE_EMPLOYEE = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "potential-role-employee-assoc");
 	QName ASSOC_POTENTIAL_ROLE_ORGANIZATION_ELEMENT = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "potential-role-organization-element-assoc");
+	QName ASSOC_DUTY_REGISTRAR = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "duty-registrar-assoc");
 
 	QName TYPE_TERMS_OF_NOTIFICATION_SETTINGS = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "terms-of-notification-settings");
 
@@ -69,6 +71,12 @@ public interface EDSGlobalSettingsService {
     NodeRef getArm();
 
 	List<NodeRef> getRegistras(NodeRef employeeRef, String businessRoleId);
+
+	/**
+	 * Получение дежурного регистратора
+	 * @return nodeRef дежурного регистратора
+     */
+	NodeRef getDutyRegistrar();
 
 	@Deprecated
 	String getLinksViewMode();
