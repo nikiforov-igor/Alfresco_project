@@ -90,8 +90,11 @@
                         /* Создаем данные для формы */
                         var formData = [];
                         /* Получатель */
-                        formData = "{\"lecm-internal:recipients-assoc\":\"" + document.assocs["lecm-document:author-assoc"][0].nodeRef.toString() + ",";
-                        formData += document.assocs["lecm-eds-document:executor-assoc"][0].nodeRef.toString() + "\",";
+                        formData = "{\"lecm-internal:recipients-assoc\":\"" + document.assocs["lecm-document:author-assoc"][0].nodeRef.toString();
+                        if (document.assocs["lecm-eds-document:executor-assoc"] && document.assocs["lecm-eds-document:executor-assoc"].length) {
+                            formData += "," + document.assocs["lecm-eds-document:executor-assoc"][0].nodeRef.toString();
+                        }
+                        formData += "\",";
                         /* Тематика */
                         formData += "\"assoc_lecm-document_subject-assoc\":\"";
                         if (document.assocs["lecm-document:subject-assoc"] && document.assocs["lecm-document:subject-assoc"].length) {
