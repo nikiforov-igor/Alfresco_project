@@ -30,6 +30,9 @@
                     </index>
                 </property>
             </properties>
+            <mandatory-aspects>
+                <aspect>lecm-doc-dic-dt:registration-setting</aspect>
+            </mandatory-aspects>
         </type>
     </types>
 </model>

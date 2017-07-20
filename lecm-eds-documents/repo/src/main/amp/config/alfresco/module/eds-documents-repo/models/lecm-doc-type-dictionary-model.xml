@@ -37,4 +37,20 @@
 			</properties>
 		</type>
 	</types>
+	<aspects>
+		<aspect name="lecm-doc-dic-dt:registration-setting">
+			<properties>
+				<property name="lecm-doc-dic-dt:registration-required">
+					<title>Требуется регистрация</title>
+					<type>d:boolean</type>
+					<default>true</default>
+				</property>
+				<property name="lecm-doc-dic-dt:auto-registration">
+					<title>Автоматическая регистрация</title>
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+			</properties>
+		</aspect>
+	</aspects>
 </model>

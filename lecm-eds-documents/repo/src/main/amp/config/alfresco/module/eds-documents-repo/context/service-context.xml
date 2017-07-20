@@ -16,6 +16,7 @@
 		<value>alfresco/module/${artifactId}/models/lecm-eds-aspects-model.xml</value>
 	</util:list>
 	<util:list id="eds.models.labels">
+		<value>alfresco/module/${artifactId}/messages/lecm-doc-type-dictionary-model</value>
 		<value>alfresco/module/${artifactId}/messages/lecm-eds-document-model</value>
 		<value>alfresco/module/${artifactId}/messages/lecm-eds-aspects-model</value>
 		<value>alfresco/module/${artifactId}/messages/lecm-eds-global-settings-model</value>
