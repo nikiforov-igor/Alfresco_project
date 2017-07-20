@@ -821,6 +821,11 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                                         nodeService.createAssociation(errand, ((ScriptNode) value).getNodeRef(), ErrandsService.ASSOC_ERRANDS_EXECUTOR);
                                     }
 
+                                    value = properties.get("lecmErrandWf_typeAssoc");
+                                    if (value != null) {
+                                        nodeService.createAssociation(errand, ((ScriptNode) value).getNodeRef(), ErrandsService.ASSOC_ERRANDS_TYPE);
+                                    }
+
                                     value = properties.get("lecmErrandWf_coexecutorsAssoc");
                                     if (value != null) {
                                         value = getObjectsArray(value);
