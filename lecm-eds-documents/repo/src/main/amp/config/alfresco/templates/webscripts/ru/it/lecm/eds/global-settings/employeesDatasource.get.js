@@ -6,7 +6,7 @@ var businessRoleId = args["businessRoleId"],
 	employees = orgstructure.getEmployeesByBusinessRoleId(businessRoleId, withDelegation && withDelegation == "true"),
 	results = new Array();
 
-    for each(var employee in employees) {
+for each (var employee in employees) {
         results.push(
             {
                 item: employee,
@@ -14,6 +14,6 @@ var businessRoleId = args["businessRoleId"],
                 visibleName: argsNameSubstituteString ? substitude.formatNodeTitle(employee, argsNameSubstituteString) : null,
                 selectedVisibleName: argsSelectedItemsNameSubstituteString ? substitude.formatNodeTitle(employee, argsSelectedItemsNameSubstituteString) : null
             });
-    }
+}
 
 model.results = results;
