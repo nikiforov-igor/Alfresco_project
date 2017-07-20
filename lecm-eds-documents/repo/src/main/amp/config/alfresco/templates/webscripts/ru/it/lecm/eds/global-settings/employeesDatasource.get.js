@@ -6,16 +6,6 @@ var businessRoleId = args["businessRoleId"],
 	employees = orgstructure.getEmployeesByBusinessRoleId(businessRoleId, withDelegation && withDelegation == "true"),
 	results = new Array();
 
-if (!employees || !employees.length) {
-	var dutyRegistrar = edsGlobalSettings.getDutyRegistrar();
-    results.push(
-        {
-            item: dutyRegistrar,
-            selectable: true,
-            visibleName: argsNameSubstituteString ? substitude.formatNodeTitle(dutyRegistrar, argsNameSubstituteString) : null,
-            selectedVisibleName: argsSelectedItemsNameSubstituteString ? substitude.formatNodeTitle(dutyRegistrar, argsSelectedItemsNameSubstituteString) : null
-        });
-} else {
     for each(var employee in employees) {
         results.push(
             {
@@ -25,6 +15,5 @@ if (!employees || !employees.length) {
                 selectedVisibleName: argsSelectedItemsNameSubstituteString ? substitude.formatNodeTitle(employee, argsSelectedItemsNameSubstituteString) : null
             });
     }
-}
 
 model.results = results;
