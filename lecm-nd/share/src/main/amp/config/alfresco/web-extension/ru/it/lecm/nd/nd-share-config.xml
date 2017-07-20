@@ -31,7 +31,6 @@
                     <show id="lecm-nd:begin-date" mandatory="true"/>
                     <show id="lecm-nd:end-date" mandatory="true"/>
                     <show id="lecm-nd:unlimited" mandatory="true"/>
-                    <show id="lecm-document-aspects:registrator-assoc" force="true"/>
                     <show id="lecm-document-aspects:template-name" force="true"/>
                     <show id="lecm-document-aspects:template-ref" force="true"/>
                     <show id="loadAuthorScript" force="true"/>
@@ -100,11 +99,6 @@
 							<control-param name="maxLength">9</control-param>
 						</control>
 					</field>
-                    <field id="lecm-document-aspects:registrator-assoc">
-                        <control>
-                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=DA_REGISTRARS</control-param>
-                        </control>
-                    </field>
                     <field id="lecm-document-aspects:template-name">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden-default-value.ftl"/>
                     </field>
@@ -138,7 +132,6 @@
                     <show id="lecm-nd:begin-date"/>
                     <show id="lecm-nd:end-date"/>
                     <show id="lecm-nd:unlimited"/>
-                    <show id="lecm-document-aspects:registrator-assoc" force="true"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-eds-document:document-type-assoc" mandatory="true">
@@ -176,13 +169,6 @@
 							<control-param name="maxLength">9</control-param>
 						</control>
 					</field>
-                    <field id="lecm-document-aspects:registrator-assoc">
-                        <control>
-                            <control-param name="useStrictFilterByOrg">true</control-param>
-                            <control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
-                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=DA_REGISTRARS</control-param>
-                        </control>
-                    </field>
                     <field id="lecm-nd:begin-date">
                         <control template="/ru/it/lecm/base-share/components/controls/relative-date-control.ftl">
                             <control-param name="radioOptions">RELATIVE,ABSOLUTE</control-param>
@@ -427,7 +413,6 @@
 					<show id="lecmSignAspects:signerEmployeeAssoc"/>
 					<show id="lecmSignAspects:isSigned" for-mode="view"/>
 					<show id="lecmSignAspects:signingDate" for-mode="view"/>
-                    <show id="lecm-document-aspects:registrator-assoc" force="true"/>
 					<show id="lecm-review-ts:review-table-assoc"/>
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
                 </field-visibility>
@@ -509,11 +494,6 @@
 							<control-param name="showTime">false</control-param>
 						</control>
 					</field>
-                    <field id="lecm-document-aspects:registrator-assoc" set="common">
-                        <control>
-                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=DA_REGISTRARS</control-param>
-                        </control>
-                    </field>
                     <field set="review" id="lecm-review-ts:review-table-assoc">
                         <control template="/ru/it/lecm/workflow/review/controls/review-list-datagrid-control.ftl">
                             <control-param name="attributeForShow">lecm-document:indexTableRow</control-param>
