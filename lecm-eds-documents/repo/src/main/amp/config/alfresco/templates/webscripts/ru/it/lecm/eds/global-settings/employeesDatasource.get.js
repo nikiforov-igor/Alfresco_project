@@ -7,13 +7,13 @@ var businessRoleId = args["businessRoleId"],
 	results = new Array();
 
 for each (var employee in employees) {
-        results.push(
-            {
-                item: employee,
-                selectable: true,
-                visibleName: argsNameSubstituteString ? substitude.formatNodeTitle(employee, argsNameSubstituteString) : null,
-                selectedVisibleName: argsSelectedItemsNameSubstituteString ? substitude.formatNodeTitle(employee, argsSelectedItemsNameSubstituteString) : null
-            });
+	results.push(
+		{
+			item: employee,
+			selectable: true,
+			visibleName: argsNameSubstituteString ? substitude.formatNodeTitle(employee, argsNameSubstituteString) : null,
+			selectedVisibleName: argsSelectedItemsNameSubstituteString ? substitude.formatNodeTitle(employee, argsSelectedItemsNameSubstituteString) : null
+		});
 }
 
 model.results = results;
