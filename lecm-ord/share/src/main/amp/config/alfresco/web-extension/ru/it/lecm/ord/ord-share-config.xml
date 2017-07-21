@@ -1099,9 +1099,18 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="cm:name" force="true"/>
                     <show id="lecm-doc-dic-dt:documentType-code" force="true"/>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-doc-dic-dt:registration-required"/>
+                    <show id="lecm-doc-dic-dt:auto-registration"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-doc-dic-dt:registration-required">
+                        <control>
+                            <control-param name="disabledFieldsIfNotSelect">lecm-doc-dic-dt:auto-registration</control-param>
+                        </control>
+                    </field>
+                </appearance>
             </form>
         </forms>
     </config>
@@ -1110,9 +1119,30 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="cm:name" force="true"/>
                     <show id="lecm-doc-dic-dt:documentType-code" force="true"/>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-doc-dic-dt:registration-required"/>
+                    <show id="lecm-doc-dic-dt:auto-registration"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-doc-dic-dt:registration-required">
+                        <control>
+                            <control-param name="disabledFieldsIfNotSelect">lecm-doc-dic-dt:auto-registration</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="lecm-doc-dic-dt:documentType-code"/>
+                    <show id="cm:name"/>
+                    <show id="lecm-doc-dic-dt:registration-required"/>
+                    <show id="lecm-doc-dic-dt:auto-registration"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-doc-dic-dt:registration-required" label-id="label.eds.document_type_dictionary.datagrid.registration_setting.registered"/>
+                    <field id="lecm-doc-dic-dt:auto-registration" label-id="label.eds.document_type_dictionary.datagrid.registration_setting.automatically"/>
+                </appearance>
             </form>
             <form id="search">
                 <field-visibility>

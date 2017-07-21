@@ -310,6 +310,9 @@
         <type name="lecm-meetings-dic:protocolDocumentType">
             <title>Protocol Document Type</title>
             <parent>lecm-doc-dic-dt:documentType</parent>
+            <mandatory-aspects>
+                <aspect>lecm-doc-dic-dt:registration-setting</aspect>
+            </mandatory-aspects>
         </type>
     </types>
 </model>
