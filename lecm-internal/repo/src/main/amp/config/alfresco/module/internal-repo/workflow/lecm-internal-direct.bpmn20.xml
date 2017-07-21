@@ -43,6 +43,31 @@
                             }
                             document.createAssociation(initiator, 'lecmSignAspects:signerEmployeeAssoc');
                         }
+
+                        var autoRegistration = document.assocs["lecm-eds-document:document-type-assoc"][0].properties["lecm-doc-dic-dt:auto-registration"];
+                        if (autoRegistration) {
+                            var documentRegnum = document.properties["lecm-document:regnum"],
+                                regDataDate = document.properties["lecm-document-aspects:reg-data-date"];
+                            if (!(documentRegnum && documentRegnum.length && regDataDate && regDataDate.length)) {
+                                var presentStringWithProjectNumber = document.properties["lecm-document:present-string"];
+                                regnumbers.registerDocument(document, "INTERNAL_DOC_NUMBER");
+                            }
+                            var initiators = [];
+                            initiators.push(document.assocs["lecm-document:author-assoc"][0]);
+                            if (initiators && initiators.length) {
+                                notifications.sendNotification({
+                                    recipients: initiators,
+                                    templateCode: 'EDS_DOCUMENT_AUTO_REGISTERED',
+                                    templateConfig: {
+                                        mainObject: document,
+                                        presentStringWithProjectNumber: presentStringWithProjectNumber
+                                    }
+                                });
+                            }
+                            var logText = "Документ " + documentScript.wrapperDocumentLink(document, presentStringWithProjectNumber) + " зарегистрирован системой автоматически. Присвоен номер {~REGNUM} на дату {~REGDATE}.";
+                            logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
+                            businessJournal.log(document.nodeRef.toString(), "EDS_AUTO_REGISTRATION", logText, []);
+                        }
                     ]]></activiti:string>
                 </activiti:field>
             </extensionElements>

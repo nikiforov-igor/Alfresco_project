@@ -7763,7 +7763,75 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>3c659ece-fbe9-4f33-8fef-1c2497418c09</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/599c2ab4-73c9-43d2-b261-6c58766b0c97
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.assocClass("lecm-eds-document:document-type-assoc") != null AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:auto-registration") != null AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:auto-registration")]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[var document = stm_document,
+	documentRegnum = document.properties["lecm-document:regnum"],
+	regDataDate = document.properties["lecm-document-aspects:reg-data-date"],
+	autoRegistration = document.assocs["lecm-eds-document:document-type-assoc"][0].properties["lecm-doc-dic-dt:auto-registration"];
+	
+if (!(documentRegnum && documentRegnum.length && regDataDate && regDataDate.length)) {
+	var presentStringWithProjectNumber = document.properties["lecm-document:present-string"];
+	regnumbers.registerDocument(document, "ORD_NUMBER");
+}
+var initiators = [];
+initiators.push(document.assocs["lecm-document:author-assoc"][0]);
+if (initiators && initiators.length) {
+	notifications.sendNotification({
+		recipients: initiators,
+		templateCode: 'EDS_DOCUMENT_AUTO_REGISTERED',
+		templateConfig: {
+			mainObject: document,
+			presentStringWithProjectNumber: presentStringWithProjectNumber
+		}
+	});
+}
+var logText = "Документ " + documentScript.wrapperDocumentLink(document, presentStringWithProjectNumber) + " зарегистрирован системой автоматически. Присвоен номер {~REGNUM} на дату {~REGDATE}.";
+logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
+businessJournal.log(document.nodeRef.toString(), "EDS_AUTO_REGISTRATION", logText, []);]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/77eea864-02d3-44d4-9102-0b5ad3375e71
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                     <node>
                                         <type>ScriptAction</type>
@@ -8660,7 +8728,75 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>a8b60f05-ccc7-4e64-a23b-a0ca3d84c0bd</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/76821bef-a11d-4b9c-bb46-4c2f08309cdd
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.assocClass("lecm-eds-document:document-type-assoc") != null AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:auto-registration") != null AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:auto-registration")]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[var document = stm_document,
+	documentRegnum = document.properties["lecm-document:regnum"],
+	regDataDate = document.properties["lecm-document-aspects:reg-data-date"],
+	autoRegistration = document.assocs["lecm-eds-document:document-type-assoc"][0].properties["lecm-doc-dic-dt:auto-registration"];
+	
+if (!(documentRegnum && documentRegnum.length && regDataDate && regDataDate.length)) {
+	var presentStringWithProjectNumber = document.properties["lecm-document:present-string"];
+	regnumbers.registerDocument(document, "ORD_NUMBER");
+}
+var initiators = [];
+initiators.push(document.assocs["lecm-document:author-assoc"][0]);
+if (initiators && initiators.length) {
+	notifications.sendNotification({
+		recipients: initiators,
+		templateCode: 'EDS_DOCUMENT_AUTO_REGISTERED',
+		templateConfig: {
+			mainObject: document,
+			presentStringWithProjectNumber: presentStringWithProjectNumber
+		}
+	});
+}
+var logText = "Документ " + documentScript.wrapperDocumentLink(document, presentStringWithProjectNumber) + " зарегистрирован системой автоматически. Присвоен номер {~REGNUM} на дату {~REGDATE}.";
+logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
+businessJournal.log(document.nodeRef.toString(), "EDS_AUTO_REGISTRATION", logText, []);]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/77eea864-02d3-44d4-9102-0b5ad3375e71
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                     <node>
                                         <type>ScriptAction</type>
