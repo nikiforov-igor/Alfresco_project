@@ -7108,34 +7108,32 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[doc.assocClass("lecm-eds-document:document-type-assoc") != null AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:auto-registration") != null AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:auto-registration")]]></value>
+                                                                    <![CDATA[doc.assocClass("lecm-eds-document:document-type-assoc") != null AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:auto-registration")]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
                                                                 <value><![CDATA[var document = stm_document,
 	documentRegnum = document.properties["lecm-document:regnum"],
-	regDataDate = document.properties["lecm-document-aspects:reg-data-date"],
-	autoRegistration = document.assocs["lecm-eds-document:document-type-assoc"][0].properties["lecm-doc-dic-dt:auto-registration"];
+	regDataIsRegistered = document.properties["lecm-document-aspects:reg-data-is-registered"],
+    presentStringWithProjectNumber = "",
+    projectNumber = document.properties["lecm-document-aspects:reg-project-data-number"],
+    presentString = document.properties["lecm-document:present-string"];
 
-if (!(documentRegnum && documentRegnum.length && regDataDate && regDataDate.length)) {
-	var presentStringWithProjectNumber = document.properties["lecm-document:present-string"];
+if (presentString.indexOf("projectNumber") > -1) {
+    presentStringWithProjectNumber = document.properties["lecm-document:present-string"];
+} else {
+    presentStringWithProjectNumber = presentString.replace(documentRegnum, projectNumber);
+}
+
+if (!(documentRegnum && documentRegnum.length && regDataIsRegistered)) {
 	regnumbers.registerDocument(document, "OUTGOING_DOC_NUMBER");
 }
-var initiators = [];
-initiators.push(document.assocs["lecm-document:author-assoc"][0]);
-if (initiators && initiators.length) {
-	notifications.sendNotification({
-		recipients: initiators,
-		templateCode: 'EDS_DOCUMENT_AUTO_REGISTERED',
-		templateConfig: {
-			mainObject: document,
-			presentStringWithProjectNumber: presentStringWithProjectNumber
-		}
-	});
-}
-var logText = "Документ " + documentScript.wrapperDocumentLink(document, presentStringWithProjectNumber) + " зарегистрирован системой автоматически. Присвоен номер {~REGNUM} на дату {~REGDATE}.";
-logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
-businessJournal.log(document.nodeRef.toString(), "EDS_AUTO_REGISTRATION", logText, []);]]></value>
+document.reset();
+document.properties["lecm-document-aspects:reg-data-is-registered"] = true;
+document.save();
+
+edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringWithProjectNumber);
+]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -8009,34 +8007,32 @@ businessJournal.log(document.nodeRef.toString(), "EDS_AUTO_REGISTRATION", logTex
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[doc.assocClass("lecm-eds-document:document-type-assoc") != null AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:auto-registration") != null AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:auto-registration")]]></value>
+                                                                    <![CDATA[doc.assocClass("lecm-eds-document:document-type-assoc") != null AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:auto-registration")]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
                                                                 <value><![CDATA[var document = stm_document,
 	documentRegnum = document.properties["lecm-document:regnum"],
-	regDataDate = document.properties["lecm-document-aspects:reg-data-date"],
-	autoRegistration = document.assocs["lecm-eds-document:document-type-assoc"][0].properties["lecm-doc-dic-dt:auto-registration"];
+	regDataIsRegistered = document.properties["lecm-document-aspects:reg-data-is-registered"],
+    presentStringWithProjectNumber = "",
+    projectNumber = document.properties["lecm-document-aspects:reg-project-data-number"],
+    presentString = document.properties["lecm-document:present-string"];
 
-if (!(documentRegnum && documentRegnum.length && regDataDate && regDataDate.length)) {
-	var presentStringWithProjectNumber = document.properties["lecm-document:present-string"];
+if (presentString.indexOf("projectNumber") > -1) {
+    presentStringWithProjectNumber = document.properties["lecm-document:present-string"];
+} else {
+    presentStringWithProjectNumber = presentString.replace(documentRegnum, projectNumber);
+}
+
+if (!(documentRegnum && documentRegnum.length && regDataIsRegistered)) {
 	regnumbers.registerDocument(document, "OUTGOING_DOC_NUMBER");
 }
-var initiators = [];
-initiators.push(document.assocs["lecm-document:author-assoc"][0]);
-if (initiators && initiators.length) {
-	notifications.sendNotification({
-		recipients: initiators,
-		templateCode: 'EDS_DOCUMENT_AUTO_REGISTERED',
-		templateConfig: {
-			mainObject: document,
-			presentStringWithProjectNumber: presentStringWithProjectNumber
-		}
-	});
-}
-var logText = "Документ " + documentScript.wrapperDocumentLink(document, presentStringWithProjectNumber) + " зарегистрирован системой автоматически. Присвоен номер {~REGNUM} на дату {~REGDATE}.";
-logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
-businessJournal.log(document.nodeRef.toString(), "EDS_AUTO_REGISTRATION", logText, []);]]></value>
+document.reset();
+document.properties["lecm-document-aspects:reg-data-is-registered"] = true;
+document.save();
+
+edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringWithProjectNumber);
+]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>

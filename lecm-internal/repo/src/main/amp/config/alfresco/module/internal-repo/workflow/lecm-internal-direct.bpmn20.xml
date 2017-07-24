@@ -43,30 +43,27 @@
                             }
                             document.createAssociation(initiator, 'lecmSignAspects:signerEmployeeAssoc');
                         }
-
                         var autoRegistration = document.assocs["lecm-eds-document:document-type-assoc"][0].properties["lecm-doc-dic-dt:auto-registration"];
                         if (autoRegistration) {
-                            var documentRegnum = document.properties["lecm-document:regnum"],
-                                regDataDate = document.properties["lecm-document-aspects:reg-data-date"];
-                            if (!(documentRegnum && documentRegnum.length && regDataDate && regDataDate.length)) {
-                                var presentStringWithProjectNumber = document.properties["lecm-document:present-string"];
+                            var regDataIsRegistered = document.properties["lecm-document-aspects:reg-data-is-registered"],
+                                presentStringWithProjectNumber = "",
+                                projectNumber = document.properties["lecm-document-aspects:reg-project-data-number"],
+                                presentString = document.properties["lecm-document:present-string"],
+                                documentRegnum = document.properties["lecm-document:regnum"];
+
+                            if (presentString.indexOf("projectNumber") > -1) {
+                                presentStringWithProjectNumber = document.properties["lecm-document:present-string"];
+                            } else {
+                                presentStringWithProjectNumber = presentString.replace(documentRegnum, projectNumber);
+                            }
+                            if (!(documentRegnum && documentRegnum.length && regDataIsRegistered)) {
                                 regnumbers.registerDocument(document, "INTERNAL_DOC_NUMBER");
                             }
-                            var initiators = [];
-                            initiators.push(document.assocs["lecm-document:author-assoc"][0]);
-                            if (initiators && initiators.length) {
-                                notifications.sendNotification({
-                                    recipients: initiators,
-                                    templateCode: 'EDS_DOCUMENT_AUTO_REGISTERED',
-                                    templateConfig: {
-                                        mainObject: document,
-                                        presentStringWithProjectNumber: presentStringWithProjectNumber
-                                    }
-                                });
-                            }
-                            var logText = "Документ " + documentScript.wrapperDocumentLink(document, presentStringWithProjectNumber) + " зарегистрирован системой автоматически. Присвоен номер {~REGNUM} на дату {~REGDATE}.";
-                            logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
-                            businessJournal.log(document.nodeRef.toString(), "EDS_AUTO_REGISTRATION", logText, []);
+                            document.reset();
+                            document.properties["lecm-document-aspects:reg-data-is-registered"] = true;
+                            document.save();
+
+                            edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringWithProjectNumber);
                         }
                     ]]></activiti:string>
                 </activiti:field>
