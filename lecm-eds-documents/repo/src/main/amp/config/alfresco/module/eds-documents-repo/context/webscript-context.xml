@@ -18,7 +18,6 @@
           p:orgstructureService-ref="serviceOrgstructure"
           p:nodeService-ref="nodeService"
           p:edsService-ref="edsService"
-		  p:authService-ref="authenticationService"
 		  p:businessJournalService-ref="businessJournalService"
 		  p:notificationsService-ref="notificationsService"
 	  	  p:documentService-ref="documentService"

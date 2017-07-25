@@ -43,25 +43,26 @@
                             }
                             document.createAssociation(initiator, 'lecmSignAspects:signerEmployeeAssoc');
                         }
+
                         var autoRegistration = document.assocs["lecm-eds-document:document-type-assoc"][0].properties["lecm-doc-dic-dt:auto-registration"];
                         if (autoRegistration) {
-                            var regDataIsRegistered = document.properties["lecm-document-aspects:reg-data-is-registered"],
+                            var regDataDate = document.properties["lecm-document-aspects:reg-data-date"],
                                 presentStringWithProjectNumber = "",
                                 projectNumber = document.properties["lecm-document-aspects:reg-project-data-number"],
                                 presentString = document.properties["lecm-document:present-string"],
                                 documentRegnum = document.properties["lecm-document:regnum"];
 
-                            if (presentString.indexOf("projectNumber") > -1) {
-                                presentStringWithProjectNumber = document.properties["lecm-document:present-string"];
-                            } else {
-                                presentStringWithProjectNumber = presentString.replace(documentRegnum, projectNumber);
-                            }
-                            if (!(documentRegnum && documentRegnum.length && regDataIsRegistered)) {
+                            presentStringWithProjectNumber = presentString.replace(documentRegnum, projectNumber);
+
+                            if (!(documentRegnum && documentRegnum.length && regDataDate)) {
+                                lecmPermission.pushAuthentication();
+                                lecmPermission.setRunAsUserSystem();
                                 regnumbers.registerDocument(document, "INTERNAL_DOC_NUMBER");
+                                lecmPermission.popAuthentication();
+                            } else {
+                                document.properties["lecm-document-aspects:reg-data-is-registered"] = true;
+                                document.save();
                             }
-                            document.reset();
-                            document.properties["lecm-document-aspects:reg-data-is-registered"] = true;
-                            document.save();
 
                             edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringWithProjectNumber);
                         }

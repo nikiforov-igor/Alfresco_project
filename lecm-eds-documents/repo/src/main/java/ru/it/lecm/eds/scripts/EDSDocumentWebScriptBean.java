@@ -4,7 +4,6 @@ import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.util.ISO8601DateFormat;
 import org.alfresco.util.ParameterCheck;
 import org.apache.commons.lang.StringUtils;
@@ -16,7 +15,6 @@ import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
-import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -31,16 +29,11 @@ public class EDSDocumentWebScriptBean extends BaseWebScript {
     private EDSDocumentService edsService;
     private NotificationsService notificationsService;
     private DocumentService documentService;
-    private AuthenticationService authService;
     private BusinessJournalService businessJournalService;
     private SubstitudeBean substitudeBean;
 
     public void setSubstitudeBean(SubstitudeBean substitudeBean) {
         this.substitudeBean = substitudeBean;
-    }
-
-    public void setAuthService(AuthenticationService authService) {
-        this.authService = authService;
     }
 
     public void setBusinessJournalService(BusinessJournalService businessJournalService) {
@@ -149,20 +142,18 @@ public class EDSDocumentWebScriptBean extends BaseWebScript {
     }
 
     public void sendNotificationAndLogAboutAutoRegistration(ScriptNode document, String presentStringWithProjectNumber) {
-        String author = authService.getCurrentUserName();
-        NodeRef initiator = orgstructureService.getCurrentEmployee();
+        NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
+        String author = orgstructureService.getEmployeeLogin(currentEmployee);
         String templateCode = "EDS_DOCUMENT_AUTO_REGISTERED";
 
         List<NodeRef> recipients = new ArrayList<>();
-        recipients.add(new NodeRef((String) nodeService.getProperty(document.getNodeRef(), documentService.PROP_AUTHOR_REF)));
+        recipients.add(documentService.getDocumentAuthor(document.getNodeRef()));
 
         Map<String, Object> config = new HashMap<>();
         config.put("mainObject", document.getNodeRef());
         config.put("presentStringWithProjectNumber", presentStringWithProjectNumber);
 
-        if (recipients != null && recipients.size() > 0) {
-            notificationsService.sendNotification(author, initiator, recipients, templateCode, config, false);
-        }
+        notificationsService.sendNotification(author, null, recipients, templateCode, config, false);
 
         String logText = "Документ " + wrapperLink(document.getNodeRef().toString(), presentStringWithProjectNumber, documentService.getDocumentUrl(document.getNodeRef())) + " зарегистрирован системой автоматически. Присвоен номер {~REGNUM} на дату {~REGDATE}.";
         logText = substitudeBean.formatNodeTitle(document.getNodeRef(), logText);
