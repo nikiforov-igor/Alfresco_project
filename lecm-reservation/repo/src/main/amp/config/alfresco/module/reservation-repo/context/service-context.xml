@@ -101,4 +101,14 @@
 		  p:workflowService-ref="WorkflowService"
 		  p:nodeService-ref="nodeService" />
 
+    <bean parent="lecmDictionaryBootstrap" depends-on="groupActionsService">
+        <property name="rootPath" value="/Business platform/LECM/Сервис Групповые операции"/>
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/actions/reservation-canceling.xml</value>
+                <value>alfresco/module/${artifactId}/actions/reservation-canceling-after-reserve.xml</value>
+            </list>
+        </property>
+    </bean>
+
 </beans>
