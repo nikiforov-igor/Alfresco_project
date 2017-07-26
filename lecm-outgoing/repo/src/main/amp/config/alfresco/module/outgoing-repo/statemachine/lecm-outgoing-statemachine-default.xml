@@ -7114,25 +7114,16 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                 <name>transitionDocumentChangeScript</name>
                                                                 <value><![CDATA[var document = stm_document,
 	documentRegnum = document.properties["lecm-document:regnum"],
-	regDataDate = document.properties["lecm-document-aspects:reg-data-date"],
-    presentStringWithProjectNumber = "",
     projectNumber = document.properties["lecm-document-aspects:reg-project-data-number"],
-    presentString = document.properties["lecm-document:present-string"];
+    presentString = document.properties["lecm-document:present-string"],
+    presentStringWithProjectNumber = presentString.replace(documentRegnum, projectNumber);
 
-presentStringWithProjectNumber = presentString.replace(documentRegnum, projectNumber);
+lecmPermission.pushAuthentication();
+lecmPermission.setRunAsUserSystem();
+regnumbers.registerDocument(document, "OUTGOING_DOC_NUMBER");
+lecmPermission.popAuthentication();
 
-if (!(documentRegnum && documentRegnum.length && regDataDate)) {
-    lecmPermission.pushAuthentication();
-    lecmPermission.setRunAsUserSystem();
-	regnumbers.registerDocument(document, "OUTGOING_DOC_NUMBER");
-	lecmPermission.popAuthentication();
-} else {
-    document.properties["lecm-document-aspects:reg-data-is-registered"] = true;
-    document.save();
-}
-
-edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringWithProjectNumber);
-]]></value>
+edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringWithProjectNumber);]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -8012,25 +8003,16 @@ edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringW
                                                                 <name>transitionDocumentChangeScript</name>
                                                                 <value><![CDATA[var document = stm_document,
 	documentRegnum = document.properties["lecm-document:regnum"],
-	regDataDate = document.properties["lecm-document-aspects:reg-data-date"],
-    presentStringWithProjectNumber = "",
     projectNumber = document.properties["lecm-document-aspects:reg-project-data-number"],
-    presentString = document.properties["lecm-document:present-string"];
+    presentString = document.properties["lecm-document:present-string"],
+    presentStringWithProjectNumber = presentString.replace(documentRegnum, projectNumber);
 
-presentStringWithProjectNumber = presentString.replace(documentRegnum, projectNumber);
+lecmPermission.pushAuthentication();
+lecmPermission.setRunAsUserSystem();
+regnumbers.registerDocument(document, "OUTGOING_DOC_NUMBER");
+lecmPermission.popAuthentication();
 
-if (!(documentRegnum && documentRegnum.length && regDataDate)) {
-    lecmPermission.pushAuthentication();
-    lecmPermission.setRunAsUserSystem();
-	regnumbers.registerDocument(document, "OUTGOING_DOC_NUMBER");
-	lecmPermission.popAuthentication();
-} else {
-    document.properties["lecm-document-aspects:reg-data-is-registered"] = true;
-    document.save();
-}
-
-edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringWithProjectNumber);
-]]></value>
+edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringWithProjectNumber);]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
