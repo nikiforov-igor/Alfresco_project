@@ -10,6 +10,10 @@
                 <property name="cm:name">Изменение срока</property>
                 <property name="lecm-busjournal:eventCategory-code">EDS_CHANGE_DUE_DATE</property>
             </item>
+            <item name="cm:Автоматическая регистрация" type="lecm-busjournal:eventCategory">
+                <property name="cm:name">Автоматическая регистрация</property>
+                <property name="lecm-busjournal:eventCategory-code">EDS_AUTO_REGISTRATION</property>
+            </item>
         </items>
     </item>
 </items>

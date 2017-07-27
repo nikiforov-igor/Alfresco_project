@@ -43,6 +43,21 @@
                             }
                             document.createAssociation(initiator, 'lecmSignAspects:signerEmployeeAssoc');
                         }
+
+                        var autoRegistration = document.assocs["lecm-eds-document:document-type-assoc"][0].properties["lecm-doc-dic-dt:auto-registration"];
+                        if (autoRegistration) {
+                            var projectNumber = document.properties["lecm-document-aspects:reg-project-data-number"],
+                                presentString = document.properties["lecm-document:present-string"],
+                                documentRegnum = document.properties["lecm-document:regnum"],
+                                presentStringWithProjectNumber = presentString.replace(documentRegnum, projectNumber);
+
+                            lecmPermission.pushAuthentication();
+                            lecmPermission.setRunAsUserSystem();
+                            regnumbers.registerDocument(document, "INTERNAL_DOC_NUMBER");
+                            lecmPermission.popAuthentication();
+
+                            edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringWithProjectNumber);
+                        }
                     ]]></activiti:string>
                 </activiti:field>
             </extensionElements>

@@ -8,12 +8,14 @@ import org.alfresco.util.ISO8601DateFormat;
 import org.alfresco.util.ParameterCheck;
 import org.apache.commons.lang.StringUtils;
 import ru.it.lecm.base.beans.BaseWebScript;
+import ru.it.lecm.base.beans.SubstitudeBean;
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.eds.api.EDSDocumentService;
+import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: pmelnikov
@@ -25,6 +27,26 @@ public class EDSDocumentWebScriptBean extends BaseWebScript {
     private OrgstructureBean orgstructureService;
     private NodeService nodeService;
     private EDSDocumentService edsService;
+    private NotificationsService notificationsService;
+    private DocumentService documentService;
+    private BusinessJournalService businessJournalService;
+    private SubstitudeBean substitudeBean;
+
+    public void setSubstitudeBean(SubstitudeBean substitudeBean) {
+        this.substitudeBean = substitudeBean;
+    }
+
+    public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+        this.businessJournalService = businessJournalService;
+    }
+
+    public void setDocumentService(DocumentService documentService) {
+        this.documentService = documentService;
+    }
+
+    public void setNotificationsService(NotificationsService notificationsService) {
+        this.notificationsService = notificationsService;
+    }
 
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;
@@ -117,5 +139,24 @@ public class EDSDocumentWebScriptBean extends BaseWebScript {
     public void resetCompletionSignal(ScriptNode doc) {
         NodeRef document = doc.getNodeRef();
         edsService.resetCompletionSignal(document);
+    }
+
+    public void sendNotificationAndLogAboutAutoRegistration(ScriptNode document, String presentStringWithProjectNumber) {
+        NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
+        String author = orgstructureService.getEmployeeLogin(currentEmployee);
+        String templateCode = "EDS_DOCUMENT_AUTO_REGISTERED";
+
+        List<NodeRef> recipients = new ArrayList<>();
+        recipients.add(documentService.getDocumentAuthor(document.getNodeRef()));
+
+        Map<String, Object> config = new HashMap<>();
+        config.put("mainObject", document.getNodeRef());
+        config.put("presentStringWithProjectNumber", presentStringWithProjectNumber);
+
+        notificationsService.sendNotification(author, null, recipients, templateCode, config, false);
+
+        String logText = "Документ " + wrapperLink(document.getNodeRef().toString(), presentStringWithProjectNumber, documentService.getDocumentUrl(document.getNodeRef())) + " зарегистрирован системой автоматически. Присвоен номер {~REGNUM} на дату {~REGDATE}.";
+        logText = substitudeBean.formatNodeTitle(document.getNodeRef(), logText);
+        businessJournalService.log(document.getNodeRef(), "EDS_AUTO_REGISTRATION", logText, null);
     }
 }

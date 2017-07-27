@@ -17,6 +17,10 @@
           p:extensionName="edsDocument"
           p:orgstructureService-ref="serviceOrgstructure"
           p:nodeService-ref="nodeService"
-          p:edsService-ref="edsService"/>
+          p:edsService-ref="edsService"
+		  p:businessJournalService-ref="businessJournalService"
+		  p:notificationsService-ref="notificationsService"
+	  	  p:documentService-ref="documentService"
+		  p:substitudeBean-ref="substitudeService"/>
 
 </beans>
