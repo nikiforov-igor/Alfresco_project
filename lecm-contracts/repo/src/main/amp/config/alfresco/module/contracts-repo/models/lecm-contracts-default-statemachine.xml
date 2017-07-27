@@ -902,6 +902,21 @@
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <nodeRef>workspace://SpacesStore/3e0ae322-c5b6-4e60-85c4-508e928e5af8</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -1767,6 +1782,21 @@
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <nodeRef>workspace://SpacesStore/bf445871-6703-4e9d-9e4f-a17ee0157e7f</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -2614,6 +2644,21 @@
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <nodeRef>workspace://SpacesStore/7443b6cc-b228-47da-80bf-c47e15e4cfde</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -3035,6 +3080,83 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                             </subFolder>
                                                         </subFolders>
                                                     </node>
+                                                    <node>
+                                                        <type>userTransition</type>
+                                                        <name>2be7fd6e-01de-483f-82d0-8be68dc65de1</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/62b99cd5-fcdf-468d-b1f6-1541d62f79dd
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>transition-script</name>
+                                                                <value><![CDATA[]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionLabel</name>
+                                                                <value><![CDATA[Направить на регистрацию]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionLabelAspect/>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/c72d7c9d-46d2-44fe-a54d-df7463f9bc5f
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders>
+                                                            <subFolder>
+                                                                <name>variables</name>
+                                                                <nodes>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>511a5d65-a4e3-44e3-ad4c-976f692895ae
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/8eff2981-b68b-43ec-8ef9-d3f1d6e82638
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") AND doc.attr("lecm-eds-aspect:signed-on-paper")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие доступно только инициатору и с установленным атрибутом "Подписан на бумажном носителе"]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                </nodes>
+                                                            </subFolder>
+                                                        </subFolders>
+                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
@@ -3266,6 +3388,38 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>hideAction</name>
                                                                                 <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>4a8a0341-3aff-45e2-8fb1-d03a3beaa64b
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/49a595e7-8fa1-4aff-a097-3999f8199137
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[!doc.attr("lecm-eds-aspect:signed-on-paper")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие доступно только при неустановленном атрибуте "Подписан на бумажном носителе"]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -4169,6 +4323,21 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         <type>documentField</type>
                                         <name>lecm-document_deprive-right</name>
                                         <nodeRef>workspace://SpacesStore/6f8523d0-159d-4feb-8ce9-c123282725b2</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <nodeRef>workspace://SpacesStore/a9509442-e44e-4842-863c-61cd99f1b32f</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5443,6 +5612,21 @@ routeWorkflow.startWorkflow(variables);]]></value>
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <nodeRef>workspace://SpacesStore/a11a76ed-5af0-4b6a-85b0-7735948cb8dd</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -5621,6 +5805,83 @@ routeWorkflow.startWorkflow(variables);]]></value>
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
+                                                    <node>
+                                                        <type>userTransition</type>
+                                                        <name>72e5b7d7-5609-4ef4-8a46-6e1d697c4ff5</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/d93fcb78-1d42-49f2-b65a-b77a4fa39fb3
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>transition-script</name>
+                                                                <value><![CDATA[]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionLabel</name>
+                                                                <value><![CDATA[Направить на регистрацию]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionLabelAspect/>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/c72d7c9d-46d2-44fe-a54d-df7463f9bc5f
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders>
+                                                            <subFolder>
+                                                                <name>variables</name>
+                                                                <nodes>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>df4a408c-9e0b-467d-b90a-e5055b93bc1b
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/7d9a61eb-491e-4cbd-8067-d6224309edd0
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") AND doc.attr("lecm-eds-aspect:signed-on-paper")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие доступно только инициатору и с установленным атрибутом "Подписан на бумажном носителе"]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                </nodes>
+                                                            </subFolder>
+                                                        </subFolders>
+                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
@@ -5728,6 +5989,38 @@ routeWorkflow.startWorkflow(variables);]]></value>
                                                                             <property>
                                                                                 <name>hideAction</name>
                                                                                 <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>bb511eec-f676-4200-a216-4ce6ed72101b
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/eb229d1b-9128-452e-ab0a-fa0c54474770
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[!doc.attr("lecm-eds-aspect:signed-on-paper")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие доступно только при неустановленном атрибуте "Подписан на бумажном носителе"]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -6642,6 +6935,21 @@ routeWorkflow.startWorkflow(variables);]]></value>
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <nodeRef>workspace://SpacesStore/fd647310-f057-4d91-9018-c3c6dd669588</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -7020,6 +7328,83 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                             </subFolder>
                                                         </subFolders>
                                                     </node>
+                                                    <node>
+                                                        <type>userTransition</type>
+                                                        <name>1515d2bb-5472-42f8-aad0-35a411134bee</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/cf45a3a5-e9b5-4883-b873-7427313a4958
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>transition-script</name>
+                                                                <value><![CDATA[]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionLabel</name>
+                                                                <value><![CDATA[Направить на регистрацию]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionLabelAspect/>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/c72d7c9d-46d2-44fe-a54d-df7463f9bc5f
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders>
+                                                            <subFolder>
+                                                                <name>variables</name>
+                                                                <nodes>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>18c2bf87-4855-4e3c-af79-da4a19563c76
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/14d4b97a-25ce-4409-ba9f-bd7ce2a7d6e9
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") AND doc.attr("lecm-eds-aspect:signed-on-paper")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие доступно только инициатору и с установленным атрибутом "Подписан на бумажном носителе"]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                </nodes>
+                                                            </subFolder>
+                                                        </subFolders>
+                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
@@ -7251,6 +7636,38 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>hideAction</name>
                                                                                 <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>c1c75b71-9944-4cb1-860f-f167e9ee03f6
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/bf183c01-56a1-4f83-a52e-5caeb0e95e5f
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[!doc.attr("lecm-eds-aspect:signed-on-paper")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие доступно только при неустановленном атрибуте "Подписан на бумажном носителе"]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -8154,6 +8571,21 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         <type>documentField</type>
                                         <name>lecm-document_deprive-right</name>
                                         <nodeRef>workspace://SpacesStore/0bef7b49-fd9a-40eb-a5b2-1be19e86aa67</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <nodeRef>workspace://SpacesStore/5c16ead9-9cbc-464c-ab6f-159d0c173485</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -9318,6 +9750,21 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         <type>documentField</type>
                                         <name>lecm-document_deprive-right</name>
                                         <nodeRef>workspace://SpacesStore/b699f359-9427-4cf1-84a6-60212a8c9755</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <nodeRef>workspace://SpacesStore/91339435-d590-48d6-86ad-898e00ab8d71</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -10594,6 +11041,21 @@ notifications.sendNotificationFromCurrentUser({
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <nodeRef>workspace://SpacesStore/82f891eb-b2d1-4425-a9fb-cfaacb985a92</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -11813,6 +12275,21 @@ businessJournal.log(contract.nodeRef.toString(), "EDIT", logText, []);]]></value
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <nodeRef>workspace://SpacesStore/58defcc2-8ed1-4aa8-96cb-60153644186d</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -12951,6 +13428,21 @@ businessJournal.log(contract.nodeRef.toString(), "EDIT", logText, []);]]></value
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <nodeRef>workspace://SpacesStore/1a3d46f9-7fd6-42db-9e68-8c91b4df892f</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -13848,6 +14340,21 @@ businessJournal.log(contract.nodeRef.toString(), "EDIT", logText, []);]]></value
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <nodeRef>workspace://SpacesStore/56cc469b-dfd1-4751-ba8c-2a8c88b46e97</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -14452,6 +14959,21 @@ businessJournal.log(contract.nodeRef.toString(), "EDIT", logText, []);]]></value
                                         <type>documentField</type>
                                         <name>lecm-document_deprive-right</name>
                                         <nodeRef>workspace://SpacesStore/c9b18e7c-a97b-4ce2-84cb-390194065c4c</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <nodeRef>workspace://SpacesStore/d4165fd9-9f74-4a40-9c51-ec6e5dc18fa5</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -15299,6 +15821,21 @@ businessJournal.log(contract.nodeRef.toString(), "EDIT", logText, []);]]></value
                                         <type>documentField</type>
                                         <name>lecm-document_deprive-right</name>
                                         <nodeRef>workspace://SpacesStore/2dead675-3016-431c-931b-00305f963d06</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <nodeRef>workspace://SpacesStore/ffcaaf97-3d1b-4348-92aa-70fa4e2a1875</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -16285,6 +16822,21 @@ notifications.sendNotificationFromCurrentUser({
                                         <type>documentField</type>
                                         <name>lecm-document_deprive-right</name>
                                         <nodeRef>workspace://SpacesStore/d73fc945-9a8b-4699-97f5-e3c8f79a00e9</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <nodeRef>workspace://SpacesStore/4407a88e-d6c9-4095-8913-62dd4b521382</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>

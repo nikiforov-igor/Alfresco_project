@@ -54,6 +54,9 @@ public interface EDSDocumentService {
     QName PROP_EXECUTION_STATE = QName.createQName(EDS_ASPECTS_NAMESPACE_URI,"execution-state");
     QName PROP_EXECUTION_STATISTICS = QName.createQName(EDS_ASPECTS_NAMESPACE_URI,"execution-statistics");
 
+    QName ASPECT_SIGNED_ON_PAPER = QName.createQName(EDS_ASPECTS_NAMESPACE_URI,"signed-on-paper-aspect");
+    QName PROP_SIGNED_ON_PAPER = QName.createQName(EDS_ASPECTS_NAMESPACE_URI,"signed-on-paper");
+
     enum EXECUTION_STATE{
         IN_PROCESS,COMPLETE,NOT_REQUIRED;
 
@@ -126,4 +129,9 @@ public interface EDSDocumentService {
      * @param document документ
      */
     void resetCompletionSignal(NodeRef document);
+
+    /**
+     * Подписан на бумажном носителе
+     */
+    boolean isSignedOnPaper(NodeRef document);
 }

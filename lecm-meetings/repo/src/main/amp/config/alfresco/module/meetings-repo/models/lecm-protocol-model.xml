@@ -189,6 +189,7 @@
                 <aspect>lecm-protocol-ts:points-table-aspect</aspect>
 				<aspect>lecm-review-ts:review-aspect</aspect>
                 <aspect>lecm-eds-aspect:execution-state-aspect</aspect>
+                <aspect>lecm-eds-aspect:signed-on-paper-aspect</aspect>
             </mandatory-aspects>
 		</type>
 	</types>

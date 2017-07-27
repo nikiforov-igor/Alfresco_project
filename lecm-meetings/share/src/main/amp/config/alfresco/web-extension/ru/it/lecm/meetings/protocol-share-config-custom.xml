@@ -19,6 +19,8 @@
 					<show id="lecm-protocol:secretary-assoc"/>
 					<!--Присутствовали-->
 					<show id="lecm-protocol:attended-assoc"/>
+					<!--Подписан на бумажном носителе-->
+					<show id="lecm-eds-aspect:signed-on-paper"/>
 					<!--Примечание-->
 					<show id="lecm-eds-document:note"/>
 					<!-- Количество листов -->
@@ -35,6 +37,7 @@
 					<show id="lecmApproveAspects:approvalFolderRef" force="true"/>
 					<show id="lecm-review-ts:review-table-assoc"/>
 					<show id="lecm-document:author-assoc"/>
+					<show id="lecm-base-dummy-aspects:script" force="true"/>
 				</field-visibility>
 				<appearance>
 					<set id="common" label-id="label.attributes"/>
@@ -58,6 +61,7 @@
 					<field id="lecm-protocol:meeting-chairman-assoc" mandatory="true" set="common"/>
 					<field id="lecm-protocol:secretary-assoc" set="common"/>
 					<field id="lecm-protocol:attended-assoc" set="common"/>
+					<field id="lecm-eds-aspect:signed-on-paper" set="common"/>
 					<field id="lecm-eds-document:note" set="common">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
 							<control-param name="rows">4</control-param>
@@ -119,6 +123,12 @@
 					</field>
 					<field id="lecm-document:author-assoc" set="common">
 						<control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+					</field>
+					<field id="lecm-base-dummy-aspects:script" set="common">
+						<control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+							<control-param name="scripts">scripts/lecm-eds-documents/check-allow-signing-on-paper-script.js</control-param>
+							<control-param name="scriptLoadedFireAction">allowSigningOnPaperScript</control-param>
+						</control>
 					</field>
 				</appearance>
 			</form>
@@ -246,6 +256,8 @@
 					<show id="lecm-protocol:secretary-assoc"/>
 					<!--Присутствовали-->
 					<show id="lecm-protocol:attended-assoc"/>
+					<!--Подписан на бумажном носителе-->
+					<show id="lecm-eds-aspect:signed-on-paper"/>
 					<!--Примечание-->
 					<show id="lecm-eds-document:note"/>
 					<!-- Количество листов -->
@@ -260,6 +272,7 @@
 					<show id="lecm-protocol:temp-items-assoc"/>
 					<show id="lecm-document-aspects:template-name" force="true"/>
 					<show id="lecm-document-aspects:template-ref" force="true"/>
+					<show id="checkAllowSigningOnPaperScript" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-document:title"/>
@@ -342,6 +355,12 @@
 
 					<field id="lecm-document-aspects:template-ref">
 						<control template="/ru/it/lecm/base-share/components/controls/hidden-default-value.ftl"/>
+					</field>
+					<field id="checkAllowSigningOnPaperScript">
+						<control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+							<control-param name="scripts">scripts/lecm-eds-documents/check-allow-signing-on-paper-script.js</control-param>
+							<control-param name="scriptLoadedFireAction">allowSigningOnPaperScript</control-param>
+						</control>
 					</field>
 				</appearance>
 			</form>
@@ -453,6 +472,8 @@
 					<show id="lecm-protocol:secretary-assoc"/>
 					<!--Присутствовали-->
 					<show id="lecm-protocol:attended-assoc"/>
+					<!--Подписан на бумажном носителе-->
+					<show id="lecm-eds-aspect:signed-on-paper"/>
 					<!--Срок исполнения-->
 					<show id="lecm-eds-document:execution-date"/>
 					<!--Председатель совещания-->

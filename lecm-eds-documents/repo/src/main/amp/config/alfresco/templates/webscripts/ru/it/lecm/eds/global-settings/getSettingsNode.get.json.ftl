@@ -3,6 +3,7 @@
     <#if node??>
         "nodeRef": "${node.getNodeRef().toString()}",
         "isRegCenralized":  ${isRegCenralized?string},
+        "isAllowSigningOnPaper": ${isAllowSigningOnPaper?string},
         "isHideProps:": ${isHideProps?string}
         <#if node.assocs["lecm-eds-globset:arm-for-dashlet-assoc"]??>
         ,"armCode": "${node.assocs["lecm-eds-globset:arm-for-dashlet-assoc"][0]["lecm-arm:code"]!"SED"}"

@@ -88,6 +88,7 @@
 					<show id="lecm-eds-globset:duty-registrar-assoc"/>
                     <show id="lecm-eds-globset:arm-for-dashlet-assoc"/>
 				    <show id="lecm-eds-globset:arm-node-for-dashlet-assoc"/>
+					<show id="lecm-eds-globset:allow-signing-on-paper"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-eds-globset:centralized-registration" label-id="label.centralized-registration">
@@ -142,6 +143,7 @@
 					<show id="lecm-eds-globset:duty-registrar-assoc"/>
 					<show id="lecm-eds-globset:arm-for-dashlet-assoc"/>
 					<show id="lecm-eds-globset:arm-node-for-dashlet-assoc"/>
+					<show id="lecm-eds-globset:allow-signing-on-paper"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-eds-globset:centralized-registration" label-id="label.centralized-registration">

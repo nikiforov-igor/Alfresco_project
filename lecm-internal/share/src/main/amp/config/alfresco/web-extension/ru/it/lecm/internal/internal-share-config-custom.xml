@@ -34,12 +34,14 @@
 	                <show id="lecm-document-aspects:reg-project-data-date"/>
 					<show id="lecmApproveAspects:approvalFolderRef" force="true"/>
                     <show id="lecm-internal-table-structure:answers-assoc"/>
+                    <show id="lecm-eds-aspect:signed-on-paper"/>
 					<show id="lecmSignAspects:signerEmployeeAssoc"/>
 					<show id="lecmSignAspects:isSigned" for-mode="view"/>
 					<show id="lecmSignAspects:signingDate" for-mode="view"/>
                     <show id="lecm-document-aspects:registrator-assoc" force="true"/>
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <show id="lecm-base-dummy-aspects:script2" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script3" force="true"/>
                     <show id="lecm-review-ts:review-table-assoc"/>
                 </field-visibility>
                 <appearance>
@@ -152,6 +154,7 @@
 					<field id="lecmApproveAspects:approvalFolderRef" set="approvalTab">
 						<control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
 					</field>
+                    <field id="lecm-eds-aspect:signed-on-paper" set="common"/>
 					<field id="lecmSignAspects:signerEmployeeAssoc" set="common">
 						<control>
 							<control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS</control-param>
@@ -172,6 +175,12 @@
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-eds-documents/edit-executor-script.js</control-param>
                             <control-param name="scriptLoadedFireAction">editExecutorEditFormScriptLoaded</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-base-dummy-aspects:script3" set="common">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-eds-documents/check-allow-signing-on-paper-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">allowSigningOnPaperScript</control-param>
                         </control>
                     </field>
                     <field set="review" id="lecm-review-ts:review-table-assoc">
@@ -521,6 +530,7 @@
                     <show id="lecm-internal:response-date"/>
                     <show id="lecm-internal:recipients-assoc"/>
                     <show id="lecm-eds-document:summaryContent"/>
+                    <show id="lecm-eds-aspect:signed-on-paper"/>
 					<show id="lecmSignAspects:signerEmployeeAssoc"/>
                     <show id="lecm-internal:temp-members-assoc" force="true"/>
                     <show id="lecm-document-aspects:response-to-assoc"/>
@@ -533,6 +543,7 @@
                     <show id="lecm-document-aspects:template-ref" force="true"/>
                     <show id="loadAuthorScript" force="true"/>
                     <show id="editExecutorScript" force="true"/>
+                    <show id="checkAllowSigningOnPaperScript" force="true"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-document:title"/>
@@ -656,6 +667,12 @@
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-eds-documents/edit-executor-script.js</control-param>
                             <control-param name="scriptLoadedFireAction">editExecutorCreateFormScriptLoaded</control-param>
+                        </control>
+                    </field>
+                    <field id="checkAllowSigningOnPaperScript">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-eds-documents/check-allow-signing-on-paper-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">allowSigningOnPaperScript</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -910,6 +927,7 @@
                     <show id="lecm-document-aspects:response-to-assoc"/>
                     <show id="lecm-document-aspects:reg-data-number"/>
 					<show id="lecmApproveAspects:approvalFolderRef"/>
+                    <show id="lecm-eds-aspect:signed-on-paper"/>
 					<show id="lecmSignAspects:signerEmployeeAssoc"/>
                     <show id="lecm-document-aspects:registrator-assoc" force="true"/>
                     <show id="lecm-eds-document:executor-assoc"/>

@@ -148,6 +148,7 @@
 				<aspect>lecm-internal-table-structure:table-answers-aspect</aspect>
 				<aspect>lecm-document-aspects:event-listeners-aspect</aspect>
 				<aspect>lecmSignAspects:signingDetailsAspect</aspect>
+				<aspect>lecm-eds-aspect:signed-on-paper-aspect</aspect>
 			</mandatory-aspects>
 		</type>
 	</types>

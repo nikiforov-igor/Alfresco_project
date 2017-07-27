@@ -143,6 +143,10 @@ public class EDSGlobalSettingsWebScriptBean extends BaseWebScript {
 		return edsGlobalSettingsService.isRegistrationCenralized();
 	}
 
+	public boolean isAllowSigningOnPaper() {
+		return edsGlobalSettingsService.isAllowSigningOnPaper();
+	}
+
     /**
      * Проверка, скрывать ли свойства для получателей
      */
