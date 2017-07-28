@@ -163,7 +163,8 @@ public class EDSDocumentWebScriptBean extends BaseWebScript {
     /**
      * Подписан на бумажном носителе
      */
-    public boolean isSignedOnPaper(NodeRef document) {
-        return edsService.isSignedOnPaper(document);
+    public boolean isSignedOnPaper(ScriptNode document) {
+        NodeRef docNodeRef = document.getNodeRef();
+        return edsService.isSignedOnPaper(docNodeRef);
     }
 }
