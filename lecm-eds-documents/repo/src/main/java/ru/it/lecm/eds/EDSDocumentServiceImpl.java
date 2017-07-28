@@ -148,4 +148,13 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
             nodeService.removeAspect(document, EDSDocumentService.ASPECT_COMPLETION_SIGNAL);
         }
     }
+
+    @Override
+    public boolean isSignedOnPaper(NodeRef document) {
+        if (document != null) {
+            Boolean isSignedOnPaper = (Boolean) nodeService.getProperty(document, PROP_SIGNED_ON_PAPER);
+            return Boolean.TRUE.equals(isSignedOnPaper);
+        }
+        return false;
+    }
 }

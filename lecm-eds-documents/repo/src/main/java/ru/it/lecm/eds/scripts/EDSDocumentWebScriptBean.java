@@ -159,4 +159,12 @@ public class EDSDocumentWebScriptBean extends BaseWebScript {
         logText = substitudeBean.formatNodeTitle(document.getNodeRef(), logText);
         businessJournalService.log(document.getNodeRef(), "EDS_AUTO_REGISTRATION", logText, null);
     }
+
+    /**
+     * Подписан на бумажном носителе
+     */
+    public boolean isSignedOnPaper(ScriptNode document) {
+        NodeRef docNodeRef = document.getNodeRef();
+        return edsService.isSignedOnPaper(docNodeRef);
+    }
 }

@@ -44,6 +44,7 @@ public interface EDSGlobalSettingsService {
 	QName PROP_N_DAYS = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "n-days");
 	QName PROP_SHORT_N_DAYS = QName.createQName(GLOBAL_SETTINGS_NAMESPACE,"short-n-days");
 	QName PROP_SHORT_LIMIT_DAYS = QName.createQName(GLOBAL_SETTINGS_NAMESPACE,"short-limit-days");
+	QName PROP_ALLOW_SIGNING_ON_PAPER = QName.createQName(GLOBAL_SETTINGS_NAMESPACE,"allow-signing-on-paper");
 
 	int DEFAULT_N_DAYS = 5;
 	int DEFAULT_SHORT_N_DAYS = 1;
@@ -62,6 +63,11 @@ public interface EDSGlobalSettingsService {
 	NodeRef updatePotentialRole(NodeRef potentialRoleRef, List<NodeRef> employeesRefs);
 
 	boolean isRegistrationCenralized();
+
+	/**
+	 * Разрешено подписание на бумажном носителе
+	 */
+	boolean isAllowSigningOnPaper();
 
 	@Deprecated
 	Boolean isHideProperties();

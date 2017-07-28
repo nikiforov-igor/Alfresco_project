@@ -68,6 +68,10 @@
                         <constraint ref="lecm-eds-globset:links-view-const"/>
                     </constraints>
                 </property>
+                <property name="lecm-eds-globset:allow-signing-on-paper">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
 		    </properties>
             <associations>
                 <association name="lecm-eds-globset:arm-node-for-dashlet-assoc">

@@ -290,7 +290,17 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
         return false;
     }
 
-    @Override
+	@Override
+	public boolean isAllowSigningOnPaper() {
+		NodeRef settings = getSettingsNode();
+		if (settings != null) {
+			Boolean isAllowSigningOnPaper = (Boolean) nodeService.getProperty(settings, PROP_ALLOW_SIGNING_ON_PAPER);
+			return Boolean.TRUE.equals(isAllowSigningOnPaper);
+		}
+		return false;
+	}
+
+	@Override
     public NodeRef getDutyRegistrar() {
         NodeRef settings = getSettingsNode();
         NodeRef registrar = null;
