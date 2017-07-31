@@ -85,6 +85,7 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 		if (null == getSettingsNode()) {
 			settingsNode = createSettingsNode();
 		}
+		initDefaultDutyRegistrar(settingsNode);
 		if (null == getTermsOfNotificationSettingsNode()) {
             termsOfNotificationSettingsNode = createTermsOfNotificationSettingsNode();
         }
@@ -228,7 +229,6 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 //		TODO: Метод разделён, создание вынесено в createSettingsNode
 		if (settingsNode == null) {
 			settingsNode = nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, EDS_GLOBAL_SETTINGS_NODE_NAME);
-			this.initDefaultDutyRegistrar(settingsNode);
 		}
 		return settingsNode;
 //		return nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, EDS_GLOBAL_SETTINGS_NODE_NAME);
