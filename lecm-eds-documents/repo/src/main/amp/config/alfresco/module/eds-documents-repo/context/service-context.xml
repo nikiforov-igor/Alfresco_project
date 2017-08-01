@@ -72,7 +72,7 @@
 		<entry key="#{EDS_GLOBAL_SETTINGS_FOLDER_ID}" value="#{EDS_GLOBAL_SETTINGS_FOLDER_NAME}"/>
 	</util:map>
 	<bean id="edsGlobalSettingsService" parent="baseBean"
-            depends-on="eds.other.models.bootstrap"
+            depends-on="eds.other.models.bootstrap, brOrgstructureEngineerInitiazer"
 		  class="ru.it.lecm.eds.EDSGlobalSettingsServiceImpl"
 		  p:orgstructureService-ref="serviceOrgstructure"
 		  p:namespaceService-ref="namespaceService"
