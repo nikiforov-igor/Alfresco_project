@@ -275,7 +275,7 @@
 
 
         var form = Dom.get(formId + "-form");
-        var value =(form && form["assoc_lecm-resolutions_base-document-assoc"] && form["assoc_lecm-resolutions_base-document-assoc"].value) || (args[1].fieldId && args[1].fieldId == "lecm-resolutions:base-assoc" && args[1].items);
+        var value =(form && form["assoc_lecm-resolutions_base-document-assoc"] && form["assoc_lecm-resolutions_base-document-assoc"].value) || (args[1].fieldId && args[1].fieldId === "lecm-resolutions:base-document-assoc" && args[1].items);
         if (value) {
             initialized = true;
             Alfresco.util.Ajax.jsonPost(
