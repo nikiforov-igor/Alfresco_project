@@ -50,7 +50,6 @@
 			<form>
 				<field-visibility>
 					<show id="reservationWf:presentString" force="true" />
-					<show id="warning" force="true"/>
 					<show id="lecmRegnumRes:decision" />
 					<show id="lecmRegnumRes:rejectReason" />
 					<show id="style" />
@@ -58,11 +57,10 @@
 				</field-visibility>
 				<appearance>
 					<field id="reservationWf:presentString">
-						<control template="/ru/it/lecm/workflow/controls/document-present-string.ftl" />
-					</field>
-					<field id="warning">
 						<control template="/ru/it/lecm/workflow/reservation/controls/reserve-message-control.ftl" >
-							<control-param name="formatString">{lecm-reservation-aspects:reserveTaskMessage}</control-param>
+							<control-param name="formatString">
+								<![CDATA[<a href='/{~SHARE_CONTEXT}/page/document?nodeRef={sys:store-protocol}://{sys:store-identifier}/{sys:node-uuid}'><h2>{lecm-document:doc-type} от {~PROJECT_REGDATE} , номер проекта: {~PROJECT_REGNUM}</h2></a></br>{lecm-reservation-aspects:reserveTaskMessage}]]>
+							</control-param>
 						</control>
 					</field>
 					<field id="lecmRegnumRes:decision" mandatory="true">
@@ -70,7 +68,7 @@
 							<control-param name="options">RESERVED|Одобрить запрос#alf#REJECTED|Отклонить запрос</control-param>
 						</control>
 					</field>
-					<field id="lecmRegnumRes:rejectReason" label-id="ru.it.reservation.title.rejectReason">
+					<field id="lecmRegnumRes:rejectReason" label-id="ru.it.reservation.title.rejectReason" help-id="lecm.reservation.reject-reason.help-id">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
 							<control-param name="rows">4</control-param>
 						</control>
@@ -114,7 +112,6 @@
 			<form>
 				<field-visibility>
 					<show id="reservationWf:presentString" force="true" />
-					<show id="warning" force="true"/>
 					<show id="lecmRegnumRes:requestCancelDecision" />
 					<show id="lecmRegnumRes:requestCancelRejectReason" />
 					<show id="style" />
@@ -122,11 +119,10 @@
 				</field-visibility>
 				<appearance>
 					<field id="reservationWf:presentString">
-						<control template="/ru/it/lecm/workflow/controls/document-present-string.ftl" />
-					</field>
-					<field id="warning">
 						<control template="/ru/it/lecm/workflow/reservation/controls/reserve-message-control.ftl" >
-							<control-param name="formatString">{lecm-reservation-aspects:reserveCancelTaskMessage}</control-param>
+							<control-param name="formatString">
+								<![CDATA[<a href='/{~SHARE_CONTEXT}/page/document?nodeRef={sys:store-protocol}://{sys:store-identifier}/{sys:node-uuid}'><h2>{lecm-document:doc-type} от {~PROJECT_REGDATE} , номер проекта: {~PROJECT_REGNUM}</h2></a></br>{lecm-reservation-aspects:reserveCancelTaskMessage}]]>
+							</control-param>
 						</control>
 					</field>
 					<field id="lecmRegnumRes:requestCancelDecision" mandatory="true">
@@ -137,7 +133,7 @@
 							<control-param name="decisionProp">prop_lecmRegnumRes_requestCancelDecision</control-param>
 						</control>
 					</field>
-					<field id="lecmRegnumRes:requestCancelRejectReason" label-id="ru.it.reservation.title.rejectReason">
+					<field id="lecmRegnumRes:requestCancelRejectReason" label-id="ru.it.reservation.title.rejectReason" help-id="lecm.reservation.reject-reason.help-id">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
 							<control-param name="rows">4</control-param>
 						</control>

@@ -2,8 +2,8 @@
 <items>
     <item name="lecm-dic:Категория события" type="lecm-dic:dictionary">
         <items updateMode="CreateOrUpdate">
-            <item name="cm:Резервирование" type="lecm-busjournal:eventCategory">
-                <property name="cm:name">Резервирование</property>
+            <item name="cm:Резервирование регистрационного номера" type="lecm-busjournal:eventCategory">
+                <property name="cm:name">Резервирование регистрационного номера</property>
                 <property name="lecm-busjournal:eventCategory-code">RESERVATION</property>
             </item>
         </items>

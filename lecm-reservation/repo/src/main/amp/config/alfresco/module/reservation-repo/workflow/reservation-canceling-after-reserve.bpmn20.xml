@@ -103,7 +103,7 @@
 
                                 notifications.sendNotification({
                                     recipients: [employee],
-                                    templateCode: 'RESERVATION_REQUEST_STARTED',
+                                    templateCode: 'RESERVATION_REQUEST_CANCEL_STARTED',
                                     templateConfig: {
                                         mainObject: document,
                                         eventExecutor: currentEmployee
@@ -132,6 +132,7 @@
                                 var document = bpm_package.children[0];
                                 var employee = assignee;
                                 var reservateInitiator = execution.getVariable('reservateInitiator');
+                                var documentInitiators = lecmPermission.getEmployeesByDynamicRole(document, "BR_INITIATOR");
 
                                 var rejectReason = task.getVariableLocal('lecmRegnumRes_requestCancelRejectReason');
                                 var decision = task.getVariableLocal('lecmRegnumRes_requestCancelDecision') ? task.getVariableLocal('lecmRegnumRes_requestCancelDecision') + '' : '';
@@ -150,6 +151,12 @@
                                     document.properties['lecm-reservation-aspects:isReserved'] = false;
                                     document.properties['lecm-document-aspects:reg-data-date'] = null;
                                     document.properties['lecm-document-aspects:reg-data-number'] = projectNumber;
+                                    var registrars = document.assocs["lecm-document-aspects:registrator-assoc"];
+                                    if (registrars && registrars.length) {
+                                        registrars.forEach(function(empl) {
+                                            document.removeAssociation(empl, 'lecm-document-aspects:registrator-assoc');
+                                        });
+                                    }
 
                                     var bjMsg = '#initiator отменил резервирование номера для документа #mainobject. Возвращен номер проекта документа:' + projectNumber;
                                     businessJournal.log(document.nodeRef.toString(), 'RESERVATION', bjMsg, []);
@@ -160,7 +167,7 @@
                                 } else if (decision == 'REJECTED') {
 
                                     /* Запись в бизнес журнал если решение плохое: */
-                                    var rejectReasonLink = "<a href='#' title=" + rejectReason + ">отклонил</a>";
+                                    var rejectReasonLink = base.wrapperTitle("отклонил", rejectReason);
                                     var bjMsg = '#initiator ' + rejectReasonLink + ' запрос на отмену зарезервированных регистрационных данных документа #mainobject';
                                     businessJournal.log(document.nodeRef.toString(), 'RESERVATION', bjMsg, []);
 
@@ -168,17 +175,16 @@
                                     templateCode = 'RESERVATION_REQUEST_CANCEL_FINISHED_REJECTED';
                                     templateConfigObject.reason = rejectReason;
                                 }
+                                /* Уведомление при окончании запроса на резервирование рег.номера: */
+                                notifications.sendNotification({
+                                    recipients: documentInitiators,
+                                    templateCode: templateCode,
+                                    templateConfig: templateConfigObject
+                                });
                                 lecmPermission.pushAuthentication();
                                 lecmPermission.setRunAsUserSystem();
                                 document.save();
                                 lecmPermission.popAuthentication();
-
-                                /* Уведомление при окончании запроса на резервирование рег.номера: */
-                                notifications.sendNotification({
-                                    recipients: [reservateInitiator],
-                                    templateCode: templateCode,
-                                    templateConfig: templateConfigObject
-                                });
 
                                 execution.setVariable('taskDecision', decision);
                                 for (var i=0; i < registrarsList.size(); i++) {

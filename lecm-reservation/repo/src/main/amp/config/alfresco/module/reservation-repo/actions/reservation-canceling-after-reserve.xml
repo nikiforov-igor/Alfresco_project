@@ -2,11 +2,11 @@
 <items updateMode="CreateOrUpdate">
     <item name="cm:Отозвать запрос номера(после резервирования)" type="lecm-group-actions:workflow-action">
         <property name="lecm-group-actions:expression">
-            <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") and doc.attr("lecm-reservation-aspects:isReserved") == true and (doc.attr("lecm-reservation-aspects:isReservationCanceling")== null or doc.attr("lecm-reservation-aspects:isReservationCanceling")==false) and doc.attr("lecm-statemachine:status") != "Черновик" and doc.attr("lecm-statemachine:status") != "Удален"]]></property>
+            <![CDATA[(doc.type()!="lecm-contract:document" || (doc.type()=="lecm-contract:document" && doc.attr("lecm-statemachine:status")!="На подписании" && doc.attr("lecm-statemachine:status")!="На регистрации" && doc.attr("lecm-statemachine:status")!="Проект")) and user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") and doc.attr("lecm-reservation-aspects:isReserved") == true and (doc.attr("lecm-reservation-aspects:isReservationCanceling")== null or doc.attr("lecm-reservation-aspects:isReservationCanceling")==false) and doc.attr("lecm-statemachine:status") != "Черновик" and doc.attr("lecm-statemachine:status") != "Удален"]]></property>
         <property name="lecm-group-actions:workflow">
             <![CDATA[activiti$reservationRequestCancelingAfterReserve]]></property>
         <property name="cm:name"><![CDATA[Отозвать запрос номера(после резервирования)]]></property>
-        <property name="lecm-group-actions:statuses"><![CDATA[]]></property>
+        <property name="lecm-group-actions:statuses"><![CDATA[Проект;На согласовании;На доработке;Согласован;На подписании;Подписан;На регистрации;Проект зарегистрирован;На подписании у контрагента;]]></property>
         <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
         <property name="lecm-group-actions:order"><![CDATA[0]]></property>
         <property name="cm:title"><![CDATA[Отозвать запрос номера]]></property>
