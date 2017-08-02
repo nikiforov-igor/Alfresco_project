@@ -660,7 +660,7 @@
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
-                                                                <value><![CDATA[На регистрацию]]></value>
+                                                                <value><![CDATA[Направить на регистрацию]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>do-not-ask-for-confirmation</name>
@@ -699,7 +699,7 @@
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[!doc.attr("lecm-incoming:is-not-registered")]]></value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") AND !doc.attr("lecm-incoming:is-not-registered")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>

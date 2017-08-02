@@ -3,10 +3,10 @@
     <item name="cm:Направить на регистрацию" type="lecm-group-actions:script-action">
         <property name="cm:name"><![CDATA[Направить на регистрацию]]></property>
         <property name="cm:title"><![CDATA[Направить на регистрацию]]></property>
-        <property name="lecm-group-actions:statuses"><![CDATA[Подписан]]></property>
+        <property name="lecm-group-actions:statuses"><![CDATA[Проект;На доработке;Согласован;Подписан]]></property>
         <property name="lecm-group-actions:type"><![CDATA[lecm-outgoing:document]]></property>
         <property name="lecm-group-actions:order"><![CDATA[10]]></property>
-        <property name="lecm-group-actions:expression"><![CDATA[]]></property>
+        <property name="lecm-group-actions:expression"><![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") AND doc.assocClass("lecm-eds-document:document-type-assoc") != null AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:registration-required") AND (doc.attr("lecm-statemachine:status") == "Подписан" OR (doc.attr("lecm-eds-aspect:signed-on-paper") AND (doc.attr("lecm-statemachine:status") == "Проект" OR doc.attr("lecm-statemachine:status") == "На доработке" OR doc.attr("lecm-statemachine:status") == "Согласован")))]]></property>
         <property name="lecm-group-actions:isGroup"><![CDATA[true]]></property>
         <property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
         <property name="lecm-group-actions:script"><![CDATA[statemachine.executeTransitionAction(document, "Направить на регистрацию");]]></property>
