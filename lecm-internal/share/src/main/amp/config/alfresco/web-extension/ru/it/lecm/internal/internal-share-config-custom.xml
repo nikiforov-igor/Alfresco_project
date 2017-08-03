@@ -423,8 +423,8 @@
                 <field-visibility>
                     <show id="lecm-doc-dic-dt:documentType-code" force="true"/>
                     <show id="cm:name" force="true"/>
-                    <show id="lecm-doc-dic-dt:registration-required"/>
-                    <show id="lecm-doc-dic-dt:auto-registration"/>
+                    <show id="lecm-doc-dic-dt:registration-required" force="true"/>
+                    <show id="lecm-doc-dic-dt:auto-registration" force="true"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-doc-dic-dt:registration-required">
