@@ -255,26 +255,9 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 	 *
 	 * @return ссылка на элеменнт справочника "Тематика"
 	 */
-	public NodeRef getDefaultSubject() {
-//		TODO: Метод getDefaultSubject в итоге вызывает метод getCurrentUserSettingsNode,
-//		который был ранее типа getOrCreate, теперь он разделён и надо проверить существование папки и
-//		при необходимости создать её в короткой транзакции
-//              Здесь создавать её необходимости нет.
-//		if(errandsService.getCurrentUserSettingsNode() == null) {
-//			RetryingTransactionHelper.RetryingTransactionCallback cb = new RetryingTransactionHelper.RetryingTransactionCallback<Void> () {
-//
-//				@Override
-//				public Void execute() throws Throwable {
-//					errandsService.createCurrentUserSettingsNode();
-//					return null;
-//				}
-//
-//			};
-//
-////			TODO: Явно вызывается из вебскрипта без транзакции
-//			lecmTransactionHelper.doInTransaction(cb, false);
-//		}
-		return  errandsService.getDefaultSubject();
+	public Scriptable getDefaultSubject() {
+        final List<NodeRef> defaultSubject = errandsService.getDefaultSubject();
+        return  defaultSubject == null ? null : createScriptable(defaultSubject);
 	}
 
     public Scriptable getMyDocumentErrands(ScriptNode document, String filter) {
