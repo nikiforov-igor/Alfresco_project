@@ -272,7 +272,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     public List<NodeRef> getDefaultSubject() {
 	NodeRef settings = getCurrentUserSettingsNode();
         if (settings != null) {
-            return  findNodesByAssociationRef(settings, USER_SETTINGS_ASSOC_DEFAULT_SUBJECT, null, ASSOCIATION_TYPE.TARGET);
+            return findNodesByAssociationRef(settings, USER_SETTINGS_ASSOC_DEFAULT_SUBJECT, null, ASSOCIATION_TYPE.TARGET);
         }
         return null;
     }

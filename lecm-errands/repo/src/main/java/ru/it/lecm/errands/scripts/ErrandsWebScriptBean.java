@@ -257,7 +257,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 	 */
 	public Scriptable getDefaultSubject() {
         final List<NodeRef> defaultSubject = errandsService.getDefaultSubject();
-        return  defaultSubject == null ? null : createScriptable(defaultSubject);
+        return defaultSubject == null ? null : createScriptable(defaultSubject);
 	}
 
     public Scriptable getMyDocumentErrands(ScriptNode document, String filter) {
