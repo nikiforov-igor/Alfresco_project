@@ -206,7 +206,7 @@ public interface ErrandsService {
      *
      * @return ссылка на элеменнт справочника "Тематика"
      */
-    NodeRef getDefaultSubject();
+    List<NodeRef> getDefaultSubject();
 
     /**
      * Поиск подписок находит все подписки в активном статусе. Игнорируются
