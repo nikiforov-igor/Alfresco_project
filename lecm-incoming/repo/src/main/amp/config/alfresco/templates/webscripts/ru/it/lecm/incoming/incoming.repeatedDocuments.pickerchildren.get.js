@@ -5,7 +5,8 @@ function main() {
 		var document = search.findNode(args["documentRef"]);
 		if (document) {
 			var argCustomSearchTerm = args["customSearchTerm"];
-            var argSearchMode = args["searchMode"];
+            var argSearchMode = args["searchMode"],
+                argSubject = args["subject"];
 			var searchTerm = null;
 			if (argCustomSearchTerm) {
 				var searchTermArr = argCustomSearchTerm.split("lecm-document:present-string:");
@@ -28,7 +29,7 @@ function main() {
                     filter = addSimilarFilter(filter, document, searchProp.propName, startLength, argSearchMode);
 				}
             });
-            if (args["subject"] == "true") {
+            if (argSubject == "true") {
                 var docSubjects = document.assocs["lecm-document:subject-assoc"];
                 var docSubjectsFilter = "";
                 if (docSubjects) {
