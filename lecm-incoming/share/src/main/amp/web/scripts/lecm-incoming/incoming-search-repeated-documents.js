@@ -46,7 +46,6 @@ LogicECM.module.Incoming = LogicECM.module.Incoming || {};
 			} else {
                 params += "&selectAll=false";
 			}
-			var atLeastOne = false;
 			for (var i = 1; i < this.checkboxElements.length; i++) {
 				if (this.checkboxElements[i].checked) {
 					params += "&" + this.checkboxElements[i].name + "=true";
@@ -55,15 +54,14 @@ LogicECM.module.Incoming = LogicECM.module.Incoming || {};
                     params += "&" + this.checkboxElements[i].name + "=false";
 				}
 			}
-			params += "&atLeastOne=" + atLeastOne;
 
             var el = Dom.get(this.options.controlId + "_search-repeats-options-search-mode");
-            if (el.selectedIndex == 0) {
-                params += "&searchMode=0";
+            if (el.value == "at_least_one") {
+                params += "&searchMode=at_least_one";
             } else {
-                params += "&searchMode=1";
+                params += "&searchMode=all";
 			}
-			params += "&sortProp=" + encodeURIComponent("score");
+			params += "&sortProp=score";
 
 			return params;
 		},
@@ -75,10 +73,9 @@ LogicECM.module.Incoming = LogicECM.module.Incoming || {};
             YAHOO.Bubbling.on("dataTableFirstLoad", this.onDataTableFirstLoad, this);
 
             this.initCheckboxElements();
-            Dom.get(this.options.controlId + "_search-repeats-options-attributes-match-select-all").onchange = this.onChangeSelectAll.bind(this);
-            Dom.get(this.options.controlId + "_search-repeats-options-switch-link").onclick = this.clickOnSearchRepeatsOptions.bind(this);
+            YAHOO.util.Event.addListener(Dom.get(this.options.controlId + "_search-repeats-options-attributes-match-select-all"), 'change', this.onChangeSelectAll, null, this);
+            YAHOO.util.Event.addListener(Dom.get(this.options.controlId + "_search-repeats-options-switch-link"), 'click', this.clickOnSearchRepeatsOptions, null, this);
             this.setAttributesCheckboxes();
-            this.beforeDataTableLoad = this.widgets.dataTable._oRecordSet._records.length;
             this.onSearch();
 
             this.widgets.clearButton = new YAHOO.widget.Button(this.options.controlId + "_search-repeats-options-clearButton");
@@ -189,7 +186,7 @@ LogicECM.module.Incoming = LogicECM.module.Incoming || {};
 
 		setAttributesCheckboxes: function () {
 			for (var i = 1; i < this.checkboxElements.length; i++) {
-                if (Dom.get(this.checkboxElements[i].id + "-value").attributes["content"].value != "(Нет)") {
+                if (Dom.get(this.checkboxElements[i].id + "-value").textContent != "(Нет)") {
                     this.checkboxElements[i].checked = true;
                 } else {
                     this.checkboxElements[i].disabled = true;
@@ -224,8 +221,8 @@ LogicECM.module.Incoming = LogicECM.module.Incoming || {};
 			}
 
             var el = Dom.get(searchOptionsId + "-search-mode");
-            if (el.selectedIndex == 1) {
-                el.selectedIndex = 0;
+            if (el.value == "all") {
+                el.value = "at_least_one";
             }
         },
 

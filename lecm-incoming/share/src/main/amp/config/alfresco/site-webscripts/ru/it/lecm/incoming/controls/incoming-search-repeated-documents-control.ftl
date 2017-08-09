@@ -58,9 +58,9 @@
 		<label class="checkbox-label" for="${optionsControlId}-attributes-match-${attributeName}">${msg("label.incoming.search_repeats_options.attributes_match." + attributeName)}:</label>
 		<div class="match-value-div">
 			<#if formArgument?? && formArgument != "">
-				<span id="${optionsControlId}-attributes-match-${attributeName}-value" content="${formArgument}">${formArgument}</span>
+				<span id="${optionsControlId}-attributes-match-${attributeName}-value">${formArgument}</span>
 			<#else>
-				<span id="${optionsControlId}-attributes-match-${attributeName}-value" content="(Нет)">${msg("form.control.novalue")}</span>
+				<span id="${optionsControlId}-attributes-match-${attributeName}-value">${msg("form.control.novalue")}</span>
 			</#if>
 		</div>
 	</div>
@@ -148,8 +148,8 @@
 							</div>
 							<div class="value-div">
 								<select id="${optionsControlId}-search-mode">
-									<option selected>${msg("label.incoming.search_repeats_options.search_mode.at_least_one_attribute_matches")}</option>
-									<option>${msg("label.incoming.search_repeats_options.search_mode.all_attributes_match")}</option>
+									<option selected value="at_least_one">${msg("label.incoming.search_repeats_options.search_mode.at_least_one_attribute_matches")}</option>
+									<option value="all">${msg("label.incoming.search_repeats_options.search_mode.all_attributes_match")}</option>
 								</select>
 							</div>
                             <div class="clear"></div>
@@ -174,12 +174,10 @@
 
 		<div class="label-div search-similar-label">
 			<label for="${controlId}">
-				<strong>
-					${field.label?html}:
-						<#if field.endpointMandatory!false || field.mandatory!false>
-							<span class="mandatory-indicator">${msg("form.required.fields.marker")}</span>
-						</#if>
-                </strong>
+			${field.label?html}:
+				<#if field.endpointMandatory!false || field.mandatory!false>
+                    <span class="mandatory-indicator">${msg("form.required.fields.marker")}</span>
+				</#if>
 			</label>
 		</div>
 		<div id="${controlId}" class="container">

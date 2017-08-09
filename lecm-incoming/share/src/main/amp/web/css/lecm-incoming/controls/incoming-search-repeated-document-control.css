@@ -4,6 +4,7 @@
 }
 .form-container .bd .form-fields .control.incoming-search-repeated .search-similar-label {
     margin-top: 0px;
+    font-weight: bold;
 }
 .form-container .bd .form-fields .control.incoming-search-repeated .container input[type="checkbox"] {
     margin-left: 2px;
