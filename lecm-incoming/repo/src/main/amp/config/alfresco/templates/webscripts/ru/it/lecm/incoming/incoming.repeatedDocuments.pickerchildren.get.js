@@ -7,6 +7,15 @@ function main() {
 			var argCustomSearchTerm = args["customSearchTerm"];
             var argSearchMode = args["searchMode"],
                 argSubject = args["subject"];
+
+            var searchPropNamesArray = [];
+            searchPropNamesArray.push({elName: "sender", propName: "lecm-incoming:sender-assoc-ref"});
+            searchPropNamesArray.push({elName: "addressee", propName: "lecm-incoming:addressee-assoc-ref"});
+            searchPropNamesArray.push({elName: "title", propName: "lecm-document:title"});
+            searchPropNamesArray.push({elName: "outgoing_number", propName: "lecm-incoming:outgoing-number"});
+            searchPropNamesArray.push({elName: "outgoing_date", propName: "lecm-incoming:outgoing-date"});
+            searchPropNamesArray.push({elName: "subject", propName: "lecm-document:subject-assoc-ref"});
+
 			var searchTerm = null;
 			if (argCustomSearchTerm) {
 				var searchTermArr = argCustomSearchTerm.split("lecm-document:present-string:");
@@ -18,13 +27,12 @@ function main() {
 				searchProp = searchPropArr && searchPropArr.length ? searchPropArr[0] : null;
 			}
 
-            var startLength = filter.length,
-            	searchPropNames = getSearchPropNamesArray();
+            var startLength = filter.length;
 
             if (searchTerm) {
                 filter += ' AND (' + '@' + searchProp.replace(":", "\\:") + '"*' + searchTerm + '*"';
             }
-            searchPropNames.forEach(function (searchProp) {
+            searchPropNamesArray.forEach(function (searchProp) {
 				if (args[searchProp.elName] == "true") {
                     filter = addSimilarFilter(filter, document, searchProp.propName, startLength, argSearchMode);
 				}
@@ -81,17 +89,6 @@ function addSimilarFilter(filter, document, prop, startLength, searchMode) {
 		}
 	}
 	return filter;
-}
-
-function getSearchPropNamesArray () {
-	var searchPropNamesArray = [];
-    searchPropNamesArray.push({elName: "sender", propName: "lecm-incoming:sender-assoc-ref"});
-    searchPropNamesArray.push({elName: "addressee", propName: "lecm-incoming:addressee-assoc-ref"});
-    searchPropNamesArray.push({elName: "title", propName: "lecm-document:title"});
-    searchPropNamesArray.push({elName: "outgoing_number", propName: "lecm-incoming:outgoing-number"});
-    searchPropNamesArray.push({elName: "outgoing_date", propName: "lecm-incoming:outgoing-date"});
-    searchPropNamesArray.push({elName: "subject", propName: "lecm-document:subject-assoc-ref"});
-	return searchPropNamesArray;
 }
 
 main();
