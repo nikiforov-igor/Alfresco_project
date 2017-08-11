@@ -169,19 +169,16 @@ LogicECM.module.Incoming = LogicECM.module.Incoming || {};
         },
 
 		onChangeSelectAll: function () {
-            if (this.checkboxElements[0].checked) {
-                for (var i = 1; i < this.checkboxElements.length; i++) {
-                	if (!this.checkboxElements[i].disabled) {
-                        this.checkboxElements[i].checked = true;
-					}
-				}
-            } else {
-                for (var i = 1; i < this.checkboxElements.length; i++) {
-                    if (!this.checkboxElements[i].disabled) {
-                        this.checkboxElements[i].checked = false;
-                    }
+		    var activeCheckBoxes = this.checkboxElements.filter(function (checkbox) {
+                return !checkbox.disabled
+            });
+            activeCheckBoxes.forEach(function (checkbox) {
+                if (this.checkboxElements[0].checked) {
+                    checkbox.checked = true;
+                } else {
+                    checkbox.checked = false;
                 }
-			}
+            }, this);
         },
 
 		setAttributesCheckboxes: function () {
@@ -213,17 +210,11 @@ LogicECM.module.Incoming = LogicECM.module.Incoming || {};
 			if (searchTextField.value) {
                 searchTextField.value = "";
 			}
-			if (this.checkboxElements[0].checked) {
-                this.checkboxElements[0].checked = false;
-                this.onChangeSelectAll();
-			} else {
-                this.onChangeSelectAll();
-			}
+            this.checkboxElements[0].checked = false;
+            this.onChangeSelectAll();
 
             var el = Dom.get(searchOptionsId + "-search-mode");
-            if (el.value == "all") {
-                el.value = "at_least_one";
-            }
+            el.value = "at_least_one";
         },
 
         initCheckboxElements: function () {

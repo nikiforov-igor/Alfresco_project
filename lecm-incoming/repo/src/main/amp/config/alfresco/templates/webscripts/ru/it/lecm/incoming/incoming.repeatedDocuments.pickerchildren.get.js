@@ -8,13 +8,12 @@ function main() {
             var argSearchMode = args["searchMode"],
                 argSubject = args["subject"];
 
-            var searchPropNamesArray = [];
-            searchPropNamesArray.push({elName: "sender", propName: "lecm-incoming:sender-assoc-ref"});
-            searchPropNamesArray.push({elName: "addressee", propName: "lecm-incoming:addressee-assoc-ref"});
-            searchPropNamesArray.push({elName: "title", propName: "lecm-document:title"});
-            searchPropNamesArray.push({elName: "outgoing_number", propName: "lecm-incoming:outgoing-number"});
-            searchPropNamesArray.push({elName: "outgoing_date", propName: "lecm-incoming:outgoing-date"});
-            searchPropNamesArray.push({elName: "subject", propName: "lecm-document:subject-assoc-ref"});
+            var searchPropNamesArray = [
+                {elName: "sender", propName: "lecm-incoming:sender-assoc-ref"},
+                {elName: "addressee", propName: "lecm-incoming:addressee-assoc-ref"},
+                {elName: "title", propName: "lecm-document:title"},
+                {elName: "outgoing_number", propName: "lecm-incoming:outgoing-number"},
+                {elName: "outgoing_date", propName: "lecm-incoming:outgoing-date"}];
 
 			var searchTerm = null;
 			if (argCustomSearchTerm) {
@@ -43,20 +42,22 @@ function main() {
                 if (docSubjects) {
                     for (var i = 0; i < docSubjects.length; i++) {
                         if (i != 0) {
-                            docSubjectsFilter += " OR ";
+                            docSubjectsFilter += " AND ";
                         }
                         docSubjectsFilter += '@lecm\\-document\\:subject\\-assoc\\-ref:"*' + docSubjects[i].nodeRef.toString() + '*"';
                     }
                 }
                 if (docSubjectsFilter.length) {
-                    if (firstAddFilter) {
+                    if (filter.length == startLength) {
                         filter += " AND (" + docSubjectsFilter + ")";
                     } else {
                         filter += " OR (" + docSubjectsFilter + ")";
                     }
                 }
             }
-            filter += ")";
+            if (filter.length > startLength) {
+                filter += ")";
+            }
 		}
 
 	var data = getPickerChildrenItems(filter);
