@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items updateMode="CreateOrUpdate">
+    <item name="cm:СЭД. Отказать в регистрации" type="lecm-group-actions:script-action">
+        <property name="lecm-group-actions:expression">
+            <![CDATA[(user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "DA_REGISTRAR_DYN") AND doc.attr("lecm-statemachine:status") == "На регистрации") OR (user.currentUser().hasBusinessRole("CONTRACT_RECORDER") AND doc.attr("lecm-document:doc-type") == "Договор" AND doc.attr("lecm-statemachine:status") == "Подписан")]]></property>
+        <property name="cm:name"><![CDATA[СЭД. Отказать в регистрации]]></property>
+        <property name="lecm-group-actions:statuses"><![CDATA[]]></property>
+        <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
+        <property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
+        <property name="lecm-group-actions:script"><![CDATA[if (document) {
+	var currentEmployee =  orgstructure.getCurrentEmployee();
+	documentMembers.addMemberWithoutCheckPermission(document, currentEmployee, "LECM_BASIC_PG_Reader", true);
+
+	var registrars = lecmPermission.getEmployeesByDynamicRole(document, "DA_REGISTRAR_DYN");
+	if (registrars && registrars.length) {
+		for each (var registrar in registrars) {
+			lecmPermission.revokeDynamicRole(document, registrar, "DA_REGISTRAR_DYN");
+		}
+	}
+
+	var initiators = lecmPermission.getEmployeesByDynamicRole(document, "BR_INITIATOR");
+
+     notifications.sendNotification({
+       recipients: initiators,
+       templateCode: 'EDS_DOCUMENT_DECLINE_REGISTERED',
+       templateConfig: {
+         mainObject: document,
+         initiator: currentEmployee,
+		 declineReason: declineReason
+       }
+     });
+
+	var logText = "#initiator"+ base.wrapperTitle("отказал", declineReason) + " в регистрации документа " + documentScript.wrapperDocumentLink(document, document.properties["lecm-document:present-string"]);
+	logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
+	businessJournal.log(document.nodeRef.toString(), "EDS_REGISTRATION", logText, []);
+
+	 statemachine.executeTransitionAction(document, 'На доработку');
+}]]></property>
+        <property name="lecm-group-actions:order"><![CDATA[0]]></property>
+        <property name="cm:title"><![CDATA[Отказать в регистрации]]></property>
+        <property name="lecm-group-actions:type"><![CDATA[[]]]></property>
+        <property name="lecm-group-actions:availableForReader"><![CDATA[true]]></property>
+        <items>
+            <item name="cm:Причина" type="lecm-group-actions:form-field">
+                <property name="lecm-group-actions:field-control">
+                    <![CDATA[{
+                        "template":"/ru/it/lecm/base-share/components/controls/textarea.ftl",
+                        "id":"d:text-textarea",
+                        "params":[
+                            {"name":"rows","value":"7"}
+                        ]
+                    }]]></property>
+                <property name="lecm-group-actions:field-is-mandatory"><![CDATA[true]]></property>
+                <property name="lecm-group-actions:field-type"><![CDATA[d:text]]></property>
+                <property name="cm:name"><![CDATA[Причина]]></property>
+                <property name="lecm-group-actions:field-id"><![CDATA[declineReason]]></property>
+                <property name="lecm-group-actions:field-priority"><![CDATA[0]]></property>
+                <property name="lecm-group-actions:field-default-value"><![CDATA[]]></property>
+            </item>
+        </items>
+    </item>
+</items>

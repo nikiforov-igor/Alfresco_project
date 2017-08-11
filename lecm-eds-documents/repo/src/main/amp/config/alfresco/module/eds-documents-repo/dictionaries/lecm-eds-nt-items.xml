@@ -62,6 +62,18 @@
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
                 </assocs>
             </item>
+            <item name="cm:EDS_DOCUMENT_DECLINE_REGISTRATION" type="lecm-notification-template:template">
+                <property name="lecm-notification-template:template">
+                    <![CDATA[{#initiator.wrapAsLink()} {#wrapTitle("отказал", #declineReason)} в регистрации документа {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}]]></property>
+                <property name="cm:name"><![CDATA[EDS_DOCUMENT_DECLINE_REGISTERED]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[СЭД. Отказать в регистрации]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
         </items>
     </item>
 </items>
