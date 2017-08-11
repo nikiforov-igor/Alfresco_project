@@ -14,10 +14,6 @@
                 <property name="cm:name">Автоматическая регистрация</property>
                 <property name="lecm-busjournal:eventCategory-code">EDS_AUTO_REGISTRATION</property>
             </item>
-            <item name="cm:Регистрация" type="lecm-busjournal:eventCategory">
-                <property name="cm:name">Регистрация</property>
-                <property name="lecm-busjournal:eventCategory-code">EDS_REGISTRATION</property>
-            </item>
         </items>
     </item>
 </items>

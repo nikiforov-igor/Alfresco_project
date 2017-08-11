@@ -9579,7 +9579,7 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
 
 	var logText = "#initiator зарегистрировал документ " + documentScript.wrapperDocumentLink(document, presentStringWithProjectNumber) + ". Присвоен номер {~REGNUM} на дату {~REGDATE}.";
 	logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
-	businessJournal.log(document.nodeRef.toString(), "EDS_REGISTRATION", logText, []);
+	businessJournal.log(document.nodeRef.toString(), "REGISTRATION", logText, []);
 })();]]></value>
                                                             </property>
                                                         </properties>
