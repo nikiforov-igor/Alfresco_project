@@ -297,6 +297,16 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 		return false;
 	}
 
+	@Override
+	public boolean isReservationCanceling(NodeRef document) {
+		ParameterCheck.mandatory("document", document);
+		if (nodeService.exists(document)) {
+			Boolean isReservationCanceling = (Boolean) nodeService.getProperty(document, PROP_IS_RESERVATION_CANCELING);
+			return isReservationCanceling != null ? isReservationCanceling : false;
+		}
+		return false;
+	}
+
 	protected void actualizeReservationTask(NodeRef assignee, DelegateTask task) {
 		String workflowRole = (String)task.getVariable("registrarDynamicRole");
 		boolean delegateAll = workflowRole == null; //если роль не указана, то ориентируемся на делегирование всего

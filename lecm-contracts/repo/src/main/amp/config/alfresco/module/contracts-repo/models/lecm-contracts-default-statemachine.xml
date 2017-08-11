@@ -10007,12 +10007,12 @@ notifications.sendNotificationFromCurrentUser({
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[@reservationWorkflowService.isReservationRunning(doc.getNodeRef()) != true]]></value>
+                                                                                    <![CDATA[@reservationWorkflowService.isReservationCanceling(doc.getNodeRef()) != true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Документ не может быть зарегистрирован, требуется завершить запросы на резервирование рег. номера]]></value>
+                                                                                    <![CDATA[Перед выполнением регистрации требуется обработать запрос на отмену зарезервированных регистрационных данных]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -11140,6 +11140,56 @@ contract.save();
 var logText = "Договор зарегистрирован, присвоен регистрационный номер: ";
 logText +=  contract.properties["lecm-document:regnum"];
 businessJournal.log(contract.nodeRef.toString(), "EDIT", logText, []);]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>5657cfd8-0f57-4391-a579-767863bc111e</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/9546ffd5-3a1c-4aef-b41d-58ab0c1facd9
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value>
+                                                                    <![CDATA[Проверка запущенных запросов на резервирование, уведомление и лог]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[(function() {
+	var document = stm_document,
+		isReservationRunning = document.properties['lecm-reservation-aspects:isReservationRunning'],
+		documentRegnum = document.properties["lecm-document:regnum"],
+		projectNumber = document.properties["lecm-document-aspects:reg-project-data-number"],
+		presentString = document.properties["lecm-document:present-string"],
+		presentStringWithProjectNumber = presentString.replace(documentRegnum, projectNumber);
+
+	if (isReservationRunning) {
+		statemachine.terminateWorkflowsByDefinition(document, 'regnumReservationExecution', null, null);
+	}
+	var initiators = lecmPermission.getEmployeesByDynamicRole(document, "BR_INITIATOR");
+    var eventInitiator = orgstructure.getCurrentEmployee();
+    if (initiators && initiators.length) {
+        notifications.sendNotification({
+		  recipients: initiators,
+		  templateCode: 'EDS_DOCUMENT_REGISTERED',
+		  templateConfig: {
+			  mainObject: document,
+			  initiator: eventInitiator,
+			  presentStringWithProjectNumber: presentStringWithProjectNumber
+		  }
+		});
+    }
+
+	var logText = "#initiator зарегистрировал документ " + documentScript.wrapperDocumentLink(document, presentStringWithProjectNumber) + ". Присвоен номер {~REGNUM} на дату {~REGDATE}.";
+	logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
+	businessJournal.log(document.nodeRef.toString(), "EDS_REGISTRATION", logText, []);
+})();]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>

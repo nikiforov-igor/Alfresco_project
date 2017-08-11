@@ -9053,7 +9053,7 @@ businessJournal.log(nd.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]></
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Документ не может быть зарегистрирован, требуется завершить запросы на резервирование рег. номера]]></value>
+                                                                                    <![CDATA[Перед выполнением регистрации требуется обработать запрос на отмену зарезервированных регистрационных данных]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -9062,7 +9062,39 @@ businessJournal.log(nd.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]></
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[@reservationWorkflowService.isReservationRunning(doc.getNodeRef()) != true]]></value>
+                                                                                    <![CDATA[@reservationWorkflowService.isReservationCanceling(doc.getNodeRef()) != true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>673f2916-d4ec-447f-a075-0cfc66a20bb5
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/4bb875a9-2437-423f-a5cd-10dc47f054e8
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "DA_REGISTRAR_DYN")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие доступно только регистраторам]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -10039,6 +10071,56 @@ businessJournal.log(nd.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]></
                                                             <property>
                                                                 <name>scriptLabel</name>
                                                                 <value><![CDATA[Зарегистрировать документ]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>1f38ffe5-271f-47c4-8fec-cb823c10119a</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/7939b1a4-fe05-464f-99c3-827044846f89
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value>
+                                                                    <![CDATA[Проверка запущенных запросов на резервирование, уведомление и лог]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[(function() {
+	var document = stm_document,
+		isReservationRunning = document.properties['lecm-reservation-aspects:isReservationRunning'],
+		documentRegnum = document.properties["lecm-document:regnum"],
+		projectNumber = document.properties["lecm-document-aspects:reg-project-data-number"],
+		presentString = document.properties["lecm-document:present-string"],
+		presentStringWithProjectNumber = presentString.replace(documentRegnum, projectNumber);
+
+	if (isReservationRunning) {
+		statemachine.terminateWorkflowsByDefinition(document, 'regnumReservationExecution', null, null);
+	}
+	var initiators = lecmPermission.getEmployeesByDynamicRole(document, "BR_INITIATOR");
+    var eventInitiator = orgstructure.getCurrentEmployee();
+    if (initiators && initiators.length) {
+        notifications.sendNotification({
+		  recipients: initiators,
+		  templateCode: 'EDS_DOCUMENT_REGISTERED',
+		  templateConfig: {
+			  mainObject: document,
+			  initiator: eventInitiator,
+			  presentStringWithProjectNumber: presentStringWithProjectNumber
+		  }
+		});
+    }
+
+	var logText = "#initiator зарегистрировал документ " + documentScript.wrapperDocumentLink(document, presentStringWithProjectNumber) + ". Присвоен номер {~REGNUM} на дату {~REGDATE}.";
+	logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
+	businessJournal.log(document.nodeRef.toString(), "EDS_REGISTRATION", logText, []);
+})();]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>

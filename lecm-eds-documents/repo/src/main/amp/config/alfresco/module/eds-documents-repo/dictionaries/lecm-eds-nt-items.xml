@@ -50,6 +50,18 @@
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
                 </assocs>
             </item>
+            <item name="cm:EDS_DOCUMENT_REGISTERED" type="lecm-notification-template:template">
+                <property name="lecm-notification-template:template">
+                    <![CDATA[{#initiator.wrapAsLink()} зарегистрировал документ {#mainObject.wrapAsLink(#presentStringWithProjectNumber)}. Присвоен номер {#mainObject.getFormatted("№ {~REGNUM} на дату {~REGDATE}.")}]]></property>
+                <property name="cm:name"><![CDATA[EDS_DOCUMENT_REGISTERED]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[СЭД. Документ зарегистрирован]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
         </items>
     </item>
 </items>
