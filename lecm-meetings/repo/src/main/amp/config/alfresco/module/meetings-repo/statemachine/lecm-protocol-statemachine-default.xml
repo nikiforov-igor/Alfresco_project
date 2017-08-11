@@ -5124,6 +5124,70 @@ edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringW
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>0fa161e3-277c-405e-afb6-e33c53d8aa79
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/383c7b07-4ed1-4670-93ab-3254bf1312c8
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[@reservationWorkflowService.isReservationCanceling(doc.getNodeRef()) != true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Перед выполнением регистрации требуется обработать запрос на отмену зарезервированных регистрационных данных]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>646f11c5-1c6b-40de-ba6e-40eaee8f224a
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/6d99768f-d368-42da-b4a3-371ef9150672
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "DA_REGISTRAR_DYN")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие доступно только регистраторам]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
@@ -5832,6 +5896,56 @@ edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringW
                                                             <property>
                                                                 <name>scriptLabel</name>
                                                                 <value><![CDATA[Регистрация протокола]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>acbce6f5-a56f-47e4-860a-d6b4cd779e7e</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/e52d4ea7-7af0-48b4-88f4-5e21d6e3683f
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value>
+                                                                    <![CDATA[Проверка запущенных запросов на резервирование, уведомление и лог]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[(function() {
+	var document = stm_document,
+		isReservationRunning = document.properties['lecm-reservation-aspects:isReservationRunning'],
+		documentRegnum = document.properties["lecm-document:regnum"],
+		projectNumber = document.properties["lecm-document-aspects:reg-project-data-number"],
+		presentString = document.properties["lecm-document:present-string"],
+		presentStringWithProjectNumber = presentString.replace(documentRegnum, projectNumber);
+
+	if (isReservationRunning) {
+		statemachine.terminateWorkflowsByDefinition(document, 'regnumReservationExecution', null, null);
+	}
+	var initiators = lecmPermission.getEmployeesByDynamicRole(document, "BR_INITIATOR");
+    var eventInitiator = orgstructure.getCurrentEmployee();
+    if (initiators && initiators.length) {
+        notifications.sendNotification({
+		  recipients: initiators,
+		  templateCode: 'EDS_DOCUMENT_REGISTERED',
+		  templateConfig: {
+			  mainObject: document,
+			  initiator: eventInitiator,
+			  presentStringWithProjectNumber: presentStringWithProjectNumber
+		  }
+		});
+    }
+
+	var logText = "#initiator зарегистрировал документ " + documentScript.wrapperDocumentLink(document, presentStringWithProjectNumber) + ". Присвоен номер {~REGNUM} на дату {~REGDATE}.";
+	logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
+	businessJournal.log(document.nodeRef.toString(), "REGISTRATION", logText, []);
+})();]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>

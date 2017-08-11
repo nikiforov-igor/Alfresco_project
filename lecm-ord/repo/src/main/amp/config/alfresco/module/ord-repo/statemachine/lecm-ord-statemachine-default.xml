@@ -9452,12 +9452,12 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[(@edsGlobalSettingsService.isRegistrationCenralized() AND user.currentUser().hasBusinessRole("DA_REGISTRARS")) OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), 'DA_REGISTRAR_DYN')]]></value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "DA_REGISTRAR_DYN")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Доступно только регистратору]]></value>
+                                                                                    <![CDATA[Действие доступно только регистраторам]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -9484,12 +9484,12 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[@reservationWorkflowService.isReservationRunning(doc.getNodeRef()) != true]]></value>
+                                                                                    <![CDATA[@reservationWorkflowService.isReservationCanceling(doc.getNodeRef()) != true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Документ не может быть зарегистрирован, требуется завершить запросы на резервирование рег. номера]]></value>
+                                                                                    <![CDATA[Перед выполнением регистрации требуется обработать запрос на отмену зарезервированных регистрационных данных]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -9753,12 +9753,12 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[(@edsGlobalSettingsService.isRegistrationCenralized() AND user.currentUser().hasBusinessRole("DA_REGISTRARS")) OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), 'DA_REGISTRAR_DYN')]]></value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "DA_REGISTRAR_DYN")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Доступно только регистратору]]></value>
+                                                                                    <![CDATA[Действие доступно только регистраторам]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -9785,12 +9785,12 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[@reservationWorkflowService.isReservationRunning(doc.getNodeRef()) != true]]></value>
+                                                                                    <![CDATA[@reservationWorkflowService.isReservationCanceling(doc.getNodeRef()) != true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Документ не может быть зарегистрирован, требуется завершить запросы на резервирование рег. номера]]></value>
+                                                                                    <![CDATA[Перед выполнением регистрации требуется обработать запрос на отмену зарезервированных регистрационных данных]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -9958,12 +9958,12 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[(@edsGlobalSettingsService.isRegistrationCenralized() AND user.currentUser().hasBusinessRole("DA_REGISTRARS")) OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), 'DA_REGISTRAR_DYN')]]></value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), 'DA_REGISTRAR_DYN')]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Доступно только регистратору]]></value>
+                                                                                    <![CDATA[Действие доступно только регистраторам]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -9990,12 +9990,12 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[@reservationWorkflowService.isReservationRunning(doc.getNodeRef()) != true]]></value>
+                                                                                    <![CDATA[@reservationWorkflowService.isReservationCanceling(doc.getNodeRef()) != true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Документ не может быть зарегистрирован, требуется завершить запросы на резервирование рег. номера]]></value>
+                                                                                    <![CDATA[Перед выполнением регистрации требуется обработать запрос на отмену зарезервированных регистрационных данных]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -10163,12 +10163,12 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[(@edsGlobalSettingsService.isRegistrationCenralized() AND user.currentUser().hasBusinessRole("DA_REGISTRARS")) OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), 'DA_REGISTRAR_DYN')]]></value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "DA_REGISTRAR_DYN")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Доступно только регистратору]]></value>
+                                                                                    <![CDATA[Действие доступно только регистраторам]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -10195,12 +10195,12 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[@reservationWorkflowService.isReservationRunning(doc.getNodeRef()) != true]]></value>
+                                                                                    <![CDATA[@reservationWorkflowService.isReservationCanceling(doc.getNodeRef()) != true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Документ не может быть зарегистрирован, требуется завершить запросы на резервирование рег. номера]]></value>
+                                                                                    <![CDATA[Перед выполнением регистрации требуется обработать запрос на отмену зарезервированных регистрационных данных]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -10368,12 +10368,12 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[@reservationWorkflowService.isReservationRunning(doc.getNodeRef()) != true]]></value>
+                                                                                    <![CDATA[@reservationWorkflowService.isReservationCanceling(doc.getNodeRef()) != true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Документ не может быть зарегистрирован, требуется завершить запросы на резервирование рег. номера]]></value>
+                                                                                    <![CDATA[Перед выполнением регистрации требуется обработать запрос на отмену зарезервированных регистрационных данных]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -10400,12 +10400,12 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[(@edsGlobalSettingsService.isRegistrationCenralized() AND user.currentUser().hasBusinessRole("DA_REGISTRARS")) OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), 'DA_REGISTRAR_DYN')]]></value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "DA_REGISTRAR_DYN")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Доступно только регистратору]]></value>
+                                                                                    <![CDATA[Действие доступно только регистраторам]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -11550,6 +11550,56 @@ if (doc) {
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var document = stm_document;
   edsDocument.resetChildChangeSignal(document);]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>c504bfb3-4cfb-4090-819c-1d0a9c8311ef</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/ab55973f-63e7-4a22-b153-73b6819d5c35
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value>
+                                                                    <![CDATA[Проверка запущенных запросов на резервирование, уведомление и лог]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[(function() {
+	var document = stm_document,
+		isReservationRunning = document.properties['lecm-reservation-aspects:isReservationRunning'],
+		documentRegnum = document.properties["lecm-document:regnum"],
+		projectNumber = document.properties["lecm-document-aspects:reg-project-data-number"],
+		presentString = document.properties["lecm-document:present-string"],
+		presentStringWithProjectNumber = presentString.replace(documentRegnum, projectNumber);
+
+	if (isReservationRunning) {
+		statemachine.terminateWorkflowsByDefinition(document, 'regnumReservationExecution', null, null);
+	}
+	var initiators = lecmPermission.getEmployeesByDynamicRole(document, "BR_INITIATOR");
+    var eventInitiator = orgstructure.getCurrentEmployee();
+    if (initiators && initiators.length) {
+        notifications.sendNotification({
+		  recipients: initiators,
+		  templateCode: 'EDS_DOCUMENT_REGISTERED',
+		  templateConfig: {
+			  mainObject: document,
+			  initiator: eventInitiator,
+			  presentStringWithProjectNumber: presentStringWithProjectNumber
+		  }
+		});
+    }
+
+	var logText = "#initiator зарегистрировал документ " + documentScript.wrapperDocumentLink(document, presentStringWithProjectNumber) + ". Присвоен номер {~REGNUM} на дату {~REGDATE}.";
+	logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
+	businessJournal.log(document.nodeRef.toString(), "REGISTRATION", logText, []);
+})();]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>
