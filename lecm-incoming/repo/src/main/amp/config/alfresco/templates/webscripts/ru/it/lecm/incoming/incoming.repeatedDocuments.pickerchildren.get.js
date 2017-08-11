@@ -49,9 +49,14 @@ function main() {
                 }
                 if (docSubjectsFilter.length) {
                     if (filter.length == startLength) {
-                        filter += " AND (" + docSubjectsFilter + ")";
+                        filter += " AND ((" + docSubjectsFilter + ")";
                     } else {
-                        filter += " OR (" + docSubjectsFilter + ")";
+                        if (argSearchMode == "at_least_one") {
+                            filter += " OR (";
+                        } else {
+                            filter += " AND (";
+                        }
+                        filter += docSubjectsFilter + ")";
                     }
                 }
             }
