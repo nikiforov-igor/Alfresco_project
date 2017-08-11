@@ -1,5 +1,4 @@
 <#include "/org/alfresco/components/component.head.inc">
-<#include "/ru/it/lecm/base-share/components/controls/association-search-control-dialog.inc.ftl">
 <@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-association-search.js"></@script>
 
 <#assign controlId = fieldHtmlId + "-cntrl">
@@ -37,6 +36,38 @@
 	<#--<input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}" />-->
 <#--</div>-->
 
+<#macro renderSearchPickerHTML controlId>
+	<#assign pickerId = controlId + "-picker">
+
+<div id="${pickerId}" class="object-finder" xmlns="http://www.w3.org/1999/html">
+    <div id="${pickerId}-body" class="bd">
+		<div id="${pickerId}-dataTable">
+			<div id="${pickerId}-group-members"  class="picker-items"></div>
+		</div>
+    </div>
+</div>
+</#macro>
+
+<#macro renderExtendedCheckboxItem formArgument attributeName>
+<div id="${optionsControlId}-${attributeName}">
+	<div class="label-div">
+		<div class="clear"></div>
+	</div>
+	<div class="value-div">
+		<input type="checkbox" name="${attributeName}" id="${optionsControlId}-attributes-match-${attributeName}"/>
+		<label class="checkbox-label" for="${optionsControlId}-attributes-match-${attributeName}">${msg("label.incoming.search_repeats_options.attributes_match." + attributeName)}:</label>
+		<div class="match-value-div">
+			<#if formArgument?? && formArgument != "">
+				<span id="${optionsControlId}-attributes-match-${attributeName}-value">${formArgument}</span>
+			<#else>
+				<span id="${optionsControlId}-attributes-match-${attributeName}-value">${msg("form.control.novalue")}</span>
+			</#if>
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>
+</#macro>
+
 <#if disabled>
 	<div id="${controlId}" class="control incoming-search-repeated viewmode">
 		<div class="label-div">
@@ -54,11 +85,98 @@
 	</div>
 <#else>
 	<div class="control incoming-search-repeated editmode">
+		<div class="label-div">
+            <div class="clear"></div>
+		</div>
+
+		<#assign optionsControlId = controlId + "_search-repeats-options">
+
+        <div id="${optionsControlId}" class="search-repeats-options">
+            <div id="${optionsControlId}-switch" class="switch">
+                <a id="${optionsControlId}-switch-link" class="switch-link">${msg("label.incoming.search_repeats_options.switch-link.show")}</a>
+            </div>
+            <div class="set">
+				<div id="${optionsControlId}-search-attributes" class="search-attributes hidden">
+					<div id="${optionsControlId}-contains-in-the-title" class="control">
+						<div class="container">
+							<div class="label-div">
+								<label for="${controlId}-picker-searchText">${msg("label.incoming.search_repeats_options.contains_in_the_title")}:</label>
+							</div>
+							<div class="value-div">
+								<input type="text" name="contains-in-the-title" id="${controlId}-picker-searchText" value="" maxlength="256"/>
+							</div>
+						</div>
+					</div>
+					<div id="${optionsControlId}-attributes-match" class="attributes-match control">
+						<div class="container">
+							<div id="${optionsControlId}-attributes-match-control">
+								<div class="attributes-match-label label-div">
+									<label for="${optionsControlId}-attributes-match">${msg("label.incoming.search_repeats_options.attributes_match")}:</label>
+								</div>
+								<div class="value-div">
+									<input type="checkbox" name="select-all" id="${optionsControlId}-attributes-match-select-all"/>
+									<label class="checkbox-label" for="${optionsControlId}-attributes-match-select-all">${msg("label.incoming.search_repeats_options.attributes_match.select_all")}</label>
+								</div>
+                                <div class="clear"></div>
+                            </div>
+
+							<#if form.arguments["lecm-incoming:outgoing-date"]?? && form.arguments["lecm-incoming:outgoing-date"] != "">
+								<#assign outgoingDate = form.arguments["lecm-incoming:outgoing-date"]?datetime("yyyy-MM-dd'T'HH:mm:ss")>
+								<#assign formatedOutgoingDate = outgoingDate?string["dd.MM.yyyy"]>
+							<#else>
+								<#assign formatedOutgoingDate = "">
+							</#if>
+
+							<#assign subjects = form.arguments["lecm-document:subject-assoc-text-content"]>
+							<#assign formatedSubjects = subjects?replace(";", ", ")>
+
+                            <@renderExtendedCheckboxItem form.arguments["lecm-incoming:sender-assoc-text-content"] "sender"/>
+							<@renderExtendedCheckboxItem form.arguments["lecm-incoming:addressee-assoc-text-content"] "addressee"/>
+							<@renderExtendedCheckboxItem form.arguments["lecm-document:title"] "title"/>
+							<@renderExtendedCheckboxItem form.arguments["lecm-incoming:outgoing-number"] "outgoing_number"/>
+							<@renderExtendedCheckboxItem formatedOutgoingDate "outgoing_date"/>
+							<@renderExtendedCheckboxItem formatedSubjects "subject"/>
+
+						</div>
+                        <div class="clear"></div>
+					</div>
+
+					<div id="${optionsControlId}-search-mode-control">
+						<div class="container">
+							<div class="label-div">
+								<label for="${optionsControlId}-search-mode">${msg("label.incoming.search_repeats_options.search_mode")}:</label>
+							</div>
+							<div class="value-div">
+								<select id="${optionsControlId}-search-mode">
+									<option selected value="at_least_one">${msg("label.incoming.search_repeats_options.search_mode.at_least_one_attribute_matches")}</option>
+									<option value="all">${msg("label.incoming.search_repeats_options.search_mode.all_attributes_match")}</option>
+								</select>
+							</div>
+                            <div class="clear"></div>
+						</div>
+					</div>
+
+                    <div id="${optionsControlId}-buttons" class="search-repeats-options buttons">
+						<div class="buttons-div">
+							<span class="search-button">
+								<button id="${controlId}-picker-searchButton">${msg("label.incoming.search_repeats_options.buttons.search-button")}</button>
+							</span>
+							<span class="clear-button">
+								<button id="${optionsControlId}-clearButton">${msg("label.incoming.search_repeats_options.buttons.clear-button")}</button>
+							</span>
+						</div>
+                        <div class="clear"></div>
+					</div>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+
 		<div class="label-div search-similar-label">
 			<label for="${controlId}">
 			${field.label?html}:
 				<#if field.endpointMandatory!false || field.mandatory!false>
-					<span class="mandatory-indicator">${msg("form.required.fields.marker")}</span>
+                    <span class="mandatory-indicator">${msg("form.required.fields.marker")}</span>
 				</#if>
 			</label>
 		</div>
@@ -68,8 +186,6 @@
 				<input type="hidden" id="${controlId}-removed" name="${field.name}_removed"/>
 				<input type="hidden" id="${controlId}-selectedItems"/>
 
-				<input type="checkbox" id="${controlId}-search-similar">
-				<label for="${controlId}-search-similar" class="checkbox">${msg("label.search.similar")}</label>
 				<@renderSearchPickerHTML controlId/>
 			</#if>
 

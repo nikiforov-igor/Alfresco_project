@@ -3,7 +3,8 @@
     margin-top:5px
 }
 .form-container .bd .form-fields .control.incoming-search-repeated .search-similar-label {
-    margin-top: 20px;
+    margin-top: 0px;
+    font-weight: bold;
 }
 .form-container .bd .form-fields .control.incoming-search-repeated .container input[type="checkbox"] {
     margin-left: 2px;
@@ -13,4 +14,40 @@
 }
 .form-container .bd .form-fields .control.incoming-search-repeated .object-finder .bd .picker-items {
     margin: 2px;
+}
+.incoming-search-repeated .attributes-match .value-div label {
+    display: inline-block;
+    vertical-align: top;
+    width: 150px;
+    margin-left: 4px;
+}
+.incoming-search-repeated .attributes-match-label {
+    margin-top: -8px;
+}
+.incoming-search-repeated .attributes-match .match-value-div {
+    display: inline-block;
+    vertical-align:top;
+}
+.incoming-search-repeated .search-repeats-options .buttons-div {
+    left: 368px;
+    position: relative;
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+.incoming-search-repeated .search-repeats-options .buttons-div .search-button {
+    margin-right: 10px;
+}
+.incoming-search-repeated .search-repeats-options .buttons-div button{
+    background: none;
+}
+.incoming-search-repeated .search-repeats-options .switch a {
+    text-decoration: none;
+    border-bottom: 1px dashed;
+}
+.incoming-search-repeated .search-repeats-options .switch a:hover {
+    color: #085bc8;
+    text-decoration: none;
+}
+.incoming-search-repeated .search-repeats-options .switch {
+    margin-bottom: 20px;
 }
