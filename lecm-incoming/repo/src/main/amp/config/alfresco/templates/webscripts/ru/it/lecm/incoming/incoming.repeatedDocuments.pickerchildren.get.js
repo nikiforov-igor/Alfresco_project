@@ -26,42 +26,15 @@ function main() {
 				searchProp = searchPropArr && searchPropArr.length ? searchPropArr[0] : null;
 			}
 
-            var startLength = filter.length;
+			filter += ' AND (';
+            var startFilterLength = filter.length;
 
-            if (searchTerm) {
-                filter += ' AND (' + '@' + searchProp.replace(":", "\\:") + '"*' + searchTerm + '*"';
-            }
-            searchPropNamesArray.forEach(function (searchProp) {
-				if (args[searchProp.elName] == "true") {
-                    filter = addSimilarFilter(filter, document, searchProp.propName, startLength, argSearchMode);
-				}
-            });
-            if (argSubject == "true") {
-                var docSubjects = document.assocs["lecm-document:subject-assoc"];
-                var docSubjectsFilter = "";
-                if (docSubjects) {
-                    for (var i = 0; i < docSubjects.length; i++) {
-                        if (i != 0) {
-                            docSubjectsFilter += " AND ";
-                        }
-                        docSubjectsFilter += '@lecm\\-document\\:subject\\-assoc\\-ref:"*' + docSubjects[i].nodeRef.toString() + '*"';
-                    }
-                }
-                if (docSubjectsFilter.length) {
-                    if (filter.length == startLength) {
-                        filter += " AND ((" + docSubjectsFilter + ")";
-                    } else {
-                        if (argSearchMode == "at_least_one") {
-                            filter += " OR (";
-                        } else {
-                            filter += " AND (";
-                        }
-                        filter += docSubjectsFilter + ")";
-                    }
-                }
-            }
-            if (filter.length > startLength) {
-                filter += ")";
+			filter = addSearchTerm(filter, searchTerm, searchProp);
+			filter = addSearchProps(document, filter, searchPropNamesArray, argSearchMode, argSubject, startFilterLength);
+
+            filter += ")";
+            if (filter.length == 60) {
+                filter = filter.substr(0, 53);
             }
 		}
 
@@ -77,9 +50,7 @@ function addSimilarFilter(filter, document, prop, startLength, searchMode) {
 	var propValue = document.properties[prop];
 	if (propValue != null) {
         if (filter.length > 0) {
-            if (filter.length == startLength) {
-                filter += " AND (";
-            } else {
+            if (filter.length != startLength) {
                 if (searchMode == "at_least_one") {
                     filter += " OR ";
                 } else {
@@ -95,6 +66,46 @@ function addSimilarFilter(filter, document, prop, startLength, searchMode) {
 		}
 	}
 	return filter;
+}
+
+function addSearchTerm(filter, searchTerm, searchProp) {
+    if (searchTerm) {
+        filter += '@' + searchProp.replace(":", "\\:") + '"*' + searchTerm + '*"';
+    }
+    return filter;
+}
+
+function addSearchProps(document, filter, searchPropNamesArray, argSearchMode, argSubject, startFilterLength) {
+    searchPropNamesArray.forEach(function (searchProp) {
+        if (args[searchProp.elName] == "true") {
+            filter = addSimilarFilter(filter, document, searchProp.propName, startFilterLength, argSearchMode);
+        }
+    });
+    if (argSubject == "true") {
+        var docSubjects = document.assocs["lecm-document:subject-assoc"];
+        var docSubjectsFilter = "";
+        if (docSubjects) {
+            for (var i = 0; i < docSubjects.length; i++) {
+                if (i != 0) {
+                    docSubjectsFilter += " AND ";
+                }
+                docSubjectsFilter += '@lecm\\-document\\:subject\\-assoc\\-ref:"*' + docSubjects[i].nodeRef.toString() + '*"';
+            }
+        }
+        if (docSubjectsFilter.length) {
+            if (filter.length == startFilterLength) {
+                filter += "(" + docSubjectsFilter + ")";
+            } else {
+                if (argSearchMode == "at_least_one") {
+                    filter += " OR (";
+                } else {
+                    filter += " AND (";
+                }
+                filter += docSubjectsFilter + ")";
+            }
+        }
+    }
+    return filter;
 }
 
 main();
