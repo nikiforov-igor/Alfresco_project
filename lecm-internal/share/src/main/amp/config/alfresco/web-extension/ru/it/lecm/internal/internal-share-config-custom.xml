@@ -38,7 +38,6 @@
 					<show id="lecmSignAspects:signerEmployeeAssoc"/>
 					<show id="lecmSignAspects:isSigned" for-mode="view"/>
 					<show id="lecmSignAspects:signingDate" for-mode="view"/>
-                    <show id="lecm-document-aspects:registrator-assoc" force="true"/>
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <show id="lecm-base-dummy-aspects:script2" force="true"/>
                     <show id="lecm-base-dummy-aspects:script3" force="true"/>
@@ -166,11 +165,6 @@
 							<control-param name="showTime">false</control-param>
 						</control>
 					</field>
-                    <field id="lecm-document-aspects:registrator-assoc" set="common">
-                        <control>
-                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=DA_REGISTRARS</control-param>
-                        </control>
-                    </field>
                     <field id="lecm-base-dummy-aspects:script" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-eds-documents/edit-executor-script.js</control-param>
@@ -538,7 +532,6 @@
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-eds-document:file-register-assoc"/>
                     <show id="lecm-eds-document:note"/>
-                    <show id="lecm-document-aspects:registrator-assoc" force="true"/>
                     <show id="lecm-document-aspects:template-name" force="true"/>
                     <show id="lecm-document-aspects:template-ref" force="true"/>
                     <show id="loadAuthorScript" force="true"/>
@@ -646,11 +639,6 @@
 							<control-param name="maxLength">9</control-param>
 						</control>
 					</field>
-                    <field id="lecm-document-aspects:registrator-assoc">
-                        <control>
-                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=DA_REGISTRARS</control-param>
-                        </control>
-                    </field>
                     <field id="lecm-document-aspects:template-name">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden-default-value.ftl"/>
                     </field>
@@ -689,7 +677,6 @@
                     <show id="lecm-eds-document:sheets-number"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-eds-document:file-register-assoc"/>
-                    <show id="lecm-document-aspects:registrator-assoc" force="true"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-internal:response-date">
@@ -770,13 +757,6 @@
 							<control-param name="maxLength">9</control-param>
 						</control>
 					</field>
-                    <field id="lecm-document-aspects:registrator-assoc">
-                        <control>
-                            <control-param name="useStrictFilterByOrg">true</control-param>
-                            <control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
-                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=DA_REGISTRARS</control-param>
-                        </control>
-                    </field>
                 </appearance>
             </form>
             <!-- Форма для табличного представления (набор столбцов)-->

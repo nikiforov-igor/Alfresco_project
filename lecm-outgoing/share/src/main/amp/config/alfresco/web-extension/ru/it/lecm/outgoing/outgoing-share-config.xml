@@ -37,7 +37,6 @@
 					<show id="lecmSignAspects:signerEmployeeAssoc"/>
 					<show id="lecmSignAspects:isSigned" for-mode="view"/>
 					<show id="lecmSignAspects:signingDate" for-mode="view"/>
-					<show id="lecm-document-aspects:registrator-assoc" force="true"/>
 					<show id="lecm-outgoing:is-finishing"/>
 					<show id="lecm-base-dummy-aspects:script" force="true"/>
 					<show id="lecm-base-dummy-aspects:script2" force="true"/>
@@ -218,11 +217,6 @@
 						</control>
 					</field>
 
-					<field id="lecm-document-aspects:registrator-assoc" set="common">
-						<control>
-							<control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=DA_REGISTRARS</control-param>
-						</control>
-					</field>
 					<field id="lecm-outgoing:is-finishing" set="common">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
 					</field>
@@ -597,7 +591,6 @@
 					<show id="lecm-document:subject-assoc"/>															<!-- Тематика -->
 					<show id="lecm-eds-document:file-register-assoc"/>													<!-- Номенклатура дел -->
 					<show id="lecm-eds-document:note"/>																	<!-- Примечание -->
-                    <show id="lecm-document-aspects:registrator-assoc" force="true"/>
 					<show id="lecm-document-aspects:template-name" force="true"/>
 					<show id="lecm-document-aspects:template-ref" force="true"/>
 					<show id="lecm-outgoing:is-finishing"/>
@@ -777,12 +770,6 @@
 						</control>
 					</field>
 
-                    <field id="lecm-document-aspects:registrator-assoc">
-                        <control>
-                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=DA_REGISTRARS</control-param>
-                        </control>
-                    </field>
-
 					<field id="lecm-document-aspects:template-name">
 						<control template="/ru/it/lecm/base-share/components/controls/hidden-default-value.ftl"/>
 					</field>
@@ -825,7 +812,6 @@
 					<show id="lecm-document:subject-assoc"/>															<!-- Тематика -->
 					<show id="lecm-eds-document:file-register-assoc"/>													<!-- Номенклатура дел -->
 					<show id="lecm-eds-document:note"/>																	<!-- Примечание -->
-                    <show id="lecm-document-aspects:registrator-assoc" force="true"/>
 					<show id="lecm-outgoing:is-finishing"/>
 				</field-visibility>
 				<appearance>
@@ -940,13 +926,6 @@
 						</control>
 					</field>
 
-                    <field id="lecm-document-aspects:registrator-assoc">
-                        <control>
-                            <control-param name="useStrictFilterByOrg">true</control-param>
-                            <control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
-                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=DA_REGISTRARS</control-param>
-                        </control>
-                    </field>
 					<field id="lecm-outgoing:is-finishing">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
 					</field>
