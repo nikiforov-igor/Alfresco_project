@@ -1754,145 +1754,6 @@ if (doc) {
                                                         <subFolders/>
                                                     </node>
                                                     <node>
-                                                        <type>transitionWorkflow</type>
-                                                        <name>a0349c4f-7893-48f0-af0a-91cbb155c2ae</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/d04cd388-a47e-4f38-93f7-4c6263bfb2f7
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[false]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>workflowId</name>
-                                                                <value><![CDATA[activiti$lecmInternalDirect]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>transitionLabel</name>
-                                                                <value><![CDATA[Подписать и направить]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>do-not-ask-for-confirmation</name>
-                                                                <value><![CDATA[false]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects>
-                                                            <workflowAspect/>
-                                                            <transitionLabelAspect/>
-                                                            <transitionStatusAspect/>
-                                                        </aspects>
-                                                        <associations>
-                                                            <association>
-                                                                <type>transitionStatus</type>
-                                                                <reference>
-                                                                    workspace://SpacesStore/69e3be5e-6e12-4693-9601-912c4f650136
-                                                                </reference>
-                                                            </association>
-                                                        </associations>
-                                                        <roleAssociations/>
-                                                        <subFolders>
-                                                            <subFolder>
-                                                                <name>variables</name>
-                                                                <nodes>
-                                                                    <node>
-                                                                        <type>inputVariable</type>
-                                                                        <name>4e942af8-c418-4a5b-950e-ebb52b222d10
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/25ecce31-2cd0-46db-a2a7-e8cf548e7803
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>inputToType</name>
-                                                                                <value><![CDATA[VARIABLE]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputToValue</name>
-                                                                                <value><![CDATA[withSigning]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputFromValue</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputFromType</name>
-                                                                                <value><![CDATA[VALUE]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>caf318ee-854b-4590-a999-8a0cc48fb14f
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/eb0be36a-d106-4ac9-aebe-84785b4b84c1
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[@reservationWorkflowService.isReservationRunning(doc.getNodeRef()) != true]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value><![CDATA[]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>ec2d031e-711b-4518-aec0-8e50eea0475e
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/525bee01-b63a-47cc-a163-c3cba358dd08
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[!doc.attr("lecm-eds-aspect:signed-on-paper")]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Действие доступно только при неустановленном атрибуте "Подписан на бумажном носителе"]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                </nodes>
-                                                            </subFolder>
-                                                        </subFolders>
-                                                    </node>
-                                                    <node>
                                                         <type>userTransition</type>
                                                         <name>f18f02d8-d618-472a-bdd4-596592513620</name>
                                                         <nodeRef>
@@ -2007,9 +1868,9 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                     </node>
                                                     <node>
                                                         <type>userTransition</type>
-                                                        <name>e388072a-aa20-41a6-9b4e-204213bdebd3</name>
+                                                        <name>f18f02d8-d618-472a-bdd4-596592513620</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/1dd4fb7c-ea54-4a27-a653-de8d47cb465e
+                                                            workspace://SpacesStore/0571faa4-a96b-4188-aac8-1b630cabdc4c
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -2061,12 +1922,121 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") AND doc.attr("lecm-eds-aspect:signed-on-paper") AND doc.assocClass("lecm-eds-document:document-type-assoc") != null AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:registration-required")]]></value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") AND doc.attr("lecm-eds-aspect:signed-on-paper")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Действие доступно только инициатору и с установленным атрибутом "Подписан на бумажном носителе"]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                </nodes>
+                                                            </subFolder>
+                                                        </subFolders>
+                                                    </node>
+                                                    <node>
+                                                        <type>userTransition</type>
+                                                        <name>e388072a-aa20-41a6-9b4e-204213bdebd3</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/1dd4fb7c-ea54-4a27-a653-de8d47cb465e
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>transition-script</name>
+                                                                <value><![CDATA[]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionLabel</name>
+                                                                <value><![CDATA[Подписать и направить]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionLabelAspect/>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/84427b9e-1aef-44a0-be6d-7708a31ab879
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders>
+                                                            <subFolder>
+                                                                <name>variables</name>
+                                                                <nodes>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>c8063170-8e60-4556-b4ca-e81bbb72b902
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/b2c94197-2405-400c-ba41-fe9ac5131117
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") AND doc.attr("lecm-eds-aspect:signed-on-paper") AND doc.assocClass("lecm-eds-document:document-type-assoc") != null AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:registration-required")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие недоступно]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>e5ab1ed5-fe8f-44e1-8b6c-5bd04bd1428b
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/41cd3850-c10d-429f-9605-e9ed095ebacb
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[!doc.attr("lecm-eds-aspect:signed-on-paper")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие доступно только при неустановленном атрибуте "Подписан на бумажном носителе"]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -4568,6 +4538,47 @@ businessJournal.log(internal.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>b239c7d7-8081-4361-8b94-b763e71a619e</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/8f279db1-b4cd-4b98-bf83-c29eb2847537
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.attr("lecm-eds-aspect:change-status-to") == "На регистрации"]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[var document = stm_document;
+document.properties["lecm-eds-aspect:change-status-to"] = "";
+document.save();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/84427b9e-1aef-44a0-be6d-7708a31ab879
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
@@ -4589,7 +4600,41 @@ businessJournal.log(internal.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>a74c5684-342a-4cfc-a669-c0b483416158</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/1092fa44-b18b-4a9a-a9a0-16ad2febd18d
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Направить на регистрацию]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[(function () {
+  var document = stm_document;
+  var approvalDecision = document.properties["lecmApproveAspects:approvalDecision"];
+	if ((approvalDecision == "APPROVED" || approvalDecision == "APPROVED_FORCED" || approvalDecision == "СОГЛАСОВАНО АВТОМАТИЧЕСКИ") && edsDocument.isSignedOnPaper(document) && "Автоматическая маршрутизация после согласования" == true) {
+		document.properties["lecm-eds-aspect:ready-for-status-change"] = true;
+		document.save();
+    }
+}) ();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                     <node>
                                         <type>TimerAction</type>
@@ -7898,9 +7943,9 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                 <nodes>
                                                     <node>
                                                         <type>transition</type>
-                                                        <name>eac25d7c-a5b1-477b-994c-8ee48670897f</name>
+                                                        <name>849e1d9b-7eaf-4d05-8a31-43d462ba7444</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/5ad38912-f8d0-4462-ba35-d1c32025aece
+                                                            workspace://SpacesStore/83046b10-63cc-48f9-8e50-693653d94e87
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -7914,23 +7959,13 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[doc.assocClass("lecm-eds-document:document-type-assoc") != null AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:auto-registration")]]></value>
+                                                                    <![CDATA[doc.attr("lecm-eds-aspect:change-status-to") == "На регистрации"]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[var document = stm_document,
-	documentRegnum = document.properties["lecm-document:regnum"],
-    projectNumber = document.properties["lecm-document-aspects:reg-project-data-number"],
-    presentString = document.properties["lecm-document:present-string"],
-    presentStringWithProjectNumber = presentString.replace(documentRegnum, projectNumber);
-
-lecmPermission.pushAuthentication();
-lecmPermission.setRunAsUserSystem();
-regnumbers.registerDocument(document, "INTERNAL_DOC_NUMBER");
-lecmPermission.popAuthentication();
-
-edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringWithProjectNumber);
-]]></value>
+                                                                <value><![CDATA[var document = stm_document;
+document.properties["lecm-eds-aspect:change-status-to"] = "";
+document.save();]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -7940,13 +7975,13 @@ edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringW
                                                             <association>
                                                                 <type>transitionStatus</type>
                                                                 <reference>
-                                                                    workspace://SpacesStore/69e3be5e-6e12-4693-9601-912c4f650136
+                                                                    workspace://SpacesStore/84427b9e-1aef-44a0-be6d-7708a31ab879
                                                                 </reference>
                                                             </association>
                                                         </associations>
                                                         <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
+                                                        <subFolders/>
+                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
@@ -7968,7 +8003,40 @@ edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringW
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>7b57ce0f-adef-41ef-b720-880711edeb90</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/2697d9bf-1a9f-4880-ae26-6e1455941aaf
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Направить на регистрацию]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[(function () {
+	var document = stm_document;
+	if ("Автоматическая маршрутизация после подписания" == true) {
+		document.properties["lecm-eds-aspect:change-status-to"] = "На регистрации";
+		document.save();
+    }
+}) ();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                     <node>
                                         <type>TimerAction</type>
@@ -8912,23 +8980,19 @@ edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringW
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[doc.assocClass("lecm-eds-document:document-type-assoc") != null AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:auto-registration")]]></value>
+                                                                    <![CDATA[doc.attr("lecm-eds-aspect:change-status-to") == "Направлен"]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[var document = stm_document,
-	documentRegnum = document.properties["lecm-document:regnum"],
-    projectNumber = document.properties["lecm-document-aspects:reg-project-data-number"],
-    presentString = document.properties["lecm-document:present-string"],
-    presentStringWithProjectNumber = presentString.replace(documentRegnum, projectNumber);
+                                                                <value><![CDATA[var document = stm_document;
+var variables = base.getValueConverter().convertValueForJava({
+	workflowDefinition: 'lecmInternalDirect',
+	documentRef: document.nodeRef
+});
+routeWorkflow.startWorkflow(variables);
 
-lecmPermission.pushAuthentication();
-lecmPermission.setRunAsUserSystem();
-regnumbers.registerDocument(document, "INTERNAL_DOC_NUMBER");
-lecmPermission.popAuthentication();
-
-edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringWithProjectNumber);
-]]></value>
+document.properties["lecm-eds-aspect:change-status-to"] = "";
+document.save();]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -8985,58 +9049,83 @@ edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringW
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[/* направить на регистрацию */
 (function () {
-    var i,
-            internal = stm_document, /* исходящий документ */
-            registrars, recipients = [],
-            notificationText = 'Документ ' + documentScript.wrapperDocumentLink(internal, '{lecm-document:present-string}') + ' поступил Вам на регистрацию',
-            registratorAssocs = internal.assocs['lecm-document-aspects:registrator-assoc'];
+    var document = stm_document;
+var registrationRequired = document.assocs["lecm-eds-document:document-type-assoc"][0].properties["lecm-doc-dic-dt:registration-required"];
+	if (!registrationRequired) {
+		document.properties["lecm-eds-aspect:change-status-to"] = "Направлен";
+		document.save();
+	} else {
+		var autoRegistration = document.assocs["lecm-eds-document:document-type-assoc"][0].properties["lecm-doc-dic-dt:auto-registration"];
+		if (autoRegistration) {
+			var documentRegnum = document.properties["lecm-document:regnum"],
+				projectNumber = document.properties["lecm-document-aspects:reg-project-data-number"],
+				presentString = document.properties["lecm-document:present-string"],
+				presentStringWithProjectNumber = presentString.replace(documentRegnum, projectNumber);
 
-    if (registratorAssocs && registratorAssocs.length) {
-        registrars = [delegation.getEffectiveEmployee(registratorAssocs[0], 'DA_REGISTRARS')];
-    } else {
-        registrars = edsGlobalSettings.getRegistrars('DA_REGISTRARS', internal);
-        /* получение списка регистраторов по документу */
-    }
-    /* раздаем права регистраторам */
-    for (i = 0; i < registrars.length; ++i) {
-        statemachine.grandDynamicRoleForEmployee(internal, registrars[i], 'DA_REGISTRAR_DYN', task);
-    }
+			lecmPermission.pushAuthentication();
+			lecmPermission.setRunAsUserSystem();
+			regnumbers.registerDocument(document, "INTERNAL_DOC_NUMBER");
+			lecmPermission.popAuthentication();
 
-    /* уведомление */
-    notifications.sendNotificationFromCurrentUser({
-        recipients: registrars,
-        templateCode: 'INTERNAL_REGISTER',
-        templateConfig: {
-            mainObject: stm_document
-        },
-        dontCheckAccessToObject: true
-    });
+			edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringWithProjectNumber);
+
+			document.reset();
+			document.properties["lecm-eds-aspect:change-status-to"] = "Направлен";
+			document.save();
+		} else {
+			var dutyRegistrar = edsGlobalSettings.getDutyRegistrar();
+			var registrars = [];
+			if (edsGlobalSettings.isRegistrationCenralized()) {
+				registrars =  orgstructure.getEmployeesByBusinessRoleId("DA_REGISTRARS", true);
+				if (registrars && registrars.length) {
+					for each (var registrar in registrars) {
+						lecmPermission.grantDynamicRole(document, registrar, "DA_REGISTRAR_DYN", "LECM_BASIC_PG_Reader");
+					}
+				} else {
+					registrars.push(dutyRegistrar);
+					lecmPermission.grantDynamicRole(document, dutyRegistrar, "DA_REGISTRAR_DYN", "LECM_BASIC_PG_Reader");
+				}
+			} else {
+				var primaryPosition = orgstructure.getPrimaryPosition(orgstructure.getCurrentEmployee().nodeRef.toString());
+                if (primaryPosition) {
+                    var unit = orgstructure.getUnitByStaff(primaryPosition.nodeRef.toString());
+					if (unit) {
+						registrars = edsGlobalSettings.getPotentialWorkers('DA_REGISTRARS', unit.nodeRef.toString());
+						while (!registrars || !registrars.length) {
+							unit = orgstructure.getParentUnit(unit.nodeRef.toString(), false);
+							if (unit) {
+								registrars = edsGlobalSettings.getPotentialWorkers('DA_REGISTRARS', unit.nodeRef.toString());
+							} else {
+								break;
+							}
+						}
+					}
+                }
+				if (registrars && registrars.length) {
+					for each (var registrar in registrars) {
+						lecmPermission.grantDynamicRole(document, registrar, "DA_REGISTRAR_DYN", "LECM_BASIC_PG_Reader");
+					}
+				} else {
+					registrars.push(dutyRegistrar);
+					lecmPermission.grantDynamicRole(document, dutyRegistrar, "DA_REGISTRAR_DYN", "LECM_BASIC_PG_Reader");
+				}
+			}
+			/* уведомление */
+			notifications.sendNotification({
+				recipients: registrars,
+				templateCode: 'INTERNAL_REGISTER',
+				templateConfig: {
+					mainObject: document
+				},
+				dontCheckAccessToObject: true
+			});
+
+			var logText = "#initiator направил(а) документ " + documentScript.wrapperDocumentLink(document, "№ {~REGNUM}") + " на регистрацию";
+			logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
+			businessJournal.log(document.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);
+		}
+	}
 })();]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects/>
-                                                        <associations/>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
-                                                    <node>
-                                                        <type>ScriptActionEntity</type>
-                                                        <name>9be949a7-5468-4e88-9181-ab1d5b9588bb</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/99aec584-4880-4ece-97ee-0638fa96426e
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>scriptLabel</name>
-                                                                <value><![CDATA[логирование события]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>actionScript</name>
-                                                                <value><![CDATA[var internal = stm_document;
-
-var logText = "#initiator направил(а) документ " + documentScript.wrapperDocumentLink(internal, "№ {~REGNUM}") + " на регистрацию";
-logText = substitude.formatNodeTitle(internal.nodeRef.toString(), logText);
-businessJournal.log(internal.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>

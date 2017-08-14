@@ -149,6 +149,7 @@
 				<aspect>lecm-document-aspects:event-listeners-aspect</aspect>
 				<aspect>lecmSignAspects:signingDetailsAspect</aspect>
 				<aspect>lecm-eds-aspect:signed-on-paper-aspect</aspect>
+				<aspect>lecm-eds-aspect:change-status-to-aspect</aspect>
 			</mandatory-aspects>
 		</type>
 	</types>

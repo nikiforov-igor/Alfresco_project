@@ -4489,6 +4489,47 @@ businessJournal.log(ord.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></v
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>233df59c-1a72-4a8b-ac94-7a71c1b3d25e</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/ef1723e3-54ef-4cbb-9b70-4b190651e921
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.attr("lecm-eds-aspect:change-status-to") == "На регистрации"]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[var document = stm_document;
+document.properties["lecm-eds-aspect:change-status-to"] = "";
+document.save();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/ccebdb24-9243-42f2-8690-629eeb66f2f3
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
@@ -4510,7 +4551,44 @@ businessJournal.log(ord.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></v
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>74f6b300-4551-4e71-af71-4fddca1fd865</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/916549eb-49cd-4f33-904f-9cb841eeb874
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Направить на регистрацию]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[(function () {
+  var document = stm_document;
+  var approvalDecision = document.properties["lecmApproveAspects:approvalDecision"];
+  var registrationRequired = document.assocs["lecm-eds-document:document-type-assoc"][0].properties["lecm-doc-dic-dt:registration-required"];
+	if ((approvalDecision == "APPROVED" || approvalDecision == "APPROVED_FORCED" || approvalDecision == "СОГЛАСОВАНО АВТОМАТИЧЕСКИ") 
+	&& edsDocument.isSignedOnPaper(document) && "Автоматическая маршрутизация после согласования" == true 
+    && registrationRequired) {
+		document.properties["lecm-eds-aspect:change-status-to"] = "На регистрации";
+		document.save();
+    }
+}) ();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                     <node>
                                         <type>TimerAction</type>
@@ -8201,9 +8279,9 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                 <nodes>
                                                     <node>
                                                         <type>transition</type>
-                                                        <name>3c659ece-fbe9-4f33-8fef-1c2497418c09</name>
+                                                        <name>0f256029-1997-4af7-a35c-5a5e476af644</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/599c2ab4-73c9-43d2-b261-6c58766b0c97
+                                                            workspace://SpacesStore/9c63ee80-553f-40a4-b203-1858201b937b
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -8217,22 +8295,13 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[doc.assocClass("lecm-eds-document:document-type-assoc") != null AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:auto-registration")]]></value>
+                                                                    <![CDATA[doc.attr("lecm-eds-aspect:change-status-to") == "На регистрации"]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[var document = stm_document,
-	documentRegnum = document.properties["lecm-document:regnum"],
-    projectNumber = document.properties["lecm-document-aspects:reg-project-data-number"],
-    presentString = document.properties["lecm-document:present-string"],
-    presentStringWithProjectNumber = presentString.replace(documentRegnum, projectNumber);
-
-lecmPermission.pushAuthentication();
-lecmPermission.setRunAsUserSystem();
-regnumbers.registerDocument(document, "ORD_NUMBER");
-lecmPermission.popAuthentication();
-
-edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringWithProjectNumber);]]></value>
+                                                                <value><![CDATA[var document = stm_document;
+document.properties["lecm-eds-aspect:change-status-to"] = "";
+document.save();]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -8242,7 +8311,7 @@ edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringW
                                                             <association>
                                                                 <type>transitionStatus</type>
                                                                 <reference>
-                                                                    workspace://SpacesStore/77eea864-02d3-44d4-9102-0b5ad3375e71
+                                                                    workspace://SpacesStore/ccebdb24-9243-42f2-8690-629eeb66f2f3
                                                                 </reference>
                                                             </association>
                                                         </associations>
@@ -8270,7 +8339,42 @@ edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringW
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>e2e9e13e-2dfa-49a6-90a9-c66e419a196f</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/b8e1e4a5-82d3-424f-a6ce-9d49432f54d1
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Направить на регистрацию]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[(function () {
+	var document = stm_document;
+	var registrationRequired = document.assocs["lecm-eds-document:document-type-assoc"][0].properties["lecm-doc-dic-dt:registration-required"];
+	if ("Автоматическая маршрутизация после подписания" == true
+		&& registrationRequired) {
+		document.properties["lecm-eds-aspect:change-status-to"] = "На регистрации";
+		document.save();
+    }
+}) ();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                     <node>
                                         <type>TimerAction</type>
@@ -9223,22 +9327,13 @@ edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringW
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[doc.assocClass("lecm-eds-document:document-type-assoc") != null AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:auto-registration")]]></value>
+                                                                    <![CDATA[doc.attr("lecm-eds-aspect:change-status-to") == "Зарегистрирован"]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[var document = stm_document,
-	documentRegnum = document.properties["lecm-document:regnum"],
-    projectNumber = document.properties["lecm-document-aspects:reg-project-data-number"],
-    presentString = document.properties["lecm-document:present-string"],
-    presentStringWithProjectNumber = presentString.replace(documentRegnum, projectNumber);
-
-lecmPermission.pushAuthentication();
-lecmPermission.setRunAsUserSystem();
-regnumbers.registerDocument(document, "ORD_NUMBER");
-lecmPermission.popAuthentication();
-
-edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringWithProjectNumber);]]></value>
+                                                                <value><![CDATA[var document = stm_document;
+document.properties["lecm-eds-aspect:change-status-to"] = "";
+document.save();]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -9284,7 +9379,7 @@ edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringW
                                                         <type>ScriptActionEntity</type>
                                                         <name>7cc7098c-2088-4daa-b83f-28a195095a79</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/f6f2b628-e617-47b8-b8fe-f8745786a764
+                                                            workspace://SpacesStore/95ec73fe-bd08-4158-a153-0cf08d6f2c60
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -9294,57 +9389,81 @@ edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringW
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[/* направить на регистрацию */
-(function(){
-    var i,
-            ord = stm_document, /* орд документ */
-            registrars,
-            registratorAssocs = ord.assocs['lecm-document-aspects:registrator-assoc'],
-            notification;
+(function () {
+    var document = stm_document;
+var registrationRequired = document.assocs["lecm-eds-document:document-type-assoc"][0].properties["lecm-doc-dic-dt:registration-required"];
+	if (registrationRequired) {
+		var autoRegistration = document.assocs["lecm-eds-document:document-type-assoc"][0].properties["lecm-doc-dic-dt:auto-registration"];
+		if (autoRegistration) {
+			var documentRegnum = document.properties["lecm-document:regnum"],
+				projectNumber = document.properties["lecm-document-aspects:reg-project-data-number"],
+				presentString = document.properties["lecm-document:present-string"],
+				presentStringWithProjectNumber = presentString.replace(documentRegnum, projectNumber);
 
-    /* раздаем права регистраторам */
-    if (registratorAssocs && registratorAssocs.length) {
-        registrars = [delegation.getEffectiveEmployee(registratorAssocs[0], 'DA_REGISTRARS')];
-    } else {
-        registrars = ordStatemachine.getRegistrars("DA_REGISTRARS", ord); /* получение списка регистраторов по документу */
-    }
-    for(i = 0; i < registrars.length; ++i) {
-        statemachine.grandDynamicRoleForEmployee(ord, registrars[i], "DA_REGISTRAR_DYN", task);
-    }
+			lecmPermission.pushAuthentication();
+			lecmPermission.setRunAsUserSystem();
+			regnumbers.registerDocument(document, "ORD_NUMBER");
+			lecmPermission.popAuthentication();
 
-    /* рассылаем уведомление */
-    notifications.sendNotification({
-        recipients: registrars,
-        templateCode: 'ORD_REGISTER',
-        templateConfig: {
-            mainObject: ord
-        }
-    });
+			edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringWithProjectNumber);
+
+			document.reset();
+			document.properties["lecm-eds-aspect:change-status-to"] = "Зарегистрирован";
+			document.save();
+		} else {
+			var dutyRegistrar = edsGlobalSettings.getDutyRegistrar();
+			var registrars = [];
+			if (edsGlobalSettings.isRegistrationCenralized()) {
+				registrars =  orgstructure.getEmployeesByBusinessRoleId("DA_REGISTRARS", true);
+				if (registrars && registrars.length) {
+					for each (var registrar in registrars) {
+						lecmPermission.grantDynamicRole(document, registrar, "DA_REGISTRAR_DYN", "LECM_BASIC_PG_Reader");
+					}
+				} else {
+					registrars.push(dutyRegistrar);
+					lecmPermission.grantDynamicRole(document, dutyRegistrar, "DA_REGISTRAR_DYN", "LECM_BASIC_PG_Reader");
+				}
+			} else {
+				var primaryPosition = orgstructure.getPrimaryPosition(orgstructure.getCurrentEmployee().nodeRef.toString());
+                if (primaryPosition) {
+                    var unit = orgstructure.getUnitByStaff(primaryPosition.nodeRef.toString());
+					if (unit) {
+						registrars = edsGlobalSettings.getPotentialWorkers('DA_REGISTRARS', unit.nodeRef.toString());
+						while (!registrars || !registrars.length) {
+							unit = orgstructure.getParentUnit(unit.nodeRef.toString(), false);
+							if (unit) {
+								registrars = edsGlobalSettings.getPotentialWorkers('DA_REGISTRARS', unit.nodeRef.toString());
+							} else {
+								break;
+							}
+						}
+					}
+                }
+				if (registrars && registrars.length) {
+					for each (var registrar in registrars) {
+						lecmPermission.grantDynamicRole(document, registrar, "DA_REGISTRAR_DYN", "LECM_BASIC_PG_Reader");
+					}
+				} else {
+					registrars.push(dutyRegistrar);
+					lecmPermission.grantDynamicRole(document, dutyRegistrar, "DA_REGISTRAR_DYN", "LECM_BASIC_PG_Reader");
+				}
+			}
+			/* уведомление */
+			notifications.sendNotification({
+				recipients: registrars,
+				templateCode: 'ORD_REGISTER',
+				templateConfig: {
+					mainObject: document
+				},
+				dontCheckAccessToObject: true
+			});
+
+			var logText = "#initiator направил(а) документ " + documentScript.wrapperDocumentLink(document, "№ {~REGNUM}") + " на регистрацию";
+			logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
+			businessJournal.log(document.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);
+		}
+	}
 })();]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects/>
-                                                        <associations/>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
-                                                    <node>
-                                                        <type>ScriptActionEntity</type>
-                                                        <name>5001e456-7adc-4508-9d1f-3320175a8db4</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/f8a9f51b-e226-4497-b39d-f2eec00f6c9e
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>scriptLabel</name>
-                                                                <value><![CDATA[логирование события]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>actionScript</name>
-                                                                <value><![CDATA[var ord = stm_document;
-
-var logText = "#initiator направил(а) документ " + documentScript.wrapperDocumentLink(ord, "№ {~REGNUM}") + " на регистрацию";
-logText = substitude.formatNodeTitle(ord.nodeRef.toString(), logText);
-businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>
