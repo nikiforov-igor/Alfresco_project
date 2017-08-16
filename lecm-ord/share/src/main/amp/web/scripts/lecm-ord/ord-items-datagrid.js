@@ -397,7 +397,7 @@ LogicECM.ORD = LogicECM.ORD || {};
                 url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
                 dataObj: {
                     nodeRef: this.tableDataNodeRef,
-                    substituteString: "{..lecm-ord-table-structure:items-assoc/lecm-eds-document:execution-date},{..lecm-ord-table-structure:items-assoc/lecm-document:subject-assoc-ref},{..lecm-ord-table-structure:items-assoc/lecm-ord:controller-assoc-ref}"
+                    substituteString: "{..lecm-ord-table-structure:items-assoc/lecm-eds-document:execution-date?yyyy-MM-dd'T'HH:mm:ss},{..lecm-ord-table-structure:items-assoc/lecm-document:subject-assoc-ref},{..lecm-ord-table-structure:items-assoc/lecm-ord:controller-assoc-ref}"
                 },
                 successCallback: {
                     fn: function (response) {
