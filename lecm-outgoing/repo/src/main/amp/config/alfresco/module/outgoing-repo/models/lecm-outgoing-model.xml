@@ -31,7 +31,7 @@
 			<parameter name="allowedValues">
 				<list>
 					<value>Исходящий|OUTGOING</value>
-					<value>Согласование|APPROVAL</value>
+					<value>Замечания рецензентов|REVIEWER_COMMENTS</value>
 					<value>Прочее|OTHER</value>
 				</list>
 			</parameter>

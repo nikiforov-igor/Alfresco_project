@@ -32,7 +32,7 @@
 					<value>Договор|CONTRACT</value>
 					<value>Приложения|CONTRACT_APPENDIX</value>
 					<value>Спецификации|CONTRACT_SPECS</value>
-					<value>Согласование|APPROVAL</value>
+					<value>Замечания рецензентов|REVIEWER_COMMENTS</value>
 					<value>Подписанный договор|SIGNED_CONTRACT</value>
 					<value>Этапы|CONTRACT_STAGES</value>
 					<value>Другое|OTHER</value>

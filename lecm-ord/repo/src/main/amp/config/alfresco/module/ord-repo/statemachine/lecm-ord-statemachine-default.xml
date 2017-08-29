@@ -303,23 +303,8 @@
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Согласование</name>
-                                        <nodeRef>workspace://SpacesStore/e09e242b-fdec-4ed5-8a43-9b5706d5032e</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>Согласования</name>
-                                        <nodeRef>workspace://SpacesStore/0039d227-e990-45fd-ada3-5cc38bd45e07</nodeRef>
+                                        <name>Замечания рецензентов</name>
+                                        <nodeRef>workspace://SpacesStore/74f15fa1-5b5a-4e1a-a19c-f71679f6d7b4</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1257,23 +1242,8 @@ if (document) {
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Согласование</name>
-                                        <nodeRef>workspace://SpacesStore/447f14f4-e80f-4ea3-b84a-36ac7666f8de</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>Согласования</name>
-                                        <nodeRef>workspace://SpacesStore/fac1a682-8ed2-4b48-907f-f9b71213e765</nodeRef>
+                                        <name>Замечания рецензентов</name>
+                                        <nodeRef>workspace://SpacesStore/b41c0789-b940-4dea-8e40-2a16df6dc8c1</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2865,23 +2835,8 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Согласование</name>
-                                        <nodeRef>workspace://SpacesStore/49d07006-b060-4346-95f5-48a1d32681d6</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[true]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>Согласования</name>
-                                        <nodeRef>workspace://SpacesStore/d1e0752f-d232-4d48-8339-4dc356e9f8b0</nodeRef>
+                                        <name>Замечания рецензентов</name>
+                                        <nodeRef>workspace://SpacesStore/6870f34c-ce26-4cd9-939a-f739b2bd3cfa</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -4012,23 +3967,8 @@ businessJournal.log(ord.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></v
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Согласование</name>
-                                        <nodeRef>workspace://SpacesStore/02776dcf-2202-48fc-9b51-943012e2455d</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>Согласования</name>
-                                        <nodeRef>workspace://SpacesStore/6669f09f-2597-41b8-abcb-5acfbebf1158</nodeRef>
+                                        <name>Замечания рецензентов</name>
+                                        <nodeRef>workspace://SpacesStore/91e61bbc-b48a-47c8-9cf8-1dd01afa0037</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5306,23 +5246,8 @@ businessJournal.log(ord.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></v
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Согласование</name>
-                                        <nodeRef>workspace://SpacesStore/43f25a8d-4e88-4017-83a2-7376aacb5958</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>Согласования</name>
-                                        <nodeRef>workspace://SpacesStore/3e086ffb-8442-41d5-97d5-1260856d93c9</nodeRef>
+                                        <name>Замечания рецензентов</name>
+                                        <nodeRef>workspace://SpacesStore/7db8ffa7-4402-4d58-834f-068e14aa839a</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -6806,23 +6731,8 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Согласование</name>
-                                        <nodeRef>workspace://SpacesStore/73bfbda6-c331-4c97-b544-7e4b4fba703f</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>Согласования</name>
-                                        <nodeRef>workspace://SpacesStore/900dc147-6b5c-4757-b72f-f62d23ff2d2e</nodeRef>
+                                        <name>Замечания рецензентов</name>
+                                        <nodeRef>workspace://SpacesStore/7628061e-165b-4887-95c4-02daac34001b</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -7761,23 +7671,8 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Согласование</name>
-                                        <nodeRef>workspace://SpacesStore/87017a6c-0e41-4931-84a9-76ebf88f6c35</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>Согласования</name>
-                                        <nodeRef>workspace://SpacesStore/4a0a379d-b92b-4e91-b95a-ee54431ce61a</nodeRef>
+                                        <name>Замечания рецензентов</name>
+                                        <nodeRef>workspace://SpacesStore/6483e401-0e3f-47fd-8aad-a887596e73f8</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -8767,23 +8662,8 @@ edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringW
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Согласование</name>
-                                        <nodeRef>workspace://SpacesStore/198a51d9-828d-4e85-aae1-497af9ae9c96</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>Согласования</name>
-                                        <nodeRef>workspace://SpacesStore/859ece3d-4987-4d8d-81fd-e6315de1b114</nodeRef>
+                                        <name>Замечания рецензентов</name>
+                                        <nodeRef>workspace://SpacesStore/d1f804bb-0380-43c0-8cf3-8743ac839a4e</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -10911,23 +10791,8 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Согласование</name>
-                                        <nodeRef>workspace://SpacesStore/33e2e71e-321f-4326-9e92-85124afbcfc5</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>Согласования</name>
-                                        <nodeRef>workspace://SpacesStore/0c20830c-09d1-40d5-89db-6b35be6de9f4</nodeRef>
+                                        <name>Замечания рецензентов</name>
+                                        <nodeRef>workspace://SpacesStore/91758428-41d6-47e1-9cfb-57d25af91889</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -12187,23 +12052,8 @@ if (doc) {
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Согласование</name>
-                                        <nodeRef>workspace://SpacesStore/9ab54cbf-f6f0-4586-82e9-4a697b00a266</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>Согласования</name>
-                                        <nodeRef>workspace://SpacesStore/0d630458-ce1d-4438-b3d6-3c7455c51478</nodeRef>
+                                        <name>Замечания рецензентов</name>
+                                        <nodeRef>workspace://SpacesStore/6bd3bb63-5cdc-44dc-985e-9d22722f3f1d</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -13322,23 +13172,8 @@ if (doc) {
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Согласование</name>
-                                        <nodeRef>workspace://SpacesStore/8cb14286-0773-4935-b357-0656fc89a85d</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>Согласования</name>
-                                        <nodeRef>workspace://SpacesStore/69786a3e-0345-446e-9768-4e90d303cd22</nodeRef>
+                                        <name>Замечания рецензентов</name>
+                                        <nodeRef>workspace://SpacesStore/ea74df9a-5a71-4f63-a0cf-cf79715a84db</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -13877,23 +13712,8 @@ if (doc) {
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Согласование</name>
-                                        <nodeRef>workspace://SpacesStore/835ac3e9-004b-45f4-b5e5-051e3abea4b0</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>Согласования</name>
-                                        <nodeRef>workspace://SpacesStore/6b2a5323-3223-4d5e-a05d-8afaf12be575</nodeRef>
+                                        <name>Замечания рецензентов</name>
+                                        <nodeRef>workspace://SpacesStore/b17bc103-39b3-4f80-a0e8-f2fd47c35156</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
