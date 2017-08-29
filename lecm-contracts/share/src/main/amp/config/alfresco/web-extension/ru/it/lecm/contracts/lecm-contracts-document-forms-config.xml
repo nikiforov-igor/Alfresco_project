@@ -1,0 +1,1427 @@
+<alfresco-config>
+
+    <config evaluator="node-type" condition="lecm-contract:document">
+        <forms>
+            <form>
+                <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
+                <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
+                <field-visibility>
+                    <show id="lecm-document-aspects:reg-project-data-number"/>
+                    <show id="lecm-document-aspects:reg-project-data-date"/>
+                    <show id="lecm-contract:typeContract-assoc" force="true"/>
+                    <show id="lecm-document:subject-assoc" force="true"/>
+                    <show id="lecm-contract:totalAmount" force="true"/>
+                    <show id="lecm-contract:currency-assoc"/>
+                    <show id="lecm-contract:dateConclusionContracts"/>
+                    <show id="lecm-contract:partner-assoc" force="true"/>
+                    <show id="lecm-contract:representative-assoc"/>
+                    <show id="lecm-contract:signedCounterparty"/>
+                    <show id="lecm-contract:signatoryCounterparty"/>
+                    <show id="lecm-contract:regNumContractor"/>
+                    <show id="lecm-contract:startDate"/>
+                    <show id="lecm-contract:endDate"/>
+                    <show id="lecm-contract:unlimited"/>
+                    <show id="lecm-contract:summaryContent"/>
+                    <show id="lecm-document:regnum"/>
+                    <show id="lecm-document:doc-date"/>
+                    <show id="lecm-contract:locationRegistration"/>
+                    <show id="lecm-contract:locationContract"/>
+                    <show id="lecm-contract-aspect:reasonDelete-assoc"/>
+                    <show id="lecm-contract-table-structure:stages-assoc"/>
+                    <show id="lecmApproveAspects:approvalFolderRef" force="true"/>
+                    <show id="lecm-eds-aspect:signed-on-paper"/>
+                    <show id="lecmSignAspects:signerEmployeeAssoc"/>
+                    <show id="lecmSignAspects:isSigned" for-mode="view"/>
+                    <show id="lecmSignAspects:signingDate" for-mode="view"/>
+                    <show id="lecm-base-dummy-aspects:script" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <set id="common" appearance="" label-id="label.contracts.main" />
+                    <set id="contract-stages" appearance="" label-id="label.contracts.stage" /><!-- tab2 -->
+                    <set id="approvalTab" appearance="" label-id="label.approval"/>
+                    <set id="contract-info" appearance="" parent="common" />
+                    <set id="price" parent="contract-info" appearance="" template="/ru/it/lecm/base-share/components/controls/price.ftl" />
+                    <set id="date-conclusion" parent="contract-info" appearance="" />
+                    <set id="counterparty-info" parent="common" appearance=""/>
+                    <set id="dates" appearance="" parent="common" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
+                    <set id="other" appearance="" parent="common" />
+
+                    <field id="lecm-document-aspects:reg-project-data-number" set="contract-info"/>
+                    <field id="lecm-document-aspects:reg-project-data-date" set="contract-info"/>
+                    <field id="lecm-contract:typeContract-assoc" set="contract-info">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_договора</control-param>
+                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"> </control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-document:subject-assoc" set="contract-info">
+                        <control>
+                            <control-param name="endpointMany">false</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-contract:totalAmount" mandatory="true" set="price" help=""/>
+                    <field id="lecm-contract:currency-assoc" set="price">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Валюты</control-param>
+                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"> </control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                        </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Contracts.currencyValidation" message-id="validation-hint.mandatory" event="change"/>
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-contract:dateConclusionContracts" set="date-conclusion"/>
+                    <field id="lecm-contract:partner-assoc" set="counterparty-info">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="changeItemsFireAction">contractor.selected</control-param>
+                            <control-param name="items">contractor,organisation,person</control-param>
+                            <control-param name="showAutocomplete">true</control-param>
+                            <control-param name="autocompleteDataSourceMethodPost">true</control-param>
+                            <control-param name="cssClasses">with-ex-search</control-param>
+                            <control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
+                            <!-- lecm-contractor:contractor-type -->
+                            <control-param name="contractor_label">Внешний контрагент</control-param>
+                            <control-param name="contractor_endpointType">lecm-contractor:contractor-type</control-param>
+                            <control-param name="contractor_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
+                            <control-param name="contractor_nameSubstituteString">{lecm-contractor:shortname}</control-param>
+                            <control-param name="contractor_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
+                            <control-param name="contractor_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
+                            <control-param name="contractor_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}, {lecm-contractor:phone}&lt;/div&gt;</control-param>
+                            <control-param name="contractor_plane">true</control-param>
+                            <control-param name="contractor_showSearch">false</control-param>
+                            <control-param name="contractor_showExSearch">true</control-param>
+                            <control-param name="contractor_showCreateNewLink">true</control-param>
+                            <control-param name="contractor_showEditButton">true</control-param>
+                            <control-param name="contractor_fillFormFromSearch">true</control-param>
+                            <control-param name="contractor_pickerItemsScript">lecm/contractors/common/picker/items</control-param>
+                            <control-param name="contractor_additionalFilter">NOT ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
+                            <control-param name="contractor_showAssocViewForm">true</control-param>
+                            <control-param name="contractor_sortProp">lecm-contractor:shortname</control-param>
+                            <control-param name="contractor_hasNoAspects">lecm-orgstr-aspects:is-organization-aspect</control-param>
+                            <control-param name="contractor_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
+                            <control-param name="contractor_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
+                            <!-- lecm-contractor:contractor-type -->
+                            <control-param name="organisation_label">Внутренний контрагент</control-param>
+                            <control-param name="organisation_endpointType">lecm-contractor:contractor-type</control-param>
+                            <control-param name="organisation_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
+                            <control-param name="organisation_nameSubstituteString">{lecm-contractor:shortname}</control-param>
+                            <control-param name="organisation_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
+                            <control-param name="organisation_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
+                            <control-param name="organisation_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}, {lecm-contractor:phone}&lt;/div&gt;</control-param>
+                            <control-param name="organisation_plane">true</control-param>
+                            <control-param name="organisation_showSearch">false</control-param>
+                            <control-param name="organisation_showExSearch">true</control-param>
+                            <control-param name="organisation_showCreateNewLink">false</control-param>
+                            <control-param name="organisation_pickerItemsScript">lecm/contractors/organization/picker/items</control-param>
+                            <control-param name="organisation_additionalFilter">ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
+                            <control-param name="organisation_showAssocViewForm">true</control-param>
+                            <control-param name="organisation_sortProp">lecm-contractor:shortname</control-param>
+                            <control-param name="organisation_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
+                            <control-param name="organisation_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
+                            <!-- lecm-contractor:physical-person-type -->
+                            <control-param name="person_label">Физическое лицо</control-param>
+                            <control-param name="person_endpointType">lecm-contractor:physical-person-type</control-param>
+                            <control-param name="person_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
+                            <control-param name="person_nameSubstituteString">{lecm-contractor:lastName} {lecm-contractor:firstName} {lecm-contractor:middleName}</control-param>
+                            <control-param name="person_selectedItemsNameSubstituteString">{lecm-contractor:fullname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
+                            <control-param name="person_plane">true</control-param>
+                            <control-param name="person_showCreateNewLink">true</control-param>
+                            <control-param name="person_showEditButton">true</control-param>
+                            <control-param name="person_fillFormFromSearch">true</control-param>
+                            <control-param name="person_showSearch">false</control-param>
+                            <control-param name="person_showExSearch">true</control-param>
+                            <control-param name="person_showAssocViewForm">true</control-param>
+                            <control-param name="person_sortProp">lecm-contractor:shortname</control-param>
+                            <control-param name="person_getExtSearchQuery">LogicECM.getExtQueryForPerson</control-param>
+                            <control-param name="person_getArgumentsFromForm">LogicECM.getExtArgsForPerson</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-contract:representative-assoc" set="counterparty-info" label-id="label.representative">
+                        <control template="/ru/it/lecm/contractors/contractors-double-select-representative.ftl">
+                            <control-param name="showAssocViewForm">true</control-param>
+                            <control-param name="plane">true</control-param>
+                            <control-param name="updateOnContractorSelect">contractor.selected</control-param>
+                            <control-param name="updateOnOrganizationSelect">organization.selected</control-param>
+                            <control-param name="defaultValueUseOnce">true</control-param>
+                            <!-- autocomplete options-->
+                            <control-param name="controlJsName">select-representative-associationControl</control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="employeeAbsenceMarker">true</control-param>
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM</control-param>
+                            <control-param name="lazyLoading">true</control-param>
+                            <control-param name="checkType">false</control-param>
+                            <!--customization options-->
+                            <control-param name="employeesByOrgDS">lecm/forms/picker</control-param>
+                            <control-param name="representativesByContrDS">lecm/representatives/{contractor}/picker</control-param>
+
+                            <!--<control-param name="employeesType">lecm-orgstr:employee</control-param>
+                            <control-param name="representativesType">lecm-representative:representative-type</control-param>-->
+
+                            <control-param name="employeesNameSubstitute">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+                            <control-param name="representativesSubstitute">{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:middlename}</control-param>
+                            <control-param name="nameSubstituteString">{lecm-representative:surname}{lecm-orgstr:employee-last-name} {lecm-representative:firstname}{lecm-orgstr:employee-first-name} {lecm-representative:middlename}{lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+                            <control-param name="selectedItemsNameSubstituteString">{lecm-representative:surname}{lecm-orgstr:employee-last-name} {lecm-representative:firstname}{lecm-orgstr:employee-first-name} {lecm-representative:middlename}{lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+
+                            <control-param name="employeesLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+                            <control-param name="representativesLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
+
+                            <control-param name="employeesDefaultValueDS"></control-param>
+                            <control-param name="representativesDefaultValueDS">lecm/contractors/getMainRepresentative?contractor={contractor}</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-contract:signedCounterparty" set="counterparty-info"/>
+                    <field id="lecm-contract:signatoryCounterparty" set="counterparty-info"/>
+                    <field id="lecm-contract:regNumContractor" set="counterparty-info"/>
+                    <field id="lecm-contract:startDate" set="dates" label-id="contract.daterange"/>
+                    <field id="lecm-contract:endDate" set="dates" label=""/>
+                    <field id="lecm-contract:unlimited" set="dates"/>
+                    <field id="lecm-contract:summaryContent" set="other">
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+                    </field>
+                    <field id="lecm-document:regnum" set="other"/>
+                    <field id="lecm-document:doc-date" set="other"/>
+                    <field id="lecm-contract:locationRegistration" set="other"/>
+                    <field id="lecm-contract:locationContract" set="other"/>
+                    <field id="lecm-contract-aspect:reasonDelete-assoc" set="common"/>
+                    <field id="lecm-contract-table-structure:stages-assoc" set="contract-stages">
+                        <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
+                            <control-param name="attributeForShow">lecm-contract-table-structure:name</control-param>
+                            <control-param name="datagridFormId">datagrid</control-param>
+                            <control-param name="isTableSortable">false</control-param>
+                            <control-param name="refreshAfterCreate">true</control-param>
+                            <control-param name="deleteMessageFunction">LogicECM.module.Contracts.getStageDeleteMessage</control-param>
+                            <control-param name="editFormTitleMsg">stage.edit.form.title</control-param>
+                            <control-param name="createFormTitleMsg">stage.create.form.title</control-param>
+                            <control-param name="viewFormTitleMsg">stage.view.form.title</control-param>
+                            <control-param name="jsDependencies">scripts/lecm-contracts/get-stage-delete-message.js,scripts/lecm-contracts/contract-stages-table.js</control-param>
+                            <control-param name="jsObjectName">LogicECM.module.Contracts.contractStagesTable</control-param>
+                        </control>
+                    </field>
+                    <field id="lecmApproveAspects:approvalFolderRef" set="approvalTab">
+                        <control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
+                    </field>
+                    <field id="lecm-eds-aspect:signed-on-paper" set="contract-info"/>
+                    <field id="lecmSignAspects:signerEmployeeAssoc" set="contract-info">
+                        <control>
+                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS</control-param>
+                        </control>
+                    </field>
+                    <field id="lecmSignAspects:isSigned" set="contract-info"/>
+                    <field id="lecmSignAspects:signingDate" set="contract-info">
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="showTime">false</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-base-dummy-aspects:script" set="contract-info">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-eds-documents/check-allow-signing-on-paper-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">allowSigningOnPaperScript</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+            <form id="document">
+                <field-visibility>
+                    <show id="lecm-statemachine:status"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-contract:typeContract-assoc"/>
+                    <show id="lecm-document:creator"/>
+                    <show id="lecm-contract:totalAmount"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-contract:totalAmount">
+                        <control template="/ru/it/lecm/contracts/controls/currency.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+            <form id="document-dashlet">
+                <field-visibility>
+                    <show id="lecm-statemachine:status"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-contract:typeContract-assoc"/>
+                    <show id="lecm-document:creator"/>
+                    <show id="lecm-contract:totalAmount"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-contract:totalAmount">
+                        <control template="/ru/it/lecm/contracts/controls/currency.ftl"/>
+                    </field>
+                    <field id="lecm-statemachine:status">
+                        <control template="/ru/it/lecm/documents/controls/history/status-history.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+            <form id="transfer-right">
+                <field-visibility>
+                    <show id="lecm-document:employee-ref"/>
+                    <show id="lecm-document:istransmit" />
+                    <show id="lecm-document:deprive-right" />
+                </field-visibility>
+                <appearance>
+
+                    <field id="lecm-document:employee-ref" label-id="contract.creator-ref" mandatory="true">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="itemType">lecm-orgstr:employee</control-param>
+                            <control-param name="employeeAbsenceMarker">true</control-param>
+                            <control-param name="useStrictFilterByOrg">true</control-param>
+                            <control-param name="plane">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-document:istransmit" label-id="contract.istransmit" />
+                    <field id="lecm-document:deprive-right" label-id="contract.deprive.right" />
+                </appearance>
+            </form>
+            <form id="main-page-dashlets">
+                <field-visibility>
+                    <show id="line1"/>
+                </field-visibility>
+                <appearance>
+                    <field id="line1">
+                        <control template="/ru/it/lecm/documents/controls/document-dashlet-control.ftl">
+                            <control-param name="first">/lecm/components/dashlets/document-main;/lecm/contracts/dashlets/stages</control-param>
+                            <control-param name="second">/lecm/components/dashlets/document-attachments;/lecm/components/dashlets/errands-by-doc</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+            <form id="contract-stages">
+                <field-visibility>
+                    <show id="lecm-contract-table-structure:stages-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-contract-table-structure:stages-assoc">
+                        <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
+                            <control-param name="attributeForShow">lecm-contract-table-structure:name</control-param>
+                            <control-param name="datagridFormId">stages-dashlet</control-param>
+                            <control-param name="isTableSortable">false</control-param>
+                            <control-param name="toolbar">false</control-param>
+                            <control-param name="refreshAfterCreate">true</control-param>
+                            <control-param name="showActions">false</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+            <form id="doc-right-parts">
+                <field-visibility>
+                    <show id="fake:document-actions"/>
+                    <show id="fake:document-metadata"/>
+                    <show id="fake:document-attachments"/>
+                    <show id="fake:document-errands"/>
+                    <show id="fake:document-workflows"/>
+                    <show id="fake:document-connections"/>
+                    <show id="fake:document-members"/>
+                    <show id="fake:document-tags"/>
+                    <show id="fake:document-history"/>
+                    <show id="fake:document-forms"/>
+                    <show id="fake:document-signed-docflow"/>
+                    <show id="fake:comments"/>
+                </field-visibility>
+                <appearance>
+                    <field id="fake:document-actions">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/dashlets/document-actions</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-metadata">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-meta</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-attachments">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-attachments</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-errands">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-errands</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-workflows">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-workflows</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-connections">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/connections</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-members">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-members</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-tags">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-tags</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-history">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-history</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-forms">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/forms</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-signed-docflow">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-signed-docflow</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:comments">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/comments</control-param>
+                            <control-param name="activityType">document</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-contract:document">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-document-aspects:attachments-temp-assoc"/>
+                    <show id="lecm-contract:typeContract-assoc" force="true"/>
+                    <show id="lecm-document:subject-assoc" force="true"/>
+                    <show id="lecm-contract:totalAmount" force="true"/>
+                    <show id="lecm-contract:currency-assoc"/>
+                    <show id="lecm-eds-aspect:signed-on-paper"/>
+                    <show id="lecmSignAspects:signerEmployeeAssoc"/>
+                    <show id="lecm-contract:partner-assoc" force="true"/>
+                    <show id="lecm-contract:representative-assoc"/>
+                    <show id="lecm-contract:signedCounterparty"/>
+                    <show id="lecm-contract:signatoryCounterparty"/>
+                    <show id="lecm-contract:startDate"/>
+                    <show id="lecm-contract:endDate"/>
+                    <show id="lecm-contract:unlimited"/>
+                    <show id="lecm-contract:summaryContent"/>
+                    <show id="lecm-contract:regNumContractor"/>
+                    <show id="lecm-contract:locationContract"/>
+                    <show id="lecm-document-aspects:template-name" force="true"/>
+                    <show id="lecm-document-aspects:template-ref" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <set id="price" appearance="" template="/ru/it/lecm/base-share/components/controls/price.ftl" />
+                    <set id="afterPrice" appearance=""/>
+                    <set id="dates" appearance="" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
+                    <set id="afterDates" appearance=""/>
+
+                    <field id="lecm-contract:typeContract-assoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_договора</control-param>
+                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"> </control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-document:subject-assoc">
+                        <control>
+                            <control-param name="endpointMany">false</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-contract:totalAmount" mandatory="true" set="price" help=""/>
+                    <field id="lecm-contract:currency-assoc" set="price">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Валюты</control-param>
+                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"> </control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                        </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Contracts.currencyValidation" message-id="validation-hint.mandatory" event="change"/>
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-contract:partner-assoc" set="afterPrice">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="changeItemsFireAction">contractor.selected</control-param>
+                            <control-param name="items">contractor,organisation,person</control-param>
+                            <control-param name="showAutocomplete">true</control-param>
+                            <control-param name="autocompleteDataSourceMethodPost">true</control-param>
+                            <control-param name="cssClasses">with-ex-search</control-param>
+                            <control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
+                            <!-- lecm-contractor:contractor-type -->
+                            <control-param name="contractor_label">Внешний контрагент</control-param>
+                            <control-param name="contractor_endpointType">lecm-contractor:contractor-type</control-param>
+                            <control-param name="contractor_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
+                            <control-param name="contractor_nameSubstituteString">{lecm-contractor:shortname}</control-param>
+                            <control-param name="contractor_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
+                            <control-param name="contractor_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
+                            <control-param name="contractor_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}, {lecm-contractor:phone}&lt;/div&gt;</control-param>
+                            <control-param name="contractor_plane">true</control-param>
+                            <control-param name="contractor_showSearch">false</control-param>
+                            <control-param name="contractor_showExSearch">true</control-param>
+                            <control-param name="contractor_showCreateNewLink">true</control-param>
+                            <control-param name="contractor_showEditButton">true</control-param>
+                            <control-param name="contractor_fillFormFromSearch">true</control-param>
+                            <control-param name="contractor_pickerItemsScript">lecm/contractors/common/picker/items</control-param>
+                            <control-param name="contractor_additionalFilter">NOT ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
+                            <control-param name="contractor_showAssocViewForm">true</control-param>
+                            <control-param name="contractor_sortProp">lecm-contractor:shortname</control-param>
+                            <control-param name="contractor_hasNoAspects">lecm-orgstr-aspects:is-organization-aspect</control-param>
+                            <control-param name="contractor_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
+                            <control-param name="contractor_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
+                            <!-- lecm-contractor:contractor-type -->
+                            <control-param name="organisation_label">Внутренний контрагент</control-param>
+                            <control-param name="organisation_endpointType">lecm-contractor:contractor-type</control-param>
+                            <control-param name="organisation_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
+                            <control-param name="organisation_nameSubstituteString">{lecm-contractor:shortname}</control-param>
+                            <control-param name="organisation_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
+                            <control-param name="organisation_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
+                            <control-param name="organisation_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}, {lecm-contractor:phone}&lt;/div&gt;</control-param>
+                            <control-param name="organisation_plane">true</control-param>
+                            <control-param name="organisation_showSearch">false</control-param>
+                            <control-param name="organisation_showExSearch">true</control-param>
+                            <control-param name="organisation_showCreateNewLink">false</control-param>
+                            <control-param name="organisation_pickerItemsScript">lecm/contractors/organization/picker/items</control-param>
+                            <control-param name="organisation_additionalFilter">ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
+                            <control-param name="organisation_showAssocViewForm">true</control-param>
+                            <control-param name="organisation_sortProp">lecm-contractor:shortname</control-param>
+                            <control-param name="organisation_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
+                            <control-param name="organisation_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
+                            <!-- lecm-contractor:physical-person-type -->
+                            <control-param name="person_label">Физическое лицо</control-param>
+                            <control-param name="person_endpointType">lecm-contractor:physical-person-type</control-param>
+                            <control-param name="person_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
+                            <control-param name="person_nameSubstituteString">{lecm-contractor:lastName} {lecm-contractor:firstName} {lecm-contractor:middleName}</control-param>
+                            <control-param name="person_selectedItemsNameSubstituteString">{lecm-contractor:fullname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
+                            <control-param name="person_plane">true</control-param>
+                            <control-param name="person_showCreateNewLink">true</control-param>
+                            <control-param name="person_showEditButton">true</control-param>
+                            <control-param name="person_fillFormFromSearch">true</control-param>
+                            <control-param name="person_showSearch">false</control-param>
+                            <control-param name="person_showExSearch">true</control-param>
+                            <control-param name="person_showAssocViewForm">true</control-param>
+                            <control-param name="person_sortProp">lecm-contractor:shortname</control-param>
+                            <control-param name="person_getExtSearchQuery">LogicECM.getExtQueryForPerson</control-param>
+                            <control-param name="person_getArgumentsFromForm">LogicECM.getExtArgsForPerson</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-contract:representative-assoc" label-id="label.representative" set="afterPrice">
+                        <control template="/ru/it/lecm/contractors/contractors-double-select-representative.ftl">
+                            <control-param name="showAssocViewForm">true</control-param>
+                            <control-param name="plane">true</control-param>
+                            <control-param name="updateOnContractorSelect">contractor.selected</control-param>
+                            <control-param name="updateOnOrganizationSelect">organization.selected</control-param>
+                            <control-param name="defaultValueUseOnce">true</control-param>
+                            <!-- autocomplete options-->
+                            <control-param name="controlJsName">select-representative-associationControl</control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="employeeAbsenceMarker">true</control-param>
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM</control-param>
+                            <control-param name="lazyLoading">true</control-param>
+                            <control-param name="checkType">false</control-param>
+                            <!--customization options-->
+                            <control-param name="employeesByOrgDS">lecm/forms/picker</control-param>
+                            <control-param name="representativesByContrDS">lecm/representatives/{contractor}/picker</control-param>
+
+                            <!--<control-param name="employeesType">lecm-orgstr:employee</control-param>
+                            <control-param name="representativesType">lecm-representative:representative-type</control-param>-->
+
+                            <control-param name="employeesNameSubstitute">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+                            <control-param name="representativesSubstitute">{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:middlename}</control-param>
+                            <control-param name="nameSubstituteString">{lecm-representative:surname}{lecm-orgstr:employee-last-name} {lecm-representative:firstname}{lecm-orgstr:employee-first-name} {lecm-representative:middlename}{lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+                            <control-param name="selectedItemsNameSubstituteString">{lecm-representative:surname}{lecm-orgstr:employee-last-name} {lecm-representative:firstname}{lecm-orgstr:employee-first-name} {lecm-representative:middlename}{lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+
+                            <control-param name="employeesLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+                            <control-param name="representativesLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
+
+                            <control-param name="employeesDefaultValueDS"></control-param>
+                            <control-param name="representativesDefaultValueDS">lecm/contractors/getMainRepresentative?contractor={contractor}</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-contract:signedCounterparty" set="afterPrice"/>
+                    <field id="lecm-contract:signatoryCounterparty" set="afterPrice"/>
+                    <field id="lecm-document:regnum" set="afterPrice"/>
+                    <field id="lecm-contract:startDate" set="dates" label-id="contract.daterange"/>
+                    <field id="lecm-contract:endDate" set="dates" label=""/>
+                    <field id="lecm-contract:unlimited" set="dates"/>
+                    <field id="lecm-contract:summaryContent" set="afterDates">
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+                    </field>
+                    <field id="lecm-contract:regNumContractor" set="afterDates"/>
+                    <field id="lecm-contract:locationContract" set="afterDates"/>
+                    <field id="lecm-document-aspects:attachments-temp-assoc" label-id="label.attachments">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control-with-preview.ftl">
+                            <control-param name="uploadDirectoryPath">{usertemp}</control-param>
+                            <control-param name="directoryName">Вложения</control-param>
+                            <control-param name="suppressRefreshEvent">true</control-param>
+                            <control-param name="defaultSelectedShowPreviewButton">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-eds-aspect:signed-on-paper" set="afterPrice"/>
+                    <field id="lecmSignAspects:signerEmployeeAssoc" set="afterPrice">
+                        <control>
+                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-document-aspects:template-name">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-default-value.ftl"/>
+                    </field>
+                    <field id="lecm-document-aspects:template-ref">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-default-value.ftl"/>
+                    </field>
+                    <field id="lecm-base-dummy-aspects:script" set="afterPrice">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-eds-documents/check-allow-signing-on-paper-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">allowSigningOnPaperScript</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+            <form id="document-template-fields">
+                <field-visibility>
+                    <show id="lecm-contract:typeContract-assoc" force="true"/>
+                    <show id="lecm-document:subject-assoc" force="true"/>
+                    <show id="lecm-contract:totalAmount" force="true"/>
+                    <show id="lecm-contract:currency-assoc"/>
+                    <show id="lecmSignAspects:signerEmployeeAssoc"/>
+                    <show id="lecm-contract:partner-assoc" force="true"/>
+                    <show id="lecm-contract:signedCounterparty"/>
+                    <show id="lecm-contract:signatoryCounterparty"/>
+                    <show id="lecm-contract:startDate"/>
+                    <show id="lecm-contract:endDate"/>
+                    <show id="lecm-contract:unlimited"/>
+                    <show id="lecm-contract:summaryContent"/>
+                    <show id="lecm-contract:regNumContractor"/>
+                    <show id="lecm-contract:locationContract"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-contract:typeContract-assoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_договора</control-param>
+                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"> </control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-contract:totalAmount" mandatory="true"/>
+                    <field id="lecm-contract:currency-assoc" mandatory="true">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Валюты</control-param>
+                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"> </control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-contract:partner-assoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="changeItemsFireAction">contractor.selected</control-param>
+                            <control-param name="items">contractor,organisation,person</control-param>
+                            <control-param name="showAutocomplete">true</control-param>
+                            <control-param name="autocompleteDataSourceMethodPost">true</control-param>
+                            <control-param name="cssClasses">with-ex-search</control-param>
+                            <control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
+                            <!-- lecm-contractor:contractor-type -->
+                            <control-param name="contractor_label">Внешний контрагент</control-param>
+                            <control-param name="contractor_endpointType">lecm-contractor:contractor-type</control-param>
+                            <control-param name="contractor_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
+                            <control-param name="contractor_nameSubstituteString">{lecm-contractor:shortname}</control-param>
+                            <control-param name="contractor_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
+                            <control-param name="contractor_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
+                            <control-param name="contractor_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}, {lecm-contractor:phone}&lt;/div&gt;</control-param>
+                            <control-param name="contractor_plane">true</control-param>
+                            <control-param name="contractor_showSearch">false</control-param>
+                            <control-param name="contractor_showExSearch">true</control-param>
+                            <control-param name="contractor_showCreateNewLink">true</control-param>
+                            <control-param name="contractor_showEditButton">true</control-param>
+                            <control-param name="contractor_fillFormFromSearch">true</control-param>
+                            <control-param name="contractor_pickerItemsScript">lecm/contractors/common/picker/items</control-param>
+                            <control-param name="contractor_additionalFilter">NOT ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
+                            <control-param name="contractor_showAssocViewForm">true</control-param>
+                            <control-param name="contractor_sortProp">lecm-contractor:shortname</control-param>
+                            <control-param name="contractor_hasNoAspects">lecm-orgstr-aspects:is-organization-aspect</control-param>
+                            <control-param name="contractor_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
+                            <control-param name="contractor_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
+                            <!-- lecm-contractor:contractor-type -->
+                            <control-param name="organisation_label">Внутренний контрагент</control-param>
+                            <control-param name="organisation_endpointType">lecm-contractor:contractor-type</control-param>
+                            <control-param name="organisation_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
+                            <control-param name="organisation_nameSubstituteString">{lecm-contractor:shortname}</control-param>
+                            <control-param name="organisation_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
+                            <control-param name="organisation_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
+                            <control-param name="organisation_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}, {lecm-contractor:phone}&lt;/div&gt;</control-param>
+                            <control-param name="organisation_plane">true</control-param>
+                            <control-param name="organisation_showSearch">false</control-param>
+                            <control-param name="organisation_showExSearch">true</control-param>
+                            <control-param name="organisation_showCreateNewLink">false</control-param>
+                            <control-param name="organisation_pickerItemsScript">lecm/contractors/organization/picker/items</control-param>
+                            <control-param name="organisation_additionalFilter">ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
+                            <control-param name="organisation_showAssocViewForm">true</control-param>
+                            <control-param name="organisation_sortProp">lecm-contractor:shortname</control-param>
+                            <control-param name="organisation_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
+                            <control-param name="organisation_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
+                            <!-- lecm-contractor:physical-person-type -->
+                            <control-param name="person_label">Физическое лицо</control-param>
+                            <control-param name="person_endpointType">lecm-contractor:physical-person-type</control-param>
+                            <control-param name="person_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
+                            <control-param name="person_nameSubstituteString">{lecm-contractor:lastName} {lecm-contractor:firstName} {lecm-contractor:middleName}</control-param>
+                            <control-param name="person_selectedItemsNameSubstituteString">{lecm-contractor:fullname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
+                            <control-param name="person_plane">true</control-param>
+                            <control-param name="person_showCreateNewLink">true</control-param>
+                            <control-param name="person_showEditButton">true</control-param>
+                            <control-param name="person_fillFormFromSearch">true</control-param>
+                            <control-param name="person_showSearch">false</control-param>
+                            <control-param name="person_showExSearch">true</control-param>
+                            <control-param name="person_showAssocViewForm">true</control-param>
+                            <control-param name="person_sortProp">lecm-contractor:shortname</control-param>
+                            <control-param name="person_getExtSearchQuery">LogicECM.getExtQueryForPerson</control-param>
+                            <control-param name="person_getArgumentsFromForm">LogicECM.getExtArgsForPerson</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-contract:summaryContent">
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+                    </field>
+                    <field id="lecmSignAspects:signerEmployeeAssoc">
+                        <control>
+                            <control-param name="useStrictFilterByOrg">true</control-param>
+                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS</control-param>
+                            <control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-document:subject-assoc">
+                        <control>
+                            <control-param name="endpointMany">false</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-contract:startDate">
+                        <control template="/ru/it/lecm/base-share/components/controls/relative-date-control.ftl">
+                            <control-param name="radioOptions">RELATIVE,ABSOLUTE</control-param>
+                            <control-param name="modeOptions">WORK|Рабочих,CALENDAR|Календарных</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-contract:endDate">
+                        <control template="/ru/it/lecm/base-share/components/controls/relative-date-control.ftl">
+                            <control-param name="radioOptions">RELATIVE,ABSOLUTE</control-param>
+                            <control-param name="modeOptions">WORK|Рабочих,CALENDAR|Календарных</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+            <form id="searchQueryGrid">
+                <field-visibility>
+                    <show id="lecm-contract:typeContract-assoc"/>
+                    <show id="lecm-contract:summaryContent"/>
+                    <show id="lecm-document:regnum"/>
+                    <show id="lecm-contract:dateConclusionContracts"/>
+                    <show id="lecm-contract:partner-assoc"/>
+                    <show id="lecm-contract:totalAmount"/>
+                    <show id="lecm-statemachine:status" force="true"/>
+                </field-visibility>
+            </form>
+            <form id="search-editor-fields">
+                <field-visibility>
+                    <show id="lecm-document:regnum"/>
+                    <show id="lecm-document-aspects:reg-project-data-number"/>
+                    <show id="lecm-contract:regNumContractor"/>
+                    <show id="lecm-contract:partner-assoc"/>
+                    <show id="lecm-contract:typeContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-contract:currency-assoc"/>
+                    <show id="lecm-document:doc-date"/>
+                    <show id="lecm-document-aspects:reg-project-data-date"/>
+                    <show id="lecm-contract:dateConclusionContracts"/>
+                    <show id="lecm-contract:totalAmount"/>
+                    <show id="lecm-contract:signedCounterparty"/>
+                    <show id="lecm-contract:signatoryCounterparty"/>
+                    <show id="lecm-contract:unlimited"/>
+                    <show id="lecm-contract:startDate"/>
+                    <show id="lecm-contract:endDate"/>
+                    <show id="lecm-contract:summaryContent"/>
+                    <show id="lecm-contract:locationRegistration"/>
+                    <show id="lecm-contract:locationContract"/>
+                    <show id="lecm-statemachine:status" force="true"/>
+                    <show id="lecm-document:author-assoc"/>
+
+                    <show id="cm:created"/>
+                    <show id="lecm-document:present-string"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-document:present-string" label="Наименование"/>
+                    <field id="lecm-contract:partner-assoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="changeItemsFireAction">contractor.selected</control-param>
+                            <control-param name="items">contractor,organisation,person</control-param>
+                            <control-param name="showAutocomplete">true</control-param>
+                            <control-param name="autocompleteDataSourceMethodPost">true</control-param>
+                            <control-param name="cssClasses">with-ex-search</control-param>
+                            <control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
+                            <!-- lecm-contractor:contractor-type -->
+                            <control-param name="contractor_label">Внешний контрагент</control-param>
+                            <control-param name="contractor_endpointType">lecm-contractor:contractor-type</control-param>
+                            <control-param name="contractor_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
+                            <control-param name="contractor_nameSubstituteString">{lecm-contractor:shortname}</control-param>
+                            <control-param name="contractor_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
+                            <control-param name="contractor_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
+                            <control-param name="contractor_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}, {lecm-contractor:phone}&lt;/div&gt;</control-param>
+                            <control-param name="contractor_plane">true</control-param>
+                            <control-param name="contractor_showSearch">false</control-param>
+                            <control-param name="contractor_showExSearch">true</control-param>
+                            <control-param name="contractor_showCreateNewLink">true</control-param>
+                            <control-param name="contractor_showEditButton">true</control-param>
+                            <control-param name="contractor_fillFormFromSearch">true</control-param>
+                            <control-param name="contractor_pickerItemsScript">lecm/contractors/common/picker/items</control-param>
+                            <control-param name="contractor_additionalFilter">NOT ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
+                            <control-param name="contractor_showAssocViewForm">true</control-param>
+                            <control-param name="contractor_sortProp">lecm-contractor:shortname</control-param>
+                            <control-param name="contractor_hasNoAspects">lecm-orgstr-aspects:is-organization-aspect</control-param>
+                            <control-param name="contractor_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
+                            <control-param name="contractor_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
+                            <!-- lecm-contractor:contractor-type -->
+                            <control-param name="organisation_label">Внутренний контрагент</control-param>
+                            <control-param name="organisation_endpointType">lecm-contractor:contractor-type</control-param>
+                            <control-param name="organisation_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
+                            <control-param name="organisation_nameSubstituteString">{lecm-contractor:shortname}</control-param>
+                            <control-param name="organisation_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
+                            <control-param name="organisation_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
+                            <control-param name="organisation_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}, {lecm-contractor:phone}&lt;/div&gt;</control-param>
+                            <control-param name="organisation_plane">true</control-param>
+                            <control-param name="organisation_showSearch">false</control-param>
+                            <control-param name="organisation_showExSearch">true</control-param>
+                            <control-param name="organisation_showCreateNewLink">false</control-param>
+                            <control-param name="organisation_pickerItemsScript">lecm/contractors/organization/picker/items</control-param>
+                            <control-param name="organisation_additionalFilter">ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
+                            <control-param name="organisation_showAssocViewForm">true</control-param>
+                            <control-param name="organisation_sortProp">lecm-contractor:shortname</control-param>
+                            <control-param name="organisation_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
+                            <control-param name="organisation_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
+                            <!-- lecm-contractor:physical-person-type -->
+                            <control-param name="person_label">Физическое лицо</control-param>
+                            <control-param name="person_endpointType">lecm-contractor:physical-person-type</control-param>
+                            <control-param name="person_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
+                            <control-param name="person_nameSubstituteString">{lecm-contractor:lastName} {lecm-contractor:firstName} {lecm-contractor:middleName}</control-param>
+                            <control-param name="person_selectedItemsNameSubstituteString">{lecm-contractor:fullname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
+                            <control-param name="person_plane">true</control-param>
+                            <control-param name="person_showCreateNewLink">true</control-param>
+                            <control-param name="person_showEditButton">true</control-param>
+                            <control-param name="person_fillFormFromSearch">true</control-param>
+                            <control-param name="person_showSearch">false</control-param>
+                            <control-param name="person_showExSearch">true</control-param>
+                            <control-param name="person_showAssocViewForm">true</control-param>
+                            <control-param name="person_sortProp">lecm-contractor:shortname</control-param>
+                            <control-param name="person_getExtSearchQuery">LogicECM.getExtQueryForPerson</control-param>
+                            <control-param name="person_getArgumentsFromForm">LogicECM.getExtArgsForPerson</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="lecm-document-aspects:reg-project-data-number"/>
+                    <show id="lecm-document:regnum"/>
+                    <show id="lecm-contract:partner-assoc"/>
+                    <show id="lecm-contract:typeContract-assoc"/>
+                    <show id="lecm-statemachine:status" force="true"/>
+                    <show id="lecm-contract:dateConclusionContracts"/>
+                    <show id="lecm-document:creator"/>
+                    <show id="lecm-document:creator-ref"/>
+                    <show id="lecm-contract-table-structure:stages-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-document-aspects:reg-project-data-number" label-id="contract.regProjectNumber"/>
+                    <field id="lecm-document:regnum" label-id="contract.regNumber"/>
+                    <field id="lecm-contract:partner-assoc" label-id="contract.parther" substituteString="{lecm-contractor:shortname}"/>
+                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
+                    <field id="lecm-statemachine:status" label-id="contract.status"/>
+                    <field id="lecm-contract:dateConclusionContracts" label-id="contract.conclusionDate"/>
+                    <field id="lecm-document:creator" label-id="contract.creator"/>
+                </appearance>
+            </form>
+            <form id="datagrid_Все">
+                <field-visibility>
+                    <show id="lecm-document-aspects:reg-project-data-number"/>
+                    <show id="lecm-document:regnum"/>
+                    <show id="lecm-contract:partner-assoc"/>
+                    <show id="lecm-contract:typeContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-statemachine:status" force="true"/>
+                    <show id="lecm-document:creator"/>
+                    <show id="lecm-document:creator-ref"/>
+                    <show id="lecm-contract:totalAmountWithCurrency"/>
+                    <show id="lecm-contract-table-structure:stages-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-document-aspects:reg-project-data-number" label-id="contract.regProjectNumber"/>
+                    <field id="lecm-document:regnum" label-id="contract.regNumber"/>
+                    <field id="lecm-contract:partner-assoc" label-id="contract.parther" substituteString="{lecm-contract:partner-assoc/lecm-contractor:shortname}"/>
+                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
+                    <field id="lecm-statemachine:status" label-id="contract.status"/>
+                    <field id="lecm-document:creator" label-id="contract.creator"/>
+                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
+                </appearance>
+            </form>
+            <form id="datagrid_Черновик">
+                <field-visibility>
+                    <show id="lecm-contract:partner-assoc"/>
+                    <show id="lecm-contract:typeContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-document:creator"/>
+                    <show id="lecm-document:creator-ref"/>
+                    <show id="lecm-contract-table-structure:stages-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-contract:partner-assoc" label-id="contract.parther" substituteString="{lecm-contractor:shortname}"/>
+                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
+                    <field id="lecm-document:creator" label-id="contract.creator"/>
+                </appearance>
+            </form>
+            <form id="datagrid_Проект_зарегистрирован">
+                <field-visibility>
+                    <show id="lecm-document-aspects:reg-project-data-number"/>
+                    <show id="lecm-document-aspects:reg-project-data-date"/>
+                    <show id="lecm-contract:partner-assoc"/>
+                    <show id="lecm-contract:typeContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-document:creator"/>
+                    <show id="lecm-document:creator-ref"/>
+                    <show id="lecm-contract:totalAmountWithCurrency"/>
+                    <show id="lecm-contract-table-structure:stages-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-document-aspects:reg-project-data-number" label-id="contract.regProjectNumber"/>
+                    <field id="lecm-document-aspects:reg-project-data-date" label-id="contract.dateRegProject"/>
+                    <field id="lecm-contract:partner-assoc" label-id="contract.parther" substituteString="{lecm-contractor:shortname}"/>
+                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
+                    <field id="lecm-document:creator" label-id="contract.creator"/>
+                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
+                </appearance>
+            </form>
+            <form id="datagrid_На_согласовании">
+                <field-visibility>
+                    <show id="lecm-document-aspects:reg-project-data-number"/>
+                    <show id="lecm-document-aspects:reg-project-data-date"/>
+                    <show id="lecm-contract:partner-assoc"/>
+                    <show id="lecm-contract:typeContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-document:creator"/>
+                    <show id="lecm-document:creator-ref"/>
+                    <show id="lecm-contract:totalAmountWithCurrency"/>
+                    <show id="lecm-contract-table-structure:stages-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-document-aspects:reg-project-data-number" label-id="contract.regProjectNumber"/>
+                    <field id="lecm-document-aspects:reg-project-data-date" label-id="contract.dateRegProject"/>
+                    <field id="lecm-contract:partner-assoc" label-id="contract.parther" substituteString="{lecm-contractor:shortname}"/>
+                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
+                    <field id="lecm-document:creator" label-id="contract.creator"/>
+                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
+                </appearance>
+            </form>
+            <form id="datagrid_Согласован">
+                <field-visibility>
+                    <show id="lecm-document-aspects:reg-project-data-number"/>
+                    <show id="lecm-document-aspects:reg-project-data-date"/>
+                    <show id="lecm-contract:partner-assoc"/>
+                    <show id="lecm-contract:typeContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-contract:totalAmountWithCurrency"/>
+                    <show id="lecm-contract-table-structure:stages-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-document-aspects:reg-project-data-number" label-id="contract.regProjectNumber"/>
+                    <field id="lecm-document-aspects:reg-project-data-date" label-id="contract.dateRegProject"/>
+                    <field id="lecm-contract:partner-assoc" label-id="contract.parther" substituteString="{lecm-contractor:shortname}"/>
+                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
+                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
+                </appearance>
+            </form>
+            <form id="datagrid_На_доработке">
+                <field-visibility>
+                    <show id="lecm-document-aspects:reg-project-data-number"/>
+                    <show id="lecm-document-aspects:reg-project-data-date"/>
+                    <show id="lecm-contract:partner-assoc"/>
+                    <show id="lecm-contract:typeContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-document:creator"/>
+                    <show id="lecm-document:creator-ref"/>
+                    <show id="lecm-contract:totalAmountWithCurrency"/>
+                    <show id="lecm-contract-table-structure:stages-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-document-aspects:reg-project-data-number" label-id="contract.regProjectNumber"/>
+                    <field id="lecm-document-aspects:reg-project-data-date" label-id="contract.dateRegProject"/>
+                    <field id="lecm-contract:partner-assoc" label-id="contract.parther" substituteString="{lecm-contractor:shortname}"/>
+                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
+                    <field id="lecm-document:creator" label-id="contract.creator"/>
+                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
+                </appearance>
+            </form>
+            <form id="datagrid_На_подписании">
+                <field-visibility>
+                    <show id="lecm-document-aspects:reg-project-data-number"/>
+                    <show id="lecm-document-aspects:reg-project-data-date"/>
+                    <show id="lecm-contract:partner-assoc"/>
+                    <show id="lecm-contract:typeContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-document:creator"/>
+                    <show id="lecm-document:creator-ref"/>
+                    <show id="lecm-contract:totalAmountWithCurrency"/>
+                    <show id="lecm-contract-table-structure:stages-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-document-aspects:reg-project-data-number" label-id="contract.regProjectNumber"/>
+                    <field id="lecm-document-aspects:reg-project-data-date" label-id="contract.dateRegProject"/>
+                    <field id="lecm-contract:partner-assoc" label-id="contract.parther" substituteString="{lecm-contractor:shortname}"/>
+                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
+                    <field id="lecm-document:creator" label-id="contract.creator"/>
+                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
+                </appearance>
+            </form>
+            <form id="datagrid_На_подписании_у_контрагента">
+                <field-visibility>
+                    <show id="lecm-document-aspects:reg-project-data-number"/>
+                    <show id="lecm-contract:dateConclusionContracts"/>
+                    <show id="lecm-contract:partner-assoc"/>
+                    <show id="lecm-contract:typeContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-contract:signatoryCounterparty"/>
+                    <show id="lecm-document:creator"/>
+                    <show id="lecm-document:creator-ref"/>
+                    <show id="lecm-contract:totalAmountWithCurrency"/>
+                    <show id="lecm-contract-table-structure:stages-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-document-aspects:reg-project-data-number" label-id="contract.regProjectNumber"/>
+                    <field id="lecm-contract:partner-assoc" label-id="contract.parther" substituteString="{lecm-contractor:shortname}"/>
+                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
+                    <field id="lecm-document:creator" label-id="contract.creator"/>
+                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
+                </appearance>
+            </form>
+            <form id="datagrid_Зарегистрирован">
+                <field-visibility>
+                    <show id="lecm-document:regnum"/>
+                    <show id="lecm-contract:dateConclusionContracts"/>
+                    <show id="lecm-contract:partner-assoc"/>
+                    <show id="lecm-contract:typeContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-contract:signatoryCounterparty"/>
+                    <show id="lecm-document:creator"/>
+                    <show id="lecm-document:creator-ref"/>
+                    <show id="lecm-contract-table-structure:stages-assoc"/>
+                    <show id="lecm-contract:totalAmountWithCurrency"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-document:regnum" label-id="contract.regNumber"/>
+                    <field id="lecm-contract:dateConclusionContracts" label-id="contract.conclusionDate"/>
+                    <field id="lecm-contract:partner-assoc" label-id="contract.parther" substituteString="{lecm-contractor:shortname}"/>
+                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
+                    <field id="lecm-document:creator" label-id="contract.creator"/>
+                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
+                </appearance>
+            </form>
+            <form id="datagrid_Действует">
+                <field-visibility>
+                    <show id="lecm-document:regnum"/>
+                    <show id="lecm-contract:dateConclusionContracts"/>
+                    <show id="lecm-contract:partner-assoc"/>
+                    <show id="lecm-contract:typeContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-contract:startDate"/>
+                    <show id="lecm-contract:endDate"/>
+                    <show id="lecm-document:creator"/>
+                    <show id="lecm-document:creator-ref"/>
+                    <show id="lecm-contract:totalAmountWithCurrency"/>
+                    <show id="lecm-contract-table-structure:stages-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-document:regnum" label-id="contract.regNumber"/>
+                    <field id="lecm-contract:dateConclusionContracts" label-id="contract.conclusionDate"/>
+                    <field id="lecm-contract:partner-assoc" label-id="contract.parther" substituteString="{lecm-contractor:shortname}"/>
+                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
+                    <field id="lecm-document:creator" label-id="contract.creator"/>
+                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
+                </appearance>
+            </form>
+            <form id="datagrid_Исполнен">
+                <field-visibility>
+                    <show id="lecm-document:regnum"/>
+                    <show id="lecm-contract:dateConclusionContracts"/>
+                    <show id="lecm-contract:partner-assoc"/>
+                    <show id="lecm-contract:typeContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-contract:startDate"/>
+                    <show id="lecm-document:creator"/>
+                    <show id="lecm-document:creator-ref"/>
+                    <show id="lecm-contract:totalAmountWithCurrency"/>
+                    <show id="lecm-contract-table-structure:stages-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-document:regnum" label-id="contract.regNumber"/>
+                    <field id="lecm-contract:dateConclusionContracts" label-id="contract.conclusionDate"/>
+                    <field id="lecm-contract:partner-assoc" label-id="contract.parther" substituteString="{lecm-contractor:shortname}"/>
+                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
+                    <field id="lecm-document:creator" label-id="contract.creator"/>
+                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
+                </appearance>
+            </form>
+            <form id="datagrid_Приостановлен">
+                <field-visibility>
+                    <show id="lecm-document:regnum"/>
+                    <show id="lecm-contract:dateConclusionContracts"/>
+                    <show id="lecm-contract:partner-assoc"/>
+                    <show id="lecm-contract:typeContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-document:creator"/>
+                    <show id="lecm-document:creator-ref"/>
+                    <show id="lecm-contract:totalAmountWithCurrency"/>
+                    <show id="lecm-contract-table-structure:stages-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-document:regnum" label-id="contract.regNumber"/>
+                    <field id="lecm-contract:dateConclusionContracts" label-id="contract.conclusionDate"/>
+                    <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
+                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
+                    <field id="lecm-document:creator" label-id="contract.creator"/>
+                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
+                </appearance>
+            </form>
+            <form id="datagrid_Расторгнут">
+                <field-visibility>
+                    <show id="lecm-document:regnum"/>
+                    <show id="lecm-contract:dateConclusionContracts"/>
+                    <show id="lecm-contract:partner-assoc"/>
+                    <show id="lecm-contract:typeContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-contract:startDate"/>
+                    <show id="lecm-document:creator"/>
+                    <show id="lecm-document:creator-ref"/>
+                    <show id="lecm-contract:totalAmountWithCurrency"/>
+                    <show id="lecm-contract-table-structure:stages-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-document:regnum" label-id="contract.regNumber"/>
+                    <field id="lecm-contract:dateConclusionContracts" label-id="contract.conclusionDate"/>
+                    <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
+                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
+                    <field id="lecm-document:creator" label-id="contract.creator"/>
+                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
+                </appearance>
+            </form>
+            <form id="datagrid_Проекты">
+                <field-visibility>
+                    <show id="lecm-document-aspects:reg-project-data-number"/>
+                    <show id="lecm-document-aspects:reg-project-data-date"/>
+                    <show id="lecm-contract:partner-assoc"/>
+                    <show id="lecm-contract:typeContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-document:creator"/>
+                    <show id="lecm-document:creator-ref"/>
+                    <show id="lecm-statemachine:status" force="true"/>
+                    <show id="lecm-contract:totalAmountWithCurrency"/>
+                    <show id="lecm-contract-table-structure:stages-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-document-aspects:reg-project-data-number" label-id="contract.regProjectNumber"/>
+                    <field id="lecm-document-aspects:reg-project-data-date" label-id="contract.dateRegProject"/>
+                    <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
+                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
+                    <field id="lecm-document:creator" label-id="contract.creator"/>
+                    <field id="lecm-statemachine:status" label-id="contract.status"/>
+                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
+                </appearance>
+            </form>
+            <form id="datagrid_Подписанные">
+                <field-visibility>
+                    <show id="lecm-document-aspects:reg-project-data-number"/>
+                    <show id="lecm-contract:dateConclusionContracts"/>
+                    <show id="lecm-contract:partner-assoc"/>
+                    <show id="lecm-contract:typeContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-contract:signatoryCounterparty"/>
+                    <show id="lecm-document:creator"/>
+                    <show id="lecm-document:creator-ref"/>
+                    <show id="lecm-statemachine:status" force="true"/>
+                    <show id="lecm-contract:totalAmountWithCurrency"/>
+                    <show id="lecm-contract-table-structure:stages-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-document-aspects:reg-project-data-number" label-id="contract.regProjectNumber"/>
+                    <field id="lecm-contract:dateConclusionContracts" label-id="contract.conclusionDate"/>
+                    <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
+                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
+                    <field id="lecm-document:creator" label-id="contract.creator"/>
+                    <field id="lecm-statemachine:status" label-id="contract.status"/>
+                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
+                </appearance>
+            </form>
+            <form id="datagrid_Завершенные">
+                <field-visibility>
+                    <show id="lecm-document-aspects:reg-project-data-number"/>
+                    <show id="lecm-contract:dateConclusionContracts"/>
+                    <show id="lecm-contract:partner-assoc"/>
+                    <show id="lecm-contract:typeContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-contract:startDate"/>
+                    <show id="lecm-document:creator"/>
+                    <show id="lecm-document:creator-ref"/>
+                    <show id="lecm-statemachine:status" force="true"/>
+                    <show id="lecm-contract:totalAmountWithCurrency"/>
+                    <show id="lecm-contract-table-structure:stages-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-document-aspects:reg-project-data-number" label-id="contract.regProjectNumber"/>
+                    <field id="lecm-contract:dateConclusionContracts" label-id="contract.conclusionDate"/>
+                    <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
+                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
+                    <field id="lecm-document:creator" label-id="contract.creator"/>
+                    <field id="lecm-statemachine:status" label-id="contract.status"/>
+                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
+                </appearance>
+            </form>
+            <form id="datagrid_Корзина">
+                <field-visibility>
+                    <show id="lecm-document-aspects:reg-project-data-number"/>
+                    <show id="lecm-contract:partner-assoc"/>
+                    <show id="lecm-contract:typeContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-document:creator"/>
+                    <show id="lecm-document:creator-ref"/>
+                    <show id="lecm-contract:totalAmountWithCurrency"/>
+                    <show id="lecm-contract-table-structure:stages-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-document-aspects:reg-project-data-number" label-id="contract.regProjectNumber"/>
+                    <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
+                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
+                    <field id="lecm-document:creator" label-id="contract.creator"/>
+                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
+                </appearance>
+            </form>
+            <form id="datagrid_Избранное">
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="cm:image"/>
+                    <show id="lecm-document:present-string"/>
+                    <show id="lecm-document:ext-present-string"/>
+                    <show id="lecm-document:list-present-string"/>
+                </field-visibility>
+            </form>
+            <form id="document-journal">
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="cm:image"/>
+                    <show id="lecm-document:present-string"/>
+                    <show id="lecm-document:list-present-string"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:image" label=" "/>
+                    <field id="cm:name" label=" "/>
+                    <field id="lecm-document:present-string" label=" "/>
+                </appearance>
+            </form>
+            <form id="search">
+                <field-visibility>
+                    <show id="lecm-document:regnum"/>
+                    <show id="lecm-document-aspects:reg-project-data-number"/>
+                    <show id="lecm-contract:regNumContractor"/>
+                    <show id="lecm-contract:partner-assoc"/>
+                    <show id="lecm-contract:typeContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-contract:currency-assoc"/>
+                    <show id="lecm-document-aspects:reg-project-data-date"/>
+                    <show id="lecm-contract:dateConclusionContracts"/>
+                    <show id="lecm-contract:totalAmount"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-document:regnum">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="hideValue"/>
+                        </control>
+                    </field>
+                    <field id="lecm-document-aspects:reg-project-data-number">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="hideValue"/>
+                        </control>
+                    </field>
+                    <field id="lecm-contract:partner-assoc" mandatory="false">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="changeItemsFireAction">contractor.selected</control-param>
+                            <control-param name="items">contractor,organisation,person</control-param>
+                            <control-param name="showAutocomplete">true</control-param>
+                            <control-param name="autocompleteDataSourceMethodPost">true</control-param>
+                            <control-param name="cssClasses">with-ex-search</control-param>
+                            <control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
+                            <!-- lecm-contractor:contractor-type -->
+                            <control-param name="contractor_label">Внешний контрагент</control-param>
+                            <control-param name="contractor_endpointType">lecm-contractor:contractor-type</control-param>
+                            <control-param name="contractor_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
+                            <control-param name="contractor_nameSubstituteString">{lecm-contractor:shortname}</control-param>
+                            <control-param name="contractor_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
+                            <control-param name="contractor_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
+                            <control-param name="contractor_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}, {lecm-contractor:phone}&lt;/div&gt;</control-param>
+                            <control-param name="contractor_plane">true</control-param>
+                            <control-param name="contractor_showSearch">false</control-param>
+                            <control-param name="contractor_showExSearch">true</control-param>
+                            <control-param name="contractor_showCreateNewLink">true</control-param>
+                            <control-param name="contractor_showEditButton">true</control-param>
+                            <control-param name="contractor_fillFormFromSearch">true</control-param>
+                            <control-param name="contractor_pickerItemsScript">lecm/contractors/common/picker/items</control-param>
+                            <control-param name="contractor_additionalFilter">NOT ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
+                            <control-param name="contractor_showAssocViewForm">true</control-param>
+                            <control-param name="contractor_sortProp">lecm-contractor:shortname</control-param>
+                            <control-param name="contractor_hasNoAspects">lecm-orgstr-aspects:is-organization-aspect</control-param>
+                            <control-param name="contractor_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
+                            <control-param name="contractor_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
+                            <!-- lecm-contractor:contractor-type -->
+                            <control-param name="organisation_label">Внутренний контрагент</control-param>
+                            <control-param name="organisation_endpointType">lecm-contractor:contractor-type</control-param>
+                            <control-param name="organisation_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
+                            <control-param name="organisation_nameSubstituteString">{lecm-contractor:shortname}</control-param>
+                            <control-param name="organisation_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
+                            <control-param name="organisation_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
+                            <control-param name="organisation_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}, {lecm-contractor:phone}&lt;/div&gt;</control-param>
+                            <control-param name="organisation_plane">true</control-param>
+                            <control-param name="organisation_showSearch">false</control-param>
+                            <control-param name="organisation_showExSearch">true</control-param>
+                            <control-param name="organisation_showCreateNewLink">false</control-param>
+                            <control-param name="organisation_pickerItemsScript">lecm/contractors/organization/picker/items</control-param>
+                            <control-param name="organisation_additionalFilter">ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
+                            <control-param name="organisation_showAssocViewForm">true</control-param>
+                            <control-param name="organisation_sortProp">lecm-contractor:shortname</control-param>
+                            <control-param name="organisation_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
+                            <control-param name="organisation_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
+                            <!-- lecm-contractor:physical-person-type -->
+                            <control-param name="person_label">Физическое лицо</control-param>
+                            <control-param name="person_endpointType">lecm-contractor:physical-person-type</control-param>
+                            <control-param name="person_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
+                            <control-param name="person_nameSubstituteString">{lecm-contractor:lastName} {lecm-contractor:firstName} {lecm-contractor:middleName}</control-param>
+                            <control-param name="person_selectedItemsNameSubstituteString">{lecm-contractor:fullname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
+                            <control-param name="person_plane">true</control-param>
+                            <control-param name="person_showCreateNewLink">true</control-param>
+                            <control-param name="person_showEditButton">true</control-param>
+                            <control-param name="person_fillFormFromSearch">true</control-param>
+                            <control-param name="person_showSearch">false</control-param>
+                            <control-param name="person_showExSearch">true</control-param>
+                            <control-param name="person_showAssocViewForm">true</control-param>
+                            <control-param name="person_sortProp">lecm-contractor:shortname</control-param>
+                            <control-param name="person_getExtSearchQuery">LogicECM.getExtQueryForPerson</control-param>
+                            <control-param name="person_getArgumentsFromForm">LogicECM.getExtArgsForPerson</control-param>
+                        </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-contract:typeContract-assoc" mandatory="false">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
+                            <control-param name="startLocation">
+                                /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_договора
+                            </control-param>
+                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabelCode"> </control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="mandatory">false</control-param>
+                        </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-document:subject-assoc">
+                        <control>
+                            <control-param name="mandatory">false</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-contract:currency-assoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
+                            <control-param name="startLocation">
+                                /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Валюты
+                            </control-param>
+                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabelCode"> </control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="mandatory">false</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-document-aspects:reg-project-data-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+                    </field>
+                    <field id="lecm-contract:dateConclusionContracts">
+                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+                    </field>
+                    <field id="lecm-contract:totalAmount">
+                        <control template="/ru/it/lecm/base-share/components/controls/numberrange.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+            <form id="statemachine-editable-fields">
+                <field-visibility>
+                    <show id="lecm-document-aspects:reg-project-data-number"/>
+                    <show id="lecm-document-aspects:reg-project-data-date"/>
+                    <show id="lecm-contract:typeContract-assoc" force="true"/>
+                    <show id="lecm-document:subject-assoc" force="true"/>
+                    <show id="lecm-contract:totalAmount" force="true"/>
+                    <show id="lecm-contract:currency-assoc"/>
+                    <show id="lecm-contract:dateConclusionContracts"/>
+                    <show id="lecm-contract:partner-assoc" force="true"/>
+                    <show id="lecm-contract:representative-assoc"/>
+                    <show id="lecm-contract:signedCounterparty"/>
+                    <show id="lecm-contract:signatoryCounterparty"/>
+                    <show id="lecm-contract:regNumContractor"/>
+                    <show id="lecm-contract:startDate"/>
+                    <show id="lecm-contract:endDate"/>
+                    <show id="lecm-contract:unlimited"/>
+                    <show id="lecm-contract:summaryContent"/>
+                    <show id="lecm-document:regnum"/>
+                    <show id="lecm-document:doc-date"/>
+                    <show id="lecm-contract:registrator-assoc"/>
+                    <show id="lecm-contract:locationRegistration"/>
+                    <show id="lecm-contract:locationContract"/>
+                    <show id="lecm-contract-table-structure:stages-assoc"/>
+                    <show id="lecmApproveAspects:approvalFolderRef"/>
+                    <show id="lecm-eds-aspect:signed-on-paper"/>
+                    <show id="lecmSignAspects:signerEmployeeAssoc"/>
+                </field-visibility>
+                <!-- Example: How to use dynamic access role
+                                <appearance>
+                                    <field id="lecm-contract:totalAmount" roles="BR_INITIATOR"/>
+                                </appearance>
+                -->
+                <appearance>
+                    <field id="lecmApproveAspects:approvalFolderRef" label-id="label.approval"/>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+</alfresco-config>

@@ -20,4 +20,15 @@
             </list>
         </property>
     </bean>
+
+	<bean id="meetings.defaultFormConfig" parent="defaultFormConfigs">
+		<property name="modelName" value="lecm-meetings:document" />
+		<property name="path" value="alfresco/web-extension/ru/it/lecm/meetings/lecm-meetings-document-forms-config.xml"/>
+	</bean>
+
+	<bean id="protocol.defaultFormConfig" parent="defaultFormConfigs">
+		<property name="modelName" value="lecm-protocol:document" />
+		<property name="path" value="alfresco/web-extension/ru/it/lecm/meetings/lecm-protocol-document-forms-config.xml"/>
+	</bean>
+
 </beans>

@@ -17,4 +17,10 @@
 
 	<bean id="outgoing.resource.bundle.bootstrap" class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent"
 		  p:resourceBundles="alfresco.web-extension.ru.it.lecm.outgoing.outgoing"/>
+
+	<bean id="outgoing.defaultFormConfig" parent="defaultFormConfigs">
+		<property name="modelName" value="lecm-outgoing:document" />
+		<property name="path" value="alfresco/web-extension/ru/it/lecm/outgoing/lecm-outgoing-document-forms-config.xml"/>
+	</bean>
+
 </beans>

@@ -19,4 +19,9 @@
             </list>
         </property>
     </bean>
+
+	<bean id="errands.defaultFormConfig" parent="defaultFormConfigs">
+		<property name="modelName" value="lecm-errands:document" />
+		<property name="path" value="alfresco/web-extension/ru/it/lecm/errands/lecm-errands-document-forms-config.xml"/>
+	</bean>
 </beans>

@@ -20,5 +20,16 @@
 			</list>
 		</property>
 	</bean>
+
+	<bean id="contract.defaultFormConfig" parent="defaultFormConfigs">
+		<property name="modelName" value="lecm-contract:document" />
+		<property name="path" value="alfresco/web-extension/ru/it/lecm/contracts/lecm-contracts-document-forms-config.xml"/>
+	</bean>
+
+	<bean id="additional.defaultFormConfig" parent="defaultFormConfigs">
+		<property name="modelName" value="lecm-additional-document:additionalDocument" />
+		<property name="path" value="alfresco/web-extension/ru/it/lecm/contracts/lecm-additional-document-forms-config.xml"/>
+	</bean>
+
 </beans>
 
