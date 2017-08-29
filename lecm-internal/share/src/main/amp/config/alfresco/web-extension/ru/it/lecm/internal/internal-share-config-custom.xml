@@ -369,11 +369,21 @@
                     <show id="cm:name" force="true"/>
                     <show id="lecm-doc-dic-dt:registration-required"/>
                     <show id="lecm-doc-dic-dt:auto-registration"/>
+                    <show id="lecm-doc-dic-dt:es-sign-required"/>
+                    <show id="lecm-doc-dic-dt:signed-categories-of-attachments"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-doc-dic-dt:registration-required">
                         <control>
                             <control-param name="disabledFieldsIfNotSelect">lecm-doc-dic-dt:auto-registration</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-doc-dic-dt:signed-categories-of-attachments">
+                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+                            <control-param name="webscript">lecm/document/attachments/api/categoriesByType?documentType=lecm-internal:document&amp;jsonObjectName=data</control-param>
+                            <control-param name="webscriptType">server</control-param>
+                            <control-param name="withEmpty">true</control-param>
+                            <control-param name="multiple">true</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -384,16 +394,22 @@
                     <show id="cm:name"/>
                     <show id="lecm-doc-dic-dt:registration-required"/>
                     <show id="lecm-doc-dic-dt:auto-registration"/>
+                    <show id="lecm-doc-dic-dt:es-sign-required"/>
+                    <show id="signed-categories-of-attachments"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-doc-dic-dt:registration-required" label-id="label.eds.document_type_dictionary.datagrid.registration_setting.registered"/>
                     <field id="lecm-doc-dic-dt:auto-registration" label-id="label.eds.document_type_dictionary.datagrid.registration_setting.automatically"/>
+                    <field id="lecm-doc-dic-dt:es-sign-required" label-id="label.eds.document_type_dictionary.datagrid.signing_setting.es_required"/>
+                    <field id="signed-categories-of-attachments" substituteString="{lecm-doc-dic-dt:signed-categories-of-attachments}" label-id="label.eds.document_type_dictionary.datagrid.signing_setting.categories"/>
                 </appearance>
             </form>
             <form id="search">
                 <field-visibility>
                     <show id="lecm-doc-dic-dt:documentType-code"/>
                     <show id="cm:name"/>
+                    <show id="lecm-doc-dic-dt:es-sign-required"/>
+                    <show id="lecm-doc-dic-dt:signed-categories-of-attachments"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-doc-dic-dt:documentType-code" mandatory="false">
@@ -405,6 +421,14 @@
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
                         </constraint-handlers>
+                    </field>
+                    <field id="lecm-doc-dic-dt:signed-categories-of-attachments">
+                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+                            <control-param name="webscript">lecm/document/attachments/api/categoriesByType?documentType=lecm-internal:document&amp;jsonObjectName=data</control-param>
+                            <control-param name="webscriptType">server</control-param>
+                            <control-param name="withEmpty">true</control-param>
+                            <control-param name="multiple">true</control-param>
+                        </control>
                     </field>
                 </appearance>
             </form>
@@ -419,11 +443,21 @@
                     <show id="cm:name" force="true"/>
                     <show id="lecm-doc-dic-dt:registration-required" force="true"/>
                     <show id="lecm-doc-dic-dt:auto-registration" force="true"/>
+                    <show id="lecm-doc-dic-dt:es-sign-required" force="true"/>
+                    <show id="lecm-doc-dic-dt:signed-categories-of-attachments" force="true"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-doc-dic-dt:registration-required">
                         <control>
                             <control-param name="disabledFieldsIfNotSelect">lecm-doc-dic-dt:auto-registration</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-doc-dic-dt:signed-categories-of-attachments">
+                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+                            <control-param name="webscript">lecm/document/attachments/api/categoriesByType?documentType=lecm-internal:document&amp;jsonObjectName=data</control-param>
+                            <control-param name="webscriptType">server</control-param>
+                            <control-param name="withEmpty">true</control-param>
+                            <control-param name="multiple">true</control-param>
                         </control>
                     </field>
                 </appearance>

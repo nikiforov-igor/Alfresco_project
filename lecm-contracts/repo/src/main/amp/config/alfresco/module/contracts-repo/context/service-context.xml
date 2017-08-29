@@ -51,7 +51,7 @@
     </bean>
 
     <bean id="contracts.LogicEcmContractsDictionariesBootstrap" parent="modelsToRepositoryLoader"
-          depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary">
+          depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary, eds.models.bootstrap">
         <property name="models">
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-contracts-dictionaries-model.xml</value>
