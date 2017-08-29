@@ -1470,12 +1470,12 @@
 					<show id="lecm-contract-dic:contract-type-code" force="true"/>
 					<show id="lecm-contract-dic:contract-type-description" force="true"/>
                     <show id="lecm-doc-dic-dt:es-sign-required" force="true"/>
-                    <show id="lecm-doc-dic-dt:signed-categories-of-attachments" force="true"/>
+                    <show id="lecm-doc-dic-dt:categories-of-attachments-to-sign" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-contract-dic:contract-type-code" read-only="true"/>
 
-                    <field id="lecm-doc-dic-dt:signed-categories-of-attachments">
+                    <field id="lecm-doc-dic-dt:categories-of-attachments-to-sign">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
                             <control-param name="webscript">lecm/document/attachments/api/categoriesByType?documentType=lecm-internal:document&amp;jsonObjectName=data</control-param>
                             <control-param name="webscriptType">server</control-param>
@@ -1496,7 +1496,7 @@
 					<show id="lecm-contract-dic:contract-type-code" force="true"/>
 					<show id="lecm-contract-dic:contract-type-description" force="true"/>
                     <show id="lecm-doc-dic-dt:es-sign-required"/>
-                    <show id="lecm-doc-dic-dt:signed-categories-of-attachments"/>
+                    <show id="lecm-doc-dic-dt:categories-of-attachments-to-sign"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-contract-dic:contract-type-code">
@@ -1505,7 +1505,7 @@
 							<constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
 						</constraint-handlers>
 					</field>
-                    <field id="lecm-doc-dic-dt:signed-categories-of-attachments">
+                    <field id="lecm-doc-dic-dt:categories-of-attachments-to-sign">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
                             <control-param name="webscript">lecm/document/attachments/api/categoriesByType?documentType=lecm-internal:document&amp;jsonObjectName=data</control-param>
                             <control-param name="webscriptType">server</control-param>
@@ -1521,7 +1521,7 @@
 					<show id="lecm-contract-dic:contract-type-code" force="true"/>
 					<show id="lecm-contract-dic:contract-type-description" force="true"/>
                     <show id="lecm-doc-dic-dt:es-sign-required"/>
-                    <show id="lecm-doc-dic-dt:signed-categories-of-attachments"/>
+                    <show id="lecm-doc-dic-dt:categories-of-attachments-to-sign"/>
 				</field-visibility>
 				<appearance>
                     <field id="cm:name" mandatory="false">
@@ -1535,7 +1535,7 @@
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
 						</constraint-handlers>
 					</field>
-                    <field id="lecm-doc-dic-dt:signed-categories-of-attachments">
+                    <field id="lecm-doc-dic-dt:categories-of-attachments-to-sign">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
                             <control-param name="webscript">lecm/document/attachments/api/categoriesByType?documentType=lecm-internal:document&amp;jsonObjectName=data</control-param>
                             <control-param name="webscriptType">server</control-param>
@@ -1551,11 +1551,11 @@
 					<show id="lecm-contract-dic:contract-type-code" force="true"/>
 					<show id="lecm-contract-dic:contract-type-description" force="true"/>
                     <show id="lecm-doc-dic-dt:es-sign-required"/>
-                    <show id="signed-categories-of-attachments"/>
+                    <show id="categories-of-attachments-to-sign"/>
 				</field-visibility>
                 <appearance>
                     <field id="lecm-doc-dic-dt:es-sign-required" label-id="label.eds.document_type_dictionary.datagrid.signing_setting.es_required"/>
-                    <field id="signed-categories-of-attachments" substituteString="{lecm-doc-dic-dt:signed-categories-of-attachments}" label-id="label.eds.document_type_dictionary.datagrid.signing_setting.categories"/>
+                    <field id="categories-of-attachments-to-sign" substituteString="{lecm-doc-dic-dt:categories-of-attachments-to-sign}" label-id="label.eds.document_type_dictionary.datagrid.signing_setting.categories"/>
                 </appearance>
 			</form>
 		</forms>

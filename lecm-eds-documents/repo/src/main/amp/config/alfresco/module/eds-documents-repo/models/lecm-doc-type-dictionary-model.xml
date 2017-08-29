@@ -60,7 +60,7 @@
 					<type>d:boolean</type>
 					<default>false</default>
 				</property>
-				<property name="lecm-doc-dic-dt:signed-categories-of-attachments">
+				<property name="lecm-doc-dic-dt:categories-of-attachments-to-sign">
 					<title>Категории подписываемых вложений</title>
 					<type>d:text</type>
 					<index enabled="false"/>
