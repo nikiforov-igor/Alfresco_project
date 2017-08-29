@@ -52,5 +52,20 @@
 				</property>
 			</properties>
 		</aspect>
+
+		<aspect name="lecm-doc-dic-dt:signing-settings">
+			<properties>
+				<property name="lecm-doc-dic-dt:es-sign-required">
+					<title>Требуется подписание ЭП</title>
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+				<property name="lecm-doc-dic-dt:categories-of-attachments-to-sign">
+					<title>Категории подписываемых вложений</title>
+					<type>d:text</type>
+					<index enabled="false"/>
+				</property>
+			</properties>
+		</aspect>
 	</aspects>
 </model>

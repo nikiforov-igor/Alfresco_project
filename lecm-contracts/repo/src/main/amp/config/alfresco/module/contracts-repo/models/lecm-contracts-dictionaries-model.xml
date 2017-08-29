@@ -6,6 +6,7 @@
 	<imports>
 		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
 		<import uri="http://www.it.ru/lecm/dictionary/1.0" prefix="lecm-dic"/>
+		<import uri="http://www.it.ru/logicECM/document/dictionaries/docType/1.0" prefix="lecm-doc-dic-dt"/>
 	</imports>
 	<namespaces>
 		<namespace uri="http://www.it.ru/logicECM/contract/dictionaries/1.0" prefix="lecm-contract-dic"/>
@@ -34,6 +35,9 @@
 					</index>
 				</property>
 			</properties>
+			<mandatory-aspects>
+				<aspect>lecm-doc-dic-dt:signing-settings</aspect>
+			</mandatory-aspects>
 		</type>
 		<type name="lecm-contract-dic:contract-documents-type">
 			<title>Справочник "Вид документа к договору"</title>
