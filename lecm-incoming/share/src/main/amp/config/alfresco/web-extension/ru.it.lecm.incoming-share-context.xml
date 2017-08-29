@@ -20,7 +20,7 @@
 		</property>
 	</bean>
 
-	<bean id="incoming.defaultFormConfig" parent="defaultFormConfigs">
+	<bean id="incomingSed.defaultFormConfig" parent="defaultFormConfigs">
 		<property name="modelName" value="lecm-incoming:document" />
 		<property name="path" value="alfresco/web-extension/ru/it/lecm/incoming/lecm-incoming-document-forms-config.xml"/>
 	</bean>
