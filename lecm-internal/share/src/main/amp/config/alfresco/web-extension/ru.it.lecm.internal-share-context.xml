@@ -21,5 +21,10 @@
         </property>
     </bean>
 
+	<bean id="internal.defaultFormConfig" parent="defaultFormConfigs">
+		<property name="modelName" value="lecm-internal:document" />
+		<property name="path" value="alfresco/web-extension/ru/it/lecm/internal/lecm-internal-document-forms-config.xml"/>
+	</bean>
+
 </beans>
 
