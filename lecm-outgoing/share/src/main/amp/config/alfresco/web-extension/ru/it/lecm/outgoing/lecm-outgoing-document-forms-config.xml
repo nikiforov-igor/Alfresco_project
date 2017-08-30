@@ -52,9 +52,14 @@
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_исходящего</control-param>
                             <control-param name="plane">true</control-param>
+                            <control-param name="changeItemsFireAction">outgoingDocumentTypeChanged</control-param>
                         </control>
                     </field>
-                    <field id="lecm-outgoing:delivery-method-assoc" set="common"/>
+                    <field id="lecm-outgoing:delivery-method-assoc" set="common">
+                        <control>
+                            <control-param name="changeItemsFireAction">outgoingDeliveryMethodChanged</control-param>
+                        </control>
+                    </field>
 
                     <field id="lecm-outgoing:contractor-assoc" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
@@ -596,9 +601,14 @@
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_исходящего</control-param>
                             <control-param name="plane">true</control-param>
+                            <control-param name="changeItemsFireAction">outgoingDocumentTypeChanged</control-param>
                         </control>
                     </field>
-                    <field id="lecm-outgoing:delivery-method-assoc"/>
+                    <field id="lecm-outgoing:delivery-method-assoc">
+                        <control>
+                            <control-param name="changeItemsFireAction">outgoingDeliveryMethodChanged</control-param>
+                        </control>
+                    </field>
 
                     <field id="lecm-outgoing:contractor-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
