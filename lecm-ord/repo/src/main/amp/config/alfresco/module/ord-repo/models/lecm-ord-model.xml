@@ -26,7 +26,7 @@
 				<list>
 					<value>Документ|DOCUMENT</value>
 					<value>Приложения|APPENDIX</value>
-					<value>Согласование|APPROVAL</value>
+					<value>Замечания рецензентов|REVIEWER_COMMENTS</value>
 					<value>Подлинник|ORIGINAL</value>
 					<value>Прочее|OTHER</value>
 				</list>

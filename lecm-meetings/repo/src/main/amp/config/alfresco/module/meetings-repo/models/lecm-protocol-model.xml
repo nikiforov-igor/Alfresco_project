@@ -30,7 +30,7 @@
 					<value>Приложение|APPENDIX</value>
 					<value>Подлинник|ORIGINAL</value>
 					<value>Прочее|OTHER</value>
-                    <value>Согласование|APPROVAL</value>
+                    <value>Замечания рецензентов|REVIEWER_COMMENTS</value>
 				</list>
 			</parameter>
 		</constraint>
