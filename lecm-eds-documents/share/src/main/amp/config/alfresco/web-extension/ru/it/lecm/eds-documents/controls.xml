@@ -20,6 +20,28 @@
 				<control id="execution-tree" template="/ru/it/lecm/eds/controls/execution-tree-control.ftl" localName="Таблица исполнения поручений">
 					<param id="showFirstLevel" visible="true" localName="Показывать только первый уровень" availableValues="true|Да,false|Нет">false</param>
 				</control>
+
+				<control id="static-text" template="/ru/it/lecm/eds/controls/static-text-control.ftl" localName="Статический текст">
+					<param id="containerStyleClass" visible="true" localName="Значение по умолчанию"/>
+					<param id="text" visible="true" localName="Выводимый текст (высокий приоритет)"/>
+					<param id="textCode" visible="true" localName="ID выводимого текста (низкий приоритет)"/>
+				</control>
+
+				<control id="selectone-radiobuttons" template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl" localName="Одиночный выбор значения с checkBox">
+					<param id="optionSeparator" visible="true" localName="Разделитель свойств">,</param>
+					<param id="labelSeparator" visible="true" localName="Разделитель заголовок-значение">|</param>
+					<param id="defaultValue" visible="true" localName="Значение по умолчанию"/>
+					<param id="forceEditable" visible="true" localName="Включить принудительное редактирование" availableValues="true|Да,false|Нет">false</param>
+					<param id="options" visible="true" localName="Свойства"/>
+					<param id="fireChangeEventName" visible="true" localName="Вызываемое событие при изменении"/>
+				</control>
+			</field-type>
+			<field-type id="fake" localName="Фиктивное поле(EDS)">
+				<control id="button" template="/ru/it/lecm/eds/controls/button-control.ftl" localName="Кнопка">
+					<param id="insertType" visible="true" localName="Добовляемый тип">prepend</param>
+					<param id="clickFireAction" visible="true" localName="Событие при клике">insertedButtonClick</param>
+					<param id="insertToDiv" visible="true" localName="Родительский элемент">form-buttons</param>
+				</control>
 			</field-type>
 		</field-types>
 	</config>
