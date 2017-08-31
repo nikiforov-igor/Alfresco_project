@@ -1,0 +1,26 @@
+<alfresco-config>
+	<config>
+		<field-types>
+			<field-type id="d:text" localName="Текст">
+				<control id="d:text-selectmany-eds" template="/ru/it/lecm/eds/controls/selectmany.ftl" localName="Множественный выбор значений(EDS)">
+					<param id="mode" visible="true" localName="Режим"/>
+					<param id="size" localName="Размер" mandatory="false" visible="true">5</param>
+					<param id="optionSeparator" visible="true" localName="Разделитель свойств">,</param>
+					<param id="labelSeparator" visible="true" localName="Разделитель заголовок-значение">|</param>
+					<param id="defaultValueContextProperty" visible="true" localName="Свойство контекстного значения по умолчанию"/>
+					<param id="options" visible="true" localName="Свойства"/>
+					<param id="style" visible="true" localName="CSS стиль"/>
+					<param id="nameSuffix" visible="true" localName="Суффикс имени поля"/>
+					<param id="withEmpty" visible="true" localName="Пустое" availableValues="true|Да,false|Нет"/>
+					<param id="styleClass" visible="true" localName="Список дополнительных стилей"/>
+					<param id="forceEditable" visible="true" localName="Включить принудительное редактирование" availableValues="true|Да,false|Нет">false</param>
+					<param id="useDefaultValue" visible="true" localName="Использовать значение по умолчанию" availableValues="true|Да,false|Нет">false</param>
+				</control>
+
+				<control id="execution-tree" template="/ru/it/lecm/eds/controls/execution-tree-control.ftl" localName="Таблица исполнения поручений">
+					<param id="showFirstLevel" visible="true" localName="Показывать только первый уровень" availableValues="true|Да,false|Нет">false</param>
+				</control>
+			</field-type>
+		</field-types>
+	</config>
+</alfresco-config>
