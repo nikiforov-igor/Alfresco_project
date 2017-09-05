@@ -229,4 +229,11 @@
 		</property>
 	</bean>
 
+	<bean id="executorAssocForCheckRegistrator" parent="docAssocsForCheckRouteRegistrator" depends-on="authorAssocForCheckRegistrator">
+		<property name="associations">
+			<list>
+				<value>lecm-eds-document:executor-assoc</value>
+			</list>
+		</property>
+	</bean>
 </beans>
