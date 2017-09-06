@@ -3787,66 +3787,10 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[var outgoing = stm_document;
-
-var currentIteration = approvalRoutes.getDocumentCurrentIteration(outgoing);
-if (currentIteration && currentIteration.properties['lecm-routes-v2:status'] == "ACTIVE") {
-  currentIteration.properties['lecm-routes-v2:status'] = 'APPROVED_AUTO';
-  currentIteration.save();
-
-  var stages = currentIteration.getChildAssocsByType('lecm-approval-route:stage');
-
-  var stage, i, j, size, length, approvalState, items, isApproved, approver, approvers = [];
-
-  for (i = 0, size = stages.length; i < size; ++i) {
-    stage = stages[i];
-    approvalState = '' + stage.properties['lecm-routes-v2:status'];
-
-    items = stage.getChildAssocsByType('lecm-approval-route:stageItem');
-    isApproved = false;
-
-    for (j = 0, length = items.length; j < length; ++j) {
-      state = '' + items[j].properties['lecm-routes-v2:status'];
-      approver = items[j].assocs["lecm-routes-v2:stageItemMemberAssoc"] && items[j].assocs["lecm-routes-v2:stageItemMemberAssoc"].length ?
-        items[j].assocs["lecm-routes-v2:stageItemMemberAssoc"][0] : null;
-
-      if (approver) {
-		approvers.push();
-      }
-
-      if ('NEW' == state || 'ACTIVE' == state) {
-        items[j].properties['lecm-routes-v2:status'] = 'CANCELLED';
-        items[j].properties['lecm-routes-v2:stageItemCompleteDate'] = base.getValueConverter().convertValueForJava(new Date());
-        items[j].save();
-      } else if ('APPROVED_EARLY' != state) {
-		isApproved = true;
-      }
-    }
-
-    if ("NEW" == approvalState) {
-      stage.properties['lecm-routes-v2:status'] = 'CANCELLED';
-    } else {
-      stage.properties['lecm-routes-v2:status'] = isApproved ? 'FINISHED' : 'CANCELLED';
-    }
-    stage.save();
-  }
-
-  /* запись в БЖ о завершении согласования */
-  var msg = "Документ " + documentScript.wrapperDocumentLink(outgoing, "{lecm-document:ext-present-string}") + " автоматически согласован в связи с превышением срока согласования";
-  businessJournal.log(outgoing.nodeRef.toString(), 'APPROVAL', msg.toString(), []);
-
-  approvers.push(currentIteration.assocs["lecm-routes-v2:initiatorEmployeeAssoc"][0]);
-
-  notifications.sendNotification({
-      recipients: approvers,
-      templateCode: 'APPROVAL_AUTO',
-      templateConfig: {
-          mainObject: outgoing
-      }
-    });
-
-  edsDocument.sendChildChangeSignal(outgoing);
-}]]></value>
+                                                                <value><![CDATA[<import resource="classpath:/alfresco/module/eds-documents-repo/workflow/scripts/eds-auto-approval.js">
+                                                                var msg = 'Документ ' + documentScript.wrapperDocumentLink(stm_document, '{lecm-document:ext-present-string}') + ' автоматически согласован в связи с превышением срока согласования';
+                                                                AutoApprovalScript.doAuto(stm_document, 'APPROVED_AUTO', msg, 'APPROVAL_AUTO');
+                                                                ]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -3878,66 +3822,10 @@ if (currentIteration && currentIteration.properties['lecm-routes-v2:status'] == 
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[var outgoing = stm_document;
-
-var currentIteration = approvalRoutes.getDocumentCurrentIteration(outgoing);
-if (currentIteration && currentIteration.properties['lecm-routes-v2:status'] == "ACTIVE") {
-  currentIteration.properties['lecm-routes-v2:status'] = 'REJECTED_AUTO';
-  currentIteration.save();
-
-  var stages = currentIteration.getChildAssocsByType('lecm-approval-route:stage');
-
-  var stage, i, j, size, length, approvalState, items, isApproved, approver, approvers = [];
-
-  for (i = 0, size = stages.length; i < size; ++i) {
-    stage = stages[i];
-    approvalState = '' + stage.properties['lecm-routes-v2:status'];
-
-    items = stage.getChildAssocsByType('lecm-approval-route:stageItem');
-    isApproved = false;
-
-    for (j = 0, length = items.length; j < length; ++j) {
-      state = '' + items[j].properties['lecm-routes-v2:status'];
-      approver = items[j].assocs["lecm-routes-v2:stageItemMemberAssoc"] && items[j].assocs["lecm-routes-v2:stageItemMemberAssoc"].length ?
-        items[j].assocs["lecm-routes-v2:stageItemMemberAssoc"][0] : null;
-
-      if (approver) {
-		approvers.push();
-      }
-
-      if ('NEW' == state || 'ACTIVE' == state) {
-        items[j].properties['lecm-routes-v2:status'] = 'CANCELLED';
-        items[j].properties['lecm-routes-v2:stageItemCompleteDate'] = base.getValueConverter().convertValueForJava(new Date());
-        items[j].save();
-      } else if ('APPROVED_EARLY' != state) {
-		isApproved = true;
-      }
-    }
-
-    if ("NEW" == approvalState) {
-      stage.properties['lecm-routes-v2:status'] = 'CANCELLED';
-    } else {
-      stage.properties['lecm-routes-v2:status'] = isApproved ? 'FINISHED' : 'CANCELLED';
-    }
-    stage.save();
-  }
-
-  /* запись в БЖ о завершении согласования */
-  var msg = "Документ " + documentScript.wrapperDocumentLink(outgoing, "{lecm-document:ext-present-string}") + " был отправлен на доработку системой в связи с превышением срока согласования";
-  businessJournal.log(outgoing.nodeRef.toString(), 'APPROVAL', msg.toString(), []);
-
-  approvers.push(currentIteration.assocs["lecm-routes-v2:initiatorEmployeeAssoc"][0]);
-
-  notifications.sendNotification({
-      recipients: approvers,
-      templateCode: 'REJECTED_AUTO',
-      templateConfig: {
-          mainObject: outgoing
-      }
-    });
-
-  edsDocument.sendChildChangeSignal(outgoing);
-}]]></value>
+                                                                <value><![CDATA[<import resource="classpath:/alfresco/module/eds-documents-repo/workflow/scripts/eds-auto-approval.js">
+                                                                    var msg = 'Документ ' + documentScript.wrapperDocumentLink(stm_document, '{lecm-document:ext-present-string}') + ' был автоматически отправлен на доработку в связи с превышением срока согласования';
+                                                                    AutoApprovalScript.doAuto(stm_document, 'REJECTED_AUTO', msg, 'REJECTED_AUTO');
+                                                                ]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
