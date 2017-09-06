@@ -23,7 +23,7 @@ var AutoApprovalScript = {
                     approver = item.assocs["lecm-routes-v2:stageItemMemberAssoc"] && item.assocs["lecm-routes-v2:stageItemMemberAssoc"].length ?
                         item.assocs["lecm-routes-v2:stageItemMemberAssoc"][0] : null;
                     if (approver) {
-                        approvers.push();
+                        approvers.push(approver);
                     }
 
                     if ('NEW' == itemState || 'ACTIVE' == itemState) {
