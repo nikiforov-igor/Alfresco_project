@@ -2900,7 +2900,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                             </property>
                             <property>
                                 <name>timerDuration</name>
-                                <value><![CDATA[]]></value>
+                                <value><![CDATA[0 0 6 * * ?]]></value>
                             </property>
                         </properties>
                         <aspects>
@@ -3609,45 +3609,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                     </node>
                                                     <node>
                                                         <type>transition</type>
-                                                        <name>6ceb5305-b19b-4c5f-a55e-39ec5e2d6ed9</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/d9294681-7b62-4684-8cae-2413e80a7620
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[false]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>do-not-ask-for-confirmation</name>
-                                                                <value><![CDATA[false]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>transitionExpression</name>
-                                                                <value>
-                                                                    <![CDATA[@approvalRoutesService.getState(doc.nodeRef) == "APPROVED_FORCE" || @approvalRoutesService.getState(doc.nodeRef) == "APPROVED_WITH_REMARK" || @approvalRoutesService.getState(doc.nodeRef) == "APPROVED_AUTO"]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects>
-                                                            <transitionStatusAspect/>
-                                                        </aspects>
-                                                        <associations>
-                                                            <association>
-                                                                <type>transitionStatus</type>
-                                                                <reference>
-                                                                    workspace://SpacesStore/11fa9155-806a-4a7a-aa71-43297e2c7a5b
-                                                                </reference>
-                                                            </association>
-                                                        </associations>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
-                                                    <node>
-                                                        <type>transition</type>
                                                         <name>4ef8ab2b-8921-45b4-8728-3bb59faf2ee3</name>
                                                         <nodeRef>
                                                             workspace://SpacesStore/b3f5e2dc-cdb3-454a-926d-f586b7162692
@@ -3664,7 +3625,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[(@approvalRoutesService.getState(doc.nodeRef) == "APPROVED_FORCE" || @approvalRoutesService.getState(doc.nodeRef) == "APPROVED_WITH_REMARK" || @approvalRoutesService.getState(doc.nodeRef) == "APPROVED_AUTO") AND (doc.assocClass("lecmSignAspects:signerEmployeeAssoc") == null OR doc.hasAspect("lecmSignAspects:signingDetailsAspect") == false)]]></value>
+                                                                    <![CDATA[(@approvalRoutesService.getState(doc.nodeRef) == "APPROVED_FORCE" || @approvalRoutesService.getState(doc.nodeRef) == "APPROVED_WITH_REMARK" || @approvalRoutesService.getState(doc.nodeRef) == "APPROVED_AUTO") AND (!@routesGlobalSettingService.isAutoRoutingAfterApproval() || doc.attr("lecm-eds-aspect:signed-on-paper") || @signingRoutesService.getState(doc.nodeRef) != "NEW")]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -3703,7 +3664,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[(@approvalRoutesService.getState(doc.nodeRef) == "APPROVED_FORCE" || @approvalRoutesService.getState(doc.nodeRef) == "APPROVED_WITH_REMARK" || @approvalRoutesService.getState(doc.nodeRef) == "APPROVED_AUTO") AND doc.assocClass("lecmSignAspects:signerEmployeeAssoc") != null AND doc.hasAspect("lecmSignAspects:signingDetailsAspect") == true]]></value>
+                                                                    <![CDATA[@routesGlobalSettingService.isAutoRoutingAfterApproval() AND !doc.attr("lecm-eds-aspect:signed-on-paper") AND (@approvalRoutesService.getState(doc.nodeRef) == "APPROVED_FORCE" || @approvalRoutesService.getState(doc.nodeRef) == "APPROVED_WITH_REMARK" || @approvalRoutesService.getState(doc.nodeRef) == "APPROVED_AUTO") AND @signingRoutesService.getState(doc.nodeRef) == "NEW"]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -3800,7 +3761,195 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>0aa40666-207e-451a-a048-4cc5bc2a8625</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/df644586-ff75-4ba5-a14b-995b742c262a
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[true]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[@approvalRoutes.getState(doc.nodeRef) == "ACTIVE" AND  @approvalRoutesService.isSuitableForAutoAction(doc.nodeRef) AND (@approvalRoutesService.getCurrentRouteAfterExpiredOption(doc.nodeRef) == "AUTO_APPROVE" OR (@approvalRoutesService.getCurrentRouteAfterExpiredOption(doc.nodeRef) == "FINISH" AND !@approvalRoutesService.isHasAtLeastOneRejectedResult(doc.nodeRef)))]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[var outgoing = stm_document;
+
+var currentIteration = approvalRoutes.getDocumentCurrentIteration(outgoing);
+if (currentIteration && currentIteration.properties['lecm-routes-v2:status'] == "ACTIVE") {
+  currentIteration.properties['lecm-routes-v2:status'] = 'APPROVED_AUTO';
+  currentIteration.save();
+
+  var stages = currentIteration.getChildAssocsByType('lecm-approval-route:stage');
+
+  var stage, i, j, size, length, approvalState, items, isApproved, approver, approvers = [];
+
+  for (i = 0, size = stages.length; i < size; ++i) {
+    stage = stages[i];
+    approvalState = '' + stage.properties['lecm-routes-v2:status'];
+
+    items = stage.getChildAssocsByType('lecm-approval-route:stageItem');
+    isApproved = false;
+
+    for (j = 0, length = items.length; j < length; ++j) {
+      state = '' + items[j].properties['lecm-routes-v2:status'];
+      approver = items[j].assocs["lecm-routes-v2:stageItemMemberAssoc"] && items[j].assocs["lecm-routes-v2:stageItemMemberAssoc"].length ?
+        items[j].assocs["lecm-routes-v2:stageItemMemberAssoc"][0] : null;
+
+      if (approver) {
+		approvers.push();
+      }
+
+      if ('NEW' == state || 'ACTIVE' == state) {
+        items[j].properties['lecm-routes-v2:status'] = 'CANCELLED';
+        items[j].properties['lecm-routes-v2:stageItemCompleteDate'] = base.getValueConverter().convertValueForJava(new Date());
+        items[j].save();
+      } else if ('APPROVED_EARLY' != state) {
+		isApproved = true;
+      }
+    }
+
+    if ("NEW" == approvalState) {
+      stage.properties['lecm-routes-v2:status'] = 'CANCELLED';
+    } else {
+      stage.properties['lecm-routes-v2:status'] = isApproved ? 'FINISHED' : 'CANCELLED';
+    }
+    stage.save();
+  }
+
+  /* запись в БЖ о завершении согласования */
+  var msg = "Документ " + documentScript.wrapperDocumentLink(outgoing, "{lecm-document:ext-present-string}") + " автоматически согласован в связи с превышением срока согласования";
+  businessJournal.log(outgoing.nodeRef.toString(), 'APPROVAL', msg.toString(), []);
+
+  approvers.push(currentIteration.assocs["lecm-routes-v2:initiatorEmployeeAssoc"][0]);
+
+  notifications.sendNotification({
+      recipients: approvers,
+      templateCode: 'APPROVAL_AUTO',
+      templateConfig: {
+          mainObject: outgoing
+      }
+    });
+
+  edsDocument.sendChildChangeSignal(outgoing);
+}]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>b7a68691-e560-4a90-866d-91c38dabf501</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/cbbc0ee3-f63b-42bf-97ea-e7ee525f1804
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[true]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[@approvalRoutes.getState(doc.nodeRef) == "ACTIVE" AND  @approvalRoutesService.isSuitableForAutoAction(doc.nodeRef) AND (@approvalRoutesService.getCurrentRouteAfterExpiredOption(doc.nodeRef) == "TO_REWORK" OR (@approvalRoutesService.getCurrentRouteAfterExpiredOption(doc.nodeRef) == "FINISH" AND @approvalRoutesService.isHasAtLeastOneRejectedResult(doc.nodeRef)))]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[var outgoing = stm_document;
+
+var currentIteration = approvalRoutes.getDocumentCurrentIteration(outgoing);
+if (currentIteration && currentIteration.properties['lecm-routes-v2:status'] == "ACTIVE") {
+  currentIteration.properties['lecm-routes-v2:status'] = 'REJECTED_AUTO';
+  currentIteration.save();
+
+  var stages = currentIteration.getChildAssocsByType('lecm-approval-route:stage');
+
+  var stage, i, j, size, length, approvalState, items, isApproved, approver, approvers = [];
+
+  for (i = 0, size = stages.length; i < size; ++i) {
+    stage = stages[i];
+    approvalState = '' + stage.properties['lecm-routes-v2:status'];
+
+    items = stage.getChildAssocsByType('lecm-approval-route:stageItem');
+    isApproved = false;
+
+    for (j = 0, length = items.length; j < length; ++j) {
+      state = '' + items[j].properties['lecm-routes-v2:status'];
+      approver = items[j].assocs["lecm-routes-v2:stageItemMemberAssoc"] && items[j].assocs["lecm-routes-v2:stageItemMemberAssoc"].length ?
+        items[j].assocs["lecm-routes-v2:stageItemMemberAssoc"][0] : null;
+
+      if (approver) {
+		approvers.push();
+      }
+
+      if ('NEW' == state || 'ACTIVE' == state) {
+        items[j].properties['lecm-routes-v2:status'] = 'CANCELLED';
+        items[j].properties['lecm-routes-v2:stageItemCompleteDate'] = base.getValueConverter().convertValueForJava(new Date());
+        items[j].save();
+      } else if ('APPROVED_EARLY' != state) {
+		isApproved = true;
+      }
+    }
+
+    if ("NEW" == approvalState) {
+      stage.properties['lecm-routes-v2:status'] = 'CANCELLED';
+    } else {
+      stage.properties['lecm-routes-v2:status'] = isApproved ? 'FINISHED' : 'CANCELLED';
+    }
+    stage.save();
+  }
+
+  /* запись в БЖ о завершении согласования */
+  var msg = "Документ " + documentScript.wrapperDocumentLink(outgoing, "{lecm-document:ext-present-string}") + " был отправлен на доработку системой в связи с превышением срока согласования";
+  businessJournal.log(outgoing.nodeRef.toString(), 'APPROVAL', msg.toString(), []);
+
+  approvers.push(currentIteration.assocs["lecm-routes-v2:initiatorEmployeeAssoc"][0]);
+
+  notifications.sendNotification({
+      recipients: approvers,
+      templateCode: 'REJECTED_AUTO',
+      templateConfig: {
+          mainObject: outgoing
+      }
+    });
+
+  edsDocument.sendChildChangeSignal(outgoing);
+}]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                     <node>
                                         <type>FinishStateWithTransition</type>
