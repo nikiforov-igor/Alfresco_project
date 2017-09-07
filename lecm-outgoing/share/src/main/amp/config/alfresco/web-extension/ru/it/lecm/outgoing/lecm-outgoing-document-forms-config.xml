@@ -198,11 +198,12 @@
                     <field id="lecm-approval-route:approvalFolder" set="approvalAndSigning" label-id="label.forms.approval">                
                         <control template="/ru/it/lecm/routes-v2/controls/routes-datagrid-control.ftl">
                             <control-param name="noRoutesLabel">label.approval.routes.no-route</control-param>
-                            <control-param name="routeDataScript">lecm/routes-v2/getApprovalRouteData</control-param>
-                            <control-param name="createStageItemScript">lecm/routes-v2/CreateApprovalStageItemInQueue</control-param>
-                            <control-param name="createEmptyIterationScript">lecm/routes-v2/createApprovalEmptyIteration</control-param>
+                            <control-param name="routeDataScript">lecm/routes-v2/approvalRoutes/getRouteData</control-param>
+                            <control-param name="createStageItemScript">lecm/routes-v2/CreateStageItemInQueue</control-param>
+                            <control-param name="createEmptyIterationScript">lecm/routes-v2/approvalRoutes/createEmptyIteration</control-param>
                             <control-param name="createIterationFromPrevious">lecm/routes-v2/createIterationFromPreviousApproval</control-param>
-                            <control-param name="convertRouteToIterationScript">lecm/routes-v2/convertApprovalRouteToIteration</control-param>
+                            <control-param name="convertRouteToIterationScript">lecm/routes-v2/approvalRoutes/convertRouteToIteration</control-param>
+                            <control-param name="removeWorkFolderScript">lecm/routes-v2/approvalRoutes/removeWorkFolder</control-param>
                             <control-param name="createListFromRouteFormId">selectRouteForm</control-param>
                             <control-param name="createIterationFormId">createIteration</control-param>
                             <control-param name="createStageInlineFormId">editStageParametersInlineForm</control-param>
@@ -822,11 +823,12 @@
                     <field id="lecm-approval-route:approvalFolder" label-id="label.forms.approval">                
                         <control template="/ru/it/lecm/routes-v2/controls/routes-datagrid-control.ftl">
                             <control-param name="noRoutesLabel">label.approval.routes.no-route</control-param>
-                            <control-param name="routeDataScript">lecm/routes-v2/getApprovalRouteData</control-param>
-                            <control-param name="createStageItemScript">lecm/routes-v2/CreateApprovalStageItemInQueue</control-param>
-                            <control-param name="createEmptyIterationScript">lecm/routes-v2/createApprovalEmptyIteration</control-param>
+                            <control-param name="routeDataScript">lecm/routes-v2/approvalRoutes/getRouteData</control-param>
+                            <control-param name="createStageItemScript">lecm/routes-v2/CreateStageItemInQueue</control-param>
+                            <control-param name="createEmptyIterationScript">lecm/routes-v2/approvalRoutes/createEmptyIteration</control-param>
                             <control-param name="createIterationFromPrevious">lecm/routes-v2/createIterationFromPreviousApproval</control-param>
-                            <control-param name="convertRouteToIterationScript">lecm/routes-v2/convertApprovalRouteToIteration</control-param>
+                            <control-param name="convertRouteToIterationScript">lecm/routes-v2/approvalRoutes/convertRouteToIteration</control-param>
+                            <control-param name="removeWorkFolderScript">lecm/routes-v2/approvalRoutes/removeWorkFolder</control-param>
                             <control-param name="createListFromRouteFormId">selectRouteForm</control-param>
                             <control-param name="createIterationFormId">createIteration</control-param>
                             <control-param name="createStageInlineFormId">editStageParametersInlineForm</control-param>
