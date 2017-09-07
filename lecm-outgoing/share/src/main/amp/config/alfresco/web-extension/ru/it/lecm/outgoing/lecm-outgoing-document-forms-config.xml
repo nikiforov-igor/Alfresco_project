@@ -199,7 +199,7 @@
                         <control template="/ru/it/lecm/routes-v2/controls/routes-datagrid-control.ftl">
                             <control-param name="noRoutesLabel">label.approval.routes.no-route</control-param>
                             <control-param name="routeDataScript">lecm/routes-v2/approvalRoutes/getRouteData</control-param>
-                            <control-param name="createStageItemScript">lecm/routes-v2/CreateApprovalStageItemInQueue</control-param>
+                            <control-param name="createStageItemScript">lecm/routes-v2/CreateStageItemInQueue</control-param>
                             <control-param name="createEmptyIterationScript">lecm/routes-v2/approvalRoutes/createEmptyIteration</control-param>
                             <control-param name="createIterationFromPrevious">lecm/routes-v2/createIterationFromPreviousApproval</control-param>
                             <control-param name="convertRouteToIterationScript">lecm/routes-v2/approvalRoutes/convertRouteToIteration</control-param>
@@ -824,7 +824,7 @@
                         <control template="/ru/it/lecm/routes-v2/controls/routes-datagrid-control.ftl">
                             <control-param name="noRoutesLabel">label.approval.routes.no-route</control-param>
                             <control-param name="routeDataScript">lecm/routes-v2/approvalRoutes/getRouteData</control-param>
-                            <control-param name="createStageItemScript">lecm/routes-v2/CreateApprovalStageItemInQueue</control-param>
+                            <control-param name="createStageItemScript">lecm/routes-v2/CreateStageItemInQueue</control-param>
                             <control-param name="createEmptyIterationScript">lecm/routes-v2/approvalRoutes/createEmptyIteration</control-param>
                             <control-param name="createIterationFromPrevious">lecm/routes-v2/createIterationFromPreviousApproval</control-param>
                             <control-param name="convertRouteToIterationScript">lecm/routes-v2/approvalRoutes/convertRouteToIteration</control-param>
