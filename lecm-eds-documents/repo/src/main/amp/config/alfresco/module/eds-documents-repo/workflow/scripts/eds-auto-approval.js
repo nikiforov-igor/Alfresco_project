@@ -2,9 +2,6 @@ var AutoApprovalScript = {
     doAuto: function (doc, newApprovalState, logMessage, notificationCode) {
         var currentIteration = approvalRoutes.getDocumentCurrentIteration(doc);
         if (currentIteration && currentIteration.properties['lecm-routes-v2:status'] == "ACTIVE") {
-            currentIteration.properties['lecm-routes-v2:status'] = newApprovalState;
-            currentIteration.save();
-
             var stages = currentIteration.getChildAssocsByType('lecm-approval-route:stage');
 
             var stage, i, j, size, length, approvalState, items, item, itemState, isApproved, approver, approvers = [];
@@ -55,7 +52,7 @@ var AutoApprovalScript = {
                 }
             });
 
-            edsDocument.sendChildChangeSignal(doc);
+            statemachine.terminateWorkflowsByDefinition(doc, 'lecmApprovementWorkflow-v2', 'forcedDecision', newApprovalState);
         }
     }
 };
