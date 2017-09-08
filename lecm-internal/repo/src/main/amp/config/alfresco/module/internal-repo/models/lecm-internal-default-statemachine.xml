@@ -3153,7 +3153,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[true]]></value>
+                                                <value><![CDATA[false]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
