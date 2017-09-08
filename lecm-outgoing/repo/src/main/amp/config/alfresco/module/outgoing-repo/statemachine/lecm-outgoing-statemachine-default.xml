@@ -662,7 +662,7 @@
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/f8bb9e1d-6570-4694-9743-612cdfe68e55</nodeRef>
                                         <properties>
                                             <property>
@@ -1545,7 +1545,7 @@
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/a6392242-69dd-4bac-90eb-17ea11c71184</nodeRef>
                                         <properties>
                                             <property>
@@ -1895,7 +1895,7 @@ if (doc) {
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") AND !doc.attr("lecm-eds-aspect:signed-on-paper")]]></value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") AND !doc.attr("lecm-signing-v2-aspects:signed-on-paper")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -2154,7 +2154,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") AND doc.attr("lecm-eds-aspect:signed-on-paper") AND doc.assocClass("lecm-eds-document:document-type-assoc") != null AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:registration-required")]]></value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") AND doc.attr("lecm-signing-v2-aspects:signed-on-paper") AND doc.assocClass("lecm-eds-document:document-type-assoc") != null AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:registration-required")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -2304,7 +2304,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[!doc.attr("lecm-eds-aspect:signed-on-paper")]]></value>
+                                                                                    <![CDATA[!doc.attr("lecm-signing-v2-aspects:signed-on-paper")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -2833,7 +2833,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/1b8a2890-7e9e-426c-8695-1d835467fb2c</nodeRef>
                                         <properties>
                                             <property>
@@ -3495,7 +3495,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/c446ece9-4d67-4be7-9c5c-6ecff41954f5</nodeRef>
                                         <properties>
                                             <property>
@@ -3625,7 +3625,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[(@approvalRoutesService.getState(doc.nodeRef) == "APPROVED_FORCE" || @approvalRoutesService.getState(doc.nodeRef) == "APPROVED_WITH_REMARK" || @approvalRoutesService.getState(doc.nodeRef) == "APPROVED_AUTO") AND (!@routesGlobalSettingService.isAutoRoutingAfterApproval() || doc.attr("lecm-eds-aspect:signed-on-paper") || @signingRoutesService.getState(doc.nodeRef) != "NEW")]]></value>
+                                                                    <![CDATA[(@approvalRoutesService.getState(doc.nodeRef) == "APPROVED_FORCE" || @approvalRoutesService.getState(doc.nodeRef) == "APPROVED_WITH_REMARK" || @approvalRoutesService.getState(doc.nodeRef) == "APPROVED_AUTO") AND (!@routesGlobalSettingService.isAutoRoutingAfterApproval() || doc.attr("lecm-signing-v2-aspects:signed-on-paper") || @signingRoutesService.getState(doc.nodeRef) != "NEW")]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -3664,7 +3664,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[@routesGlobalSettingService.isAutoRoutingAfterApproval() AND !doc.attr("lecm-eds-aspect:signed-on-paper") AND (@approvalRoutesService.getState(doc.nodeRef) == "APPROVED_FORCE" || @approvalRoutesService.getState(doc.nodeRef) == "APPROVED_WITH_REMARK" || @approvalRoutesService.getState(doc.nodeRef) == "APPROVED_AUTO") AND @signingRoutesService.getState(doc.nodeRef) == "NEW"]]></value>
+                                                                    <![CDATA[@routesGlobalSettingService.isAutoRoutingAfterApproval() AND !doc.attr("lecm-signing-v2-aspects:signed-on-paper") AND (@approvalRoutesService.getState(doc.nodeRef) == "APPROVED_FORCE" || @approvalRoutesService.getState(doc.nodeRef) == "APPROVED_WITH_REMARK" || @approvalRoutesService.getState(doc.nodeRef) == "APPROVED_AUTO") AND @signingRoutesService.getState(doc.nodeRef) == "NEW"]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -4563,7 +4563,7 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/ee811d7f-fa48-4086-a4a4-32940bd9ec85</nodeRef>
                                         <properties>
                                             <property>
@@ -4808,7 +4808,7 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") AND doc.attr("lecm-eds-aspect:signed-on-paper")]]></value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") AND doc.attr("lecm-signing-v2-aspects:signed-on-paper")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -4987,7 +4987,7 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") AND doc.attr("lecm-eds-aspect:signed-on-paper") AND doc.assocClass("lecm-eds-document:document-type-assoc") != null AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:registration-required")]]></value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") AND doc.attr("lecm-signing-v2-aspects:signed-on-paper") AND doc.assocClass("lecm-eds-document:document-type-assoc") != null AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:registration-required")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -5137,7 +5137,7 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[!doc.attr("lecm-eds-aspect:signed-on-paper")]]></value>
+                                                                                    <![CDATA[!doc.attr("lecm-signing-v2-aspects:signed-on-paper")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -5848,7 +5848,7 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/d3c9c3eb-c9ac-4e0d-b733-4f622a5afa80</nodeRef>
                                         <properties>
                                             <property>
@@ -6167,7 +6167,7 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") AND !doc.attr("lecm-eds-aspect:signed-on-paper")]]></value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") AND !doc.attr("lecm-signing-v2-aspects:signed-on-paper")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -6458,7 +6458,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") AND doc.attr("lecm-eds-aspect:signed-on-paper") AND doc.assocClass("lecm-eds-document:document-type-assoc") != null AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:registration-required")]]></value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") AND doc.attr("lecm-signing-v2-aspects:signed-on-paper") AND doc.assocClass("lecm-eds-document:document-type-assoc") != null AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:registration-required")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -6767,7 +6767,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[!doc.attr("lecm-eds-aspect:signed-on-paper")]]></value>
+                                                                                    <![CDATA[!doc.attr("lecm-signing-v2-aspects:signed-on-paper")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -7506,7 +7506,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/6dd48173-d7ee-4f6f-bad3-b49245ec2863</nodeRef>
                                         <properties>
                                             <property>
@@ -8423,7 +8423,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/8bf202ad-9392-4914-b3e2-e70ad078e05a</nodeRef>
                                         <properties>
                                             <property>
@@ -9395,7 +9395,7 @@ edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringW
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/dcf218ec-6fd9-4f6a-92ee-b86ec6bae46f</nodeRef>
                                         <properties>
                                             <property>
@@ -10556,7 +10556,7 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/afe54229-eea0-4ff8-92cf-19a013f465cc</nodeRef>
                                         <properties>
                                             <property>
@@ -11529,7 +11529,7 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/62585da0-036f-42ea-9918-cc86291e11bc</nodeRef>
                                         <properties>
                                             <property>
@@ -12367,7 +12367,7 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/84095edf-50e6-4c0b-9ffd-60fe1c2daf9b</nodeRef>
                                         <properties>
                                             <property>
@@ -12847,7 +12847,7 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/2b1edc9c-125a-44e0-84ff-b53ee1c09faf</nodeRef>
                                         <properties>
                                             <property>

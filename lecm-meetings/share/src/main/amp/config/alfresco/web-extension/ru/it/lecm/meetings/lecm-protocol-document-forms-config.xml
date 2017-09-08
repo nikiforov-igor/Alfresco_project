@@ -21,7 +21,7 @@
                     <!--Присутствовали-->
                     <show id="lecm-protocol:attended-assoc"/>
                     <!--Подписан на бумажном носителе-->
-                    <show id="lecm-eds-aspect:signed-on-paper"/>
+                    <show id="lecm-signing-v2-aspects:signed-on-paper"/>
                     <!--Примечание-->
                     <show id="lecm-eds-document:note"/>
                     <!-- Количество листов -->
@@ -62,7 +62,7 @@
                     <field id="lecm-protocol:meeting-chairman-assoc" mandatory="true" set="common"/>
                     <field id="lecm-protocol:secretary-assoc" set="common"/>
                     <field id="lecm-protocol:attended-assoc" set="common"/>
-                    <field id="lecm-eds-aspect:signed-on-paper" set="common"/>
+                    <field id="lecm-signing-v2-aspects:signed-on-paper" set="common"/>
                     <field id="lecm-eds-document:note" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
@@ -258,7 +258,7 @@
                     <!--Присутствовали-->
                     <show id="lecm-protocol:attended-assoc"/>
                     <!--Подписан на бумажном носителе-->
-                    <show id="lecm-eds-aspect:signed-on-paper"/>
+                    <show id="lecm-signing-v2-aspects:signed-on-paper"/>
                     <!--Примечание-->
                     <show id="lecm-eds-document:note"/>
                     <!-- Количество листов -->
@@ -474,7 +474,7 @@
                     <!--Присутствовали-->
                     <show id="lecm-protocol:attended-assoc"/>
                     <!--Подписан на бумажном носителе-->
-                    <show id="lecm-eds-aspect:signed-on-paper"/>
+                    <show id="lecm-signing-v2-aspects:signed-on-paper"/>
                     <!--Срок исполнения-->
                     <show id="lecm-eds-document:execution-date"/>
                     <!--Председатель совещания-->

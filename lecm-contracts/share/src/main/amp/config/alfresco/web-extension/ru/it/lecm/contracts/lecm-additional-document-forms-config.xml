@@ -1,5 +1,13 @@
 <alfresco-config>
 
+    <config>
+        <forms>
+            <dependencies>
+                <js src="/scripts/lecm-signing-v2/constraints/signing-validators.js"/>
+            </dependencies>
+        </forms>
+    </config>
+
     <config evaluator="node-type" condition="lecm-additional-document:additionalDocument">
         <forms>
             <form>
@@ -12,11 +20,12 @@
                     <show id="lecm-additional-document:signedCounterparty"/>
                     <show id="lecm-additional-document:summaryContent"/>
                     <show id="lecmApproveAspects:approvalFolderRef" force="true"/>
-                    <show id="lecm-eds-aspect:signed-on-paper"/>
-                    <show id="lecmSignAspects:signerEmployeeAssoc"/>
-                    <show id="lecmSignAspects:isSigned" for-mode="view"/>
-                    <show id="lecmSignAspects:signingDate" for-mode="view"/>
+                    <show id="lecm-signing-v2-aspects:signed-on-paper"/>
+                    <show id="lecm-signing-v2-aspects:signerEmployeeAssoc" force="true"/>
+                    <show id="lecm-signing-v2-aspects:isSigned" force="true"/>
+                    <show id="lecm-signing-v2-aspects:signingDate" force="true"/>
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script2" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="common" appearance="" label-id="label.contracts.main" />
@@ -32,14 +41,21 @@
                     <field id="lecmApproveAspects:approvalFolderRef" set="approvalTab">
                         <control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
                     </field>
-                    <field id="lecm-eds-aspect:signed-on-paper" set="common"/>
-                    <field id="lecmSignAspects:signerEmployeeAssoc" set="common">
+                    <field id="lecm-signing-v2-aspects:signed-on-paper" set="common">
                         <control>
-                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS</control-param>
+                            <control-param name="changeFireAction">signedOnPaperChange</control-param>
                         </control>
                     </field>
-                    <field id="lecmSignAspects:isSigned" set="common"/>
-                    <field id="lecmSignAspects:signingDate" set="common">
+                    <field id="lecm-signing-v2-aspects:signerEmployeeAssoc" set="common">
+                        <control>
+                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS,CONTRACT_SIGNER</control-param>
+                        </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Signing2.signersValidator" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-signing-v2-aspects:isSigned" set="common"/>
+                    <field id="lecm-signing-v2-aspects:signingDate" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
                             <control-param name="showTime">false</control-param>
                         </control>
@@ -48,6 +64,11 @@
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-eds-documents/check-allow-signing-on-paper-script.js</control-param>
                             <control-param name="scriptLoadedFireAction">allowSigningOnPaperScript</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-base-dummy-aspects:script2" set="common">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-signing-v2/change-availability-of-signing-fields-script.js</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -213,12 +234,15 @@
                     <show id="lecm-additional-document:date"/>
                     <show id="lecm-additional-document:signedCounterparty"/>
                     <show id="lecm-additional-document:summaryContent"/>
-                    <show id="lecm-eds-aspect:signed-on-paper"/>
-                    <show id="lecmSignAspects:signerEmployeeAssoc"/>
+                    <show id="lecm-signing-v2-aspects:signed-on-paper"/>
+                    <show id="lecm-signing-v2-aspects:signerEmployeeAssoc" force="true"/>
+                    <show id="lecm-signing-v2-aspects:signingDate" force="true"/>
+                    <show id="lecm-signing-v2-aspects:isSigned" force="true"/>
                     <show id="lecm-document-aspects:template-name" force="true"/>
                     <show id="lecm-document-aspects:template-ref" force="true"/>
                     <show id="lecm-additional-document:document-assoc" force="true"/>
                     <show id="checkAllowSigningOnPaperScript" force="true"/>
+                    <show id="loadChangeSignersListScript" force="true"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-document-aspects:attachments-temp-assoc" label-id="label.attachments">
@@ -229,10 +253,26 @@
                             <control-param name="defaultSelectedShowPreviewButton">true</control-param>
                         </control>
                     </field>
-                    <field id="lecmSignAspects:signerEmployeeAssoc">
+                    <field id="lecm-signing-v2-aspects:signed-on-paper">
                         <control>
-                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS</control-param>
+                            <control-param name="changeFireAction">signedOnPaperChange</control-param>
                         </control>
+                    </field>
+                    <field id="lecm-signing-v2-aspects:signerEmployeeAssoc">
+                        <control>
+                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS,CONTRACT_SIGNER</control-param>
+                        </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Signing2.signersValidator" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-signing-v2-aspects:signingDate">
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="showTime">false</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-signing-v2-aspects:isSigned">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl"/>
                     </field>
                     <field id="lecm-document-aspects:template-name">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden-default-value.ftl"/>
@@ -247,6 +287,11 @@
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-eds-documents/check-allow-signing-on-paper-script.js</control-param>
                             <control-param name="scriptLoadedFireAction">allowSigningOnPaperScript</control-param>
+                        </control>
+                    </field>
+                    <field id="loadChangeSignersListScript">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-signing-v2/change-availability-of-signing-fields-script.js</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -295,8 +340,9 @@
                     <show id="lecm-additional-document:signedCounterparty"/>
                     <show id="lecm-additional-document:summaryContent"/>
                     <show id="lecmApproveAspects:approvalFolderRef"/>
-                    <show id="lecm-eds-aspect:signed-on-paper"/>
-                    <show id="lecmSignAspects:signerEmployeeAssoc"/>
+                    <show id="lecm-signing-v2-aspects:signed-on-paper"/>
+                    <show id="lecm-signing-v2-aspects:signerEmployeeAssoc"/>
+                    <show id="lecm-signing-v2-aspects:signingDate"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecmApproveAspects:approvalFolderRef" label-id="label.approval"/>

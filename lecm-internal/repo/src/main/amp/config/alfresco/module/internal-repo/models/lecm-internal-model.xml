@@ -15,6 +15,7 @@
 		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
 		<import uri="http://www.it.ru/logicECM/model/review-ts/1.0" prefix="lecm-review-ts"/>
         <import uri="http://www.it.ru/logicECM/eds-document/aspects/1.0" prefix="lecm-eds-aspect"/>
+        <import uri="http://www.it.ru/logicECM/model/signing-v2/aspects/1.0" prefix="lecm-signing-v2-aspects"/>
 	</imports>
 	<namespaces>
 		<namespace uri="http://www.it.ru/logicECM/internal/1.0" prefix="lecm-internal"/>
@@ -148,7 +149,8 @@
 				<aspect>lecm-internal-table-structure:table-answers-aspect</aspect>
 				<aspect>lecm-document-aspects:event-listeners-aspect</aspect>
 				<aspect>lecmSignAspects:signingDetailsAspect</aspect>
-				<aspect>lecm-eds-aspect:signed-on-paper-aspect</aspect>
+				<aspect>lecm-signing-v2-aspects:signed-on-paper-aspect</aspect>
+				<aspect>lecm-signing-v2-aspects:signingDetailsAspect</aspect>
 			</mandatory-aspects>
 		</type>
 	</types>

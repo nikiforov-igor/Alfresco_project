@@ -13,9 +13,9 @@
                     if (response && response.json.nodeRef) {
                         var isAllowSigningOnPaper = response.json.isAllowSigningOnPaper;
                         if (isAllowSigningOnPaper) {
-                            LogicECM.module.Base.Util.showControl(formId, "lecm-eds-aspect:signed-on-paper");
+                            LogicECM.module.Base.Util.showControl(formId, "lecm-signing-v2-aspects:signed-on-paper");
                         } else {
-                            LogicECM.module.Base.Util.hideControl(formId, "lecm-eds-aspect:signed-on-paper");
+                            LogicECM.module.Base.Util.hideControl(formId, "lecm-signing-v2-aspects:signed-on-paper");
                         }
                     }
                 }
