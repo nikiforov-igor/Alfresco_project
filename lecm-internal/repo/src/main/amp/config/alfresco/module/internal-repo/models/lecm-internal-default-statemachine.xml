@@ -2672,6 +2672,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                </nodes>
                             </subFolder>
                             <subFolder>
                                 <name>actions</name>
