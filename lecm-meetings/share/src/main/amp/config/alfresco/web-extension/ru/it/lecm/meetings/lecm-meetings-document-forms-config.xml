@@ -184,7 +184,7 @@
                     <show id="approve-agenda-label" force="true"/>
                     <!--Требование согласовать повестку-->
                     <show id="lecm-meetings:approve-agenda"/>
-                    <show id="lecm-meetings:approval"/>
+                    <show id="lecm-approval-route:approvalFolder" force="true"/>
                 </field-visibility>
                 <appearance>
                     <!--"Повестка"-->
@@ -212,13 +212,35 @@
                     </field>
                     <field id="lecm-meetings:approve-agenda">
                         <control template="/ru/it/lecm/meetings/components/controls/checkbox-control.ftl">
-                            <control-param name="hideFieldsIfSelect">lecm-meetings:approval</control-param>
+                            <control-param name="hideFieldsIfSelect">lecm-approval-route:approvalFolder</control-param>
                         </control>
                     </field>
-                    <field id="lecm-meetings:approval">
-                        <control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl">
-
-                        </control>
+                    <field id="lecm-approval-route:approvalFolder" label-id="label.forms.approval">                
+                        <control template="/ru/it/lecm/routes-v2/controls/routes-datagrid-control.ftl">
+                            <control-param name="noRoutesLabel">label.approval.routes.no-route</control-param>
+                            <control-param name="routeDataScript">lecm/routes-v2/approvalRoutes/getRouteData</control-param>
+                            <control-param name="createStageItemScript">lecm/routes-v2/approvalRoutes/CreateStageItemInQueue</control-param>
+                            <control-param name="createEmptyIterationScript">lecm/routes-v2/approvalRoutes/createEmptyIteration</control-param>
+                            <control-param name="createIterationFromPrevious">lecm/routes-v2/createIterationFromPreviousApproval</control-param>
+                            <control-param name="convertRouteToIterationScript">lecm/routes-v2/approvalRoutes/convertRouteToIteration</control-param>
+                            <control-param name="removeWorkFolderScript">lecm/routes-v2/approvalRoutes/removeWorkFolder</control-param>
+                            <control-param name="createListFromRouteFormId">selectRouteForm</control-param>
+                            <control-param name="createIterationFormId">createIteration</control-param>
+                            <control-param name="createStageInlineFormId">editStageParametersInlineForm</control-param>
+                            <control-param name="expandDataSource">ru/it/lecm/routes-v2/stages/stageExpanded</control-param>
+                            <control-param name="expandedDataSource">components/form?formId=viewApprovalResult</control-param>
+                            <control-param name="newListTitleMsgId">title.new.approval.list</control-param>
+                            <control-param name="repeatRouteDialogFormId">repeatPreviousApprovalRouteDialog</control-param>
+                            <control-param name="newListConfirmationMsgId">message.new.approval.list.confirmation</control-param>
+                            <control-param name="newListFromRoutTitleMsgId">title.new.approval.list.from.route</control-param>
+                            <control-param name="clearListTitleId">title.approval.list.clear</control-param>
+                            <control-param name="clearListMsgId">message.clear.approval.list</control-param>
+                            <control-param name="viewIterationResultFormTitleId">label.view.approval.details</control-param>
+                            <control-param name="showIterationsHistoryFormId">showApprovalHistoryForm</control-param>
+                            <control-param name="viewIterationResultFormId">viewApprovalResult</control-param>
+                            <control-param name="editIterationFormId">editIterationProperties</control-param>
+                            <control-param name="fieldsForFilterRoutes">lecm-eds-document:executor-assoc,lecm-document:author-assoc</control-param>
+                        </control>                 
                     </field>
                 </appearance>
             </form>
@@ -492,6 +514,7 @@
                     <show id="lecm-meetings:approve-agenda"/>
                     <!-- Повестка -->
                     <show id="lecm-meetings:temp-items-assoc"/>
+                    <show id="lecm-approval-route:approvalFolder" force="true"/>
                     <show id="lecm-document-aspects:template-name" force="true"/>
                     <show id="lecm-document-aspects:template-ref" force="true"/>
                 </field-visibility>
@@ -645,7 +668,11 @@
                     <field id="lecm-events:subject-assoc-ref" set="createEventSet">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
                     </field>
-                    <field id="lecm-meetings:approve-agenda" set="createEventSet"/>
+                    <field id="lecm-meetings:approve-agenda" set="createEventSet">
+                        <control>
+                            <control-param name="hideFieldsIfSelect">lecm-approval-route:approvalFolder</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-meetings:temp-items-assoc" label-id="label.items" set="createEventSet">
                         <control template="/ru/it/lecm/base-share/components/controls/association-datagrid-control.ftl">
                             <control-param name="itemType">lecm-meetings-ts:item</control-param>
@@ -670,6 +697,33 @@
                     </field>
                     <field id="lecm-document-aspects:template-ref" set="createEventSet">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden-default-value.ftl"/>
+                    </field>
+                    <field id="lecm-approval-route:approvalFolder" set="createEventSet" label-id="label.forms.approval">                
+                        <control template="/ru/it/lecm/routes-v2/controls/routes-datagrid-control.ftl">
+                            <control-param name="noRoutesLabel">label.approval.routes.no-route</control-param>
+                            <control-param name="routeDataScript">lecm/routes-v2/approvalRoutes/getRouteData</control-param>
+                            <control-param name="createStageItemScript">lecm/routes-v2/approvalRoutes/CreateStageItemInQueue</control-param>
+                            <control-param name="createEmptyIterationScript">lecm/routes-v2/approvalRoutes/createEmptyIteration</control-param>
+                            <control-param name="createIterationFromPrevious">lecm/routes-v2/createIterationFromPreviousApproval</control-param>
+                            <control-param name="convertRouteToIterationScript">lecm/routes-v2/approvalRoutes/convertRouteToIteration</control-param>
+                            <control-param name="removeWorkFolderScript">lecm/routes-v2/approvalRoutes/removeWorkFolder</control-param>
+                            <control-param name="createListFromRouteFormId">selectRouteForm</control-param>
+                            <control-param name="createIterationFormId">createIteration</control-param>
+                            <control-param name="createStageInlineFormId">editStageParametersInlineForm</control-param>
+                            <control-param name="expandDataSource">ru/it/lecm/routes-v2/stages/stageExpanded</control-param>
+                            <control-param name="expandedDataSource">components/form?formId=viewApprovalResult</control-param>
+                            <control-param name="newListTitleMsgId">title.new.approval.list</control-param>
+                            <control-param name="repeatRouteDialogFormId">repeatPreviousApprovalRouteDialog</control-param>
+                            <control-param name="newListConfirmationMsgId">message.new.approval.list.confirmation</control-param>
+                            <control-param name="newListFromRoutTitleMsgId">title.new.approval.list.from.route</control-param>
+                            <control-param name="clearListTitleId">title.approval.list.clear</control-param>
+                            <control-param name="clearListMsgId">message.clear.approval.list</control-param>
+                            <control-param name="viewIterationResultFormTitleId">label.view.approval.details</control-param>
+                            <control-param name="showIterationsHistoryFormId">showApprovalHistoryForm</control-param>
+                            <control-param name="viewIterationResultFormId">viewApprovalResult</control-param>
+                            <control-param name="editIterationFormId">editIterationProperties</control-param>
+                            <control-param name="fieldsForFilterRoutes">lecm-eds-document:executor-assoc,lecm-document:author-assoc</control-param>
+                        </control>                 
                     </field>
                 </appearance>
             </form>
@@ -872,7 +926,7 @@
                     <!--Согласовать повестку-->
                     <show id="lecm-meetings:approve-agenda"/>
                     <!--согласование-->
-                    <show id="lecm-meetings:approval"/>
+                    <show id="lecm-approval-route:approvalFolder"/>
                     <!--Время начала проведения-->
                     <show id="lecm-meetings:holding-start-date"/>
                     <!--Участники проведения проведения-->
@@ -880,6 +934,9 @@
                     <!--Приглашённые участники проведения -->
                     <show id="lecm-meetings:holding-invited-members-assoc"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-approval-route:approvalFolder" label="Согласование (версия 2)"/>
+                </appearance>
             </form>
             <form id="search-editor-fields">
                 <field-visibility>
