@@ -43,7 +43,7 @@
                 <appearance>
                     <set id="common" label-id="label.attributes"/>
                     <set id="points" label-id="label.points"/>
-                    <set id="approvalAndSigning" appearance="" label-id="label.approval"/>
+                    <set id="approvalAndSigning" appearance="" label="Согласование и подписание"/>
                     <set id="review" label="Ознакомление"/>
 
                     <field id="lecm-document:title" set="common" />
