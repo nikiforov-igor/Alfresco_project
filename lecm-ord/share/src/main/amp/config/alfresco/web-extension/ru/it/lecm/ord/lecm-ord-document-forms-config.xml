@@ -345,8 +345,8 @@
                     <show id="lecm-document:regnum"/>
                     <show id="lecm-approval-route:approvalFolder"/>
                     <show id="lecm-signing-v2-aspects:signed-on-paper"/>
-                    <show id="lecm-signing-v2-aspects:signerEmployeeAssoc"/>
-                    <show id="lecm-signing-v2-aspects:signingDate"/>
+                    <show id="lecm-signing-v2-aspects:signerEmployeeAssoc" force="true"/>
+                    <show id="lecm-signing-v2-aspects:signingDate" force="true"/>
                     <show id="lecm-document-aspects:registrator-assoc" force="true"/>
                     <show id="lecm-review-ts:review-table-assoc"/>
                     <show id="lecm-eds-document:executor-assoc"/>

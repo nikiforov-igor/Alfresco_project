@@ -1194,9 +1194,9 @@
                     <show id="lecm-eds-document:note"/>																	<!-- Примечание -->
                     <show id="lecm-document:regnum"/>																	<!-- Регистрационный номер -->
                     <show id="lecm-approval-route:approvalFolder" force="true"/>
-                    <show id="lecm-signing-v2-aspects:signed-on-paper"/>
-                    <show id="lecm-signing-v2-aspects:signerEmployeeAssoc"/>
-                    <show id="lecm-signing-v2-aspects:signingDate"/>
+                    <show id="lecm-signing-v2-aspects:signed-on-paper" force="true"/>
+                    <show id="lecm-signing-v2-aspects:signerEmployeeAssoc" force="true"/>
+                    <show id="lecm-signing-v2-aspects:signingDate" force="true"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-approval-route:approvalFolder" label="Согласование"/>

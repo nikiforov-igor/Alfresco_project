@@ -333,8 +333,8 @@
                     <show id="lecm-additional-document:summaryContent"/>
                     <show id="lecmApproveAspects:approvalFolderRef"/>
                     <show id="lecm-signing-v2-aspects:signed-on-paper"/>
-                    <show id="lecm-signing-v2-aspects:signerEmployeeAssoc"/>
-                    <show id="lecm-signing-v2-aspects:signingDate"/>
+                    <show id="lecm-signing-v2-aspects:signerEmployeeAssoc" force="true"/>
+                    <show id="lecm-signing-v2-aspects:signingDate" force="true"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecmApproveAspects:approvalFolderRef" label-id="label.approval"/>

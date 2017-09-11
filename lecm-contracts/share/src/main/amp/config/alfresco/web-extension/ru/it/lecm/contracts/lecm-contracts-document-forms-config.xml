@@ -1446,8 +1446,8 @@
                     <show id="lecm-contract-table-structure:stages-assoc"/>
                     <show id="lecmApproveAspects:approvalFolderRef"/>
                     <show id="lecm-signing-v2-aspects:signed-on-paper"/>
-                    <show id="lecm-signing-v2-aspects:signerEmployeeAssoc"/>
-                    <show id="lecm-signing-v2-aspects:signingDate"/>
+                    <show id="lecm-signing-v2-aspects:signerEmployeeAssoc" force="true"/>
+                    <show id="lecm-signing-v2-aspects:signingDate" force="true"/>
                 </field-visibility>
                 <!-- Example: How to use dynamic access role
                                 <appearance>
