@@ -1,13 +1,5 @@
 <alfresco-config>
 
-    <config>
-        <forms>
-            <dependencies>
-                <js src="/scripts/lecm-signing-v2/constraints/signing-validators.js"/>
-            </dependencies>
-        </forms>
-    </config>
-
     <config evaluator="model-type" condition="lecm-ord:document">
         <forms>
             <form>
