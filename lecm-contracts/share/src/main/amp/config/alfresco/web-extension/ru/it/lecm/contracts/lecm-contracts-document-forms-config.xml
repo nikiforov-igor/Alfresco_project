@@ -631,7 +631,7 @@
                     <show id="lecm-document:subject-assoc" force="true"/>
                     <show id="lecm-contract:totalAmount" force="true"/>
                     <show id="lecm-contract:currency-assoc"/>
-                    <show id="lecmSignAspects:signerEmployeeAssoc"/>
+                    <show id="lecm-signing-v2-aspects:signerEmployeeAssoc"/>
                     <show id="lecm-contract:partner-assoc" force="true"/>
                     <show id="lecm-contract:signedCounterparty"/>
                     <show id="lecm-contract:signatoryCounterparty"/>
@@ -730,10 +730,10 @@
                     <field id="lecm-contract:summaryContent">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
-                    <field id="lecmSignAspects:signerEmployeeAssoc">
+                    <field id="lecm-signing-v2-aspects:signerEmployeeAssoc">
                         <control>
                             <control-param name="useStrictFilterByOrg">true</control-param>
-                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS</control-param>
+                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS,CONTRACT_SIGNER</control-param>
                             <control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
                         </control>
                     </field>

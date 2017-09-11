@@ -229,7 +229,7 @@
                     <show id="lecm-eds-document:document-type-assoc"/>
                     <show id="lecm-eds-document:execution-date"/>
                     <show id="lecm-eds-document:summaryContent"/>
-                    <show id="lecmSignAspects:signerEmployeeAssoc"/>
+                    <show id="lecm-signing-v2-aspects:signerEmployeeAssoc"/>
                     <show id="lecm-ord:controller-assoc"/>
                     <show id="lecm-eds-document:note"/>
                     <show id="lecm-eds-document:sheets-number"/>
@@ -284,11 +284,11 @@
                             <control-param name="plane">true</control-param>
                         </control>
                     </field>
-                    <field id="lecmSignAspects:signerEmployeeAssoc">
+                    <field id="lecm-signing-v2-aspects:signerEmployeeAssoc">
                         <control>
                             <control-param name="useStrictFilterByOrg">true</control-param>
                             <control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
-                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS</control-param>
+                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS,CONTRACT_SIGNER</control-param>
                         </control>
                     </field>
 
@@ -366,7 +366,7 @@
                     <show id="lecm-document-aspects:reg-project-data-date"/>                                            <!-- Дата регистрации проекта -->
                     <show id="lecm-eds-document:executor-assoc"/>                                                       <!-- Исполнитель -->
                     <show id="lecm-document:author-assoc"/>                                                             <!-- Составитель -->
-                    <show id="lecmSignAspects:signerEmployeeAssoc"/>                                                    <!-- Подписанты -->
+                    <show id="lecm-signing-v2-aspects:signerEmployeeAssoc"/>                                                    <!-- Подписанты -->
                     <show id="lecm-ord:controller-assoc"/>                                                              <!-- Контролер -->
                     <show id="lecm-document:title"/>                                                                    <!-- Заголовок -->
                     <show id="lecm-ord:confirm-completion"/>                                                            <!-- Подтверждать завершение  -->
@@ -405,7 +405,7 @@
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup"/>
                         </constraint-handlers>
                     </field>
-                    <field id="lecmSignAspects:signerEmployeeAssoc">
+                    <field id="lecm-signing-v2-aspects:signerEmployeeAssoc">
                         <control>
                             <control-param name="endpointMany">true</control-param>
                         </control>

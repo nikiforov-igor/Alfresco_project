@@ -164,7 +164,7 @@
                     <show id="lecm-document:title"/>
                     <show id="lecm-eds-document:document-type-assoc"/>
                     <show id="lecm-eds-document:summaryContent"/>
-                    <show id="lecmSignAspects:signerEmployeeAssoc"/>
+                    <show id="lecm-signing-v2-aspects:signerEmployeeAssoc"/>
                     <show id="lecm-eds-document:note"/>
                     <show id="lecm-eds-document:sheets-number"/>
                     <show id="lecm-document:subject-assoc"/>
@@ -196,11 +196,11 @@
                             <control-param name="rows">4</control-param>
                         </control>
                     </field>
-                    <field id="lecmSignAspects:signerEmployeeAssoc">
+                    <field id="lecm-signing-v2-aspects:signerEmployeeAssoc">
                         <control>
                             <control-param name="useStrictFilterByOrg">true</control-param>
                             <control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
-                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS</control-param>
+                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS,CONTRACT_SIGNER</control-param>
                         </control>
                     </field>
 
@@ -290,7 +290,7 @@
                     <show id="lecm-document:title"/>																	<!-- Заголовок -->
                     <show id="lecm-document:author-assoc"/>
                     <show id="lecm-eds-document:executor-assoc"/>                                                       <!-- Исполнитель -->
-                    <show id="lecmSignAspects:signerEmployeeAssoc"/>                                                    <!-- Подписанты -->
+                    <show id="lecm-signing-v2-aspects:signerEmployeeAssoc"/>                                                    <!-- Подписанты -->
                     <show id="lecm-document-aspects:additional-organization-unit-assoc"/>
                     <show id="lecm-eds-aspect:execution-state"/>                                                        <!-- Исполнение -->
                     <show id="lecm-review-ts:doc-review-state"/>                                                        <!-- Ознакомление -->
@@ -338,7 +338,7 @@
                             <control-param name="endpointMany">true</control-param>
                         </control>
                     </field>
-                    <field id="lecmSignAspects:signerEmployeeAssoc" set="nd-document-search-common-set">
+                    <field id="lecm-signing-v2-aspects:signerEmployeeAssoc" set="nd-document-search-common-set">
                         <control>
                             <control-param name="endpointMany">true</control-param>
                         </control>

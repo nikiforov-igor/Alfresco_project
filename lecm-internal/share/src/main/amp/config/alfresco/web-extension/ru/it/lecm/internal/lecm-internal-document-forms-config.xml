@@ -213,7 +213,7 @@
                     <show id="lecm-internal:response-date"/>
                     <show id="lecm-internal:recipients-assoc"/>
                     <show id="lecm-eds-document:summaryContent"/>
-                    <show id="lecmSignAspects:signerEmployeeAssoc"/>
+                    <show id="lecm-signing-v2-aspects:signerEmployeeAssoc"/>
                     <show id="lecm-document-aspects:response-to-assoc"/>
                     <show id="lecm-eds-document:sheets-number"/>
                     <show id="lecm-document:subject-assoc"/>
@@ -286,11 +286,11 @@
                         </control>
                     </field>
                     <field id="lecm-eds-document:file-register-assoc"/>
-                    <field id="lecmSignAspects:signerEmployeeAssoc">
+                    <field id="lecm-signing-v2-aspects:signerEmployeeAssoc">
                         <control>
                             <control-param name="useStrictFilterByOrg">true</control-param>
                             <control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
-                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS</control-param>
+                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS,CONTRACT_SIGNER</control-param>
                         </control>
                     </field>
                     <field id="lecm-eds-document:sheets-number">
@@ -334,7 +334,7 @@
                     <show id="lecm-document:title"/>
                     <show id="lecm-document:author-assoc"/>
                     <show id="lecm-eds-document:executor-assoc"/>
-                    <show id="lecmSignAspects:signerEmployeeAssoc"/>
+                    <show id="lecm-signing-v2-aspects:signerEmployeeAssoc"/>
                     <show id="lecm-internal:recipients-assoc"/>
                     <show id="lecm-eds-aspect:execution-state"/>                                                        <!-- Исполнение -->
                     <show id="lecm-review-ts:doc-review-state"/>                                                        <!-- Ознакомление -->
@@ -383,7 +383,7 @@
                             <control-param name="endpointMany">true</control-param>
                         </control>
                     </field>
-                    <field id="lecmSignAspects:signerEmployeeAssoc">
+                    <field id="lecm-signing-v2-aspects:signerEmployeeAssoc">
                         <control>
                             <control-param name="endpointMany">true</control-param>
                         </control>
