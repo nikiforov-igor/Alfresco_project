@@ -30,18 +30,18 @@
                             msg;
                         execution.setVariable("assigneesList", edsDocument.getRecipientLogins(document));
                         if (withSigning && 'true' == ('' + withSigning)) {
-                            assocs = document.assocs['lecmSignAspects:signerEmployeeAssoc'];
+                            assocs = document.assocs['lecm-signing-v2-aspects:signerEmployeeAssoc'];
                             initiator = orgstructure.getCurrentEmployee();
                             msg = "#initiator подписал(а) документ " + documentScript.wrapperDocumentLink(document, "{lecm-document:ext-present-string}");
                             businessJournal.log(document.nodeRef.toString(), "SIGNING", substitude.formatNodeTitle(document.nodeRef.toString(), msg), []);
-                            document.properties['lecmSignAspects:isSigned'] = true;
-                            document.properties['lecmSignAspects:signingState'] = 'COMPLETE';
-                            document.properties['lecmSignAspects:signingDate'] = base.getValueConverter().convertValueForJava(new Date());
+                            document.properties['lecm-signing-v2-aspects:isSigned'] = true;
+                            document.properties['lecm-signing-v2-aspects:signingState'] = 'COMPLETE';
+                            document.properties['lecm-signing-v2-aspects:signingDate'] = base.getValueConverter().convertValueForJava(new Date());
                             document.save();
                             if (assocs && assocs.length) {
-                                document.removeAssociation(assocs[0], 'lecmSignAspects:signerEmployeeAssoc');
+                                document.removeAssociation(assocs[0], 'lecm-signing-v2-aspects:signerEmployeeAssoc');
                             }
-                            document.createAssociation(initiator, 'lecmSignAspects:signerEmployeeAssoc');
+                            document.createAssociation(initiator, 'lecm-signing-v2-aspects:signerEmployeeAssoc');
                         }
 
                         var autoRegistration = document.assocs["lecm-eds-document:document-type-assoc"][0].properties["lecm-doc-dic-dt:auto-registration"];
@@ -91,7 +91,7 @@
                         lecmPermission.grantDynamicRole(document, employee, "DA_RECIPIENT_DYN", "LECM_BASIC_PG_Employee");
                         lecmPermission.grantDynamicRole(answer, author, "BR_INITIATOR", "LECM_BASIC_PG_Owner");
 
-                        var signerAssoc = document.assocs['lecmSignAspects:signerEmployeeAssoc'];
+                        var signerAssoc = document.assocs['lecm-signing-v2-aspects:signerEmployeeAssoc'];
                         var signer = signerAssoc && signerAssoc.length ? signerAssoc[0] : null;
                         if (signer) {
                             lecmPermission.grantDynamicRole(answer, signer, "LECM_SIGNER_DYN", "LECM_BASIC_PG_Reviewer");

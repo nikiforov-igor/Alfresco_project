@@ -563,7 +563,7 @@
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecmSignAspects_signerEmployeeAssoc</name>
+                                        <name>lecm-signing-v2-aspects_signerEmployeeAssoc</name>
                                         <nodeRef>workspace://SpacesStore/5848ab31-79ee-4728-b218-150d6d07e166</nodeRef>
                                         <properties>
                                             <property>
@@ -764,7 +764,7 @@ if (document) {
   if (datesTable) {
     var datesTemp = document.assocs["lecm-ord:temp-items-assoc"];
     if (datesTemp && datesTemp.length) {
-      var signerAssoc = document.assocs["lecmSignAspects:signerEmployeeAssoc"];
+      var signerAssoc = document.assocs["lecm-signing-v2-aspects:signerEmployeeAssoc"];
       datesTemp.forEach(function(item) {
         if (signerAssoc && signerAssoc.length){
           item.createAssociation(signerAssoc[0], "lecm-ord-table-structure:author-assoc");
@@ -1502,7 +1502,7 @@ if (document) {
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecmSignAspects_signerEmployeeAssoc</name>
+                                        <name>lecm-signing-v2-aspects_signerEmployeeAssoc</name>
                                         <nodeRef>workspace://SpacesStore/c370161f-6351-48ef-b44e-ff33f1b8cb35</nodeRef>
                                         <properties>
                                             <property>
@@ -1722,7 +1722,7 @@ if (document) {
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA["ACTIVE" == doc.attr("lecmSignAspects:signingState")]]></value>
+                                                                    <![CDATA["ACTIVE" == doc.attr("lecm-signing-v2-aspects:signingState")]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -1960,15 +1960,15 @@ if (doc) {
                                                                 <name>transition-script</name>
                                                                 <value><![CDATA[(function() {
     var assoc, msg;
-    stm_document.properties['lecmSignAspects:isSigned'] = true;
-    stm_document.properties['lecmSignAspects:signingState'] = 'COMPLETE';
-    stm_document.properties['lecmSignAspects:signingDate'] = base.getValueConverter().convertValueForJava(new Date());
+    stm_document.properties['lecm-signing-v2-aspects:isSigned'] = true;
+    stm_document.properties['lecm-signing-v2-aspects:signingState'] = 'COMPLETE';
+    stm_document.properties['lecm-signing-v2-aspects:signingDate'] = base.getValueConverter().convertValueForJava(new Date());
     stm_document.save();
-    assocs = stm_document.assocs['lecmSignAspects:signerEmployeeAssoc'];
+    assocs = stm_document.assocs['lecm-signing-v2-aspects:signerEmployeeAssoc'];
     if (assocs && assocs.length) {
-        stm_document.removeAssociation(assocs[0], 'lecmSignAspects:signerEmployeeAssoc');
+        stm_document.removeAssociation(assocs[0], 'lecm-signing-v2-aspects:signerEmployeeAssoc');
     }
-    stm_document.createAssociation(orgstructure.getCurrentEmployee(), 'lecmSignAspects:signerEmployeeAssoc');
+    stm_document.createAssociation(orgstructure.getCurrentEmployee(), 'lecm-signing-v2-aspects:signerEmployeeAssoc');
 
     msg = "#initiator подписал(а) документ " + documentScript.wrapperDocumentLink(stm_document, "{lecm-document:ext-present-string}");
     businessJournal.log(stm_document.nodeRef.toString(), "SIGNING", substitude.formatNodeTitle(stm_document.nodeRef.toString(), msg), []);
@@ -2364,7 +2364,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.assocClass("lecmSignAspects:signerEmployeeAssoc") != null]]></value>
+                                                                                    <![CDATA[doc.assocClass("lecm-signing-v2-aspects:signerEmployeeAssoc") != null]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -3040,7 +3040,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecmSignAspects_signerEmployeeAssoc</name>
+                                        <name>lecm-signing-v2-aspects_signerEmployeeAssoc</name>
                                         <nodeRef>workspace://SpacesStore/28602e1e-d821-4a21-b9c3-9629fa590c7f</nodeRef>
                                         <properties>
                                             <property>
@@ -4123,7 +4123,7 @@ businessJournal.log(ord.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></v
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecmSignAspects_signerEmployeeAssoc</name>
+                                        <name>lecm-signing-v2-aspects_signerEmployeeAssoc</name>
                                         <nodeRef>workspace://SpacesStore/dd483696-b0b2-4368-85d0-cf37679c5eae</nodeRef>
                                         <properties>
                                             <property>
@@ -4304,7 +4304,7 @@ businessJournal.log(ord.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></v
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA["ACTIVE" == doc.attr("lecmSignAspects:signingState")]]></value>
+                                                                    <![CDATA["ACTIVE" == doc.attr("lecm-signing-v2-aspects:signingState")]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -4399,15 +4399,15 @@ businessJournal.log(ord.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></v
                                                                 <name>transition-script</name>
                                                                 <value><![CDATA[(function() {
     var assoc, msg;
-    stm_document.properties['lecmSignAspects:isSigned'] = true;
-    stm_document.properties['lecmSignAspects:signingState'] = 'COMPLETE';
-    stm_document.properties['lecmSignAspects:signingDate'] = base.getValueConverter().convertValueForJava(new Date());
+    stm_document.properties['lecm-signing-v2-aspects:isSigned'] = true;
+    stm_document.properties['lecm-signing-v2-aspects:signingState'] = 'COMPLETE';
+    stm_document.properties['lecm-signing-v2-aspects:signingDate'] = base.getValueConverter().convertValueForJava(new Date());
     stm_document.save();
-    assocs = stm_document.assocs['lecmSignAspects:signerEmployeeAssoc'];
+    assocs = stm_document.assocs['lecm-signing-v2-aspects:signerEmployeeAssoc'];
     if (assocs && assocs.length) {
-        stm_document.removeAssociation(assocs[0], 'lecmSignAspects:signerEmployeeAssoc');
+        stm_document.removeAssociation(assocs[0], 'lecm-signing-v2-aspects:signerEmployeeAssoc');
     }
-    stm_document.createAssociation(orgstructure.getCurrentEmployee(), 'lecmSignAspects:signerEmployeeAssoc');
+    stm_document.createAssociation(orgstructure.getCurrentEmployee(), 'lecm-signing-v2-aspects:signerEmployeeAssoc');
 
     msg = "#initiator подписал(а) документ " + documentScript.wrapperDocumentLink(stm_document, "{lecm-document:ext-present-string}");
     businessJournal.log(stm_document.nodeRef.toString(), "SIGNING", substitude.formatNodeTitle(stm_document.nodeRef.toString(), msg), []);
@@ -4726,7 +4726,7 @@ businessJournal.log(ord.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></v
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.assocClass("lecmSignAspects:signerEmployeeAssoc") != null]]></value>
+                                                                                    <![CDATA[doc.assocClass("lecm-signing-v2-aspects:signerEmployeeAssoc") != null]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -5402,7 +5402,7 @@ businessJournal.log(ord.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></v
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecmSignAspects_signerEmployeeAssoc</name>
+                                        <name>lecm-signing-v2-aspects_signerEmployeeAssoc</name>
                                         <nodeRef>workspace://SpacesStore/64d5295d-88d5-4215-8cc4-1f9cfb2594d3</nodeRef>
                                         <properties>
                                             <property>
@@ -5622,7 +5622,7 @@ businessJournal.log(ord.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></v
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA["ACTIVE" == doc.attr("lecmSignAspects:signingState")]]></value>
+                                                                    <![CDATA["ACTIVE" == doc.attr("lecm-signing-v2-aspects:signingState")]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -5752,15 +5752,15 @@ businessJournal.log(ord.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></v
                                                                 <name>transition-script</name>
                                                                 <value><![CDATA[(function() {
     var assoc, msg;
-    stm_document.properties['lecmSignAspects:isSigned'] = true;
-    stm_document.properties['lecmSignAspects:signingState'] = 'COMPLETE';
-    stm_document.properties['lecmSignAspects:signingDate'] = base.getValueConverter().convertValueForJava(new Date());
+    stm_document.properties['lecm-signing-v2-aspects:isSigned'] = true;
+    stm_document.properties['lecm-signing-v2-aspects:signingState'] = 'COMPLETE';
+    stm_document.properties['lecm-signing-v2-aspects:signingDate'] = base.getValueConverter().convertValueForJava(new Date());
     stm_document.save();
-    assocs = stm_document.assocs['lecmSignAspects:signerEmployeeAssoc'];
+    assocs = stm_document.assocs['lecm-signing-v2-aspects:signerEmployeeAssoc'];
     if (assocs && assocs.length) {
-        stm_document.removeAssociation(assocs[0], 'lecmSignAspects:signerEmployeeAssoc');
+        stm_document.removeAssociation(assocs[0], 'lecm-signing-v2-aspects:signerEmployeeAssoc');
     }
-    stm_document.createAssociation(orgstructure.getCurrentEmployee(), 'lecmSignAspects:signerEmployeeAssoc');
+    stm_document.createAssociation(orgstructure.getCurrentEmployee(), 'lecm-signing-v2-aspects:signerEmployeeAssoc');
 
     msg = "#initiator подписал(а) документ " + documentScript.wrapperDocumentLink(stm_document, "{lecm-document:ext-present-string}");
     businessJournal.log(stm_document.nodeRef.toString(), "SIGNING", substitude.formatNodeTitle(stm_document.nodeRef.toString(), msg), []);
@@ -6188,7 +6188,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.assocClass("lecmSignAspects:signerEmployeeAssoc") != null]]></value>
+                                                                                    <![CDATA[doc.assocClass("lecm-signing-v2-aspects:signerEmployeeAssoc") != null]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -7023,7 +7023,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecmSignAspects_signerEmployeeAssoc</name>
+                                        <name>lecm-signing-v2-aspects_signerEmployeeAssoc</name>
                                         <nodeRef>workspace://SpacesStore/dd91def7-7f25-41be-923d-a512780b9e89</nodeRef>
                                         <properties>
                                             <property>
@@ -7204,7 +7204,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA["COMPLETE" == doc.attr("lecmSignAspects:signingState") and !doc.attr("lecmSignAspects:isSigned")]]></value>
+                                                                    <![CDATA["COMPLETE" == doc.attr("lecm-signing-v2-aspects:signingState") and !doc.attr("lecm-signing-v2-aspects:isSigned")]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -7243,7 +7243,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA["COMPLETE" == doc.attr("lecmSignAspects:signingState") and doc.attr("lecmSignAspects:isSigned")]]></value>
+                                                                    <![CDATA["COMPLETE" == doc.attr("lecm-signing-v2-aspects:signingState") and doc.attr("lecm-signing-v2-aspects:isSigned")]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -7963,7 +7963,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecmSignAspects_signerEmployeeAssoc</name>
+                                        <name>lecm-signing-v2-aspects_signerEmployeeAssoc</name>
                                         <nodeRef>workspace://SpacesStore/340bcd46-7471-48e7-a631-01540cc0706c</nodeRef>
                                         <properties>
                                             <property>
@@ -8954,7 +8954,7 @@ edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringW
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecmSignAspects_signerEmployeeAssoc</name>
+                                        <name>lecm-signing-v2-aspects_signerEmployeeAssoc</name>
                                         <nodeRef>workspace://SpacesStore/8d64157b-222f-4ad5-81f8-0a446f5ea258</nodeRef>
                                         <properties>
                                             <property>
@@ -11083,7 +11083,7 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecmSignAspects_signerEmployeeAssoc</name>
+                                        <name>lecm-signing-v2-aspects_signerEmployeeAssoc</name>
                                         <nodeRef>workspace://SpacesStore/cd267b05-19d9-4864-9318-92e5303882ae</nodeRef>
                                         <properties>
                                             <property>
@@ -12344,7 +12344,7 @@ if (doc) {
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecmSignAspects_signerEmployeeAssoc</name>
+                                        <name>lecm-signing-v2-aspects_signerEmployeeAssoc</name>
                                         <nodeRef>workspace://SpacesStore/f49c0d80-dfd8-4f15-8a53-b3d9dbc8c202</nodeRef>
                                         <properties>
                                             <property>
@@ -13458,7 +13458,7 @@ if (doc) {
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecmSignAspects_signerEmployeeAssoc</name>
+                                        <name>lecm-signing-v2-aspects_signerEmployeeAssoc</name>
                                         <nodeRef>workspace://SpacesStore/02154e38-fe55-48c0-8a9f-1608ad6498cd</nodeRef>
                                         <properties>
                                             <property>
@@ -13998,7 +13998,7 @@ if (doc) {
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecmSignAspects_signerEmployeeAssoc</name>
+                                        <name>lecm-signing-v2-aspects_signerEmployeeAssoc</name>
                                         <nodeRef>workspace://SpacesStore/e5b30542-53a5-48fc-a131-8799c11842f5</nodeRef>
                                         <properties>
                                             <property>

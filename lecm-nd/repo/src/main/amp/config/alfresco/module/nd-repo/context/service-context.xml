@@ -166,7 +166,7 @@
             <list>
                 <value>lecm-eds-document:document-type-assoc</value>
                 <value>lecm-document-aspects:additional-organization-unit-assoc</value>
-                <value>lecmSignAspects:signerEmployeeAssoc</value>
+                <value>lecm-signing-v2-aspects:signerEmployeeAssoc</value>
                 <value>lecm-document:subject-assoc</value>
             </list>
         </property>

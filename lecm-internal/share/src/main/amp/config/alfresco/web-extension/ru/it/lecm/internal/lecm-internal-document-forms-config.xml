@@ -485,8 +485,8 @@
                     <show id="lecm-eds-document:note"/>
                     <show id="lecm-document-aspects:reg-project-data-number"/>
                     <show id="lecm-document-aspects:reg-project-data-date"/>
-                    <show id="lecmSignAspects:signingDate"/>
-                    <show id="lecmSignAspects:isSigned"/>
+                    <show id="lecm-signing-v2-aspects:signingDate"/>
+                    <show id="lecm-signing-v2-aspects:isSigned"/>
 
                     <show id="cm:created"/>
                     <show id="lecm-statemachine:status" force="true"/>
@@ -529,7 +529,7 @@
                             <control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
                         </control>
                     </field>
-                    <field id="lecmSignAspects:signingDate">
+                    <field id="lecm-signing-v2-aspects:signingDate">
                         <control>
                             <control-param name="showTime">false</control-param>
                         </control>

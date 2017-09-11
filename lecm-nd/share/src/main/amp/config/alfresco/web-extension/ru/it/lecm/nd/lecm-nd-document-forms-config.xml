@@ -390,8 +390,8 @@
                     <show id="lecm-document:author-assoc"/>
                     <show id="lecm-document-aspects:reg-project-data-number"/>
                     <show id="lecm-document-aspects:reg-project-data-date"/>
-                    <show id="lecmSignAspects:isSigned"/>
-                    <show id="lecmSignAspects:signingDate"/>
+                    <show id="lecm-signing-v2-aspects:isSigned"/>
+                    <show id="lecm-signing-v2-aspects:signingDate"/>
 
                     <show id="cm:created"/>
                     <show id="lecm-statemachine:status" force="true"/>

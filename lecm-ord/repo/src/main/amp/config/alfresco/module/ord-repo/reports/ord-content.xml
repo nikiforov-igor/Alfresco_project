@@ -84,7 +84,7 @@
                 <property name="cm:name"><![CDATA[Подписанты]]></property>
                 <property name="lecm-rpeditor:includeAllOrganizations"><![CDATA[false]]></property>
                 <property name="lecm-rpeditor:reportQueryPgSize"><![CDATA[-1]]></property>
-                <property name="lecm-rpeditor:reportQuery"><![CDATA[{lecmSignAspects:signerEmployeeAssoc/}]]></property>
+                <property name="lecm-rpeditor:reportQuery"><![CDATA[{lecm-signing-v2-aspects:signerEmployeeAssoc/}]]></property>
                 <property name="lecm-rpeditor:runAsSystem"><![CDATA[true]]></property>
                 <property name="lecm-rpeditor:reportCode"><![CDATA[ord-signer-subreport]]></property>
                 <property name="lecm-rpeditor:reportObjectsMultiplicity"><![CDATA[false]]></property>

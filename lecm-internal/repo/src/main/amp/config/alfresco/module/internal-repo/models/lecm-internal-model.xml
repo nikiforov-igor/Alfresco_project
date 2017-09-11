@@ -11,7 +11,6 @@
 		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
 		<import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
 		<import uri="http://www.it.ru/logicECM/internal/table-structure/1.0" prefix="lecm-internal-table-structure"/>
-		<import uri="http://www.it.ru/logicECM/model/signing/aspects/1.0" prefix="lecmSignAspects"/>
 		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
 		<import uri="http://www.it.ru/logicECM/model/review-ts/1.0" prefix="lecm-review-ts"/>
         <import uri="http://www.it.ru/logicECM/eds-document/aspects/1.0" prefix="lecm-eds-aspect"/>
@@ -148,7 +147,6 @@
 				<aspect>lecm-document-aspects:response-to-aspect</aspect>
 				<aspect>lecm-internal-table-structure:table-answers-aspect</aspect>
 				<aspect>lecm-document-aspects:event-listeners-aspect</aspect>
-				<aspect>lecmSignAspects:signingDetailsAspect</aspect>
 				<aspect>lecm-signing-v2-aspects:signed-on-paper-aspect</aspect>
 				<aspect>lecm-signing-v2-aspects:signingDetailsAspect</aspect>
 			</mandatory-aspects>

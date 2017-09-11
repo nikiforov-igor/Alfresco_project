@@ -12,7 +12,6 @@
 		<import uri="http://www.it.ru/logicECM/eds-document/1.0" prefix="lecm-eds-document"/>
 		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
 		<import uri="http://www.it.ru/lecm/ORD/table-structure/1.0" prefix="lecm-ord-table-structure"/>
-		<import uri="http://www.it.ru/logicECM/model/signing/aspects/1.0" prefix="lecmSignAspects"/>
 		<import uri="http://www.it.ru/logicECM/model/review-ts/1.0" prefix="lecm-review-ts"/>
 		<import uri="http://www.it.ru/logicECM/errands-aspects/1.0" prefix="lecm-errands-aspect"/>
 		<import uri="http://www.it.ru/logicECM/eds-document/aspects/1.0" prefix="lecm-eds-aspect"/>
@@ -198,7 +197,7 @@
 
 			<mandatory-aspects>
 				<aspect>lecm-ord-table-structure:table-items-aspect</aspect>
-				<aspect>lecmSignAspects:signingDetailsAspect</aspect>
+				<aspect>lecm-signing-v2-aspects:signingDetailsAspect</aspect>
 				<aspect>lecm-review-ts:review-aspect</aspect>
 				<aspect>lecm-errands-aspect:errandsExecutorsAspect</aspect>
 				<aspect>lecm-eds-aspect:execution-state-aspect</aspect>
