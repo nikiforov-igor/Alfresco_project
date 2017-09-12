@@ -2,7 +2,7 @@
 
 var fromJson = false;
 var resolutionRef = args["nodeRef"];
-if (resolutionRef && resolutionRef.search("SpacesStore") != -1) {
+if (resolutionRef && base.isNodeRef(resolutionRef)) {
     var resolution = search.findNode(resolutionRef);
     if (resolution) {
         var status = resolution.properties["lecm-statemachine:status"];
