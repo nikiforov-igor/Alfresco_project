@@ -1,23 +1,25 @@
 <#assign htmlId = fieldHtmlId/>
-
+<#assign itemId = (form.arguments.itemId?contains("SpacesStore")) ? string(form.arguments.itemId, '')/>
 <script type="text/javascript">
     //    <![CDATA[
     function getCurrency() {
-        Alfresco.util.Ajax.jsonGet({
-            url: Alfresco.constants.PROXY_URI + "lecm/contracts/getCurrency",
-            dataObj: {
-                nodeRef: "${form.arguments.itemId}"
-            },
-            successCallback: {
-                fn: function (response) {
-                    if (response.json.currency) {
-                        var id = Dom.get("${htmlId}");
-                        id.innerHTML = "${field.value} " + response.json.currency;
+        if (${itemId}) {
+            Alfresco.util.Ajax.jsonGet({
+                url: Alfresco.constants.PROXY_URI + "lecm/contracts/getCurrency",
+                dataObj: {
+                    nodeRef: "${itemId}"
+                },
+                successCallback: {
+                    fn: function (response) {
+                        if (response.json.currency) {
+                            var id = Dom.get("${htmlId}");
+                            id.innerHTML = "${field.value} " + response.json.currency;
+                        }
                     }
-                }
-            },
-            failureMessage: "${msg("failure.message")}"
-        });
+                },
+                failureMessage: "${msg("failure.message")}"
+            });
+        }
     }
     YAHOO.util.Event.onDOMReady(getCurrency);
     //]]>

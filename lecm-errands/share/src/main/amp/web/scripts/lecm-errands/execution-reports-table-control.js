@@ -28,28 +28,30 @@ LogicECM.errands = LogicECM.errands || {};
                 Dom.get(this.id + "-cntrl-show-previous-reports").checked = true;
             }
 
-            Alfresco.util.Ajax.jsonPost({
-                url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
-                dataObj: {
-                    nodeRef: this.options.documentNodeRef,
-                    substituteString: "{lecm-errands:execution-report-status},{lecm-errands:project-report-ref}"
-                },
-                successCallback: {
-                    fn: function (response) {
-                        if (response && response.json.formatString) {
-                            var resp = response.json.formatString.split(",");
-                            var currentReportStatus = resp[0];
-                            var reportRef = resp[1];
-                            if (currentReportStatus == "Отклонен" && reportRef) {
-                                this.filter = "@lecm\\-errands\\-ts:execution\\-report\\-status:\"DECLINE\" AND NOT ID:\"" + reportRef + "\"";
-                            }
-                        }
+            if (this.options.documentNodeRef && this.options.documentNodeRef.search("SpacesStore") != -1) {
+                Alfresco.util.Ajax.jsonPost({
+                    url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
+                    dataObj: {
+                        nodeRef: this.options.documentNodeRef,
+                        substituteString: "{lecm-errands:execution-report-status},{lecm-errands:project-report-ref}"
                     },
+                    successCallback: {
+                        fn: function (response) {
+                            if (response && response.json.formatString) {
+                                var resp = response.json.formatString.split(",");
+                                var currentReportStatus = resp[0];
+                                var reportRef = resp[1];
+                                if (currentReportStatus == "Отклонен" && reportRef) {
+                                    this.filter = "@lecm\\-errands\\-ts:execution\\-report\\-status:\"DECLINE\" AND NOT ID:\"" + reportRef + "\"";
+                                }
+                            }
+                        },
+                        scope: this
+                    },
+                    failureMessage: Alfresco.util.message("message.details.failure"),
                     scope: this
-                },
-                failureMessage: Alfresco.util.message("message.details.failure"),
-                scope: this
-            });
+                });
+            }
 
             this.loadTableData();
         },

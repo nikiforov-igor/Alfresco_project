@@ -3,26 +3,31 @@ var viewLinksMode = '' + edsGlobalSettings.getLinksViewMode();
 var isMlSupported = lecmMessages.isMlSupported();
 
 var documentNodeRef = args['documentNodeRef'];
-var showFirstLevel = args["showFirstLevel"] == "true";
+if (documentNodeRef && documentNodeRef.search("SpacesStore") != -1) {
+    var showFirstLevel = args["showFirstLevel"] == "true";
 
-var substituteTitle = isMlSupported ? "{lecm-document:ml-ext-present-string}" : "{lecm-document:ext-present-string}";
+    var substituteTitle = isMlSupported ? "{lecm-document:ml-ext-present-string}" : "{lecm-document:ext-present-string}";
 
-var items = [];
-var item = search.findNode(documentNodeRef);
-if (showFirstLevel) {
-    items.push(evaluateItem(item, substituteTitle))
+    var items = [];
+    var item = search.findNode(documentNodeRef);
+    if (showFirstLevel) {
+        items.push(evaluateItem(item, substituteTitle))
+    } else {
+        var children = getChildren(item);
+        children.sort(function (a, b) {
+            return (a.properties["cm:created"] < b.properties["cm:created"]) ? -1 : (a.properties["cm:created"] > b.properties["cm:created"]) ? 1 : 0;
+        });
+        children.forEach(function (child) {
+            items.push(evaluateItem(child, substituteTitle));
+        });
+    }
+
+    model.items = items;
+    model.documentRef = documentNodeRef;
 } else {
-    var children = getChildren(item);
-    children.sort(function (a, b) {
-        return (a.properties["cm:created"] < b.properties["cm:created"]) ? -1 : (a.properties["cm:created"] > b.properties["cm:created"]) ? 1 : 0;
-    });
-    children.forEach(function (child) {
-        items.push(evaluateItem(child, substituteTitle));
-    });
+    model.items = [];
+    model.documentRef = null;
 }
-
-model.items = items;
-model.documentRef = documentNodeRef;
 
 function evaluateItem(document, substituteTitle) {
     var itemObj = {};

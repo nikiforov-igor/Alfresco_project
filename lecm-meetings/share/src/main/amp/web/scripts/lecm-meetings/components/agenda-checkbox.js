@@ -65,7 +65,7 @@ LogicECM.module = LogicECM.module || {};
 
 				onReady: function () {
 					var item = this.options.itemId;
-					if (item) {
+					if (item && item.search("SpacesStore") != -1) {
 						var nodeUUID = item.replace("workspace://SpacesStore/","");
 						Alfresco.util.Ajax.request(
 							{
