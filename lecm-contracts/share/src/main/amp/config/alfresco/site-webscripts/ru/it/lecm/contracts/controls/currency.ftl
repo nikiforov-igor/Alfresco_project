@@ -1,18 +1,19 @@
 <#assign htmlId = fieldHtmlId/>
-<#assign itemId = (form.arguments.itemId?contains("SpacesStore")) ? string(form.arguments.itemId, '')/>
+
 <script type="text/javascript">
     //    <![CDATA[
     function getCurrency() {
-        if (${itemId}) {
+        var nodeRef = '${itemId}';
+        if (nodeRef && LogicECM.module.Base.Util.isNodeRef(nodeRef)) {
             Alfresco.util.Ajax.jsonGet({
                 url: Alfresco.constants.PROXY_URI + "lecm/contracts/getCurrency",
                 dataObj: {
-                    nodeRef: "${itemId}"
+                    nodeRef: "${form.arguments.itemId}"
                 },
                 successCallback: {
                     fn: function (response) {
                         if (response.json.currency) {
-                            var id = Dom.get("${htmlId}");
+                            var id = Dom.get(nodeRef);
                             id.innerHTML = "${field.value} " + response.json.currency;
                         }
                     }

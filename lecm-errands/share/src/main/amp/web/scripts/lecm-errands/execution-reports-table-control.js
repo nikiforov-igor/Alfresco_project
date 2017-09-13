@@ -28,7 +28,7 @@ LogicECM.errands = LogicECM.errands || {};
                 Dom.get(this.id + "-cntrl-show-previous-reports").checked = true;
             }
 
-            if (this.options.documentNodeRef && this.options.documentNodeRef.search("SpacesStore") != -1) {
+            if (this.options.documentNodeRef && LogicECM.module.Base.Util.isNodeRef(this.options.documentNodeRef)) {
                 Alfresco.util.Ajax.jsonPost({
                     url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
                     dataObj: {
