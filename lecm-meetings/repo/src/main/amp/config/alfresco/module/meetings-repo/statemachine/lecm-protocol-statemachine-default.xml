@@ -607,32 +607,41 @@
                                                                 <value><![CDATA[(function(){
   var protocol = stm_document;
   /* create approval list */
-  var route = routesService.createEmptyIteration(protocol);
-  var stage = route.createNode(Packages.java.util.UUID.randomUUID().toString(), 'lecmWorkflowRoutes:stage');
-  stage.properties["lecmWorkflowRoutes:stageWorkflowType"] = "PARALLEL";
-  stage.properties["lecmWorkflowRoutes:stageWorkflowTerm"] = approval.getApprovalTerm();
-  stage.properties["cm:title"] = "Этап 1";
-  stage.save();
+  var DEFAULT_APPROVAL_TERM = routesGlobalSettings.getApprovalTerm();
+  if(!approvalRoutes.hasEmployeesInRoute(protocol)){
+    	var workFolder = approvalRoutes.createEmptyIteration(protocol);
+		var route = approvalRoutes.createNewTemporaryNode(workFolder.getNodeRef(),"lecm-approval-route:route");
+    	route.properties['cm:title'] = 'нетиповой маршрут';
+		route.save();
+        route.removeAspect('sys:temporary');
 
-  var assocTypeQName = 'lecmWorkflowRoutes:stageItemEmployeeAssoc';
-  var signersRefsString = protocol.properties["lecm-protocol:signers-assoc-ref"];
-  if (signersRefsString) {
-	var signersRefs = signersRefsString.split(";");
-	if (signersRefs){
-		var signersCount = signersRefs.length;
-		for(i = 0; i < signersCount; ++i) {
-			var signer = search.findNode(signersRefs[i]);
-			if (signer){
-				stageItem = stage.createNode(Packages.java.util.UUID.randomUUID().toString(), 'lecmWorkflowRoutes:stageItem', {
-					'lecmWorkflowRoutes:stageItemOrder': i
-                });
-                stageItem =
-				stageItem.createAssociation(signer, assocTypeQName);
-			}
-		}
-	}
+        var stage = approvalRoutes.createNewTemporaryNode(route.getNodeRef(),"lecm-approval-route:stage");
+		stage.properties['lecm-routes-v2:stageWorkflowType'] = "PARALLEL";
+		stage.properties['lecm-routes-v2:stageWorkflowTerm'] = DEFAULT_APPROVAL_TERM;
+        stage.properties["cm:title"] = "Этап 1";
+      	stage.save();
+    	stage.removeAspect('sys:temporary');
+
+    	var assocTypeQName = 'lecm-routes-v2:stageItemMemberAssoc';
+  		var signersRefsString = protocol.properties["lecm-protocol:signers-assoc-ref"];
+        if (signersRefsString) {
+          var signersRefs = signersRefsString.split(";");
+          if (signersRefs){
+              var signersCount = signersRefs.length;
+              for(i = 0; i < signersCount; ++i) {
+                  var signer = search.findNode(signersRefs[i]);
+                  if (signer){
+                    	var stageItem = approvalRoutes.createNewTemporaryNode(stage.getNodeRef(),"lecm-approval-route:stageItem");
+                        stageItem.properties['lecm-base-aspects:order'] = i;
+                        stageItem.save();
+                        stageItem.createAssociation(signer, 'lecm-routes-v2:stageItemMemberAssoc');
+                        stageItem.removeAspect('sys:temporary');
+                  }
+              }
+          }
+        }
+
   }
-
 })();]]></value>
                                                             </property>
                                                         </properties>
