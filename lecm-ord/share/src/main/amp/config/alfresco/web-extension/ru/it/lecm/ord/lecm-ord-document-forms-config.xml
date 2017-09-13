@@ -12,6 +12,7 @@
                     <show id="lecm-eds-document:execution-date"/>
                     <show id="lecm-eds-document:summaryContent"/>
                     <show id="lecm-signing-v2-aspects:signed-on-paper"/>
+                    <show id="lecm-signing-v2-aspects:signed-on-paper-changed" force="true"/>
                     <show id="lecm-signing-v2-aspects:signerEmployeeAssoc" force="true"/>
                     <show id="lecm-signing-v2-aspects:signingDate" force="true"/>
                     <show id="lecm-signing-v2-aspects:isSigned" force="true"/>
@@ -116,6 +117,9 @@
                         <control>
                             <control-param name="changeFireAction">signedOnPaperChange</control-param>
                         </control>
+                    </field>
+                    <field id="lecm-signing-v2-aspects:signed-on-paper-changed">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl"/>
                     </field>
                     <field id="lecm-signing-v2-aspects:signerEmployeeAssoc">
                         <control>
@@ -577,6 +581,7 @@
                     <show id="lecm-approval-route:approvalFolder" force="true" for-mode="view"/>
                     <show id="lecm-signing-route:signingFolder" force="true" for-mode="view"/>
                     <show id="lecm-signing-v2-aspects:signed-on-paper"/>
+                    <show id="lecm-signing-v2-aspects:signed-on-paper-changed" force="true" for-mode="edit"/>
                     <show id="lecm-signing-v2-aspects:signerEmployeeAssoc" force="true"/>
                     <show id="lecm-signing-v2-aspects:isSigned" force="true"/>
                     <show id="lecm-signing-v2-aspects:signingDate" force="true"/>
@@ -711,6 +716,9 @@
                             <control-param name="changeFireAction">signedOnPaperChange</control-param>
                         </control>
                     </field>
+                    <field id="lecm-signing-v2-aspects:signed-on-paper-changed" set="ord-document-form-common-set">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl"/>
+                    </field>
                     <field id="lecm-signing-v2-aspects:signerEmployeeAssoc" set="ord-document-form-common-set">
                         <control>
                             <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS,CONTRACT_SIGNER</control-param>
@@ -772,7 +780,7 @@
                             <control-param name="scriptLoadedFireAction">allowSigningOnPaperScript</control-param>
                         </control>
                     </field>
-                    <field id="lecm-base-dummy-aspects:script5" set="common">
+                    <field id="lecm-base-dummy-aspects:script5" set="ord-document-form-common-set">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-signing-v2/change-availability-of-signing-fields-script.js</control-param>
                         </control>
