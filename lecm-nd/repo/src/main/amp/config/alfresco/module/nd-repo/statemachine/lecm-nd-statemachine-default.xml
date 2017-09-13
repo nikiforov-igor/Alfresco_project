@@ -754,6 +754,21 @@
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-signing-route_signingFolder</name>
+                                        <nodeRef>workspace://SpacesStore/4f555cbb-a501-471e-8a9d-6e603bd86f8f</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -1707,6 +1722,21 @@
                                         <type>documentField</type>
                                         <name>lecm-approval-route_approvalFolder</name>
                                         <nodeRef>workspace://SpacesStore/414d6ee7-18a3-4618-836c-5c4d72812561</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-signing-route_signingFolder</name>
+                                        <nodeRef>workspace://SpacesStore/ad54ac56-51c7-49fc-beb2-ff3e9a40e567</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -3271,6 +3301,21 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-signing-route_signingFolder</name>
+                                        <nodeRef>workspace://SpacesStore/cac9e456-f43a-40b5-b8b8-3cb525b56830</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -4410,6 +4455,21 @@ businessJournal.log(nd.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></va
                                         <type>documentField</type>
                                         <name>lecm-approval-route_approvalFolder</name>
                                         <nodeRef>workspace://SpacesStore/936e413d-4ade-47ce-96cf-31a2d89b1ef7</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-signing-route_signingFolder</name>
+                                        <nodeRef>workspace://SpacesStore/ea2096ea-f11e-4515-9e60-c80c67e8b474</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5651,6 +5711,21 @@ businessJournal.log(nd.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></va
                                         <type>documentField</type>
                                         <name>lecm-approval-route_approvalFolder</name>
                                         <nodeRef>workspace://SpacesStore/50e68bd3-965b-4e98-8010-83a12a18524d</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-signing-route_signingFolder</name>
+                                        <nodeRef>workspace://SpacesStore/405d708f-e491-4962-b665-614c0b26c34b</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -7350,6 +7425,21 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-signing-route_signingFolder</name>
+                                        <nodeRef>workspace://SpacesStore/9c95af31-4219-49db-964e-ab55aa9f8bb4</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -8346,6 +8436,21 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         <type>documentField</type>
                                         <name>lecm-approval-route_approvalFolder</name>
                                         <nodeRef>workspace://SpacesStore/c44347e2-9f4a-4e81-a164-d7606882c994</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-signing-route_signingFolder</name>
+                                        <nodeRef>workspace://SpacesStore/714135be-bee2-4a06-a0c5-b29f0c7b9807</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -9404,6 +9509,21 @@ edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringW
                                         <type>documentField</type>
                                         <name>lecm-approval-route_approvalFolder</name>
                                         <nodeRef>workspace://SpacesStore/5095f763-c10c-4d5d-8f64-33c2511c9006</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-signing-route_signingFolder</name>
+                                        <nodeRef>workspace://SpacesStore/85891bb7-b97f-4b3b-8705-ef5033e24a4d</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -10662,6 +10782,21 @@ businessJournal.log(nd.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]></
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-signing-route_signingFolder</name>
+                                        <nodeRef>workspace://SpacesStore/428353e6-63ee-4b3d-adc9-60c999addf51</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -11775,6 +11910,21 @@ businessJournal.log(nd.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]></
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-signing-route_signingFolder</name>
+                                        <nodeRef>workspace://SpacesStore/8f467aa7-5547-4cd1-9659-2a5213a6a99a</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -12588,6 +12738,21 @@ businessJournal.log(nd.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]></
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-signing-route_signingFolder</name>
+                                        <nodeRef>workspace://SpacesStore/82e5c720-8e48-4f2c-b44f-29d0ef7b8199</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -13022,6 +13187,21 @@ businessJournal.log(nd.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]></
                                         <type>documentField</type>
                                         <name>lecm-approval-route_approvalFolder</name>
                                         <nodeRef>workspace://SpacesStore/04da1962-d44d-4e12-a5c3-41126c1ac2ba</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-signing-route_signingFolder</name>
+                                        <nodeRef>workspace://SpacesStore/8964bca3-8d2d-4122-8668-04ff4788c8f3</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -13478,6 +13658,21 @@ businessJournal.log(nd.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]></
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-signing-route_signingFolder</name>
+                                        <nodeRef>workspace://SpacesStore/c13698df-0826-447d-a94f-0725140e9511</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -13882,6 +14077,21 @@ businessJournal.log(nd.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]></
                                         <type>documentField</type>
                                         <name>lecm-approval-route_approvalFolder</name>
                                         <nodeRef>workspace://SpacesStore/3db16aad-8686-40b7-994e-f85178095717</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-signing-route_signingFolder</name>
+                                        <nodeRef>workspace://SpacesStore/b55aff5c-5231-4cd9-bdf6-6d4adb1d6262</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
