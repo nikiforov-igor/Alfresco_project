@@ -27,6 +27,7 @@
                     <show id="editExecutorScript" force="true"/>
                     <show id="lecm-ord:temp-items-assoc"/>
                     <show id="lecm-approval-route:approvalFolder" force="true"/>
+                    <show id="lecm-signing-route:signingFolder" force="true"/>
                     <show id="confirmCompletionHandler" force="true"/>
                     <show id="checkAllowSigningOnPaperScript" force="true"/>
                 </field-visibility>
@@ -111,6 +112,7 @@
                     <field id="lecmSignAspects:signerEmployeeAssoc">
                         <control>
                             <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS</control-param>
+                            <control-param name="endpointMany">true</control-param>
                         </control>
                     </field>
 
@@ -198,6 +200,33 @@
                             <control-param name="fieldsForFilterRoutes">lecm-eds-document:executor-assoc,lecm-document:author-assoc</control-param>
                         </control>                 
                     </field>
+                    <field id="lecm-signing-route:signingFolder" label-id="label.forms.signing">
+                        <control template="/ru/it/lecm/routes-v2/controls/routes-datagrid-control.ftl">
+                            <control-param name="noRoutesLabel">label.signing.routes.no-route</control-param>
+                            <control-param name="removeWorkFolderScript">lecm/routes-v2/signingRoutes/removeWorkFolder</control-param>
+                            <control-param name="routeDataScript">lecm/routes-v2/signingRoutes/getRouteData</control-param>
+                            <control-param name="createStageItemScript">lecm/routes-v2/signingRoutes/CreateStageItemInQueue</control-param>
+                            <control-param name="createEmptyIterationScript">lecm/routes-v2/signingRoutes/createEmptyIteration</control-param>
+                            <control-param name="createIterationFromPrevious">lecm/routes-v2/createIterationFromPreviousSigning</control-param>
+                            <control-param name="convertRouteToIterationScript">lecm/routes-v2/signingRoutes/convertRouteToIteration</control-param>
+                            <control-param name="createListFromRouteFormId">selectRouteForm</control-param>
+                            <control-param name="editIterationFormId">editIterationProperties</control-param>
+                            <control-param name="createIterationFormId">createIteration</control-param>
+                            <control-param name="createStageInlineFormId">editStageParametersInlineForm</control-param>
+                            <control-param name="expandDataSource">ru/it/lecm/routes-v2/stages/stageExpanded</control-param>
+                            <control-param name="editStageItemsFormTitleMessage">title.signing.routes.stage.item.form.edit</control-param>
+                            <control-param name="expandedDataSource">components/form?formId=viewSigningResult</control-param>
+                            <control-param name="repeatRouteDialogFormId">repeatPreviousApprovalRouteDialog</control-param>
+                            <control-param name="clearListTitleId">title.signing.list.clear</control-param>
+                            <control-param name="clearListMsgId">message.clear.signing.list</control-param>
+                            <control-param name="showIterationsHistoryFormId">showApprovalHistoryForm</control-param>
+                            <control-param name="viewIterationResultFormId">viewSigningResult</control-param>
+                            <control-param name="cssFiles">css/lecm-signing-v2/lecm-signing-v2-routes-datagrid-control.css</control-param>
+                            <control-param name="determinantClass">signing-control</control-param>
+                            <control-param name="scripts">scripts/lecm-signing-v2/evaluators-v2.js</control-param>
+                            <control-param name="jsObjectName">LogicECM.module.Signing.Evaluators</control-param>
+                        </control>
+                    </field>
                 </appearance>
             </form>
             <form id="document-template-fields">
@@ -266,6 +295,7 @@
                             <control-param name="useStrictFilterByOrg">true</control-param>
                             <control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
                             <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS</control-param>
+                            <control-param name="endpointMany">true</control-param>
                         </control>
                     </field>
 
@@ -321,6 +351,7 @@
                     <show id="lecm-ord-table-structure:items-assoc"/>
                     <show id="lecm-document:regnum"/>
                     <show id="lecm-approval-route:approvalFolder"/>
+                    <show id="lecm-signing-route:signingFolder" force="true"/>
                     <show id="lecm-eds-aspect:signed-on-paper"/>
                     <show id="lecmSignAspects:signerEmployeeAssoc"/>
                     <show id="lecm-document-aspects:registrator-assoc" force="true"/>
@@ -329,6 +360,7 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-approval-route:approvalFolder" label="Согласование (версия 2)"/>
+                    <field id="lecm-signing-route:signingFolder" label="Подписание (версия 2)"/>
                 </appearance>
             </form>
 
@@ -519,6 +551,7 @@
                     <show id="lecm-document-aspects:reg-project-data-date"/>
                     <show id="lecm-ord-table-structure:items-assoc"/>
                     <show id="lecm-approval-route:approvalFolder" force="true" for-mode="view"/>
+                    <show id="lecm-signing-route:signingFolder" force="true" for-mode="view"/>
                     <show id="lecm-eds-aspect:signed-on-paper"/>
                     <show id="lecmSignAspects:signerEmployeeAssoc"/>
                     <show id="lecmSignAspects:isSigned" for-mode="view"/>
@@ -532,7 +565,7 @@
                 <appearance>
                     <set id="ord-document-form-common-set" label-id="label.ord.common"/>
                     <set id="ord-document-items" label-id="label.ord.items"/>
-                    <set id="approvalAndSigning" appearance="" label="Согласование"/>
+                    <set id="approvalAndSigning" appearance="" label="Согласование и подписание"/>
                     <set id="review" label="Ознакомление"/>
 
                     <field id="lecm-eds-aspect:execution-state" set="ord-document-form-common-set">
@@ -652,6 +685,7 @@
                     <field id="lecmSignAspects:signerEmployeeAssoc" set="ord-document-form-common-set">
                         <control>
                             <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS</control-param>
+                            <control-param name="endpointMany">true</control-param>
                         </control>
                     </field>
                     <field id="lecmSignAspects:isSigned" set="ord-document-form-common-set"/>
@@ -732,6 +766,33 @@
                             <control-param name="editIterationFormId">editIterationProperties</control-param>
                             <control-param name="fieldsForFilterRoutes">lecm-eds-document:executor-assoc,lecm-document:author-assoc</control-param>
                         </control>                 
+                    </field>
+                    <field id="lecm-signing-route:signingFolder" set="approvalAndSigning" label-id="label.forms.signing">
+                        <control template="/ru/it/lecm/routes-v2/controls/routes-datagrid-control.ftl">
+                            <control-param name="noRoutesLabel">label.signing.routes.no-route</control-param>
+                            <control-param name="removeWorkFolderScript">lecm/routes-v2/signingRoutes/removeWorkFolder</control-param>
+                            <control-param name="routeDataScript">lecm/routes-v2/signingRoutes/getRouteData</control-param>
+                            <control-param name="createStageItemScript">lecm/routes-v2/signingRoutes/CreateStageItemInQueue</control-param>
+                            <control-param name="createEmptyIterationScript">lecm/routes-v2/signingRoutes/createEmptyIteration</control-param>
+                            <control-param name="createIterationFromPrevious">lecm/routes-v2/createIterationFromPreviousSigning</control-param>
+                            <control-param name="convertRouteToIterationScript">lecm/routes-v2/signingRoutes/convertRouteToIteration</control-param>
+                            <control-param name="createListFromRouteFormId">selectRouteForm</control-param>
+                            <control-param name="editIterationFormId">editIterationProperties</control-param>
+                            <control-param name="createIterationFormId">createIteration</control-param>
+                            <control-param name="createStageInlineFormId">editStageParametersInlineForm</control-param>
+                            <control-param name="expandDataSource">ru/it/lecm/routes-v2/stages/stageExpanded</control-param>
+                            <control-param name="editStageItemsFormTitleMessage">title.signing.routes.stage.item.form.edit</control-param>
+                            <control-param name="expandedDataSource">components/form?formId=viewSigningResult</control-param>
+                            <control-param name="repeatRouteDialogFormId">repeatPreviousApprovalRouteDialog</control-param>
+                            <control-param name="clearListTitleId">title.signing.list.clear</control-param>
+                            <control-param name="clearListMsgId">message.clear.signing.list</control-param>
+                            <control-param name="showIterationsHistoryFormId">showApprovalHistoryForm</control-param>
+                            <control-param name="viewIterationResultFormId">viewSigningResult</control-param>
+                            <control-param name="cssFiles">css/lecm-signing-v2/lecm-signing-v2-routes-datagrid-control.css</control-param>
+                            <control-param name="determinantClass">signing-control</control-param>
+                            <control-param name="scripts">scripts/lecm-signing-v2/evaluators-v2.js</control-param>
+                            <control-param name="jsObjectName">LogicECM.module.Signing.Evaluators</control-param>
+                        </control>
                     </field>
                 </appearance>
             </form>
