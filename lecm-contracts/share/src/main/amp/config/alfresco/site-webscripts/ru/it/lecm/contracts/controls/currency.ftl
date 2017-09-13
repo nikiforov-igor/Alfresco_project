@@ -3,17 +3,17 @@
 <script type="text/javascript">
     //    <![CDATA[
     function getCurrency() {
-        var nodeRef = '${itemId}';
+        var nodeRef = '${form.arguments.itemId}';
         if (nodeRef && LogicECM.module.Base.Util.isNodeRef(nodeRef)) {
             Alfresco.util.Ajax.jsonGet({
                 url: Alfresco.constants.PROXY_URI + "lecm/contracts/getCurrency",
                 dataObj: {
-                    nodeRef: "${form.arguments.itemId}"
+                    nodeRef: nodeRef
                 },
                 successCallback: {
                     fn: function (response) {
                         if (response.json.currency) {
-                            var id = Dom.get(nodeRef);
+                            var id = Dom.get("${htmlId}");
                             id.innerHTML = "${field.value} " + response.json.currency;
                         }
                     }
