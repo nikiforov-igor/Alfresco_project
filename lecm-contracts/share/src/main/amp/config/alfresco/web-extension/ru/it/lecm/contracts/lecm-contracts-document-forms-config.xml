@@ -33,7 +33,7 @@
                     <show id="lecm-signing-v2-aspects:signed-on-paper"/>
                     <show id="lecm-signing-v2-aspects:signed-on-paper-changed" force="true"/>
                     <show id="lecm-signing-v2-aspects:signerEmployeeAssoc" force="true"/>
-                    <show id="lecm-signing-v2-aspects:isSigned" force="true"/>
+                    <show id="lecm-signing-v2-aspects:isSigned" force="true" for-mode="view"/>
                     <show id="lecm-signing-v2-aspects:signingDate" force="true"/>
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <show id="lecm-base-dummy-aspects:script2" force="true"/>
@@ -452,7 +452,6 @@
                     <show id="lecm-signing-v2-aspects:signed-on-paper-changed" force="true"/>
                     <show id="lecm-signing-v2-aspects:signerEmployeeAssoc" force="true"/>
                     <show id="lecm-signing-v2-aspects:signingDate" force="true"/>
-                    <show id="lecm-signing-v2-aspects:isSigned" force="true"/>
                     <show id="lecm-contract:partner-assoc" force="true"/>
                     <show id="lecm-contract:representative-assoc"/>
                     <show id="lecm-contract:signedCounterparty"/>
@@ -668,9 +667,6 @@
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
                             <control-param name="showTime">false</control-param>
                         </control>
-                    </field>
-                    <field id="lecm-signing-v2-aspects:isSigned" set="afterPrice">
-                        <control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl"/>
                     </field>
                     <field id="lecm-document-aspects:template-name">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden-default-value.ftl"/>

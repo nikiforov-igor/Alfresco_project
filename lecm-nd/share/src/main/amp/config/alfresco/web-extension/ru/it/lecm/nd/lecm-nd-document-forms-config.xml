@@ -14,7 +14,6 @@
                     <show id="lecm-signing-v2-aspects:signed-on-paper-changed" force="true"/>
                     <show id="lecm-signing-v2-aspects:signerEmployeeAssoc" force="true"/>
                     <show id="lecm-signing-v2-aspects:signingDate" force="true"/>
-                    <show id="lecm-signing-v2-aspects:isSigned" force="true"/>
                     <show id="lecm-eds-document:note"/>
                     <show id="lecm-eds-document:sheets-number"/>
                     <show id="lecm-document:subject-assoc"/>
@@ -104,9 +103,6 @@
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
                             <control-param name="showTime">false</control-param>
                         </control>
-                    </field>
-                    <field id="lecm-signing-v2-aspects:isSigned">
-                        <control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl"/>
                     </field>
                     <field id="lecm-eds-document:sheets-number">
                         <control template="/ru/it/lecm/base-share/components/controls/number.ftl">
@@ -498,7 +494,7 @@
                     <show id="lecm-signing-v2-aspects:signed-on-paper"/>
                     <show id="lecm-signing-v2-aspects:signed-on-paper-changed" force="true" for-mode="edit"/>
                     <show id="lecm-signing-v2-aspects:signerEmployeeAssoc" force="true"/>
-                    <show id="lecm-signing-v2-aspects:isSigned" force="true"/>
+                    <show id="lecm-signing-v2-aspects:isSigned" force="true" for-mode="view"/>
                     <show id="lecm-signing-v2-aspects:signingDate" force="true"/>
                     <show id="lecm-review-ts:review-table-assoc"/>
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
