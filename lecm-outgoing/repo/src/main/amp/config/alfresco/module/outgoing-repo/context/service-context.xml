@@ -19,7 +19,8 @@
 					  documents.dictionaries.LogicEcmModelsBootstrap,
 					  dictionary.fileRegister.LogicEcmModelsBootstrap,
 					  ru.it.lecm.contractors.lecm-contractors-repo.contractors-model-bootstrap,
-					  lecm.sign2.helper.model.bootstrap"
+					  lecm.sign2.helper.model.bootstrap,
+                        approvalRoutesService"
 		  p:models-ref="outgoing.models"
 		  p:labels="alfresco/module/${artifactId}/messages/lecm-outgoing-model"/>
 
