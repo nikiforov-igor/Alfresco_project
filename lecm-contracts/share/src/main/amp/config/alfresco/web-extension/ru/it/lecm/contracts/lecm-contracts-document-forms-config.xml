@@ -31,7 +31,6 @@
                     <show id="lecmApproveAspects:approvalFolderRef" force="true"/>
                     <show id="lecm-signing-route:signingFolder" force="true" for-mode="view"/>
                     <show id="lecm-signing-v2-aspects:signed-on-paper"/>
-                    <show id="lecm-signing-v2-aspects:signed-on-paper-changed" force="true"/>
                     <show id="lecm-signing-v2-aspects:signerEmployeeAssoc" force="true"/>
                     <show id="lecm-signing-v2-aspects:isSigned" force="true" for-mode="view"/>
                     <show id="lecm-signing-v2-aspects:signingDate" force="true"/>
@@ -241,9 +240,6 @@
                             <control-param name="changeFireAction">signedOnPaperChange</control-param>
                         </control>
                     </field>
-                    <field id="lecm-signing-v2-aspects:signed-on-paper-changed" set="contract-info">
-                        <control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl"/>
-                    </field>
                     <field id="lecm-signing-v2-aspects:signerEmployeeAssoc" set="contract-info">
                         <control>
                             <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS,CONTRACT_SIGNER</control-param>
@@ -449,7 +445,6 @@
                     <show id="lecm-contract:totalAmount" force="true"/>
                     <show id="lecm-contract:currency-assoc"/>
                     <show id="lecm-signing-v2-aspects:signed-on-paper"/>
-                    <show id="lecm-signing-v2-aspects:signed-on-paper-changed" force="true"/>
                     <show id="lecm-signing-v2-aspects:signerEmployeeAssoc" force="true"/>
                     <show id="lecm-signing-v2-aspects:signingDate" force="true"/>
                     <show id="lecm-contract:partner-assoc" force="true"/>
@@ -624,10 +619,7 @@
                             <control-param name="changeFireAction">signedOnPaperChange</control-param>
                         </control>
                     </field>
-                    <field id="lecm-signing-v2-aspects:signed-on-paper-changed" set="afterPrice">
-                        <control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl"/>
-                    </field>
-                    <field id="lecm-signing-route:signingFolder" label-id="label.forms.signing" set="afterDates">
+                    <field id="lecm-signing-route:signingFolder" label-id="label.forms.signing">
                         <control template="/ru/it/lecm/routes-v2/controls/routes-datagrid-control.ftl">
                             <control-param name="noRoutesLabel">label.signing.routes.no-route</control-param>
                             <control-param name="removeWorkFolderScript">lecm/routes-v2/signingRoutes/removeWorkFolder</control-param>

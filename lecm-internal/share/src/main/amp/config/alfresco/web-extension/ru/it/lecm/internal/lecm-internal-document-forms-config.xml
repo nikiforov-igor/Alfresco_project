@@ -14,7 +14,6 @@
                     <show id="lecm-internal:recipients-assoc"/>
                     <show id="lecm-eds-document:summaryContent"/>
                     <show id="lecm-signing-v2-aspects:signed-on-paper"/>
-                    <show id="lecm-signing-v2-aspects:signed-on-paper-changed" force="true"/>
                     <show id="lecm-signing-v2-aspects:signerEmployeeAssoc" force="true"/>
                     <show id="lecm-signing-v2-aspects:signingDate" force="true"/>
                     <show id="lecm-internal:temp-members-assoc" force="true"/>
@@ -124,9 +123,6 @@
                         <control>
                             <control-param name="changeFireAction">signedOnPaperChange</control-param>
                         </control>
-                    </field>
-                    <field id="lecm-signing-v2-aspects:signed-on-paper-changed">
-                        <control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl"/>
                     </field>
                     <field id="lecm-signing-v2-aspects:signerEmployeeAssoc">
                         <control>
@@ -598,7 +594,6 @@
                     <show id="lecm-signing-route:signingFolder" force="true" for-mode="view"/>
                     <show id="lecm-internal-table-structure:answers-assoc"/>
                     <show id="lecm-signing-v2-aspects:signed-on-paper"/>
-                    <show id="lecm-signing-v2-aspects:signed-on-paper-changed" force="true" for-mode="edit"/>
                     <show id="lecm-signing-v2-aspects:signerEmployeeAssoc" force="true"/>
                     <show id="lecm-signing-v2-aspects:isSigned" force="true" for-mode="view"/>
                     <show id="lecm-signing-v2-aspects:signingDate" force="true"/>
@@ -719,9 +714,6 @@
                         <control>
                             <control-param name="changeFireAction">signedOnPaperChange</control-param>
                         </control>
-                    </field>
-                    <field id="lecm-signing-v2-aspects:signed-on-paper-changed" set="common">
-                        <control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl"/>
                     </field>
                     <field id="lecm-signing-v2-aspects:signerEmployeeAssoc" set="common">
                         <control>
