@@ -12,6 +12,7 @@
 		<import uri="http://www.it.ru/logicECM/model/approval/aspects/1.0" prefix="lecmApproveAspects"/>
 		<import uri="http://www.it.ru/logicECM/meetings/table-structure/1.0" prefix="lecm-meetings-ts"/>
 		<import uri="http://www.it.ru/lecm/contractors/model/representative/1.0" prefix="lecm-representative"/>
+        <import uri="http://www.it.ru/logicECM/model/approval-routes/1.0" prefix="lecm-approval-route"/>
 	</imports>
 	<namespaces>
 		<namespace uri="http://www.it.ru/logicECM/meetings/1.0" prefix="lecm-meetings"/>
@@ -310,6 +311,7 @@
 				<aspect>lecm-meetings-ts:items-table-aspect</aspect>
 				<aspect>lecm-meetings-ts:holding-items-table-aspect</aspect>
 				<aspect>lecmApproveAspects:approvalDetailsAspect</aspect>
+                <aspect>lecm-approval-route:hasApprovalAspect</aspect>
 			</mandatory-aspects>
 		</type>
 	</types>

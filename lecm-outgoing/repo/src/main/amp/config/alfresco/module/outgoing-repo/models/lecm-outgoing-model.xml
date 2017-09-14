@@ -13,6 +13,7 @@
 		<import uri="http://www.it.ru/logicECM/document/dictionaries/deliveryMethod/1.0" prefix="lecm-doc-dic-dm"/>
 		<import uri="http://www.it.ru/logicECM/model/signing/aspects/1.0" prefix="lecmSignAspects"/>
 		<import uri="http://www.it.ru/logicECM/eds-document/aspects/1.0" prefix="lecm-eds-aspect"/>
+        <import uri="http://www.it.ru/logicECM/model/approval-routes/1.0" prefix="lecm-approval-route"/>
 	</imports>
 
 	<namespaces>
@@ -151,6 +152,7 @@
 				<aspect>lecm-document-aspects:on-control-aspect</aspect>
 				<aspect>lecmSignAspects:signingDetailsAspect</aspect>
 				<aspect>lecm-eds-aspect:signed-on-paper-aspect</aspect>
+                <aspect>lecm-approval-route:hasApprovalAspect</aspect>
 			</mandatory-aspects>
 		</type>
 
