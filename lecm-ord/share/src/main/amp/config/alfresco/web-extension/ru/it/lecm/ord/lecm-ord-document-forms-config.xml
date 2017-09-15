@@ -550,6 +550,7 @@
                     <show id="lecm-document-aspects:reg-project-data-number"/>
                     <show id="lecm-document-aspects:reg-project-data-date"/>
                     <show id="lecm-ord-table-structure:items-assoc"/>
+                    <show id="lecm-base-dummy-aspects:script5" force="true" for-mode="view"/>
                     <show id="lecm-approval-route:approvalFolder" force="true" for-mode="view"/>
                     <show id="lecm-signing-route:signingFolder" force="true" for-mode="view"/>
                     <show id="lecm-eds-aspect:signed-on-paper"/>
@@ -738,6 +739,12 @@
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-eds-documents/check-allow-signing-on-paper-script.js</control-param>
                             <control-param name="scriptLoadedFireAction">allowSigningOnPaperScript</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-base-dummy-aspects:script5" set="approvalAndSigning">
+                        <control template="/ru/it/lecm/forms/jasperforms/printReportBtn.ftl">
+                            <control-param name="reportId">approval-and-signing-list</control-param>
+                            <control-param name="buttonLabel">Лист согласования и подписания</control-param>
                         </control>
                     </field>
                     <field id="lecm-approval-route:approvalFolder" set="approvalAndSigning" label-id="label.forms.approval">                
