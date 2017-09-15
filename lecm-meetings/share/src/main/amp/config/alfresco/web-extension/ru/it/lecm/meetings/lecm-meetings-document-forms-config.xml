@@ -184,6 +184,7 @@
                     <show id="approve-agenda-label" force="true"/>
                     <!--Требование согласовать повестку-->
                     <show id="lecm-meetings:approve-agenda"/>
+                    <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <show id="lecm-approval-route:approvalFolder" force="true"/>
                 </field-visibility>
                 <appearance>
