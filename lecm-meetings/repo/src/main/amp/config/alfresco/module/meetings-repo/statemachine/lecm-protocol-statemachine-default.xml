@@ -499,7 +499,7 @@
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/c48cfec6-3652-4b91-8b90-94423fa77b11</nodeRef>
                                         <properties>
                                             <property>
@@ -1337,7 +1337,7 @@
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/08da3dab-bdac-4ab7-936b-ffbd68e7825f</nodeRef>
                                         <properties>
                                             <property>
@@ -1596,7 +1596,7 @@
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") AND doc.attr("lecm-eds-aspect:signed-on-paper") AND doc.assocClass("lecm-eds-document:document-type-assoc") != null AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:registration-required")]]></value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") AND doc.attr("lecm-signing-v2-aspects:signed-on-paper") AND doc.assocClass("lecm-eds-document:document-type-assoc") != null AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:registration-required")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -2405,7 +2405,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/86cc5bf2-6d3c-460b-84de-86af05ce94a5</nodeRef>
                                         <properties>
                                             <property>
@@ -2603,7 +2603,7 @@ AutoApprovalScript.doAuto(stm_document, 'REJECTED_AUTO', msg, 'REJECTED_AUTO');]
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[@approvalRoutesService.getState(doc.nodeRef).contains("APPROVED") AND (!@routesGlobalSettingService.isAutoRoutingAfterApproval() OR doc.attr("lecm-eds-aspect:signed-on-paper") OR @signingRoutesService.getState(doc.nodeRef) != "NEW")]]></value>
+                                                                    <![CDATA[@approvalRoutesService.getState(doc.nodeRef).contains("APPROVED") AND (!@routesGlobalSettingService.isAutoRoutingAfterApproval() OR doc.attr("lecm-signing-v2-aspects:signed-on-paper") OR @signingRoutesService.getState(doc.nodeRef) != "NEW")]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -2642,7 +2642,7 @@ AutoApprovalScript.doAuto(stm_document, 'REJECTED_AUTO', msg, 'REJECTED_AUTO');]
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[@routesGlobalSettingService.isAutoRoutingAfterApproval() AND !doc.attr("lecm-eds-aspect:signed-on-paper") AND @approvalRoutesService.getState(doc.nodeRef).contains("APPROVED")]]></value>
+                                                                    <![CDATA[@routesGlobalSettingService.isAutoRoutingAfterApproval() AND !doc.attr("lecm-signing-v2-aspects:signed-on-paper") AND @approvalRoutesService.getState(doc.nodeRef).contains("APPROVED")]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -3317,7 +3317,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/9b03dee3-db4d-4213-8746-ff71180b2061</nodeRef>
                                         <properties>
                                             <property>
@@ -3624,7 +3624,7 @@ protocolService.setPointsStatusRemoved(protocol);]]></value>
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") AND doc.attr("lecm-eds-aspect:signed-on-paper") AND doc.assocClass("lecm-eds-document:document-type-assoc") != null AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:registration-required")]]></value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") AND doc.attr("lecm-signing-v2-aspects:signed-on-paper") AND doc.assocClass("lecm-eds-document:document-type-assoc") != null AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:registration-required")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -4590,7 +4590,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/e8fa0270-2b3b-45cf-a556-3c8ecb5820b2</nodeRef>
                                         <properties>
                                             <property>
@@ -5415,7 +5415,7 @@ edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringW
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/1d8d3433-1e97-476d-bd7a-67cfa1f7cd68</nodeRef>
                                         <properties>
                                             <property>
@@ -6491,7 +6491,7 @@ edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringW
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/0e4c3e07-61c4-4122-8020-9a4f3ab99d44</nodeRef>
                                         <properties>
                                             <property>
@@ -7392,7 +7392,7 @@ edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringW
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/260996b9-fadc-4f90-8f58-1c0ea0b730a7</nodeRef>
                                         <properties>
                                             <property>
@@ -8061,7 +8061,7 @@ edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringW
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/02040016-a0df-4926-8fa5-81f130ada397</nodeRef>
                                         <properties>
                                             <property>
@@ -8421,7 +8421,7 @@ edsDocument.sendNotificationAndLogAboutAutoRegistration(document, presentStringW
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-eds-aspect_signed-on-paper</name>
+                                        <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/402c8b4f-ab57-4c7c-9834-b984f9c28bd7</nodeRef>
                                         <properties>
                                             <property>

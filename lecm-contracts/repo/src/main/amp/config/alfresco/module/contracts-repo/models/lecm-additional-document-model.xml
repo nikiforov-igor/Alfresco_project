@@ -9,8 +9,7 @@
 		<import uri="http://www.it.ru/logicECM/contract/dictionaries/1.0" prefix="lecm-contract-dic"/>
 		<import uri="http://www.it.ru/logicECM/contract/1.0" prefix="lecm-contract"/>
 		<import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
-		<import uri="http://www.it.ru/logicECM/model/signing/aspects/1.0" prefix="lecmSignAspects"/>
-		<import uri="http://www.it.ru/logicECM/eds-document/aspects/1.0" prefix="lecm-eds-aspect"/>
+		<import uri="http://www.it.ru/logicECM/model/signing-v2/aspects/1.0" prefix="lecm-signing-v2-aspects"/>
 	</imports>
 	<namespaces>
 		<namespace uri="http://www.it.ru/logicECM/contract/additional-document/1.0" prefix="lecm-additional-document"/>
@@ -122,10 +121,10 @@
 			</associations>
 			<mandatory-aspects>
 				<aspect>lecm-document-aspects:semanticAssistAspect</aspect>
-				<aspect>lecmSignAspects:signingDetailsAspect</aspect>
+				<aspect>lecm-signing-v2-aspects:signingDetailsAspect</aspect>
 				<aspect>lecm-document-aspects:has-reg-document-data</aspect>
 				<aspect>lecm-document-aspects:has-reg-project-data</aspect>
-				<aspect>lecm-eds-aspect:signed-on-paper-aspect</aspect>
+				<aspect>lecm-signing-v2-aspects:signed-on-paper-aspect</aspect>
 			</mandatory-aspects>
 		</type>
 	</types>

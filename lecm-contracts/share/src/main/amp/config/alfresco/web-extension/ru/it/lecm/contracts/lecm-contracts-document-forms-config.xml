@@ -30,11 +30,12 @@
                     <show id="lecm-contract-table-structure:stages-assoc"/>
                     <show id="lecmApproveAspects:approvalFolderRef" force="true"/>
                     <show id="lecm-signing-route:signingFolder" force="true" for-mode="view"/>
-                    <show id="lecm-eds-aspect:signed-on-paper"/>
-                    <show id="lecmSignAspects:signerEmployeeAssoc"/>
-                    <show id="lecmSignAspects:isSigned" for-mode="view"/>
-                    <show id="lecmSignAspects:signingDate" for-mode="view"/>
+                    <show id="lecm-signing-v2-aspects:signed-on-paper"/>
+                    <show id="lecm-signing-v2-aspects:signerEmployeeAssoc" force="true"/>
+                    <show id="lecm-signing-v2-aspects:isSigned" force="true" for-mode="view"/>
+                    <show id="lecm-signing-v2-aspects:signingDate" force="true"/>
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script2" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="common" appearance="" label-id="label.contracts.main" />
@@ -232,17 +233,27 @@
                             <control-param name="determinantClass">signing-control</control-param>
                             <control-param name="scripts">scripts/lecm-signing-v2/evaluators-v2.js</control-param>
                             <control-param name="jsObjectName">LogicECM.module.Signing.Evaluators</control-param>
+                            <control-param name="newListConfirmationMsgId">message.new.signing.list.confirmation</control-param>
+                            <control-param name="newListFromRoutTitleMsgId">title.new.signing.list.from.route</control-param>
+                            <control-param name="newListTitleMsgId">title.new.signing.list</control-param>
                         </control>
                     </field>
-                    <field id="lecm-eds-aspect:signed-on-paper" set="contract-info"/>
-                    <field id="lecmSignAspects:signerEmployeeAssoc" set="contract-info">
+                    <field id="lecm-signing-v2-aspects:signed-on-paper" set="contract-info">
                         <control>
-                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS</control-param>
+                            <control-param name="changeFireAction">signedOnPaperChange</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-signing-v2-aspects:signerEmployeeAssoc" set="contract-info">
+                        <control>
+                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS,CONTRACT_SIGNER</control-param>
                             <control-param name="endpointMany">true</control-param>
                         </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Signing2.signersValidator" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
+                        </constraint-handlers>
                     </field>
-                    <field id="lecmSignAspects:isSigned" set="contract-info"/>
-                    <field id="lecmSignAspects:signingDate" set="contract-info">
+                    <field id="lecm-signing-v2-aspects:isSigned" set="contract-info"/>
+                    <field id="lecm-signing-v2-aspects:signingDate" set="contract-info">
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
                             <control-param name="showTime">false</control-param>
                         </control>
@@ -251,6 +262,11 @@
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-eds-documents/check-allow-signing-on-paper-script.js</control-param>
                             <control-param name="scriptLoadedFireAction">allowSigningOnPaperScript</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-base-dummy-aspects:script2" set="contract-info">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-signing-v2/change-availability-of-signing-fields-script.js</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -431,8 +447,9 @@
                     <show id="lecm-document:subject-assoc" force="true"/>
                     <show id="lecm-contract:totalAmount" force="true"/>
                     <show id="lecm-contract:currency-assoc"/>
-                    <show id="lecm-eds-aspect:signed-on-paper"/>
-                    <show id="lecmSignAspects:signerEmployeeAssoc"/>
+                    <show id="lecm-signing-v2-aspects:signed-on-paper"/>
+                    <show id="lecm-signing-v2-aspects:signerEmployeeAssoc" force="true"/>
+                    <show id="lecm-signing-v2-aspects:signingDate" force="true"/>
                     <show id="lecm-contract:partner-assoc" force="true"/>
                     <show id="lecm-contract:representative-assoc"/>
                     <show id="lecm-contract:signedCounterparty"/>
@@ -447,6 +464,7 @@
                     <show id="lecm-document-aspects:template-name" force="true"/>
                     <show id="lecm-document-aspects:template-ref" force="true"/>
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script2" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="price" appearance="" template="/ru/it/lecm/base-share/components/controls/price.ftl" />
@@ -599,11 +617,9 @@
                             <control-param name="defaultSelectedShowPreviewButton">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-eds-aspect:signed-on-paper" set="afterPrice"/>
-                    <field id="lecmSignAspects:signerEmployeeAssoc" set="afterPrice">
+                    <field id="lecm-signing-v2-aspects:signed-on-paper" set="afterPrice">
                         <control>
-                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS</control-param>
-                            <control-param name="endpointMany">true</control-param>
+                            <control-param name="changeFireAction">signedOnPaperChange</control-param>
                         </control>
                     </field>
                     <field id="lecm-signing-route:signingFolder" label-id="label.forms.signing">
@@ -631,6 +647,23 @@
                             <control-param name="determinantClass">signing-control</control-param>
                             <control-param name="scripts">scripts/lecm-signing-v2/evaluators-v2.js</control-param>
                             <control-param name="jsObjectName">LogicECM.module.Signing.Evaluators</control-param>
+                            <control-param name="newListConfirmationMsgId">message.new.signing.list.confirmation</control-param>
+                            <control-param name="newListFromRoutTitleMsgId">title.new.signing.list.from.route</control-param>
+                            <control-param name="newListTitleMsgId">title.new.signing.list</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-signing-v2-aspects:signerEmployeeAssoc" set="afterPrice">
+                        <control>
+                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS,CONTRACT_SIGNER</control-param>
+                            <control-param name="endpointMany">true</control-param>
+                        </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Signing2.signersValidator" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-signing-v2-aspects:signingDate" set="afterPrice">
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="showTime">false</control-param>
                         </control>
                     </field>
                     <field id="lecm-document-aspects:template-name">
@@ -645,6 +678,11 @@
                             <control-param name="scriptLoadedFireAction">allowSigningOnPaperScript</control-param>
                         </control>
                     </field>
+                    <field id="lecm-base-dummy-aspects:script2" set="afterPrice">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-signing-v2/change-availability-of-signing-fields-script.js</control-param>
+                        </control>
+                    </field>
                 </appearance>
             </form>
             <form id="document-template-fields">
@@ -653,7 +691,7 @@
                     <show id="lecm-document:subject-assoc" force="true"/>
                     <show id="lecm-contract:totalAmount" force="true"/>
                     <show id="lecm-contract:currency-assoc"/>
-                    <show id="lecmSignAspects:signerEmployeeAssoc"/>
+                    <show id="lecm-signing-v2-aspects:signerEmployeeAssoc"/>
                     <show id="lecm-contract:partner-assoc" force="true"/>
                     <show id="lecm-contract:signedCounterparty"/>
                     <show id="lecm-contract:signatoryCounterparty"/>
@@ -752,10 +790,10 @@
                     <field id="lecm-contract:summaryContent">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
-                    <field id="lecmSignAspects:signerEmployeeAssoc">
+                    <field id="lecm-signing-v2-aspects:signerEmployeeAssoc">
                         <control>
                             <control-param name="useStrictFilterByOrg">true</control-param>
-                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS</control-param>
+                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS,CONTRACT_SIGNER</control-param>
                             <control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
                             <control-param name="endpointMany">true</control-param>
                         </control>
@@ -1469,8 +1507,9 @@
                     <show id="lecm-contract-table-structure:stages-assoc"/>
                     <show id="lecmApproveAspects:approvalFolderRef"/>
                     <show id="lecm-signing-route:signingFolder" force="true"/>
-                    <show id="lecm-eds-aspect:signed-on-paper"/>
-                    <show id="lecmSignAspects:signerEmployeeAssoc"/>
+                    <show id="lecm-signing-v2-aspects:signed-on-paper"/>
+                    <show id="lecm-signing-v2-aspects:signerEmployeeAssoc" force="true"/>
+                    <show id="lecm-signing-v2-aspects:signingDate" force="true"/>
                 </field-visibility>
                 <!-- Example: How to use dynamic access role
                                 <appearance>

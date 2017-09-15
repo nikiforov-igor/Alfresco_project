@@ -10,9 +10,9 @@
 		<import uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
 		<import uri="http://www.it.ru/logicECM/eds-document/1.0" prefix="lecm-eds-document"/>
 		<import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
-		<import uri="http://www.it.ru/logicECM/model/signing/aspects/1.0" prefix="lecmSignAspects"/>
 		<import uri="http://www.it.ru/logicECM/model/review-ts/1.0" prefix="lecm-review-ts"/>
 		<import uri="http://www.it.ru/logicECM/eds-document/aspects/1.0" prefix="lecm-eds-aspect"/>
+		<import uri="http://www.it.ru/logicECM/model/signing-v2/aspects/1.0" prefix="lecm-signing-v2-aspects"/>
         <import uri="http://www.it.ru/logicECM/model/approval-routes/1.0" prefix="lecm-approval-route"/>
 	</imports>
 	<namespaces>
@@ -80,10 +80,10 @@
 			</properties>
 			<mandatory-aspects>
 				<aspect>lecm-document-aspects:finalize-to-unit</aspect>
-				<aspect>lecmSignAspects:signingDetailsAspect</aspect>
+				<aspect>lecm-signing-v2-aspects:signingDetailsAspect</aspect>
 				<aspect>lecm-review-ts:review-aspect</aspect>
 				<aspect>lecm-eds-aspect:execution-state-aspect</aspect>
-				<aspect>lecm-eds-aspect:signed-on-paper-aspect</aspect>
+				<aspect>lecm-signing-v2-aspects:signed-on-paper-aspect</aspect>
                 <aspect>lecm-approval-route:hasApprovalAspect</aspect>
 			</mandatory-aspects>
 		</type>

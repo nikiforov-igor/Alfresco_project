@@ -91,7 +91,7 @@
         lecmPermission.popAuthentication();
     }
 
-    var signerAssoc = document.assocs["lecmSignAspects:signerEmployeeAssoc"];
+    var signerAssoc = document.assocs["lecm-signing-v2-aspects:signerEmployeeAssoc"];
     if (signerAssoc && signerAssoc.length) {
         notificationRecipients.push(signerAssoc[0]);
         members.push(signerAssoc[0]);

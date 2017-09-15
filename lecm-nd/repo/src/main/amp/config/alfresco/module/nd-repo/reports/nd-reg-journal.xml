@@ -20,7 +20,7 @@
                     <item name="cm:1c575ab5-dae8-434b-9329-a7d9a4c1a76f" type="lecm-rpeditor:reportDataColumn">
                         <property name="cm:name"><![CDATA[Подписант]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression">
-                            <![CDATA[{lecmSignAspects:signerEmployeeAssoc/lecm-orgstr:employee-last-name} {lecmSignAspects:signerEmployeeAssoc/lecm-orgstr:employee-first-name} {lecmSignAspects:signerEmployeeAssoc/lecm-orgstr:employee-middle-name}]]></property>
+                            <![CDATA[{lecm-signing-v2-aspects:signerEmployeeAssoc/lecm-orgstr:employee-last-name} {lecm-signing-v2-aspects:signerEmployeeAssoc/lecm-orgstr:employee-first-name} {lecm-signing-v2-aspects:signerEmployeeAssoc/lecm-orgstr:employee-middle-name}]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[signer]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                         <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
