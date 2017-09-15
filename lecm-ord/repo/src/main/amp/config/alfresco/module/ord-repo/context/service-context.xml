@@ -34,7 +34,7 @@
             errands.LogicEcmModelsBootstrap,
             eds.dictionary.bootstrap,
             lecm.sign2.helper.model.bootstrap
-            review.model.bootstrap, errands.LogicEcmModelsBootstrap, lecm.signing-v2.helper.model.bootstrap"
+            review.model.bootstrap, errands.LogicEcmModelsBootstrap, lecm.signing-v2.helper.model.bootstrap, approvalRoutesService"
           p:models-ref="ord.models"
 		  p:labels-ref="ord.models.labels"/>
 

@@ -16,6 +16,7 @@
 		<import uri="http://www.it.ru/logicECM/errands-aspects/1.0" prefix="lecm-errands-aspect"/>
 		<import uri="http://www.it.ru/logicECM/eds-document/aspects/1.0" prefix="lecm-eds-aspect"/>
 		<import uri="http://www.it.ru/logicECM/model/signing-v2/aspects/1.0" prefix="lecm-signing-v2-aspects"/>
+        <import uri="http://www.it.ru/logicECM/model/approval-routes/1.0" prefix="lecm-approval-route"/>
 	</imports>
 	<namespaces>
 		<namespace uri="http://www.it.ru/lecm/ORD/1.0" prefix="lecm-ord"/>
@@ -203,6 +204,7 @@
 				<aspect>lecm-eds-aspect:execution-state-aspect</aspect>
 				<aspect>lecm-document-aspects:on-control-aspect</aspect>
 				<aspect>lecm-signing-v2-aspects:signed-on-paper-aspect</aspect>
+                <aspect>lecm-approval-route:hasApprovalAspect</aspect>
 			</mandatory-aspects>
 		</type>
 	</types>
