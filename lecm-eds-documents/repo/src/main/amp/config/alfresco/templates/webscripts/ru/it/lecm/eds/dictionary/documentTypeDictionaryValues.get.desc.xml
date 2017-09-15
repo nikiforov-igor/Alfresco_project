@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+    <shortname>Get Document Type Dictionary Values</shortname>
+    <description>Get Document Type Dictionary Values</description>
+    <url>/lecm/document/getDocumentTypeDictionaryValues?documentNodeRef={documentNodeRef}</url>
+    <format default="json"/>
+    <authentication>user</authentication>
+    <transaction allow="readonly">required</transaction>
+</webscript>

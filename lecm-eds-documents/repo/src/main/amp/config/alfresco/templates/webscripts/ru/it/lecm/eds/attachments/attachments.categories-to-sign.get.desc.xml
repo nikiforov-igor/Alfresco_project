@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Get document attachments</shortname>
+    <description>Get document attachments</description>
+    <url>/lecm/documents/attachments/get/categoriesToSign?documentNodeRef={documentNodeRef}</url>
+    <authentication>user</authentication>
+    <transaction allow="readonly">required</transaction>
+    <format default="json"/>
+</webscript>
