@@ -13,7 +13,6 @@
         <forms>
             <dependencies>
                 <js src="/scripts/lecm-ord/constraint/ord-constraint.js"/>
-                <js src="/scripts/lecm-signing-v2/constraints/signing-validators.js"/>
             </dependencies>
         </forms>
     </config>

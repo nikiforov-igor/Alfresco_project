@@ -2,14 +2,6 @@
 
     <config>
         <forms>
-            <dependencies>
-                <js src="/scripts/lecm-signing-v2/constraints/signing-validators.js"/>
-            </dependencies>
-        </forms>
-    </config>
-
-    <config>
-        <forms>
             <default-controls>
                 <type name="association:lecm-internal-doc-type:dictionary" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                     <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_внутреннего_x0020_документа</control-param>
