@@ -100,6 +100,7 @@
                 <value>alfresco/module/${artifactId}/reports/eds-by-subject-stat.xml</value>
                 <value>alfresco/module/${artifactId}/reports/eds-by-subject-stat-all-in.xml</value>
                 <value>alfresco/module/${artifactId}/reports/eds-by-type-stat.xml</value>
+                <value>alfresco/module/${artifactId}/reports/approval-and-signing-list.xml</value>
             </list>
         </property>
         <property name="xmlImportListener" ref="eds.reportsDeployer"/>
@@ -112,6 +113,7 @@
                 <value>eds-by-subject-stat</value>
                 <value>eds-by-subject-stat-all-in</value>
                 <value>eds-by-type-stat</value>
+                <value>approval-and-signing-list</value>
             </list>
         </property>
     </bean>

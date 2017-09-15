@@ -22,6 +22,7 @@
                     <show id="lecm-eds-document:executor-assoc"/>															<!-- Исполнитель -->
                     <show id="lecm-document-aspects:reg-project-data-number"/>
                     <show id="lecm-document-aspects:reg-project-data-date"/>
+                    <show id="lecm-base-dummy-aspects:script3" force="true" for-mode="view"/>
                     <show id="lecm-approval-route:approvalFolder" force="true" for-mode="view"/>
                     <show id="lecm-signing-route:signingFolder" force="true" for-mode="view"/>
                     <show id="lecm-signing-v2-aspects:signed-on-paper"/>
@@ -198,7 +199,12 @@
                     </field>
                     <field id="lecm-document-aspects:reg-project-data-number" set="common"/>
                     <field id="lecm-document-aspects:reg-project-data-date" set="common"/>
-
+                    <field id="lecm-base-dummy-aspects:script3" set="approvalAndSigning">
+                        <control template="/ru/it/lecm/forms/jasperforms/printReportBtn.ftl">
+                            <control-param name="reportId">approval-and-signing-list</control-param>
+                            <control-param name="buttonLabel">Лист согласования и подписания</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-approval-route:approvalFolder" set="approvalAndSigning" label-id="label.forms.approval">                
                         <control template="/ru/it/lecm/routes-v2/controls/routes-datagrid-control.ftl">
                             <control-param name="noRoutesLabel">label.approval.routes.no-route</control-param>
