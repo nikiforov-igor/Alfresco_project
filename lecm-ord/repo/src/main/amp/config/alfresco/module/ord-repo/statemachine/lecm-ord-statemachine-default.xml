@@ -3266,7 +3266,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[@routesGlobalSettingService.isAutoRoutingAfterApproval() AND !doc.attr("lecm-eds-aspect:signed-on-paper") AND (@approvalRoutesService.getState(doc.nodeRef) == "APPROVED_FORCE" OR @approvalRoutesService.getState(doc.nodeRef) == "APPROVED_WITH_REMARK" OR @approvalRoutesService.getState(doc.nodeRef) == "APPROVED_AUTO") AND @signingRoutesService.getState(doc.nodeRef) == "NEW"]]></value>
+                                                                    <![CDATA[@routesGlobalSettingService.isAutoRoutingAfterApproval() AND !doc.attr("lecm-eds-aspect:signed-on-paper") AND @approvalRoutesService.getState(doc.nodeRef).contains("APPROVED") AND @signingRoutesService.getState(doc.nodeRef) == "NEW"]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -3344,7 +3344,7 @@ AutoApprovalScript.doAuto(stm_document, 'APPROVED_AUTO', msg, 'APPROVAL_AUTO');]
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[(@approvalRoutesService.getState(doc.nodeRef) == "APPROVED_FORCE" OR @approvalRoutesService.getState(doc.nodeRef) == "APPROVED_WITH_REMARK" OR @approvalRoutesService.getState(doc.nodeRef) == "APPROVED_AUTO") AND (!@routesGlobalSettingService.isAutoRoutingAfterApproval() OR doc.attr("lecm-eds-aspect:signed-on-paper") OR @signingRoutesService.getState(doc.nodeRef) != "NEW")]]></value>
+                                                                    <![CDATA[@approvalRoutesService.getState(doc.nodeRef).contains("APPROVED") AND (!@routesGlobalSettingService.isAutoRoutingAfterApproval() OR doc.attr("lecm-eds-aspect:signed-on-paper") OR @signingRoutesService.getState(doc.nodeRef) != "NEW")]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>

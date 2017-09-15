@@ -4363,7 +4363,7 @@ if (document !== null) {
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[@approvalRoutesService.getState(doc.nodeRef) == "APPROVED_FORCE" OR @approvalRoutesService.getState(doc.nodeRef) == "APPROVED_WITH_REMARK" OR @approvalRoutesService.getState(doc.nodeRef) == "APPROVED_AUTO"]]></value>
+                                                                    <![CDATA[@approvalRoutesService.getState(doc.nodeRef).contains("APPROVED")]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
