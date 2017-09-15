@@ -175,6 +175,9 @@
                             <control-param name="determinantClass">signing-control</control-param>
                             <control-param name="scripts">scripts/lecm-signing-v2/evaluators-v2.js</control-param>
                             <control-param name="jsObjectName">LogicECM.module.Signing.Evaluators</control-param>
+                            <control-param name="newListConfirmationMsgId">message.new.signing.list.confirmation</control-param>
+                            <control-param name="newListFromRoutTitleMsgId">title.new.signing.list.from.route</control-param>
+                            <control-param name="newListTitleMsgId">title.new.signing.list</control-param>
                         </control>
                     </field>
                     <field id="loadChangeSignersListScript">
@@ -676,6 +679,9 @@
                             <control-param name="determinantClass">signing-control</control-param>
                             <control-param name="scripts">scripts/lecm-signing-v2/evaluators-v2.js</control-param>
                             <control-param name="jsObjectName">LogicECM.module.Signing.Evaluators</control-param>
+                            <control-param name="newListConfirmationMsgId">message.new.signing.list.confirmation</control-param>
+                            <control-param name="newListFromRoutTitleMsgId">title.new.signing.list.from.route</control-param>
+                            <control-param name="newListTitleMsgId">title.new.signing.list</control-param>
                         </control>
                     </field>
                 </appearance>
