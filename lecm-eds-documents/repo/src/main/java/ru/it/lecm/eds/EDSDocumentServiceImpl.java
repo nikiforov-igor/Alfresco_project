@@ -181,8 +181,7 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
 
             List<NodeRef> categories = documentAttachmentsService.getCategories(documentRef);
             if (categories != null && docTypeDicRef != null) {
-                QName categoriesToSignQName = QName.createQName("lecm-doc-dic-dt:categories-of-attachments-to-sign", namespaceService);
-                String categoriesToSign = (String) nodeService.getProperty(docTypeDicRef, categoriesToSignQName);
+                String categoriesToSign = (String) nodeService.getProperty(docTypeDicRef, PROP_CATEGORIES_OF_ATTACHMENTS_TO_SIGN);
                 if (categoriesToSign != null) {
                     String[] categoriesToSignArr = categoriesToSign.split(";");
                     if (categoriesToSignArr.length > 0) {
