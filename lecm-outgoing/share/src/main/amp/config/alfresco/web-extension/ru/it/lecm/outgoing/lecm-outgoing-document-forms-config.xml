@@ -44,6 +44,8 @@
                                         event="keyup" />
                         </constraint-handlers>
                     </field>
+                    <field id="lecm-document-aspects:reg-data-date" set="common"/>													<!-- Дата регистрации -->
+
                     <field id="lecm-signing-v2-aspects:signed-on-paper" set="common">
                         <control>
                             <control-param name="changeFireAction">signedOnPaperChange</control-param>

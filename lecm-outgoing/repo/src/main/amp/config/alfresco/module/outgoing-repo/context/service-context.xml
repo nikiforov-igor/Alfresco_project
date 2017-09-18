@@ -21,7 +21,8 @@
 					  ru.it.lecm.contractors.lecm-contractors-repo.contractors-model-bootstrap,
 					  lecm.sign2.helper.model.bootstrap,
 					  lecm.signing-v2.helper.model.bootstrap,
-                      approvalRoutesService"
+                      approvalRoutesService,
+                      signingRoutesService"
 		  p:models-ref="outgoing.models"
 		  p:labels="alfresco/module/${artifactId}/messages/lecm-outgoing-model"/>
 
