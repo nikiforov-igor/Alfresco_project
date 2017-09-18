@@ -182,23 +182,19 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
             List<NodeRef> categories = documentAttachmentsService.getCategories(documentRef);
             if (categories != null && docTypeDicRef != null) {
                 String categoriesToSign = (String) nodeService.getProperty(docTypeDicRef, PROP_CATEGORIES_OF_ATTACHMENTS_TO_SIGN);
-                if (categoriesToSign != null) {
+                if (categoriesToSign == null || categoriesToSign.length() == 0) {
+                    result.addAll(categories);
+                } else {
                     String[] categoriesToSignArr = categoriesToSign.split(";");
-                    if (categoriesToSignArr[0].equals("")) {
-                        result.addAll(categories);
-                    } else {
-                        for (int i = 0; i < categoriesToSignArr.length; i++) {
-                            for (NodeRef categoryNodeRef : categories) {
-                                String categoryName = (String) nodeService.getProperty(categoryNodeRef, ContentModel.PROP_TITLE);
-                                if (categoryName.equals(categoriesToSignArr[i])) {
-                                    result.add(categoryNodeRef);
-                                    break;
-                                }
+                    for (int i = 0; i < categoriesToSignArr.length; i++) {
+                        for (NodeRef categoryNodeRef : categories) {
+                            String categoryName = (String) nodeService.getProperty(categoryNodeRef, ContentModel.PROP_TITLE);
+                            if (categoryName.equals(categoriesToSignArr[i])) {
+                                result.add(categoryNodeRef);
+                                break;
                             }
                         }
                     }
-                } else {
-                    result.addAll(categories);
                 }
             }
         }
