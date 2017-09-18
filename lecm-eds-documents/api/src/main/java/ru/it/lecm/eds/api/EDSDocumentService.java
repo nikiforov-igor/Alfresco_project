@@ -4,6 +4,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * User: dbayandin
@@ -134,4 +135,12 @@ public interface EDSDocumentService {
      * Подписан на бумажном носителе
      */
     boolean isSignedOnPaper(NodeRef document);
+
+    /**
+     * Получение категорий подписываемых вложений
+     * @param documentRef NodeRef документа
+     * @param documentTypeAssocName ассоциация на справочник типа документа, например, "lecm-eds-document:document-type-assoc'
+     * @return список nodeRef категорий подписываемых вложений
+     */
+    public List<NodeRef> getCategoriesToSign(NodeRef documentRef, String documentTypeAssocName);
 }
