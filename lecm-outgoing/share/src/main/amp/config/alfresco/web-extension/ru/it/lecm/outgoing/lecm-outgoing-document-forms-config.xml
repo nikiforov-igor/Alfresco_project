@@ -48,7 +48,7 @@
 
                     <field id="lecm-signing-v2-aspects:signed-on-paper" set="common">
                         <control>
-                            <control-param name="changeFireAction">signedOnPaperChange</control-param>
+                            <control-param name="changeFireAction">actionsVisibilityChange</control-param>
                         </control>
                     </field>
 
@@ -839,7 +839,7 @@
                     </field>
                     <field id="lecm-signing-v2-aspects:signed-on-paper">
                         <control>
-                            <control-param name="changeFireAction">signedOnPaperChange</control-param>
+                            <control-param name="changeFireAction">actionsVisibilityChange</control-param>
                         </control>
                     </field>
                     <field id="lecm-signing-v2-aspects:signerEmployeeAssoc">
