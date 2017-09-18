@@ -162,6 +162,8 @@
         <property name="workDayTypeString" value="р.д."/>
         <property name="limitlessString" value="Без срока"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
+		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
+		<property name="namespaceService" ref="namespaceService"/>
     </bean>
 
 	<bean id="edsExecutorPolicy" class="ru.it.lecm.eds.policy.EDSExecutorPolicy"
