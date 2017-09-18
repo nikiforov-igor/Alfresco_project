@@ -14,6 +14,7 @@
 		<import uri="http://www.it.ru/logicECM/eds-document/aspects/1.0" prefix="lecm-eds-aspect"/>
 		<import uri="http://www.it.ru/logicECM/model/signing-v2/aspects/1.0" prefix="lecm-signing-v2-aspects"/>
         <import uri="http://www.it.ru/logicECM/model/approval-routes/1.0" prefix="lecm-approval-route"/>
+		<import uri="http://www.it.ru/logicECM/model/signing-routes/1.0" prefix="lecm-signing-route"/>
 	</imports>
 	<namespaces>
 		<namespace uri="http://www.it.ru/lecm/ND/1.0" prefix="lecm-nd"/>
@@ -85,6 +86,7 @@
 				<aspect>lecm-eds-aspect:execution-state-aspect</aspect>
 				<aspect>lecm-signing-v2-aspects:signed-on-paper-aspect</aspect>
                 <aspect>lecm-approval-route:hasApprovalAspect</aspect>
+				<aspect>lecm-signing-route:hasSigningAspect</aspect>
 			</mandatory-aspects>
 		</type>
 	</types>
