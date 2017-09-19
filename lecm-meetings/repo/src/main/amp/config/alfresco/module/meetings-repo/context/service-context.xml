@@ -69,7 +69,7 @@
 		      ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
   			  eds.models.bootstrap,
 			  errands.LogicEcmModelsBootstrap
-			  review.model.bootstrap,approvalRoutesService"
+			  review.model.bootstrap,approvalRoutesService,lecm.signing-v2.helper.model.bootstrap"
 		  p:models-ref="protocolModels"
 		  p:labels-ref="protocolLabels"
 	/>
