@@ -240,7 +240,7 @@
                     </field>
                     <field id="lecm-signing-v2-aspects:signed-on-paper" set="contract-info">
                         <control>
-                            <control-param name="changeFireAction">signedOnPaperChange</control-param>
+                            <control-param name="changeFireAction">actionsVisibilityChange</control-param>
                         </control>
                     </field>
                     <field id="lecm-signing-v2-aspects:signerEmployeeAssoc" set="contract-info">
@@ -619,10 +619,10 @@
                     </field>
                     <field id="lecm-signing-v2-aspects:signed-on-paper" set="afterPrice">
                         <control>
-                            <control-param name="changeFireAction">signedOnPaperChange</control-param>
+                            <control-param name="changeFireAction">actionsVisibilityChange</control-param>
                         </control>
                     </field>
-                    <field id="lecm-signing-route:signingFolder" label-id="label.forms.signing">
+                    <field id="lecm-signing-route:signingFolder" set="afterDates" label-id="label.forms.signing">
                         <control template="/ru/it/lecm/routes-v2/controls/routes-datagrid-control.ftl">
                             <control-param name="noRoutesLabel">label.signing.routes.no-route</control-param>
                             <control-param name="removeWorkFolderScript">lecm/routes-v2/signingRoutes/removeWorkFolder</control-param>

@@ -14,6 +14,7 @@
 		<import uri="http://www.it.ru/lecm/model/signed-docflow/1.0" prefix="lecm-signed-docflow"/>
 		<import uri="http://www.it.ru/logicECM/contract/table-structure/1.0" prefix="lecm-contract-table-structure"/>
 		<import uri="http://www.it.ru/logicECM/model/signing-v2/aspects/1.0" prefix="lecm-signing-v2-aspects"/>
+		<import uri="http://www.it.ru/logicECM/model/signing-routes/1.0" prefix="lecm-signing-route"/>
 	</imports>
 	<namespaces>
 		<namespace uri="http://www.it.ru/logicECM/contract/1.0" prefix="lecm-contract"/>
@@ -251,6 +252,7 @@
 				<aspect>lecm-document-aspects:has-reg-document-data</aspect>
                 <aspect>lecm-document-aspects:has-reg-project-data</aspect>
 				<aspect>lecm-signing-v2-aspects:signed-on-paper-aspect</aspect>
+				<aspect>lecm-signing-route:hasSigningAspect</aspect>
 			</mandatory-aspects>
 		</type>
 	</types>
