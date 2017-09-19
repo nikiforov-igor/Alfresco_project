@@ -38,7 +38,8 @@
             lecm.sign2.helper.model.bootstrap
             review.model.bootstrap,
             lecm.signing-v2.helper.model.bootstrap,
-            approvalRoutesService"
+            approvalRoutesService,
+            signingRoutesService"
           p:models-ref="nd.models"
           p:labels-ref="nd.models.labels"/>
 
