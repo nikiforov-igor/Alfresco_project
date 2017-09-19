@@ -772,7 +772,7 @@
                             <control-param name="scriptLoadedFireAction">allowSigningOnPaperScript</control-param>
                         </control>
                     </field>
-                    <field id="lecm-base-dummy-aspects:script5" set="common">
+                    <field id="lecm-base-dummy-aspects:script5" set="ord-document-form-common-set">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-signing-v2/change-availability-of-signing-fields-script.js</control-param>
                         </control>
