@@ -32,7 +32,6 @@
                     <field id="lecmApproveAspects:approvalFolderRef" set="approvalTab">
                         <control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
                     </field>
-<<<<<<< Updated upstream
                     <field id="lecm-signing-route:signingFolder" set="approvalAndSigning" label-id="label.forms.signing">
                         <control template="/ru/it/lecm/routes-v2/controls/routes-datagrid-control.ftl">
                             <control-param name="noRoutesLabel">label.signing.routes.no-route</control-param>
@@ -68,11 +67,8 @@
                             <control-param name="changeFireAction">actionsVisibilityChange</control-param>
                         </control>
                     </field>
-                    <field id="lecm-signing-v2-aspects:signerEmployeeAssoc" set="common">
-=======
                     <field id="lecm-signing-v2-aspects:signed-on-paper" set="common"/>
                     <field id="lecmSignAspects:signerEmployeeAssoc" set="common">
->>>>>>> Stashed changes
                         <control>
                             <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS</control-param>
                         </control>
@@ -268,17 +264,13 @@
                             <control-param name="defaultSelectedShowPreviewButton">true</control-param>
                         </control>
                     </field>
-<<<<<<< Updated upstream
                     <field id="lecm-signing-v2-aspects:signed-on-paper">
                         <control>
                             <control-param name="changeFireAction">actionsVisibilityChange</control-param>
                             <control-param name="endpointMany">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-signing-v2-aspects:signerEmployeeAssoc">
-=======
                     <field id="lecmSignAspects:signerEmployeeAssoc">
->>>>>>> Stashed changes
                         <control>
                             <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS</control-param>
                         </control>
