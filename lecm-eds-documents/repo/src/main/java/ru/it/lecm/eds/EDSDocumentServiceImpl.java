@@ -1,11 +1,14 @@
 package ru.it.lecm.eds;
 
+import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.ConcurrencyFailureException;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.IWorkCalendar;
@@ -29,6 +32,18 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
 
     private IWorkCalendar calendarBean;
     private OrgstructureBean orgstructureService;
+
+    private DocumentAttachmentsService documentAttachmentsService;
+
+    public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {
+        this.documentAttachmentsService = documentAttachmentsService;
+    }
+
+    public void setNamespaceService(NamespaceService namespaceService) {
+        this.namespaceService = namespaceService;
+    }
+
+    private NamespaceService namespaceService;
 
     public OrgstructureBean getOrgstructureService() {
         return orgstructureService;
@@ -156,5 +171,31 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
             return Boolean.TRUE.equals(isSignedOnPaper);
         }
         return false;
+    }
+
+    public List<NodeRef> getCategoriesToSign(NodeRef documentRef, String documentTypeAssoc) {
+        List<NodeRef> result = new ArrayList<>();
+        if (documentRef != null) {
+            QName documentTypeQName = QName.createQName(documentTypeAssoc, namespaceService);
+            NodeRef docTypeDicRef = findNodeByAssociationRef(documentRef, documentTypeQName, null, ASSOCIATION_TYPE.TARGET);
+
+            List<NodeRef> categories = documentAttachmentsService.getCategories(documentRef);
+            if (categories != null && docTypeDicRef != null) {
+                String categoriesToSign = (String) nodeService.getProperty(docTypeDicRef, PROP_CATEGORIES_OF_ATTACHMENTS_TO_SIGN);
+                if (categoriesToSign == null || categoriesToSign.length() == 0) {
+                    result.addAll(categories);
+                } else {
+                    List<String> categoriesToSignList = Arrays.asList(categoriesToSign.split(";"));
+                    for (NodeRef categoryNodeRef : categories) {
+                        String categoryName = (String) nodeService.getProperty(categoryNodeRef, ContentModel.PROP_TITLE);
+                        if (categoriesToSignList.contains(categoryName)) {
+                            result.add(categoryNodeRef);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return result;
     }
 }

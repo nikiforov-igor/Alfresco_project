@@ -3823,16 +3823,27 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[@routesGlobalSettingService.isAutoRoutingAfterApproval() AND !doc.attr("lecm-signing-v2-aspects:signed-on-paper") AND @approvalRoutesService.getState(doc.nodeRef).contains("APPROVED") AND @signingRoutesService.getState(doc.nodeRef) == "NEW"]]></value>
+                                                                    <![CDATA[@routesGlobalSettingService.isAutoRoutingAfterApproval() AND !doc.attr("lecm-signing-v2-aspects:signed-on-paper") AND @approvalRoutesService.getState(doc.nodeRef).contains("APPROVED") AND (@signingRoutesService.getState(doc.nodeRef) == "NEW" or @signingRoutesService.getHistoryIterationsCount(doc.nodeRef) > 0 or "COMPLETE" == doc.attr("lecm-signing-v2-aspects:signingState") or @signingRoutesService.getLastIteration(doc.nodeRef)!=null )]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[var variables = base.getValueConverter().convertValueForJava({
-    workflowDefinition: 'lecmSigningWorkflow',
-    documentRef: stm_document.nodeRef
-});
+                                                                <value><![CDATA[var document = stm_document;
 
-routeWorkflow.startWorkflow(variables);]]></value>
+if (document) {
+  var currentIterationState = signingRoutes.getState(document);
+  if (currentIterationState != "NEW") {
+   	var lastIteration = signingRoutes.getLastIteration(document);
+    if (lastIteration) {
+      	signingRoutes.createIterationFromPrevious(document);
+    }
+  }
+  var variables = base.getValueConverter().convertValueForJava({
+      workflowDefinition: 'lecmSigningWorkflow-v2',
+      documentRef: document.nodeRef
+  });
+
+  routeWorkflow.startWorkflow(variables);
+}]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -3901,7 +3912,7 @@ AutoApprovalScript.doAuto(stm_document, 'APPROVED_AUTO', msg, 'APPROVAL_AUTO');]
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[@approvalRoutesService.getState(doc.nodeRef).contains("APPROVED") AND (!@routesGlobalSettingService.isAutoRoutingAfterApproval() OR doc.attr("lecm-signing-v2-aspects:signed-on-paper") OR @signingRoutesService.getState(doc.nodeRef) != "NEW")]]></value>
+                                                                    <![CDATA[@approvalRoutesService.getState(doc.nodeRef).contains("APPROVED") AND (!@routesGlobalSettingService.isAutoRoutingAfterApproval() OR doc.attr("lecm-signing-v2-aspects:signed-on-paper") OR (@signingRoutesService.getWorkingFolder(doc.nodeRef) == null or (@signingRoutesService.getState(doc.nodeRef) != "NEW" AND @signingRoutesService.getLastIteration(doc.nodeRef) == null )))]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>

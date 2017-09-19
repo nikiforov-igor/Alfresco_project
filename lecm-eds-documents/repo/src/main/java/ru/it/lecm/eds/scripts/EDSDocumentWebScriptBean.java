@@ -7,6 +7,7 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.util.ISO8601DateFormat;
 import org.alfresco.util.ParameterCheck;
 import org.apache.commons.lang.StringUtils;
+import org.mozilla.javascript.Scriptable;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
@@ -166,5 +167,13 @@ public class EDSDocumentWebScriptBean extends BaseWebScript {
     public boolean isSignedOnPaper(ScriptNode document) {
         NodeRef docNodeRef = document.getNodeRef();
         return edsService.isSignedOnPaper(docNodeRef);
+    }
+
+    public Scriptable getCategoriesToSign(ScriptNode document, String documentTypeAssoc) {
+        ParameterCheck.mandatory("document", document);
+        ParameterCheck.mandatory("documentTypeAssoc", documentTypeAssoc);
+
+        List<NodeRef> result = edsService.getCategoriesToSign(document.getNodeRef(), documentTypeAssoc);
+        return createScriptable(result);
     }
 }
