@@ -609,7 +609,7 @@
   /* create approval list */
   var DEFAULT_APPROVAL_TERM = routesGlobalSettings.getApprovalTerm();
   if(!approvalRoutes.hasEmployeesInRoute(protocol)){
-    	var workFolder = approvalRoutes.createEmptyIteration(protocol);
+    	var workFolder = approvalRoutes.createEmptyWorkingFolder(protocol);
 		var route = approvalRoutes.createNewTemporaryNode(workFolder.getNodeRef(),"lecm-approval-route:route");
     	route.properties['cm:title'] = 'нетиповой маршрут';
 		route.save();

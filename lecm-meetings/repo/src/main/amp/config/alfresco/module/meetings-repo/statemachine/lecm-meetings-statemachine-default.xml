@@ -967,7 +967,7 @@
   var isRepeated = !!stm_document.properties["lecm-events:is-repeated"];
   var DEFAULT_APPROVAL_TERM = routesGlobalSettings.getApprovalTerm();
   if(!approvalRoutes.hasEmployeesInRoute(document)){
-		var workFolder = approvalRoutes.createEmptyIteration(document);
+		var workFolder = approvalRoutes.createEmptyWorkingFolder(document);
 
    		var iteration = approvalRoutes.createNewTemporaryNode(workFolder.getNodeRef(),"lecm-approval-route:route");
     	iteration.properties['lecm-approval-route:routeInterruptAfterReject'] = false;

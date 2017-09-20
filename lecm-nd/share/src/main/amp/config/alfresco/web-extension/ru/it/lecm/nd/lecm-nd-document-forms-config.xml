@@ -31,6 +31,7 @@
                 </field-visibility>
                 <appearance>
                     <set id="dates" appearance="" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
+                    <set id="approvalAndSigning" appearance="" />
 
                     <field id="lecm-document:title"/>
                     <field id="lecm-eds-document:document-type-assoc" mandatory="true">
@@ -123,7 +124,7 @@
                             <control-param name="scriptLoadedFireAction">editExecutorCreateFormScriptLoaded</control-param>
                         </control>
                     </field>
-                    <field id="lecm-approval-route:approvalFolder" label-id="label.forms.approval">                
+                    <field id="lecm-approval-route:approvalFolder" label-id="label.forms.approval" set="approvalAndSigning">                
                         <control template="/ru/it/lecm/routes-v2/controls/routes-datagrid-control.ftl">
                             <control-param name="noRoutesLabel">label.approval.routes.no-route</control-param>
                             <control-param name="routeDataScript">lecm/routes-v2/approvalRoutes/getRouteData</control-param>
@@ -150,7 +151,7 @@
                             <control-param name="fieldsForFilterRoutes">lecm-eds-document:executor-assoc,lecm-document:author-assoc</control-param>
                         </control>                 
                     </field>
-                    <field id="lecm-signing-route:signingFolder" label-id="label.forms.signing">
+                    <field id="lecm-signing-route:signingFolder" label-id="label.forms.signing" set="approvalAndSigning">
                         <control template="/ru/it/lecm/routes-v2/controls/routes-datagrid-control.ftl">
                             <control-param name="noRoutesLabel">label.signing.routes.no-route</control-param>
                             <control-param name="removeWorkFolderScript">lecm/routes-v2/signingRoutes/removeWorkFolder</control-param>
