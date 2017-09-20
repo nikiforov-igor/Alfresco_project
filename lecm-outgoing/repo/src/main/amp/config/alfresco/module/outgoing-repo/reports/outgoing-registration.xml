@@ -197,7 +197,7 @@
                         <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression">
-                            <![CDATA[{lecmSignAspects:signerEmployeeAssoc-text-content}]]></property>
+                            <![CDATA[{lecm-signing-v2-aspects:signerEmployeeAssoc-text-content}]]></property>
                         <property name="cm:name"><![CDATA[Подписант]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_signer]]></property>

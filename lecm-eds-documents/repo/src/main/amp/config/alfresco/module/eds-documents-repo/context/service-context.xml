@@ -100,6 +100,7 @@
                 <value>alfresco/module/${artifactId}/reports/eds-by-subject-stat.xml</value>
                 <value>alfresco/module/${artifactId}/reports/eds-by-subject-stat-all-in.xml</value>
                 <value>alfresco/module/${artifactId}/reports/eds-by-type-stat.xml</value>
+                <value>alfresco/module/${artifactId}/reports/approval-and-signing-list.xml</value>
             </list>
         </property>
         <property name="xmlImportListener" ref="eds.reportsDeployer"/>
@@ -112,6 +113,7 @@
                 <value>eds-by-subject-stat</value>
                 <value>eds-by-subject-stat-all-in</value>
                 <value>eds-by-type-stat</value>
+                <value>approval-and-signing-list</value>
             </list>
         </property>
     </bean>
@@ -160,6 +162,8 @@
         <property name="workDayTypeString" value="р.д."/>
         <property name="limitlessString" value="Без срока"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
+		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
+		<property name="namespaceService" ref="namespaceService"/>
     </bean>
 
 	<bean id="edsExecutorPolicy" class="ru.it.lecm.eds.policy.EDSExecutorPolicy"
@@ -229,4 +233,11 @@
 		</property>
 	</bean>
 
+	<bean id="executorAssocForCheckRegistrator" parent="docAssocsForCheckRouteRegistrator" depends-on="authorAssocForCheckRegistrator">
+		<property name="associations">
+			<list>
+				<value>lecm-eds-document:executor-assoc</value>
+			</list>
+		</property>
+	</bean>
 </beans>

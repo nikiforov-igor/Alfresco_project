@@ -12,10 +12,11 @@
 		<import uri="http://www.it.ru/logicECM/eds-document/1.0" prefix="lecm-eds-document"/>
 		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
 		<import uri="http://www.it.ru/lecm/ORD/table-structure/1.0" prefix="lecm-ord-table-structure"/>
-		<import uri="http://www.it.ru/logicECM/model/signing/aspects/1.0" prefix="lecmSignAspects"/>
 		<import uri="http://www.it.ru/logicECM/model/review-ts/1.0" prefix="lecm-review-ts"/>
 		<import uri="http://www.it.ru/logicECM/errands-aspects/1.0" prefix="lecm-errands-aspect"/>
 		<import uri="http://www.it.ru/logicECM/eds-document/aspects/1.0" prefix="lecm-eds-aspect"/>
+		<import uri="http://www.it.ru/logicECM/model/signing-v2/aspects/1.0" prefix="lecm-signing-v2-aspects"/>
+        <import uri="http://www.it.ru/logicECM/model/approval-routes/1.0" prefix="lecm-approval-route"/>
 	</imports>
 	<namespaces>
 		<namespace uri="http://www.it.ru/lecm/ORD/1.0" prefix="lecm-ord"/>
@@ -26,7 +27,7 @@
 				<list>
 					<value>Документ|DOCUMENT</value>
 					<value>Приложения|APPENDIX</value>
-					<value>Согласование|APPROVAL</value>
+					<value>Замечания рецензентов|REVIEWER_COMMENTS</value>
 					<value>Подлинник|ORIGINAL</value>
 					<value>Прочее|OTHER</value>
 				</list>
@@ -197,12 +198,13 @@
 
 			<mandatory-aspects>
 				<aspect>lecm-ord-table-structure:table-items-aspect</aspect>
-				<aspect>lecmSignAspects:signingDetailsAspect</aspect>
+				<aspect>lecm-signing-v2-aspects:signingDetailsAspect</aspect>
 				<aspect>lecm-review-ts:review-aspect</aspect>
 				<aspect>lecm-errands-aspect:errandsExecutorsAspect</aspect>
 				<aspect>lecm-eds-aspect:execution-state-aspect</aspect>
 				<aspect>lecm-document-aspects:on-control-aspect</aspect>
-				<aspect>lecm-eds-aspect:signed-on-paper-aspect</aspect>
+				<aspect>lecm-signing-v2-aspects:signed-on-paper-aspect</aspect>
+                <aspect>lecm-approval-route:hasApprovalAspect</aspect>
 			</mandatory-aspects>
 		</type>
 	</types>

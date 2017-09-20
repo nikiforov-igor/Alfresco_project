@@ -17,4 +17,10 @@
 
 	<bean id="ord.resource.bundle.bootstrap" class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent"
 		  p:resourceBundles="alfresco.web-extension.ru.it.lecm.ord.ord"/>
+
+	<bean id="ord.defaultFormConfig" parent="defaultFormConfigs">
+		<property name="modelName" value="lecm-ord:document" />
+		<property name="path" value="alfresco/web-extension/ru/it/lecm/ord/lecm-ord-document-forms-config.xml"/>
+	</bean>
+
 </beans>

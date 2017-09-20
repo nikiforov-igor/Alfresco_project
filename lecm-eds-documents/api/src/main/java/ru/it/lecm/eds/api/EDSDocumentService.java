@@ -4,6 +4,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * User: dbayandin
@@ -20,9 +21,11 @@ public interface EDSDocumentService {
 
     String EDS_NAMESPACE_URI = "http://www.it.ru/logicECM/eds-document/1.0";
 	String EDS_ASPECTS_NAMESPACE_URI = "http://www.it.ru/logicECM/eds-document/aspects/1.0";
+	String DOCUMENT_DICTIONARIES_DOC_TYPE_NAMESPACE_URI = "http://www.it.ru/logicECM/document/dictionaries/docType/1.0";
 
     QName TYPE_EDS_DOCUMENT = QName.createQName(EDS_NAMESPACE_URI, "base");
 
+    QName PROP_CATEGORIES_OF_ATTACHMENTS_TO_SIGN = QName.createQName(DOCUMENT_DICTIONARIES_DOC_TYPE_NAMESPACE_URI, "categories-of-attachments-to-sign");
     QName PROP_NOTE = QName.createQName(EDS_NAMESPACE_URI, "note");
     QName PROP_CONTENT = QName.createQName(EDS_NAMESPACE_URI, "summaryContent");
 
@@ -134,4 +137,12 @@ public interface EDSDocumentService {
      * Подписан на бумажном носителе
      */
     boolean isSignedOnPaper(NodeRef document);
+
+    /**
+     * Получение категорий подписываемых вложений
+     * @param documentRef NodeRef документа
+     * @param documentTypeAssocName ассоциация на справочник типа документа, например, "lecm-eds-document:document-type-assoc'
+     * @return список nodeRef категорий подписываемых вложений
+     */
+    public List<NodeRef> getCategoriesToSign(NodeRef documentRef, String documentTypeAssocName);
 }

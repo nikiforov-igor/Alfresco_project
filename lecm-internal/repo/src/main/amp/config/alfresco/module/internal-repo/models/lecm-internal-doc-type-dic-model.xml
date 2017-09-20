@@ -32,6 +32,7 @@
             </properties>
             <mandatory-aspects>
                 <aspect>lecm-doc-dic-dt:registration-setting</aspect>
+                <aspect>lecm-doc-dic-dt:signing-settings</aspect>
             </mandatory-aspects>
         </type>
     </types>

@@ -637,7 +637,7 @@
                             <item name="cm:Документы в работе" type="lecm-arm:node">
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                 <property name="lecm-arm:search-query">
-                                    <![CDATA[({{ACTIVE_TASKS_ONLY({tasks:['lecmReview:reviewTask'],user:'#current-user'})}} OR @lecm\-review\-ts\:active\-reviewers:"*#current-user*") OR (({{ACTIVE_TASKS_ONLY({tasks:['lecmApprove3:approveTask'],user:'#current-user'})}} AND lecm\-statemachine\:status:'На согласовании')) OR (({{ACTIVE_TASKS_ONLY({tasks:['lecmSign2:signTask'],user:'#current-user'})}} AND lecm\-statemachine\:status:'На подписании')) OR ((@lecm\-statemachine\:status:'Проект' AND (@lecm\-document\:author\-assoc\-ref:"#current-user" OR @lecm\-eds\-document\:executor\-assoc:"#current-user"))) OR (@lecm\-statemachine\:status:'Подписан' AND (@lecm\-document\:author\-assoc\-ref:"#current-user" OR @lecm\-eds\-document\:executor\-assoc\-ref:"#current-user")) OR (@lecm\-statemachine\:status:'Согласован' AND (@lecm\-document\:author\-assoc\-ref:"#current-user" OR @lecm\-eds\-document\:executor\-assoc\-ref:"#current-user")) OR (@lecm\-statemachine\:status:'Направлен' AND @lecm\-incoming\:recipient\-assoc\-ref:('*#current-user*' OR {{CURRENT_EMPLOYEE_UNITS}})) OR (@lecm\-statemachine\:status:'На доработке' AND (@lecm\-document\:author\-assoc\-ref:"#current-user" OR @lecm\-eds\-document\:executor\-assoc\-ref:"#current-user")) OR (@lecm\-statemachine\:status:'Направлен' AND @lecm\-internal\:recipients\-assoc\-ref:('*#current-user*' OR {{CURRENT_EMPLOYEE_UNITS}}))]]></property>
+                                    <![CDATA[({{ACTIVE_TASKS_ONLY({tasks:['lecmReview:reviewTask'],user:'#current-user'})}} OR @lecm\-review\-ts\:active\-reviewers:"*#current-user*") OR (({{ACTIVE_TASKS_ONLY({tasks:['lecm-approval-v2:approveTask'],user:'#current-user'})}} AND lecm\-statemachine\:status:'На согласовании')) OR (({{ACTIVE_TASKS_ONLY({tasks:['lecmSign2:signTask'],user:'#current-user'})}} AND lecm\-statemachine\:status:'На подписании')) OR ((@lecm\-statemachine\:status:'Проект' AND (@lecm\-document\:author\-assoc\-ref:"#current-user" OR @lecm\-eds\-document\:executor\-assoc:"#current-user"))) OR (@lecm\-statemachine\:status:'Подписан' AND (@lecm\-document\:author\-assoc\-ref:"#current-user" OR @lecm\-eds\-document\:executor\-assoc\-ref:"#current-user")) OR (@lecm\-statemachine\:status:'Согласован' AND (@lecm\-document\:author\-assoc\-ref:"#current-user" OR @lecm\-eds\-document\:executor\-assoc\-ref:"#current-user")) OR (@lecm\-statemachine\:status:'Направлен' AND @lecm\-incoming\:recipient\-assoc\-ref:('*#current-user*' OR {{CURRENT_EMPLOYEE_UNITS}})) OR (@lecm\-statemachine\:status:'На доработке' AND (@lecm\-document\:author\-assoc\-ref:"#current-user" OR @lecm\-eds\-document\:executor\-assoc\-ref:"#current-user")) OR (@lecm\-statemachine\:status:'Направлен' AND @lecm\-internal\:recipients\-assoc\-ref:('*#current-user*' OR {{CURRENT_EMPLOYEE_UNITS}}))]]></property>
                                 <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[true]]></property>
                                 <property name="lecm-arm:counter-description"><![CDATA[]]></property>
@@ -670,7 +670,7 @@
                                     <item name="cm:На согласовании" type="lecm-arm:node">
                                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                         <property name="lecm-arm:search-query">
-                                            <![CDATA[({{ACTIVE_TASKS_ONLY({tasks:['lecmApprove3:approveTask'],user:'#current-user'})}} AND lecm\-statemachine\:status:'На согласовании')]]></property>
+                                            <![CDATA[({{ACTIVE_TASKS_ONLY({tasks:['lecm-approval-v2:approveTask'],user:'#current-user'})}} AND lecm\-statemachine\:status:'На согласовании')]]></property>
                                         <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                         <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                         <property name="lecm-arm:counter-description"><![CDATA[]]></property>
@@ -1118,7 +1118,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[9]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                             </item>
                                             <item name="cm:830b4e95-5a34-40f1-ba1d-0323d3de13d8" type="lecm-arm:field">
@@ -2781,7 +2781,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[11]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                             </item>
                                             <item name="cm:142ba9b3-187b-449e-9aa7-3ea5ad79c363" type="lecm-arm:field">
@@ -2954,7 +2954,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[14]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                             </item>
                                             <item name="cm:f986081d-6606-4efa-a5cc-c1fac95375dc" type="lecm-arm:field">
@@ -3163,7 +3163,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[12]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                             </item>
                                             <item name="cm:45ac910a-c0bf-4ad2-ac6c-ec0528a6a108" type="lecm-arm:field">
@@ -3341,7 +3341,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[9]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                             </item>
                                             <item name="cm:d672a623-d712-4112-a5fc-4cb1734f896c" type="lecm-arm:field">
@@ -4817,7 +4817,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[9]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                             </item>
                                             <item name="cm:2baa8a30-f7b5-4fd6-a2e7-fcf4eef622fb" type="lecm-arm:field">
@@ -5058,7 +5058,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[10]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                             </item>
                                             <item name="cm:bccc9082-3c43-49d7-ac49-2e10f9a2f7fd" type="lecm-arm:field">
@@ -5199,7 +5199,7 @@
                                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[9]]></property>
                                                 <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                 <property name="lecm-arm:field-title"><![CDATA[Подписант]]></property>
                                                 <property name="cm:name">
                                                     <![CDATA[3078c02d-2c21-4ac8-93e8-d395b5c61fbb]]></property>
@@ -5674,7 +5674,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[8]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                             </item>
                                         </items>
@@ -7759,7 +7759,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[false]]></property>
                                                                 <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
@@ -8018,7 +8018,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[false]]></property>
                                                                 <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
@@ -8224,7 +8224,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[false]]></property>
                                                                 <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
@@ -8490,7 +8490,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[false]]></property>
                                                                 <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
@@ -8981,7 +8981,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[false]]></property>
                                                                 <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
@@ -9240,7 +9240,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[false]]></property>
                                                                 <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
@@ -9446,7 +9446,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[false]]></property>
                                                                 <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
@@ -9712,7 +9712,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[false]]></property>
                                                                 <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
@@ -10203,7 +10203,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[false]]></property>
                                                                 <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
@@ -10462,7 +10462,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[false]]></property>
                                                                 <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
@@ -10668,7 +10668,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[false]]></property>
                                                                 <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
@@ -10934,7 +10934,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[false]]></property>
                                                                 <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
@@ -11425,7 +11425,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[false]]></property>
                                                                 <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
@@ -11684,7 +11684,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[false]]></property>
                                                                 <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
@@ -11890,7 +11890,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[false]]></property>
                                                                 <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
@@ -12156,7 +12156,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[false]]></property>
                                                                 <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
@@ -12647,7 +12647,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[false]]></property>
                                                                 <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
@@ -12906,7 +12906,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[false]]></property>
                                                                 <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
@@ -13112,7 +13112,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[false]]></property>
                                                                 <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
@@ -13378,7 +13378,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[false]]></property>
                                                                 <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
@@ -16306,7 +16306,7 @@
                                                         <property name="lecm-arm:order"><![CDATA[8]]></property>
                                                         <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
                                                         <property name="lecm-arm:field-name">
-                                                            <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                            <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                                     </item>
                                                     <item name="cm:3104b9ce-7bf2-4405-a5ee-883e20215c11" type="lecm-arm:field">
@@ -16500,7 +16500,7 @@
                                                         <property name="lecm-arm:order"><![CDATA[8]]></property>
                                                         <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
                                                         <property name="lecm-arm:field-name">
-                                                            <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                            <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                                     </item>
                                                     <item name="cm:79643c1c-5532-4d70-8f6a-fd0d64e2b27a" type="lecm-arm:field">
@@ -16935,7 +16935,7 @@
                                                         <property name="lecm-arm:order"><![CDATA[9]]></property>
                                                         <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
                                                         <property name="lecm-arm:field-name">
-                                                            <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                            <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                                     </item>
                                                 </items>
@@ -17485,7 +17485,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[false]]></property>
                                                                 <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
@@ -17743,7 +17743,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[false]]></property>
                                                                 <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
@@ -18024,7 +18024,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[false]]></property>
                                                                 <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
@@ -18267,7 +18267,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[false]]></property>
                                                                 <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
@@ -18998,7 +18998,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[false]]></property>
                                                                 <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
@@ -19255,7 +19255,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[false]]></property>
                                                                 <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
@@ -19513,7 +19513,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[false]]></property>
                                                                 <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
@@ -19777,7 +19777,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[false]]></property>
                                                                 <property name="lecm-arm:field-name">
-                                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                             </item>
@@ -20851,7 +20851,7 @@
                                                         <property name="lecm-arm:order"><![CDATA[10]]></property>
                                                         <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
                                                         <property name="lecm-arm:field-name">
-                                                            <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                            <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                                     </item>
                                                 </items>
@@ -21025,7 +21025,7 @@
                                                         <property name="lecm-arm:order"><![CDATA[12]]></property>
                                                         <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
                                                         <property name="lecm-arm:field-name">
-                                                            <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                            <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                                     </item>
                                                     <item name="cm:121723f9-5e49-418b-bccb-7acfdbbcd1e8" type="lecm-arm:field">
@@ -21213,7 +21213,7 @@
                                                         <property name="lecm-arm:order"><![CDATA[13]]></property>
                                                         <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
                                                         <property name="lecm-arm:field-name">
-                                                            <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                            <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                                     </item>
                                                     <item name="cm:a5a7a696-121c-4f03-a6d2-06c1e6ddb5b9" type="lecm-arm:field">
@@ -21393,7 +21393,7 @@
                                                         <property name="lecm-arm:order"><![CDATA[9]]></property>
                                                         <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
                                                         <property name="lecm-arm:field-name">
-                                                            <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                            <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                                     </item>
                                                     <item name="cm:12865c60-ef4f-408b-8476-dc3ddb639108" type="lecm-arm:field">
@@ -22944,7 +22944,7 @@
                                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[9]]></property>
                                                 <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                 <property name="lecm-arm:field-title"><![CDATA[Подписант]]></property>
                                                 <property name="cm:name">
                                                     <![CDATA[dd8c51e6-b86e-467b-9de6-14e6db14d12b]]></property>
@@ -23106,7 +23106,7 @@
                                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[10]]></property>
                                                 <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                 <property name="lecm-arm:field-title"><![CDATA[Подписант]]></property>
                                                 <property name="cm:name">
                                                     <![CDATA[a660ad17-b4eb-4106-8fea-ac7937ace121]]></property>
@@ -23260,7 +23260,7 @@
                                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[12]]></property>
                                                 <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                 <property name="lecm-arm:field-title"><![CDATA[Подписант]]></property>
                                                 <property name="cm:name">
                                                     <![CDATA[1211e34d-0e37-46a0-b0eb-cca5e1e725e6]]></property>
@@ -23498,7 +23498,7 @@
                                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[9]]></property>
                                                 <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                 <property name="lecm-arm:field-title"><![CDATA[Подписант]]></property>
                                                 <property name="cm:name">
                                                     <![CDATA[8caaeb2f-966c-4dc8-8715-3738fafecfc3]]></property>
@@ -24143,7 +24143,7 @@
                                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[9]]></property>
                                                 <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                 <property name="lecm-arm:field-title"><![CDATA[Подписант]]></property>
                                                 <property name="cm:name">
                                                     <![CDATA[b5d17420-5fa0-48bc-b647-9cc44dbaa22d]]></property>
@@ -24316,7 +24316,7 @@
                                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[12]]></property>
                                                 <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                 <property name="lecm-arm:field-title"><![CDATA[Подписант]]></property>
                                                 <property name="cm:name">
                                                     <![CDATA[0e48af35-1647-4498-83fc-a1501f7e326b]]></property>
@@ -24509,7 +24509,7 @@
                                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[9]]></property>
                                                 <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                                    <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                                 <property name="lecm-arm:field-title"><![CDATA[Подписант]]></property>
                                                 <property name="cm:name">
                                                     <![CDATA[ab0b9ea6-4ac1-4527-b203-c6ecd99ac6a5]]></property>
@@ -25810,7 +25810,7 @@
                                             <item name="cm:Повестка согласована" type="lecm-arm:node">
                                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:search-query">
-                                                    <![CDATA[@lecmApproveAspects\:approvalDecision:'APPROVED'  AND NOT (@lecmApproveAspects\:approvalDecision:'APPROVED_WITH_REMARK' OR @lecmApproveAspects\:approvalDecision:'REJECTED')]]></property>
+                                                    <![CDATA[@lecm\-routes\-v2\:decision:'APPROVED'  AND NOT (@lecm\-routes\-v2\:decision:'APPROVED_WITH_REMARK' OR @lecm\-routes\-v2\:decision:'REJECTED')]]></property>
                                                 <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:counter-description"><![CDATA[]]></property>
@@ -25824,7 +25824,7 @@
                                             <item name="cm:Повестка не согласована" type="lecm-arm:node">
                                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:search-query">
-                                                    <![CDATA[@lecmApproveAspects\:approvalDecision:'APPROVED_WITH_REMARK' OR @lecmApproveAspects\:approvalDecision:'REJECTED']]></property>
+                                                    <![CDATA[@lecm\-routes\-v2\:decision:'APPROVED_WITH_REMARK' OR @lecm\-routes\-v2\:decision:'REJECTED']]></property>
                                                 <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:counter-description"><![CDATA[]]></property>
@@ -26186,7 +26186,7 @@
                                         <property name="lecm-arm:order"><![CDATA[7]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
+                                            <![CDATA[lecm-signing-v2-aspects:signerEmployeeAssoc]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                     </item>
                                     <item name="cm:c92b27b6-7cd9-44b3-b210-7ed6dbd4556e" type="lecm-arm:field">

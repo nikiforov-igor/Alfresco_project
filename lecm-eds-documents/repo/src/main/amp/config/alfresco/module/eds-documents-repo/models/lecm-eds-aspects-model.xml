@@ -112,14 +112,6 @@
                 </property>
             </properties>
         </aspect>
-        <aspect name="lecm-eds-aspect:signed-on-paper-aspect">
-            <properties>
-                <property name="lecm-eds-aspect:signed-on-paper">
-                    <type>d:boolean</type>
-                    <default>false</default>
-                </property>
-            </properties>
-        </aspect>
         <aspect name="lecm-eds-aspect:change-status-to-aspect">
             <properties>
                 <property name="lecm-eds-aspect:change-status-to">

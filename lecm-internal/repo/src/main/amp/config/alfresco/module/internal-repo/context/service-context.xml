@@ -38,7 +38,10 @@
 					 documents.dictionaries.LogicEcmModelsBootstrap,
 					 lecm.signed-docflow.model-bootstrap,
 					 eds.models.bootstrap,
-					 lecm.sign2.helper.model.bootstrap">
+					 lecm.sign2.helper.model.bootstrap,
+                     lecm.signing-v2.helper.model.bootstrap,
+                     approvalRoutesService,
+                     signingRoutesService">
         <property name="models">
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-internal-typical-answers-dic-model.xml</value>

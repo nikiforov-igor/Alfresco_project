@@ -11,10 +11,12 @@
 		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
 		<import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
 		<import uri="http://www.it.ru/logicECM/internal/table-structure/1.0" prefix="lecm-internal-table-structure"/>
-		<import uri="http://www.it.ru/logicECM/model/signing/aspects/1.0" prefix="lecmSignAspects"/>
 		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
 		<import uri="http://www.it.ru/logicECM/model/review-ts/1.0" prefix="lecm-review-ts"/>
         <import uri="http://www.it.ru/logicECM/eds-document/aspects/1.0" prefix="lecm-eds-aspect"/>
+        <import uri="http://www.it.ru/logicECM/model/signing-v2/aspects/1.0" prefix="lecm-signing-v2-aspects"/>
+        <import uri="http://www.it.ru/logicECM/model/approval-routes/1.0" prefix="lecm-approval-route"/>
+		<import uri="http://www.it.ru/logicECM/model/signing-routes/1.0" prefix="lecm-signing-route"/>
 	</imports>
 	<namespaces>
 		<namespace uri="http://www.it.ru/logicECM/internal/1.0" prefix="lecm-internal"/>
@@ -31,7 +33,7 @@
 			<parameter name="allowedValues">
 				<list>
 					<value>Внутренний|INTERNAL</value>
-					<value>Согласование|APPROVAL</value>
+					<value>Замечания рецензентов|REVIEWER_COMMENTS</value>
 					<value>Прочее|OTHER</value>
 				</list>
 			</parameter>
@@ -147,8 +149,10 @@
 				<aspect>lecm-document-aspects:response-to-aspect</aspect>
 				<aspect>lecm-internal-table-structure:table-answers-aspect</aspect>
 				<aspect>lecm-document-aspects:event-listeners-aspect</aspect>
-				<aspect>lecmSignAspects:signingDetailsAspect</aspect>
-				<aspect>lecm-eds-aspect:signed-on-paper-aspect</aspect>
+				<aspect>lecm-signing-v2-aspects:signed-on-paper-aspect</aspect>
+				<aspect>lecm-signing-v2-aspects:signingDetailsAspect</aspect>
+                <aspect>lecm-approval-route:hasApprovalAspect</aspect>
+				<aspect>lecm-signing-route:hasSigningAspect</aspect>
 				<aspect>lecm-eds-aspect:change-status-to-aspect</aspect>
 			</mandatory-aspects>
 		</type>

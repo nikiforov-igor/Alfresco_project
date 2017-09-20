@@ -17,4 +17,10 @@
 
 	<bean id="nd.resource.bundle.bootstrap" class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent"
 		  p:resourceBundles="alfresco.web-extension.ru.it.lecm.nd.nd"/>
+
+	<bean id="nd.defaultFormConfig" parent="defaultFormConfigs">
+		<property name="modelName" value="lecm-nd:document" />
+		<property name="path" value="alfresco/web-extension/ru/it/lecm/nd/lecm-nd-document-forms-config.xml"/>
+	</bean>
+
 </beans>

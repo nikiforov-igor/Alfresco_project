@@ -18,4 +18,10 @@
 			</list>
 		</property>
 	</bean>
+
+	<bean id="resolutions.defaultFormConfig" parent="defaultFormConfigs">
+		<property name="modelName" value="lecm-resolutions:document" />
+		<property name="path" value="alfresco/web-extension/ru/it/lecm/resolutions/lecm-resolutions-document-forms-config.xml"/>
+	</bean>
+
 </beans>
