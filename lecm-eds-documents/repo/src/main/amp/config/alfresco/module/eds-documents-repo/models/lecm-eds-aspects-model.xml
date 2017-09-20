@@ -112,5 +112,13 @@
                 </property>
             </properties>
         </aspect>
+        <aspect name="lecm-eds-aspect:change-status-to-aspect">
+            <properties>
+                <property name="lecm-eds-aspect:change-status-to">
+                    <type>d:text</type>
+                    <index enabled="false"/>
+                </property>
+            </properties>
+        </aspect>
     </aspects>
 </model>

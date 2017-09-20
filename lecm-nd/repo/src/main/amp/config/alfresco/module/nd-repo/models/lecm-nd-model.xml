@@ -87,6 +87,7 @@
 				<aspect>lecm-signing-v2-aspects:signed-on-paper-aspect</aspect>
                 <aspect>lecm-approval-route:hasApprovalAspect</aspect>
 				<aspect>lecm-signing-route:hasSigningAspect</aspect>
+				<aspect>lecm-eds-aspect:change-status-to-aspect</aspect>
 			</mandatory-aspects>
 		</type>
 	</types>
