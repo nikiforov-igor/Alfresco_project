@@ -63,9 +63,15 @@
           p:rootPath="/Business platform/LECM/Сервис Групповые операции"
           p:dictionaries-ref="nd.groupOperations.dictionaries"/>
 
-    <bean id="nd.statemachine.bootstrap" parent="defaultStatemachines"
-          p:statemachineName="lecm-nd:document"
-          p:path="alfresco/module/${artifactId}/statemachine/lecm-nd-statemachine-default.xml"/>
+    <bean id="nd.defaultStatemachine" parent="defaultStatemachines">
+        <property name="statemachineName" value="lecm-nd:document" />
+        <property name="path" value="alfresco/module/${artifactId}/statemachine/lecm-nd-statemachine-default.xml" />
+    </bean>
+    <!-- Автоматическое развертывание машин состояний -->
+    <bean id="nd.defaultStatemachine.bootstrap" parent="defaultStatemachineBootstrap">
+        <property name="defaultStateMachines" ref="nd.defaultStatemachine" />
+        <property name="stateMachineName" value="lecm-nd:document"/>
+    </bean>
 
     <bean id="nd.start.schedule" class="ru.it.lecm.nd.scheduler.InWorkScheduler" parent="baseTransactionalSchedule"
           p:jobName="switch-nd-status"

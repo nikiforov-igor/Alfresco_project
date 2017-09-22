@@ -56,9 +56,15 @@
 		  p:rootPath="/Business platform/LECM/Сервис Групповые операции"
 		  p:dictionaries-ref="outgoing.groupOperations.dictionaries"/>
 
-	<bean id="outgoing.statemachine.bootstrap" parent="defaultStatemachines"
-		  p:statemachineName="lecm-outgoing:document"
-		  p:path="alfresco/module/${artifactId}/statemachine/lecm-outgoing-statemachine-default.xml"/>
+	<bean id="outgoing.defaultStatemachine" parent="defaultStatemachines">
+		<property name="statemachineName" value="lecm-outgoing:document" />
+		<property name="path" value="alfresco/module/${artifactId}/statemachine/lecm-outgoing-statemachine-default.xml" />
+	</bean>
+	<!-- Автоматическое развертывание машин состояний -->
+	<bean id="outgoing.defaultStatemachine.bootstrap" parent="defaultStatemachineBootstrap">
+		<property name="defaultStateMachines" ref="outgoing.defaultStatemachine" />
+		<property name="stateMachineName" value="lecm-outgoing:document"/>
+	</bean>
 
 	<bean id="outgoing.service" parent="baseBean"
 		  class="ru.it.lecm.outgoing.beans.OutgoingServiceImpl"

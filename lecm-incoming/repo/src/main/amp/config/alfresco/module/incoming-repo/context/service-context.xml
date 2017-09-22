@@ -75,6 +75,11 @@
         <property name="statemachineName" value="lecm-incoming:document" />
         <property name="path" value="alfresco/module/${artifactId}/models/lecm-incoming-default-statemachine.xml" />
     </bean>
+    <!-- Автоматическое развертывание машин состояний -->
+    <bean id="incoming.defaultStatemachine.bootstrap" parent="defaultStatemachineBootstrap">
+        <property name="defaultStateMachines" ref="incoming.defaultStatemachine" />
+        <property name="stateMachineName" value="lecm-incoming:document"/>
+    </bean>
 
     <bean id="incomingCopySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings">
         <property name="propsToCopy">

@@ -317,6 +317,11 @@
         <property name="statemachineName" value="lecm-errands:document" />
         <property name="path" value="alfresco/module/${artifactId}/models/lecm-errands-default-statemacine.xml" />
     </bean>
+    <!-- Автоматическое развертывание машин состояний -->
+    <bean id="errands.defaultStatemachine.bootstrap" parent="defaultStatemachineBootstrap">
+        <property name="defaultStateMachines" ref="errands.defaultStatemachine" />
+        <property name="stateMachineName" value="lecm-errands:document"/>
+    </bean>
 
     <bean id="errandsWorkflowBootstrap" parent="workflowDeployer"
           depends-on="contracts.LogicEcmContractsDictionariesBootstrap,

@@ -90,6 +90,11 @@
         <property name="statemachineName" value="lecm-internal:document" />
         <property name="path" value="alfresco/module/${artifactId}/models/lecm-internal-default-statemachine.xml" />
     </bean>
+    <!-- Автоматическое развертывание машин состояний -->
+    <bean id="internal.defaultStatemachine.bootstrap" parent="defaultStatemachineBootstrap">
+        <property name="defaultStateMachines" ref="internal.defaultStatemachine" />
+        <property name="stateMachineName" value="lecm-internal:document"/>
+    </bean>
 
     <bean  id="internalCreateRecipientPolicy" class="ru.it.lecm.internal.policy.InternalCreateRecipientPolicy"
            init-method="init" depends-on="internal.LogicEcmInternalBootstrap">

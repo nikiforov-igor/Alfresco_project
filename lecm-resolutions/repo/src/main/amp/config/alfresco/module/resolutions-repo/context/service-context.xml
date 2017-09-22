@@ -73,8 +73,13 @@
     </bean>
 
     <bean id="resolutions.defaultStatemachine" parent="defaultStatemachines">
-        <property name="statemachineName" value="lecm-resolutions:document"/>
-        <property name="path" value="alfresco/module/${artifactId}/statemachine/lecm-resolution-statemachine-default.xml"/>
+        <property name="statemachineName" value="lecm-resolutions:document" />
+        <property name="path" value="alfresco/module/${artifactId}/statemachine/lecm-resolution-statemachine-default.xml" />
+    </bean>
+    <!-- Автоматическое развертывание машин состояний -->
+    <bean id="resolutions.defaultStatemachine.bootstrap" parent="defaultStatemachineBootstrap">
+        <property name="defaultStateMachines" ref="resolutions.defaultStatemachine" />
+        <property name="stateMachineName" value="lecm-resolutions:document"/>
     </bean>
 
     <util:constant id="RESOLUTIONS_ROOT_ID" static-field="ru.it.lecm.resolutions.api.ResolutionsService.RESOLUTIONS_ROOT_ID"/>
