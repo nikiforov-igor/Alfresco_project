@@ -146,11 +146,20 @@
         <property name="statemachineName" value="lecm-contract:document"/>
         <property name="path" value="alfresco/module/${artifactId}/models/lecm-contracts-default-statemachine.xml"/>
     </bean>
+    <!-- Автоматическое развертывание машин состояний -->
+    <bean id="contract.defaultStatemachine.bootstrap" parent="defaultStatemachineBootstrap">
+        <property name="defaultStateMachines" ref="contract.defaultStatemachine" />
+        <property name="stateMachineName" value="lecm-contract:document"/>
+    </bean>
 
     <bean id="additionalDocument.defaultStatemachine" parent="defaultStatemachines">
         <property name="statemachineName" value="lecm-additional-document:additionalDocument"/>
-        <property name="path"
-                  value="alfresco/module/${artifactId}/models/lecm-additionalDocument-default-statemachine.xml"/>
+        <property name="path" value="alfresco/module/${artifactId}/models/lecm-additionalDocument-default-statemachine.xml"/>
+    </bean>
+    <!-- Автоматическое развертывание машин состояний -->
+    <bean id="additionalDocument.defaultStatemachine.bootstrap" parent="defaultStatemachineBootstrap">
+        <property name="defaultStateMachines" ref="additionalDocument.defaultStatemachine" />
+        <property name="stateMachineName" value="lecm-additional-document:additionalDocument"/>
     </bean>
 
     <bean id="contractsStatusesFilter" parent="documentStatusesFilter">

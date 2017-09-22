@@ -62,9 +62,15 @@
 		  p:dictionaries-ref="ord.dictionaries"
           />
 
-	<bean id="ord.statemachine.bootstrap" parent="defaultStatemachines"
-		  p:statemachineName="lecm-ord:document"
-		  p:path="alfresco/module/${artifactId}/statemachine/lecm-ord-statemachine-default.xml"/>
+    <bean id="ord.defaultStatemachine" parent="defaultStatemachines">
+        <property name="statemachineName" value="lecm-ord:document" />
+        <property name="path" value="alfresco/module/${artifactId}/statemachine/lecm-ord-statemachine-default.xml" />
+    </bean>
+    <!-- Автоматическое развертывание машин состояний -->
+    <bean id="ord.defaultStatemachine.bootstrap" parent="defaultStatemachineBootstrap">
+        <property name="defaultStateMachines" ref="ord.defaultStatemachine" />
+        <property name="stateMachineName" value="lecm-ord:document"/>
+    </bean>
 
 	<util:list id="ord.taggedCounterRegistrator.tags">
 		<value>project</value>
