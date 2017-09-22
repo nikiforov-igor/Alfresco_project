@@ -187,7 +187,7 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
                 } else {
                     List<String> categoriesToSignList = Arrays.asList(categoriesToSign.split(";"));
                     for (NodeRef categoryNodeRef : categories) {
-                        String categoryName = (String) nodeService.getProperty(categoryNodeRef, ContentModel.PROP_TITLE);
+                        String categoryName = (String) nodeService.getProperty(categoryNodeRef, ContentModel.PROP_NAME);
                         if (categoriesToSignList.contains(categoryName)) {
                             result.add(categoryNodeRef);
                             break;
