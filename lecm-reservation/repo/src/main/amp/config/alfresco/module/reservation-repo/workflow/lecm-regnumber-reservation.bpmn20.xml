@@ -191,7 +191,7 @@
 
 							    /* Запись в бизнес журнал если решение хорошее: */
 							    documentReservedNumber = document.properties['lecm-document-aspects:reg-data-number'];
-							    var regInfo = 'Зарезервирован номер: ' + documentReservedNumber;
+							    var regInfo = '. Зарезервирован номер ' + documentReservedNumber;
 							    var documentReservedDate;
 							    if (regDate) {
 							        /* Формат 'dd.MM.yyyy' */
