@@ -45,8 +45,6 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 
 	private EDSGlobalSettingsService edsGlobalSettingsService;
 	private RegNumbersService regNumbersService;
-	private BusinessJournalService businessJournalService;
-	protected NotificationsService notificationsService;
 	
 	private static final String POSITIVE_DECISION = "выполнен";
 	
@@ -179,11 +177,11 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 				
 				// Запись в бизнес журнал если решение хорошее:
 				String documentReservedNumber = (String) nodeService.getProperty(documentRef, DocumentService.PROP_REG_DATA_DOC_NUMBER);	
-				String regInfo = "Зарезервирован номер: " + documentReservedNumber;
+				String regInfo = ". Зарезервирован номер " + documentReservedNumber;
 				if (regDate != null) {
 					SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
 					String documentReservedDate = dateFormat.format(regDate);
-					regInfo += " от " + documentReservedDate;
+					regInfo += " на дату " + documentReservedDate;
 				}
 				String bjMessage = "#initiator выполнил резервирование регистрационного номера для документа #mainobject " + regInfo;
 				String registrarLogin = orgstructureService.getEmployeeLogin(orgstructureService.getCurrentEmployee());
