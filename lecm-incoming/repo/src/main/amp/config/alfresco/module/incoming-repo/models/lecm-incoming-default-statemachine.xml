@@ -6929,7 +6929,7 @@ if (document) {
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
-                                                                <value><![CDATA[На регистрацию]]></value>
+                                                                <value><![CDATA[Направить на регистрацию]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>do-not-ask-for-confirmation</name>
