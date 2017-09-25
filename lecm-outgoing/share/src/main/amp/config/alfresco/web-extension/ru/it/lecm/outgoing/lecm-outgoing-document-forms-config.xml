@@ -282,7 +282,7 @@
                         </control>
                     </field>
 
-                    <field id="lecm-outgoing:is-finishing" set="common">
+                    <field id="lecm-outgoing:is-finishing" set="common" read-only="true">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
                     </field>
                     <field id="lecm-base-dummy-aspects:script" set="common">
@@ -868,7 +868,7 @@
                     <field id="lecm-document-aspects:template-ref">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden-default-value.ftl"/>
                     </field>
-                    <field id="lecm-outgoing:is-finishing">
+                    <field id="lecm-outgoing:is-finishing" read-only="true">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
                     </field>
                     <field id="loadAuthorScript">
