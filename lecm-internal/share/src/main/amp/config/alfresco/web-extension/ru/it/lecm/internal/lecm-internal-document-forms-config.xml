@@ -819,10 +819,11 @@
                             <control-param name="clearListMsgId">message.clear.signing.list</control-param>
                             <control-param name="showIterationsHistoryFormId">showApprovalHistoryForm</control-param>
                             <control-param name="viewIterationResultFormId">viewSigningResult</control-param>
-                            <control-param name="cssFiles">css/lecm-signing-v2/lecm-signing-v2-routes-datagrid-control.css</control-param>
+                            <control-param name="cssFiles">css/lecm-signing-v2/lecm-signing-v2-routes-datagrid-control.css,css/lecm-signing-v2/signing-stage-items-control-styles.css</control-param>
                             <control-param name="determinantClass">signing-control</control-param>
-                            <control-param name="scripts">scripts/lecm-signing-v2/evaluators-v2.js</control-param>
+                            <control-param name="scripts">scripts/lecm-signing-v2/evaluators-v2.js,scripts/lecm-signing-v2/signing-stage-items-control.js</control-param>
                             <control-param name="jsObjectName">LogicECM.module.Signing.Evaluators</control-param>
+                            <control-param name="stageItemsJsObjectName">LogicECM.module.Signing2.SigningStageItemsControlDatagrid</control-param>
                             <control-param name="newListConfirmationMsgId">message.new.signing.list.confirmation</control-param>
                             <control-param name="newListFromRoutTitleMsgId">title.new.signing.list.from.route</control-param>
                             <control-param name="newListTitleMsgId">title.new.signing.list</control-param>
