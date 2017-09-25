@@ -121,7 +121,7 @@
 					<field id="reservationWf:presentString">
 						<control template="/ru/it/lecm/workflow/reservation/controls/reserve-message-control.ftl" >
 							<control-param name="formatString">
-								<![CDATA[<a href='/{~SHARE_CONTEXT}/page/document?nodeRef={sys:store-protocol}://{sys:store-identifier}/{sys:node-uuid}'><h2>{lecm-document:doc-type} от {~PROJECT_REGDATE} , номер проекта: {~PROJECT_REGNUM}</h2></a></br>{lecm-reservation-aspects:reserveCancelTaskMessage}]]>
+								<![CDATA[<a href='/{~SHARE_CONTEXT}/page/document?nodeRef={sys:store-protocol}://{sys:store-identifier}/{sys:node-uuid}'><h2>{lecm-document:doc-type} от {~REGDATE} , номер: {~REGNUM}</h2></a></br>{lecm-reservation-aspects:reserveCancelTaskMessage}]]>
 							</control-param>
 						</control>
 					</field>
