@@ -9,8 +9,7 @@
         "docType": "${item.docType}",
         "status": "${item.status!''}",
         "hasAccess": ${item.hasAccess?string},
-        "numberOfChildErrands": ${item.numberOfChildErrands},
-        "numberOfChildElements": ${item.numberOfChildElements}
+        "hasChildElements": ${item.hasChildElements?string}
         }<#if item_has_next>,</#if>
         </#if>
     </#list>
