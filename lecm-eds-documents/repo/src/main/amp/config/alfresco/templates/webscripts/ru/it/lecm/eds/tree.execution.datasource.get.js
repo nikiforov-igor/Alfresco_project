@@ -40,10 +40,7 @@ function evaluateItem(document, substituteTitle) {
         itemObj.hasAccess = lecmPermission.hasReadAccess(document);
 
         var children = getChildren(document);
-        var numberOfChildren = children === null ? 0 : children.length;
-
-        itemObj.numberOfChildErrands = numberOfChildren;
-        itemObj.numberOfChildElements = numberOfChildren;
+        itemObj.hasChildElements = !!(children && children.length);
 
         return itemObj;
     }
