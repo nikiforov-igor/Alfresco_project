@@ -44,11 +44,11 @@
                                    path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип параметра/Диапазон"/>
                         </assocs>
                     </item>
-                    <item name="cm:Тематика" type="lecm-rpeditor:reportDataColumn">
+                    <item name="cm:Тематики" type="lecm-rpeditor:reportDataColumn">
                         <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[lecm-doc-dic:subjects]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[]]></property>
-                        <property name="cm:name"><![CDATA[Тематика]]></property>
+                        <property name="cm:name"><![CDATA[Тематики]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[20]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[par_Subject]]></property>
                         <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
@@ -59,12 +59,12 @@
                                    path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип параметра/Список"/>
                         </assocs>
                     </item>
-                    <item name="cm:Тип документа" type="lecm-rpeditor:reportDataColumn">
+                    <item name="cm:Типы документов" type="lecm-rpeditor:reportDataColumn">
                         <property name="lecm-rpeditor:dataColumnControlParams">
                             <![CDATA[options=lecm-ord:document|ОРД,lecm-nd:document|НД,lecm-internal:document|Внутренний,lecm-incoming:document|Входящий,lecm-outgoing:document|Исходящий,lecm-protocol:document|Протокол]]></property>
                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[d:text]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[]]></property>
-                        <property name="cm:name"><![CDATA[Тип документа]]></property>
+                        <property name="cm:name"><![CDATA[Типы документов]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[10]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[par_DocKind]]></property>
                         <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
