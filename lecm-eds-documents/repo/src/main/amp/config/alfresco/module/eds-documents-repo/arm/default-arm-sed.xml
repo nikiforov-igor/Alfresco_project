@@ -6476,8 +6476,6 @@
                                             </item>
                                         </items>
                                         <assocs>
-                                            <assoc type="lecm-arm:filters-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По типу"/>
                                     <assoc type="lecm-arm:filters-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/Мои документы"/>
                                             <assoc type="lecm-arm:filters-assoc"
