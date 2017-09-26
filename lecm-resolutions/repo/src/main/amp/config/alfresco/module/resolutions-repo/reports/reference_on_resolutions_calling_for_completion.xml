@@ -119,7 +119,7 @@
                         <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[d:text]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression">
-                            <![CDATA[(1=1)|Все,(lecm_document_aspects_is_on_control = 1)|Контрольные,(lecm_document_aspects_is_on_control = 0)|Неконтрольные]]></property>
+                            <![CDATA[(1=1)|Все,(resolutions.lecm_document_aspects_is_on_control = 1)|Контрольные,(resolutions.lecm_document_aspects_is_on_control = 0)|Неконтрольные]]></property>
                         <property name="cm:name"><![CDATA[Выводить резолюции]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[is_control]]></property>
