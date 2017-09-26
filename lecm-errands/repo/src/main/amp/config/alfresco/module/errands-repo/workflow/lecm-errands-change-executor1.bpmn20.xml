@@ -20,7 +20,7 @@
                                 if (executorAssoc && executorAssoc.length == 1) {
                                     executor = executorAssoc[0];
                                 }
-                                if (executor && lecmErrandWf_changeExecutor_1NewExecutor && executor != lecmErrandWf_changeExecutor_1NewExecutor) {
+                                if (executor && lecmErrandWf_changeExecutor_1NewExecutor && executor.getId() != lecmErrandWf_changeExecutor_1NewExecutor.getId()) {
                                     processChangeExecutor(lecmErrandWf_changeExecutor_1NewExecutor, lecmErrandWf_changeExecutor_1Reason);
 
                                     var logObjects = [];
