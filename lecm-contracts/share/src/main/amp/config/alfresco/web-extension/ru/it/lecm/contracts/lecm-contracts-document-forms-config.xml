@@ -24,6 +24,7 @@
                     <show id="lecm-contract:summaryContent"/>
                     <show id="lecm-document:regnum"/>
                     <show id="lecm-document:doc-date"/>
+                    <show id="lecm-document-aspects:registrator-assoc" for-mode="view"/>
                     <show id="lecm-contract:locationRegistration"/>
                     <show id="lecm-contract:locationContract"/>
                     <show id="lecm-contract-aspect:reasonDelete-assoc"/>
@@ -188,6 +189,7 @@
                     </field>
                     <field id="lecm-document:regnum" set="other"/>
                     <field id="lecm-document:doc-date" set="other"/>
+                    <field id="lecm-document-aspects:registrator-assoc" read-only="true" set="other"/>
                     <field id="lecm-contract:locationRegistration" set="other"/>
                     <field id="lecm-contract:locationContract" set="other"/>
                     <field id="lecm-contract-aspect:reasonDelete-assoc" set="common"/>
