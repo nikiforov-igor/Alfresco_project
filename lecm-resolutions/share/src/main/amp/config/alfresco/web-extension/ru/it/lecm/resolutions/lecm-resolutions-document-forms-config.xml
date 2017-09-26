@@ -640,7 +640,7 @@
                         <control template="/ru/it/lecm/eds/controls/multi-form-control.ftl">
                             <control-param name="availableRemoveDefault">true</control-param>
                             <control-param name="documentType">lecm-errands:document</control-param>
-                            <control-param name="documentFromId">from-resolution</control-param>
+                            <control-param name="documentFromId">from-edit-resolution</control-param>
                             <control-param name="submitFireEvent">sendResolution</control-param>
                             <control-param name="argsConfig"><![CDATA[{
                                     "assoc_lecm-resolutions_controller-assoc": "assoc_lecm-errands_controller-assoc",

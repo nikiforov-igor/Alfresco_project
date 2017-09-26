@@ -1,4 +1,6 @@
 (function() {
+    var lastSelectedErrandType = null;
+
     var errandsTypes = [];
     Alfresco.util.Ajax.jsonGet({
         url: Alfresco.constants.PROXY_URI + "lecm/errands/api/getTypes",
@@ -17,9 +19,10 @@
     });
 
 
-	YAHOO.Bubbling.on('errandTypeChanged', reInit, {reinitLimitationDate: true});
-	YAHOO.Bubbling.on('resolutionErrandTypeChanged', reInit, {reinitLimitationDate: false});
-    YAHOO.Bubbling.on('createErrandsWFErrandTypeChanged', reInit, {reinitLimitationDate: true});
+	YAHOO.Bubbling.on('errandTypeChanged', reInit, {reinitLimitationDate: true, editForm: false});
+	YAHOO.Bubbling.on('resolutionErrandTypeChanged', reInit, {reinitLimitationDate: false, editForm: false});
+	YAHOO.Bubbling.on('resolutionEditErrandTypeChanged', reInit, {reinitLimitationDate: false, editForm: true});
+    YAHOO.Bubbling.on('createErrandsWFErrandTypeChanged', reInit, {reinitLimitationDate: true, editForm: false});
 
 	function reInit(layer, args, param) {
 		var obj = args[1];
@@ -77,18 +80,22 @@
                     });
                 }
                 if (reportRequiredElement) {
-                    var reportRequiredCheckBox = Dom.get(reportRequiredElement.id + "-entry");
-                    if (errandsTypes[nodeRef]["report-required"]) {
-                        reportRequiredElement.value = true;
-                        reportRequiredCheckBox.checked = true;
-                    } else {
-                        reportRequiredElement.value = false;
-                        reportRequiredCheckBox.checked = false;
+                    if (!param.editForm || (lastSelectedErrandType && lastSelectedErrandType !== nodeRef)) {
+                        var reportRequiredCheckBox = Dom.get(reportRequiredElement.id + "-entry");
+                        if (errandsTypes[nodeRef]["report-required"]) {
+                            reportRequiredElement.value = true;
+                            reportRequiredCheckBox.checked = true;
+                        } else {
+                            reportRequiredElement.value = false;
+                            reportRequiredCheckBox.checked = false;
+                        }
+                        YAHOO.Bubbling.fire(reportRequiredChangedFireEvent, {
+                            formId: obj.formId,
+                            fieldId: reportRequiredProp.replace("_",":")
+                        });
+                    } else if (param.editForm) {
+                        lastSelectedErrandType = nodeRef;
                     }
-                    YAHOO.Bubbling.fire(reportRequiredChangedFireEvent, {
-                        formId: obj.formId,
-                        fieldId: reportRequiredProp.replace("_",":")
-                    });
                 }
             }
 
