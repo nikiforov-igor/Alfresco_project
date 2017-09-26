@@ -342,10 +342,10 @@
                     </item>
                     <item name="cm:Состояние исполнения" type="lecm-rpeditor:reportDataColumn">
                         <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[options=|Все,
-false" AND @lecm\-statemachine\-aspects\:is\-final:"true|Завершено в срок,
-true" AND @lecm\-statemachine\-aspects\:is\-final:"true|Завершено с нарушением срока,
-false" AND NOT @lecm\-statemachine\-aspects\:is\-final:"true|На исполнении(срок не наступил),
-true" AND NOT @lecm\-statemachine\-aspects\:is\-final:"true|На исполнении(срок истек)]]></property>
+false" AND @lecm\-statemachine\:status:"Завершено" AND @lecm\-statemachine\-aspects\:is\-final:"true|Завершено в срок,
+true" AND @lecm\-statemachine\:status:"Завершено" AND @lecm\-statemachine\-aspects\:is\-final:"true|Завершено с нарушением срока,
+false" AND @lecm\-statemachine\:status:"На исполнении" AND NOT @lecm\-statemachine\-aspects\:is\-final:"true|На исполнении(срок не наступил),
+true" AND @lecm\-statemachine\:status:"На исполнении" AND NOT @lecm\-statemachine\-aspects\:is\-final:"true|На исполнении(срок истек)]]></property>
                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[d:text]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression">
                             <![CDATA[{lecm-resolutions:is-expired}]]></property>
