@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<items>
+    <item name="lecm-dic:Макросы участников маршрута" type="lecm-dic:dictionary">
+        <items updateMode="CreateOrUpdate">
+            <item name="cm:Руководители по иерархии" type="lecmWorkflowRoutesMacros:macros">
+                <property name="lecmWorkflowRoutesMacros:macrosString"><![CDATA[
+                (function () {
+
+                    var results = "";
+                    model.result = [];
+
+                    //Ищем пользователя исполнителя и его основную должность
+                    var executor = document.assocs["lecm-eds-document:executor-assoc"][0];
+                    if (executor) {
+                        var executorPosition = orgstructure.getPrimaryPosition(executor.nodeRef);
+                    }
+                    //Ищем подразделение по найденной должности
+                    if (executorPosition) {
+                        var employeeUnit = orgstructure.getUnitByStaff(executorPosition.nodeRef);
+                        var bossEmployee;
+
+                        while (employeeUnit) {
+                            bossEmployee = orgstructure.findUnitBoss(employeeUnit.nodeRef);
+
+                            if (bossEmployee) {
+                                //Проверяем, чтобы в результирующей строке не было дубликатов и исполнителя
+                                if (results.indexOf(bossEmployee.nodeRef.toString()) == -1
+                                    && !bossEmployee.nodeRef.toString().equals(executor.nodeRef.toString())) {
+                                    results += bossEmployee.nodeRef.toString() + ";";
+                                    //Добавляем в результат
+                                    model.result.push(bossEmployee);
+                                }
+                                //Ищем руководителя подразделения-родителя, если оно есть
+                                employeeUnit = orgstructure.getParentUnit(employeeUnit.nodeRef, false);
+                            } else {
+                                employeeUnit = null;
+                            }
+                        }
+                    }
+                })();]]>
+                </property>
+                <property name="cm:name"><![CDATA[Руководители по иерархии]]></property>
+                <property name="lecmWorkflowRoutesMacros:macrosServiceId"><![CDATA[MACRO_BOSS_HIERARCHICAL]]></property>
+                <property name="lecmWorkflowRoutesMacros:multipleResults"><![CDATA[true]]></property>
+            </item>
+        </items>
+    </item>
+</items>
