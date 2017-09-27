@@ -192,6 +192,23 @@
                         </roleAssociations>
                         <subFolders/>
                     </node>
+                    <node>
+                        <type>dynamic-role-item</type>
+                        <name>7ab90ac8-45cd-48be-80f1-e2c53afb08f2</name>
+                        <nodeRef>workspace://SpacesStore/943db6de-9966-4674-a70a-063138cd3a22</nodeRef>
+                        <properties/>
+                        <aspects>
+                            <business-role/>
+                        </aspects>
+                        <associations/>
+                        <roleAssociations>
+                            <roleAssociation>
+                                <type>role-assoc</type>
+                                <businessRoleName>LECM_APPROVER_DYN</businessRoleName>
+                            </roleAssociation>
+                        </roleAssociations>
+                        <subFolders/>
+                    </node>
                 </nodes>
             </subFolder>
             <subFolder>
@@ -3847,6 +3864,29 @@ if (document !== null) {
                                             <roleAssociation>
                                                 <type>role-assoc</type>
                                                 <businessRoleName>EVENTS_MEMBER_DYN</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>3e265b12-8072-4aa4-b095-1f55bd7d8bf1</name>
+                                        <nodeRef>workspace://SpacesStore/3e265b12-8072-4aa4-b095-1f55bd7d8bf1</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reviewer]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <business-role/>
+                                            <permissionTypeAspect/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>LECM_APPROVER_DYN</businessRoleName>
                                             </roleAssociation>
                                         </roleAssociations>
                                         <subFolders/>
