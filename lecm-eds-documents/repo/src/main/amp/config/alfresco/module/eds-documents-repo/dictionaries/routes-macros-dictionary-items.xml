@@ -10,9 +10,9 @@
                     model.result = [];
 
                     //Ищем пользователя исполнителя и его основную должность
-                    var executor = document.assocs["lecm-eds-document:executor-assoc"][0];
-                    if (executor) {
-                        var executorPosition = orgstructure.getPrimaryPosition(executor.nodeRef);
+                    var executor = document.assocs["lecm-eds-document:executor-assoc"];
+                    if (executor && executor.length > 0) {
+                        var executorPosition = orgstructure.getPrimaryPosition(executor[0].nodeRef);
                     }
                     //Ищем подразделение по найденной должности
                     if (executorPosition) {
@@ -25,7 +25,7 @@
                             if (bossEmployee) {
                                 //Проверяем, чтобы в результирующей строке не было дубликатов и исполнителя
                                 if (results.indexOf(bossEmployee.nodeRef.toString()) == -1
-                                    && !bossEmployee.nodeRef.toString().equals(executor.nodeRef.toString())) {
+                                    && !bossEmployee.nodeRef.toString().equals(executor[0].nodeRef.toString())) {
                                     results += bossEmployee.nodeRef.toString() + ";";
                                     //Добавляем в результат
                                     model.result.push(bossEmployee);
