@@ -1,10 +1,22 @@
 (function() {
-    YAHOO.Bubbling.on('resolutionControllerChanged', onResolutionControllerChange);
+    var controllerChangedPromptVisible = false;
+    var lastSelectedResolutionController = null;
 
-    function onResolutionControllerChange(layer, args) {
+    YAHOO.Bubbling.on('resolutionControllerChanged', onResolutionControllerChange, {editForm: false});
+    YAHOO.Bubbling.on('resolutionEditControllerChanged', onResolutionControllerChange, {editForm: true});
+
+    function onResolutionControllerChange(layer, args, param) {
+        var controllerValue = "";
+        if (args[1].selectedItems) {
+            var keys = Object.keys(args[1].selectedItems);
+            if (keys.length == 1) {
+                controllerValue = keys[0];
+            }
+        }
+
         var recipientField = Dom.get(args[1].formId + '_prop_lecm-resolutions_closers');
         if (recipientField && recipientField.tagName == "SELECT") {
-            if (args[1].selectedItems && Object.keys(args[1].selectedItems).length) {
+            if (controllerValue) {
                 recipientField.options[1].disabled = false;
                 recipientField.options[2].disabled = false;
             } else {
@@ -15,7 +27,10 @@
         }
 
         var errandsCount = Dom.get(args[1].formId + '_prop_lecm-resolutions_errands-json-count');
-        if (errandsCount && parseInt(errandsCount.value)) {
+        if (errandsCount && parseInt(errandsCount.value) && !controllerChangedPromptVisible
+            && (!param.editForm || (lastSelectedResolutionController !== null && lastSelectedResolutionController !== controllerValue))) {
+
+            controllerChangedPromptVisible = true;
             Alfresco.util.PopupManager.displayPrompt({
                 title: Alfresco.util.message('title.resolution.controller.change'),
                 text: Alfresco.util.message('message.resolution.controller.change'),
@@ -25,14 +40,6 @@
                     {
                         text: Alfresco.util.message('button.yes'),
                         handler: function () {
-                            var controllerValue = "";
-                            if (args[1].selectedItems) {
-                                var keys = Object.keys(args[1].selectedItems);
-                                if (keys.length == 1) {
-                                    controllerValue = keys[0];
-                                }
-                            }
-
                             YAHOO.Bubbling.fire("reInitializeSubFormsControls", {
                                 formId: args[1].formId,
                                 fieldId: "lecm-resolutions:errands-json",
@@ -44,15 +51,18 @@
                                 }
                             });
                             this.destroy();
+                            controllerChangedPromptVisible = false;
                         }
                     }, {
                         text: Alfresco.util.message('button.no'),
                         handler: function () {
                             this.destroy();
+                            controllerChangedPromptVisible = false;
                         },
                         isDefault: true
                     }]
             });
         }
+        lastSelectedResolutionController = controllerValue;
     }
 })();

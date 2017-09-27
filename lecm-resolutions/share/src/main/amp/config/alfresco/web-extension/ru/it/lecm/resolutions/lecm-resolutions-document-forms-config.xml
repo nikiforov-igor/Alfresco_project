@@ -578,7 +578,7 @@
                     <field id="lecm-resolutions:author-assoc" set="start-left"/>
                     <field id="lecm-resolutions:controller-assoc" set="start-left">
                         <control>
-                            <control-param name="changeItemsFireAction">resolutionControllerChanged</control-param>
+                            <control-param name="changeItemsFireAction">resolutionEditControllerChanged</control-param>
                             <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
                         </control>
                         <constraint-handlers>
