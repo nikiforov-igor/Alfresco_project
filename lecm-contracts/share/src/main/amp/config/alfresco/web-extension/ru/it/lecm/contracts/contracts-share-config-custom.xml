@@ -138,8 +138,8 @@
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
                             <control-param name="webscript">lecm/document/attachments/api/categoriesByType?documentType=lecm-internal:document&amp;jsonObjectName=data</control-param>
                             <control-param name="webscriptType">server</control-param>
-                            <control-param name="withEmpty">true</control-param>
                             <control-param name="multiple">true</control-param>
+                            <control-param name="customOptionName">Все</control-param>
                         </control>
                     </field>
 				</appearance>
