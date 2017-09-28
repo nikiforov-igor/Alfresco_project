@@ -2607,7 +2607,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:field-marker-html">
-                                                    <![CDATA[<B style="color:#FF0000">!</B>]]></property>
+                                                    <![CDATA[<B style="color:#FF0000" title="Важное">!</B>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-errands:is-important]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -3611,7 +3611,7 @@
                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                         <property name="lecm-arm:field-marker-html">
-                                            <![CDATA[<B style="color:#FF0000">!</B>]]></property>
+                                            <![CDATA[<B style="color:#FF0000" title="Важное">!</B>]]></property>
                                         <property name="lecm-arm:field-name"><![CDATA[lecm-errands:is-important]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                         <property name="lecm-arm:field-marker-icon"><![CDATA[]]></property>
