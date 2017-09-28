@@ -238,6 +238,7 @@
                             <control-param name="newListConfirmationMsgId">message.new.signing.list.confirmation</control-param>
                             <control-param name="newListFromRoutTitleMsgId">title.new.signing.list.from.route</control-param>
                             <control-param name="newListTitleMsgId">title.new.signing.list</control-param>
+                            <control-param name="unableCreateListActiveMessageId">message.signing.unable.to.create.list.active</control-param>
                         </control>
                     </field>
                     <field id="lecm-signing-v2-aspects:signed-on-paper" set="contract-info">
@@ -652,6 +653,7 @@
                             <control-param name="newListConfirmationMsgId">message.new.signing.list.confirmation</control-param>
                             <control-param name="newListFromRoutTitleMsgId">title.new.signing.list.from.route</control-param>
                             <control-param name="newListTitleMsgId">title.new.signing.list</control-param>
+                            <control-param name="unableCreateListActiveMessageId">message.signing.unable.to.create.list.active</control-param>
                         </control>
                     </field>
                     <field id="lecm-signing-v2-aspects:signerEmployeeAssoc" set="afterPrice">
