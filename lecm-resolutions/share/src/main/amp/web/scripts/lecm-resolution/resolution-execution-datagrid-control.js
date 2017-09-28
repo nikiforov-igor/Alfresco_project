@@ -76,6 +76,7 @@ LogicECM.module.Resolutions = LogicECM.module.Resolutions || {};
                                                 useChildQuery: false,
                                                 useFilterByOrg: false,
                                                 datagridFormId: this.options.datagridFormId,
+                                                sort: "lecm-errands:child-index-counter",
                                                 searchConfig: {
                                                     filter: "@lecm\\-errands\\:additional\\-document\\-assoc\\-ref:'" + this.options.documentNodeRef + "'"
                                                 }
