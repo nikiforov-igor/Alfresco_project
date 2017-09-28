@@ -64,6 +64,15 @@
 					  businessJournalLogEventsPolicy, eds.models.bootstrap"
 		  p:dictionaries-ref="eds.dictionaries"/>
 
+	<bean id="routes.routesMacrosDicBootstrap_v2"
+		  parent="lecmDictionaryBootstrap" depends-on="routes.model.bootstrap, businessJournalLogEventsPolicy" >
+		<property name="dictionaries">
+			<list>
+				<value>alfresco/module/${artifactId}/dictionaries/routes-macros-dictionary-items.xml</value>
+			</list>
+		</property>
+	</bean>
+
 	<bean id="eds.arm.filters.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="arm.LogicEcmModelsBootstrap, armService, arm.LogicEcmBootstrap, arm.filters.LogicEcmBootstrap">
 		<property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>

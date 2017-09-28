@@ -526,6 +526,8 @@
             </form>
             <form id="editForm">
                 <field-visibility>
+                    <show id="lecm-resolutions:base-document-assoc"/>
+
                     <show id="lecm-document-aspects:is-on-control"/>
                     <show id="lecm-resolutions:approved-outside-system"/>
                     <show id="lecm-document:subject-assoc"/>
@@ -565,12 +567,18 @@
                     <set id="reviewers" parent="reviewers-fieldset" template="/org/alfresco/components/form/2-column-set.ftl"/>
                     <set id="end"/>
 
+                    <field id="lecm-resolutions:base-document-assoc" set="start">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl">
+                            <control-param name="valueSetFireAction">resolutionEditFormScriptLoaded</control-param>
+                        </control>
+                    </field>
+
                     <field id="lecm-resolutions:approved-outside-system" set="start"/>
                     <field id="lecm-document:subject-assoc" set="start-left"/>
                     <field id="lecm-resolutions:author-assoc" set="start-left"/>
                     <field id="lecm-resolutions:controller-assoc" set="start-left">
                         <control>
-                            <control-param name="changeItemsFireAction">resolutionControllerChanged</control-param>
+                            <control-param name="changeItemsFireAction">resolutionEditControllerChanged</control-param>
                             <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
                         </control>
                         <constraint-handlers>
@@ -632,7 +640,7 @@
                         <control template="/ru/it/lecm/eds/controls/multi-form-control.ftl">
                             <control-param name="availableRemoveDefault">true</control-param>
                             <control-param name="documentType">lecm-errands:document</control-param>
-                            <control-param name="documentFromId">from-resolution</control-param>
+                            <control-param name="documentFromId">from-edit-resolution</control-param>
                             <control-param name="submitFireEvent">sendResolution</control-param>
                             <control-param name="argsConfig"><![CDATA[{
                                     "assoc_lecm-resolutions_controller-assoc": "assoc_lecm-errands_controller-assoc",

@@ -131,6 +131,9 @@ var LECMResolutionActions = {
                     document.properties["lecm-resolutions:annul-signal"] = true;
                 }
                 document.save();
+            } else {
+                document.properties["lecm-resolutions:auto-complete"] = true;
+                document.save();
             }
         }
     }

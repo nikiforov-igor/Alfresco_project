@@ -29,6 +29,7 @@
                     <show id="lecm-signing-v2-aspects:signerEmployeeAssoc" force="true"/>
                     <show id="lecm-signing-v2-aspects:isSigned" force="true" for-mode="view"/>
                     <show id="lecm-signing-v2-aspects:signingDate" force="true"/>
+                    <show id="lecm-document-aspects:registrator-assoc" force="true" for-mode="view"/>
                     <show id="lecm-outgoing:is-finishing"/>
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <show id="lecm-base-dummy-aspects:script2" force="true"/>
@@ -282,7 +283,7 @@
                             <control-param name="showTime">false</control-param>
                         </control>
                     </field>
-
+                    <field id="lecm-document-aspects:registrator-assoc" set="common"/>
                     <field id="lecm-outgoing:is-finishing" set="common" read-only="true">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
                     </field>
