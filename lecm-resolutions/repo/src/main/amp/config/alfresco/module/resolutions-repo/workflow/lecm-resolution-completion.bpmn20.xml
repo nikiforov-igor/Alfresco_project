@@ -12,6 +12,8 @@
                     <activiti:field name="script">
                         <activiti:string>
                             <![CDATA[
+                            <import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/workflow/review/form/review-ts.form.lib.js">
+
                             var completionReason = lecmResolutionWf_completionReason;
                             var document = bpm_package.children[0];
                             if (document) {
@@ -32,6 +34,14 @@
 			                            errands.sendCancelSignal(errand.nodeRef.toString(), completionReason, currentUser.nodeRef.toString());
                                     });
 			                    }
+
+                                var reviewItemsAssocs = document.assocs["lecm-review-aspects:related-review-records-assoc"];
+                                if (reviewItemsAssocs && reviewItemsAssocs.length) {
+                                    reviewItemsAssocs = reviewItemsAssocs.filter(function(item){
+                                        return item.properties['lecm-review-ts:review-state'] == 'NOT_REVIEWED';
+                                    });
+                                    cancelReviewFromInitiatingDocument(document, reviewItemsAssocs);
+                                }
 
                                 var baseDocAssoc = document.assocs["lecm-resolutions:base-document-assoc"];
                                 if (baseDocAssoc && baseDocAssoc.length) {
