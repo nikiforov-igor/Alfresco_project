@@ -71,6 +71,7 @@
                     <show id="lecm-doc-dic-dt:auto-registration"/>
                     <show id="lecm-doc-dic-dt:es-sign-required"/>
                     <show id="lecm-doc-dic-dt:categories-of-attachments-to-sign"/>
+                    <show id="load-set-default-categories-to-sign-script" force="true"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-doc-dic-dt:registration-required">
@@ -82,8 +83,18 @@
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
                             <control-param name="webscript">lecm/document/attachments/api/categoriesByType?documentType=lecm-internal:document&amp;jsonObjectName=data</control-param>
                             <control-param name="webscriptType">server</control-param>
-                            <control-param name="withEmpty">true</control-param>
                             <control-param name="multiple">true</control-param>
+                            <control-param name="customOptionName">Все</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-doc-dic-dt:es-sign-required">
+                        <control>
+                            <control-param name="changeFireAction">esSignRequiredChanged</control-param>
+                        </control>
+                    </field>
+                    <field id="load-set-default-categories-to-sign-script">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-eds-documents/set-default-categories-to-sign-script.js</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -145,6 +156,7 @@
                     <show id="lecm-doc-dic-dt:auto-registration" force="true"/>
                     <show id="lecm-doc-dic-dt:es-sign-required" force="true"/>
                     <show id="lecm-doc-dic-dt:categories-of-attachments-to-sign" force="true"/>
+                    <show id="load-set-default-categories-to-sign-script" force="true"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-doc-dic-dt:registration-required">
@@ -156,8 +168,18 @@
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
                             <control-param name="webscript">lecm/document/attachments/api/categoriesByType?documentType=lecm-internal:document&amp;jsonObjectName=data</control-param>
                             <control-param name="webscriptType">server</control-param>
-                            <control-param name="withEmpty">true</control-param>
                             <control-param name="multiple">true</control-param>
+                            <control-param name="customOptionName">Все</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-doc-dic-dt:es-sign-required">
+                        <control>
+                            <control-param name="changeFireAction">esSignRequiredChanged</control-param>
+                        </control>
+                    </field>
+                    <field id="load-set-default-categories-to-sign-script">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-eds-documents/set-default-categories-to-sign-script.js</control-param>
                         </control>
                     </field>
                 </appearance>
