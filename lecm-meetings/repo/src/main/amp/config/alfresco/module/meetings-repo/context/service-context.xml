@@ -166,19 +166,25 @@
 
 	/>
 
-	<bean id="protocol.statemachine.bootstrap" parent="defaultStatemachines"
-		  p:statemachineName="lecm-protocol:document"
-		  p:path="alfresco/module/${artifactId}/statemachine/lecm-protocol-statemachine-default.xml"/>
+    <bean id="protocol.defaultStatemachine" parent="defaultStatemachines">
+        <property name="statemachineName" value="lecm-protocol:document" />
+        <property name="path" value="alfresco/module/${artifactId}/statemachine/lecm-protocol-statemachine-default.xml" />
+    </bean>
+    <!--Автоматическое развертывание машин состояний -->
+    <bean id="protocol.defaultStatemachine.bootstrap" parent="defaultStatemachineBootstrap">
+        <property name="defaultStateMachines" ref="protocol.defaultStatemachine" />
+        <property name="stateMachineName" value="lecm-protocol:document"/>
+    </bean>
 
-	<bean id="protocol.defaultStatemachine" parent="defaultStatemachines">
-		<property name="statemachineName" value="lecm-meetings:document" />
-		<property name="path" value="alfresco/module/${artifactId}/statemachine/lecm-meetings-statemachine-default.xml" />
-	</bean>
-	<!--Автоматическое развертывание машин состояний -->
-	<bean id="protocol.defaultStatemachine.bootstrap" parent="defaultStatemachineBootstrap">
-		<property name="defaultStateMachines" ref="protocol.defaultStatemachine" />
-		<property name="stateMachineName" value="lecm-protocol:document"/>
-	</bean>
+    <bean id="meetings.defaultStatemachine" parent="defaultStatemachines">
+        <property name="statemachineName" value="lecm-meetings:document" />
+        <property name="path" value="alfresco/module/${artifactId}/statemachine/lecm-meetings-statemachine-default.xml" />
+    </bean>
+    <!-- Автоматическое развертывание машин состояний -->
+    <bean id="meetings.defaultStatemachine.bootstrap" parent="defaultStatemachineBootstrap">
+        <property name="defaultStateMachines" ref="meetings.defaultStatemachine" />
+        <property name="stateMachineName" value="lecm-meetings:document"/>
+    </bean>
 
 	<util:list id="protocol.taggedCounterRegistrator.tags">
 		<value>project</value>
