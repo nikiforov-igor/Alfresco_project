@@ -37,7 +37,7 @@
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
                 </field-visibility>
                 <appearance>
-                    <set id="buttons" template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
+                    <set id="buttons" template="/ru/it/lecm/base-share/components/hidden-set.ftl"/>
                     <field id="lecm-ord-table-structure:item-content">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
