@@ -12,13 +12,8 @@
         var options = categoriesToSignSelect.options;
 
         if (categoriesToSignSelect.options.selectedIndex == -1 && esSignedRequiredEl.value == "true") {
-            for (var i = 0, len = options.length; i < len; i++) {
-                if (options[i].value == "Все") {
-                    options[i].selected = true;
-                    categoriesToSignHiddenEl.value = options[i].value;
-                    break;
-                }
-            }
+            options[0].selected = true;
+            categoriesToSignHiddenEl.value = options[0].value;
         }
     }
 })();
