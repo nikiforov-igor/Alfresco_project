@@ -1125,7 +1125,7 @@
                             <control-param name="rows">3</control-param>
                         </control>
                     </field>
-                    <field id="lecmErrandWf:requestCancelTask_1NewExecutor">
+                    <field id="lecmErrandWf:requestCancelTask_1NewExecutor" mandatory="true">
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.requestCancelTaskNewExecutorValidation" message-id="validation-hint.mandatory" event="change"/>
                         </constraint-handlers>
