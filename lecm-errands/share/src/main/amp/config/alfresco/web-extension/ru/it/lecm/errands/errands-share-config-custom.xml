@@ -1106,7 +1106,7 @@
                             <control-param name="fieldsByOption">lecmErrandWf:requestCancelTask_1CancelReason|lecmErrandWf:requestCancelTask_1CancelChildren#alf#lecmErrandWf:requestCancelTask_1RejectReason#alf#lecmErrandWf:requestCancelTask_1NewExecutor</control-param>
                         </control>
                     </field>
-                    <field id="lecmErrandWf:requestCancelTask_1CancelReason" >
+                    <field id="lecmErrandWf:requestCancelTask_1CancelReason">
                         <control  template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Причины_x0020_отмены_x0020_поручений</control-param>
                             <control-param name="itemType">lecm-errands-dic:errand-cancel-reason</control-param>
@@ -1120,7 +1120,7 @@
                     <field id="lecmErrandWf:requestCancelTask_1CancelChildren">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
                     </field>
-                    <field id="lecmErrandWf:requestCancelTask_1RejectReason">
+                    <field id="lecmErrandWf:requestCancelTask_1RejectReason" mandatory="true">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">3</control-param>
                         </control>
