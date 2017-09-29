@@ -217,6 +217,7 @@
                             <control-param name="viewIterationResultFormId">viewApprovalResult</control-param>
                             <control-param name="editIterationFormId">editIterationProperties</control-param>
                             <control-param name="fieldsForFilterRoutes">lecm-eds-document:executor-assoc,lecm-document:author-assoc</control-param>
+                            <control-param name="scripts">scripts/lecm-routes-v2/validators/route-complete-create-validator.js</control-param>
                         </control>                 
                     </field>
                     <field id="lecm-signing-route:signingFolder" label-id="label.forms.signing">
@@ -242,7 +243,7 @@
                             <control-param name="viewIterationResultFormId">viewSigningResult</control-param>
                             <control-param name="cssFiles">css/lecm-signing-v2/lecm-signing-v2-routes-datagrid-control.css</control-param>
                             <control-param name="determinantClass">signing-control</control-param>
-                            <control-param name="scripts">scripts/lecm-signing-v2/evaluators-v2.js</control-param>
+                            <control-param name="scripts">scripts/lecm-signing-v2/evaluators-v2.js,scripts/lecm-routes-v2/validators/route-complete-create-validator.js</control-param>
                             <control-param name="jsObjectName">LogicECM.module.Signing.Evaluators</control-param>
                             <control-param name="newListConfirmationMsgId">message.new.signing.list.confirmation</control-param>
                             <control-param name="newListFromRoutTitleMsgId">title.new.signing.list.from.route</control-param>
