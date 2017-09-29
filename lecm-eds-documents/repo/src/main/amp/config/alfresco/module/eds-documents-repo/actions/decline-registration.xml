@@ -20,7 +20,7 @@
 
 	var initiators = lecmPermission.getEmployeesByDynamicRole(document, "BR_INITIATOR");
 
-     notifications.sendNotification({
+     notifications.sendNotificationFromCurrentUser({
        recipients: initiators,
        templateCode: 'EDS_DOCUMENT_DECLINE_REGISTERED',
        templateConfig: {

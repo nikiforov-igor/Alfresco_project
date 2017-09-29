@@ -11726,7 +11726,7 @@ var registrationRequired = document.assocs["lecm-eds-document:document-type-asso
 				}
 			}
 			/* уведомление */
-			notifications.sendNotification({
+			notifications.sendNotificationFromCurrentUser({
 				recipients: registrars,
 				templateCode: 'OUTGOING_REGISTER',
 				templateConfig: {
@@ -12856,7 +12856,7 @@ var registrationRequired = document.assocs["lecm-eds-document:document-type-asso
 	var initiators = lecmPermission.getEmployeesByDynamicRole(document, "BR_INITIATOR");
     var eventInitiator = orgstructure.getCurrentEmployee();
     if (initiators && initiators.length) {
-        notifications.sendNotification({
+        notifications.sendNotificationFromCurrentUser({
 		  recipients: initiators,
 		  templateCode: 'EDS_DOCUMENT_REGISTERED',
 		  templateConfig: {

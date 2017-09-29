@@ -12081,7 +12081,7 @@ businessJournal.log(contract.nodeRef.toString(), "EDIT", logText, []);]]></value
 	var initiators = lecmPermission.getEmployeesByDynamicRole(document, "BR_INITIATOR");
     var eventInitiator = orgstructure.getCurrentEmployee();
     if (initiators && initiators.length) {
-        notifications.sendNotification({
+        notifications.sendNotificationFromCurrentUser({
 		  recipients: initiators,
 		  templateCode: 'EDS_DOCUMENT_REGISTERED',
 		  templateConfig: {
