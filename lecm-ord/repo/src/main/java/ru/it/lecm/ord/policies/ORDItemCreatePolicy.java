@@ -93,6 +93,12 @@ public class ORDItemCreatePolicy implements NodeServicePolicies.OnCreateNodePoli
                 NodeRef signer = signerAssocs.get(0).getTargetRef();
                 nodeService.createAssociation(node, signer, ORDModel.ASSOC_ORD_TABLE_ITEM_AUTHOR);
             }
+            else {
+                nodeService.createAssociation(node, compiler, ORDModel.ASSOC_ORD_TABLE_ITEM_AUTHOR);
+            }
+        }
+        else {
+            nodeService.createAssociation(node, compiler, ORDModel.ASSOC_ORD_TABLE_ITEM_AUTHOR);
         }
     }
 
