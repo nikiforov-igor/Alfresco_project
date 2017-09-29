@@ -89,7 +89,7 @@ var ErrandsCompletionSignalScript = {
             logObjects.push("" + signalSender.nodeRef);
             var logText = "#object1 ";
             logText += documentScript.wrapperTitle("завершил", signalReason ? signalReason : "");
-            logText += "исполнение поручения #mainobject.";
+            logText += " исполнение поручения #mainobject.";
             businessJournal.log(doc.nodeRef.toString(), "EXECUTE_DOCUMENT", logText, logObjects);
 
             edsDocument.resetCompletionSignal(doc);

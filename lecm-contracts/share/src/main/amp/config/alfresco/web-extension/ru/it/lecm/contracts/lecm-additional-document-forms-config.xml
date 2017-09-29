@@ -2,8 +2,48 @@
 
     <config evaluator="node-type" condition="lecm-additional-document:additionalDocument">
         <forms>
+            <!-- Форма редактирования-->
+            <form id="edit">
+                <field-visibility>
+                    <show id="lecm-additional-document:additionalDocumentType"/>
+                    <show id="lecm-document:regnum"/>
+                    <show id="lecm-additional-document:date"/>
+                    <show id="lecm-additional-document:signedCounterparty"/>
+                    <show id="lecm-additional-document:summaryContent"/>
+                    <show id="lecm-signing-v2-aspects:signed-on-paper"/>
+                    <show id="lecmSignAspects:signerEmployeeAssoc"/>
+                    <show id="lecm-base-dummy-aspects:script" force="true"/>
+                </field-visibility>
+                <appearance>
+
+                    <field id="lecm-additional-document:additionalDocumentType"/>
+                    <field id="lecm-document:regnum"/>
+                    <field id="lecm-additional-document:date"/>
+                    <field id="lecm-additional-document:signedCounterparty"/>
+                    <field id="lecm-additional-document:summaryContent">
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+                    </field>
+                    <field id="lecm-signing-v2-aspects:signed-on-paper">
+                        <control>
+                            <control-param name="changeFireAction">actionsVisibilityChange</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-signing-v2-aspects:signed-on-paper"/>
+                    <field id="lecmSignAspects:signerEmployeeAssoc">
+                        <control>
+                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-base-dummy-aspects:script">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-eds-documents/check-allow-signing-on-paper-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">allowSigningOnPaperScript</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+            <!-- Форма просмотра-->
             <form>
-                <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
                     <show id="lecm-additional-document:additionalDocumentType"/>
@@ -31,36 +71,6 @@
                     </field>
                     <field id="lecmApproveAspects:approvalFolderRef" set="approvalTab">
                         <control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
-                    </field>
-                    <field id="lecm-signing-route:signingFolder" set="approvalAndSigning" label-id="label.forms.signing">
-                        <control template="/ru/it/lecm/routes-v2/controls/routes-datagrid-control.ftl">
-                            <control-param name="noRoutesLabel">label.signing.routes.no-route</control-param>
-                            <control-param name="removeWorkFolderScript">lecm/routes-v2/signingRoutes/removeWorkFolder</control-param>
-                            <control-param name="routeDataScript">lecm/routes-v2/signingRoutes/getRouteData</control-param>
-                            <control-param name="createStageItemScript">lecm/routes-v2/signingRoutes/CreateStageItemInQueue</control-param>
-                            <control-param name="createEmptyIterationScript">lecm/routes-v2/signingRoutes/createEmptyIteration</control-param>
-                            <control-param name="createIterationFromPrevious">lecm/routes-v2/createIterationFromPreviousSigning</control-param>
-                            <control-param name="convertRouteToIterationScript">lecm/routes-v2/signingRoutes/convertRouteToIteration</control-param>
-                            <control-param name="createListFromRouteFormId">selectRouteForm</control-param>
-                            <control-param name="editIterationFormId">editIterationProperties</control-param>
-                            <control-param name="createIterationFormId">createIteration</control-param>
-                            <control-param name="createStageInlineFormId">editStageParametersInlineForm</control-param>
-                            <control-param name="expandDataSource">ru/it/lecm/routes-v2/stages/stageExpanded</control-param>
-                            <control-param name="editStageItemsFormTitleMessage">title.signing.routes.stage.item.form.edit</control-param>
-                            <control-param name="expandedDataSource">components/form?formId=viewSigningResult</control-param>
-                            <control-param name="repeatRouteDialogFormId">repeatPreviousApprovalRouteDialog</control-param>
-                            <control-param name="clearListTitleId">title.signing.list.clear</control-param>
-                            <control-param name="clearListMsgId">message.clear.signing.list</control-param>
-                            <control-param name="showIterationsHistoryFormId">showApprovalHistoryForm</control-param>
-                            <control-param name="viewIterationResultFormId">viewSigningResult</control-param>
-                            <control-param name="cssFiles">css/lecm-signing-v2/lecm-signing-v2-routes-datagrid-control.css</control-param>
-                            <control-param name="determinantClass">signing-control</control-param>
-                            <control-param name="scripts">scripts/lecm-signing-v2/evaluators-v2.js</control-param>
-                            <control-param name="jsObjectName">LogicECM.module.Signing.Evaluators</control-param>
-                            <control-param name="newListConfirmationMsgId">message.new.signing.list.confirmation</control-param>
-                            <control-param name="newListFromRoutTitleMsgId">title.new.signing.list.from.route</control-param>
-                            <control-param name="newListTitleMsgId">title.new.signing.list</control-param>
-                        </control>
                     </field>
                     <field id="lecm-signing-v2-aspects:signed-on-paper" set="common">
                         <control>
