@@ -101,7 +101,7 @@
                                 document.save();
                                 lecmPermission.popAuthentication();
 
-                                notifications.sendNotification({
+                                notifications.sendNotificationFromCurrentUser({
                                     recipients: [employee],
                                     templateCode: 'RESERVATION_REQUEST_CANCEL_STARTED',
                                     templateConfig: {
@@ -176,7 +176,7 @@
                                     templateConfigObject.reason = rejectReason;
                                 }
                                 /* Уведомление при окончании запроса на резервирование рег.номера: */
-                                notifications.sendNotification({
+                                notifications.sendNotificationFromCurrentUser({
                                     recipients: documentInitiators,
                                     templateCode: templateCode,
                                     templateConfig: templateConfigObject
