@@ -423,6 +423,8 @@
                     <show id="lecm-errands:limitation-date"/>
                     <!-- Важное -->
                     <show id="lecm-errands:is-important"/>
+                    <!-- Статус -->
+                    <show id="lecm-statemachine:status"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-errands:initiator-assoc">
