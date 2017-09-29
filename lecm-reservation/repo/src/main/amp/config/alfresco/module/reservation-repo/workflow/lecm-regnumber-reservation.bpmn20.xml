@@ -109,7 +109,7 @@
 						    document.properties['lecm-reservation-aspects:reserveTaskMessage'] = reserveTaskMessage;
 						    document.save();
 
-                            notifications.sendNotification({
+                            notifications.sendNotificationFromCurrentUser({
                                 recipients: [employee],
                                 templateCode: 'RESERVATION_REQUEST_STARTED',
                                 templateConfig: {
@@ -229,7 +229,7 @@
 							lecmPermission.popAuthentication();
 
 							/* Уведомление при окончании запроса на резервирование рег.номера: */
-                            notifications.sendNotification({
+                            notifications.sendNotificationFromCurrentUser({
                                 recipients: documentInitiators,
                                 templateCode: templateCode,
                                 templateConfig: templateConfigObject
