@@ -1706,6 +1706,32 @@ if (doc) {
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>46e97fab-c965-4ccd-bf53-27665aa1cd30</name>
+                                                        <nodeRef>workspace://SpacesStore/eed3c7d3-a4ae-41ae-9f33-3e50cd7ce84b</nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value>
+                                                                    <![CDATA[Назначение прав Исполнителю]]>
+                                                                </value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value>
+                                                                    <![CDATA[<import resource="classpath:/alfresco/module/eds-documents-repo/workflow/scripts/eds-executor-script.js">
+var doc = bpm_package.children[0];
+if (doc) {
+    EDSExecutorScript.grandDynamicRoleForExecutor(doc);
+}]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
