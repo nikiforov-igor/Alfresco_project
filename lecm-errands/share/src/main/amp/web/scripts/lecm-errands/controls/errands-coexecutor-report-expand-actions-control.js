@@ -147,9 +147,16 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
 
         },
         processDeclineReasonField: function () {
-            var declineReasonField = Selector.query(".hiddenFields.hidden1", Dom.get(this.options.formId), true);
-            if (declineReasonField && this.options.expandedReport.status == "DECLINE") {
-                Dom.removeClass(declineReasonField, "hidden1");
+            var declineReasonFields = Selector.query(".hiddenFields.hidden1", Dom.get(this.options.formId), false);
+            //Берем nodeRef для идентификации нужного блока
+            var nodeId = encodeURIComponent(this.options.expandedReport.nodeRef);
+            if (declineReasonFields && declineReasonFields.length > 0) {
+                for (var i = 0; i < declineReasonFields.length; i++) {
+                    if (declineReasonFields[i] && declineReasonFields[i].className.indexOf(nodeId) != -1
+                        && this.options.expandedReport.status == "DECLINE") {
+                        Dom.removeClass(declineReasonFields[i], "hidden1");
+                    }
+                }
             }
         },
         prepareButtons: function () {
