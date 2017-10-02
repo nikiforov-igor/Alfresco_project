@@ -2,9 +2,83 @@
 
     <config evaluator="node-type" condition="lecm-protocol:document">
         <forms>
+            <!-- Форма редактирования-->
+            <form id="edit">
+                <field-visibility>
+                    <!-- Заголовок -->
+                    <show id="lecm-document:title"/>
+                    <!--Вид документа-->
+                    <show id="lecm-eds-document:document-type-assoc"/>
+                    <!--Срок исполнения-->
+                    <show id="lecm-eds-document:execution-date"/>
+                    <!--Содержание-->
+                    <show id="lecm-eds-document:summaryContent"/>
+                    <!--Председатель совещания-->
+                    <show id="lecm-protocol:meeting-chairman-assoc"/>
+                    <!--Секретарь-->
+                    <show id="lecm-protocol:secretary-assoc"/>
+                    <!--Присутствовали-->
+                    <show id="lecm-protocol:attended-assoc"/>
+                    <!--Подписан на бумажном носителе-->
+                    <show id="lecm-signing-v2-aspects:signed-on-paper"/>
+                    <!--Примечание-->
+                    <show id="lecm-eds-document:note"/>
+                    <!-- Количество листов -->
+                    <show id="lecm-eds-document:sheets-number"/>
+                    <!--Тематика-->
+                    <show id="lecm-document:subject-assoc"/>
+                    <!--Дело-->
+                    <show id="lecm-eds-document:file-register-assoc"/>
+                    <!--Автосоздание поручений-->
+                    <show id="lecm-protocol:errands-autocreation"/>
+                    <show id="lecm-document:author-assoc"/>
+                    <show id="lecm-base-dummy-aspects:script" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-document:title"/>
+                    <field id="lecm-eds-document:document-type-assoc" mandatory="true">
+                        <control>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_протокола</control-param>
+                            <control-param name="plane">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-eds-document:execution-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
+                    </field>
+                    <field id="lecm-eds-document:summaryContent">
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+                    </field>
+                    <field id="lecm-protocol:meeting-chairman-assoc" mandatory="true"/>
+                    <field id="lecm-protocol:secretary-assoc"/>
+                    <field id="lecm-protocol:attended-assoc"/>
+                    <field id="lecm-signing-v2-aspects:signed-on-paper"/>
+                    <field id="lecm-eds-document:note">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">4</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-eds-document:sheets-number">
+                        <control template="/ru/it/lecm/base-share/components/controls/number.ftl">
+                            <control-param name="maxLength">9</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-document:subject-assoc"/>
+                    <field id="lecm-eds-document:file-register-assoc"/>
+                    <field id="lecm-protocol:errands-autocreation"/>
+                    <field id="lecm-document:author-assoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="lecm-base-dummy-aspects:script">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-eds-documents/check-allow-signing-on-paper-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">allowSigningOnPaperScript</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+            <!-- Форма просмотра-->
             <form>
                 <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
-                <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
                     <!-- Заголовок -->
                     <show id="lecm-document:title"/>
@@ -279,8 +353,6 @@
                     <show id="lecm-eds-document:execution-date"/>
                     <!--Содержание-->
                     <show id="lecm-eds-document:summaryContent"/>
-                    <!--Подписанты-->
-                    <show id="lecm-protocol:signers-assoc"/>
                     <!--Председатель совещания-->
                     <show id="lecm-protocol:meeting-chairman-assoc"/>
                     <!--Секретарь-->
@@ -319,20 +391,6 @@
                     </field>
                     <field id="lecm-eds-document:summaryContent">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
-                    </field>
-                    <field id="lecm-protocol:signers-assoc" mandatory="true">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
-                            <control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
-                            <control-param name="showCreateNewLink">false</control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="employeeAbsenceMarker">true</control-param>
-                            <control-param name="itemType">lecm-orgstr:employee</control-param>
-                            <control-param name="endpointMany">true</control-param>
-                            <control-param name="useStrictFilterByOrg">true</control-param>
-                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_APPROVERS</control-param>
-                            <control-param name="plane">true</control-param>
-                        </control>
                     </field>
                     <field id="lecm-protocol:meeting-chairman-assoc" mandatory="true"/>
                     <field id="lecm-protocol:secretary-assoc"/>
@@ -419,6 +477,7 @@
                             <control-param name="viewIterationResultFormId">viewApprovalResult</control-param>
                             <control-param name="editIterationFormId">editIterationProperties</control-param>
                             <control-param name="fieldsForFilterRoutes">lecm-eds-document:executor-assoc,lecm-document:author-assoc</control-param>
+                            <control-param name="scripts">scripts/lecm-routes-v2/validators/route-complete-create-validator.js</control-param>
                         </control>                 
                     </field>
                 </appearance>

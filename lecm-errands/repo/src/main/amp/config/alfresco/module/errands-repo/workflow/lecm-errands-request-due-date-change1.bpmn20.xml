@@ -30,7 +30,7 @@
 
                             var logText = "#initiator запросил ";
                             logText += documentScript.wrapperTitle("изменение срока", lecmErrandWf_requestDueDateChange_1Reason);
-                            logText += "исполнения поручения: #mainobject.";
+                            logText += " исполнения поручения #mainobject.";
                             businessJournal.log(document.nodeRef.toString(), "EDS_CHANGE_DUE_DATE", logText, []);
 
                             var initiator = null;

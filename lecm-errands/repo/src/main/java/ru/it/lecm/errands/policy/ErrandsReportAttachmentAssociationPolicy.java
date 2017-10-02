@@ -1,5 +1,6 @@
 package ru.it.lecm.errands.policy;
 
+import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
@@ -8,6 +9,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
@@ -15,6 +17,7 @@ import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -114,8 +117,31 @@ public class ErrandsReportAttachmentAssociationPolicy implements NodeServicePoli
         }
         NodeRef category = documentAttachmentsService.getCategory("Исполнение", errandDoc);
         if (category != null) {
+            final List<String> attachmentsNames = getAttachmentsNames(documentAttachmentsService.getAttachmentsByCategory(category));
+            final String attachFileName = (String) nodeService.getProperty(attachment, ContentModel.PROP_NAME);
+            String attachCorrectFileName = buildUniqueFileName(attachmentsNames, attachFileName);
+            nodeService.setProperty(attachment, ContentModel.PROP_NAME, attachCorrectFileName);
             documentAttachmentsService.addAttachment(attachment, category);
         }
+    }
+
+    private List<String> getAttachmentsNames(final List<NodeRef> attachments) {
+        final List<String> attachmentsNames = new ArrayList<>(attachments.size());
+        for (NodeRef attach : attachments) {
+            attachmentsNames.add((String) nodeService.getProperty(attach, ContentModel.PROP_NAME));
+        }
+        return attachmentsNames;
+    }
+
+    private String buildUniqueFileName(final List<String> existedNames, final String fileName) {
+        final String baseName = FilenameUtils.getBaseName(fileName);
+        final String extension = FilenameUtils.getExtension(fileName);
+        int index = 1;
+        String result = fileName;
+        while (existedNames.contains(result)) {
+            result = String.format("%s-%s%s", baseName, index++, extension.isEmpty() ? "" : "." + extension);
+        }
+        return result;
     }
 
     @Override

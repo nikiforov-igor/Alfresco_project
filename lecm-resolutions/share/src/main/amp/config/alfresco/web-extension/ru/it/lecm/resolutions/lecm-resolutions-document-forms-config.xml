@@ -44,7 +44,7 @@
                     <set id="start-right-start" parent="start-right"/>
                     <set id="limitation-date" parent="start-right" label-id="label.limitation-date" template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
                     <set id="errands"/>
-                    <set id="reviewers-hidden" template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
+                    <set id="reviewers-hidden" template="/ru/it/lecm/base-share/components/hidden-set.ftl"/>
                     <set id="reviewers-fieldset" parent="reviewers-hidden" appearance="fieldset" label-id="label.review"/>
                     <set id="reviewers" parent="reviewers-fieldset" template="/org/alfresco/components/form/2-column-set.ftl"/>
                     <set id="end"/>
@@ -458,10 +458,10 @@
                     <set id="limitation-date" parent="common" label-id="label.limitation-date" template="/ru/it/lecm/errands/controls/errands-view-limitation-date-set.ftl"/>
 
                     <set id="execution" parent="common" appearance="title" label-id="label.execution"/>
-                    <set id="reviewers-hidden" parent="common" template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
+                    <set id="reviewers-hidden" parent="common" template="/ru/it/lecm/base-share/components/hidden-set.ftl"/>
                     <set id="reviewers" parent="reviewers-hidden" appearance="title" label-id="label.review"/>
-                    <set id="reviewers-list-hidden" parent="reviewers" template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
-                    <set id="reviewers-table-hidden" parent="reviewers" template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
+                    <set id="reviewers-list-hidden" parent="reviewers" template="/ru/it/lecm/base-share/components/hidden-set.ftl"/>
+                    <set id="reviewers-table-hidden" parent="reviewers" template="/ru/it/lecm/base-share/components/hidden-set.ftl"/>
 
                     <field id="lecm-base-dummy-aspects:script2" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
@@ -607,7 +607,7 @@
                     <set id="start-right-start" parent="start-right"/>
                     <set id="limitation-date" parent="start-right" label-id="label.limitation-date" template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
                     <set id="errands"/>
-                    <set id="reviewers-hidden" template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
+                    <set id="reviewers-hidden" template="/ru/it/lecm/base-share/components/hidden-set.ftl"/>
                     <set id="reviewers-fieldset" parent="reviewers-hidden" appearance="fieldset" label-id="label.review"/>
                     <set id="reviewers" parent="reviewers-fieldset" template="/org/alfresco/components/form/2-column-set.ftl"/>
                     <set id="end"/>

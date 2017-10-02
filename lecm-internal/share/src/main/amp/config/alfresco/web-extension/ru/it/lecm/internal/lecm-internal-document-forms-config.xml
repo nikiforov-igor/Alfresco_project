@@ -195,6 +195,7 @@
                             <control-param name="viewIterationResultFormId">viewApprovalResult</control-param>
                             <control-param name="editIterationFormId">editIterationProperties</control-param>
                             <control-param name="fieldsForFilterRoutes">lecm-eds-document:executor-assoc,lecm-document:author-assoc</control-param>
+                            <control-param name="scripts">scripts/lecm-routes-v2/validators/route-complete-create-validator.js</control-param>
                         </control>                 
                     </field>
                     <field id="lecm-signing-route:signingFolder" label-id="label.forms.signing">
@@ -220,7 +221,7 @@
                             <control-param name="viewIterationResultFormId">viewSigningResult</control-param>
                             <control-param name="cssFiles">css/lecm-signing-v2/lecm-signing-v2-routes-datagrid-control.css</control-param>
                             <control-param name="determinantClass">signing-control</control-param>
-                            <control-param name="scripts">scripts/lecm-signing-v2/evaluators-v2.js</control-param>
+                            <control-param name="scripts">scripts/lecm-signing-v2/evaluators-v2.js,scripts/lecm-routes-v2/validators/route-complete-create-validator.js</control-param>
                             <control-param name="jsObjectName">LogicECM.module.Signing.Evaluators</control-param>
                             <control-param name="newListConfirmationMsgId">message.new.signing.list.confirmation</control-param>
                             <control-param name="newListFromRoutTitleMsgId">title.new.signing.list.from.route</control-param>
@@ -573,10 +574,9 @@
 
     <config evaluator="node-type" condition="lecm-internal:document">
         <forms>
-            <!-- Форма редатирования-->
+            <!-- Форма просмотра-->
             <form>
                 <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
-                <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
                     <show id="lecm-document:regnum"/>																	<!-- Рег. номер -->
                     <show id="lecm-document-aspects:reg-data-date"/>
@@ -594,15 +594,15 @@
                     <show id="lecm-eds-document:note"/>
                     <show id="lecm-document-aspects:reg-project-data-number"/>
                     <show id="lecm-document-aspects:reg-project-data-date"/>
-                    <show id="lecm-base-dummy-aspects:script4" force="true" for-mode="view"/>
-                    <show id="lecm-approval-route:approvalFolder" force="true" for-mode="view"/>
-                    <show id="lecm-signing-route:signingFolder" force="true" for-mode="view"/>
+                    <show id="lecm-base-dummy-aspects:script5" force="true"/>
+                    <show id="lecm-approval-route:approvalFolder" force="true"/>
+                    <show id="lecm-signing-route:signingFolder" force="true"/>
                     <show id="lecm-internal-table-structure:answers-assoc"/>
                     <show id="lecm-signing-v2-aspects:signed-on-paper"/>
                     <show id="lecm-signing-v2-aspects:signerEmployeeAssoc" force="true"/>
-                    <show id="lecm-signing-v2-aspects:isSigned" force="true" for-mode="view"/>
+                    <show id="lecm-signing-v2-aspects:isSigned" force="true"/>
                     <show id="lecm-signing-v2-aspects:signingDate" force="true"/>
-                    <show id="lecm-document-aspects:registrator-assoc" force="true" for-mode="view"/>
+                    <show id="lecm-document-aspects:registrator-assoc" force="true"/>
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <show id="lecm-base-dummy-aspects:script2" force="true"/>
                     <show id="lecm-base-dummy-aspects:script3" force="true"/>
@@ -768,7 +768,7 @@
                             <control-param name="allowDelete">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-base-dummy-aspects:script4" set="approvalAndSigning">
+                    <field id="lecm-base-dummy-aspects:script5" set="approvalAndSigning">
                         <control template="/ru/it/lecm/forms/jasperforms/printReportBtn.ftl">
                             <control-param name="reportId">approval-and-signing-list</control-param>
                             <control-param name="buttonLabel">Лист согласования и подписания</control-param>
@@ -831,6 +831,157 @@
                             <control-param name="newListFromRoutTitleMsgId">title.new.signing.list.from.route</control-param>
                             <control-param name="newListTitleMsgId">title.new.signing.list</control-param>
                             <control-param name="unableCreateListActiveMessageId">message.signing.unable.to.create.list.active</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+            <!-- Форма редактирования-->
+            <form id="edit">
+                <field-visibility>
+                    <show id="lecm-document:regnum"/>																	<!-- Рег. номер -->
+                    <show id="lecm-document-aspects:reg-data-date"/>
+                    <show id="lecm-document:author-assoc"/>
+                    <show id="lecm-eds-document:executor-assoc"/>
+                    <show id="lecm-document:title"/>
+                    <show id="lecm-eds-document:document-type-assoc"/>
+                    <show id="lecm-internal:response-date"/>
+                    <show id="lecm-internal:recipients-assoc"/>
+                    <show id="lecm-eds-document:summaryContent"/>
+                    <show id="lecm-document-aspects:response-to-assoc"/>
+                    <show id="lecm-eds-document:sheets-number"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-eds-document:file-register-assoc"/>
+                    <show id="lecm-eds-document:note"/>
+                    <show id="lecm-document-aspects:reg-project-data-number"/>
+                    <show id="lecm-document-aspects:reg-project-data-date"/>
+                    <show id="lecm-signing-v2-aspects:signed-on-paper"/>
+                    <show id="lecm-signing-v2-aspects:signerEmployeeAssoc" force="true"/>
+                    <show id="lecm-signing-v2-aspects:signingDate" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script3" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script4" force="true"/>
+                </field-visibility>
+                <appearance>
+
+                    <field id="lecm-document:regnum"/>
+                    <field id="lecm-document-aspects:reg-data-date"/>
+                    <field id="lecm-document:author-assoc" label-id="label.eds.assoc.compiler" read-only="true"/>
+                    <field id="lecm-eds-document:executor-assoc">
+                        <control>
+                            <control-param name="childrenDataSource">lecm/employees/INTERNAL_CREATORS/picker</control-param>
+                            <control-param name="defaultValueDataSource">lecm/orgstructure/api/getCurrentEmployee</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-document:title"/>
+                    <field id="lecm-eds-document:document-type-assoc" mandatory="true">
+                        <control>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_внутреннего_x0020_документа</control-param>
+                            <control-param name="plane">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-internal:response-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="minLimitCurrentDate">true</control-param>
+                        </control>
+                    </field>
+
+                    <field id="lecm-internal:recipients-assoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="items">employee,organization</control-param>
+                            <control-param name="showAutocomplete">true</control-param>
+                            <control-param name="autocompleteDataSourceMethodPost">true</control-param>
+                            <control-param name="dataSourceLogic">OR</control-param>
+                            <!-- lecm-orgstr:employee -->
+                            <control-param name="employee_label">Сотрудник</control-param>
+                            <control-param name="employee_endpointType">lecm-orgstr:employee</control-param>
+                            <control-param name="employee_endpointMany">true</control-param>
+                            <control-param name="employee_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+                            <control-param name="employee_nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+                            <control-param name="employee_plane">true</control-param>
+                            <control-param name="employee_showSearch">true</control-param>
+                            <control-param name="employee_useStrictFilterByOrg">true</control-param>
+                            <!-- lecm-orgstr:organization-unit -->
+                            <control-param name="organization_label">Подразделение</control-param>
+                            <control-param name="organization_endpointType">lecm-orgstr:organization-unit</control-param>
+                            <control-param name="organization_endpointMany">true</control-param>
+                            <control-param name="organization_xPathLocation">{currentLocation}</control-param>
+                            <control-param name="organization_xPathLocationRoot">{lecmMyOrganization}</control-param>
+                            <control-param name="organization_nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
+                            <control-param name="organization_treeNodeSubstituteString">{lecm-orgstr:element-short-name}</control-param>
+                            <control-param name="organization_treeNodeTitleSubstituteString">{cm:name}</control-param>
+                            <control-param name="organization_plane">false</control-param>
+                            <control-param name="organization_showSearch">true</control-param>
+                            <control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
+                        </control>
+                    </field>
+
+                    <field id="lecm-eds-document:summaryContent">
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+                    </field>
+
+                    <field id="lecm-document-aspects:response-to-assoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
+                            <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
+                            <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
+                            <control-param name="itemType">lecm-internal:document</control-param>
+                            <control-param name="showSearch">true</control-param>
+                            <control-param name="plane">true</control-param>
+                        </control>
+                    </field>
+
+                    <field id="lecm-eds-document:sheets-number">
+                        <control template="/ru/it/lecm/base-share/components/controls/number.ftl">
+                            <control-param name="maxLength">9</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-document:subject-assoc"/>
+
+                    <field id="lecm-eds-document:file-register-assoc"/>
+
+                    <field id="lecm-eds-document:note">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">4</control-param>
+                        </control>
+                    </field>
+
+                    <field id="lecm-document-aspects:reg-project-data-number"/>
+                    <field id="lecm-document-aspects:reg-project-data-date"/>
+
+                    <field id="lecm-signing-v2-aspects:signed-on-paper">
+                        <control>
+                            <control-param name="changeFireAction">actionsVisibilityChange</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-signing-v2-aspects:signerEmployeeAssoc">
+                        <control>
+                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS,CONTRACT_SIGNER</control-param>
+                            <control-param name="endpointMany">true</control-param>
+                        </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Signing2.signersValidator" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-signing-v2-aspects:signingDate">
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="showTime">false</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-base-dummy-aspects:script">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-eds-documents/edit-executor-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">editExecutorEditFormScriptLoaded</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-base-dummy-aspects:script3">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-eds-documents/check-allow-signing-on-paper-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">allowSigningOnPaperScript</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-base-dummy-aspects:script4">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-signing-v2/change-availability-of-signing-fields-script.js</control-param>
                         </control>
                     </field>
                 </appearance>

@@ -2,6 +2,7 @@
 
     <config evaluator="node-type" condition="lecm-errands:document">
         <forms>
+            <!-- Форма просмотра-->
             <form>
                 <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl"/>
                 <field-visibility>
@@ -206,9 +207,8 @@
                     </field>
                 </appearance>
             </form>
-
+            <!-- Форма редактирования-->
             <form id="edit">
-                <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
                     <!-- Важное -->
                     <show id="lecm-errands:is-important"/>
@@ -246,43 +246,19 @@
                     <show id="lecm-errands:report-recipient-type"/>
                     <!-- Тематика -->
                     <show id="lecm-document:subject-assoc"/>
-                    <!-- Отчет об исполнении -->
-                    <!-- Статус отчета -->
-                    <show id="lecm-errands:execution-report-status" force="true"/>
-                    <!-- Причина отклонения -->
-                    <show id="lecm-errands:execution-report-decline-reason" force="true"/>
-                    <!-- Текст отчета -->
-                    <show id="lecm-errands:execution-report"/>
-                    <!-- Связи -->
-                    <show id="lecm-errands:execution-connected-document-assoc"/>
-                    <!-- Вложения -->
-                    <show id="lecm-errands:execution-report-attachment-assoc"/>
-                    <!-- Предидущие отчеты -->
-                    <show id="lecm-errands-ts:execution-reports-assoc" force="true"/>
-                    <!-- Разделительная линия -->
-                    <show id="lecm-base-dummy-aspects:script8" force="true"/>
-                    <!-- Отчеты соисполнителей -->
-                    <show id="lecm-errands-ts:coexecutor-reports-assoc"/>
 
                     <show id="lecm-base-dummy-aspects:script2" force="true"/>
                     <show id="lecm-base-dummy-aspects:script3" force="true"/>
                     <show id="lecm-base-dummy-aspects:script4" force="true"/>
                     <show id="lecm-base-dummy-aspects:script5" force="true"/>
-                    <show id="lecm-base-dummy-aspects:script6" force="true"/>
-                    <show id="lecm-base-dummy-aspects:script7" force="true"/>
                     <show id="lecm-base-dummy-aspects:script9" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="common" label-id="label.errands.forms.tab.common"/>
-                    <set id="reports" label-id="label.errands.forms.tab.reports"/>
-                    <set id="execution" label-id="label.errands.forms.tab.execution"/>
                     <set id="statuses" parent="common"/>
                     <set id="beforeDateSet" parent="common"/>
                     <set id="limitation-date" parent="common" label-id="label.limitation-date" template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>/>
                     <set id="afterDateSet" parent="common"/>
-                    <set id="execution-reports" parent="reports" appearance="title" template="/ru/it/lecm/errands/controls/errands-execution-report-set.ftl" label-id="title.errands.execution-reports"/>
-                    <set id="lineReports" parent="reports"/>
-                    <set id="coexecutors-reports" parent="reports" appearance="title" label-id="title.errands.coexecutors-reports"/>
 
                     <field id="lecm-errands:is-important" set="statuses">
                         <control template="/ru/it/lecm/base-share/components/controls/important.ftl" />
@@ -378,40 +354,6 @@
                         <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
                     </field>
                     <field id="lecm-document:subject-assoc" set="afterDateSet"/>
-                    <field id="lecm-errands:execution-report-status" set="execution-reports"/>
-                    <field id="lecm-errands:execution-report-decline-reason" set="execution-reports"/>
-                    <field id="lecm-errands:execution-report" set="execution-reports">
-                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
-                            <control-param name="rows">8</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-errands:execution-connected-document-assoc" set="execution-reports">
-                        <control>
-                            <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
-                            <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
-                            <control-param name="showInaccessible">true</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-errands:execution-report-attachment-assoc" set="execution-reports">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-search-control.ftl">
-                            <control-param name="viewUrl">document-attachment?nodeRef={nodeRef}</control-param> '
-                        </control>
-                    </field>
-                    <field id="lecm-errands-ts:execution-reports-assoc" set="execution-reports">
-                        <control template="/ru/it/lecm/errands/controls/execution-reports-table-control.ftl">
-                            <control-param name="isTableSortable">true</control-param>
-                            <control-param name="sort">lecm-errands-ts:execution-report-create-date|false</control-param>
-                            <control-param name="expandDataSource">lecm/components/form?formId=table-structure-expand</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-base-dummy-aspects:script8" set="lineReports">
-                        <control template="/ru/it/lecm/base-share/components/controls/line.ftl"/>
-                    </field>
-                    <field id="lecm-errands-ts:coexecutor-reports-assoc" set="coexecutors-reports">
-                        <control template="/ru/it/lecm/errands/controls/coexecutors-reports-table-control.ftl">
-                            <control-param name="datagridFormId">coexecutors-reports-datagrid</control-param>
-                        </control>
-                    </field>
                     <field id="lecm-base-dummy-aspects:script2" set="afterDateSet">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-eds-documents/complex-date-listener.js</control-param>
@@ -437,15 +379,6 @@
                             <control-param name="scripts">scripts/lecm-errands/errands-view-form-script.js</control-param>
                             <control-param name="scriptLoadedFireAction">errandsTabsFormScriptLoaded</control-param>
                         </control>
-                    </field>
-                    <field id="lecm-base-dummy-aspects:script6" set="reports">
-                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                            <control-param name="scripts">scripts/lecm-errands/errands-reports-tab-form-script.js</control-param>
-                            <control-param name="scriptLoadedFireAction">errandsReportsTabEditFormScriptLoaded</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-base-dummy-aspects:script7" set="execution">
-                        <control template="/ru/it/lecm/eds/controls/execution-tree-control.ftl"/>
                     </field>
                     <field id="lecm-base-dummy-aspects:script9" set="afterDateSet">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
@@ -490,6 +423,8 @@
                     <show id="lecm-errands:limitation-date"/>
                     <!-- Важное -->
                     <show id="lecm-errands:is-important"/>
+                    <!-- Статус -->
+                    <show id="lecm-statemachine:status"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-errands:initiator-assoc">
@@ -719,13 +654,13 @@
                 <appearance>
                     <set id="exist-business-role" template="/ru/it/lecm/errands/controls/errands-choosing-set.ftl" />
                     <set id="limitation-date"  template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
-                    <set id="block2-1" template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
-                    <set id="block3"  template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
+                    <set id="block2-1" template="/ru/it/lecm/base-share/components/hidden-set.ftl"/>
+                    <set id="block3"  template="/ru/it/lecm/base-share/components/hidden-set.ftl"/>
                     <set id="errand-validity" parent="block3" template="/ru/it/lecm/errands/controls/errands-validity-set.ftl"/>
                     <set id="validity-dates" parent="errand-validity" template="/ru/it/lecm/base-share/components/controls/daterange.ftl"/>
                     <set id="during" parent="errand-validity" template="/org/alfresco/components/form/2-column-set.ftl"/>
                     <set id="repeat" parent="errand-validity" template="/org/alfresco/components/form/2-column-set.ftl"/>
-                    <set id="block2-2" template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
+                    <set id="block2-2" template="/ru/it/lecm/base-share/components/hidden-set.ftl"/>
                     <set id="static"/>
 
                     <field id="lecm-errands:type-assoc" mandatory="true" >
@@ -1211,13 +1146,13 @@
                 <appearance>
                     <set id="exist-business-role" template="/ru/it/lecm/errands/controls/errands-choosing-set.ftl" />
                     <set id="limitation-date"  template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
-                    <set id="block2-1" template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
-                    <set id="block3"  template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
+                    <set id="block2-1" template="/ru/it/lecm/base-share/components/hidden-set.ftl"/>
+                    <set id="block3"  template="/ru/it/lecm/base-share/components/hidden-set.ftl"/>
                     <set id="errand-validity" parent="block3" template="/ru/it/lecm/errands/controls/errands-validity-set.ftl"/>
                     <set id="validity-dates" parent="errand-validity" template="/ru/it/lecm/base-share/components/controls/daterange.ftl"/>
                     <set id="during" parent="errand-validity" template="/org/alfresco/components/form/2-column-set.ftl"/>
                     <set id="repeat" parent="errand-validity" template="/org/alfresco/components/form/2-column-set.ftl"/>
-                    <set id="block2-2" template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
+                    <set id="block2-2" template="/ru/it/lecm/base-share/components/hidden-set.ftl"/>
                     <set id="static"/>
 
                     <field id="lecm-errands:type-assoc" mandatory="true" >
@@ -1502,13 +1437,13 @@
                 <appearance>
                     <set id="exist-business-role" template="/ru/it/lecm/errands/controls/errands-choosing-set.ftl" />
                     <set id="limitation-date"  template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
-                    <set id="block2-1" template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
-                    <set id="block3"  template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
+                    <set id="block2-1" template="/ru/it/lecm/base-share/components/hidden-set.ftl"/>
+                    <set id="block3"  template="/ru/it/lecm/base-share/components/hidden-set.ftl"/>
                     <set id="errand-validity" parent="block3" template="/ru/it/lecm/errands/controls/errands-validity-set.ftl"/>
                     <set id="validity-dates" parent="errand-validity" template="/ru/it/lecm/base-share/components/controls/daterange.ftl"/>
                     <set id="during" parent="errand-validity" template="/org/alfresco/components/form/2-column-set.ftl"/>
                     <set id="repeat" parent="errand-validity" template="/org/alfresco/components/form/2-column-set.ftl"/>
-                    <set id="block2-2" template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
+                    <set id="block2-2" template="/ru/it/lecm/base-share/components/hidden-set.ftl"/>
                     <set id="static"/>
 
                     <field id="lecm-errands:type-assoc" mandatory="true" >
