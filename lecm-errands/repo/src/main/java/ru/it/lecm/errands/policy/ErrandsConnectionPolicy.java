@@ -227,7 +227,6 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
     private void transferRight(NodeRef errandDoc, NodeRef baseDoc) {
         AuthenticationUtil.pushAuthentication();
         AuthenticationUtil.setRunAsUserSystem();
-        AuthenticationUtil.setAdminUserAsFullyAuthenticatedUser();
         try {
             NodeRef executor = errandsService.getExecutor(errandDoc);
             NodeRef initiator = errandsService.getInitiator(errandDoc);
