@@ -18,6 +18,9 @@
                           	if (document && reason && currentUser) {
                           	    var reasonText;
 
+                          	    document.properties["lecm-incoming:work-finished"] = true;
+                          	    document.save();
+
                           	    var childErrands = document.sourceAssocs["lecm-errands:additional-document-assoc"];
 			                    if (childErrands) {
 			                        childErrands.forEach(function (errand) {
