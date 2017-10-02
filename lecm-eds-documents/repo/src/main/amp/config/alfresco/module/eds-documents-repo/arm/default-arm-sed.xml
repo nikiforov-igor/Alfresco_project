@@ -2042,7 +2042,7 @@
                             <item name="cm:Все созданные мной" type="lecm-arm:node">
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                 <property name="lecm-arm:search-query">
-                                    <![CDATA[(@lecm\-document\:author\-assoc\-ref:"#current-user" OR @lecm\-errands\:initiator\-assoc\-ref:"#current-user" OR @lecm\-resolutions\:author\-assoc\-ref:"#current-user" OR @lecm\-eds\-document\:executor\-assoc\-ref:"#current-user" OR @lecm\-errands\-aspect\:errands\-executors\-assoc\-ref:"#current-user" OR @lecm\-protocol\:secretary\-assoc\-ref:"#current-user") AND NOT @lecm\-statemachine\-aspects\:is\-final:true AND NOT @lecm\-statemachine\-aspects\:is\-draft:true]]></property>
+                                    <![CDATA[(@lecm\-document\:author\-assoc\-ref:"#current-user" OR @lecm\-errands\:initiator\-assoc\-ref:"#current-user" OR @lecm\-resolutions\:author\-assoc\-ref:"#current-user" OR @lecm\-eds\-document\:executor\-assoc\-ref:"#current-user" OR @lecm\-protocol\:secretary\-assoc\-ref:"#current-user") AND NOT @lecm\-statemachine\-aspects\:is\-final:true AND NOT @lecm\-statemachine\-aspects\:is\-draft:true]]></property>
                                 <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                 <property name="lecm-arm:counter-description"><![CDATA[]]></property>
