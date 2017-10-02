@@ -5078,6 +5078,45 @@ document.save();]]></value>
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>7dc174d0-99fa-4ef3-80bb-fc5f71f991d0</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/78bf5106-6aa7-4b97-ad42-f83c11ad1dab
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.hasAspect("lecm-document-aspects:in-work") == true AND !@routesGlobalSettingService.isAutoRoutingAfterApproval() AND doc.assocClass("lecm-eds-document:document-type-assoc") != null AND !doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:registration-required") AND doc.attr("lecm-signing-v2-aspects:signed-on-paper")]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/0271eb76-7628-436e-9743-4b25d3ec8679
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
@@ -10503,6 +10542,45 @@ document.save();]]></value>
                                                                 <type>transitionStatus</type>
                                                                 <reference>
                                                                     workspace://SpacesStore/babd97b7-f4f7-4e20-a98b-cc8b5f71a210
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>7afe190d-7e3d-4212-b27d-42310831f768</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/f2edc3a4-714f-494d-be90-958872d8d545
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.hasAspect("lecm-document-aspects:in-work") == true AND !@routesGlobalSettingsScript.getSettings().properties["lecmRoutesGlobalSettings:autoRoutingAfterSigning"] AND doc.assocClass("lecm-eds-document:document-type-assoc") != null AND !doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:registration-required")]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/0271eb76-7628-436e-9743-4b25d3ec8679
                                                                 </reference>
                                                             </association>
                                                         </associations>
