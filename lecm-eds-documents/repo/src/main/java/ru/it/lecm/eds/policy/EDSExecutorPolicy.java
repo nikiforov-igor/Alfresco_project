@@ -136,15 +136,15 @@ public class EDSExecutorPolicy implements NodeServicePolicies.OnCreateAssociatio
         if (enabled) {
             NodeRef documentRef = associationRef.getSourceRef();
             NodeRef docExecutorRef = associationRef.getTargetRef();
+            NodeRef docCompilerRef = documentService.getDocumentAuthor(documentRef);
             String author = authenticationService.getCurrentUserName();
             NodeRef initiator = orgstructureService.getCurrentEmployee();
             Map<String, Object> templateConfig = new HashMap<>();
             templateConfig.put("mainObject", documentRef);
             stateMachineService.grandDynamicRoleForEmployee(documentRef, docExecutorRef, GRAND_DYNAMIC_ROLE_CODE_INITIATOR);
-            if (nodeService.getProperty(documentRef, StatemachineModel.PROP_STATUS) != null) {
+            if (docCompilerRef != null && !docCompilerRef.equals(docExecutorRef) && nodeService.getProperty(documentRef, StatemachineModel.PROP_STATUS) != null) {
                 notificationsService.sendNotification(author, initiator, Collections.singletonList(docExecutorRef), "EDS_EXECUTOR_NEW", templateConfig, true);
             }
-
         }
         else {
             throw new RuntimeException("Property ru.it.lecm.properties.bj.enabled not found");

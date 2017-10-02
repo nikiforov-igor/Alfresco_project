@@ -1891,33 +1891,47 @@ if (document) {
                                                     <node>
                                                         <type>ScriptActionEntity</type>
                                                         <name>0a6e77a8-af88-4d81-8f9c-bf1139134839</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/fb4025c8-d9c0-445f-80e9-8f306ec3b09f
-                                                        </nodeRef>
+                                                        <nodeRef>workspace://SpacesStore/14d7ac1f-cace-4a57-814d-937992044653</nodeRef>
                                                         <properties>
                                                             <property>
                                                                 <name>scriptLabel</name>
-                                                                <value><![CDATA[Уведомление Исполнителю]]></value>
+                                                                <value>
+                                                                    <![CDATA[Уведомление Исполнителю]]>
+                                                                </value>
                                                             </property>
                                                             <property>
                                                                 <name>actionScript</name>
-                                                                <value><![CDATA[var doc = bpm_package.children[0];
+                                                                <value>
+                                                                    <![CDATA[<import resource="classpath:/alfresco/module/eds-documents-repo/workflow/scripts/eds-executor-script.js">
+var doc = bpm_package.children[0];
 if (doc) {
-  var docCompiler = doc.assocs["lecm-document:author-assoc"][0];
-  var docExecutorAssoc = doc.assocs["lecm-eds-document:executor-assoc"];
-  var docExecutor = null;
-  if (docExecutorAssoc && docExecutorAssoc.length) {
-  	docExecutor = docExecutorAssoc[0];
-  }
-  if (docExecutor && docCompiler && !docExecutor.nodeRef.equals(docCompiler.nodeRef)) {
-  	 notifications.sendNotificationFromCurrentUser({
-        recipients: [docExecutor],
-        templateCode: 'EDS_EXECUTOR_NEW',
-        templateConfig: {
-            mainObject: doc
-        }
-    });
-  }
+    EDSExecutorScript.notificateExecutor(doc);
+}]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>8c682ade-1bf2-4c9a-b525-df5351132b10</name>
+                                                        <nodeRef>workspace://SpacesStore/8169922b-2aa0-4c4b-8510-0c853aa3149f</nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value>
+                                                                    <![CDATA[Назначение прав Исполнителю]]>
+                                                                </value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value>
+                                                                    <![CDATA[<import resource="classpath:/alfresco/module/eds-documents-repo/workflow/scripts/eds-executor-script.js">
+var doc = bpm_package.children[0];
+if (doc) {
+    EDSExecutorScript.grandDynamicRoleForExecutor(doc);
 }]]></value>
                                                             </property>
                                                         </properties>
