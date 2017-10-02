@@ -5383,7 +5383,7 @@ if (document) {
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[doc.attr("lecm-review-ts:doc-review-state") == "NOT_REQUIRED" OR doc.attr("lecm-review-ts:doc-review-state") == "COMPLETE"]]></value>
+                                                                    <![CDATA[(doc.attr("lecm-review-ts:doc-review-state") == "NOT_REQUIRED" OR doc.attr("lecm-review-ts:doc-review-state") == "COMPLETE") AND !doc.attr("lecm-incoming:work-finished")]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
