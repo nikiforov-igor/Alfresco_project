@@ -295,7 +295,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
             getActionsDivHTML: function (num) {
                 YAHOO.util.Event.onAvailable(this.id + "_" + num + "_remove", this.attachRemoveItemClickListener, num, this);
 
-                var template = "<div class='actions' id='{divActionsId}'><div><a id='{divRemoveActionId}' title='{messageRemove}' class='remove-item' href='#'></a></div></div>";
+                var template = "<div class='actions' id='{divActionsId}'><div><a id='{divRemoveActionId}' title='{messageRemove}' class='remove-item' href='javascript:void(0);'></a></div></div>";
 
                 return YAHOO.lang.substitute(template, {
                     divActionsId: this.id + "_" + num + "_actions",
