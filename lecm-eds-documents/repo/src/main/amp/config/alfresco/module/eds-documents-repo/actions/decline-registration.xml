@@ -32,7 +32,7 @@
 
 	var logText = "#initiator"+ base.wrapperTitle("отказал", declineReason) + " в регистрации документа " + documentScript.wrapperDocumentLink(document, document.properties["lecm-document:present-string"]);
 	logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
-	businessJournal.log(document.nodeRef.toString(), "EDS_REGISTRATION", logText, []);
+	businessJournal.log(document.nodeRef.toString(), "REGISTRATION", logText, []);
 
 	 statemachine.executeTransitionAction(document, 'На доработку');
 }]]></property>
