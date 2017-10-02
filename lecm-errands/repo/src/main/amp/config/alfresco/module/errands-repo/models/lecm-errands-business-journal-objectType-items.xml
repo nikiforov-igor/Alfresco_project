@@ -16,6 +16,13 @@
                 <property name="lecm-busjournal:objectType-template">Отчет соисполнителя</property>
                 <property name="lecm-busjournal:objectType-list-template">Отчет соисполнителя</property>
             </item>
+            <item name="cm:Предыдущие отчеты" type="lecm-busjournal:objectType">
+                <property name="cm:name">Предыдущие отчеты</property>
+                <property name="lecm-busjournal:objectType-code">LECM_ERRAND_PREVIOUS_REPORTS</property>
+                <property name="lecm-busjournal:objectType-class">lecm-errands-ts:execution-report</property>
+                <property name="lecm-busjournal:objectType-template">{lecm-errands-ts:execution-report-text}</property>
+                <property name="lecm-busjournal:objectType-list-template">{lecm-errands-ts:execution-report-text}</property>
+            </item>
         </items>
     </item>
 </items>
