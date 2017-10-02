@@ -19,14 +19,26 @@
             </activiti:executionListener>
             <activiti:executionListener event="end" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
                 <activiti:field name="script">
-                    <activiti:string>
+                    <activiti:string><![CDATA[
                         var document = bpm_package.children[0];
                         document.properties["lecm-reservation-aspects:isReservationCanceling"] = false;
                         lecmPermission.pushAuthentication();
                         lecmPermission.setRunAsUserSystem();
                         document.save();
                         lecmPermission.popAuthentication();
-                    </activiti:string>
+                        var registrars = document.assocs["lecm-document-aspects:registrator-assoc"];
+                        if (registrars && registrars.length) {
+                            registrars.forEach(function(empl) {
+                                document.removeAssociation(empl, 'lecm-document-aspects:registrator-assoc');
+                            });
+                        }
+                        if (registrarsList) {
+                            for (var i=0; i < registrarsList.size(); i++) {
+                                lecmPermission.revokeDynamicRole(document, registrarsList.get(i), 'LECM_REGISTRAR_DYN');
+                                lecmPermission.revokeDynamicRole(document, registrarsList.get(i), 'RESERVATION_PERFORMER_DYN');
+                            }
+                        }
+                    ]]></activiti:string>
                 </activiti:field>
             </activiti:executionListener>
         </extensionElements>
@@ -115,7 +127,7 @@
                 </activiti:taskListener>
                 <activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
                     <activiti:field name="script">
-                        <activiti:string><![CDATA[0
+                        <activiti:string><![CDATA[
                                 var document = bpm_package.children[0];
                                 var employee = assignee;
 
@@ -151,12 +163,11 @@
                                     document.properties['lecm-reservation-aspects:isReserved'] = false;
                                     document.properties['lecm-document-aspects:reg-data-date'] = null;
                                     document.properties['lecm-document-aspects:reg-data-number'] = projectNumber;
-                                    var registrars = document.assocs["lecm-document-aspects:registrator-assoc"];
-                                    if (registrars && registrars.length) {
-                                        registrars.forEach(function(empl) {
-                                            document.removeAssociation(empl, 'lecm-document-aspects:registrator-assoc');
-                                        });
-                                    }
+                                    document.properties['lecm-document:regnum'] = projectNumber;
+                                    lecmPermission.pushAuthentication();
+                                    lecmPermission.setRunAsUserSystem();
+                                    document.save();
+                                    lecmPermission.popAuthentication();
 
                                     var bjMsg = '#initiator отменил резервирование номера для документа #mainobject. Возвращен номер проекта документа:' + projectNumber;
                                     businessJournal.log(document.nodeRef.toString(), 'RESERVATION', bjMsg, []);
@@ -181,17 +192,8 @@
                                     templateCode: templateCode,
                                     templateConfig: templateConfigObject
                                 });
-                                lecmPermission.pushAuthentication();
-                                lecmPermission.setRunAsUserSystem();
-                                document.save();
-                                lecmPermission.popAuthentication();
-
-                                execution.setVariable('taskDecision', decision);
-                                for (var i=0; i < registrarsList.size(); i++) {
-                                    lecmPermission.revokeDynamicRole(document, registrarsList.get(i), 'LECM_REGISTRAR_DYN');
-                                    lecmPermission.revokeDynamicRole(document, registrarsList.get(i), 'RESERVATION_PERFORMER_DYN');
-                                }
                                 documentMembers.addMemberWithoutCheckPermission(document, employee, 'LECM_BASIC_PG_Reader', true);
+                                execution.setVariable('taskDecision', decision);
                             ]]></activiti:string>
                     </activiti:field>
                 </activiti:taskListener>
@@ -205,6 +207,6 @@
         <sequenceFlow id="flow2" sourceRef="emptyScripttask1" targetRef="reservationReceiveTask"></sequenceFlow>
         <sequenceFlow id="flow3" sourceRef="reservationReceiveTask" targetRef="searchRegistrarsScripttask"></sequenceFlow>
         <sequenceFlow id="flow4" sourceRef="searchRegistrarsScripttask" targetRef="requestCancelTask"></sequenceFlow>
-        <sequenceFlow id="flow7" sourceRef="requestCancelTask" targetRef="endRequestCancel"> </sequenceFlow>
+        <sequenceFlow id="flow5" sourceRef="requestCancelTask" targetRef="endRequestCancel"></sequenceFlow>
     </process>
 </definitions>

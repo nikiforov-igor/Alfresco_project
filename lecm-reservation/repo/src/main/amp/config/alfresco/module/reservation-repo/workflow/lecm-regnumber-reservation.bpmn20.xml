@@ -132,7 +132,7 @@
                 </activiti:taskListener>
                 <activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
                     <activiti:field name="script">
-                        <activiti:string><![CDATA[0
+                        <activiti:string><![CDATA[
                             var document = bpm_package.children[0];
                             var employee = assignee;
 
@@ -175,6 +175,10 @@
 							    */
 							    if (document.properties['lecm-document-aspects:reg-data-number'] == '"НЕТ ДОСТУПНЫХ РЕГИСТРАТОРОВ"') {
 							        document.properties['lecm-document-aspects:reg-data-number'] = 'Не присвоено';
+							        document.save();
+							    }
+							    if (document.properties['lecm-document-aspects:reg-data-number'] != null && document.properties['lecm-document-aspects:reg-data-number'] != 'Не присвоено') {
+							        document.properties['lecm-document-aspects:reg-data-number'] = null;
 							        document.save();
 							    }
 								regnumbers.registerDocument(document, regnumTemplateId, true);
