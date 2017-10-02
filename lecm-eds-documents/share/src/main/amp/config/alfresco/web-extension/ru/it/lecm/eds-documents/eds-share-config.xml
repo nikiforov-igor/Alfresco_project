@@ -106,6 +106,7 @@
 					<field id="lecm-eds-globset:duty-registrar-assoc">
 						<control>
 							<control-param name="allowedNodesScript"><![CDATA[lecm/orgstructure/employees/allowed?businessRoleId=DA_REGISTRARS&includeAdmin=true]]></control-param>
+							<control-param name="useStrictFilterByOrg">false</control-param>
 						</control>
 					</field>
 				    <field id="lecm-eds-globset:arm-for-dashlet-assoc">
