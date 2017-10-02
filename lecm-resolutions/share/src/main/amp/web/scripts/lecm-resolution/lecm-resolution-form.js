@@ -184,7 +184,7 @@
     }
 
     function sendResolution(layer, args) {
-        if (args[1] && args[1].form) {
+        if (args[1] && args[1].form && args[1].form.isValid()) {
             var formData = args[1].form.getFormData();
             if (formData) {
                 var resolutionExecutionDate = {
