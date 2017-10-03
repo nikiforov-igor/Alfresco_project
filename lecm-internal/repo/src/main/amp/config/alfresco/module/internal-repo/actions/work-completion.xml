@@ -140,7 +140,6 @@
     var logText = "#initiator " + documentScript.wrapperTitle("завершил", completionReason) + " работу по документу " + documentScript.wrapperDocumentLink(document, "{lecm-document:present-string}");
     businessJournal.log(document.nodeRef.toString(), "EXECUTE_DOCUMENT", substitude.formatNodeTitle(document.nodeRef.toString(), logText), []);
 
-    statemachine.executeTransitionAction(document, 'Завершение работы');
 })();]]></property>
         <property name="lecm-group-actions:order"><![CDATA[0]]></property>
         <property name="cm:title"><![CDATA[Завершить работу]]></property>
