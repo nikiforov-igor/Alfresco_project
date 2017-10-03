@@ -37,6 +37,9 @@
 .incoming-search-repeated .search-repeats-options .buttons-div .search-button {
     margin-right: 10px;
 }
+.incoming-search-repeated .search-repeats-options .buttons-div .search-button button:disabled{
+    color: rgb(84, 84, 84);
+}
 .incoming-search-repeated .search-repeats-options .buttons-div button{
     background: none;
 }
