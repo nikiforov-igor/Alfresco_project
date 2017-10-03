@@ -3408,7 +3408,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[@signingRoutesService.getState(doc.nodeRef) != "NEW" OR (@signingRoutesService.getState(doc.nodeRef) == "NEW" AND @signingRoutesService.hasEmployeesInRoute(doc.nodeRef))]]></value>
+                                                                                    <![CDATA[@signingRoutesService.getState(doc.nodeRef) != "NEW" OR (@signingRoutesService.getState(doc.nodeRef) == "NEW" AND (@signingRoutesService.hasUnresolvedMacros(doc.nodeRef) OR @signingRoutesService.hasEmployeesInRoute(doc.nodeRef)))]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -6226,7 +6226,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[@signingRoutesService.getState(doc.nodeRef) != "NEW" OR (@signingRoutesService.getState(doc.nodeRef) == "NEW" AND @signingRoutesService.hasEmployeesInRoute(doc.nodeRef))]]></value>
+                                                                                    <![CDATA[@signingRoutesService.getState(doc.nodeRef) != "NEW" OR (@signingRoutesService.getState(doc.nodeRef) == "NEW" AND (@signingRoutesService.hasUnresolvedMacros(doc.nodeRef) OR @signingRoutesService.hasEmployeesInRoute(doc.nodeRef)))]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -8122,7 +8122,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[@signingRoutesService.getState(doc.nodeRef) != "NEW" OR (@signingRoutesService.getState(doc.nodeRef) == "NEW" AND @signingRoutesService.hasEmployeesInRoute(doc.nodeRef))]]></value>
+                                                                                    <![CDATA[@signingRoutesService.getState(doc.nodeRef) != "NEW" OR (@signingRoutesService.getState(doc.nodeRef) == "NEW" AND (@signingRoutesService.hasUnresolvedMacros(doc.nodeRef) OR @signingRoutesService.hasEmployeesInRoute(doc.nodeRef)))]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
