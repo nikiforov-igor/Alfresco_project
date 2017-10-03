@@ -61,7 +61,7 @@ LogicECM.module.Incoming = LogicECM.module.Incoming || {};
             } else {
                 params += "&searchMode=all";
 			}
-			params += "&sortProp=score";
+			params += "&sortProp=" + encodeURIComponent("score|false");
 
 			return params;
 		},
