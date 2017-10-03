@@ -237,6 +237,8 @@ LogicECM.module.Incoming = LogicECM.module.Incoming || {};
 
             var el = Dom.get(searchOptionsId + "-search-mode");
             el.value = "at_least_one";
+
+            this.widgets.dataTable.deleteRows(0, this.widgets.dataTable.getRecordSet().getLength());
         },
 
         initCheckboxElements: function () {
