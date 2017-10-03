@@ -397,7 +397,7 @@ LogicECM.ORD = LogicECM.ORD || {};
                 url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
                 dataObj: {
                     nodeRef: this.tableDataNodeRef,
-                    substituteString: "{..lecm-ord-table-structure:items-assoc/lecm-eds-document:execution-date?yyyy-MM-dd'T'HH:mm:ss},{..lecm-ord-table-structure:items-assoc/lecm-document:subject-assoc-ref},{..lecm-ord-table-structure:items-assoc/lecm-ord:controller-assoc-ref}"
+                    substituteString: "{..lecm-ord-table-structure:items-assoc/lecm-eds-document:execution-date?yyyy-MM-dd'T'HH:mm:ss},{..lecm-ord-table-structure:items-assoc/lecm-document:subject-assoc-ref},{..lecm-ord-table-structure:items-assoc/lecm-ord:controller-assoc-ref},{..lecm-ord-table-structure:items-assoc/lecm-document:author-assoc-ref}"
                 },
                 successCallback: {
                     fn: function (response) {
@@ -420,6 +420,9 @@ LogicECM.ORD = LogicECM.ORD || {};
                                 args["assoc_lecm-ord-table-structure_controller-assoc"] = controllerFormValue;
                             } else if (data[2]) {
                                 args["assoc_lecm-ord-table-structure_controller-assoc"] = data[2];
+                            }
+                            if (data[3]) {
+                                args["assoc_lecm-ord-table-structure_author-assoc"] = data[3];
                             }
                             var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
                                 var addMsg = meta.addMessage;
