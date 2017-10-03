@@ -8861,7 +8861,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             </property>
                                                                             <property>
                                                                                 <name>inputFromType</name>
-                                                                                <value><![CDATA[FIELD]]></value>
+                                                                                <value><![CDATA[VALUE]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
