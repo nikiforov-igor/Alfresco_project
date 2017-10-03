@@ -304,7 +304,7 @@
                     </source>
                     <target>
                         <class>lecm-orgstr:employee</class>
-                        <mandatory>false</mandatory>
+                        <mandatory>true</mandatory>
                         <many>false</many>
                     </target>
                 </association>
