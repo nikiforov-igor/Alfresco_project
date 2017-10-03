@@ -65,6 +65,13 @@
                             registrars = orgstructure.getEmployeesByBusinessRoleId('CONTRACT_RECORDER', true);
                         }
 
+                        var currentEmployeeOrganization = orgstructure.getEmployeeOrganization(currentEmployee);
+                        if (currentEmployeeOrganization) {
+                            registrars = registrars.filter(function (item) {
+                                return currentEmployeeOrganization.equals(orgstructure.getEmployeeOrganization(item));
+                            });
+                        }
+
                         var registrarsListItems = base.getWorkflowNodeConverter().convertNodes(base.getValueConverter().convertValueForJava(registrars), true);
 						execution.setVariableLocal('registrarsList', registrarsListItems);
                         execution.setVariable('reservateInitiator', base.getWorkflowNodeConverter().convertNode(currentEmployee.nodeRef));
