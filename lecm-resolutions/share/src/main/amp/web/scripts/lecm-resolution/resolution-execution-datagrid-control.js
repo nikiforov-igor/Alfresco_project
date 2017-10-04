@@ -136,7 +136,10 @@ LogicECM.module.Resolutions = LogicECM.module.Resolutions || {};
             var dTable = new YAHOO.widget.DataTable(this.id + "-grid", columnDefinitions, this.widgets.dataSource,
                 {
                     "MSG_EMPTY": this.msg("message.empty"),
-                    "MSG_ERROR": this.msg("message.error")
+                    "MSG_ERROR": this.msg("message.error"),
+                    "MSG_LOADING" : this.msg("message.loading"),
+                    MSG_SORTASC: this.msg("message.sortasc"),
+                    MSG_SORTDESC: this.msg("message.sortdesc")
                 });
 
             // Enable row highlighting
