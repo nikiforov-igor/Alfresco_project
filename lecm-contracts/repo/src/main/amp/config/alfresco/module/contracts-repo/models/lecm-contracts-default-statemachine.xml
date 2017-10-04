@@ -7990,7 +7990,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                             </property>
                                                             <property>
                                                                 <name>redirectAfterBlock</name>
-                                                                <value><![CDATA[]]></value>
+                                                                <value><![CDATA[document?nodeRef={nodeRef}#approvalAndSigning]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
