@@ -70,12 +70,14 @@
 
                         var initiator = orgstructure.getCurrentEmployee();
                         var author = document.assocs["lecm-document:author-assoc"][0];
+                        var executor = document.assocs["lecm-eds-document:executor-assoc"][0];
                         var answer = table.createNode(null, "lecm-internal-table-structure:answer", "cm:contains");
 
                         answer.setInheritsPermissions(false);
                         lecmPermission.grantDynamicRole(answer, employee, "DA_RECIPIENT_DYN", "LECM_BASIC_PG_ActionPerformer");
                         lecmPermission.grantDynamicRole(document, employee, "DA_RECIPIENT_DYN", "LECM_BASIC_PG_Employee");
                         lecmPermission.grantDynamicRole(answer, author, "BR_INITIATOR", "LECM_BASIC_PG_Owner");
+                        lecmPermission.grantDynamicRole(answer, executor, "BR_INITIATOR", "LECM_BASIC_PG_Owner");
 
                         var signerAssoc = document.assocs['lecm-signing-v2-aspects:signerEmployeeAssoc'];
                         var signer = signerAssoc && signerAssoc.length ? signerAssoc[0] : null;
