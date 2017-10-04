@@ -2209,7 +2209,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[В маршруте не найдено согласующих, от которых требуется вынесение решение. Измените маршрут согласования или обратитесь к администратору]]></value>
+                                                                                    <![CDATA[В маршруте не найдено согласующих, от которых требуется вынесение решения. Измените маршрут согласования или обратитесь к администратору]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -2500,7 +2500,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[В маршруте не найдено подписантов, от которых требуется вынесение решение. Измените маршрут подписания или обратитесь к администратору]]></value>
+                                                                                    <![CDATA[В маршруте не найдено подписантов, от которых требуется вынесение решения. Измените маршрут подписания или обратитесь к администратору]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -6127,7 +6127,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[В маршруте не найдено подписантов, от которых требуется вынесение решение. Измените маршрут подписания или обратитесь к администратору]]></value>
+                                                                                    <![CDATA[В маршруте не найдено подписантов, от которых требуется вынесение решения. Измените маршрут подписания или обратитесь к администратору]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -7885,7 +7885,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[В маршруте не найдено согласующих, от которых требуется вынесение решение. Измените маршрут согласования или обратитесь к администратору]]></value>
+                                                                                    <![CDATA[В маршруте не найдено согласующих, от которых требуется вынесение решения. Измените маршрут согласования или обратитесь к администратору]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -8143,7 +8143,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[В маршруте не найдено подписантов, от которых требуется вынесение решение. Измените маршрут подписания или обратитесь к администратору]]></value>
+                                                                                    <![CDATA[В маршруте не найдено подписантов, от которых требуется вынесение решения. Измените маршрут подписания или обратитесь к администратору]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
