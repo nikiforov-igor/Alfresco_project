@@ -112,7 +112,6 @@
                     </field>
                     <field id="lecm-document:indexTableRow" mandatory="true"/>
                     <field id="lecm-ord-table-structure:subject-assoc" set="bottom"/>
-                    <field id="lecm-ord-table-structure:item-status-assoc" set="bottom"/>
                     <field id="lecm-ord-table-structure:limitation-date-radio" set="limitation-date"  mandatory="true">
                         <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
                             <control-param name="defaultValue">DAYS</control-param>
@@ -150,7 +149,11 @@
                             <control-param name="textCode">label.ord.limitless</control-param>
                         </control>
                     </field>
-                    <field id="lecm-ord-table-structure:item-status-assoc" read-only="true" set="bottom"/>
+                    <field id="lecm-ord-table-structure:item-status-assoc" read-only="true" set="bottom">
+                        <control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
+                            <control-param name="formatString">{lecm-ord-table-structure:item-status-assoc/cm:name}</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-ord-table-structure:errand-assoc" read-only="true" set="bottom"/>
                     <field id="ord-item-edit-form-script">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
