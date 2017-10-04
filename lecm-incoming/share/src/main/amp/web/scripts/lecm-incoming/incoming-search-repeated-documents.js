@@ -61,7 +61,7 @@ LogicECM.module.Incoming = LogicECM.module.Incoming || {};
             } else {
                 params += "&searchMode=all";
 			}
-			params += "&sortProp=score";
+			params += "&sortProp=" + encodeURIComponent("score|false");
 
 			return params;
 		},
@@ -75,6 +75,7 @@ LogicECM.module.Incoming = LogicECM.module.Incoming || {};
             this.initCheckboxElements();
             YAHOO.util.Event.addListener(Dom.get(this.options.controlId + "_search-repeats-options-attributes-match-select-all"), 'change', this.onChangeSelectAll, null, this);
             YAHOO.util.Event.addListener(Dom.get(this.options.controlId + "_search-repeats-options-switch-link"), 'click', this.clickOnSearchRepeatsOptions, null, this);
+            YAHOO.util.Event.addListener(Dom.get(this.options.controlId + "-picker-searchText"), 'keyup', this.checkAvailabilitySearchButton, null, this);
             this.setAttributesCheckboxes();
             this.onSearch();
 
@@ -159,6 +160,7 @@ LogicECM.module.Incoming = LogicECM.module.Incoming || {};
         },
 
 		onChangeCheckbox: function () {
+            this.checkAvailabilitySearchButton();
             for (var i = 1; i < this.checkboxElements.length; i++) {
                 if (!this.checkboxElements[i].disabled && !this.checkboxElements[i].checked) {
                     this.checkboxElements[0].checked = false;
@@ -166,6 +168,25 @@ LogicECM.module.Incoming = LogicECM.module.Incoming || {};
                 }
             }
             this.checkboxElements[0].checked = true;
+        },
+
+        checkAvailabilitySearchButton: function () {
+            var searchTextEl = Dom.get(this.options.controlId + "-picker-searchText");
+            var searchButton = this.widgets.searchButton;
+
+            if (searchButton && searchButton._button && searchButton._button.id) {
+                if (searchTextEl && !searchTextEl.value) {
+                    for (var i = 1; i < this.checkboxElements.length; i++) {
+                        if (!this.checkboxElements[i].disabled && this.checkboxElements[i].checked) {
+                            searchButton._button.disabled = false;
+                            return;
+                        }
+                    }
+                    searchButton._button.disabled = true;
+                } else {
+                    searchButton._button.disabled = false;
+                }
+            }
         },
 
 		onChangeSelectAll: function () {
@@ -179,6 +200,7 @@ LogicECM.module.Incoming = LogicECM.module.Incoming || {};
                     checkbox.checked = false;
                 }
             }, this);
+            this.checkAvailabilitySearchButton();
         },
 
 		setAttributesCheckboxes: function () {
@@ -215,6 +237,8 @@ LogicECM.module.Incoming = LogicECM.module.Incoming || {};
 
             var el = Dom.get(searchOptionsId + "-search-mode");
             el.value = "at_least_one";
+
+            this.widgets.dataTable.deleteRows(0, this.widgets.dataTable.getRecordSet().getLength());
         },
 
         initCheckboxElements: function () {

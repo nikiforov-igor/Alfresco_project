@@ -1,12 +1,4 @@
 <alfresco-config>
-    <!-- <config>
-            <forms>
-                    <dependencies>
-                            <js src="/scripts/lecm-incoming/incoming-search-repeated-documents.js" />
-                    </dependencies>
-            </forms>
-    </config> -->
-
     <config>
         <forms>
             <default-controls>
@@ -110,7 +102,7 @@
                     </field>
                     <field id="lecmIncomingWf:repeatedToDocument">
                         <control template="/ru/it/lecm/incoming/controls/incoming-search-repeated-documents-control.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
+                            <control-param name="rootLocation">/app:company_home</control-param>
                             <control-param name="nameSubstituteString"><![CDATA[<a href='/{~SHARE_CONTEXT}/page/document?nodeRef={nodeRef}'>
                                 {lecm-document:ext-present-string}, от {lecm-incoming:sender-assoc/lecm-contractor:contractor-to-legalform-association/lecm-legalform:short-title} '{lecm-incoming:sender-assoc/lecm-contractor:shortname}', получатель {lecm-incoming:recipient-assoc-text-content}</a></br>
                                 Статус: {lecm-statemachine:status}, автор: <a href='/{~SHARE_CONTEXT}/page/view-metadata?nodeRef={lecm-document:author-assoc-ref}'>{~AUTHOR}</a>]]></control-param>

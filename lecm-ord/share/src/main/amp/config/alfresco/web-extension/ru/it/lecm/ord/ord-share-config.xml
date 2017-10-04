@@ -23,6 +23,7 @@
                 <field-visibility>
                     <show id="lecm-document:indexTableRow" force="true" />
                     <show id="lecm-ord-table-structure:title"/>
+                    <show id="lecm-ord-table-structure:author-assoc"/>
                     <show id="lecm-ord-table-structure:item-content"/>
                     <show id="lecm-ord-table-structure:executor-assoc"/>
                     <show id="lecm-ord-table-structure:coexecutors-assoc"/>
@@ -195,6 +196,7 @@
             <field-visibility>
                 <show id="lecm-document:indexTableRow" force="true"/>
                 <show id="lecm-ord-table-structure:title"/>
+                <show id="lecm-ord-table-structure:author-assoc"/>
                 <show id="lecm-ord-table-structure:item-content"/>
                 <show id="lecm-ord-table-structure:executor-assoc"/>
                 <show id="lecm-ord-table-structure:coexecutors-assoc"/>
@@ -214,6 +216,12 @@
                 <set id="limitation-date"  template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
                 <set id="bottom"/>
 
+
+                <field id="lecm-ord-table-structure:author-assoc">
+                    <control>
+                        <control-param name="defaultValueDataSource">lecm/orgstructure/api/getCurrentEmployee</control-param>
+                    </control>
+                </field>
                 <field id="lecm-ord-table-structure:item-content">
                     <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                         <control-param name="rows">4</control-param>

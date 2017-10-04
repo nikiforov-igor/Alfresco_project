@@ -950,11 +950,7 @@
                     <field id="lecm-errands:is-important">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
                     </field>
-                    <field id="lecm-document:subject-assoc">
-                        <control>
-                            <control-param name="defaultValueDataSource">lecm/errands/getDefaultSubject</control-param>
-                        </control>
-                    </field>
+                    <field id="lecm-document:subject-assoc"/>
                 </appearance>
             </form>
             <form id="datagrid">
