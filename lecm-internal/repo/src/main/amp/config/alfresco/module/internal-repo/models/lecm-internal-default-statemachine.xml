@@ -12281,7 +12281,7 @@ var registrationRequired = document.assocs["lecm-eds-document:document-type-asso
                                                             <association>
                                                                 <type>transitionStatus</type>
                                                                 <reference>
-                                                                    workspace://SpacesStore/13f997b0-58e8-4622-a93b-2016af55e627
+                                                                    workspace://SpacesStore/17a772f6-a45f-46dd-b292-0990112ddefe
                                                                 </reference>
                                                             </association>
                                                         </associations>
