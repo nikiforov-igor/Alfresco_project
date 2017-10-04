@@ -3457,6 +3457,38 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>7a681091-485b-41d8-93b0-b04f08e99890
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/51a1c542-c18e-4ca4-bfe5-9d68e2b21175
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[!doc.attr("lecm-signing-v2-aspects:signed-on-paper")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Документ подписан на бумажном носителе. Действие недоступно]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
@@ -6371,6 +6403,38 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>188e3482-bdc0-48d7-b8d5-576446189923
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/e98ffd1f-6d96-4503-a4b2-ad0c8a1e5b57
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[!doc.attr("lecm-signing-v2-aspects:signed-on-paper")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Документ подписан на бумажном носителе. Действие недоступно]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
@@ -6548,6 +6612,38 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>inputFromType</name>
                                                                                 <value><![CDATA[VALUE]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>fe9c8ebf-748a-4145-8135-3f198d815bca
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/260fa8d0-3ff8-4774-9c18-1d6ab52d5c38
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[!doc.attr("lecm-signing-v2-aspects:signed-on-paper")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Документ подписан на бумажном носителе. Действие недоступно]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -8203,6 +8299,38 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>031fa602-0655-42c0-a065-f449fd8cb14a
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/06da2d6e-acb7-4781-a3b7-353d54eb859a
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[!doc.attr("lecm-signing-v2-aspects:signed-on-paper")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Документ подписан на бумажном носителе. Действие недоступно]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
@@ -8504,6 +8632,38 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>inputFromType</name>
                                                                                 <value><![CDATA[VALUE]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>56bbfe99-df42-4cf0-9dd7-d85409652984
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/3d975531-cdec-4312-a2b4-877f345317c3
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[!doc.attr("lecm-signing-v2-aspects:signed-on-paper")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Документ подписан на бумажном носителе. Действие недоступно]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
