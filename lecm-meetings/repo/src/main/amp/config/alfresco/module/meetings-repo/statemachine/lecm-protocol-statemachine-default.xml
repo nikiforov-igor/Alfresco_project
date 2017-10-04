@@ -5927,11 +5927,11 @@ var registrationRequired = document.assocs["lecm-eds-document:document-type-asso
 				registrars =  orgstructure.getEmployeesByBusinessRoleId("DA_REGISTRARS", true);
 				if (registrars && registrars.length) {
 					for each (var registrar in registrars) {
-						lecmPermission.grantDynamicRole(document, registrar, "DA_REGISTRAR_DYN", "LECM_BASIC_PG_Reader");
+						statemachine.grandDynamicRoleForEmployee(document, registrar, "DA_REGISTRAR_DYN", task);
 					}
 				} else {
 					registrars.push(dutyRegistrar);
-					lecmPermission.grantDynamicRole(document, dutyRegistrar, "DA_REGISTRAR_DYN", "LECM_BASIC_PG_Reader");
+					statemachine.grandDynamicRoleForEmployee(document, dutyRegistrar, "DA_REGISTRAR_DYN", task);
 				}
 			} else {
 				var primaryPosition = orgstructure.getPrimaryPosition(orgstructure.getCurrentEmployee().nodeRef.toString());
@@ -5951,11 +5951,11 @@ var registrationRequired = document.assocs["lecm-eds-document:document-type-asso
                 }
 				if (registrars && registrars.length) {
 					for each (var registrar in registrars) {
-						lecmPermission.grantDynamicRole(document, registrar, "DA_REGISTRAR_DYN", "LECM_BASIC_PG_Reader");
+						statemachine.grandDynamicRoleForEmployee(document, registrar, "DA_REGISTRAR_DYN", task);
 					}
 				} else {
 					registrars.push(dutyRegistrar);
-					lecmPermission.grantDynamicRole(document, dutyRegistrar, "DA_REGISTRAR_DYN", "LECM_BASIC_PG_Reader");
+					statemachine.grandDynamicRoleForEmployee(document, dutyRegistrar, "DA_REGISTRAR_DYN", task);
 				}
 			}
 			/* уведомление */
