@@ -8861,7 +8861,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             </property>
                                                                             <property>
                                                                                 <name>inputFromType</name>
-                                                                                <value><![CDATA[FIELD]]></value>
+                                                                                <value><![CDATA[VALUE]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -11228,7 +11228,7 @@ document.save();]]></value>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reviewer]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_Employee]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
