@@ -10451,7 +10451,7 @@ document.save();]]></value>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer_Lite]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -12233,6 +12233,45 @@ var registrationRequired = document.assocs["lecm-eds-document:document-type-asso
         }
     }
 })();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/17a772f6-a45f-46dd-b292-0990112ddefe
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>b11b381b-0375-4017-b383-7d36106341b3</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/8e1e9416-2b00-4cfa-850d-a6f244d87f60
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.hasAspect("os-aspects:move-to-case")]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
