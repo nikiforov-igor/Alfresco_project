@@ -43,7 +43,6 @@
 		  p:dictionaries-ref="outgoing.dictionaries"/>
 
 	<util:list id="outgoing.groupOperations.dictionaries">
-		<value>alfresco/module/${artifactId}/actions/direct-to-registration.xml</value>
 		<value>alfresco/module/${artifactId}/actions/prepare-to-send.xml</value>
 		<value>alfresco/module/${artifactId}/actions/send.xml</value>
 		<value>alfresco/module/${artifactId}/actions/print-cover.xml</value>

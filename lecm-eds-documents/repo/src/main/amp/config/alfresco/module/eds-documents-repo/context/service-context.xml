@@ -24,6 +24,7 @@
 	<util:list id="documents.groupOperations">
 		<value>alfresco/module/${artifactId}/actions/decline-registration.xml</value>
 		<value>alfresco/module/${artifactId}/actions/send-to-review-action.xml</value>
+		<value>alfresco/module/${artifactId}/actions/direct-to-registration.xml</value>
 	</util:list>
 	<bean parent="lecmDictionaryBootstrap" depends-on="groupActionsService">
 		<property name="rootPath" value="/Business platform/LECM/Сервис Групповые операции"/>
