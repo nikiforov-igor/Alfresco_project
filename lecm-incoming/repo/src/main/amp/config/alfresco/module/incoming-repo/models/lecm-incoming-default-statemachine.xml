@@ -810,7 +810,7 @@
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[!doc.hasDuplicates(false, "lecm-incoming:outgoing-number", "lecm-incoming:outgoing-date", "lecm-incoming:sender-assoc-ref", "lecm-document:subject-assoc-ref")]]></value>
+                                                                                    <![CDATA[!doc.hasDuplicates(false, "lecm-incoming:outgoing-number", "lecm-incoming:outgoing-date", "lecm-incoming:sender-assoc-ref", "lecm-incoming:delivery-method-assoc-ref")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -2061,7 +2061,7 @@
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[!doc.hasDuplicates(false, "lecm-incoming:outgoing-number", "lecm-incoming:outgoing-date", "lecm-incoming:sender-assoc-ref", "lecm-document:subject-assoc-ref")]]></value>
+                                                                                    <![CDATA[!doc.hasDuplicates(false, "lecm-incoming:outgoing-number", "lecm-incoming:outgoing-date", "lecm-incoming:sender-assoc-ref", "lecm-incoming:delivery-method-assoc-ref")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -6635,7 +6635,7 @@ if (document) {
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[!doc.hasDuplicates(false, "lecm-incoming:outgoing-number", "lecm-incoming:outgoing-date", "lecm-incoming:sender-assoc-ref", "lecm-document:subject-assoc-ref")]]></value>
+                                                                                    <![CDATA[!doc.hasDuplicates(false, "lecm-incoming:outgoing-number", "lecm-incoming:outgoing-date", "lecm-incoming:sender-assoc-ref", "lecm-incoming:delivery-method-assoc-ref")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
