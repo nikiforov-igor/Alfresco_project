@@ -61,12 +61,17 @@ LogicECM.errands = LogicECM.errands || {};
                                                 url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
                                                 dataObj: {
                                                     nodeRef: this.options.documentNodeRef,
-                                                    substituteString: "{lecm-statemachine:status}"
+                                                    substituteString: "{lecm-statemachine:status}[SEPARATOR]{lecm-errands:executor-assoc-ref}[SEPARATOR]{lecm-errands:coexecutors-assoc-ref}"
                                                 },
                                                 successCallback: {
                                                     fn: function (response) {
                                                         if (response && response.json.formatString) {
-                                                            currentDocumentStatus = response.json.formatString;
+                                                            var responseFields = response.json.formatString.split("[SEPARATOR]");
+                                                            currentDocumentStatus = responseFields[0];
+                                                            var executorAssoc = responseFields[1];
+                                                            var coexecutorsAssoc = responseFields[2];
+                                                            currentUser.isExecutor = currentUser.isExecutor && executorAssoc && executorAssoc.indexOf(currentUser.nodeRef) != -1;
+                                                            currentUser.isCoexecutor = currentUser.isCoexecutor && coexecutorsAssoc && coexecutorsAssoc.indexOf(currentUser.nodeRef) != -1;
                                                             this.realCreateDatagrid(actions, currentUser, currentDocumentStatus);
                                                         }
                                                     },
@@ -176,7 +181,7 @@ LogicECM.errands = LogicECM.errands || {};
             });
             //получаем кнопку переноса отчетов
             var transferSelectedReportsButton = Dom.get(this.id + "-cntrl-exec-report-transfer-coexecutors-reports");
-            if (currentUser.isExecutor && !currentUser.isCoexecutor) {
+            if (currentUser.isExecutor) {
                 Dom.removeClass(transferSelectedReportsButton.parentElement, "hidden");
             }
             var buttonEl = YAHOO.util.Selector.query("span button", transferSelectedReportsButton, true);
