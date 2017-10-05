@@ -3,7 +3,7 @@
 	<item name="cm:Создать документ по шаблону" type="lecm-group-actions:script-action">
 		<property name="cm:name"><![CDATA[Создать вложение по шаблону]]></property>
 		<property name="cm:title"><![CDATA[Создать вложение по шаблону]]></property>
-		<property name="lecm-group-actions:statuses"><![CDATA[Проект;На согласовании;Согласован;На подписании;На доработке;Подписан;На регистрации;Зарегистрирован;На исполнении]]></property>
+		<property name="lecm-group-actions:statuses"><![CDATA[Проект;Согласован;На доработке;Подписан;На регистрации]]></property>
 		<property name="lecm-group-actions:type"><![CDATA[lecm-ord:document]]></property>
 		<property name="lecm-group-actions:order"><![CDATA[0]]></property>
 		<property name="lecm-group-actions:expression"><![CDATA[doc.attr("lecm-statemachine-aspects:is-draft") == false]]></property>
