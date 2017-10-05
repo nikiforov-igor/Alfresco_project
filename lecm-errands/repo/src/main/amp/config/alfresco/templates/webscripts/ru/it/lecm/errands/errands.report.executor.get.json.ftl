@@ -9,7 +9,7 @@
                 <#attempt>
                     "presentString": "${connectedDoc.doc.properties["lecm-document:present-string"]}",
                 <#recover>
-                    "presentString": "Содержание недоступно",
+                    "presentString": "${msg("content.unavailable")}",
                 </#attempt>
                 "viewUrl": "${connectedDoc.viewPage!"document"}"
                 }<#if connectedDoc_has_next>,</#if>
