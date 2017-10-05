@@ -103,7 +103,7 @@
                     <field id="lecmIncomingWf:repeatedToDocument">
                         <control template="/ru/it/lecm/incoming/controls/incoming-search-repeated-documents-control.ftl">
                             <control-param name="rootLocation">/app:company_home</control-param>
-                            <control-param name="nameSubstituteString"><![CDATA[<a href='/{~SHARE_CONTEXT}/page/document?nodeRef={nodeRef}'>
+                            <control-param name="nameSubstituteString"><![CDATA[<a href='/{~SHARE_CONTEXT}/page/document?nodeRef={nodeRef}' target='blank'>
                                 {lecm-document:ext-present-string}, от {lecm-incoming:sender-assoc/lecm-contractor:contractor-to-legalform-association/lecm-legalform:short-title} '{lecm-incoming:sender-assoc/lecm-contractor:shortname}', получатель {lecm-incoming:recipient-assoc-text-content}</a></br>
                                 Статус: {lecm-statemachine:status}, автор: <a href='/{~SHARE_CONTEXT}/page/view-metadata?nodeRef={lecm-document:author-assoc-ref}'>{~AUTHOR}</a>]]></control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
