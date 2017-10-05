@@ -286,9 +286,11 @@ LogicECM.module.eds = LogicECM.module.eds || {};
             },
 
             onRemove: function remove_function(ev, args) {
+                var formId = this.id + "-line-" + args.num + "-form";
+                this.forms[formId].hideErrorContainer();
                 var element = document.getElementById(this.id + "_" + args.num + "_item");
                 element.parentNode.removeChild(element);
-                delete this.forms[this.id + "-line-" + args.num + "-form"];
+                delete this.forms[formId];
                 this.updateFormCount();
             },
 
