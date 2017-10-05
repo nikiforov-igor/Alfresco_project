@@ -8,16 +8,14 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
 LogicECM.module.Errands.requestCancelTaskNewExecutorValidation =
 	function (field, args,  event, form, silent, message) {
 		if (field.form != null) {
-		    var result,newExecutor;
+            var result, newExecutor;
             if (field.id.indexOf("requestCancelTask_1") > 0) {
                 result = field.form["prop_lecmErrandWf_requestCancelTask_1Result"];
                 newExecutor = field.form["assoc_lecmErrandWf_requestCancelTask_1NewExecutor"];
-
             } else {
                 result = field.form["prop_lecmErrandWf_requestCancelTaskResult"];
                 newExecutor = field.form["assoc_lecmErrandWf_requestCancelTaskNewExecutor"];
             }
-
 			if (newExecutor != null) {
 				var formId = form.formId.replace("-form", "");
 				var isChangeExecutor = false;
