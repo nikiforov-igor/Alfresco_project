@@ -794,11 +794,7 @@ if (document) {
   if (datesTable) {
     var datesTemp = document.assocs["lecm-ord:temp-items-assoc"];
     if (datesTemp && datesTemp.length) {
-      var signerAssoc = document.assocs["lecm-signing-v2-aspects:signerEmployeeAssoc"];
       datesTemp.forEach(function(item) {
-        if (signerAssoc && signerAssoc.length){
-          item.createAssociation(signerAssoc[0], "lecm-ord-table-structure:author-assoc");
-        }
         item.move(datesTable);
       });
     }
