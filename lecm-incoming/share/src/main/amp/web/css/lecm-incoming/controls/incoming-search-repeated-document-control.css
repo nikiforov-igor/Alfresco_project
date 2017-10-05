@@ -27,6 +27,7 @@
 .incoming-search-repeated .attributes-match .match-value-div {
     display: inline-block;
     vertical-align:top;
+    width: calc(100% - 180px);
 }
 .incoming-search-repeated .search-repeats-options .buttons-div {
     left: 368px;
