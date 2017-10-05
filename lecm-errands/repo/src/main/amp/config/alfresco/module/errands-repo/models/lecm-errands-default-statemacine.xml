@@ -12475,7 +12475,9 @@ if (doc) {
   if (additionalDoc) {
     edsDocument.sendChildChangeSignal(additionalDoc);
   }
-
+  if (doc.properties["lecm-errands:auto-close"]){
+  	edsDocument.sendCompletionSignal(additionalDoc, "",orgstructure.getCurrentEmployee());
+  }
 }]]></value>
                                                             </property>
                                                         </properties>
