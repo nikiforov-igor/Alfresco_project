@@ -65,9 +65,9 @@ LogicECM.ORD = LogicECM.ORD || {};
                                 label: this.msg("ord.item.execute.button"),
                                 evaluator: this.showExecuteActionEvaluator
                             });
-                            if (allowedStatuses.indexOf(docStatus) > 0 &&
-                                ((docStatus == "На регистрации" && currentUser.roles.indexOf("DA_REGISTRAR_DYN") > 0 && currentUser.roles.indexOf("DA_REGISTRARS") > 0) ||
-                                (docStatus != "На регистрации" && currentUser.roles.indexOf("BR_INITIATOR") > 0))) {
+                            if (allowedStatuses.indexOf(docStatus) >= 0 &&
+                                ((docStatus == "На регистрации" && currentUser.roles.indexOf("DA_REGISTRAR_DYN") >= 0 && currentUser.roles.indexOf("DA_REGISTRARS") >= 0) ||
+                                (docStatus != "На регистрации" && currentUser.roles.indexOf("BR_INITIATOR") >= 0))) {
                                 if (!this.options.disabled && this.options.mode == "edit") {
                                     if (this.options.allowEdit === true) {
                                         actions.push({
