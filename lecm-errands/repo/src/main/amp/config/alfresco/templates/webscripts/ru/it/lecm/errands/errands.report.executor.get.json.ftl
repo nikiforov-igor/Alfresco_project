@@ -6,7 +6,11 @@
             <#list connectedDocuments as connectedDoc>
                 {
                 "nodeRef": "${connectedDoc.doc.nodeRef}",
-                "presentString": "<#if connectedDoc.doc?? && connectedDoc.doc.properties??>${connectedDoc.doc.properties["lecm-document:present-string"]!""}</#if>",
+                <#attempt>
+                    "presentString": "${connectedDoc.doc.properties["lecm-document:present-string"]}",
+                <#recover>
+                    "presentString": "${msg("content.unavailable")}",
+                </#attempt>
                 "viewUrl": "${connectedDoc.viewPage!"document"}"
                 }<#if connectedDoc_has_next>,</#if>
             </#list>
