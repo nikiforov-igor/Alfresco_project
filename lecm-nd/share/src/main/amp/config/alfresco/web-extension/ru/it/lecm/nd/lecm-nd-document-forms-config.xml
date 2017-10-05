@@ -613,7 +613,6 @@
                     <show id="lecm-document-aspects:additional-organization-unit-assoc" mandatory="true"/>
                     <show id="lecm-eds-document:sheets-number"/>
                     <show id="lecm-document:subject-assoc"/>
-                    <show id="lecm-base-dummy-aspects:script4" force="true" for-mode="view"/>
                     <show id="lecm-approval-route:approvalFolder" force="true" for-mode="view"/>
                     <show id="lecm-signing-route:signingFolder" force="true" for-mode="view"/>
                     <show id="lecm-nd:begin-date"/>
@@ -754,12 +753,6 @@
                     <field id="lecm-base-dummy-aspects:script3" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-signing-v2/change-availability-of-signing-fields-script.js</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-base-dummy-aspects:script4" set="approvalAndSigning">
-                        <control template="/ru/it/lecm/forms/jasperforms/printReportBtn.ftl">
-                            <control-param name="reportId">approval-and-signing-list</control-param>
-                            <control-param name="buttonLabel">Лист согласования и подписания</control-param>
                         </control>
                     </field>
                     <field id="lecm-approval-route:approvalFolder" set="approvalAndSigning" label-id="label.forms.approval">                
