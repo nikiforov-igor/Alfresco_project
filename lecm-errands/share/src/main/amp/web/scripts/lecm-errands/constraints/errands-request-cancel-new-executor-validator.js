@@ -1,5 +1,5 @@
 if (typeof LogicECM == "undefined" || !LogicECM) {
-    LogicECM = {};
+	LogicECM = {};
 }
 
 LogicECM.module = LogicECM.module || {};
