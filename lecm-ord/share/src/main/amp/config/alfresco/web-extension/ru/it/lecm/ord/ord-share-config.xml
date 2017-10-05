@@ -57,6 +57,11 @@
                             <control-param name="scriptLoadedFireAction">ordItemViewFormScriptLoaded</control-param>
                         </control>
                     </field>
+                    <field id="lecm-ord-table-structure:item-status-assoc" read-only="true">
+                        <control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
+                            <control-param name="formatString">{lecm-ord-table-structure:item-status-assoc/cm:name}</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-base-dummy-aspects:script" set="buttons">
                         <control template="/ru/it/lecm/eds/controls/button-control.ftl">
                         </control>
