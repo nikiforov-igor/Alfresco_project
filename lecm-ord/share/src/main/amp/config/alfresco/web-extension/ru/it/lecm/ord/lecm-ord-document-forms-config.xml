@@ -218,6 +218,7 @@
                             <control-param name="editIterationFormId">editIterationProperties</control-param>
                             <control-param name="fieldsForFilterRoutes">lecm-eds-document:executor-assoc,lecm-document:author-assoc</control-param>
                             <control-param name="scripts">scripts/lecm-routes-v2/validators/route-complete-create-validator.js</control-param>
+                            <control-param name="addEmployeeToStageMsgId">label.approval.routes.stage.addEmployee</control-param>
                         </control>                 
                     </field>
                     <field id="lecm-signing-route:signingFolder" label-id="label.forms.signing">
@@ -249,6 +250,7 @@
                             <control-param name="newListFromRoutTitleMsgId">title.new.signing.list.from.route</control-param>
                             <control-param name="newListTitleMsgId">title.new.signing.list</control-param>
                             <control-param name="unableCreateListActiveMessageId">message.signing.unable.to.create.list.active</control-param>
+                            <control-param name="addEmployeeToStageMsgId">label.signing.routes.stage.addEmployee</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -974,6 +976,7 @@
                             <control-param name="viewIterationResultFormId">viewApprovalResult</control-param>
                             <control-param name="editIterationFormId">editIterationProperties</control-param>
                             <control-param name="fieldsForFilterRoutes">lecm-eds-document:executor-assoc,lecm-document:author-assoc</control-param>
+                            <control-param name="addEmployeeToStageMsgId">label.approval.routes.stage.addEmployee</control-param>
                         </control>                 
                     </field>
                     <field id="lecm-signing-route:signingFolder" set="approvalAndSigning" label-id="label.forms.signing">
@@ -1005,6 +1008,7 @@
                             <control-param name="newListConfirmationMsgId">message.new.signing.list.confirmation</control-param>
                             <control-param name="newListFromRoutTitleMsgId">title.new.signing.list.from.route</control-param>
                             <control-param name="newListTitleMsgId">title.new.signing.list</control-param>
+                            <control-param name="addEmployeeToStageMsgId">label.signing.routes.stage.addEmployee</control-param>
                             <control-param name="unableCreateListActiveMessageId">message.signing.unable.to.create.list.active</control-param>
                         </control>
                     </field>
