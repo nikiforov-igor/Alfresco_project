@@ -12474,9 +12474,9 @@ if (doc) {
   var additionalDoc = errands.getAdditionalDocument(doc.nodeRef.toString());
   if (additionalDoc) {
     edsDocument.sendChildChangeSignal(additionalDoc);
-  }
-  if (doc.properties["lecm-errands:auto-close"]){
-  	edsDocument.sendCompletionSignal(additionalDoc, "",orgstructure.getCurrentEmployee());
+      if (doc.properties["lecm-errands:auto-close"]){
+        edsDocument.sendCompletionSignal(additionalDoc, "",orgstructure.getCurrentEmployee());
+      }
   }
 }]]></value>
                                                             </property>
