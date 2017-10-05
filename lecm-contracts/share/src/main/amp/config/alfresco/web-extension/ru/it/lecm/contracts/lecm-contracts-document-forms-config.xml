@@ -191,7 +191,7 @@
                     </field>
                     <field id="lecm-signing-v2-aspects:signerEmployeeAssoc" set="contract-info">
                         <control>
-                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=CONTRACT_SIGNER,LECM_ES_SIGNERS</control-param>
+                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS,LECM_ES_SIGNERS</control-param>
                             <control-param name="endpointMany">true</control-param>
                         </control>
                         <constraint-handlers>
@@ -464,7 +464,7 @@
                     </field>
                     <field id="lecm-signing-v2-aspects:signerEmployeeAssoc" set="contract-info">
                         <control>
-                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=CONTRACT_SIGNER,LECM_ES_SIGNERS</control-param>
+                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS,LECM_ES_SIGNERS</control-param>
                             <control-param name="endpointMany">true</control-param>
                         </control>
                         <constraint-handlers>
@@ -875,7 +875,7 @@
                     </field>
                     <field id="lecm-signing-v2-aspects:signerEmployeeAssoc" set="afterPrice">
                         <control>
-                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=CONTRACT_SIGNER,LECM_ES_SIGNERS</control-param>
+                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS,LECM_ES_SIGNERS</control-param>
                             <control-param name="endpointMany">true</control-param>
                         </control>
                         <constraint-handlers>
@@ -1014,7 +1014,7 @@
                     <field id="lecm-signing-v2-aspects:signerEmployeeAssoc">
                         <control>
                             <control-param name="useStrictFilterByOrg">true</control-param>
-                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=CONTRACT_SIGNER,LECM_ES_SIGNERS</control-param>
+                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS,LECM_ES_SIGNERS</control-param>
                             <control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
                             <control-param name="endpointMany">true</control-param>
                         </control>
