@@ -492,8 +492,6 @@
                     <show id="lecm-eds-document:execution-date"/>
                     <!--Содержание-->
                     <show id="lecm-eds-document:summaryContent"/>
-                    <!--Подписанты-->
-                    <show id="lecm-protocol:signers-assoc"/>
                     <!--Председатель совещания-->
                     <show id="lecm-protocol:meeting-chairman-assoc"/>
                     <!--Секретарь-->
@@ -526,13 +524,6 @@
                     </field>
                     <field id="lecm-eds-document:summaryContent">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
-                    </field>
-                    <field id="lecm-protocol:signers-assoc">
-                        <control>
-                            <control-param name="useStrictFilterByOrg">true</control-param>
-                            <control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
-                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_APPROVERS</control-param>
-                        </control>
                     </field>
                     <field id="lecm-eds-document:note">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
