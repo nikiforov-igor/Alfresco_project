@@ -79,18 +79,6 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
                 ErrandsService.TYPE_ERRANDS, ErrandsService.ASSOC_ADDITIONAL_ERRANDS_DOCUMENT, new JavaBehaviour(this, "onCreateAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-                ErrandsService.TYPE_ERRANDS, ErrandsService.ASSOC_ERRANDS_EXECUTOR, new JavaBehaviour(this, "onCreateAssocForTransferRightToBaseDocument"));
-
-        policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-                ErrandsService.TYPE_ERRANDS, ErrandsService.ASSOC_ERRANDS_INITIATOR, new JavaBehaviour(this, "onCreateAssocForTransferRightToBaseDocument"));
-
-        policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-                ErrandsService.TYPE_ERRANDS, ErrandsService.ASSOC_ERRANDS_CO_EXECUTORS, new JavaBehaviour(this, "onCreateAssocForTransferRightToBaseDocument"));
-
-        policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-                ErrandsService.TYPE_ERRANDS, ErrandsService.ASSOC_ERRANDS_CONTROLLER, new JavaBehaviour(this, "onCreateAssocForTransferRightToBaseDocument"));
-
-        policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
                 ErrandsService.TYPE_ERRANDS, ErrandsService.ASSOC_BASE_DOCUMENT, new JavaBehaviour(this, "onCreateBaseDocAssociation"));
     }
 
@@ -164,25 +152,6 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
             }
             nodeService.createAssociation(errandDoc, baseDoc, ErrandsService.ASSOC_BASE_DOCUMENT);
         }
-
-        //		TODO: Метод transferRightToBaseDocument в итоге использует метод erransService.getSettingsNode,
-//		который ранее был типа getOrCreate, поэтому здесь надо бы проверить ноду на
-//		существование и создать при необходимости
-//              не понятно, зачем это делать здесь. Это не инит метод, и не точка изменения настроек.
-//		if(errandsService.getSettingsNode() == null) {
-//			try {
-//				errandsService.createSettingsNode();
-//			} catch (WriteTransactionNeededException ex) {
-//				throw new RuntimeException("Can't create settings node", ex);
-//			}
-//		}
-
-        //OnCreateAssociationPolicy : транзакция должна быть.
-        try {
-            this.transferRightToBaseDocument(errandDoc);
-        } catch (WriteTransactionNeededException ex) {
-            throw new RuntimeException(ex);
-        }
     }
 
     public void onCreateBaseDocAssociation(AssociationRef associationRef) {
@@ -203,53 +172,6 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
         baseAssocRefs = nodeService.getTargetAssocs(errandDoc, ErrandsService.ASSOC_ADDITIONAL_ERRANDS_DOCUMENT);
         if (baseAssocRefs == null || baseAssocRefs.size() == 0) {
             nodeService.createAssociation(errandDoc, baseDoc, ErrandsService.ASSOC_ADDITIONAL_ERRANDS_DOCUMENT);
-        }
-    }
-
-    public void onCreateAssocForTransferRightToBaseDocument(AssociationRef associationRef) {
-        NodeRef errandDoc = associationRef.getSourceRef();
-
-        //OnCreateAssociationPolicy : транзакция должна быть.
-        try {
-            this.transferRightToBaseDocument(errandDoc);
-        } catch (WriteTransactionNeededException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-    public void transferRightToBaseDocument(NodeRef errandDoc) throws WriteTransactionNeededException {
-        if (errandsService.isTransferRightToBaseDocument()) {
-            NodeRef baseDoc = errandsService.getErrandBaseDocument(errandDoc);
-            transferRight(errandDoc, baseDoc);
-        }
-    }
-
-    private void transferRight(NodeRef errandDoc, NodeRef baseDoc) {
-        AuthenticationUtil.pushAuthentication();
-        AuthenticationUtil.setRunAsUserSystem();
-        try {
-            NodeRef executor = errandsService.getExecutor(errandDoc);
-            NodeRef initiator = errandsService.getInitiator(errandDoc);
-            if (baseDoc != null && executor != null && initiator != null) {
-                documentMembersService.addMemberWithoutCheckPermission(baseDoc, executor, new HashMap<QName, Serializable>(), true);
-
-                documentMembersService.addMemberWithoutCheckPermission(baseDoc, initiator, new HashMap<QName, Serializable>(), true);
-
-                List<AssociationRef> coexecutors = nodeService.getTargetAssocs(errandDoc, ErrandsService.ASSOC_ERRANDS_CO_EXECUTORS);
-                if (coexecutors != null) {
-                    for (AssociationRef coexecutor : coexecutors) {
-                        documentMembersService.addMemberWithoutCheckPermission(baseDoc, coexecutor.getTargetRef(), new HashMap<QName, Serializable>(), true);
-                    }
-                }
-
-                List<AssociationRef> controlerAssocs = nodeService.getTargetAssocs(errandDoc, ErrandsService.ASSOC_ERRANDS_CONTROLLER);
-                if (controlerAssocs != null && !controlerAssocs.isEmpty()) {
-                    NodeRef controller = controlerAssocs.get(0).getTargetRef();
-                    documentMembersService.addMemberWithoutCheckPermission(baseDoc, controller, new HashMap<QName, Serializable>(), true);
-                }
-            }
-        } finally {
-            AuthenticationUtil.popAuthentication();
         }
     }
 

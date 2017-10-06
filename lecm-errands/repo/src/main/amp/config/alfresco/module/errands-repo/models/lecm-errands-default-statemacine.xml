@@ -3368,6 +3368,56 @@ if (doc) {
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>dd13e808-ba8b-4f08-b284-ec96a4938327</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/6094d43c-8691-4efa-964b-b58c6f45d916
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value>
+                                                                    <![CDATA[Передача прав на документ основание]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[if (errands.isTransferRightToBaseDocument()) {
+  var document = stm_document;
+  var baseDocumentAssoc = document.assocs["lecm-errands:base-assoc"];
+  if (baseDocumentAssoc && baseDocumentAssoc.length) {
+    var baseDocument = baseDocumentAssoc[0];
+
+    var controllerAssoc = document.assocs["lecm-errands:controller-assoc"];
+    if (controllerAssoc && controllerAssoc.length) {
+      documentMembers.addMemberWithoutCheckPermission(baseDocument, controllerAssoc[0], "LECM_BASIC_PG_Reader", true);
+    }
+
+    var initiatorAssoc = document.assocs["lecm-errands:initiator-assoc"];
+    if (initiatorAssoc && initiatorAssoc.length) {
+      documentMembers.addMemberWithoutCheckPermission(baseDocument, initiatorAssoc[0], "LECM_BASIC_PG_Reader", true);
+    }
+
+    var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
+    if (executorAssoc && executorAssoc.length) {
+      documentMembers.addMemberWithoutCheckPermission(baseDocument, executorAssoc[0], "LECM_BASIC_PG_Reader", true);
+    }
+
+    var soExecutors = document.assocs["lecm-errands:coexecutors-assoc"];
+    if (soExecutors) {
+      soExecutors.forEach(function (soExecutor) {
+        documentMembers.addMemberWithoutCheckPermission(baseDocument, soExecutor, "LECM_BASIC_PG_Reader", true);
+      });
+	}
+  }
+}]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
