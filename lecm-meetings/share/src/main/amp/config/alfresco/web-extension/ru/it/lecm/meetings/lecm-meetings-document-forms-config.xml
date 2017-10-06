@@ -247,6 +247,8 @@
                             <control-param name="viewIterationResultFormId">viewApprovalResult</control-param>
                             <control-param name="editIterationFormId">editIterationProperties</control-param>
                             <control-param name="fieldsForFilterRoutes">lecm-eds-document:executor-assoc,lecm-document:author-assoc</control-param>
+                            <control-param name="scripts">scripts/lecm-approval-v2/approval-stage-items-control.js</control-param>
+                            <control-param name="stageItemsJsObjectName">LogicECM.module.Approval2.ApprovalStageItemsControlDatagrid</control-param>
                         </control>                 
                     </field>
                 </appearance>
