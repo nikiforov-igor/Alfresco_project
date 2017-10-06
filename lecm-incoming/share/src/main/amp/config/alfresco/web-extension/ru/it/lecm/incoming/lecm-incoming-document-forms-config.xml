@@ -1176,7 +1176,8 @@
                             <control-param name="nameSuffix">-multiText</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document-aspects:reg-data-date">
+                    <field id="lecm-document-aspects:reg-data-number" label-id="label.incoming.lecm-document-aspects_reg-data-number" />
+                    <field id="lecm-document-aspects:reg-data-date" label-id="label.incoming.lecm-document-aspects_reg-data-date">
                         <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
                     </field>
                     <field id="lecm-document:title">
@@ -1184,7 +1185,7 @@
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
                         </constraint-handlers>
                     </field>
-                    <field id="lecm-incoming:outgoing-date">
+                    <field id="lecm-incoming:outgoing-date" label-id="label.incoming.outgoing-date">
                         <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
                     </field>
                     <field id="lecm-incoming:sender-assoc">
