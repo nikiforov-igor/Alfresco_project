@@ -53,10 +53,20 @@
 
 		                        if (finalNewCoexecutors.length || removedExecutors.length) {
 									if (finalNewCoexecutors.length) {
+									    if (errands.isTransferRightToBaseDocument()) {
+									        var baseDocumentAssoc = document.assocs["lecm-errands:base-assoc"];
+									        if (baseDocumentAssoc && baseDocumentAssoc.length) {
+									            var baseDocument = baseDocumentAssoc[0];
+									        }
+									    }
+
 										finalNewCoexecutors.forEach(function(coexecutor){
 											document.createAssociation(coexecutor, "lecm-errands:coexecutors-assoc");
 											statemachine.grandDynamicRoleForEmployee(document, coexecutor, "ERRANDS_COEXECUTOR");
 											documentMembers.addMember(document, coexecutor, "ERRANDS_READER", true);
+											if (baseDocument) {
+											    documentMembers.addMemberWithoutCheckPermission(baseDocument, coexecutor, "LECM_BASIC_PG_Reader", true);
+											}
 										});
 										notifications.sendNotificationFromCurrentUser({
 												recipients: finalNewCoexecutors,

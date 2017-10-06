@@ -967,4 +967,8 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         ParameterCheck.mandatory("nodeRef", doc.getNodeRef());
         errandsService.resetCancelSignal(doc.getNodeRef());
     }
+
+    public boolean isTransferRightToBaseDocument() {
+        return errandsService.isTransferRightToBaseDocument();
+    }
 }

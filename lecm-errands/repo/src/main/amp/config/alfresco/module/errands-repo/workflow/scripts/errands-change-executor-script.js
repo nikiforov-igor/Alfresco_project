@@ -6,6 +6,13 @@ function processChangeExecutor(newExecutor, reason) {
     documentMembers.addMember(document, executor, "ERRANDS_READER", true);
     documentMembers.addMember(document, newExecutor, "ERRANDS_READER", true);
 
+    if (errands.isTransferRightToBaseDocument()) {
+        var baseDocumentAssoc = document.assocs["lecm-errands:base-assoc"];
+        if (baseDocumentAssoc && baseDocumentAssoc.length) {
+            documentMembers.addMemberWithoutCheckPermission(baseDocumentAssoc[0], newExecutor, "LECM_BASIC_PG_Reader", true);
+        }
+    }
+
     notifications.sendNotificationFromCurrentUser({
         recipients: [newExecutor],
         templateCode: 'ERRANDS_CHANGE_EXECUTOR_NEW',
