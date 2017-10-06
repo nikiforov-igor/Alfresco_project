@@ -12348,7 +12348,7 @@ var registrationRequired = document.assocs["lecm-eds-document:document-type-asso
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>

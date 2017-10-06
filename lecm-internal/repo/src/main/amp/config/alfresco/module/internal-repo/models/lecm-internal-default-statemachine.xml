@@ -5904,38 +5904,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                 <nodes>
                                                                     <node>
                                                                         <type>conditionAccess</type>
-                                                                        <name>77dcceb4-3c4e-43d6-b7b0-27dbd78782ac
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/1950cc9f-dfc0-4355-9380-9d86f77f97b6
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[doc.hasCategoryAttachment("Внутренний")]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Документ не имеет вложений! Направить на подписание?]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
                                                                         <name>762dc691-a078-4d02-9574-6089566fc62c
                                                                         </name>
                                                                         <nodeRef>
@@ -7989,38 +7957,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                             <subFolder>
                                                                 <name>variables</name>
                                                                 <nodes>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>45092d7d-9379-4572-ada4-cfe5d16ebd80
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/2805dd4a-bd6b-4e28-8a02-efb1ae8c0110
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[doc.hasCategoryAttachment("Внутренний")]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Документ не имеет вложений! Направить на подписание?]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
                                                                     <node>
                                                                         <type>conditionAccess</type>
                                                                         <name>8dfde581-e755-4782-b3ff-c69516ecf65c
@@ -11379,7 +11315,7 @@ var registrationRequired = document.assocs["lecm-eds-document:document-type-asso
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
