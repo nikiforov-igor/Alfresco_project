@@ -142,6 +142,10 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                     }
                 }
             }
+        },
+
+        onFormValidationError: function(){
+            return null;
         }
     }, true);
 })();
