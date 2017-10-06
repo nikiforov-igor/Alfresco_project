@@ -253,7 +253,7 @@
 	</bean>
 
 	<!-- Настройки прав доступа на каталоги в рамках сервиса -->
-	<bean id="eds.ScheduleServicePermissions" parent="ServiceFolderPermissionHelper"
+	<bean id="eds.globalSettingServicePermissions" parent="ServiceFolderPermissionHelper"
 		  depends-on="eds.other.models.bootstrap, eds.dictionary.bootstrap" >
 		<property name="serviceBean" ref="edsGlobalSettingsService"/>
 		<property name="permissionsList">
