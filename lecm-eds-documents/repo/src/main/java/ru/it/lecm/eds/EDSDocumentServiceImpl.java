@@ -11,6 +11,7 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.signing_v2.api.SigningAspectsModel;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.io.Serializable;
@@ -167,7 +168,7 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
     @Override
     public boolean isSignedOnPaper(NodeRef document) {
         if (document != null) {
-            Boolean isSignedOnPaper = (Boolean) nodeService.getProperty(document, PROP_SIGNED_ON_PAPER);
+            Boolean isSignedOnPaper = (Boolean) nodeService.getProperty(document, SigningAspectsModel.PROP_SIGNED_ON_PAPER);
             return Boolean.TRUE.equals(isSignedOnPaper);
         }
         return false;
