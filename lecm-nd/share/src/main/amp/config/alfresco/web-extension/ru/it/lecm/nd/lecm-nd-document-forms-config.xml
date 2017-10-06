@@ -788,6 +788,8 @@
                             <control-param name="editIterationFormId">editIterationProperties</control-param>
                             <control-param name="fieldsForFilterRoutes">lecm-eds-document:executor-assoc,lecm-document:author-assoc</control-param>
                             <control-param name="addEmployeeToStageMsgId">label.approval.routes.stage.addEmployee</control-param>
+                            <control-param name="scripts">scripts/lecm-approval-v2/approval-stage-items-control.js</control-param>
+                            <control-param name="stageItemsJsObjectName">LogicECM.module.Approval2.ApprovalStageItemsControlDatagrid</control-param>
                         </control>                 
                     </field>
                     <field id="lecm-signing-route:signingFolder" set="approvalAndSigning" label-id="label.forms.signing">
