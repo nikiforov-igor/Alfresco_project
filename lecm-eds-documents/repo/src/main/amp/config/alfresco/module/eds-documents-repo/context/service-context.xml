@@ -251,4 +251,15 @@
 			</list>
 		</property>
 	</bean>
+
+	<!-- Настройки прав доступа на каталоги в рамках сервиса -->
+	<bean id="eds.globalSettingServicePermissions" parent="ServiceFolderPermissionHelper"
+		  depends-on="eds.other.models.bootstrap, eds.dictionary.bootstrap" >
+		<property name="serviceBean" ref="edsGlobalSettingsService"/>
+		<property name="permissionsList">
+			<list>
+				<value>alfresco/module/${artifactId}/permissions/directories-permissions.xml</value>
+			</list>
+		</property>
+	</bean>
 </beans>

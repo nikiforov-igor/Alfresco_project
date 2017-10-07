@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ReposioryPermissions>
+    <BusinessRole id="DA_ENGINEER">
+        <Permission object="." permissionGroup="LECM_BASIC_PG_Owner"/>
+    </BusinessRole>
+</ReposioryPermissions>
