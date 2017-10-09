@@ -595,7 +595,6 @@
                     <show id="lecm-eds-document:note"/>
                     <show id="lecm-document-aspects:reg-project-data-number"/>
                     <show id="lecm-document-aspects:reg-project-data-date"/>
-                    <show id="lecm-base-dummy-aspects:script5" force="true"/>
                     <show id="lecm-approval-route:approvalFolder" force="true"/>
                     <show id="lecm-signing-route:signingFolder" force="true"/>
                     <show id="lecm-internal-table-structure:answers-assoc"/>
@@ -767,12 +766,6 @@
                             <control-param name="allowCreate">false</control-param>
                             <control-param name="allowEdit">false</control-param>
                             <control-param name="allowDelete">false</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-base-dummy-aspects:script5" set="approvalAndSigning">
-                        <control template="/ru/it/lecm/forms/jasperforms/printReportBtn.ftl">
-                            <control-param name="reportId">approval-and-signing-list</control-param>
-                            <control-param name="buttonLabel">Лист согласования и подписания</control-param>
                         </control>
                     </field>
                     <field id="lecm-approval-route:approvalFolder" set="approvalAndSigning" label-id="label.forms.approval">                
