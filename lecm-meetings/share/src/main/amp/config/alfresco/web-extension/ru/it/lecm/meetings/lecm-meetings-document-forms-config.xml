@@ -1081,6 +1081,7 @@
                     <field id="lecm-events:location-assoc">
                         <control>
                             <control-param name="endpointMany">true</control-param>
+                            <control-param name="childrenDataSource">lecm/events/locations/picker</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="change"/>
