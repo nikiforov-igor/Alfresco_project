@@ -122,6 +122,7 @@
                     <field id="lecm-signing-v2-aspects:signed-on-paper">
                         <control>
                             <control-param name="changeFireAction">actionsVisibilityChange</control-param>
+                            <control-param name="hideByDefault">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-signing-v2-aspects:signerEmployeeAssoc">
@@ -719,6 +720,7 @@
                     <field id="lecm-signing-v2-aspects:signed-on-paper" set="common">
                         <control>
                             <control-param name="changeFireAction">actionsVisibilityChange</control-param>
+                            <control-param name="hideByDefault">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-signing-v2-aspects:signerEmployeeAssoc" set="common">
@@ -949,6 +951,7 @@
                     <field id="lecm-signing-v2-aspects:signed-on-paper">
                         <control>
                             <control-param name="changeFireAction">actionsVisibilityChange</control-param>
+                            <control-param name="hideByDefault">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-signing-v2-aspects:signerEmployeeAssoc">

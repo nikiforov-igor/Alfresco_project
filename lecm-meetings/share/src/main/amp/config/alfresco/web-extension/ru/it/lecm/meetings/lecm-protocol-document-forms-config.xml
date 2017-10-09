@@ -51,7 +51,11 @@
                     <field id="lecm-protocol:meeting-chairman-assoc" mandatory="true"/>
                     <field id="lecm-protocol:secretary-assoc"/>
                     <field id="lecm-protocol:attended-assoc"/>
-                    <field id="lecm-signing-v2-aspects:signed-on-paper"/>
+                    <field id="lecm-signing-v2-aspects:signed-on-paper">
+                        <control>
+                            <control-param name="hideByDefault">true</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-eds-document:note">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
@@ -136,7 +140,11 @@
                     <field id="lecm-protocol:meeting-chairman-assoc" mandatory="true" set="common"/>
                     <field id="lecm-protocol:secretary-assoc" set="common"/>
                     <field id="lecm-protocol:attended-assoc" set="common"/>
-                    <field id="lecm-signing-v2-aspects:signed-on-paper" set="common"/>
+                    <field id="lecm-signing-v2-aspects:signed-on-paper" set="common">
+                        <control>
+                            <control-param name="hideByDefault">true</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-eds-document:note" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
@@ -393,6 +401,11 @@
                     <field id="lecm-eds-document:note">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-signing-v2-aspects:signed-on-paper">
+                        <control>
+                            <control-param name="hideByDefault">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-document:subject-assoc"/>
