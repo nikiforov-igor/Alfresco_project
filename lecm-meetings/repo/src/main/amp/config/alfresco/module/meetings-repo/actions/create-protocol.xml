@@ -68,6 +68,14 @@ if (draftRootFolder) {
         createdPoint.createAssociation(reporterAssoc[0], "lecm-protocol-ts:reporter-assoc");
       }
 
+      var coreportersAssoc = item.assocs["lecm-meetings-ts:holding-coreporters-assoc"];
+      if (coreportersAssoc && coreportersAssoc.length > 0) {
+        for (var j = 0; j < coreportersAssoc.length; j++) {
+          var coreporter = coreportersAssoc[j];
+          createdPoint.createAssociation(coreporter, "lecm-protocol-ts:coreporter-assoc");
+        }
+      }
+
       protocol.createAssociation(createdPoint, "lecm-protocol:temp-items-assoc");
     }
   }
