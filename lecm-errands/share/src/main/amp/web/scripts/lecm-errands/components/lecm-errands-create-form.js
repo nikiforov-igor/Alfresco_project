@@ -15,6 +15,7 @@
     Bubbling.on('expandButtonClick', toggleSet);
     Bubbling.on('periodicallyErrandChange', toggleSet);
     Bubbling.on('errandsCreateFormScriptLoaded', init);
+    Bubbling.on('errandTitleChanged', titleChangeHandler);
 
     function toggleSet(layer, args) {
         var sets = [];
@@ -68,6 +69,22 @@
         isRouteClick = false;
         isShort.value = "false";
         routeButton.click();
+    }
+
+    function titleChangeHandler(layer,args) {
+        var textArea = document.getElementsByName("prop_lecm-errands_content")[0];
+        if(!args[1] || !textArea || textArea.value.length > 0){
+            return;
+        }
+
+        var changeValue = "";
+        var selectedItems = args[1].selectedItems;
+        for (var i in selectedItems) {
+            changeValue = selectedItems[i].name;
+            break;
+        }
+
+        textArea.value = changeValue;
     }
 
     function init(layer,args){
