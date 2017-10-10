@@ -8,7 +8,7 @@
         <endEvent id="endExecute" name="End"></endEvent>
         <scriptTask id="executeErrand" name="Errand execute" scriptFormat="javascript">
             <extensionElements>
-                <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                <activiti:executionListener event="end" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
                     <activiti:field name="script">
                         <activiti:string><![CDATA[
                         <import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/errands-execute-errand-script.js">
@@ -58,9 +58,20 @@
             </extensionElements>
             <script>var test=1;</script>
         </scriptTask>
+        <scriptTask id="emptyScript" name="Empty script" scriptFormat="javascript">
+            <extensionElements>
+                <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                    <activiti:field name="script">
+                        <activiti:string><![CDATA[/*empty script*/]]></activiti:string>
+                    </activiti:field>
+                </activiti:executionListener>
+            </extensionElements>
+            <script>var test=1;</script>
+        </scriptTask>
         <receiveTask id="errandReceiveTask" name="Receive Task"></receiveTask>
-        <sequenceFlow id="flow1" name="" sourceRef="startExecute" targetRef="executeErrand"></sequenceFlow>
-        <sequenceFlow id="flow2" name="" sourceRef="executeErrand" targetRef="errandReceiveTask"></sequenceFlow>
-        <sequenceFlow id="flow3" name="" sourceRef="errandReceiveTask" targetRef="endExecute"></sequenceFlow>
+        <sequenceFlow id="flow1" name="" sourceRef="startExecute" targetRef="emptyScript"></sequenceFlow>
+        <sequenceFlow id="flow2" name="" sourceRef="emptyScript" targetRef="errandReceiveTask"></sequenceFlow>
+        <sequenceFlow id="flow3" name="" sourceRef="errandReceiveTask" targetRef="executeErrand"></sequenceFlow>
+        <sequenceFlow id="flow4" name="" sourceRef="executeErrand" targetRef="endExecute"></sequenceFlow>
     </process>
 </definitions>
