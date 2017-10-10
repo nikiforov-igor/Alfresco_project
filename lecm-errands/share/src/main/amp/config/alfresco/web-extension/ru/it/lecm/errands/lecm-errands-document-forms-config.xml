@@ -933,12 +933,12 @@
                             <control-param name="changeItemsFireAction">initiatorChanged</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:limitation-date">
-                        <constraint-handlers>
-                            <constraint type="MANDATORY"
-                                        validation-handler="LogicECM.module.Errands.limitationDateValidation"
-                                        event="change"/>
-                        </constraint-handlers>
+                    <field id="lecm-errands:limitation-date" mandatory="true">
+                        <control template="/ru/it/lecm/base-share/components/controls/relative-date-control.ftl">
+                            <control-param name="radioOptions">RELATIVE,ABSOLUTE</control-param>
+                            <control-param name="modeOptions">WORK|Рабочих,CALENDAR|Календарных</control-param>
+                            <control-param name="minLimitCurrentDate">true</control-param>
+                        </control>
                     </field>
                     <field id="lecm-errands:controller-assoc">
                         <control>

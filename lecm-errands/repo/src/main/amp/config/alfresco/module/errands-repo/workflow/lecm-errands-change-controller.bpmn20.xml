@@ -67,11 +67,12 @@
                                         }
                                     }
 
-                                    var baseDocumentAssoc = document.assocs["lecm-errands:base-assoc"];
-                                        transferRights = document.properties["lecm-errands:settings-transfer-rights"];
-                                    if (baseDocumentAssoc && transferRights) {
-                                        documentMembers.addMemberWithoutCheckPermission(baseDocumentAssoc[0], lecmErrandWf_changeControllerNewController, "LECM_BASIC_PG_Reader", true);
-                                    }
+                                    if (errands.isTransferRightToBaseDocument()) {
+									    var baseDocumentAssoc = document.assocs["lecm-errands:base-assoc"];
+									    if (baseDocumentAssoc && baseDocumentAssoc.length) {
+									        documentMembers.addMemberWithoutCheckPermission(baseDocumentAssoc[0], lecmErrandWf_changeControllerNewController, "LECM_BASIC_PG_Reader", true);
+									    }
+									}
 
                                     var isOnControl = document.properties["lecm-document-aspects:is-on-control"];
                                     if (!isOnControl) {

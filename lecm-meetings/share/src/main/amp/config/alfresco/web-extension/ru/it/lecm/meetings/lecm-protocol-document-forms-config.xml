@@ -51,7 +51,11 @@
                     <field id="lecm-protocol:meeting-chairman-assoc" mandatory="true"/>
                     <field id="lecm-protocol:secretary-assoc"/>
                     <field id="lecm-protocol:attended-assoc"/>
-                    <field id="lecm-signing-v2-aspects:signed-on-paper"/>
+                    <field id="lecm-signing-v2-aspects:signed-on-paper">
+                        <control>
+                            <control-param name="hideByDefault">true</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-eds-document:note">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
@@ -136,7 +140,11 @@
                     <field id="lecm-protocol:meeting-chairman-assoc" mandatory="true" set="common"/>
                     <field id="lecm-protocol:secretary-assoc" set="common"/>
                     <field id="lecm-protocol:attended-assoc" set="common"/>
-                    <field id="lecm-signing-v2-aspects:signed-on-paper" set="common"/>
+                    <field id="lecm-signing-v2-aspects:signed-on-paper" set="common">
+                        <control>
+                            <control-param name="hideByDefault">true</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-eds-document:note" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
@@ -226,6 +234,8 @@
                             <control-param name="showIterationsHistoryFormId">showApprovalHistoryForm</control-param>
                             <control-param name="viewIterationResultFormId">viewApprovalResult</control-param>
                             <control-param name="fieldsForFilterRoutes">lecm-eds-document:executor-assoc,lecm-document:author-assoc</control-param>
+                            <control-param name="scripts">scripts/lecm-approval-v2/approval-stage-items-control.js</control-param>
+                            <control-param name="stageItemsJsObjectName">LogicECM.module.Approval2.ApprovalStageItemsControlDatagrid</control-param>
                             <control-param name="showPrintButton">true</control-param>
                             <control-param name="reportLabelId">label.button.approval-list</control-param>
                         </control>                 
@@ -393,6 +403,11 @@
                     <field id="lecm-eds-document:note">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-signing-v2-aspects:signed-on-paper">
+                        <control>
+                            <control-param name="hideByDefault">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-document:subject-assoc"/>

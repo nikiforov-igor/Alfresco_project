@@ -42,6 +42,7 @@
                     <field id="lecm-signing-v2-aspects:signed-on-paper">
                         <control>
                             <control-param name="changeFireAction">actionsVisibilityChange</control-param>
+                            <control-param name="hideByDefault">true</control-param>
                         </control>
                     </field>
 
@@ -278,6 +279,7 @@
                     <field id="lecm-signing-v2-aspects:signed-on-paper" set="common">
                         <control>
                             <control-param name="changeFireAction">actionsVisibilityChange</control-param>
+                            <control-param name="hideByDefault">true</control-param>
                         </control>
                     </field>
 
@@ -456,6 +458,8 @@
                             <control-param name="fieldsForFilterRoutes">lecm-eds-document:executor-assoc,lecm-document:author-assoc</control-param>
                             <control-param name="editIterationFormId">editIterationProperties</control-param>
                             <control-param name="addEmployeeToStageMsgId">label.approval.routes.stage.addEmployee</control-param>
+                            <control-param name="scripts">scripts/lecm-approval-v2/approval-stage-items-control.js</control-param>
+                            <control-param name="stageItemsJsObjectName">LogicECM.module.Approval2.ApprovalStageItemsControlDatagrid</control-param>
                             <control-param name="showPrintButton">true</control-param>
                         </control>                 
                     </field>
@@ -1068,6 +1072,7 @@
                     <field id="lecm-signing-v2-aspects:signed-on-paper">
                         <control>
                             <control-param name="changeFireAction">actionsVisibilityChange</control-param>
+                            <control-param name="hideByDefault">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-signing-v2-aspects:signerEmployeeAssoc">

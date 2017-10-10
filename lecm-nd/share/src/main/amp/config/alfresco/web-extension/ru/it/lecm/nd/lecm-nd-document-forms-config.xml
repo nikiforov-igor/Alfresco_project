@@ -85,6 +85,7 @@
                     <field id="lecm-signing-v2-aspects:signed-on-paper">
                         <control>
                             <control-param name="changeFireAction">actionsVisibilityChange</control-param>
+                            <control-param name="hideByDefault">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-signing-v2-aspects:signerEmployeeAssoc">
@@ -259,12 +260,6 @@
                         <control template="/ru/it/lecm/base-share/components/controls/relative-date-control.ftl">
                             <control-param name="radioOptions">RELATIVE,ABSOLUTE</control-param>
                             <control-param name="modeOptions">WORK|Рабочих,CALENDAR|Календарных</control-param>
-                        </control>
-                    </field>
-                    <field id="checkAllowSigningOnPaperScript">
-                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                            <control-param name="scripts">scripts/lecm-eds-documents/check-allow-signing-on-paper-script.js</control-param>
-                            <control-param name="scriptLoadedFireAction">allowSigningOnPaperScript</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -565,6 +560,7 @@
                     <field id="lecm-signing-v2-aspects:signed-on-paper" set="common">
                         <control>
                             <control-param name="changeFireAction">actionsVisibilityChange</control-param>
+                            <control-param name="hideByDefault">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-signing-v2-aspects:signerEmployeeAssoc" set="common">
@@ -697,6 +693,7 @@
                     <field id="lecm-signing-v2-aspects:signed-on-paper" set="common">
                         <control>
                             <control-param name="changeFireAction">actionsVisibilityChange</control-param>
+                            <control-param name="hideByDefault">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-signing-v2-aspects:signerEmployeeAssoc" set="common">
@@ -781,6 +778,8 @@
                             <control-param name="editIterationFormId">editIterationProperties</control-param>
                             <control-param name="fieldsForFilterRoutes">lecm-eds-document:executor-assoc,lecm-document:author-assoc</control-param>
                             <control-param name="addEmployeeToStageMsgId">label.approval.routes.stage.addEmployee</control-param>
+                            <control-param name="scripts">scripts/lecm-approval-v2/approval-stage-items-control.js</control-param>
+                            <control-param name="stageItemsJsObjectName">LogicECM.module.Approval2.ApprovalStageItemsControlDatagrid</control-param>
                             <control-param name="showPrintButton">true</control-param>
                         </control>                 
                     </field>

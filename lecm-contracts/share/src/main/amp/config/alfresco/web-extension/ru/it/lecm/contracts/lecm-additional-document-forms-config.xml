@@ -28,7 +28,11 @@
                             <control-param name="changeFireAction">actionsVisibilityChange</control-param>
                         </control>
                     </field>
-                    <field id="lecm-signing-v2-aspects:signed-on-paper"/>
+                    <field id="lecm-signing-v2-aspects:signed-on-paper">
+                        <control>
+                            <control-param name="hideByDefault">true</control-param>
+                        </control>
+                    </field>
                     <field id="lecmSignAspects:signerEmployeeAssoc">
                         <control>
                             <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS</control-param>
@@ -77,7 +81,11 @@
                             <control-param name="changeFireAction">actionsVisibilityChange</control-param>
                         </control>
                     </field>
-                    <field id="lecm-signing-v2-aspects:signed-on-paper" set="common"/>
+                    <field id="lecm-signing-v2-aspects:signed-on-paper" set="common">
+                        <control>
+                            <control-param name="hideByDefault">true</control-param>
+                        </control>
+                    </field>
                     <field id="lecmSignAspects:signerEmployeeAssoc" set="common">
                         <control>
                             <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS</control-param>
@@ -278,6 +286,7 @@
                         <control>
                             <control-param name="changeFireAction">actionsVisibilityChange</control-param>
                             <control-param name="endpointMany">true</control-param>
+                            <control-param name="hideByDefault">true</control-param>
                         </control>
                     </field>
                     <field id="lecmSignAspects:signerEmployeeAssoc">
