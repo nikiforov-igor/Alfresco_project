@@ -460,6 +460,7 @@
                             <control-param name="addEmployeeToStageMsgId">label.approval.routes.stage.addEmployee</control-param>
                             <control-param name="scripts">scripts/lecm-approval-v2/approval-stage-items-control.js</control-param>
                             <control-param name="stageItemsJsObjectName">LogicECM.module.Approval2.ApprovalStageItemsControlDatagrid</control-param>
+                            <control-param name="showPrintButton">true</control-param>
                         </control>                 
                     </field>
 
