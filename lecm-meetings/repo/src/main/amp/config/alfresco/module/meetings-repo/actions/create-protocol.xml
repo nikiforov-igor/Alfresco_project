@@ -50,7 +50,7 @@ if (draftRootFolder) {
   }
 
   var types = search.xpathSearch("/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_протокола/cm:Протокол_x0020_совещания");
-  if (types.length) {
+  if (types.length && types[0].properties["lecm-dic:active"]) {
     protocol.createAssociation(types[0], "lecm-eds-document:document-type-assoc");
   }
 
