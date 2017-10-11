@@ -897,7 +897,7 @@
                     <field id="fake:document-connections">
                         <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
                             <control-param name="uri">/lecm/components/document/connections</control-param>
-                            <!--<control-param name="excludeType"></control-param>-->
+                            <control-param name="excludeType">lecm-errands:document</control-param>
                         </control>
                     </field>
                     <field id="fake:document-members">
