@@ -193,6 +193,7 @@
                         <control>
                             <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS,LECM_ES_SIGNERS</control-param>
                             <control-param name="endpointMany">true</control-param>
+                            <control-param name="hideByDefault">true</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Signing2.signersValidator" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
@@ -201,6 +202,7 @@
                     <field id="lecm-signing-v2-aspects:signingDate" set="contract-info">
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
                             <control-param name="showTime">false</control-param>
+                            <control-param name="hideByDefault">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-base-dummy-aspects:script" set="contract-info">
@@ -466,6 +468,7 @@
                         <control>
                             <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS,LECM_ES_SIGNERS</control-param>
                             <control-param name="endpointMany">true</control-param>
+                            <control-param name="hideByDefault">true</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Signing2.signersValidator" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
@@ -475,6 +478,7 @@
                     <field id="lecm-signing-v2-aspects:signingDate" set="contract-info">
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
                             <control-param name="showTime">false</control-param>
+                            <control-param name="hideByDefault">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-base-dummy-aspects:script" set="contract-info">
@@ -877,6 +881,7 @@
                         <control>
                             <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS,LECM_ES_SIGNERS</control-param>
                             <control-param name="endpointMany">true</control-param>
+                            <control-param name="hideByDefault">true</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Signing2.signersValidator" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
@@ -885,6 +890,7 @@
                     <field id="lecm-signing-v2-aspects:signingDate" set="afterPrice">
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
                             <control-param name="showTime">false</control-param>
+                            <control-param name="hideByDefault">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-document-aspects:template-name">
