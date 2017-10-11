@@ -14,8 +14,12 @@
                         var isAllowSigningOnPaper = response.json.isAllowSigningOnPaper;
                         if (isAllowSigningOnPaper) {
                             LogicECM.module.Base.Util.showControl(formId, "lecm-signing-v2-aspects:signed-on-paper");
+                            LogicECM.module.Base.Util.showControl(formId, "lecm-signing-v2-aspects:signerEmployeeAssoc");
+                            LogicECM.module.Base.Util.showControl(formId, "lecm-signing-v2-aspects:signingDate");
                         } else {
                             LogicECM.module.Base.Util.hideControl(formId, "lecm-signing-v2-aspects:signed-on-paper");
+                            LogicECM.module.Base.Util.hideControl(formId, "lecm-signing-v2-aspects:signerEmployeeAssoc");
+                            LogicECM.module.Base.Util.hideControl(formId, "lecm-signing-v2-aspects:signingDate");
                         }
                     }
                 }
