@@ -3,6 +3,6 @@
     <description>Return true if employee NO active absences</description>
     <url>/lecm/eds/global-settings/api/savePotentialWorkers</url>
     <format default="json" />
-    <authentication>admin</authentication>
+    <authentication>user</authentication>
     <transaction>required</transaction>
 </webscript>
