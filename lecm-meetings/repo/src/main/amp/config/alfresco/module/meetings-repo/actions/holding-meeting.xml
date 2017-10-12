@@ -55,9 +55,11 @@
             }
           }
 
-          var themeAssoc = item.assocs["lecm-meetings-ts:theme-assoc"];
-          if (themeAssoc != null && themeAssoc.length == 1) {
-            createdItem.createAssociation(themeAssoc[0], "lecm-meetings-ts:holding-theme-assoc");
+          var themeAssocs = item.assocs["lecm-meetings-ts:theme-assoc"];
+          if (themeAssocs != null) {
+            for (var j = 0; j < themeAssocs.length; j++) {
+              createdItem.createAssociation(themeAssocs[j], "lecm-meetings-ts:holding-theme-assoc");
+            }
           }
         }
       }

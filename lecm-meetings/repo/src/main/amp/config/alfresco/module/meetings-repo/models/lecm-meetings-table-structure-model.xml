@@ -130,7 +130,7 @@
                         <many>true</many>
                     </target>
                 </association>
-				<!--Тематика-->
+				<!--Тематики-->
                 <association name="lecm-meetings-ts:theme-assoc">
                     <source>
                         <mandatory>false</mandatory>
@@ -139,7 +139,7 @@
                     <target>
                         <class>lecm-doc-dic:subjects</class>
                         <mandatory>false</mandatory>
-                        <many>false</many>
+                        <many>true</many>
                     </target>
                 </association>
 				<association name="lecm-meetings-ts:documents-assoc">
@@ -266,7 +266,7 @@
                         <many>true</many>
                     </target>
                 </association>
-                <!--Тематика-->
+                <!--Тематики-->
                 <association name="lecm-meetings-ts:holding-theme-assoc">
                     <source>
                         <mandatory>false</mandatory>
@@ -275,7 +275,7 @@
                     <target>
                         <class>lecm-doc-dic:subjects</class>
                         <mandatory>false</mandatory>
-                        <many>false</many>
+                        <many>true</many>
                     </target>
                 </association>
             </associations>
