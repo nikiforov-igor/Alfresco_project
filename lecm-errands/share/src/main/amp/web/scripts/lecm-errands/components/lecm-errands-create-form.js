@@ -71,20 +71,18 @@
         routeButton.click();
     }
 
-    function titleChangeHandler(layer,args) {
+    function titleChangeHandler(layer, args) {
         var textArea = document.getElementsByName("prop_lecm-errands_content")[0];
-        if(!args[1] || !textArea || textArea.value.length > 0){
+        if (!args[1] || !textArea || textArea.value.length) {
             return;
         }
 
-        var changeValue = "";
         var selectedItems = args[1].selectedItems;
-        for (var i in selectedItems) {
-            changeValue = selectedItems[i].name;
-            break;
-        }
+        var key = Object.keys(selectedItems)[0];
 
-        textArea.value = changeValue;
+        if (key) {
+            textArea.value = selectedItems[key].name;
+        }
     }
 
     function init(layer,args){
