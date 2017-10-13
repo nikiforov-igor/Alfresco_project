@@ -684,6 +684,7 @@
                             <control-param name="notSelectedOptionLabel"> </control-param>
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="changeItemsFireAction">errandTitleChanged</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:content" >
