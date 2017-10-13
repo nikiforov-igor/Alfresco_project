@@ -48,7 +48,7 @@
                 <property name="lecm-notification-template:template">
                     <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} отменил резервирование номера для документа {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:ext-present-string"))}. Возвращен номер проекта документа: {#projectNumber}]]></property>
                 <property name="lecm-notification-template:description">
-                    <![CDATA[Резервирование номера. Запрос на резервирование выполнен регистратором]]></property>
+                    <![CDATA[Резервирование номера. Запрос на отмену номера одобрен регистратором]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
