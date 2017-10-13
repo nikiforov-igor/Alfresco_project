@@ -28,6 +28,7 @@
 			<parameter name="allowedValues">
 				<list>
 					<value>Вложения|ATTACHMENTS</value>
+					<value>Замечания рецензентов|REVIEWER_COMMENTS</value>
 				</list>
 			</parameter>
 		</constraint>

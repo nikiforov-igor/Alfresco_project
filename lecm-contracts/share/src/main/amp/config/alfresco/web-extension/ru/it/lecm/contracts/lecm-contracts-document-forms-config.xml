@@ -187,6 +187,7 @@
                     <field id="lecm-signing-v2-aspects:signed-on-paper" set="contract-info">
                         <control>
                             <control-param name="changeFireAction">actionsVisibilityChange</control-param>
+                            <control-param name="hideByDefault">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-signing-v2-aspects:signerEmployeeAssoc" set="contract-info">
@@ -462,6 +463,7 @@
                     <field id="lecm-signing-v2-aspects:signed-on-paper" set="contract-info">
                         <control>
                             <control-param name="changeFireAction">actionsVisibilityChange</control-param>
+                            <control-param name="hideByDefault">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-signing-v2-aspects:signerEmployeeAssoc" set="contract-info">
@@ -844,6 +846,7 @@
                     <field id="lecm-signing-v2-aspects:signed-on-paper" set="afterPrice">
                         <control>
                             <control-param name="changeFireAction">actionsVisibilityChange</control-param>
+                            <control-param name="hideByDefault">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-signing-route:signingFolder" set="afterDates" label-id="label.forms.signing">

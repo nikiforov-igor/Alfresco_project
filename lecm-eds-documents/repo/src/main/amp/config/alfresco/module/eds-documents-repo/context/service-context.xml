@@ -21,14 +21,14 @@
 		<value>alfresco/module/${artifactId}/messages/lecm-eds-aspects-model</value>
 		<value>alfresco/module/${artifactId}/messages/lecm-eds-global-settings-model</value>
 	</util:list>
-	<util:list id="documents.groupOperations">
+	<util:list id="eds.documents.groupOperations">
 		<value>alfresco/module/${artifactId}/actions/decline-registration.xml</value>
 		<value>alfresco/module/${artifactId}/actions/send-to-review-action.xml</value>
 		<value>alfresco/module/${artifactId}/actions/direct-to-registration.xml</value>
 	</util:list>
 	<bean parent="lecmDictionaryBootstrap" depends-on="groupActionsService">
 		<property name="rootPath" value="/Business platform/LECM/Сервис Групповые операции"/>
-		<property name="dictionaries" ref="documents.groupOperations"/>
+		<property name="dictionaries" ref="eds.documents.groupOperations"/>
 	</bean>
 	<bean id="eds.models.bootstrap" parent="modelsToRepositoryLoader"
 		  depends-on="dictionaryBootstrap,

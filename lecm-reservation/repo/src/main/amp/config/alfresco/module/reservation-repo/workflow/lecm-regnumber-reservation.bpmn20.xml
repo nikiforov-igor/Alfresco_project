@@ -58,8 +58,8 @@
                                     registrars = edsGlobalSettings.getPotentialWorkers('DA_REGISTRARS', unit.nodeRef.toString());
                                 }
                             }
-                            if (!registrars) {
-                                    registrars.push(edsGlobalSettings.getDutyRegistrar());
+                            if (!registrars.length) {
+                                registrars.push(edsGlobalSettings.getDutyRegistrar());
                             }
                         } else {
                             registrars = orgstructure.getEmployeesByBusinessRoleId('CONTRACT_RECORDER', true);
