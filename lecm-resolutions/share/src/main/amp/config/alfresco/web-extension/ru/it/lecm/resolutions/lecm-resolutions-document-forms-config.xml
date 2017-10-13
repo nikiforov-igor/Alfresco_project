@@ -27,6 +27,7 @@
                     <show id="lecm-base-dummy-aspects:script6" force="true"/>
 
                     <show id="lecm-resolutions:reviewers-assoc"/>
+                    <show id="lecm-resolutions:save-reviewers"/>
 
                     <show id="lecm-resolutions:is-draft"/>
                     <show id="lecm-resolutions:base-assoc"/>
@@ -164,6 +165,7 @@
                     <field id="lecm-resolutions:reviewers-assoc" set="reviewers">
                         <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
                             <control-param name="items">employee,orgUnit,workGroup,reviewItem</control-param>
+                            <control-param name="changeItemsFireAction">employeesSelected</control-param>
                             <control-param name="autocompleteDataSourceMethodPost">true</control-param>
                             <!-- lecm-orgstr:employee -->
                             <control-param name="employee_label">Сотрудник</control-param>
@@ -205,6 +207,9 @@
                             <control-param name="reviewItem_childrenDataSource">lecm/review/ds/allowedReviewLists</control-param>
                             <control-param name="reviewItem_sortProp">cm:title</control-param>
                         </control>
+                    </field>
+                    <field id="lecm-resolutions:save-reviewers" set="reviewers">
+                        <control template="/ru/it/lecm/workflow/review/controls/review-list-save-control.ftl"/>
                     </field>
 
                     <field id="lecm-resolutions:is-draft" set="end">
