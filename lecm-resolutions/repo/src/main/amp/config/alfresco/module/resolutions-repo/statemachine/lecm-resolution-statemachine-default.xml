@@ -3321,6 +3321,9 @@ if (document) {
     baseDoc = baseDocAssoc[0];
   }
 
+  /* Удаляем старых авторов */
+  lecmPermission.revokeDynamicRole(stm_document, 'RESOLUTION_AUTHOR_DYN');
+
   /* Автор */
   var authorAssoc = stm_document.assocs["lecm-resolutions:author-assoc"];
   if (authorAssoc && authorAssoc.length) {
