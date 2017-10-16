@@ -134,22 +134,30 @@ public class NomenclatureCasePolicy implements OnCreateNodePolicy,
 		return null;
 	}
 
-	private void checkAndActualizeDates(NodeRef nodeRef, NodeRef yearSection) {
-		Date nomenclatureCaseCreationDate = (Date) nodeService.getProperty(nodeRef, OperativeStorageService.PROP_NOMENCLATURE_CASE_CREATION_DATE);
-		int nomenclatureYearSectionYear = (int) nodeService.getProperty(yearSection, OperativeStorageService.PROP_NOMENCLATURE_YEAR_SECTION_YEAR);
-				
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(nomenclatureCaseCreationDate);
-		int nomenclatureCaseCreationDateYear = cal.get(Calendar.YEAR);
-		
-		if(nomenclatureCaseCreationDateYear != nomenclatureYearSectionYear) {
-			// Set Date to 31.12.{nomenclatureYearSectionYear} 12:00:00
-			cal.set(nomenclatureYearSectionYear, Calendar.DECEMBER, 31, 12, 0, 0);
-			Date theLastDayOfTheYearDate = cal.getTime();
-			nodeService.setProperty(nodeRef, OperativeStorageService.PROP_NOMENCLATURE_CASE_CREATION_DATE, new Date());
-			nodeService.setProperty(nodeRef, OperativeStorageService.PROP_NOMENCLATURE_CASE_CLOSE_DATE, theLastDayOfTheYearDate);
-		}
-	};
+	/**
+	 * В случае несоответствия даты создания/закрытия автоматически меняются в год годового раздела (ALFSED-1607)
+	 * @param nodeRef
+	 * @param yearSection
+	 */
+    private void checkAndActualizeDates(NodeRef nodeRef, NodeRef yearSection) {
+        Date nomenclatureCaseCreationDate = (Date) nodeService.getProperty(nodeRef, OperativeStorageService.PROP_NOMENCLATURE_CASE_CREATION_DATE);
+        Date nomenclatureCaseCloseDate = (Date) nodeService.getProperty(nodeRef, OperativeStorageService.PROP_NOMENCLATURE_CASE_CLOSE_DATE);
+        int nomenclatureYearSectionYear = (int) nodeService.getProperty(yearSection, OperativeStorageService.PROP_NOMENCLATURE_YEAR_SECTION_YEAR);
+
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.setTime(nomenclatureCaseCreationDate);//актуализация для даты создания
+        if (calendar.get(Calendar.YEAR) != nomenclatureYearSectionYear) {
+            calendar.set(Calendar.YEAR, nomenclatureYearSectionYear);
+            nodeService.setProperty(nodeRef, OperativeStorageService.PROP_NOMENCLATURE_CASE_CREATION_DATE, calendar.getTime());
+        }
+
+        calendar.setTime(nomenclatureCaseCloseDate);//актуализация для даты закрытия
+        if (calendar.get(Calendar.YEAR) != nomenclatureYearSectionYear) {
+            calendar.set(Calendar.YEAR, nomenclatureYearSectionYear);
+            nodeService.setProperty(nodeRef, OperativeStorageService.PROP_NOMENCLATURE_CASE_CLOSE_DATE, calendar.getTime());
+        }
+    }
 
 	@Override
 	public void onCreateAssociation(AssociationRef nodeAssocRef) {
