@@ -16,6 +16,7 @@
                     <show id="lecm-incoming:outgoing-date"/>
                     <show id="lecm-eds-document:summaryContent"/>
                     <show id="lecm-incoming:recipient-assoc"/>
+                    <show id="lecm-document-aspects:response-to-assoc"/>
                     <show id="lecm-eds-document:execution-date"/>
                     <show id="lecm-document-aspects:is-on-control"/>
                     <show id="lecm-eds-document:file-register-assoc"/>
@@ -180,6 +181,18 @@
                             <control-param name="organization_showSearch">true</control-param>
                             <control-param name="organization_showAssocViewForm">true</control-param>
                             <control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
+                        </control>
+                    </field>
+
+                    <field id="lecm-document-aspects:response-to-assoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                            <control-param name="rootLocation">/app:company_home</control-param>
+                            <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
+                            <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
+                            <control-param name="itemType">lecm-outgoing:document</control-param>
+                            <control-param name="additionalFilter">NOT @lecm\-statemachine\-aspects\:is\-draft:true</control-param>
+                            <control-param name="showSearch">true</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
 
