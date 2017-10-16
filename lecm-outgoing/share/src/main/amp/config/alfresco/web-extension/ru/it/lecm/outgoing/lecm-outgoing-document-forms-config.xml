@@ -13,6 +13,7 @@
                     <show id="lecm-outgoing:contractor-assoc"/>															<!-- Организация-получатель -->
                     <show id="lecm-outgoing:recipient-assoc"/>															<!-- Получатель -->
                     <show id="lecm-eds-document:summaryContent"/>														<!-- Содержание -->
+                    <show id="lecm-document-aspects:response-to-assoc"/>
                     <show id="lecm-eds-document:sheets-number"/>
                     <show id="lecm-document:subject-assoc"/>															<!-- Тематика -->
                     <show id="lecm-eds-document:note"/>																	<!-- Примечание -->
@@ -169,6 +170,17 @@
                     <field id="lecm-eds-document:summaryContent">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl">
                             <control-param name="rows">4</control-param>
+                        </control>
+                    </field>
+
+                    <field id="lecm-document-aspects:response-to-assoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
+                            <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
+                            <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
+                            <control-param name="itemType">lecm-incoming:document</control-param>
+                            <control-param name="showSearch">true</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
 
