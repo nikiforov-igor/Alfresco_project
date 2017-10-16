@@ -2327,9 +2327,22 @@ var reviewers = document.assocs["lecm-resolutions:reviewers-assoc"];
   if (baseDocumentAssoc && baseDocumentAssoc.length && reviewers && reviewers.length) {
     sendDocumentToReview(baseDocumentAssoc[0], reviewers, document);
 	for (var i = 0; i < reviewers.length; i++) {
-		documentMembers.addMemberWithoutCheckPermission(document, reviewers[i], 'LECM_BASIC_PG_Reader', true);
+      if(reviewers[i].typeShort == "lecm-review-list:review-list-item"){
+        var assocs = reviewers[i].assocs['lecm-review-list:reviewer-assoc'];
+        if (assocs && assocs.length) {
+          for (j in assocs) {
+			addMembersToDocument(document, assocs[j]);
+          }
+        }
+      } else {
+		addMembersToDocument(document, reviewers[i]);
+      }
 	}
   }
+}
+
+function addMembersToDocument(document, reviewer){
+	documentMembers.addMemberWithoutCheckPermission(document, reviewer, 'LECM_BASIC_PG_Reader', true);
 }]]></value>
                                                             </property>
                                                         </properties>
