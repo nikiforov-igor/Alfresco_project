@@ -224,7 +224,7 @@
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Приложение</name>
+                                        <name>Приложения</name>
                                         <nodeRef>workspace://SpacesStore/a081ce71-61ce-4dcf-8afe-4e6c08c8abc1</nodeRef>
                                         <properties>
                                             <property>
@@ -1062,7 +1062,7 @@
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Приложение</name>
+                                        <name>Приложения</name>
                                         <nodeRef>workspace://SpacesStore/08f7be4a-b635-4185-9781-f6747566f737</nodeRef>
                                         <properties>
                                             <property>
@@ -2162,7 +2162,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Приложение</name>
+                                        <name>Приложения</name>
                                         <nodeRef>workspace://SpacesStore/a3da7049-c222-4c11-a324-1e7c743d1f0e</nodeRef>
                                         <properties>
                                             <property>
@@ -3074,7 +3074,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Приложение</name>
+                                        <name>Приложения</name>
                                         <nodeRef>workspace://SpacesStore/781af912-e0f8-426d-a8f1-e674f28d2801</nodeRef>
                                         <properties>
                                             <property>
@@ -4411,7 +4411,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Приложение</name>
+                                        <name>Приложения</name>
                                         <nodeRef>workspace://SpacesStore/4c7d831e-3c3e-4bed-9105-bc2669f38d2e</nodeRef>
                                         <properties>
                                             <property>
@@ -5427,7 +5427,7 @@ document.save();]]></value>
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Приложение</name>
+                                        <name>Приложения</name>
                                         <nodeRef>workspace://SpacesStore/63b3c6a8-be4a-4e81-bae3-e14e43e8f2c9</nodeRef>
                                         <properties>
                                             <property>
@@ -6592,7 +6592,7 @@ var registrationRequired = document.assocs["lecm-eds-document:document-type-asso
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Приложение</name>
+                                        <name>Приложения</name>
                                         <nodeRef>workspace://SpacesStore/17d81bf1-d039-4634-bfbe-0738e89b8b73</nodeRef>
                                         <properties>
                                             <property>
@@ -7493,7 +7493,7 @@ var registrationRequired = document.assocs["lecm-eds-document:document-type-asso
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Приложение</name>
+                                        <name>Приложения</name>
                                         <nodeRef>workspace://SpacesStore/8535c76f-d645-43fa-b50d-82658b6638ec</nodeRef>
                                         <properties>
                                             <property>
@@ -8177,7 +8177,7 @@ var registrationRequired = document.assocs["lecm-eds-document:document-type-asso
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Приложение</name>
+                                        <name>Приложения</name>
                                         <nodeRef>workspace://SpacesStore/8f1acbc6-893f-463f-860f-4b163be4af44</nodeRef>
                                         <properties>
                                             <property>
@@ -8522,7 +8522,7 @@ var registrationRequired = document.assocs["lecm-eds-document:document-type-asso
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Приложение</name>
+                                        <name>Приложения</name>
                                         <nodeRef>workspace://SpacesStore/5a5268f8-458f-41a9-8d24-325532b58411</nodeRef>
                                         <properties>
                                             <property>

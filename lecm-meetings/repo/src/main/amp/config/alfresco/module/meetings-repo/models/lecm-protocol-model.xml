@@ -29,7 +29,7 @@
 			<parameter name="allowedValues">
 				<list>
 					<value>Документ|DOCUMENT</value>
-					<value>Приложение|APPENDIX</value>
+					<value>Приложения|APPENDICES</value>
 					<value>Подлинник|ORIGINAL</value>
 					<value>Прочее|OTHER</value>
                     <value>Замечания рецензентов|REVIEWER_COMMENTS</value>
