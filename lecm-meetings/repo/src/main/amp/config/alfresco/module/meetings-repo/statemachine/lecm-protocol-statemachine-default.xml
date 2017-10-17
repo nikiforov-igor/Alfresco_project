@@ -6997,7 +6997,7 @@ var registrationRequired = document.assocs["lecm-eds-document:document-type-asso
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[@errandsService.getChildErrands(doc.getNodeRef()) != null AND @errandsService.getChildErrands(doc.getNodeRef()).size() > 0]]></value>
+                                                                    <![CDATA[@errandsService.getChildErrands(doc.getNodeRef()).size() > 0]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
