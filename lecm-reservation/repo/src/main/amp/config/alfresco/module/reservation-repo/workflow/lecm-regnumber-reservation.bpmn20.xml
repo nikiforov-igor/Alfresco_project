@@ -10,6 +10,7 @@
                     <activiti:string><![CDATA[
 						var document = bpm_package.children[0];
 						document.properties['lecm-reservation-aspects:isReservationRunning'] = true;
+						document.properties['lecm-reservation-aspects:lastReservationRunDate'] = new Date();
 						document.save();
                         statemachine.connectToStatemachine(document, 'activiti$' + execution.getProcessInstanceId(), 'activiti$' + execution.getProcessDefinition().getKey());
 					]]></activiti:string>
