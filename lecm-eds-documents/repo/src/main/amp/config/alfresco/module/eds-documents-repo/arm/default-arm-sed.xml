@@ -335,10 +335,6 @@
                                                 <property name="lecm-arm:field-format-string">
                                                     <![CDATA[{lecm-document:status-changed-date?dd.MM.yyyy HH:mm}]]></property>
                                             </item>
-                                            <item name="cm:admin" type="lecm-arm:user-settings">
-                                                <property name="cm:name"><![CDATA[admin]]></property>
-                                                <assocs/>
-                                            </item>
                                         </items>
                                         <assocs>
                                             <assoc type="lecm-arm:fields-assoc"
@@ -1065,10 +1061,6 @@
                                                     <![CDATA[lecm-document:author-assoc]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                             </item>
-                                            <item name="cm:admin" type="lecm-arm:user-settings">
-                                                <property name="cm:name"><![CDATA[admin]]></property>
-                                                <assocs/>
-                                            </item>
                                             <item name="cm:050532a3-d80b-440c-b954-ba0b7ee68697" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-title"><![CDATA[Дата поступления]]></property>
                                                 <property name="cm:name">
@@ -1259,10 +1251,6 @@
                                                     <![CDATA[lecm-signing-route_currentTaskStartDate]]></property>
                                                 <property name="lecm-arm:field-format-string">
                                                     <![CDATA[{lecm-signing-route:currentTaskStartDate?dd.MM.yyyy HH:mm}]]></property>
-                                            </item>
-                                            <item name="cm:admin" type="lecm-arm:user-settings">
-                                                <property name="cm:name"><![CDATA[admin]]></property>
-                                                <assocs/>
                                             </item>
                                         </items>
                                         <assocs>
@@ -1519,10 +1507,6 @@
                                                 <property name="lecm-arm:field-format-string">
                                                     <![CDATA[{lecm-document:status-changed-date?dd.MM.yyyy HH:mm}]]></property>
                                             </item>
-                                            <item name="cm:admin" type="lecm-arm:user-settings">
-                                                <property name="cm:name"><![CDATA[admin]]></property>
-                                                <assocs/>
-                                            </item>
                                         </items>
                                         <assocs>
                                             <assoc type="lecm-arm:fields-assoc"
@@ -1742,10 +1726,6 @@
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-statemachine:status]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                            </item>
-                                            <item name="cm:admin" type="lecm-arm:user-settings">
-                                                <property name="cm:name"><![CDATA[admin]]></property>
-                                                <assocs/>
                                             </item>
                                             <item name="cm:52d6a5ba-bc59-40f3-af88-2cbf1b0693fe" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-title"><![CDATA[Дата поступления]]></property>
@@ -2064,10 +2044,6 @@
                                                 <property name="lecm-arm:field-format-string">
                                                     <![CDATA[{lecm-document:status-changed-date?dd.MM.yyyy HH:mm}]]></property>
                                             </item>
-                                            <item name="cm:admin" type="lecm-arm:user-settings">
-                                                <property name="cm:name"><![CDATA[admin]]></property>
-                                                <assocs/>
-                                            </item>
                                         </items>
                                         <assocs>
                                             <assoc type="lecm-arm:fields-assoc"
@@ -2314,10 +2290,6 @@
                                                     <![CDATA[lecm-document_status-changed-date]]></property>
                                                 <property name="lecm-arm:field-format-string">
                                                     <![CDATA[{lecm-document:status-changed-date?dd.MM.yyyy HH:mm}]]></property>
-                                            </item>
-                                            <item name="cm:admin" type="lecm-arm:user-settings">
-                                                <property name="cm:name"><![CDATA[admin]]></property>
-                                                <assocs/>
                                             </item>
                                         </items>
                                         <assocs>
@@ -26886,7 +26858,7 @@
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-reservation-aspects_lastReservationRunDate]]></property>
                                                 <property name="lecm-arm:field-format-string">
-                                                    <![CDATA[{lecm-reservation-aspects:lastReservationRunDate?dd.MM.yyyy HH:mm}}]]></property>
+                                                    <![CDATA[{lecm-reservation-aspects:lastReservationRunDate?dd.MM.yyyy HH:mm}]]></property>
                                             </item>
                                         </items>
                                         <assocs>
@@ -27955,10 +27927,6 @@
                                         <property name="cm:name"><![CDATA[d59f386a-2d87-4a95-93e1-3728d0fe6543]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                         <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
-                                    </item>
-                                    <item name="cm:admin" type="lecm-arm:user-settings">
-                                        <property name="cm:name">
-                                            <![CDATA[admin]]></property><!--<property name="cm:title"><value lang="ru"><![CDATA[ru value]]></value><value lang="en_GB"><![CDATA[en_GB value]]></value></property>-->
                                     </item>
                                     <item name="cm:4726b803-425a-450e-a3db-e22dae1cd4c1" type="lecm-arm:field">
                                         <property name="lecm-arm:field-title"><![CDATA[Окончание]]></property>
