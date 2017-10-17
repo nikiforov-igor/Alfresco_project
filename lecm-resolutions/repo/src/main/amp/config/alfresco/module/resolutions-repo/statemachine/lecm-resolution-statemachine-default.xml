@@ -2330,8 +2330,8 @@ var reviewers = document.assocs["lecm-resolutions:reviewers-assoc"];
       if(reviewers[i].typeShort == "lecm-review-list:review-list-item"){
         var assocs = reviewers[i].assocs['lecm-review-list:reviewer-assoc'];
         if (assocs && assocs.length) {
-          for (j in assocs) {
-			addMembersToDocument(document, assocs[j]);
+          for (var key in assocs) {
+			addMembersToDocument(document, assocs[key]);
           }
         }
       } else {
