@@ -6027,41 +6027,6 @@ var registrationRequired = document.assocs["lecm-eds-document:document-type-asso
                                                 <nodes>
                                                     <node>
                                                         <type>userTransition</type>
-                                                        <name>58876b9c-5cc5-4619-ba59-dd30164b4026</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/dfcadaef-8c91-4d90-b3f0-73189c8d2108
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[false]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>transitionLabel</name>
-                                                                <value><![CDATA[Направить на доработку]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>do-not-ask-for-confirmation</name>
-                                                                <value><![CDATA[false]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects>
-                                                            <transitionLabelAspect/>
-                                                            <transitionStatusAspect/>
-                                                        </aspects>
-                                                        <associations>
-                                                            <association>
-                                                                <type>transitionStatus</type>
-                                                                <reference>
-                                                                    workspace://SpacesStore/e8c3effb-f96a-4474-baa9-a7797b6ef589
-                                                                </reference>
-                                                            </association>
-                                                        </associations>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
-                                                    <node>
-                                                        <type>userTransition</type>
                                                         <name>97e0e672-6ac1-422f-aa3d-c4ea35769d3b</name>
                                                         <nodeRef>
                                                             workspace://SpacesStore/2c7e8b8f-756f-4247-af4e-a4b4d625bf64
