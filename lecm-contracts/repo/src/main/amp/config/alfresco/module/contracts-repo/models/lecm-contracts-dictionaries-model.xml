@@ -53,6 +53,9 @@
 					</index>
 				</property>
 			</properties>
+			<mandatory-aspects>
+				<aspect>lecm-doc-dic-dt:signing-settings</aspect>
+			</mandatory-aspects>
 		</type>
 
 		<!--todo Нужно будет удалить-->

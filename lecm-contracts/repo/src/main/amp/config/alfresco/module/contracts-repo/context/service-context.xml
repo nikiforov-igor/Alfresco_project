@@ -33,7 +33,7 @@
     </bean>
 
     <bean id="contracts.LogicEcmContractsBootstrap" parent="modelsToRepositoryLoader"
-          depends-on="contracts.contractsBootstrap, lecm.sign2.helper.model.bootstrap, eds.models.bootstrap, lecm.signing-v2.helper.model.bootstrap, signingRoutesService">
+          depends-on="contracts.contractsBootstrap, eds.models.bootstrap, lecm.signing-v2.helper.model.bootstrap, signingRoutesService">
         <property name="models">
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-contracts-model.xml</value>

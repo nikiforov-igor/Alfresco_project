@@ -10,8 +10,10 @@ if (document) {
     var typeAssocName = "";
     if (document.typeShort == "lecm-contract:document"){
         typeAssocName ="lecm-contract:typeContract-assoc";
+    } else if (document.typeShort == "lecm-additional-document:additionalDocument") {
+        typeAssocName = "lecm-additional-document:additionalDocumentType";
     } else {
-        typeAssocName = "lecm-eds-document:document-type-assoc";
+        typeAssocName = "lecm-eds-document:document-type-assoc"
     }
     var typeAssoc =  document.assocs[typeAssocName];
     if (typeAssoc && typeAssoc.length > 0) {
