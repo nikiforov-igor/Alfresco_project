@@ -16,6 +16,9 @@
 				<property name="lecm-reservation-aspects:isReservationRunning">
 					<type>d:boolean</type>
 				</property>
+				<property name="lecm-reservation-aspects:lastReservationRunDate">
+					<type>d:date</type>
+				</property>
 				<property name="lecm-reservation-aspects:isReserved">
 					<type>d:boolean</type>
 				</property>
@@ -27,6 +30,9 @@
 				</property>
 				<property name="lecm-reservation-aspects:isReservationCanceling">
 					<type>d:boolean</type>
+				</property>
+				<property name="lecm-reservation-aspects:lastReservationCancelDate">
+					<type>d:date</type>
 				</property>
 				<property name="lecm-reservation-aspects:reserveCancelTaskMessage">
 					<type>d:text</type>

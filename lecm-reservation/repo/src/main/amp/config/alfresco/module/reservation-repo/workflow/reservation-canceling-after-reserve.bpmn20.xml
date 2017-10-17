@@ -10,6 +10,7 @@
                     <activiti:string>
                         var document = bpm_package.children[0];
                         document.properties["lecm-reservation-aspects:isReservationCanceling"] = true;
+                        document.properties['lecm-reservation-aspects:lastReservationCancelDate'] = new Date();
                         lecmPermission.pushAuthentication();
                         lecmPermission.setRunAsUserSystem();
                         document.save();
