@@ -13501,23 +13501,7 @@ var registrationRequired = document.assocs["lecm-eds-document:document-type-asso
                                                         <properties>
                                                             <property>
                                                                 <name>transition-script</name>
-                                                                <value><![CDATA[/* уведомить об отправке */
-(function() {
-    var outgoing = stm_document,
-        senders = orgstructure.getEmployeesByBusinessRoleId('OUTGOING_SENDERS', true);
-    notifications.sendNotification({
-        author: 'System',
-        recipients: senders,
-        templateCode: 'OUTGOING_SEND',
-        templateConfig: {
-            mainObject: stm_document
-        }
-    });
-
-	var logText = "#initiator направил(а) документ " + documentScript.wrapperDocumentLink(outgoing, "№ {~REGNUM} от {~REGDATE}") + " на отправку";
-    logText = substitude.formatNodeTitle(outgoing.nodeRef.toString(), logText);
-	businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);
-})();]]></value>
+                                                                <value><![CDATA[]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>stopSubWorkflows</name>
@@ -14412,7 +14396,50 @@ var registrationRequired = document.assocs["lecm-eds-document:document-type-asso
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>f83a892b-cc81-4892-8edd-5e28fead5661</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/643de4b4-8922-4371-a995-d209378f9f2c
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Уведомление об отправке]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[/* уведомить об отправке */
+(function() {
+    var outgoing = stm_document,
+        senders = orgstructure.getEmployeesByBusinessRoleId('OUTGOING_SENDERS', true);
+    notifications.sendNotification({
+        author: 'System',
+        recipients: senders,
+        templateCode: 'OUTGOING_SEND',
+        templateConfig: {
+            mainObject: stm_document
+        }
+    });
+
+	var logText = "#initiator направил(а) документ " + documentScript.wrapperDocumentLink(outgoing, "№ {~REGNUM} от {~REGDATE}") + " на отправку";
+    logText = substitude.formatNodeTitle(outgoing.nodeRef.toString(), logText);
+	businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);
+})();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                     <node>
                                         <type>TimerAction</type>
