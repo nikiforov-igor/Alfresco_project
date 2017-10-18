@@ -63,7 +63,11 @@
 				<property name="lecm-doc-dic-dt:categories-of-attachments-to-sign">
 					<title>Категории подписываемых вложений</title>
 					<type>d:text</type>
-					<index enabled="false"/>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
 				</property>
 			</properties>
 		</aspect>
