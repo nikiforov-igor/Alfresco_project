@@ -138,7 +138,7 @@
 					</field>
                     <field id="lecm-doc-dic-dt:categories-of-attachments-to-sign">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
-                            <control-param name="webscript">lecm/document/attachments/api/categoriesByType?documentType=lecm-internal:document&amp;jsonObjectName=data</control-param>
+                            <control-param name="webscript">lecm/document/attachments/api/categoriesByType?documentType=lecm-contract:document&amp;jsonObjectName=data</control-param>
                             <control-param name="webscriptType">server</control-param>
                             <control-param name="withEmpty">true</control-param>
                             <control-param name="emptyLabel">Все</control-param>
@@ -169,9 +169,31 @@
 				<field-visibility>
 					<show id="cm:name" force="true"/>
 					<show id="lecm-contract-dic:contract-documents-type-code" force="true"/>
+                    <show id="lecm-doc-dic-dt:es-sign-required" force="true"/>
+                    <show id="lecm-doc-dic-dt:categories-of-attachments-to-sign" force="true"/>
+                    <show id="load-set-default-categories-to-sign-script" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-contract-dic:contract-documents-type-code" read-only="true"/>
+                    <field id="lecm-doc-dic-dt:categories-of-attachments-to-sign">
+                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+                            <control-param name="webscript">lecm/document/attachments/api/categoriesByType?documentType=lecm-additional-document:additionalDocument&amp;jsonObjectName=data</control-param>
+                            <control-param name="webscriptType">server</control-param>
+                            <control-param name="withEmpty">true</control-param>
+                            <control-param name="emptyLabel">Все</control-param>
+                            <control-param name="multiple">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-doc-dic-dt:es-sign-required">
+                        <control>
+                            <control-param name="changeFireAction">esSignRequiredChanged</control-param>
+                        </control>
+                    </field>
+                    <field id="load-set-default-categories-to-sign-script">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-eds-documents/set-default-categories-to-sign-script.js</control-param>
+                        </control>
+                    </field>
 				</appearance>
 			</form>
 		</forms>
@@ -183,6 +205,9 @@
 				<field-visibility>
 					<show id="cm:name" force="true"/>
 					<show id="lecm-contract-dic:contract-documents-type-code" force="true"/>
+                    <show id="lecm-doc-dic-dt:es-sign-required"/>
+                    <show id="lecm-doc-dic-dt:categories-of-attachments-to-sign"/>
+                    <show id="load-set-default-categories-to-sign-script" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-contract-dic:contract-documents-type-code">
@@ -191,12 +216,33 @@
 							<constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
 						</constraint-handlers>
 					</field>
+                    <field id="lecm-doc-dic-dt:categories-of-attachments-to-sign">
+                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+                            <control-param name="webscript">lecm/document/attachments/api/categoriesByType?documentType=lecm-additional-document:additionalDocument&amp;jsonObjectName=data</control-param>
+                            <control-param name="webscriptType">server</control-param>
+                            <control-param name="withEmpty">true</control-param>
+                            <control-param name="emptyLabel">Все</control-param>
+                            <control-param name="multiple">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-doc-dic-dt:es-sign-required">
+                        <control>
+                            <control-param name="changeFireAction">esSignRequiredChanged</control-param>
+                        </control>
+                    </field>
+                    <field id="load-set-default-categories-to-sign-script">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-eds-documents/set-default-categories-to-sign-script.js</control-param>
+                        </control>
+                    </field>
 				</appearance>
 			</form>
 			<form id="search">
 				<field-visibility>
 					<show id="cm:name" force="true"/>
 					<show id="lecm-contract-dic:contract-documents-type-code" force="true"/>
+                    <show id="lecm-doc-dic-dt:es-sign-required"/>
+                    <show id="lecm-doc-dic-dt:categories-of-attachments-to-sign"/>
 				</field-visibility>
 				<appearance>
                     <field id="cm:name" mandatory="false">
@@ -210,13 +256,28 @@
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
 						</constraint-handlers>
 					</field>
+                    <field id="lecm-doc-dic-dt:categories-of-attachments-to-sign">
+                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+                            <control-param name="webscript">lecm/document/attachments/api/categoriesByType?documentType=lecm-additional-document:additionalDocument&amp;jsonObjectName=data</control-param>
+                            <control-param name="webscriptType">server</control-param>
+                            <control-param name="withEmpty">true</control-param>
+                            <control-param name="emptyLabel">Все</control-param>
+                            <control-param name="multiple">true</control-param>
+                        </control>
+                    </field>
 				</appearance>
 			</form>
 			<form id="datagrid">
 				<field-visibility>
 					<show id="cm:name" force="true"/>
 					<show id="lecm-contract-dic:contract-documents-type-code" force="true"/>
+                    <show id="lecm-doc-dic-dt:es-sign-required"/>
+                    <show id="categories-of-attachments-to-sign"/>
 				</field-visibility>
+                <appearance>
+                    <field id="lecm-doc-dic-dt:es-sign-required" label-id="label.eds.document_type_dictionary.datagrid.signing_setting.es_required"/>
+                    <field id="categories-of-attachments-to-sign" substituteString="{lecm-doc-dic-dt:categories-of-attachments-to-sign}" label-id="label.eds.document_type_dictionary.datagrid.signing_setting.categories"/>
+                </appearance>
 			</form>
 		</forms>
 	</config>
