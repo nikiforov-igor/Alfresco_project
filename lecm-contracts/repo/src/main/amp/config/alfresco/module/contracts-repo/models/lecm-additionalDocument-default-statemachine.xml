@@ -836,7 +836,7 @@
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-signing-v2-aspects_signingDate</name>
+                                        <name>lecmSignAspects_signingDate</name>
                                         <nodeRef>workspace://SpacesStore/9795779f-85a5-4167-a3dd-c93029ab58e6</nodeRef>
                                         <properties>
                                             <property>
@@ -868,21 +868,6 @@
                                         <type>documentField</type>
                                         <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/ca2a05fd-77a5-47a6-8df5-6ccbff1d9211</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[true]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-signing-route_signingFolder</name>
-                                        <nodeRef>workspace://SpacesStore/c21212ba-5a07-4f0d-af2e-1e90f0472857</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1457,7 +1442,7 @@
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-signing-v2-aspects_signingDate</name>
+                                        <name>lecmSignAspects_signingDate</name>
                                         <nodeRef>workspace://SpacesStore/d50a394b-2c88-4ed1-9967-f1152d189b91</nodeRef>
                                         <properties>
                                             <property>
@@ -1489,21 +1474,6 @@
                                         <type>documentField</type>
                                         <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/cda0f2d1-cd28-4182-a5ee-4f17d2bd251c</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-signing-route_signingFolder</name>
-                                        <nodeRef>workspace://SpacesStore/b8159850-1926-4c3d-b918-df92d9711d53</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2027,7 +1997,7 @@
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-signing-v2-aspects_signingDate</name>
+                                        <name>lecmSignAspects_signingDate</name>
                                         <nodeRef>workspace://SpacesStore/31a9a4f2-01ef-4c7a-aaba-50b41ecf8884</nodeRef>
                                         <properties>
                                             <property>
@@ -2059,21 +2029,6 @@
                                         <type>documentField</type>
                                         <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/6d8b6122-c464-4c4f-b197-aa51726813cc</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-signing-route_signingFolder</name>
-                                        <nodeRef>workspace://SpacesStore/7b06baf9-ab8d-401f-86ba-f1594bd67a9b</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2426,7 +2381,7 @@
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA["ACTIVE" == doc.attr("lecm-signing-v2-aspects:signingState")]]></value>
+                                                                    <![CDATA["ACTIVE" == doc.attr("lecmSignAspects:signingState")]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -3610,7 +3565,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-signing-v2-aspects_signingDate</name>
+                                        <name>lecmSignAspects_signingDate</name>
                                         <nodeRef>workspace://SpacesStore/2f42a3d0-a8f7-4c9d-a458-f509b9c29b28</nodeRef>
                                         <properties>
                                             <property>
@@ -3642,21 +3597,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         <type>documentField</type>
                                         <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/ede6e8e8-936b-4dd2-908f-a6c7538004a9</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[true]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-signing-route_signingFolder</name>
-                                        <nodeRef>workspace://SpacesStore/17711ff1-15a2-40dd-a096-daa6a72afecd</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -4184,7 +4124,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[@routesService.getApprovalState(doc.nodeRef) == "APPROVED" AND (doc.assocClass("lecmSignAspects:signerEmployeeAssoc") == null OR doc.hasAspect("lecm-signing-v2-aspects:signingDetailsAspect") == false)]]></value>
+                                                                    <![CDATA[@routesService.getApprovalState(doc.nodeRef) == "APPROVED" AND (doc.assocClass("lecmSignAspects:signerEmployeeAssoc") == null OR doc.hasAspect("lecmSignAspects:signingDetailsAspect") == false)]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -4262,7 +4202,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[@routesService.getApprovalState(doc.nodeRef) == "APPROVED" AND doc.assocClass("lecmSignAspects:signerEmployeeAssoc") != null AND doc.hasAspect("lecm-signing-v2-aspects:signingDetailsAspect") == true]]></value>
+                                                                    <![CDATA[@routesService.getApprovalState(doc.nodeRef) == "APPROVED" AND doc.assocClass("lecmSignAspects:signerEmployeeAssoc") != null AND doc.hasAspect("lecmSignAspects:signingDetailsAspect") == true]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -4910,7 +4850,7 @@ for (i in approvals) {
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-signing-v2-aspects_signingDate</name>
+                                        <name>lecmSignAspects_signingDate</name>
                                         <nodeRef>workspace://SpacesStore/0b3495d9-1cbc-4742-9ac3-c0ef9357950d</nodeRef>
                                         <properties>
                                             <property>
@@ -4942,21 +4882,6 @@ for (i in approvals) {
                                         <type>documentField</type>
                                         <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/095d42cf-d507-45ff-a2db-9229b71a499e</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-signing-route_signingFolder</name>
-                                        <nodeRef>workspace://SpacesStore/122e037c-400c-4777-b92d-af75474f8b84</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5367,7 +5292,7 @@ for (i in approvals) {
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA["ACTIVE" == doc.attr("lecm-signing-v2-aspects:signingState")]]></value>
+                                                                    <![CDATA["ACTIVE" == doc.attr("lecmSignAspects:signingState")]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -6220,7 +6145,7 @@ for (i in approvals) {
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-signing-v2-aspects_signingDate</name>
+                                        <name>lecmSignAspects_signingDate</name>
                                         <nodeRef>workspace://SpacesStore/b3b6cffc-bceb-492e-950f-2d84b1460cb6</nodeRef>
                                         <properties>
                                             <property>
@@ -6252,21 +6177,6 @@ for (i in approvals) {
                                         <type>documentField</type>
                                         <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/8afc830c-04fb-4314-ab71-ea333758910f</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[true]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-signing-route_signingFolder</name>
-                                        <nodeRef>workspace://SpacesStore/d3b0c60f-d82b-4df9-9734-c37d48ea20e3</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -6716,7 +6626,7 @@ for (i in approvals) {
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA["ACTIVE" == doc.attr("lecm-signing-v2-aspects:signingState")]]></value>
+                                                                    <![CDATA["ACTIVE" == doc.attr("lecmSignAspects:signingState")]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -7854,7 +7764,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-signing-v2-aspects_signingDate</name>
+                                        <name>lecmSignAspects_signingDate</name>
                                         <nodeRef>workspace://SpacesStore/967582ff-bd6c-42d1-8b8a-ee7515b2c25d</nodeRef>
                                         <properties>
                                             <property>
@@ -7886,21 +7796,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         <type>documentField</type>
                                         <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/1a2253fc-b0e7-437c-ab7d-20091fe05e58</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[true]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-signing-route_signingFolder</name>
-                                        <nodeRef>workspace://SpacesStore/bbe08abe-8152-4dbf-a081-e7d5c9465f6a</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -8311,7 +8206,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA["COMPLETE" == doc.attr("lecm-signing-v2-aspects:signingState") and !doc.attr("lecm-signing-v2-aspects:isSigned")]]></value>
+                                                                    <![CDATA["COMPLETE" == doc.attr("lecmSignAspects:signingState") and !doc.attr("lecmSignAspects:isSigned")]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -8350,7 +8245,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA["COMPLETE" == doc.attr("lecm-signing-v2-aspects:signingState") and doc.attr("lecm-signing-v2-aspects:isSigned") and doc.attr("lecm-additional-document:signedCounterparty")]]></value>
+                                                                    <![CDATA["COMPLETE" == doc.attr("lecmSignAspects:signingState") and doc.attr("lecmSignAspects:isSigned") and doc.attr("lecm-additional-document:signedCounterparty")]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -8389,7 +8284,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA["COMPLETE" == doc.attr("lecm-signing-v2-aspects:signingState") and doc.attr("lecm-signing-v2-aspects:isSigned") and !doc.attr("lecm-additional-document:signedCounterparty")]]></value>
+                                                                    <![CDATA["COMPLETE" == doc.attr("lecmSignAspects:signingState") and doc.attr("lecmSignAspects:isSigned") and !doc.attr("lecm-additional-document:signedCounterparty")]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -9068,7 +8963,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-signing-v2-aspects_signingDate</name>
+                                        <name>lecmSignAspects_signingDate</name>
                                         <nodeRef>workspace://SpacesStore/1a1bf1c2-c9d2-4d87-a342-b38037ce3024</nodeRef>
                                         <properties>
                                             <property>
@@ -9104,21 +8999,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                             <property>
                                                 <name>editableField</name>
                                                 <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-signing-route_signingFolder</name>
-                                        <nodeRef>workspace://SpacesStore/ff8a6d2c-e95d-49b5-9eb7-d517273d9e2f</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -10259,7 +10139,7 @@ additionalDocument.save();
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-signing-v2-aspects_signingDate</name>
+                                        <name>lecmSignAspects_signingDate</name>
                                         <nodeRef>workspace://SpacesStore/f33027e2-43f4-412a-97ba-67d5444bd379</nodeRef>
                                         <properties>
                                             <property>
@@ -10291,21 +10171,6 @@ additionalDocument.save();
                                         <type>documentField</type>
                                         <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/20cd7f4e-3562-4e92-90ea-4edc4fc9a4ef</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-signing-route_signingFolder</name>
-                                        <nodeRef>workspace://SpacesStore/9caa2576-7091-4bd9-bb18-0c54fad2ca69</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -11401,7 +11266,7 @@ additionalDocument.save();
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-signing-v2-aspects_signingDate</name>
+                                        <name>lecmSignAspects_signingDate</name>
                                         <nodeRef>workspace://SpacesStore/38a0a160-ec07-473e-9e76-9cbdd91a4611</nodeRef>
                                         <properties>
                                             <property>
@@ -11433,21 +11298,6 @@ additionalDocument.save();
                                         <type>documentField</type>
                                         <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/4c2f3213-c4f8-4740-8c1d-4eeb1bb32149</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-signing-route_signingFolder</name>
-                                        <nodeRef>workspace://SpacesStore/4b36f12b-b06c-4015-95fe-8391a99885bf</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -12068,7 +11918,7 @@ additionalDocument.save();
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-signing-v2-aspects_signingDate</name>
+                                        <name>lecmSignAspects_signingDate</name>
                                         <nodeRef>workspace://SpacesStore/34512a65-09bc-4353-b3ca-4611e0f4f8ab</nodeRef>
                                         <properties>
                                             <property>
@@ -12100,21 +11950,6 @@ additionalDocument.save();
                                         <type>documentField</type>
                                         <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/2b6f80c5-801a-4491-8bea-d96d163ec9de</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-signing-route_signingFolder</name>
-                                        <nodeRef>workspace://SpacesStore/5f1860b0-902c-41e3-b7c7-a11d6809edea</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -13126,7 +12961,7 @@ additionalDocument.save();
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-signing-v2-aspects_signingDate</name>
+                                        <name>lecmSignAspects_signingDate</name>
                                         <nodeRef>workspace://SpacesStore/48f5aa15-43a6-429d-b445-d8efa7da8731</nodeRef>
                                         <properties>
                                             <property>
@@ -13158,21 +12993,6 @@ additionalDocument.save();
                                         <type>documentField</type>
                                         <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/243b395a-a429-4c6e-aa32-515e9b94cb6e</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-signing-route_signingFolder</name>
-                                        <nodeRef>workspace://SpacesStore/722fb701-c80b-407a-805a-a4b559a0d945</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -13478,7 +13298,7 @@ additionalDocument.save();
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-signing-v2-aspects_signingDate</name>
+                                        <name>lecmSignAspects_signingDate</name>
                                         <nodeRef>workspace://SpacesStore/58591449-01dc-45a7-a3f1-6e117e6c619e</nodeRef>
                                         <properties>
                                             <property>
@@ -13510,21 +13330,6 @@ additionalDocument.save();
                                         <type>documentField</type>
                                         <name>lecm-signing-v2-aspects_signed-on-paper</name>
                                         <nodeRef>workspace://SpacesStore/494ae845-d867-4651-bf4d-9701ce844e75</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-signing-route_signingFolder</name>
-                                        <nodeRef>workspace://SpacesStore/3576d52e-3626-4541-9703-0405f0316a2a</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
