@@ -12492,11 +12492,15 @@ var registrationRequired = document.assocs["lecm-eds-document:document-type-asso
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[doc.hasAspect("os-aspects:move-to-case")]]></value>
+                                                                    <![CDATA[doc.attr("lecm-eds-aspect:change-status-to") == "Закрыт"]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[]]></value>
+                                                                <value><![CDATA[(function(){
+	var document = stm_document;
+	document.properties["lecm-eds-aspect:change-status-to"] = "";
+	document.save();
+})();]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
