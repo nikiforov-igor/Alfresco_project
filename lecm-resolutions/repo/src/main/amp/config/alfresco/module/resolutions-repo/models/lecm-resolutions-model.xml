@@ -284,6 +284,10 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
+                <property name="lecm-resolutions:save-reviewers">
+                    <type>d:text</type>
+                    <index enabled="false"/>
+                </property>
             </properties>
             <associations>
                 <!-- Автор -->
