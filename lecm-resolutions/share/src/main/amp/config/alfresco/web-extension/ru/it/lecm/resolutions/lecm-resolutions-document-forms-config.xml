@@ -167,6 +167,7 @@
                             <control-param name="items">employee,orgUnit,workGroup,reviewItem</control-param>
                             <control-param name="changeItemsFireAction">employeesSelected</control-param>
                             <control-param name="autocompleteDataSourceMethodPost">true</control-param>
+                            <control-param name="additionalStyles">css/lecm-resolution/resolution-save-review-list.css</control-param>
                             <!-- lecm-orgstr:employee -->
                             <control-param name="employee_label">Сотрудник</control-param>
                             <control-param name="employee_endpointType">lecm-orgstr:employee</control-param>
