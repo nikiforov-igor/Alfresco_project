@@ -2860,6 +2860,32 @@ if(doc){
           }
       }
   }
+
+  var errandTypeAssoc = doc.assocs["lecm-errands:type-assoc"];
+  if (errandTypeAssoc && errandTypeAssoc.length == 1 && errandTypeAssoc[0]) {
+    var launchReview = errandTypeAssoc[0].properties["lecm-errands-dic:errand-type-launch-review"];
+    if (launchReview) {
+      var childErrands = errands.getChildErrands(doc.nodeRef.toString());
+      var docExecutor = doc.properties["lecm-errands:executor-assoc-ref"];
+      if (childErrands && childErrands.length) {
+        for (var i = 0; i < childErrands.length; i++) {
+            var childAuthor = null;
+            if (childErrands[i].typeShort == "lecm-errands:document") {
+                childAuthor = childErrands[i].properties["lecm-errands:initiator-assoc-ref"];
+            }
+            if (docExecutor && childAuthor && docExecutor == childAuthor) {
+                if (!statemachine.isFinal(childErrands[i].nodeRef.toString())) {
+                    if (childErrands[i].properties["lecm-statemachine:status"] == "Ожидает исполнения") {
+                        hasOnExecution = true;
+                        break;
+                    }
+                }
+            }
+        }
+      }
+  	}
+  }
+
   doc.properties["lecm-errands:transit-to-on-execution"] = hasOnExecution;
   doc.save();
   edsDocument.resetChildChangeSignal(doc);
