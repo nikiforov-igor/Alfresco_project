@@ -13,6 +13,8 @@ import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.internal.api.InternalService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
+import java.util.List;
+
 /**
  * User: dbashmakov
  * Date: 11.03.14
@@ -44,7 +46,8 @@ public class InternalCreateRecipientPolicy implements NodeServicePolicies.OnCrea
             } else {
                 if (orgstructureService.isUnit(targetRef)) {
                     NodeRef employee = orgstructureService.getUnitBoss(targetRef);
-                    if (employee != null) {
+                    List<AssociationRef> recipients = nodeService.getTargetAssocs(employee, EDSDocumentService.ASSOC_RECIPIENTS);
+                    if (employee != null && recipients.contains(internalRef)) {
                         nodeService.createAssociation(internalRef, employee, EDSDocumentService.ASSOC_RECIPIENTS);
                     }
                 }
