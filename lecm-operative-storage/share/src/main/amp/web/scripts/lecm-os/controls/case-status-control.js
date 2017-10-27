@@ -11,10 +11,9 @@ LogicECM.module.OS = LogicECM.module.OS || {};
 	LogicECM.module.OS.StatusControl = function (htmlId) {
 		LogicECM.module.OS.StatusControl.superclass.constructor.call(this, "LogicECM.module.OS.StatusControl", htmlId);
 		this.controlId = htmlId;
-        YAHOO.Bubbling.on("onSearchSuccess", this.prepare, this);
 		this.grid = Alfresco.util.ComponentManager.find({name: "LogicECM.module.Base.DataGrid_nomenclature"})[0];
 		return this;
-	}
+	};
 
 	YAHOO.extend(LogicECM.module.OS.StatusControl, Alfresco.component.Base, {
 		controlId: null,
