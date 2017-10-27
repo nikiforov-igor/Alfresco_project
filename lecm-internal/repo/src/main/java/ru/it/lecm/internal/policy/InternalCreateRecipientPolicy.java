@@ -46,8 +46,8 @@ public class InternalCreateRecipientPolicy implements NodeServicePolicies.OnCrea
             } else {
                 if (orgstructureService.isUnit(targetRef)) {
                     NodeRef employee = orgstructureService.getUnitBoss(targetRef);
-                    List<AssociationRef> recipients = nodeService.getTargetAssocs(employee, EDSDocumentService.ASSOC_RECIPIENTS);
-                    if (employee != null && recipients.contains(internalRef)) {
+                    if (employee != null &&
+                            nodeService.getTargetAssocs(employee, EDSDocumentService.ASSOC_RECIPIENTS).contains(internalRef)) {
                         nodeService.createAssociation(internalRef, employee, EDSDocumentService.ASSOC_RECIPIENTS);
                     }
                 }
