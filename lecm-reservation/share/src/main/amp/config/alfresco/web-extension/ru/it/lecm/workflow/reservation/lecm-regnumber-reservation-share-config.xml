@@ -91,6 +91,7 @@
 			<form>
 				<field-visibility>
 					<show id="packageItems"/>
+					<show id="bpm:workflowDescription" />
 					<show id="lecmRegnumRes:cancelReasonAfterReserve"/>
 				</field-visibility>
 				<appearance>
@@ -100,6 +101,11 @@
 					<field id="lecmRegnumRes:cancelReasonAfterReserve" mandatory="true" help-id="lecm.reservation.reject-reason.help-id">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
 							<control-param name="rows">4</control-param>
+						</control>
+					</field>
+					<field id="bpm:workflowDescription">
+						<control template="/ru/it/lecm/documents/controls/workflow/document-present-string-hidden.ftl">
+							<control-param name="leftPartTextCode">ru.it.reservation.reject.workflowDescription.message</control-param>
 						</control>
 					</field>
 				</appearance>
