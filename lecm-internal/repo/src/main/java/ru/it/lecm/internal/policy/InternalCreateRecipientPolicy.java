@@ -43,11 +43,20 @@ public class InternalCreateRecipientPolicy implements NodeServicePolicies.OnCrea
         try {
             if (orgstructureService.isEmployee(targetRef)) {
                 nodeService.createAssociation(internalRef, targetRef, EDSDocumentService.ASSOC_RECIPIENTS);
-            } else {
-                if (orgstructureService.isUnit(targetRef)) {
-                    NodeRef employee = orgstructureService.getUnitBoss(targetRef);
-                    if (employee != null &&
-                            !nodeService.getTargetAssocs(employee, EDSDocumentService.ASSOC_RECIPIENTS).contains(internalRef)) {
+            } else if (orgstructureService.isUnit(targetRef)) {
+                NodeRef employee = orgstructureService.getUnitBoss(targetRef);
+                if (employee != null) {
+                    //Проверям, существует ли уже ассоциация
+                    boolean isAssociationExist = false;
+                    List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(internalRef, EDSDocumentService.ASSOC_RECIPIENTS);
+                    if (targetAssocs != null) {
+                        for (int i = 0; i < targetAssocs.size(); i++) {
+                            if (targetAssocs.get(i).getTargetRef().equals(employee)) {
+                                isAssociationExist = true;
+                            }
+                        }
+                    }
+                    if (!isAssociationExist) {
                         nodeService.createAssociation(internalRef, employee, EDSDocumentService.ASSOC_RECIPIENTS);
                     }
                 }
