@@ -50,9 +50,10 @@ public class InternalCreateRecipientPolicy implements NodeServicePolicies.OnCrea
                     boolean isAssociationExist = false;
                     List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(internalRef, EDSDocumentService.ASSOC_RECIPIENTS);
                     if (targetAssocs != null) {
-                        for (int i = 0; i < targetAssocs.size(); i++) {
-                            if (targetAssocs.get(i).getTargetRef().equals(employee)) {
+                        for (AssociationRef associationRef: targetAssocs) {
+                            if (associationRef.getTargetRef().equals(employee)) {
                                 isAssociationExist = true;
+                                break;
                             }
                         }
                     }
