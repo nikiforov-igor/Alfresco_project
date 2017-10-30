@@ -10,7 +10,10 @@
 
     Bubbling.on('errandsWFChangeDueDateScriptLoaded', init);
     if (Bubbling.addLayer('requestDueDateChangeTaskFormScriptLoaded')) {
-        Bubbling.on('requestDueDateChangeTaskFormScriptLoaded', process);
+        Bubbling.on('requestDueDateChangeTaskFormScriptLoaded', function (layer, args) {
+            init(layer, args);
+            process(layer, args);
+        });
     }
     Bubbling.on('changeDueDateRadioEvent', processDueDateSet);
 
@@ -30,6 +33,9 @@
                             var changeChildDueDateField = Dom.get(formId + "_prop_lecmErrandWf_changeDueDateChangeChildDueDate");
                             if (!changeChildDueDateField) {
                                 changeChildDueDateField = Dom.get(formId + "_prop_lecmErrandWf_requestDueDateChange_1ChildDueDate");
+                            }
+                            if (!changeChildDueDateField) {
+                                changeChildDueDateField = Dom.get(formId + "_prop_lecmErrandWf_requestDueDateChangeTask_1ChildDueDate");
                             }
                             if (changeChildDueDateField) {
                                 changeChildDueDateField.value = false;
