@@ -471,4 +471,32 @@
 			</form>
 		</forms>
 	</config>
+
+	<config evaluator="task-type" condition="lecm-signing-v2:signTask">
+		<forms>
+			<form>
+				<appearance>
+					<field id="lecm-signing-v2:attachments">
+						<control>
+							<control-param name="dataSourceScript">lecm/documents/attachments/get/categoriesToSign</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="string-compare" condition="activiti$documentSignAndDirect">
+		<forms>
+			<form>
+				<appearance>
+					<field id="lecm-signing-v2:attachments">
+						<control>
+							<control-param name="dataSourceScript">lecm/documents/attachments/get/categoriesToSign</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
 </alfresco-config>
