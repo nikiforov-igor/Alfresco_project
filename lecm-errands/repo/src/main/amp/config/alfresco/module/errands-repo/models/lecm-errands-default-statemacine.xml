@@ -3561,38 +3561,6 @@ if (doc) {
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>29b6a0bf-bd6d-4f28-a662-4b6eca77d29f
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/d3921a28-1c61-4079-873e-8a1c5ded05a8
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[doc.assocClass("lecm-errands:type-assoc")==null OR (doc.assocClass("lecm-errands:type-assoc")!=null AND doc.assocAttr("lecm-errands:type-assoc","lecm-errands-dic:errand-type-launch-review")==false)]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Действие доступно для поручений не для рассмотрения.]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
