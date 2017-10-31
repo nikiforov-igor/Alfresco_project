@@ -1951,39 +1951,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[В маршруте не найдено согласующих, от которых требуется вынесение решения. Измените маршрут согласования или обратитесь к администратору]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>b0339ed7-b1e8-4ad9-a873-55bbbfea6586
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/5b64a063-2a02-4dad-b13d-e8e83e6b04f0
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[!@approvalRoutesService.hasEmployeesInRoute(doc.nodeRef) OR  !@approvalRoutesService.hasUnresolvedMacros(doc.nodeRef)]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Некоторые участники согласования не могут быть определены. Измените маршрут согласования или обратитесь к администратору]]></value>
+                                                                                    <![CDATA[В маршруте не найдено участников, от которых требуется вынесение решения. Измените маршрут или обратитесь к администратору]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -2173,12 +2141,12 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[@signingRoutesService.getState(doc.nodeRef) != "NEW" OR (@signingRoutesService.getState(doc.nodeRef) == "NEW" AND (@signingRoutesService.hasUnresolvedMacros(doc.nodeRef) OR @signingRoutesService.hasEmployeesInRoute(doc.nodeRef)))]]></value>
+                                                                                    <![CDATA[@signingRoutesService.getState(doc.nodeRef) != "NEW" OR @signingRoutesService.hasEmployeesInRoute(doc.nodeRef)]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[В маршруте не найдено подписантов, от которых требуется вынесение решения. Измените маршрут подписания или обратитесь к администратору]]></value>
+                                                                                    <![CDATA[В маршруте не найдено участников, от которых требуется вынесение решения. Измените маршрут или обратитесь к администратору]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -2224,38 +2192,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                     </node>
                                                                     <node>
                                                                         <type>conditionAccess</type>
-                                                                        <name>aba9ec4d-d903-434f-9eda-90eb0146ecb2
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/69d51d4c-e525-49c6-b163-5dd39f03e364
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[!(@signingRoutesService.hasUnresolvedMacros(doc.nodeRef) AND @signingRoutesService.isAllEmployeesInRouteHasBusinessRole(doc.nodeRef, "LECM_ES_SIGNERS") AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required"))]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Некоторые участники подписания не могут быть определены. Измените маршрут подписания или обратитесь к администратору]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
                                                                         <name>a14a7091-0b2b-40ca-b8e4-f1d3d3f1fa02
                                                                         </name>
                                                                         <nodeRef>
@@ -2269,7 +2205,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[!(!@signingRoutesService.hasUnresolvedMacros(doc.nodeRef) AND !@signingRoutesService.isAllEmployeesInRouteHasBusinessRole(doc.nodeRef, "LECM_ES_SIGNERS") AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required"))]]></value>
+                                                                                    <![CDATA[!@signingRoutesService.hasEmployeesInRoute(doc.nodeRef) OR (@signingRoutesService.hasEmployeesInRoute(doc.nodeRef) AND ((@signingRoutesService.isAllEmployeesInRouteHasBusinessRole(doc.nodeRef, "LECM_ES_SIGNERS") AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required")) OR !doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required")))]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -2311,38 +2247,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>hideAction</name>
                                                                                 <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>1efb5523-3414-4551-8e59-d84a1a54a2a1
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/c1fd902a-ab83-4b11-af78-5870d8b0267f
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[!(@signingRoutesService.hasUnresolvedMacros(doc.nodeRef) AND !@signingRoutesService.isAllEmployeesInRouteHasBusinessRole(doc.nodeRef, "LECM_ES_SIGNERS") AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required"))]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Некоторые участники подписания не могут быть определены и некоторые из участников маршрута не обладают полномочиями подписания электронной подписью. Документ не может быть отправлен на подписание. Измените маршрут подписания или обратитесь к администратору]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -5321,7 +5225,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[!(!@signingRoutesService.hasUnresolvedMacros(doc.nodeRef) AND !@signingRoutesService.isAllEmployeesInRouteHasBusinessRole(doc.nodeRef, "LECM_ES_SIGNERS") AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required"))]]></value>
+                                                                                    <![CDATA[!@signingRoutesService.hasEmployeesInRoute(doc.nodeRef) OR (@signingRoutesService.hasEmployeesInRoute(doc.nodeRef) AND ((@signingRoutesService.isAllEmployeesInRouteHasBusinessRole(doc.nodeRef, "LECM_ES_SIGNERS") AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required")) OR !doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required")))]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -5353,12 +5257,12 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[@signingRoutesService.getState(doc.nodeRef) != "NEW" OR (@signingRoutesService.getState(doc.nodeRef) == "NEW" AND (@signingRoutesService.hasUnresolvedMacros(doc.nodeRef) OR @signingRoutesService.hasEmployeesInRoute(doc.nodeRef)))]]></value>
+                                                                                    <![CDATA[@signingRoutesService.getState(doc.nodeRef) != "NEW" OR @signingRoutesService.hasEmployeesInRoute(doc.nodeRef)]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[В маршруте не найдено подписантов, от которых требуется вынесение решения. Измените маршрут подписания или обратитесь к администратору]]></value>
+                                                                                    <![CDATA[В маршруте не найдено участников, от которых требуется вынесение решения. Измените маршрут или обратитесь к администратору]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -5455,70 +5359,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Заданный в документе типовой маршрут подписания не может быть запущен (не соответствует условиям доступности). Документ будет отправлен по заданному маршруту с пометкой "нетиповой"]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>3a4f2f1a-9ee3-4d78-8990-422561d311e6
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/6d93d82f-f860-42b1-a3e3-a0baf692b232
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[!(@signingRoutesService.hasUnresolvedMacros(doc.nodeRef) AND @signingRoutesService.isAllEmployeesInRouteHasBusinessRole(doc.nodeRef, "LECM_ES_SIGNERS") AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required"))]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Некоторые участники подписания не могут быть определены. Измените маршрут подписания или обратитесь к администратору]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>76b65969-fbf6-4009-8ed4-28c5e08e6ecd
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/798a5f7d-76f2-4b75-b3d8-3cf40d0ff1fa
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[!(@signingRoutesService.hasUnresolvedMacros(doc.nodeRef) AND !@signingRoutesService.isAllEmployeesInRouteHasBusinessRole(doc.nodeRef, "LECM_ES_SIGNERS") AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required"))]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Некоторые участники подписания не могут быть определены и некоторые из участников маршрута не обладают полномочиями подписания электронной подписью. Документ не может быть отправлен на подписание. Измените маршрут подписания или обратитесь к администратору]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -6116,102 +5956,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>inputFromType</name>
                                                                                 <value><![CDATA[VALUE]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>b5cac59f-1917-43be-9d15-241f2fcc17fb
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/244f238d-a346-4345-99cd-03620edeabea
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[!(@signingRoutesService.hasUnresolvedMacros(doc.nodeRef) AND @signingRoutesService.isAllEmployeesInRouteHasBusinessRole(doc.nodeRef, "LECM_ES_SIGNERS") AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required"))]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Некоторые участники подписания не могут быть определены. Измените маршрут подписания или обратитесь к администратору]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>1cd25b9c-ea99-474a-a17a-ae9f7ac33296
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/78298f77-3137-4682-a82b-43935c3e712e
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[!(@signingRoutesService.hasUnresolvedMacros(doc.nodeRef) AND !@signingRoutesService.isAllEmployeesInRouteHasBusinessRole(doc.nodeRef, "LECM_ES_SIGNERS") AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required"))]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Некоторые участники подписания не могут быть определены и некоторые из участников маршрута не обладают полномочиями подписания электронной подписью. Документ не может быть отправлен на подписание. Измените маршрут подписания или обратитесь к администратору]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>d489c8c9-a316-40bf-98cf-57e317216f05
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/83ef8ad3-217f-4fc5-aafc-3b774c2a04a6
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[!(!@signingRoutesService.hasUnresolvedMacros(doc.nodeRef) AND !@signingRoutesService.isAllEmployeesInRouteHasBusinessRole(doc.nodeRef, "LECM_ES_SIGNERS") AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required"))]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Некоторые из участников маршрута не обладают полномочиями подписания электронной подписью. Документ не может быть отправлен на подписание]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -7187,7 +6931,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[В маршруте не найдено согласующих, от которых требуется вынесение решения. Измените маршрут согласования или обратитесь к администратору]]></value>
+                                                                                    <![CDATA[В маршруте не найдено участников, от которых требуется вынесение решения. Измените маршрут или обратитесь к администратору]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -7288,38 +7032,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>hideAction</name>
                                                                                 <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>3ec1f057-d189-4662-99c5-5cad4d71b274
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/76e5501e-f992-493b-ba71-50060d9e8a86
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[!@approvalRoutesService.hasEmployeesInRoute(doc.nodeRef) OR  !@approvalRoutesService.hasUnresolvedMacros(doc.nodeRef)]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Некоторые участники согласования не могут быть определены. Измените маршрут согласования или обратитесь к администратору]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -7473,7 +7185,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[!(!@signingRoutesService.hasUnresolvedMacros(doc.nodeRef) AND !@signingRoutesService.isAllEmployeesInRouteHasBusinessRole(doc.nodeRef, "LECM_ES_SIGNERS") AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required"))]]></value>
+                                                                                    <![CDATA[!@signingRoutesService.hasEmployeesInRoute(doc.nodeRef) OR (@signingRoutesService.hasEmployeesInRoute(doc.nodeRef) AND ((@signingRoutesService.isAllEmployeesInRouteHasBusinessRole(doc.nodeRef, "LECM_ES_SIGNERS") AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required")) OR !doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required")))]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -7505,12 +7217,12 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[@signingRoutesService.getState(doc.nodeRef) != "NEW" OR (@signingRoutesService.getState(doc.nodeRef) == "NEW" AND (@signingRoutesService.hasUnresolvedMacros(doc.nodeRef) OR @signingRoutesService.hasEmployeesInRoute(doc.nodeRef)))]]></value>
+                                                                                    <![CDATA[@signingRoutesService.getState(doc.nodeRef) != "NEW" OR @signingRoutesService.hasEmployeesInRoute(doc.nodeRef)]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[В маршруте не найдено подписантов, от которых требуется вынесение решения. Измените маршрут подписания или обратитесь к администратору]]></value>
+                                                                                    <![CDATA[В маршруте не найдено участников, от которых требуется вынесение решения. Измените маршрут или обратитесь к администратору]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -7620,38 +7332,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                     </node>
                                                                     <node>
                                                                         <type>conditionAccess</type>
-                                                                        <name>c9be6321-9cf0-4fa7-818a-ba845552892c
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/d227d295-0a7d-40d3-bbca-8efe1e6fd160
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[!(@signingRoutesService.hasUnresolvedMacros(doc.nodeRef) AND @signingRoutesService.isAllEmployeesInRouteHasBusinessRole(doc.nodeRef, "LECM_ES_SIGNERS") AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required"))]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Некоторые участники подписания не могут быть определены. Измените маршрут подписания или обратитесь к администратору]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
                                                                         <name>9cccdf56-5509-4dbe-b1f5-13a6fd17d0f5
                                                                         </name>
                                                                         <nodeRef>
@@ -7675,38 +7355,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>hideAction</name>
                                                                                 <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>44efa465-6d0f-4675-9a93-29ff8d02243a
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/2bc8e9d5-8f78-47b2-8530-224cac17b4a3
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[!(@signingRoutesService.hasUnresolvedMacros(doc.nodeRef) AND !@signingRoutesService.isAllEmployeesInRouteHasBusinessRole(doc.nodeRef, "LECM_ES_SIGNERS") AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required"))]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Некоторые участники подписания не могут быть определены и некоторые из участников маршрута не обладают полномочиями подписания электронной подписью. Документ не может быть отправлен на подписание. Измените маршрут подписания или обратитесь к администратору]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -8300,102 +7948,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>hideAction</name>
                                                                                 <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>aaddb44f-6ede-451f-8b23-4f5aa6b42d7b
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/2306b112-f9c7-42a3-b0d1-f9a8f62124c4
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[!(@signingRoutesService.hasUnresolvedMacros(doc.nodeRef) AND @signingRoutesService.isAllEmployeesInRouteHasBusinessRole(doc.nodeRef, "LECM_ES_SIGNERS") AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required"))]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Некоторые участники подписания не могут быть определены. Измените маршрут подписания или обратитесь к администратору]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>1e4b6da0-3430-483a-8ff2-374fce86024d
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/18132797-7a28-46df-bff0-14ef95d0c2af
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[!(@signingRoutesService.hasUnresolvedMacros(doc.nodeRef) AND !@signingRoutesService.isAllEmployeesInRouteHasBusinessRole(doc.nodeRef, "LECM_ES_SIGNERS") AND doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required"))]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Некоторые участники подписания не могут быть определены и некоторые из участников маршрута не обладают полномочиями подписания электронной подписью. Документ не может быть отправлен на подписание. Измените маршрут подписания или обратитесь к администратору]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>657c95f4-a845-4e70-a07c-77540754357c
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/8058b429-8d67-4e39-82d5-3276f5615b2a
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required"))]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Некоторые из участников маршрута не обладают полномочиями подписания электронной подписью. Документ не может быть отправлен на подписание]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>

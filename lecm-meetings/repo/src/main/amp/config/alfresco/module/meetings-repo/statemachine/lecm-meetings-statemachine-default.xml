@@ -1330,7 +1330,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[В маршруте не найдено согласующих, от которых требуется вынесение решения. Измените маршрут согласования или обратитесь к администратору]]></value>
+                                                                                    <![CDATA[В маршруте не найдено участников, от которых требуется вынесение решения. Измените маршрут или обратитесь к администратору]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -1363,38 +1363,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Нет пунктов повестки]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>acd0251b-5135-4524-b6ce-eacbb875f0cd
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/aa1f8da5-8c8e-41ba-84a4-579b533f4ed0
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[!@approvalRoutesService.hasEmployeesInRoute(doc.nodeRef) OR  !@approvalRoutesService.hasUnresolvedMacros(doc.nodeRef)]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Некоторые участники согласования не могут быть определены. Измените маршрут согласования или обратитесь к администратору]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
