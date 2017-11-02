@@ -2992,7 +2992,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[!@signingRoutesService.hasEmployeesInRoute(doc.nodeRef) OR (@signingRoutesService.hasEmployeesInRoute(doc.nodeRef) AND ((@signingRoutesService.isAllEmployeesInRouteHasBusinessRole(doc.nodeRef, "LECM_ES_SIGNERS") AND doc.assocAttr("lecm-additional-document:additionalDocumentType", "lecm-doc-dic-dt:es-sign-required")) OR !doc.assocAttr("lecm-additional-document:additionalDocumentType", "lecm-doc-dic-dt:es-sign-required")))]]></value>
+                                                                                    <![CDATA[!@signingRoutesService.hasEmployeesInRoute(doc.nodeRef) OR (@signingRoutesService.hasEmployeesInRoute(doc.nodeRef) AND ((@signingRoutesService.isAllEmployeesInRouteHasBusinessRole(doc.nodeRef, "LECM_ES_SIGNERS") AND doc.assocAttr("lecm-additional-document:additionalDocumentType", "lecm-doc-dic-dt:es-sign-required") == true) OR doc.assocAttr("lecm-additional-document:additionalDocumentType", "lecm-doc-dic-dt:es-sign-required") != true))]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -9283,7 +9283,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[!@signingRoutesService.hasEmployeesInRoute(doc.nodeRef) OR (@signingRoutesService.hasEmployeesInRoute(doc.nodeRef) AND ((@signingRoutesService.isAllEmployeesInRouteHasBusinessRole(doc.nodeRef, "LECM_ES_SIGNERS") AND doc.assocAttr("lecm-additional-document:additionalDocumentType", "lecm-doc-dic-dt:es-sign-required")) OR !doc.assocAttr("lecm-additional-document:additionalDocumentType", "lecm-doc-dic-dt:es-sign-required")))]]></value>
+                                                                                    <![CDATA[!@signingRoutesService.hasEmployeesInRoute(doc.nodeRef) OR (@signingRoutesService.hasEmployeesInRoute(doc.nodeRef) AND ((@signingRoutesService.isAllEmployeesInRouteHasBusinessRole(doc.nodeRef, "LECM_ES_SIGNERS") AND doc.assocAttr("lecm-additional-document:additionalDocumentType", "lecm-doc-dic-dt:es-sign-required") == true) OR doc.assocAttr("lecm-additional-document:additionalDocumentType", "lecm-doc-dic-dt:es-sign-required") != true))]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -10842,7 +10842,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[!@signingRoutesService.hasEmployeesInRoute(doc.nodeRef) OR (@signingRoutesService.hasEmployeesInRoute(doc.nodeRef) AND ((@signingRoutesService.isAllEmployeesInRouteHasBusinessRole(doc.nodeRef, "LECM_ES_SIGNERS") AND doc.assocAttr("lecm-additional-document:additionalDocumentType", "lecm-doc-dic-dt:es-sign-required")) OR !doc.assocAttr("lecm-additional-document:additionalDocumentType", "lecm-doc-dic-dt:es-sign-required")))]]></value>
+                                                                                    <![CDATA[!@signingRoutesService.hasEmployeesInRoute(doc.nodeRef) OR (@signingRoutesService.hasEmployeesInRoute(doc.nodeRef) AND ((@signingRoutesService.isAllEmployeesInRouteHasBusinessRole(doc.nodeRef, "LECM_ES_SIGNERS") AND doc.assocAttr("lecm-additional-document:additionalDocumentType", "lecm-doc-dic-dt:es-sign-required") == true) OR doc.assocAttr("lecm-additional-document:additionalDocumentType", "lecm-doc-dic-dt:es-sign-required") != true))]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
