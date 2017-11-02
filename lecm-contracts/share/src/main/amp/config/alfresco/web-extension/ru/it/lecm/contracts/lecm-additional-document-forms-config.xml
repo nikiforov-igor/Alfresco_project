@@ -68,7 +68,7 @@
                     <show id="lecm-additional-document:date"/>
                     <show id="lecm-additional-document:signedCounterparty"/>
                     <show id="lecm-additional-document:summaryContent"/>
-                    <show id="lecmApproveAspects:approvalFolderRef" force="true"/>
+                    <show id="lecm-approval-route:approvalFolder" force="true"/>
                     <show id="lecm-signing-route:signingFolder" force="true"/>
                     <show id="lecm-signing-v2-aspects:signed-on-paper" force="true"/>
                     <show id="lecm-signing-v2-aspects:signerEmployeeAssoc" force="true"/>
@@ -88,8 +88,34 @@
                     <field id="lecm-additional-document:summaryContent" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
-                    <field id="lecmApproveAspects:approvalFolderRef" set="approvalAndSigning">
-                        <control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
+                    <field id="lecm-approval-route:approvalFolder" set="approvalAndSigning" label-id="label.forms.approval">                
+                        <control template="/ru/it/lecm/routes-v2/controls/routes-datagrid-control.ftl">
+                            <control-param name="noRoutesLabel">label.approval.routes.no-route</control-param>
+                            <control-param name="routeDataScript">lecm/routes-v2/approvalRoutes/getRouteData</control-param>
+                            <control-param name="createStageItemScript">lecm/routes-v2/approvalRoutes/CreateStageItemInQueue</control-param>
+                            <control-param name="createEmptyIterationScript">lecm/routes-v2/approvalRoutes/createEmptyIteration</control-param>
+                            <control-param name="createIterationFromPrevious">lecm/routes-v2/createIterationFromPreviousApproval</control-param>
+                            <control-param name="convertRouteToIterationScript">lecm/routes-v2/approvalRoutes/convertRouteToIteration</control-param>
+                            <control-param name="removeWorkFolderScript">lecm/routes-v2/approvalRoutes/removeWorkFolder</control-param>
+                            <control-param name="createListFromRouteFormId">selectRouteForm</control-param>
+                            <control-param name="createIterationFormId">createIteration</control-param>
+                            <control-param name="createStageInlineFormId">editStageParametersInlineForm</control-param>
+                            <control-param name="expandDataSource">ru/it/lecm/routes-v2/stages/stageExpanded</control-param>
+                            <control-param name="expandedDataSource">components/form?formId=viewApprovalResult</control-param>
+                            <control-param name="newListTitleMsgId">title.new.approval.list</control-param>
+                            <control-param name="repeatRouteDialogFormId">repeatPreviousApprovalRouteDialog</control-param>
+                            <control-param name="newListConfirmationMsgId">message.new.approval.list.confirmation</control-param>
+                            <control-param name="newListFromRoutTitleMsgId">title.new.approval.list.from.route</control-param>
+                            <control-param name="clearListTitleId">title.approval.list.clear</control-param>
+                            <control-param name="clearListMsgId">message.clear.approval.list</control-param>
+                            <control-param name="viewIterationResultFormTitleId">label.view.approval.details</control-param>
+                            <control-param name="showIterationsHistoryFormId">showApprovalHistoryForm</control-param>
+                            <control-param name="viewIterationResultFormId">viewApprovalResult</control-param>
+                            <control-param name="editIterationFormId">editIterationProperties</control-param>
+                            <control-param name="fieldsForFilterRoutes">lecm-eds-document:executor-assoc,lecm-document:author-assoc</control-param>
+                            <control-param name="scripts">scripts/lecm-routes-v2/validators/route-complete-create-validator.js</control-param>
+                            <control-param name="addEmployeeToStageMsgId">label.approval.routes.stage.addEmployee</control-param>
+                        </control>                 
                     </field>
                     <field id="lecm-signing-route:signingFolder" set="approvalAndSigning" label-id="label.forms.signing">
                         <control template="/ru/it/lecm/routes-v2/controls/routes-datagrid-control.ftl">
@@ -328,6 +354,7 @@
                     <show id="lecm-document-aspects:template-name" force="true"/>
                     <show id="lecm-document-aspects:template-ref" force="true"/>
                     <show id="lecm-additional-document:document-assoc" force="true"/>
+                    <show id="lecm-approval-route:approvalFolder" force="true"/>
                     <show id="lecm-signing-route:signingFolder" force="true"/>
                     <show id="checkAllowSigningOnPaperScript" force="true"/>
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
@@ -371,6 +398,35 @@
                     </field>
                     <field id="lecm-additional-document:document-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="lecm-approval-route:approvalFolder" label-id="label.forms.approval">                
+                        <control template="/ru/it/lecm/routes-v2/controls/routes-datagrid-control.ftl">
+                            <control-param name="noRoutesLabel">label.approval.routes.no-route</control-param>
+                            <control-param name="routeDataScript">lecm/routes-v2/approvalRoutes/getRouteData</control-param>
+                            <control-param name="createStageItemScript">lecm/routes-v2/approvalRoutes/CreateStageItemInQueue</control-param>
+                            <control-param name="createEmptyIterationScript">lecm/routes-v2/approvalRoutes/createEmptyIteration</control-param>
+                            <control-param name="createIterationFromPrevious">lecm/routes-v2/createIterationFromPreviousApproval</control-param>
+                            <control-param name="convertRouteToIterationScript">lecm/routes-v2/approvalRoutes/convertRouteToIteration</control-param>
+                            <control-param name="removeWorkFolderScript">lecm/routes-v2/approvalRoutes/removeWorkFolder</control-param>
+                            <control-param name="createListFromRouteFormId">selectRouteForm</control-param>
+                            <control-param name="createIterationFormId">createIteration</control-param>
+                            <control-param name="createStageInlineFormId">editStageParametersInlineForm</control-param>
+                            <control-param name="expandDataSource">ru/it/lecm/routes-v2/stages/stageExpanded</control-param>
+                            <control-param name="expandedDataSource">components/form?formId=viewApprovalResult</control-param>
+                            <control-param name="newListTitleMsgId">title.new.approval.list</control-param>
+                            <control-param name="repeatRouteDialogFormId">repeatPreviousApprovalRouteDialog</control-param>
+                            <control-param name="newListConfirmationMsgId">message.new.approval.list.confirmation</control-param>
+                            <control-param name="newListFromRoutTitleMsgId">title.new.approval.list.from.route</control-param>
+                            <control-param name="clearListTitleId">title.approval.list.clear</control-param>
+                            <control-param name="clearListMsgId">message.clear.approval.list</control-param>
+                            <control-param name="viewIterationResultFormTitleId">label.view.approval.details</control-param>
+                            <control-param name="showIterationsHistoryFormId">showApprovalHistoryForm</control-param>
+                            <control-param name="viewIterationResultFormId">viewApprovalResult</control-param>
+                            <control-param name="editIterationFormId">editIterationProperties</control-param>
+                            <control-param name="fieldsForFilterRoutes">lecm-eds-document:executor-assoc,lecm-document:author-assoc</control-param>
+                            <control-param name="scripts">scripts/lecm-routes-v2/validators/route-complete-create-validator.js</control-param>
+                            <control-param name="addEmployeeToStageMsgId">label.approval.routes.stage.addEmployee</control-param>
+                        </control>                 
                     </field>
                     <field id="lecm-signing-route:signingFolder" label-id="label.forms.signing">
                         <control template="/ru/it/lecm/routes-v2/controls/routes-datagrid-control.ftl">
@@ -461,13 +517,13 @@
                     <show id="lecm-document:regnum"/>
                     <show id="lecm-additional-document:signedCounterparty"/>
                     <show id="lecm-additional-document:summaryContent"/>
-                    <show id="lecmApproveAspects:approvalFolderRef"/>
+                    <show id="lecm-approval-route:approvalFolder"/>
                     <show id="lecm-signing-v2-aspects:signed-on-paper"/>
                     <show id="lecm-signing-v2-aspects:signerEmployeeAssoc" force="true"/>
                     <show id="lecm-signing-route:signingFolder" force="true"/>
                 </field-visibility>
                 <appearance>
-                    <field id="lecmApproveAspects:approvalFolderRef" label-id="label.approval"/>
+                    <field id="lecm-approval-route:approvalFolder" label-id="Согласование (версия 2)"/>
                     <field id="lecm-signing-route:signingFolder" label="Подписание (версия 2)"/>
                 </appearance>
             </form>

@@ -375,6 +375,20 @@
                                     </node>
                                     <node>
                                         <type>documentField</type>
+                                        <name>lecm-approval-route_approvalFolder</name>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
                                         <name>lecm-contract_currency-assoc</name>
                                         <properties>
                                             <property>
@@ -726,20 +740,6 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-signing-v2-aspects_signingDate</name>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecmApproveAspects_approvalFolderRef</name>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1347,6 +1347,20 @@
                                     </node>
                                     <node>
                                         <type>documentField</type>
+                                        <name>lecm-approval-route_approvalFolder</name>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
                                         <name>lecm-contract_currency-assoc</name>
                                         <properties>
                                             <property>
@@ -1698,20 +1712,6 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-signing-v2-aspects_signingDate</name>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecmApproveAspects_approvalFolderRef</name>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1973,6 +1973,20 @@
                                     </node>
                                     <node>
                                         <type>documentField</type>
+                                        <name>lecm-approval-route_approvalFolder</name>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
                                         <name>lecm-contract_currency-assoc</name>
                                         <properties>
                                             <property>
@@ -2335,20 +2349,6 @@
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecmApproveAspects_approvalFolderRef</name>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
                                 </nodes>
                             </subFolder>
                         </subFolders>
@@ -2486,7 +2486,7 @@
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[@routesService.getApprovalState(doc.nodeRef) == "ACTIVE"]]></value>
+                                                                    <![CDATA[@approvalRoutesService.getState(doc.nodeRef) == "ACTIVE"]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -3055,7 +3055,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
         workflowVariables = {
             workflowRole: "LECM_APPROVERS",
             workflowDynRole: "LECM_APPROVER_DYN",
-            workflowDefinition: "lecmApprovementWorkflow",
+            workflowDefinition: "lecmApprovementWorkflow-v2",
             documentRef: document.nodeRef
         };
     variables = jsonUtils.toJSONObject(workflowVariables);
@@ -3064,6 +3064,11 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                             <property>
                                                                 <name>stopSubWorkflows</name>
                                                                 <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>redirectAfterBlock</name>
+                                                                <value>
+                                                                    <![CDATA[document?nodeRef={nodeRef}#approvalAndSigning]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
@@ -3086,7 +3091,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                 <nodes>
                                                                     <node>
                                                                         <type>conditionAccess</type>
-                                                                        <name>0ff68b6b-8c1c-4e1a-bd62-5ba2c8c8defd
+                                                                        <name>06f8efb8-5f7b-4943-b3fe-14240023835e
                                                                         </name>
                                                                         <properties>
                                                                             <property>
@@ -3096,12 +3101,70 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[@routesService.hasEmployeesInRoute(doc.nodeRef) and @routesService.getApprovalState(doc.nodeRef) == "NEW"]]></value>
+                                                                                    <![CDATA[@approvalRoutesService.getState(doc.nodeRef) == "NEW"]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Требуется заполненный список согласования]]></value>
+                                                                                    <![CDATA[Маршрут согласования не создан, документ не может быть отправлен на согласование. Создайте маршрут]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>4ce389b9-8668-4b69-b1e6-1718cede3b0f
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[@approvalRoutesService.getState(doc.nodeRef) != "NEW" OR @approvalRoutesService.hasEmployeesInRoute(doc.nodeRef)]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[В маршруте не найдено участников, от которых требуется вынесение решения. Измените маршрут или обратитесь к администратору]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>9175345a-a9a8-4ca0-bfbb-271f1e3cdd03
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[@approvalRoutesService.getState(doc.nodeRef) == "NEW" OR (@approvalRoutesService.getState(doc.nodeRef) == "UNDEF" AND @approvalRoutesService.getHistoryIterationsCount(doc.nodeRef) == 0)]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие для фильтрации доступных действий "Направить на согласование"]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -3115,22 +3178,22 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                     </node>
                                                                     <node>
                                                                         <type>conditionAccess</type>
-                                                                        <name>f32b1beb-2988-4239-8e65-10c3ef01ba57
+                                                                        <name>dacef5d0-a27b-4e9e-bfbe-2e68b325d171
                                                                         </name>
                                                                         <properties>
                                                                             <property>
                                                                                 <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.hasCategoryAttachment("Документ")]]></value>
+                                                                                    <![CDATA[@approvalRoutesService.getRouteCreationType(doc.nodeRef) == "NOT_TYPICAL" OR @approvalRoutesService.isRouteAllowedForEmployeeFromAssoc(doc.nodeRef)]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Необходимо добавить вложение в категорию "Документ"]]></value>
+                                                                                    <![CDATA[Заданный в документе типовой маршрут согласования не может быть запущен (не соответствует условиям доступности). <br/>Документ будет отправлен по заданному маршруту с пометкой "нетиповой".]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -3354,7 +3417,11 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                             <property>
                                                                 <name>workflowId</name>
                                                                 <value>
-                                                                    <![CDATA[activiti$lecmApprovementWorkflow]]></value>
+                                                                    <![CDATA[activiti$lecmApprovementWorkflow-v2]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>redirectAfterBlock</name>
+                                                                <value><![CDATA[]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -3368,7 +3435,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                 <nodes>
                                                                     <node>
                                                                         <type>conditionAccess</type>
-                                                                        <name>0396b477-3988-4036-b16a-01a4496b8076
+                                                                        <name>240f9f19-238f-4227-8380-89db09d2e65f
                                                                         </name>
                                                                         <properties>
                                                                             <property>
@@ -3378,16 +3445,45 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.hasCategoryAttachment("Документ")]]></value>
+                                                                                    <![CDATA[@approvalRoutesService.getState(doc.nodeRef) != "NEW" AND (@approvalRoutesService.getState(doc.nodeRef) != "UNDEF" OR @approvalRoutesService.getHistoryIterationsCount(doc.nodeRef) > 0)]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Необходимо добавить вложение в категорию "Документ"]]></value>
+                                                                                    <![CDATA[Маршрут согласования не создан, документ не может быть отправлен на согласование. Создайте маршрут]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>7e9b40cb-e390-460d-8a98-2228a10361f8
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[dialogMessageId]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[title.select.route]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -3410,7 +3506,8 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             </property>
                                                                             <property>
                                                                                 <name>inputFromValue</name>
-                                                                                <value><![CDATA[selectRoute]]></value>
+                                                                                <value>
+                                                                                    <![CDATA[repeatFromPrevious]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>inputFromType</name>
@@ -3423,27 +3520,25 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                         <subFolders/>
                                                                     </node>
                                                                     <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>d67309e8-96ec-4e1a-abe4-734335e3dbfe
+                                                                        <type>inputVariable</type>
+                                                                        <name>b66128f8-5433-4c83-b077-8b0aec6e7aa4
                                                                         </name>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[!@routesService.hasEmployeesInRoute(doc.nodeRef) or @routesService.getApprovalState(doc.nodeRef) != "NEW"]]></value>
+                                                                                <name>inputToValue</name>
+                                                                                <value><![CDATA[width]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Невозможно запустить согласование: требуется незаполненный список согласования]]></value>
+                                                                                <name>inputFromValue</name>
+                                                                                <value><![CDATA[30em]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -3663,6 +3758,20 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-additional-document_summaryContent</name>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-approval-route_approvalFolder</name>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -4027,20 +4136,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-signing-v2-aspects_signingDate</name>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[true]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecmApproveAspects_approvalFolderRef</name>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -4740,6 +4835,20 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
+                                        <name>lecm-approval-route_approvalFolder</name>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
                                         <name>lecm-contract_currency-assoc</name>
                                         <properties>
                                             <property>
@@ -5091,20 +5200,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-signing-v2-aspects_signingDate</name>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecmApproveAspects_approvalFolderRef</name>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5820,6 +5915,20 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
+                                        <name>lecm-approval-route_approvalFolder</name>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
                                         <name>lecm-contract_currency-assoc</name>
                                         <properties>
                                             <property>
@@ -6182,20 +6291,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecmApproveAspects_approvalFolderRef</name>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -6443,6 +6538,37 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                     </node>
                                                     <node>
                                                         <type>transition</type>
+                                                        <name>40cb6f16-d977-433b-a41f-565814d25022</name>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[true]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[@approvalRoutesService.getState(doc.nodeRef) == "ACTIVE" AND doc.attr("lecm-routes-v2:decision") != NULL and doc.attr("lecm-routes-v2:decision") == "REJECTED_AUTO"]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[<import resource="classpath:/alfresco/module/eds-documents-repo/workflow/scripts/eds-auto-approval.js">
+var msg = 'Документ ' + documentScript.wrapperDocumentLink(stm_document, '{lecm-document:ext-present-string}') + ' был автоматически отправлен на доработку в связи с превышением срока согласования';
+AutoApprovalScript.doAuto(stm_document, 'REJECTED_AUTO', msg, 'REJECTED_AUTO');]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>transition</type>
                                                         <name>557a3b06-8754-4ca6-a44d-0789eed2cc65</name>
                                                         <properties>
                                                             <property>
@@ -6456,7 +6582,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[@routesService.getApprovalState(doc.nodeRef) == "WITHDRAWN" OR @routesService.getApprovalState(doc.nodeRef) == "REJECTED_FORCED" OR @routesService.getApprovalState(doc.nodeRef) == "REJECTED_AUTO" OR @routesService.getApprovalState(doc.nodeRef) == "REJECTED"]]></value>
+                                                                    <![CDATA[@approvalRoutesService.getState(doc.nodeRef) == "WITHDRAWN" OR @approvalRoutesService.getState(doc.nodeRef) == "REJECTED" OR @approvalRoutesService.getState(doc.nodeRef) == "REJECTED_AUTO"]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -6507,6 +6633,37 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                     </node>
                                                     <node>
                                                         <type>transition</type>
+                                                        <name>b245b605-7288-49a9-8729-89d1fd26c58b</name>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[true]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[@approvalRoutesService.getState(doc.nodeRef) == "ACTIVE" AND doc.attr("lecm-routes-v2:decision") != NULL and doc.attr("lecm-routes-v2:decision") == "APPROVED_AUTO"]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[<import resource="classpath:/alfresco/module/eds-documents-repo/workflow/scripts/eds-auto-approval.js">
+var msg = 'Документ ' + documentScript.wrapperDocumentLink(stm_document, '{lecm-document:ext-present-string}') + ' автоматически согласован в связи с превышением срока согласования';
+AutoApprovalScript.doAuto(stm_document, 'APPROVED_AUTO', msg, 'APPROVAL_AUTO');]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>transition</type>
                                                         <name>c746971d-a721-477e-9cb2-b833b938f6e0</name>
                                                         <properties>
                                                             <property>
@@ -6520,7 +6677,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[@routesService.getApprovalState(doc.nodeRef).contains("APPROVED") AND (!@routesGlobalSettingService.isAutoRoutingAfterApproval() OR doc.attr("lecm-signing-v2-aspects:signed-on-paper") OR (@signingRoutesService.getWorkingFolder(doc.nodeRef) == null or (@signingRoutesService.getState(doc.nodeRef) != "NEW" AND @signingRoutesService.getLastIteration(doc.nodeRef) == null )) OR  (@signingRoutesService.getState(doc.nodeRef) == "NEW" AND !(@signingRoutesService.isRouteAllowedForEmployeeFromAssoc(doc.nodeRef) AND (@signingRoutesService.hasEmployeesInRoute(doc.nodeRef) AND !@signingRoutesService.hasUnresolvedMacros(doc.nodeRef)) AND (doc.assocAttr("lecm-additional-document:additionalDocumentType", "lecm-doc-dic-dt:es-sign-required")!=true or (doc.assocAttr("lecm-additional-document:additionalDocumentType", "lecm-doc-dic-dt:es-sign-required")==true and @signingRoutesService.isAllEmployeesInRouteHasBusinessRole(doc.nodeRef, "LECM_ES_SIGNERS"))))) or  ((@signingRoutesService.getHistoryIterationsCount(doc.nodeRef) > 0 or "COMPLETE" == doc.attr("lecm-signing-v2-aspects:signingState") or @signingRoutesService.getLastIteration(doc.nodeRef)!=null) and   !(@signingRoutesService.isRouteAllowedForEmployeeFromAssoc(doc.nodeRef, @signingRoutesService.getLastIteration(doc.nodeRef)) AND (doc.assocAttr("lecm-additional-document:additionalDocumentType", "lecm-doc-dic-dt:es-sign-required")!=true or (doc.assocAttr("lecm-additional-document:additionalDocumentType", "lecm-doc-dic-dt:es-sign-required")==true and @signingRoutesService.isAllEmployeesInRouteHasBusinessRole("LECM_ES_SIGNERS", @signingRoutesService.getLastIteration(doc.nodeRef)))))))]]></value>
+                                                                    <![CDATA[@approvalRoutesService.getState(doc.nodeRef).contains("APPROVED") AND (!@routesGlobalSettingService.isAutoRoutingAfterApproval() OR doc.attr("lecm-signing-v2-aspects:signed-on-paper") OR (@signingRoutesService.getWorkingFolder(doc.nodeRef) == null or (@signingRoutesService.getState(doc.nodeRef) != "NEW" AND @signingRoutesService.getLastIteration(doc.nodeRef) == null )) OR  (@signingRoutesService.getState(doc.nodeRef) == "NEW" AND !(@signingRoutesService.isRouteAllowedForEmployeeFromAssoc(doc.nodeRef) AND (@signingRoutesService.hasEmployeesInRoute(doc.nodeRef) AND !@signingRoutesService.hasUnresolvedMacros(doc.nodeRef)) AND (doc.assocAttr("lecm-additional-document:additionalDocumentType", "lecm-doc-dic-dt:es-sign-required")!=true or (doc.assocAttr("lecm-additional-document:additionalDocumentType", "lecm-doc-dic-dt:es-sign-required")==true and @signingRoutesService.isAllEmployeesInRouteHasBusinessRole(doc.nodeRef, "LECM_ES_SIGNERS"))))) or ((@signingRoutesService.getHistoryIterationsCount(doc.nodeRef) > 0 or "COMPLETE" == doc.attr("lecm-signing-v2-aspects:signingState") or @signingRoutesService.getLastIteration(doc.nodeRef)!=null) and   !(@signingRoutesService.isRouteAllowedForEmployeeFromAssoc(doc.nodeRef, @signingRoutesService.getLastIteration(doc.nodeRef)) AND (doc.assocAttr("lecm-additional-document:additionalDocumentType", "lecm-doc-dic-dt:es-sign-required")!=true or (doc.assocAttr("lecm-additional-document:additionalDocumentType", "lecm-doc-dic-dt:es-sign-required")==true and @signingRoutesService.isAllEmployeesInRouteHasBusinessRole("LECM_ES_SIGNERS", @signingRoutesService.getLastIteration(doc.nodeRef)))))))]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -6932,6 +7089,20 @@ for (i in approvals) {
                                     </node>
                                     <node>
                                         <type>documentField</type>
+                                        <name>lecm-approval-route_approvalFolder</name>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
                                         <name>lecm-contract_currency-assoc</name>
                                         <properties>
                                             <property>
@@ -7294,20 +7465,6 @@ for (i in approvals) {
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecmApproveAspects_approvalFolderRef</name>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[true]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -7558,6 +7715,20 @@ for (i in approvals) {
                                     </node>
                                     <node>
                                         <type>documentField</type>
+                                        <name>lecm-approval-route_approvalFolder</name>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
                                         <name>lecm-document_regnum</name>
                                         <properties>
                                             <property>
@@ -7615,20 +7786,6 @@ for (i in approvals) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-signing-v2-aspects_signingDate</name>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecmApproveAspects_approvalFolderRef</name>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -8240,6 +8397,20 @@ for (i in approvals) {
                                     </node>
                                     <node>
                                         <type>documentField</type>
+                                        <name>lecm-approval-route_approvalFolder</name>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
                                         <name>lecm-contract_currency-assoc</name>
                                         <properties>
                                             <property>
@@ -8602,20 +8773,6 @@ for (i in approvals) {
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecmApproveAspects_approvalFolderRef</name>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -8791,125 +8948,7 @@ for (i in approvals) {
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders>
-                                            <subFolder>
-                                                <name>transitions</name>
-                                                <nodes>
-                                                    <node>
-                                                        <type>UserWorkflowEntity</type>
-                                                        <name>ef5feb87-8f58-46d8-9391-f3b5bda38ff9</name>
-                                                        <properties>
-                                                            <property>
-                                                                <name>workflowLabel</name>
-                                                                <value><![CDATA[Направить на согласование]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>workflowId</name>
-                                                                <value>
-                                                                    <![CDATA[activiti$lecmApprovementWorkflow]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects>
-                                                            <workflowAspect/>
-                                                        </aspects>
-                                                        <associations/>
-                                                        <roleAssociations/>
-                                                        <subFolders>
-                                                            <subFolder>
-                                                                <name>variables</name>
-                                                                <nodes>
-                                                                    <node>
-                                                                        <type>inputVariable</type>
-                                                                        <name>11092395-fb85-444a-9224-d0408983164e
-                                                                        </name>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>inputToType</name>
-                                                                                <value><![CDATA[VARIABLE]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputToValue</name>
-                                                                                <value><![CDATA[formId]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputFromValue</name>
-                                                                                <value><![CDATA[selectRoute]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputFromType</name>
-                                                                                <value><![CDATA[VALUE]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>44c96697-a34b-4e97-b3fe-603ec630450a
-                                                                        </name>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[doc.hasCategoryAttachment("Документ")]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Необходимо добавить вложение в категорию "Документ"]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>c6242395-99be-4bae-924d-a81e9fa13b77
-                                                                        </name>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[!@routesService.hasEmployeesInRoute(doc.nodeRef) or @routesService.getApprovalState(doc.nodeRef) != "NEW"]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Невозможно запустить согласование: требуется незаполненный список согласования]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                </nodes>
-                                                            </subFolder>
-                                                        </subFolders>
-                                                    </node>
-                                                </nodes>
-                                            </subFolder>
-                                        </subFolders>
+                                        <subFolders/>
                                     </node>
                                     <node>
                                         <type>TimerAction</type>
@@ -9000,7 +9039,7 @@ for (i in approvals) {
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[@routesService.getApprovalState(doc.nodeRef) == "ACTIVE"]]></value>
+                                                                    <![CDATA[@approvalRoutesService.getState(doc.nodeRef) == "ACTIVE"]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -9415,7 +9454,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
         workflowVariables = {
             workflowRole: "LECM_APPROVERS",
             workflowDynRole: "LECM_APPROVER_DYN",
-            workflowDefinition: "lecmApprovementWorkflow",
+            workflowDefinition: "lecmApprovementWorkflow-v2",
             documentRef: document.nodeRef
         };
     variables = jsonUtils.toJSONObject(workflowVariables);
@@ -9424,6 +9463,11 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                             <property>
                                                                 <name>stopSubWorkflows</name>
                                                                 <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>redirectAfterBlock</name>
+                                                                <value>
+                                                                    <![CDATA[document?nodeRef={nodeRef}#approvalAndSigning]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
@@ -9446,7 +9490,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                 <nodes>
                                                                     <node>
                                                                         <type>conditionAccess</type>
-                                                                        <name>49809d83-c207-416c-991c-709ca8083d88
+                                                                        <name>002b2f60-1269-4362-b64a-1ba9d40e2d98
                                                                         </name>
                                                                         <properties>
                                                                             <property>
@@ -9456,16 +9500,16 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[@routesService.hasEmployeesInRoute(doc.nodeRef) and @routesService.getApprovalState(doc.nodeRef) == "NEW"]]></value>
+                                                                                    <![CDATA[@approvalRoutesService.getState(doc.nodeRef) == "NEW"]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Требуется заполненный список согласования]]></value>
+                                                                                    <![CDATA[Маршрут согласования не создан, документ не может быть отправлен на согласование. Создайте маршрут]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -9475,7 +9519,36 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                     </node>
                                                                     <node>
                                                                         <type>conditionAccess</type>
-                                                                        <name>efcb0db9-a03c-4b30-815a-bf392b852be5
+                                                                        <name>16838b0a-2614-43c9-8da8-6efc2dacc055
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[@approvalRoutesService.getRouteCreationType(doc.nodeRef) == "NOT_TYPICAL" OR @approvalRoutesService.isRouteAllowedForEmployeeFromAssoc(doc.nodeRef)]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Заданный в документе типовой маршрут согласования не может быть запущен (не соответствует условиям доступности). <br/>Документ будет отправлен по заданному маршруту с пометкой "нетиповой".]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>f9140371-64e0-4bb7-b925-2b2cede91d86
                                                                         </name>
                                                                         <properties>
                                                                             <property>
@@ -9485,12 +9558,12 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.hasCategoryAttachment("Документ")]]></value>
+                                                                                    <![CDATA[@approvalRoutesService.getState(doc.nodeRef) != "NEW" OR @approvalRoutesService.hasEmployeesInRoute(doc.nodeRef)]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Необходимо добавить вложение в категорию "Документ"]]></value>
+                                                                                    <![CDATA[В маршруте не найдено участников, от которых требуется вынесение решения. Измените маршрут или обратитесь к администратору]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -9877,6 +9950,20 @@ if (contractAssocs != null && contractAssocs.length == 1) {
                                     </node>
                                     <node>
                                         <type>documentField</type>
+                                        <name>lecm-approval-route_approvalFolder</name>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
                                         <name>lecm-contract_currency-assoc</name>
                                         <properties>
                                             <property>
@@ -10228,20 +10315,6 @@ if (contractAssocs != null && contractAssocs.length == 1) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-signing-v2-aspects_signingDate</name>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[true]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecmApproveAspects_approvalFolderRef</name>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -11378,6 +11451,20 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
+                                        <name>lecm-approval-route_approvalFolder</name>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
                                         <name>lecm-contract_currency-assoc</name>
                                         <properties>
                                             <property>
@@ -11733,20 +11820,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                             <property>
                                                 <name>editableField</name>
                                                 <value><![CDATA[true]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecmApproveAspects_approvalFolderRef</name>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -12004,6 +12077,20 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
+                                        <name>lecm-approval-route_approvalFolder</name>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
                                         <name>lecm-contract_currency-assoc</name>
                                         <properties>
                                             <property>
@@ -12355,20 +12442,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-signing-v2-aspects_signingDate</name>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecmApproveAspects_approvalFolderRef</name>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -12861,6 +12934,20 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
+                                        <name>lecm-approval-route_approvalFolder</name>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
                                         <name>lecm-contract_currency-assoc</name>
                                         <properties>
                                             <property>
@@ -13212,20 +13299,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-signing-v2-aspects_signingDate</name>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[true]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecmApproveAspects_approvalFolderRef</name>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
