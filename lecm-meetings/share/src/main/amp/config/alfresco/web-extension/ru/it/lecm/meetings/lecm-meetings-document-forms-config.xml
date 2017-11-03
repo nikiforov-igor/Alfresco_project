@@ -571,20 +571,20 @@
                     </field>
                     <field id="lecm-events:repeatable-start-period" mandatory="true" set="createEventSet">
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Events.repeatableValidation" event="change"/>
-                            <constraint type="INVALID" validation-handler="LogicECM.module.Events.repeateDateValidation" event="change"/>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Events.repeatableValidation" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
+                            <constraint type="INVALID" validation-handler="LogicECM.module.Events.repeateDateValidation" event="change" message-id="Alfresco.forms.validation.invalid.message"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-events:repeatable-end-period" mandatory="true" set="createEventSet">
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Events.repeatableValidation" event="change"/>
-                            <constraint type="INVALID" validation-handler="LogicECM.module.Events.repeateDateValidation" event="change"/>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Events.repeatableValidation" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
+                            <constraint type="INVALID" validation-handler="LogicECM.module.Events.repeateDateValidation" event="change" message-id="Alfresco.forms.validation.invalid.message"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-events:repeatable-rule" mandatory="true" set="createEventSet">
                         <control template="/ru/it/lecm/base-share/components/controls/reiteration-control-ext.ftl" />
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Events.repeatableValidation" event="change"/>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Events.repeatableValidation" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
                         </constraint-handlers>
                     </field>
 
