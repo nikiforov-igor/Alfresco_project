@@ -860,7 +860,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                                             }
                                         }
                                     }
-                                    nodeService.createAssociation(errand, parentDoc, ErrandsService.ASSOC_BASE_DOCUMENT);
+                                    nodeService.createAssociation(errand, parentDoc, ErrandsService.ASSOC_ADDITIONAL_ERRANDS_DOCUMENT);
 
                                     return null;
                                 }
