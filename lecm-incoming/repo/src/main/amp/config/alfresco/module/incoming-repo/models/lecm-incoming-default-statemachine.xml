@@ -815,7 +815,7 @@
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Документ с такими корреспондентом, исходящим номером, исходящей датой и способом доставки в системе уже зарегистрирован]]></value>
+                                                                                    <![CDATA[Документ с такими корреспондентом, исходящим номером, исходящей датой и способом доставки в системе уже зарегистрирован: #{@documentService.wrapAsDocumentLink(@documentService.getDocumentDuplicate(doc.nodeRef, false, "lecm-incoming:outgoing-number", "lecm-incoming:outgoing-date", "lecm-incoming:sender-assoc-ref", "lecm-incoming:delivery-method-assoc-ref"), true)}]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -2066,7 +2066,7 @@
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Документ с такими корреспондентом, исходящим номером, исходящей датой и способом доставки в системе уже зарегистрирован]]></value>
+                                                                                    <![CDATA[Документ с такими корреспондентом, исходящим номером, исходящей датой и способом доставки в системе уже зарегистрирован: #{@documentService.wrapAsDocumentLink(@documentService.getDocumentDuplicate(doc.nodeRef, false, "lecm-incoming:outgoing-number", "lecm-incoming:outgoing-date", "lecm-incoming:sender-assoc-ref", "lecm-incoming:delivery-method-assoc-ref"), true)}]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -6640,7 +6640,7 @@ if (document) {
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Документ с такими корреспондентом, исходящим номером, исходящей датой и способом доставки в системе уже зарегистрирован]]></value>
+                                                                                    <![CDATA[Документ с такими корреспондентом, исходящим номером, исходящей датой и способом доставки в системе уже зарегистрирован: #{@documentService.wrapAsDocumentLink(@documentService.getDocumentDuplicate(doc.nodeRef, false, "lecm-incoming:outgoing-number", "lecm-incoming:outgoing-date", "lecm-incoming:sender-assoc-ref", "lecm-incoming:delivery-method-assoc-ref"), true)}]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
