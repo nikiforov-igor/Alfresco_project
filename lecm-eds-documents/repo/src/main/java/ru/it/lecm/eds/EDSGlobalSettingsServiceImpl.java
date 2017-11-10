@@ -106,16 +106,22 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 
 	@Override
 	public Collection<NodeRef> getPotentialWorkers(String businessRoleId, NodeRef organizationElementRef) {
+		return getPotentialWorkers(businessRoleId, organizationElementRef, false);
+	}
+
+	@Override
+	public Collection<NodeRef> getPotentialWorkers(String businessRoleId, NodeRef organizationElementRef, boolean checkEmployeeRole) {
 		if (businessRoleId == null || organizationElementRef == null) {
 			return new HashSet<NodeRef>();
 		}
 		NodeRef businessRoleRef = orgstructureService.getBusinessRoleByIdentifier(businessRoleId);
-		return getPotentialWorkers(businessRoleRef, organizationElementRef);
+		return getPotentialWorkers(businessRoleRef, organizationElementRef, checkEmployeeRole);
 	}
 
 	@Override
-	public Collection<NodeRef> getPotentialWorkers(NodeRef businessRoleRef, NodeRef organizationElementRef) {
+	public Collection<NodeRef> getPotentialWorkers(NodeRef businessRoleRef, NodeRef organizationElementRef, boolean checkEmployeeRole) {
 		Set<NodeRef> result = new HashSet<NodeRef>();
+		checkEmployeeRole = Boolean.TRUE.equals(checkEmployeeRole);
 
 		if (businessRoleRef == null || organizationElementRef == null) {
 			return result;
@@ -132,7 +138,15 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 			List<AssociationRef> employeeAssocRefs = nodeService.getTargetAssocs(potentialRoleRef, ASSOC_POTENTIAL_ROLE_EMPLOYEE);
 			for (AssociationRef employeeAssocRef : employeeAssocRefs) {
 				NodeRef employeeRef = employeeAssocRef.getTargetRef();
-				if (employeeRef != null) result.add(employeeRef);
+				if (employeeRef != null) {
+					if (checkEmployeeRole) {
+						if (orgstructureService.isEmployeeHasBusinessRole(employeeRef, (String) nodeService.getProperty(businessRoleRef, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER))) {
+							result.add(employeeRef);
+						}
+					} else {
+						result.add(employeeRef);
+					}
+				}
 			}
 		}
 

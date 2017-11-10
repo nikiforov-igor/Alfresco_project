@@ -6894,11 +6894,11 @@ var registrationRequired = document.assocs["lecm-eds-document:document-type-asso
                 if (primaryPosition) {
                     var unit = orgstructure.getUnitByStaff(primaryPosition.nodeRef.toString());
 					if (unit) {
-						registrars = edsGlobalSettings.getPotentialWorkers('DA_REGISTRARS', unit.nodeRef.toString());
+						registrars = edsGlobalSettings.getPotentialWorkers('DA_REGISTRARS', unit.nodeRef.toString(), true);
 						while (!registrars || !registrars.length) {
 							unit = orgstructure.getParentUnit(unit.nodeRef.toString(), false);
 							if (unit) {
-								registrars = edsGlobalSettings.getPotentialWorkers('DA_REGISTRARS', unit.nodeRef.toString());
+								registrars = edsGlobalSettings.getPotentialWorkers('DA_REGISTRARS', unit.nodeRef.toString(), true);
 							} else {
 								break;
 							}

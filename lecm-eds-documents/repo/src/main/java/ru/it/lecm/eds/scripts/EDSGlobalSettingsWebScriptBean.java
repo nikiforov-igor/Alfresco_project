@@ -32,22 +32,34 @@ public class EDSGlobalSettingsWebScriptBean extends BaseWebScript {
 	}
 
 	public Scriptable getPotentialWorkers(String businessRoleId, String organizationElementStrRef) {
+		return getPotentialWorkers(businessRoleId, organizationElementStrRef, false);
+	}
+
+	public Scriptable getPotentialWorkers(ScriptNode businessRoleRef, ScriptNode organizationElementRef) {
+		return getPotentialWorkers(businessRoleRef, organizationElementRef, false);
+	}
+
+	public Scriptable getPotentialWorkers(String businessRoleId, ScriptNode organizationElementRef) {
+		return getPotentialWorkers(businessRoleId, organizationElementRef, false);
+	}
+
+	public Scriptable getPotentialWorkers(String businessRoleId, String organizationElementStrRef, boolean checkEmployeeRole) {
 		if (organizationElementStrRef == null || !NodeRef.isNodeRef(organizationElementStrRef)
 				|| businessRoleId == null || businessRoleId.isEmpty()) {
 			return null;
 		}
 		NodeRef organizationElementRef = new NodeRef(organizationElementStrRef);
-		Collection<NodeRef> result = edsGlobalSettingsService.getPotentialWorkers(businessRoleId, organizationElementRef);
+		Collection<NodeRef> result = edsGlobalSettingsService.getPotentialWorkers(businessRoleId, organizationElementRef, checkEmployeeRole);
 		return createScriptable(new ArrayList<NodeRef>(result));
 	}
 
-	public Scriptable getPotentialWorkers(ScriptNode businessRoleRef, ScriptNode organizationElementRef) {
-		Collection<NodeRef> potentialWorkers = edsGlobalSettingsService.getPotentialWorkers(businessRoleRef.getNodeRef(), organizationElementRef.getNodeRef());
+	public Scriptable getPotentialWorkers(ScriptNode businessRoleRef, ScriptNode organizationElementRef, boolean checkEmployeeRole) {
+		Collection<NodeRef> potentialWorkers = edsGlobalSettingsService.getPotentialWorkers(businessRoleRef.getNodeRef(), organizationElementRef.getNodeRef(), checkEmployeeRole);
 		return createScriptable(new ArrayList<NodeRef>(potentialWorkers));
 	}
 
-	public Scriptable getPotentialWorkers(String businessRoleId, ScriptNode organizationElementRef) {
-		Collection<NodeRef> potentialWorkers = edsGlobalSettingsService.getPotentialWorkers(businessRoleId, organizationElementRef.getNodeRef());
+	public Scriptable getPotentialWorkers(String businessRoleId, ScriptNode organizationElementRef, boolean checkEmployeeRole) {
+		Collection<NodeRef> potentialWorkers = edsGlobalSettingsService.getPotentialWorkers(businessRoleId, organizationElementRef.getNodeRef(), checkEmployeeRole);
 		return createScriptable(new ArrayList<NodeRef>(potentialWorkers));
 	}
 

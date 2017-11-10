@@ -53,8 +53,9 @@ public interface EDSGlobalSettingsService {
 	NodeRef getSettingsNode();
 	NodeRef createSettingsNode() throws WriteTransactionNeededException;
 
-	Collection<NodeRef> getPotentialWorkers(NodeRef businessRoleRef, NodeRef organizationElementRef);
 	Collection<NodeRef> getPotentialWorkers(String businessRoleId, NodeRef organizationElementRef);
+	Collection<NodeRef> getPotentialWorkers(NodeRef businessRoleRef, NodeRef organizationElementRef, boolean checkEmployeeRole);
+	Collection<NodeRef> getPotentialWorkers(String businessRoleId, NodeRef organizationElementRef, boolean checkEmployeeRole);
 
 	void savePotentialWorkers(String businessRoleId, NodeRef orgElementRef, List<NodeRef> employeesRefs);
 	void savePotentialWorkers(NodeRef businessRoleRef, NodeRef orgElementRef, List<NodeRef> employeesRefs);
