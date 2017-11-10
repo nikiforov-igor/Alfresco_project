@@ -101,6 +101,7 @@
                             <control-param name="uploadDirectoryPath">{usertemp}</control-param>
                             <control-param name="directoryName">Вложения</control-param>
                             <control-param name="suppressRefreshEvent">true</control-param>
+                            <control-param name="categoriesName">["Внутренний", "Прочее"]</control-param>
                         </control>
                     </field>
                     <field id="lecm-eds-document:note">
