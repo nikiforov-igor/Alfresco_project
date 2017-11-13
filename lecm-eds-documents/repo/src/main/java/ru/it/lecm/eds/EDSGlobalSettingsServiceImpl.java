@@ -121,7 +121,6 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 	@Override
 	public Collection<NodeRef> getPotentialWorkers(NodeRef businessRoleRef, NodeRef organizationElementRef, boolean checkEmployeeRole) {
 		Set<NodeRef> result = new HashSet<NodeRef>();
-		checkEmployeeRole = Boolean.TRUE.equals(checkEmployeeRole);
 
 		if (businessRoleRef == null || organizationElementRef == null) {
 			return result;
