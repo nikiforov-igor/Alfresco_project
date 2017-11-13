@@ -114,14 +114,17 @@ var LECMIncomingActions = {
                                 lecmPermission.popAuthentication();
                             }
                         } else {
-                            var registrars = orgstructure.getEmployeesByBusinessRoleId("DA_REGISTRARS", true);
-                            notifications.sendNotificationFromCurrentUser({
-                                recipients: registrars,
-                                templateCode: 'INCOMING_MAKE_DECISION',
-                                templateConfig: {
-                                    mainObject: document
-                                }
-                            });
+                            if (!(allReviewReviewed && allExecutedErrands && allExecutedResolutions)
+                                && (hasErrands || hasResolutions || hasReview)) {
+                                var registrars = orgstructure.getEmployeesByBusinessRoleId("DA_REGISTRARS", true);
+                                notifications.sendNotificationFromCurrentUser({
+                                    recipients: registrars,
+                                    templateCode: 'INCOMING_MAKE_DECISION',
+                                    templateConfig: {
+                                        mainObject: document
+                                    }
+                                });
+                            }
                         }
                     }
                 }
