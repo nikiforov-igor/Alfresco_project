@@ -432,7 +432,6 @@
                             <control-param name="itemType">lecm-orgstr:employee</control-param>
                             <control-param name="endpointMany">true</control-param>
                             <control-param name="useStrictFilterByOrg">true</control-param>
-                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_APPROVERS</control-param>
                             <control-param name="plane">true</control-param>
                         </control>
                     </field>
@@ -552,7 +551,6 @@
                         <control>
                             <control-param name="useStrictFilterByOrg">true</control-param>
                             <control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
-                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_APPROVERS</control-param>
                         </control>
                     </field>
                     <field id="lecm-eds-document:note">
@@ -661,11 +659,7 @@
                             <control-param name="plane">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-protocol:signers-assoc">
-                        <control>
-                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_APPROVERS</control-param>
-                        </control>
-                    </field>
+                    <field id="lecm-protocol:signers-assoc"/>
                     <field id="lecm-document:present-string" label="Название"/>
                 </appearance>
             </form>
