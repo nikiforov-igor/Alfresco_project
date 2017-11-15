@@ -63,7 +63,6 @@
         var fieldHtmlId = formId + '_prop_' + args[1].fieldId.replace('\:', '_');
         var value = Dom.get(fieldHtmlId).value == "true";
         if (value) {
-            Util.enableControl(formId, "lecm-ord-table-structure:controller-assoc");
             Util.readonlyControl(formId, "lecm-ord-table-structure:controller-assoc", false);
         } else {
             var controllerField = Dom.get(formId + "_assoc_lecm-ord-table-structure_controller-assoc");
