@@ -103,6 +103,7 @@
                     <field id="lecm-ord-table-structure:report-required"  set="bottom">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
                             <control-param name="changeFireAction">ordItemReportRequiredChanged</control-param>
+                            <control-param name="fireMandatoryByChange">true</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.itemControllerValidation" event="change"/>
@@ -241,6 +242,7 @@
                     <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
                         <control-param name="changeFireAction">ordItemReportRequiredChanged</control-param>
                         <control-param name="defaultValue">true</control-param>
+                        <control-param name="fireMandatoryByChange">true</control-param>
                     </control>
                     <constraint-handlers>
                         <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.itemControllerValidation" event="change"/>
