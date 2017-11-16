@@ -148,7 +148,7 @@
                             <item name="cm:Сумма" type="lecm-rpeditor:reportDataColumn">
                                 <property name="cm:name"><![CDATA[Сумма]]></property>
                                 <property name="lecm-rpeditor:dataColumnExpression">
-                                    <![CDATA[{lecm-contract-table-structure:stage-amount} {lecm-contract-table-structure:stage-currency-assoc/lecm-currency:alphabetic-code}]]></property>
+                                    <![CDATA[{lecm-contract-table-structure:stage-amount}]]></property>
                                 <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_Sum]]></property>
                                 <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                                 <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
