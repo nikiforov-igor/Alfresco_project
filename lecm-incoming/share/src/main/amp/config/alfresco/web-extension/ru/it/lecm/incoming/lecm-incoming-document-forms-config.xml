@@ -914,6 +914,7 @@
                             <control-param name="organization_plane">false</control-param>
                             <control-param name="organization_showSearch">true</control-param>
                             <control-param name="organization_showAssocViewForm">true</control-param>
+                            <control-param name="organization_additionalFilter">ISNOTNULL:\"sys:node-dbid\"</control-param>
                             <control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
                         </control>
                     </field>
@@ -1065,6 +1066,7 @@
 
                     <field id="lecm-incoming:recipient-assoc" mandatory="true">
                         <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="endpointMany">true</control-param>
                             <control-param name="autocompleteDataSourceMethodPost">true</control-param>
                             <control-param name="dataSourceLogic">AND</control-param>
                             <control-param name="items">employee,organization</control-param>
