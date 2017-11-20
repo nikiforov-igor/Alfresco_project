@@ -115,13 +115,18 @@
                         <control>
                             <control-param name="changeFireAction">actionsVisibilityChange</control-param>
                             <control-param name="hideByDefault">true</control-param>
+                            <control-param name="fireMandatoryByChange">true</control-param>
                         </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Signing2.signersValidator" event="change"/>
+                        </constraint-handlers>
                     </field>
                     <field id="lecm-signing-v2-aspects:signerEmployeeAssoc">
                         <control>
                             <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS,LECM_ES_SIGNERS</control-param>
                             <control-param name="endpointMany">true</control-param>
                             <control-param name="hideByDefault">true</control-param>
+                            <control-param name="changeItemsFireAction">mandatoryControlValueUpdated</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Signing2.signersValidator" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
@@ -672,13 +677,18 @@
                         <control>
                             <control-param name="changeFireAction">actionsVisibilityChange</control-param>
                             <control-param name="hideByDefault">true</control-param>
+                            <control-param name="fireMandatoryByChange">true</control-param>
                         </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Signing2.signersValidator" event="change"/>
+                        </constraint-handlers>
                     </field>
                     <field id="lecm-signing-v2-aspects:signerEmployeeAssoc">
                         <control>
                             <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS,LECM_ES_SIGNERS</control-param>
                             <control-param name="endpointMany">true</control-param>
                             <control-param name="hideByDefault">true</control-param>
+                            <control-param name="changeItemsFireAction">mandatoryControlValueUpdated</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Signing2.signersValidator" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
@@ -882,13 +892,18 @@
                         <control>
                             <control-param name="changeFireAction">actionsVisibilityChange</control-param>
                             <control-param name="hideByDefault">true</control-param>
+                            <control-param name="fireMandatoryByChange">true</control-param>
                         </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Signing2.signersValidator" event="change"/>
+                        </constraint-handlers>
                     </field>
                     <field id="lecm-signing-v2-aspects:signerEmployeeAssoc" set="ord-document-form-common-set">
                         <control>
                             <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS,LECM_ES_SIGNERS</control-param>
                             <control-param name="endpointMany">true</control-param>
                             <control-param name="hideByDefault">true</control-param>
+                            <control-param name="changeItemsFireAction">mandatoryControlValueUpdated</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Signing2.signersValidator" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
