@@ -1239,6 +1239,7 @@
                             <control-param name="autocompleteDataSourceMethodPost">true</control-param>
                             <control-param name="cssClasses">with-ex-search</control-param>
                             <control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
+                            <control-param name="endpointMany">true</control-param>
                             <!-- lecm-contractor:contractor-type -->
                             <control-param name="contractor_label">Внешний контрагент</control-param>
                             <control-param name="contractor_endpointType">lecm-contractor:contractor-type</control-param>
