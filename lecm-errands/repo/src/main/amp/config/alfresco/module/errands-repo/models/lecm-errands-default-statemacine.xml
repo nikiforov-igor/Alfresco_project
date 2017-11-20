@@ -7418,33 +7418,6 @@ ErrandsCompletionSignalScript.processCompletionSignal();]]></value>
                                                 <nodes>
                                                     <node>
                                                         <type>ScriptActionEntity</type>
-                                                        <name>022a997d-e7f7-420a-80e5-fecc65dc18e0</name>
-                                                        <properties>
-                                                            <property>
-                                                                <name>scriptLabel</name>
-                                                                <value>
-                                                                    <![CDATA[Сохранение фактического времени перехода в статус и сигнал в родительский документ]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>actionScript</name>
-                                                                <value><![CDATA[var document = bpm_package.children[0];
-if (document) {
-    document.properties["lecm-errands:wait-for-execution-date"] = new Date();
-    document.save();
-    var additionalDoc = errands.getAdditionalDocument(document.nodeRef.toString());
-    if (additionalDoc) {
-       edsDocument.sendChildChangeSignal(additionalDoc);
-    }
-}]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects/>
-                                                        <associations/>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
-                                                    <node>
-                                                        <type>ScriptActionEntity</type>
                                                         <name>2830c6e3-4867-4df1-91d8-bbf6bd27ee50</name>
                                                         <properties>
                                                             <property>
@@ -7568,21 +7541,23 @@ if (document) {
                                                     </node>
                                                     <node>
                                                         <type>ScriptActionEntity</type>
-                                                        <name>380ddd2c-e8e2-47dd-a135-16af79628b9c</name>
+                                                        <name>022a997d-e7f7-420a-80e5-fecc65dc18e0</name>
                                                         <properties>
                                                             <property>
                                                                 <name>scriptLabel</name>
-                                                                <value><![CDATA[Установка флага "на контроле"]]></value>
+                                                                <value>
+                                                                    <![CDATA[Сохранение фактического времени перехода в статус и сигнал в родительский документ]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>actionScript</name>
-                                                                <value><![CDATA[var doc = bpm_package.children[0];
-if (doc) {
-  var controllerAssoc = doc.assocs["lecm-errands:controller-assoc"];
-  if (controllerAssoc && controllerAssoc.length){
-    doc.properties["lecm-document-aspects:is-on-control"] = true;
-    doc.save();
-  }
+                                                                <value><![CDATA[var document = bpm_package.children[0];
+if (document) {
+    document.properties["lecm-errands:wait-for-execution-date"] = new Date();
+    document.save();
+    var additionalDoc = errands.getAdditionalDocument(document.nodeRef.toString());
+    if (additionalDoc) {
+       edsDocument.sendChildChangeSignal(additionalDoc);
+    }
 }]]></value>
                                                             </property>
                                                         </properties>
@@ -7593,18 +7568,37 @@ if (doc) {
                                                     </node>
                                                     <node>
                                                         <type>ScriptActionEntity</type>
-                                                        <name>5f879258-b176-44b6-ade7-c5c7e382ac3f</name>
+                                                        <name>f4efce13-ccab-4d0d-8a82-8562d6133b93</name>
                                                         <properties>
                                                             <property>
                                                                 <name>scriptLabel</name>
-                                                                <value><![CDATA[Сброс сигналов]]></value>
+                                                                <value>
+                                                                    <![CDATA[Уведомить о просроченном поручении]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>actionScript</name>
-                                                                <value><![CDATA[var document = stm_document;
-  errands.resetCancelSignal(document);
-  edsDocument.resetCompletionSignal(document);
-  edsDocument.resetChildChangeSignal(document);]]></value>
+                                                                <value><![CDATA[(function() {
+var errand = stm_document,
+    isExpired = !!errand.properties['lecm-errands:is-expired'],
+    initiators = errand.assocs['lecm-errands:initiator-assoc'],
+    executors =  errand.assocs['lecm-errands:executor-assoc'],
+    controllers = errand.assocs['lecm-errands:controller-assoc'],
+    recipients = initiators.concat(executors);
+
+    if (controllers && controllers.length) {
+        Array.prototype.push.apply(recipients, controllers);
+    }
+  	if (isExpired) {
+      notifications.sendNotification({
+          recipients: recipients,
+          templateCode: 'ERRANDS_EXPIRED',
+          templateConfig: {
+              mainObject: errand
+          },
+          dontCheckAccessToObject: true
+      });
+  	}
+})();]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>
@@ -7683,6 +7677,75 @@ if (document) {
                                                     </node>
                                                     <node>
                                                         <type>ScriptActionEntity</type>
+                                                        <name>ed402734-588b-4f94-b32e-419ad9956a03</name>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value>
+                                                                    <![CDATA[Установка атрибута номера поручения]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[var document = bpm_package.children[0];
+if (document) {
+  document.properties["lecm-errands:number"] = document.properties["lecm-document:regnum"];
+  document.save();
+}]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>380ddd2c-e8e2-47dd-a135-16af79628b9c</name>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Установка флага "на контроле"]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[var doc = bpm_package.children[0];
+if (doc) {
+  var controllerAssoc = doc.assocs["lecm-errands:controller-assoc"];
+  if (controllerAssoc && controllerAssoc.length){
+    doc.properties["lecm-document-aspects:is-on-control"] = true;
+    doc.save();
+  }
+}]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>5f879258-b176-44b6-ade7-c5c7e382ac3f</name>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Сброс сигналов]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[var document = stm_document;
+  errands.resetCancelSignal(document);
+  edsDocument.resetCompletionSignal(document);
+  edsDocument.resetChildChangeSignal(document);]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
                                                         <name>dd13e808-ba8b-4f08-b284-ec96a4938327</name>
                                                         <properties>
                                                             <property>
@@ -7721,69 +7784,6 @@ if (document) {
 	}
   }
 }]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects/>
-                                                        <associations/>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
-                                                    <node>
-                                                        <type>ScriptActionEntity</type>
-                                                        <name>ed402734-588b-4f94-b32e-419ad9956a03</name>
-                                                        <properties>
-                                                            <property>
-                                                                <name>scriptLabel</name>
-                                                                <value>
-                                                                    <![CDATA[Установка атрибута номера поручения]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>actionScript</name>
-                                                                <value><![CDATA[var document = bpm_package.children[0];
-if (document) {
-  document.properties["lecm-errands:number"] = document.properties["lecm-document:regnum"];
-  document.save();
-}]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects/>
-                                                        <associations/>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
-                                                    <node>
-                                                        <type>ScriptActionEntity</type>
-                                                        <name>f4efce13-ccab-4d0d-8a82-8562d6133b93</name>
-                                                        <properties>
-                                                            <property>
-                                                                <name>scriptLabel</name>
-                                                                <value>
-                                                                    <![CDATA[Уведомить о просроченном поручении]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>actionScript</name>
-                                                                <value><![CDATA[(function() {
-var errand = stm_document,
-    isExpired = !!errand.properties['lecm-errands:is-expired'],
-    initiators = errand.assocs['lecm-errands:initiator-assoc'],
-    executors =  errand.assocs['lecm-errands:executor-assoc'],
-    controllers = errand.assocs['lecm-errands:controller-assoc'],
-    recipients = initiators.concat(executors);
-
-    if (controllers && controllers.length) {
-        Array.prototype.push.apply(recipients, controllers);
-    }
-  	if (isExpired) {
-      notifications.sendNotification({
-          recipients: recipients,
-          templateCode: 'ERRANDS_EXPIRED',
-          templateConfig: {
-              mainObject: errand
-          },
-          dontCheckAccessToObject: true
-      });
-  	}
-})();]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>
