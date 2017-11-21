@@ -12432,10 +12432,39 @@ notifications.sendNotificationFromCurrentUser({
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>110e65f0-eccf-40a8-a9e7-ccbe2fcc5bab</name>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Настройка подписания]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[(function(){
+
+var document = stm_document;
+  var typeAssoc = document.assocs["lecm-contract:typeContract-assoc"];
+  if (typeAssoc) {
+      documentTypeDictionary = typeAssoc[0];
+      document.properties["lecm-signing-v2-aspects:isESSigningRequired"] = documentTypeDictionary.properties["lecm-doc-dic-dt:es-sign-required"];
+      document.save();
+  }
+
+})();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
                                     </node>
+
                                 </nodes>
                             </subFolder>
                             <subFolder>
