@@ -7418,6 +7418,27 @@ ErrandsCompletionSignalScript.processCompletionSignal();]]></value>
                                                 <nodes>
                                                     <node>
                                                         <type>ScriptActionEntity</type>
+                                                        <name>5f879258-b176-44b6-ade7-c5c7e382ac3f</name>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Сброс сигналов]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[var document = stm_document;
+  errands.resetCancelSignal(document);
+  edsDocument.resetCompletionSignal(document);
+  edsDocument.resetChildChangeSignal(document);]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
                                                         <name>2830c6e3-4867-4df1-91d8-bbf6bd27ee50</name>
                                                         <properties>
                                                             <property>
@@ -7716,27 +7737,6 @@ if (doc) {
     doc.save();
   }
 }]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects/>
-                                                        <associations/>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
-                                                    <node>
-                                                        <type>ScriptActionEntity</type>
-                                                        <name>5f879258-b176-44b6-ade7-c5c7e382ac3f</name>
-                                                        <properties>
-                                                            <property>
-                                                                <name>scriptLabel</name>
-                                                                <value><![CDATA[Сброс сигналов]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>actionScript</name>
-                                                                <value><![CDATA[var document = stm_document;
-  errands.resetCancelSignal(document);
-  edsDocument.resetCompletionSignal(document);
-  edsDocument.resetChildChangeSignal(document);]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>
