@@ -886,6 +886,7 @@
                             <control-param name="directoryName">Вложения</control-param>
                             <control-param name="suppressRefreshEvent">true</control-param>
                             <control-param name="defaultSelectedShowPreviewButton">true</control-param>
+                            <control-param name="categoriesName">["Договор", "Приложения"]</control-param>
                         </control>
                     </field>
                     <field id="lecm-signing-v2-aspects:signed-on-paper" set="afterPrice">
