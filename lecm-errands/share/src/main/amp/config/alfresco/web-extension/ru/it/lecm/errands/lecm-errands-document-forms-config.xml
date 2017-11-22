@@ -807,6 +807,7 @@
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control-with-preview.ftl">
                             <control-param name="uploadDirectoryPath">{usertemp}</control-param>
                             <control-param name="directoryName">label.errands.attachments</control-param>
+                            <control-param name="categoriesName">["Поручение"]</control-param>
                         </control>
                     </field>
 
@@ -2087,8 +2088,6 @@
                     <show id="lecm-errands:end-date"/>
                     <!-- Контролер -->
                     <show id="lecm-errands:controller-assoc"/>
-                    <!-- Дата начала -->
-                    <show id="lecm-errands:start-date"/>
                     <!-- Содержание -->
                     <show id="lecm-errands:content"/>
                     <!-- Соисполнители -->
@@ -2104,6 +2103,9 @@
 
                     <show id="cm:created"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-document:author-assoc" label-id="label.creator"/>
+                </appearance>
             </form>
         </forms>
     </config>

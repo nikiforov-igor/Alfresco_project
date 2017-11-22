@@ -64,14 +64,14 @@
                             <control-param name="organization_label">Подразделение</control-param>
                             <control-param name="organization_endpointType">lecm-orgstr:organization-unit</control-param>
                             <control-param name="organization_endpointMany">true</control-param>
-                            <control-param name="organization_xPathLocation">{currentLocation}</control-param>
-                            <control-param name="organization_xPathLocationRoot">{lecmMyOrganization}</control-param>
+                            <control-param name="organization_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
                             <control-param name="organization_nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
                             <control-param name="organization_treeNodeSubstituteString">{lecm-orgstr:element-short-name}</control-param>
                             <control-param name="organization_treeNodeTitleSubstituteString">{cm:name}</control-param>
                             <control-param name="organization_plane">false</control-param>
                             <control-param name="organization_showSearch">true</control-param>
                             <control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
+                            <control-param name="organization_additionalFilter">ISNOTNULL:\"sys:node-dbid\"</control-param>
                         </control>
                     </field>
 
@@ -101,6 +101,7 @@
                             <control-param name="uploadDirectoryPath">{usertemp}</control-param>
                             <control-param name="directoryName">Вложения</control-param>
                             <control-param name="suppressRefreshEvent">true</control-param>
+                            <control-param name="categoriesName">["Внутренний", "Прочее"]</control-param>
                         </control>
                     </field>
                     <field id="lecm-eds-document:note">
@@ -280,6 +281,7 @@
                             <control-param name="autocompleteDataSourceMethodPost">true</control-param>
                             <control-param name="dataSourceLogic">OR</control-param>
                             <control-param name="selectedItemsFormArgs">lecm-internal:recipients-assoc</control-param>
+                            <control-param name="endpointMany">true</control-param>
                             <!-- lecm-orgstr:employee -->
                             <control-param name="employee_label">Сотрудник</control-param>
                             <control-param name="employee_endpointType">lecm-orgstr:employee</control-param>
@@ -294,7 +296,7 @@
                             <control-param name="organization_label">Подразделение</control-param>
                             <control-param name="organization_endpointType">lecm-orgstr:organization-unit</control-param>
                             <control-param name="organization_endpointMany">true</control-param>
-                            <control-param name="organization_rootLocation">{organization}</control-param>
+                            <control-param name="organization_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
                             <control-param name="organization_nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
                             <control-param name="organization_treeNodeSubstituteString">{lecm-orgstr:element-short-name}</control-param>
                             <control-param name="organization_treeNodeTitleSubstituteString">{cm:name}</control-param>

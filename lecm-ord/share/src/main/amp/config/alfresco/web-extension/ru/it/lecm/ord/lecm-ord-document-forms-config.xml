@@ -98,6 +98,7 @@
                             <control-param name="uploadDirectoryPath">{usertemp}</control-param>
                             <control-param name="directoryName">Вложения</control-param>
                             <control-param name="suppressRefreshEvent">true</control-param>
+                            <control-param name="categoriesName">["Документ", "Приложения"]</control-param>
                         </control>
                     </field>
                     <field id="lecm-document:author-assoc" label-id="label.eds.assoc.compiler" read-only="true">

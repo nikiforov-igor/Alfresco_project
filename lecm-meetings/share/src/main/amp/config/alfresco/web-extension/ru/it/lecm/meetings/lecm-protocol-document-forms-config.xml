@@ -457,6 +457,7 @@
                             <control-param name="uploadDirectoryPath">{usertemp}</control-param>
                             <control-param name="directoryName">Вложения</control-param>
                             <control-param name="suppressRefreshEvent">true</control-param>
+                            <control-param name="categoriesName">["Документ", "Приложение"]</control-param>
                         </control>
                     </field>
 
