@@ -640,6 +640,34 @@
                                                                 <name>variables</name>
                                                                 <nodes>
                                                                     <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>06149cc4-cd0a-49b5-91ba-e53411fcd601
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[FIELD]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[lecm-signing-v2-aspects:isESSigningRequired]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
                                                                         <type>conditionAccess</type>
                                                                         <name>33f1ed82-dc25-4e40-b97e-c7318afd7b71
                                                                         </name>
@@ -690,6 +718,34 @@
                                                                             <property>
                                                                                 <name>hideAction</name>
                                                                                 <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>48c63770-34bf-40a4-a6e4-91661a637105
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[isESSigningRequired]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -807,6 +863,7 @@
       });
     }
     document.createAssociation(currentEmployee, 'lecm-signing-v2-aspects:signerEmployeeAssoc');
+    document.properties["lecm-signing-v2-aspects:isESSigningRequired"] = false;
     document.properties["lecm-signing-v2-aspects:isSigned"] = true;
     document.properties['lecm-signing-v2-aspects:signingState'] = 'COMPLETE';
     document.properties['lecm-signing-v2-aspects:isSigned'] = true;
@@ -1602,6 +1659,35 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                         <subFolders/>
                                                                     </node>
                                                                     <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>98b63a92-7105-493b-872a-fa5cbddfe8c7
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[!doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действия для подписания без ЭП]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
                                                                         <type>inputVariable</type>
                                                                         <name>ac41e935-13f8-4bba-bc64-99071723cd35
                                                                         </name>
@@ -1617,6 +1703,34 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>inputFromValue</name>
                                                                                 <value><![CDATA[30em]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>c2a344a8-7667-4ef7-9cbb-23827a3138d1
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[isESSigningRequired]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>inputFromType</name>
@@ -1822,6 +1936,236 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>inputFromType</name>
                                                                                 <value><![CDATA[VALUE]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                </nodes>
+                                                            </subFolder>
+                                                        </subFolders>
+                                                    </node>
+                                                    <node>
+                                                        <type>UserWorkflowEntity</type>
+                                                        <name>a335aa88-d1c1-445b-a1a6-e165cc7a5adc</name>
+                                                        <properties>
+                                                            <property>
+                                                                <name>workflowLabel</name>
+                                                                <value><![CDATA[Направить на подписание]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>workflowId</name>
+                                                                <value>
+                                                                    <![CDATA[activiti$lecmSigningWorkflow-v2]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>redirectAfterBlock</name>
+                                                                <value><![CDATA[]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <workflowAspect/>
+                                                        </aspects>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders>
+                                                            <subFolder>
+                                                                <name>variables</name>
+                                                                <nodes>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>100b5872-6f2f-4ccc-a3a2-dbd7f4f552c5
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[isESSigningRequired]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>1ca72ec1-cfeb-4b29-8cbc-c69ac2a6859f
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value><![CDATA[formId]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[repeatFromPrevious]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>488197ab-5a4c-4541-bf9c-d2ccf84e67c3
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value><![CDATA[width]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value><![CDATA[30em]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>5dff0ba2-5d27-4434-b0c9-47405542736c
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[dialogMessageId]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[title.select.route]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>a1430bca-4daf-40ea-b507-a5ddf5e86c16
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required")==true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие для подписания с ЭП]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>cc01802e-f0e1-451f-bc98-001fc89155b2
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[!doc.attr("lecm-signing-v2-aspects:signed-on-paper")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Документ подписан на бумажном носителе. Действие недоступно]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>fad2bb8e-ca63-4238-bccd-f2833504246d
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[@signingRoutesService.getState(doc.nodeRef) != "NEW" AND (@signingRoutesService.getState(doc.nodeRef) != "UNDEF" OR @signingRoutesService.getHistoryIterationsCount(doc.nodeRef) > 0)]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действия при наличии завершенных итераций]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -2757,7 +3101,39 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>1ac8c6e9-79cf-4977-9965-9cd41b983e4c</name>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Настройка подписания]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[(function(){
+  var document = stm_document;
+  var typeAssoc = document.assocs["lecm-eds-document:document-type-assoc"];
+  if (typeAssoc) {
+      var documentTypeDictionary = typeAssoc[0];
+      document.properties["lecm-signing-v2-aspects:isESSigningRequired"] = documentTypeDictionary.properties["lecm-doc-dic-dt:es-sign-required"] === true;
+      document.save();
+  }
+})();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                     <node>
                                         <type>UserWorkflow</type>
@@ -7557,34 +7933,6 @@ if (doc) {
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
-                                                    <node>
-                                                        <type>ScriptActionEntity</type>
-                                                        <name>110e65f0-eccf-40a8-a9e7-ccbe2fcc5bab</name>
-                                                        <properties>
-                                                            <property>
-                                                                <name>scriptLabel</name>
-                                                                <value><![CDATA[Настройка подписания]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>actionScript</name>
-                                                                <value><![CDATA[(function(){
-
-var document = stm_document;
-  var typeAssoc = document.assocs["lecm-eds-document:document-type-assoc"];
-  if (typeAssoc) {
-      documentTypeDictionary = typeAssoc[0];
-      document.properties["lecm-signing-v2-aspects:isESSigningRequired"] = documentTypeDictionary.properties["lecm-doc-dic-dt:es-sign-required"];
-      document.save();
-  }
-
-})();]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects/>
-                                                        <associations/>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
@@ -8110,6 +8458,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
       });
     }
     document.createAssociation(currentEmployee, 'lecm-signing-v2-aspects:signerEmployeeAssoc');
+    document.properties["lecm-signing-v2-aspects:isESSigningRequired"] = false;
     document.properties["lecm-signing-v2-aspects:isSigned"] = true;
     document.properties['lecm-signing-v2-aspects:signingState'] = 'COMPLETE';
     document.properties['lecm-signing-v2-aspects:isSigned'] = true;
@@ -8496,6 +8845,62 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>hideAction</name>
                                                                                 <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>6310d148-3b27-4123-9e38-e333780d1b67
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[FIELD]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[lecm-signing-v2-aspects:isESSigningRequired]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>6b4a2196-309d-406f-8117-69e80cc38951
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[isESSigningRequired]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -9488,6 +9893,236 @@ document.save();]]></value>
                                                 <nodes>
                                                     <node>
                                                         <type>UserWorkflowEntity</type>
+                                                        <name>09fa2c69-6d86-40f8-9410-c9de9458ef4b</name>
+                                                        <properties>
+                                                            <property>
+                                                                <name>workflowLabel</name>
+                                                                <value><![CDATA[Направить на подписание]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>workflowId</name>
+                                                                <value>
+                                                                    <![CDATA[activiti$lecmSigningWorkflow-v2]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>redirectAfterBlock</name>
+                                                                <value><![CDATA[]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <workflowAspect/>
+                                                        </aspects>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders>
+                                                            <subFolder>
+                                                                <name>variables</name>
+                                                                <nodes>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>00618fad-c659-4a0b-b01f-d517697cbdb3
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value><![CDATA[width]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value><![CDATA[30em]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>185bc062-78f9-4d57-b9ed-72ef61063f7f
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[isESSigningRequired]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>218f371c-15c1-4a5c-b535-09054d07be0d
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[!doc.attr("lecm-signing-v2-aspects:signed-on-paper")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Документ подписан на бумажном носителе. Действие недоступно]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>4bac1d55-8c6c-4005-b27c-18521611b870
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value><![CDATA[formId]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[repeatFromPrevious]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>cdf325bc-bf17-4bb8-91fc-68a20f0d93cf
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[!doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действия для подписания без ЭП]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>cfbe161d-258b-4e2a-9b99-470e068376b2
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[@signingRoutesService.getState(doc.nodeRef) != "NEW" AND (@signingRoutesService.getState(doc.nodeRef) != "UNDEF" OR @signingRoutesService.getHistoryIterationsCount(doc.nodeRef) > 0)]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действия при наличии завершенных итераций]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>f264a84b-9ce1-4313-9063-b025c34a98e0
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[dialogMessageId]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[title.select.route]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                </nodes>
+                                                            </subFolder>
+                                                        </subFolders>
+                                                    </node>
+                                                    <node>
+                                                        <type>UserWorkflowEntity</type>
                                                         <name>0de761c4-eb5d-48a9-a1e6-2d203913c02f</name>
                                                         <properties>
                                                             <property>
@@ -9629,6 +10264,63 @@ document.save();]]></value>
                                                                     </node>
                                                                     <node>
                                                                         <type>inputVariable</type>
+                                                                        <name>af8acb44-f619-40a9-83f8-13e3e68462a6
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[isESSigningRequired]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>c4ceffea-dc97-4135-a1b5-ddbdbab8196c
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required")==true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие для подписания с ЭП]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
                                                                         <name>f286eb58-9524-4717-8286-bd54021b4c39
                                                                         </name>
                                                                         <properties>
@@ -9702,6 +10394,7 @@ document.save();]]></value>
       });
     }
     document.createAssociation(currentEmployee, 'lecm-signing-v2-aspects:signerEmployeeAssoc');
+    document.properties["lecm-signing-v2-aspects:isESSigningRequired"] = false;
     document.properties["lecm-signing-v2-aspects:isSigned"] = true;
     document.properties['lecm-signing-v2-aspects:signingState'] = 'COMPLETE';
     document.properties['lecm-signing-v2-aspects:isSigned'] = true;
@@ -9994,6 +10687,34 @@ document.save();]]></value>
                                                                         <subFolders/>
                                                                     </node>
                                                                     <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>6fe1ae7b-f11b-4635-be60-87fded2c402c
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[isESSigningRequired]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
                                                                         <type>conditionAccess</type>
                                                                         <name>83f329ce-25d2-41ea-abeb-cbcfa7b46974
                                                                         </name>
@@ -10015,6 +10736,34 @@ document.save();]]></value>
                                                                             <property>
                                                                                 <name>hideAction</name>
                                                                                 <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>f95faafd-4f52-4a91-b6f2-98d0538592c0
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[FIELD]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[lecm-signing-v2-aspects:isESSigningRequired]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
