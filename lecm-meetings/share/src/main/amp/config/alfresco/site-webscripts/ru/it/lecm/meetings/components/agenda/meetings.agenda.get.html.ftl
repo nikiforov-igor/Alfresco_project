@@ -7,7 +7,7 @@
         <h2 id="${el}-heading" class="dark">
         ${msg("heading")}
             <span class="alfresco-twister-actions">
-	            <a id="${el}-action-expand" href="javascript:void(0);" class="expand agenda-expand"
+	            <a id="${el}-action-expand" href="#" onclick="return false;" class="expand agenda-expand"
                    title="${msg("label.expand")}">&nbsp</a>
 	        </span>
         </h2>
@@ -29,7 +29,7 @@
     </div>
     <div id="${el}-short-view" class="document-components-panel short-view hidden">
           <span class="alfresco-twister-actions">
-            <a href="javascript:void(0);" class="expand agenda-expand"
+            <a href="#" onclick="return false;" class="expand agenda-expand"
                title="${msg("label.expand")}">&nbsp</a>
         </span>
         <div class="right-block-content">

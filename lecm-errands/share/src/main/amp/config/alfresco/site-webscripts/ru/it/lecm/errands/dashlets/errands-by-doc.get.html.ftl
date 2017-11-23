@@ -8,7 +8,7 @@
 
             <#if hasPermission && hasStatemachine && isErrandsStarter && isRegistered>
                 <span class="lecm-dashlet-actions">
-                    <a id="${id}-action-add" href="javascript:void(0);" onclick="errandsComponent.createChildErrand()" class="add"
+                    <a id="${id}-action-add" href="#" onclick="errandsComponent.createChildErrand(); return false;" class="add"
                        title="${msg("dashlet.add.errand.tooltip")}">${msg("dashlet.add.errand")}</a>
                 </span>
             </#if>
@@ -16,7 +16,7 @@
             </div>
         </span>
         <span class="lecm-dashlet-actions">
-            <a id="${id}-action-expand" href="javascript:void(0);" onclick="documentErrandsComponent.onExpand()"
+            <a id="${id}-action-expand" href="#" onclick="documentErrandsComponent.onExpand(); return false;"
                class="expand" title="${msg("dashlet.expand.tooltip")}">&nbsp</a>
         </span>
     </div>

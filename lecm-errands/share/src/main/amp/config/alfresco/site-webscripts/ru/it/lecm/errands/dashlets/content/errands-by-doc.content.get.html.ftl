@@ -42,7 +42,7 @@
         <div class="total-tasks-count">
             <#if mayCreateReErrand && hasStatemachine && hasPermission && isErrandsStarter && errand??>
             <span class="lecm-dashlet-actions">
-                <a id="${id}-action-add" href="javascript:void(0);" onclick="errandsComponent.createReErrand('${errandObj.data[0].nodeRef}','${errandObj.data[0].subject}'<#if errandObj.data[0].date??>, '${errandObj.data[0].date}'</#if>)" class="add"
+                <a id="${id}-action-add" href="#" onclick="errandsComponent.createReErrand('${errandObj.data[0].nodeRef}','${errandObj.data[0].subject}'<#if errandObj.data[0].date??>, '${errandObj.data[0].date}'</#if>); return false;" class="add"
                    title="${msg("dashlet.add.reerrand.tooltip")}">${msg("dashlet.add.reerrand")}</a>
             </span>
             </#if>

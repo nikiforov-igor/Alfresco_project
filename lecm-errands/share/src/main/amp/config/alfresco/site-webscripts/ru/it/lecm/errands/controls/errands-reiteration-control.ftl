@@ -62,7 +62,7 @@
 <#else>
     <div class="container">
         <div class="value-div">
-            <span class="mandatory-highlightable"><a id="${fieldHtmlId}-displayValue" href="javascript:void(0)"></a></span>
+            <span class="mandatory-highlightable"><a id="${fieldHtmlId}-displayValue" href="#" onclick="return false;"></a></span>
         </div>
     </div>
 </#if>

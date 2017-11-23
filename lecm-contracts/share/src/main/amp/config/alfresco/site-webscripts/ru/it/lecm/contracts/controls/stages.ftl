@@ -50,7 +50,7 @@
                         resultMessage = "<div><b>${msg('message.contract.stages.not.closed')}</b></div>"
                         for (var rowIndex in oResults) {
                             var row = oResults[rowIndex];
-                            resultMessage += "<div style='padding-left: 10px;'>${msg('label.stage')} № " + row.number + ", <i><a href='javascript:void(0);' id='preview_" + row.nodeRef + "'>" + row.title + "</a></i></div>"
+                            resultMessage += "<div style='padding-left: 10px;'>${msg('label.stage')} № " + row.number + ", <i><a href='#' onclick='return false;' id='preview_" + row.nodeRef + "'>" + row.title + "</a></i></div>"
                         }
                         resultMessage += "<div><b>${msg('message.contract.execution.close.quest')}</b></div>"
                         var container = Dom.get('${id}_container');

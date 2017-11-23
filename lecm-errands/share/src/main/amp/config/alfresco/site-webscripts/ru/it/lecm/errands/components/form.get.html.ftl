@@ -240,16 +240,16 @@
             </#if>
 
             <div class="control status-control">
-                <a onclick="LogicECM.module.DocumentStatusHistory.showDialog('form-errans-history-status', '${nodeRef}');" href="javascript:void(0);">${props["lecm-statemachine:status"]!""}</a>
+                <a onclick="LogicECM.module.DocumentStatusHistory.showDialog('form-errans-history-status', '${nodeRef}');return false;" href="#">${props["lecm-statemachine:status"]!""}</a>
             </div>
             <@historyStatus.showDialog formId="form-errans-history-status"/>
         </div>
         <div class="clear"></div>
         <div class="main-info">
-            ${msg("message.eddand.fromEmployee")} <a href="javascript:void(0);" onclick="LogicECM.module.Base.Util.viewAttributes({itemId:'${props["lecm-errands:initiator-assoc-ref"]}', title: 'logicecm.employee.view'})">${props["lecm-errands:initiator-assoc-text-content"]}</a>
+            ${msg("message.eddand.fromEmployee")} <a href="#" onclick="LogicECM.module.Base.Util.viewAttributes({itemId:'${props["lecm-errands:initiator-assoc-ref"]}', title: 'logicecm.employee.view'}); return false;">${props["lecm-errands:initiator-assoc-text-content"]}</a>
             &nbsp;
             <span id="${id}-time-ago"></span>
-            &nbsp;${msg("message.eddand.toEmployee")} <a href="javascript:void(0);" onclick="LogicECM.module.Base.Util.viewAttributes({itemId:'${props["lecm-errands:executor-assoc-ref"]}', title: 'logicecm.employee.view'})">${props["lecm-errands:executor-assoc-text-content"]}</a>
+            &nbsp;${msg("message.eddand.toEmployee")} <a href="#" onclick="LogicECM.module.Base.Util.viewAttributes({itemId:'${props["lecm-errands:executor-assoc-ref"]}', title: 'logicecm.employee.view'}); return false;">${props["lecm-errands:executor-assoc-text-content"]}</a>
             <br/>
             <#if additionalDoc?? && additionalDoc.name??>
                 ${msg("message.eddand.onBasis")} <a href="${siteURL("document?nodeRef=" + additionalDoc.nodeRef)}">${additionalDoc.name}</a>
@@ -314,7 +314,7 @@
                                 <img src="${url.context}/proxy/alfresco/lecm/profile/employee-photo?nodeRef=${coexec.employeeRef}" alt="Avatar" />
                             </div>
                             <div class="person">
-                                <div><a href="javascript:void(0);" onclick="LogicECM.module.Base.Util.viewAttributes({itemId:'${coexec.employeeRef}', title:'logicecm.employee.view'})">${coexec.employeeName}</a></div>
+                                <div><a href="#" onclick="LogicECM.module.Base.Util.viewAttributes({itemId:'${coexec.employeeRef}', title:'logicecm.employee.view'}); return false;">${coexec.employeeName}</a></div>
                                 <div class="position">${coexec.employeePosition}</div>
                                 <div class="coexec-ref hidden1">${coexec.employeeRef}</div>
                             </div>
@@ -393,7 +393,7 @@
                                 </div>
                                 <div class="person">
                                     <div>
-                                        <a href="javascript:void(0);" onclick="LogicECM.module.Base.Util.viewAttributes({itemId:'${childErrand.executorNodeRef}', title:'logicecm.employee.view'})">${childErrand.executorName}</a>
+                                        <a href="#" onclick="LogicECM.module.Base.Util.viewAttributes({itemId:'${childErrand.executorNodeRef}', title:'logicecm.employee.view'}); return false;">${childErrand.executorName}</a>
                                         ${msg("message.eddand.employee.get")}
                                         <span class="text-cropped"><a href="${siteURL("document?nodeRef=" + childErrand.nodeRef)}">${childErrand.name}</a></span>
                                     </div>

@@ -19,7 +19,7 @@
             <h2 id="${id}-heading" class="dark">
             ${msg("heading")}
                 <span class="alfresco-twister-actions">
-                    <a id="${id}-action-expand" href="javascript:void(0);" class="expand errands-expand"
+                    <a id="${id}-action-expand" href="#" onclick="return false;" class="expand errands-expand"
                        title="${msg("label.expand")}">&nbsp;</a>
                 </span>
             </h2>
@@ -30,7 +30,7 @@
 
     <div id="${id}-short-view" class="document-components-panel short-view hidden">
         <span class="alfresco-twister-actions">
-            <a href="javascript:void(0);" class="expand errands-expand"
+            <a href="#" onclick="return false;" class="expand errands-expand"
                title="${msg("label.expand")}">&nbsp</a>
         </span>
         <div id="${id}-formContainer" class="right-block-content">
