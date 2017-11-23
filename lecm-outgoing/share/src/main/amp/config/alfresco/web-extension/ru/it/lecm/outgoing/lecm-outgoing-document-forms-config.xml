@@ -44,7 +44,11 @@
                         <control>
                             <control-param name="changeFireAction">actionsVisibilityChange</control-param>
                             <control-param name="hideByDefault">true</control-param>
+                            <control-param name="fireMandatoryByChange">true</control-param>
                         </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Signing2.signersValidator" event="change"/>
+                        </constraint-handlers>
                     </field>
 
                     <field id="lecm-document:title"/>
@@ -213,6 +217,7 @@
                             <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS,LECM_ES_SIGNERS</control-param>
                             <control-param name="endpointMany">true</control-param>
                             <control-param name="hideByDefault">true</control-param>
+                            <control-param name="changeItemsFireAction">mandatoryControlValueUpdated</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Signing2.signersValidator" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
@@ -294,7 +299,11 @@
                         <control>
                             <control-param name="changeFireAction">actionsVisibilityChange</control-param>
                             <control-param name="hideByDefault">true</control-param>
+                            <control-param name="fireMandatoryByChange">true</control-param>
                         </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Signing2.signersValidator" event="change"/>
+                        </constraint-handlers>
                     </field>
 
                     <field id="lecm-document:title" set="common"/>
@@ -517,6 +526,7 @@
                             <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS,LECM_ES_SIGNERS</control-param>
                             <control-param name="endpointMany">true</control-param>
                             <control-param name="hideByDefault">true</control-param>
+                            <control-param name="changeItemsFireAction">mandatoryControlValueUpdated</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Signing2.signersValidator" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
@@ -1073,6 +1083,7 @@
                             <control-param name="uploadDirectoryPath">{usertemp}</control-param>
                             <control-param name="directoryName">Вложения</control-param>
                             <control-param name="suppressRefreshEvent">true</control-param>
+                            <control-param name="categoriesName">["Исходящее", "Прочее"]</control-param>
                         </control>
                     </field>
                     <field id="lecm-document:author-assoc" label-id="label.eds.assoc.compiler" read-only="true">
@@ -1090,13 +1101,18 @@
                         <control>
                             <control-param name="changeFireAction">actionsVisibilityChange</control-param>
                             <control-param name="hideByDefault">true</control-param>
+                            <control-param name="fireMandatoryByChange">true</control-param>
                         </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Signing2.signersValidator" event="change"/>
+                        </constraint-handlers>
                     </field>
                     <field id="lecm-signing-v2-aspects:signerEmployeeAssoc">
                         <control>
                             <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS,LECM_ES_SIGNERS</control-param>
                             <control-param name="endpointMany">true</control-param>
                             <control-param name="hideByDefault">true</control-param>
+                            <control-param name="changeItemsFireAction">mandatoryControlValueUpdated</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Signing2.signersValidator" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
@@ -1239,6 +1255,7 @@
                             <control-param name="autocompleteDataSourceMethodPost">true</control-param>
                             <control-param name="cssClasses">with-ex-search</control-param>
                             <control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
+                            <control-param name="endpointMany">true</control-param>
                             <!-- lecm-contractor:contractor-type -->
                             <control-param name="contractor_label">Внешний контрагент</control-param>
                             <control-param name="contractor_endpointType">lecm-contractor:contractor-type</control-param>

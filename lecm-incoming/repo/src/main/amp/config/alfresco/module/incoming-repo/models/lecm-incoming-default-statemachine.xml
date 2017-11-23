@@ -1320,7 +1320,7 @@
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_ResponsibleEmployeeExtended]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ResponsibleEmployee]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -3425,7 +3425,7 @@
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_ResponsibleEmployeeExtended]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ResponsibleEmployee]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -4767,7 +4767,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_ResponsibleEmployeeExtended]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ResponsibleEmployee]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
