@@ -77,19 +77,17 @@
                     <field id="lecm-protocol:errands-autocreation" set="common"/>
                     <!--Закладка "Пункты"-->
                     <field id="lecm-protocol-ts:points-assoc" set="points">
-                        <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
+                        <control template="/ru/it/lecm/documents/controls/document-table-jsonData-control.ftl">
                             <control-param name="attributeForShow">lecm-document:indexTableRow</control-param>
                             <control-param name="datagridFormId">points-datagrid</control-param>
-                            <control-param name="expandable">false</control-param>
-                            <!--<control-param name="expandDataSource">components/form?formId=table-structure-info</control-param>-->
                             <control-param name="isTableSortable">false</control-param>
-                            <control-param name="refreshAfterCreate">true</control-param>
-                            <!--<control-param name="deleteMessageFunction"></control-param>-->
+                            <control-param name="allowMove">true</control-param>
                             <control-param name="editFormTitleMsg">protocol.item.edit.form.title</control-param>
                             <control-param name="createFormTitleMsg">protocol.item.create.form.title</control-param>
                             <control-param name="viewFormTitleMsg">protocol.item.view.form.title</control-param>
-                            <control-param name="jsDependencies">scripts/lecm-meetings/protocol-points-table.js</control-param>
-                            <control-param name="jsObjectName">LogicECM.module.Meetings.protocolPointsTable</control-param>
+                            <control-param name="jsDependencies">scripts/lecm-meetings/protocol-points-table-jsonData-control.js</control-param>
+                            <control-param name="jsObjectName">LogicECM.module.Meetings.protocolPointsTableControl</control-param>
+                            <control-param name="jsDatagridName">LogicECM.module.Meetings.protocolPointsTableControlJSONDataGrid</control-param>
                         </control>
                     </field>
                     <field id="lecm-document:author-assoc" set="common">
