@@ -7770,13 +7770,14 @@ if (document) {
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[(function() {
-var errand = stm_document,
-    isExpired = !!errand.properties['lecm-errands:is-expired'],
+var errand = stm_document;
+errand.reset();
+var isExpired = !!errand.properties['lecm-errands:is-expired'],
     initiators = errand.assocs['lecm-errands:initiator-assoc'],
     executors =  errand.assocs['lecm-errands:executor-assoc'],
     controllers = errand.assocs['lecm-errands:controller-assoc'],
     recipients = initiators.concat(executors);
-    errand.reset();
+
     if (controllers && controllers.length) {
         Array.prototype.push.apply(recipients, controllers);
     }
