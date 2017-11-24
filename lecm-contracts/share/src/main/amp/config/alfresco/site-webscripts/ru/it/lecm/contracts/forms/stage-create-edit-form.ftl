@@ -16,7 +16,6 @@
 
 <#assign propName = "prop_lecm-contract-table-structure_name">
 <#assign propAmount = "prop_lecm-contract-table-structure_stage-amount">
-<#assign assocCurrency = "assoc_lecm-contract-table-structure_stage-currency-assoc">
 
 <#assign propComment = "prop_lecm-contract-table-structure_stage-comment">
 <#assign assocAttachments = "assoc_lecm-contract-table-structure_attachments-temp-assoc">
@@ -26,9 +25,9 @@
 <#assign endId = htmlId + "_" + propEndDate?replace("prop_", "")?replace("_", ":") + "_" + "componentReady"/>
 <#-- /Fields -->
 
-<#assign inEditMode = form.mode == "edit">
+<#assign inEditMode = (form.mode == "edit" || form.mode == "create")>
 <#assign inViewMode = form.mode == "view">
-<#assign inEditOrViewMode = (inEditMode || inViewMode)>
+<#assign inEditOrViewMode = true>
 
 <div id="${formContainerId}">
 <#if formUI == "true">
@@ -40,7 +39,6 @@
 			<#if inEditOrViewMode>
             <tr>
                 <td colspan="3"><@formLib.renderField field = form.fields[propStatus] /></td>
-                <input id="${htmlId}_${propStatus}" name="${propStatus}" value="${form.fields[propStatus].value}" type="hidden"/>
             </tr>
 			</#if>
         <tr>
@@ -60,6 +58,9 @@
 			</#if>
         <tr>
             <td colspan="3" <#if inViewMode>class="view-name"</#if>><@formLib.renderField field = form.fields[propName] /></td>
+        </tr>
+        <tr>
+            <td colspan="3" <#if inViewMode>class="view-name"</#if>><@formLib.renderField field = form.fields[propAmount] /></td>
         </tr>
         <tr>
             <td <#if inViewMode>id="price"</#if> colspan="3">

@@ -141,7 +141,7 @@
                     </source>
                     <target>
                         <class>lecm-currency:currency</class>
-                        <mandatory>true</mandatory>
+                        <mandatory>false</mandatory>
                         <many>false</many>
                     </target>
                 </association>
@@ -189,6 +189,10 @@
             <properties>
                 <property name="lecm-contract-table-structure:stages-assoc-text-content">
                     <type>d:text</type>
+                </property>
+                <property name="lecm-contract-table-structure:stages-assoc-jsonData">
+                    <type>d:text</type>
+                    <index enabled="false"/>
                 </property>
             </properties>
             <associations>

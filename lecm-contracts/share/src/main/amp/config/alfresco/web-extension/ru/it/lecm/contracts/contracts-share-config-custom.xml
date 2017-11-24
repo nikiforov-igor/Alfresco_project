@@ -460,23 +460,12 @@
                     <show id="lecm-contract-table-structure:start-date-real" force="true"/>
                     <show id="lecm-contract-table-structure:end-date-real" force="true"/>
                     <show id="lecm-contract-table-structure:stage-amount" force="true"/>
-                    <show id="lecm-contract-table-structure:stage-currency-assoc" force="true"/>
                     <show id="lecm-contract-table-structure:stage-comment"/>
                     <show id="lecm-contract-table-structure:attachments-temp-assoc" />
                     <show id="lecm-contract-table-structure:status-buttons" />
                 </field-visibility>
                 <appearance>
-                    <set id="price" appearance="" template="/ru/it/lecm/base-share/components/controls/price.ftl" />
-                    <field id="lecm-contract-table-structure:stage-amount" set="price" help=""/>
-                    <field id="lecm-contract-table-structure:stage-currency-assoc" set="price" help="">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Валюты</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                        </control>
-                    </field>
+                    <field id="lecm-contract-table-structure:stage-amount" help=""/>
                     <field id="lecm-document:indexTableRow" help-id="label.stage.number.help"/>
                     <field id="lecm-contract-table-structure:stage-status">
                         <control template="/ru/it/lecm/base-share/components/controls/view-text-control.ftl"/>
@@ -510,37 +499,53 @@
     <config evaluator="model-type" condition="lecm-contract-table-structure:stage">
         <forms>
             <form>
-                <create-form template="/ru/it/lecm/contracts/forms/stage-create-edit-form.ftl" />
                 <field-visibility>
                     <show id="lecm-document:indexTableRow" force="true"/>
                     <show id="lecm-contract-table-structure:name" force="true"/>
                     <show id="lecm-contract-table-structure:start-date" force="true"/>
                     <show id="lecm-contract-table-structure:end-date" force="true"/>
                     <show id="lecm-contract-table-structure:stage-amount" force="true"/>
-                    <show id="lecm-contract-table-structure:stage-currency-assoc" force="true"/>
                     <show id="lecm-contract-table-structure:stage-comment" force="true"/>
-                    <!--<show id="lecm-contract-table-structure:attachments-temp-assoc" />-->
                 </field-visibility>
                 <appearance>
-                    <set id="price" appearance="" template="/ru/it/lecm/base-share/components/controls/price.ftl" />
-                    <field id="lecm-contract-table-structure:stage-amount" set="price" help=""/>
-                    <field id="lecm-contract-table-structure:stage-currency-assoc" set="price" help="">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Валюты</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
+                    <field id="lecm-contract-table-structure:stage-amount" help=""/>
+                    <field id="lecm-document:indexTableRow" help-id="label.stage.number.help"/>
+                    <field id="lecm-contract-table-structure:stage-comment">
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+            <form id="default-create-form">
+                <create-form template="/ru/it/lecm/contracts/forms/stage-create-edit-form.ftl"/>
+                <field-visibility>
+                    <show id="lecm-contract-table-structure:stage-status" force="true"/>
+                    <show id="lecm-document:indexTableRow"/>
+                    <show id="lecm-contract-table-structure:name"/>
+                    <show id="lecm-contract-table-structure:start-date"/>
+                    <show id="lecm-contract-table-structure:end-date"/>
+                    <show id="lecm-contract-table-structure:start-date-real"/>
+                    <show id="lecm-contract-table-structure:end-date-real"/>
+                    <show id="lecm-contract-table-structure:stage-amount"/>
+                    <show id="lecm-contract-table-structure:stage-comment"/>
+                    <show id="lecm-contract-table-structure:attachments-temp-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-document:indexTableRow" help-id="label.stage.number.help"/>
+                    <field id="lecm-contract-table-structure:stage-status">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="readonly">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document:indexTableRow" help-id="label.stage.number.help"/>
-                    <!--<field id="lecm-contract-table-structure:attachments-temp-assoc" >-->
-                        <!--<control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">-->
-                            <!--<control-param name="uploadDirectoryPath">{usertemp}</control-param>-->
-                            <!--<control-param name="directoryName">label.contracts.attachments</control-param>-->
-                            <!--<control-param name="showUploadNewVersion">false</control-param>-->
-                        <!--</control>-->
-                    <!--</field>-->
+                    <field id="lecm-contract-table-structure:attachments-temp-assoc" >
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
+                            <control-param name="uploadDirectoryPath">{usertemp}</control-param>
+                            <control-param name="directoryName">label.contracts.attachments</control-param>
+                            <control-param name="showUploadNewVersion">true</control-param>
+                            <control-param name="checkRights">false</control-param>
+                            <control-param name="suppressRefreshEvent">true</control-param>
+                            <control-param name="showPreview">false</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-contract-table-structure:stage-comment">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
@@ -550,27 +555,24 @@
                 <field-visibility>
                     <show id="lecm-document:indexTableRow" force="true"/>
                     <show id="lecm-contract-table-structure:name" force="true"/>
-                    <show id="lecm-contract-table-structure:totalAmountWithCurrency" force="true"/>
+                    <show id="lecm-contract-table-structure:stage-amount" force="true"/>
                     <show id="lecm-contract-table-structure:start-date" force="true"/>
                     <show id="lecm-contract-table-structure:end-date" force="true"/>
                     <show id="lecm-contract-table-structure:stage-status" />
                     <show id="lecm-contract-table-structure:attachments-temp-assoc" />
                 </field-visibility>
-                <appearance>
-                    <field id="lecm-contract-table-structure:totalAmountWithCurrency" label-id="stage.totalAmount" substituteString="{lecm-contract-table-structure:stage-amount} {lecm-contract-table-structure:stage-currency-assoc/lecm-currency:alphabetic-code}"/>
-                </appearance>
             </form>
             <form id="stages-dashlet">
                 <field-visibility>
                     <show id="lecm-contract-table-structure:name" force="true"/>
                     <show id="lecm-contract-table-structure:stage-status"/>
-                    <show id="lecm-contract-table-structure:totalAmountWithCurrency"/>
+                    <show id="lecm-contract-table-structure:stage-amount"/>
                     <show id="lecm-contract-table-structure:end-date"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-contract-table-structure:name" />
                     <field id="lecm-contract-table-structure:stage-status" />
-                    <field id="lecm-contract-table-structure:totalAmountWithCurrency" label-id="stage.totalAmount" substituteString="{lecm-contract-table-structure:stage-amount} {lecm-contract-table-structure:stage-currency-assoc/lecm-currency:alphabetic-code}"/>
+                    <field id="lecm-contract-table-structure:stage-amount" label-id="stage.totalAmount"/>
                     <field id="lecm-contract-table-structure:end-date" />
                 </appearance>
             </form>

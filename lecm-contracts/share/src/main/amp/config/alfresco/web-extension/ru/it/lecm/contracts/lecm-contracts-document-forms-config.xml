@@ -188,17 +188,16 @@
                     <field id="lecm-contract:locationContract" set="other"/>
                     <field id="lecm-contract-aspect:reasonDelete-assoc" set="common"/>
                     <field id="lecm-contract-table-structure:stages-assoc" set="contract-stages">
-                        <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
+                        <control template="/ru/it/lecm/documents/controls/document-table-jsonData-control.ftl">
                             <control-param name="attributeForShow">lecm-contract-table-structure:name</control-param>
                             <control-param name="datagridFormId">datagrid</control-param>
                             <control-param name="isTableSortable">false</control-param>
-                            <control-param name="refreshAfterCreate">true</control-param>
                             <control-param name="deleteMessageFunction">LogicECM.module.Contracts.getStageDeleteMessage</control-param>
                             <control-param name="editFormTitleMsg">stage.edit.form.title</control-param>
                             <control-param name="createFormTitleMsg">stage.create.form.title</control-param>
                             <control-param name="viewFormTitleMsg">stage.view.form.title</control-param>
-                            <control-param name="jsDependencies">scripts/lecm-contracts/get-stage-delete-message.js,scripts/lecm-contracts/contract-stages-table.js</control-param>
-                            <control-param name="jsObjectName">LogicECM.module.Contracts.contractStagesTable</control-param>
+                            <control-param name="allowMove">true</control-param>
+                            <control-param name="jsDependencies">scripts/lecm-contracts/get-stage-delete-message.js</control-param>
                         </control>
                     </field>
                     <field id="lecm-signing-v2-aspects:signed-on-paper" set="contract-info">
@@ -433,17 +432,16 @@
                     <field id="lecm-contract:locationContract" set="other"/>
                     <field id="lecm-contract-aspect:reasonDelete-assoc" set="common"/>
                     <field id="lecm-contract-table-structure:stages-assoc" set="contract-stages">
-                        <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
+                        <control template="/ru/it/lecm/documents/controls/document-table-jsonData-control.ftl">
                             <control-param name="attributeForShow">lecm-contract-table-structure:name</control-param>
                             <control-param name="datagridFormId">datagrid</control-param>
                             <control-param name="isTableSortable">false</control-param>
-                            <control-param name="refreshAfterCreate">true</control-param>
                             <control-param name="deleteMessageFunction">LogicECM.module.Contracts.getStageDeleteMessage</control-param>
                             <control-param name="editFormTitleMsg">stage.edit.form.title</control-param>
                             <control-param name="createFormTitleMsg">stage.create.form.title</control-param>
                             <control-param name="viewFormTitleMsg">stage.view.form.title</control-param>
-                            <control-param name="jsDependencies">scripts/lecm-contracts/get-stage-delete-message.js,scripts/lecm-contracts/contract-stages-table.js</control-param>
-                            <control-param name="jsObjectName">LogicECM.module.Contracts.contractStagesTable</control-param>
+                            <control-param name="allowMove">true</control-param>
+                            <control-param name="jsDependencies">scripts/lecm-contracts/get-stage-delete-message.js</control-param>
                         </control>
                     </field>
                     <field id="lecm-approval-route:approvalFolder" set="approvalAndSigning" label-id="label.forms.approval">                
@@ -624,12 +622,11 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-contract-table-structure:stages-assoc">
-                        <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
+                        <control template="/ru/it/lecm/documents/controls/document-table-jsonData-control.ftl">
                             <control-param name="attributeForShow">lecm-contract-table-structure:name</control-param>
                             <control-param name="datagridFormId">stages-dashlet</control-param>
                             <control-param name="isTableSortable">false</control-param>
-                            <control-param name="toolbar">false</control-param>
-                            <control-param name="refreshAfterCreate">true</control-param>
+                            <control-param name="allowCreate">false</control-param>
                             <control-param name="showActions">false</control-param>
                         </control>
                     </field>
