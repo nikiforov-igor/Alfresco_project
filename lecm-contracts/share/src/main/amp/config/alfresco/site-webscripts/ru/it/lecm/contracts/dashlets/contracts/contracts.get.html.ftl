@@ -54,7 +54,7 @@
 	    <div class="title">${msg("header")}
 	        <#if isStarter?? && isStarter>
 	            <span class="lecm-dashlet-actions">
-	            <a id="${id}-action-add" href="javascript:void(0);" onclick="contracts.onAddContractClick()" class="add" title="${msg("dashlet.add.tooltip")}">${msg("dashlet.add.contract")}</a>
+	            <a id="${id}-action-add" href="#" onclick="contracts.onAddContractClick(); return false;" class="add" title="${msg("dashlet.add.tooltip")}">${msg("dashlet.add.contract")}</a>
 	         </span>
 	        </#if>
 	    </div>

@@ -101,7 +101,7 @@
 			<div id="${importErrorFormId}-content" class="import-info-content">
 				<div class="import-error-header">
 					<h3>${msg('import.failure')}</h3>
-					<a href="javascript:void(0);" id="${importErrorFormId}-show-more-link">${msg('import.failure.showMore')}</a>
+					<a href="#" onclick="return false;" id="${importErrorFormId}-show-more-link">${msg('import.failure.showMore')}</a>
 				</div>
 				<div id="${importErrorFormId}-more" class="import-error-more">
 					<div class="import-error-exception">

@@ -377,12 +377,12 @@ LogicECM.module = LogicECM.module || {};
                                                 "<div>{icon} <a href='" + link + "'>{name}</a></div>");
                                         } else {
                                             displayValue += this.options.objectRenderer.renderItem(item, 16,
-                                                "<div>{icon} <a href='javascript:void(0)'; onclick=\"LogicECM.module.Base.Util.viewAttributes({" +
+                                                "<div>{icon} <a href='#'; onclick=\"LogicECM.module.Base.Util.viewAttributes({" +
                                                 "formId:\'" + this.id + "-link\'," +
                                                 "itemId:\'" + item.nodeRef + "\'," +
                                                 "htmlId: \'LinkMetadata-" + Alfresco.util.generateDomId() + "\'," +
                                                 "setId:\'common\'," +
-                                                "failureMessage: \'message.object-not-found\'})\">" + "{name}</a></div>");
+                                                "failureMessage: \'message.object-not-found\'}); return false;\">" + "{name}</a></div>");
 
                                         }
                                     }

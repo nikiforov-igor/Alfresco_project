@@ -114,8 +114,8 @@ LogicECM.module = LogicECM.module || {};
                                     '       <a target="_blank" href="{documentUrl}">{documentName}</a>' +
                                     '       <div>' +
                                     '           <span class="connectionType">{documentStatus}</span>' +
-                                    '           <a id="{expandShowId}" href="javascript:void(0);" class="{showExpandClass}">{expandShowMessage}</a>' +
-                                    '           <a id="{expandHideId}" href="javascript:void(0);" class="hidden1">{expandHideMessage}</a>' +
+                                    '           <a id="{expandShowId}" href="#" onclick="return false;" class="{showExpandClass}">{expandShowMessage}</a>' +
+                                    '           <a id="{expandHideId}" href="#" onclick="return false;" class="hidden1">{expandHideMessage}</a>' +
                                     '       </div>' +
                                     '       <div id="{expandedDivId}" class="hidden1"></div>' +
                                     '   </span>' +

@@ -61,13 +61,13 @@
             <div class="dashlet-title-text">${msg('label.contracts.stages')}</div>
             <div class="total-tasks-count">
                 <span class="lecm-dashlet-actions">
-                    <a id="${id}-action-add" href="javascript:void(0);" class="add"
+                    <a id="${id}-action-add" href="#" onclick="return false;" class="add"
                        title="${msg("dashlet.contract.stages.add.tooltip")}">${msg('label.contract.stage.add')}</a>
                 </span>
             </div>
         </span>
         <span class="lecm-dashlet-actions">
-            <a id="${id}-action-expand" href="javascript:void(0);" class="expand stages-expand" title="${msg("dashlet.contract.stages.expand.tooltip")}">&nbsp</a>
+            <a id="${id}-action-expand" href="#" onclick="return false;" class="expand stages-expand" title="${msg("dashlet.contract.stages.expand.tooltip")}">&nbsp</a>
 		</span>
     </div>
     <div class="dashlet-contract-stages body scrollableList dashlet-body" id="${id}_results">

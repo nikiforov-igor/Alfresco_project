@@ -1379,7 +1379,7 @@ LogicECM.module = LogicECM.module || {};
 					} else {
 						msg = scope.msg("form.control.object-picker.create-new")
 					}
-                    elCell.innerHTML = '<a href="javascript:void(0);" title="' + msg + '" class="create-new-row create-new-item-' + scope.eventGroup + '" >' + msg + '</a>';
+                    elCell.innerHTML = '<a href="#" onclick="return false;" title="' + msg + '" class="create-new-row create-new-item-' + scope.eventGroup + '" >' + msg + '</a>';
                     return;
                 }
 
@@ -1426,7 +1426,7 @@ LogicECM.module = LogicECM.module || {};
                         style = 'style="display: none"';
                     }
 
-                    elCell.innerHTML = '<a id="' + containerId + '" href="javascript:void(0);" ' + style + ' class="add-item add-' + scope.eventGroup + '" title="' + scope.msg("form.control.object-picker.add-item") + '" tabindex="0"><span class="addIcon">&nbsp;</span></a>';
+                    elCell.innerHTML = '<a id="' + containerId + '" href="#" onclick="return false;" ' + style + ' class="add-item add-' + scope.eventGroup + '" title="' + scope.msg("form.control.object-picker.add-item") + '" tabindex="0"><span class="addIcon">&nbsp;</span></a>';
                     scope.addItemButtons[nodeRef] = containerId;
                 }
             };
@@ -1723,7 +1723,7 @@ LogicECM.module = LogicECM.module || {};
             var title = (this.options.showAssocViewForm && item.nodeRef != null) ? Alfresco.component.Base.prototype.msg("title.click.for.extend.info") : displayValue;
 	        var result = "<span class='not-person' title='" + title + "'>";
 	        if (this.options.showAssocViewForm && item.nodeRef != null) {
-		        result += "<a href='javascript:void(0);' " + " onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'" + item.nodeRef + "\', title: \'logicecm.view\' })\">" + displayValue + "</a>";
+		        result += "<a href='#' " + " onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'" + item.nodeRef + "\', title: \'logicecm.view\' }); return false;\">" + displayValue + "</a>";
 	        } else {
 		        result += displayValue;
 	        }
