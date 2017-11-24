@@ -377,6 +377,20 @@
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
+                                        <name>lecm-approval-route_approvalFolder</name>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
                                         <name>lecm-contract-table-structure_stages-assoc</name>
                                         <properties>
                                             <property>
@@ -826,20 +840,6 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-signing-v2-aspects_signingDate</name>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-approval-route_approvalFolder</name>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1452,6 +1452,20 @@
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
+                                        <name>lecm-approval-route_approvalFolder</name>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
                                         <name>lecm-contract-table-structure_stages-assoc</name>
                                         <properties>
                                             <property>
@@ -1901,20 +1915,6 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-signing-v2-aspects_signingDate</name>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-approval-route_approvalFolder</name>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2680,6 +2680,20 @@ businessJournal.log(contract.nodeRef.toString(), "EDIT", logText, []);]]></value
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
+                                        <name>lecm-approval-route_approvalFolder</name>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
                                         <name>lecm-contract-table-structure_stages-assoc</name>
                                         <properties>
                                             <property>
@@ -3129,20 +3143,6 @@ businessJournal.log(contract.nodeRef.toString(), "EDIT", logText, []);]]></value
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-signing-v2-aspects_signingDate</name>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-approval-route_approvalFolder</name>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -3412,6 +3412,20 @@ businessJournal.log(contract.nodeRef.toString(), "EDIT", logText, []);]]></value
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
+                                        <name>lecm-approval-route_approvalFolder</name>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
                                         <name>lecm-contract-table-structure_stages-assoc</name>
                                         <properties>
                                             <property>
@@ -3861,20 +3875,6 @@ businessJournal.log(contract.nodeRef.toString(), "EDIT", logText, []);]]></value
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-signing-v2-aspects_signingDate</name>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-approval-route_approvalFolder</name>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -4748,6 +4748,34 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                         <subFolders/>
                                                                     </node>
                                                                     <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>55df2e8c-5598-49b9-b87d-0b3ea4d5d35c
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[isESSigningRequired]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
                                                                         <type>conditionAccess</type>
                                                                         <name>56bbfe99-df42-4cf0-9dd7-d85409652984
                                                                         </name>
@@ -4765,6 +4793,35 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Документ подписан на бумажном носителе. Действие недоступно]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>94dd2703-8703-4f65-aec7-74745f3848e0
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[!doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действия для подписания без ЭП]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -4854,6 +4911,236 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>hideAction</name>
                                                                                 <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                </nodes>
+                                                            </subFolder>
+                                                        </subFolders>
+                                                    </node>
+                                                    <node>
+                                                        <type>UserWorkflowEntity</type>
+                                                        <name>61657f9a-9130-440a-8b06-d1d6d7ca4c0d</name>
+                                                        <properties>
+                                                            <property>
+                                                                <name>workflowLabel</name>
+                                                                <value><![CDATA[Направить на подписание]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>workflowId</name>
+                                                                <value>
+                                                                    <![CDATA[activiti$lecmSigningWorkflow-v2]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>redirectAfterBlock</name>
+                                                                <value><![CDATA[]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <workflowAspect/>
+                                                        </aspects>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders>
+                                                            <subFolder>
+                                                                <name>variables</name>
+                                                                <nodes>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>17a50b2b-0e7f-46c4-9309-1e97a3aa67c6
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value><![CDATA[width]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value><![CDATA[30em]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>3d8ec797-d5d0-4fe6-9f89-57c5cdf3890e
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[!doc.attr("lecm-signing-v2-aspects:signed-on-paper")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Документ подписан на бумажном носителе. Действие недоступно]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>62cf3c4d-e308-40c4-866e-912db421b41d
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[dialogMessageId]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[title.select.route]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>853e64b3-340b-4719-8db6-87b7e6b260fb
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[@signingRoutesService.getState(doc.nodeRef) != "NEW" AND (@signingRoutesService.getState(doc.nodeRef) != "UNDEF" OR @signingRoutesService.getHistoryIterationsCount(doc.nodeRef) > 0)]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действия при наличии завершенных итераций]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>87d41de4-f4bd-4812-8c9c-873c932c21f9
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required")==true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие для подписания с ЭП]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>dbd8e8f0-04ee-4b5b-bfc8-37fe4d47de76
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value><![CDATA[formId]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[repeatFromPrevious]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>e6472699-7d36-490d-97a4-272ca8fc07e1
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[isESSigningRequired]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -5254,6 +5541,20 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                             <subFolder>
                                 <name>fields</name>
                                 <nodes>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-approval-route_approvalFolder</name>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-contract-table-structure_stages-assoc</name>
@@ -5716,20 +6017,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-approval-route_approvalFolder</name>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[true]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -5905,7 +6192,39 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>b9d28a13-f95c-4549-8baf-3dbf2725dd3d</name>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Настройка подписания]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[(function(){
+  var document = stm_document;
+  var typeAssoc = document.assocs["lecm-contract:typeContract-assoc"];
+  if (typeAssoc) {
+      var documentTypeDictionary = typeAssoc[0];
+      document.properties["lecm-signing-v2-aspects:isESSigningRequired"] = documentTypeDictionary.properties["lecm-doc-dic-dt:es-sign-required"];
+      document.save();
+  }
+})();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                     <node>
                                         <type>TimerAction</type>
@@ -6366,6 +6685,20 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
+                                        <name>lecm-approval-route_approvalFolder</name>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
                                         <name>lecm-contract-table-structure_stages-assoc</name>
                                         <properties>
                                             <property>
@@ -6815,20 +7148,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-signing-v2-aspects_signingDate</name>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-approval-route_approvalFolder</name>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -7549,6 +7868,20 @@ notifications.sendNotificationFromCurrentUser({
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
+                                        <name>lecm-approval-route_approvalFolder</name>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
                                         <name>lecm-contract-table-structure_stages-assoc</name>
                                         <properties>
                                             <property>
@@ -7998,20 +8331,6 @@ notifications.sendNotificationFromCurrentUser({
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-signing-v2-aspects_signingDate</name>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-approval-route_approvalFolder</name>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -8737,6 +9056,20 @@ AutoApprovalScript.doAuto(stm_document, 'APPROVED_AUTO', msg, 'APPROVAL_AUTO');]
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
+                                        <name>lecm-approval-route_approvalFolder</name>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
                                         <name>lecm-contract-table-structure_stages-assoc</name>
                                         <properties>
                                             <property>
@@ -9190,20 +9523,6 @@ AutoApprovalScript.doAuto(stm_document, 'APPROVED_AUTO', msg, 'APPROVAL_AUTO');]
                                             <property>
                                                 <name>editableField</name>
                                                 <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-approval-route_approvalFolder</name>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -10031,6 +10350,20 @@ notifications.sendNotificationFromCurrentUser({
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
+                                        <name>lecm-approval-route_approvalFolder</name>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
                                         <name>lecm-contract-table-structure_stages-assoc</name>
                                         <properties>
                                             <property>
@@ -10480,20 +10813,6 @@ notifications.sendNotificationFromCurrentUser({
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-signing-v2-aspects_signingDate</name>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-approval-route_approvalFolder</name>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -11131,6 +11450,20 @@ notifications.sendNotificationFromCurrentUser({
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
+                                        <name>lecm-approval-route_approvalFolder</name>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
                                         <name>lecm-contract-table-structure_stages-assoc</name>
                                         <properties>
                                             <property>
@@ -11580,20 +11913,6 @@ notifications.sendNotificationFromCurrentUser({
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-signing-v2-aspects_signingDate</name>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-approval-route_approvalFolder</name>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -12661,6 +12980,20 @@ notifications.sendNotificationFromCurrentUser({
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
+                                        <name>lecm-approval-route_approvalFolder</name>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
                                         <name>lecm-contract-table-structure_stages-assoc</name>
                                         <properties>
                                             <property>
@@ -13110,20 +13443,6 @@ notifications.sendNotificationFromCurrentUser({
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-signing-v2-aspects_signingDate</name>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[true]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-approval-route_approvalFolder</name>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -13371,6 +13690,20 @@ notifications.sendNotificationFromCurrentUser({
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
+                                        <name>lecm-approval-route_approvalFolder</name>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
                                         <name>lecm-contract-table-structure_stages-assoc</name>
                                         <properties>
                                             <property>
@@ -13831,20 +14164,6 @@ notifications.sendNotificationFromCurrentUser({
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-approval-route_approvalFolder</name>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
                                 </nodes>
                             </subFolder>
                         </subFolders>
@@ -13991,6 +14310,236 @@ notifications.sendNotificationFromCurrentUser({
                                                 <nodes>
                                                     <node>
                                                         <type>UserWorkflowEntity</type>
+                                                        <name>3d531306-8d25-43f0-9f82-3992ce052388</name>
+                                                        <properties>
+                                                            <property>
+                                                                <name>workflowLabel</name>
+                                                                <value><![CDATA[Направить на подписание]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>workflowId</name>
+                                                                <value>
+                                                                    <![CDATA[activiti$lecmSigningWorkflow-v2]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>redirectAfterBlock</name>
+                                                                <value><![CDATA[]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <workflowAspect/>
+                                                        </aspects>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders>
+                                                            <subFolder>
+                                                                <name>variables</name>
+                                                                <nodes>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>3fe4c7c2-27b9-49d3-9011-896f85603e1f
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[dialogMessageId]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[title.select.route]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>4ea22d56-42bd-4167-b5fe-60046cbd4e57
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required")==true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие для подписания с ЭП]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>80b258d2-c1de-4b26-9139-7606a740ff0f
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value><![CDATA[formId]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[repeatFromPrevious]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>82a632cb-9fdb-4ebc-b1a4-2f42e5ac1168
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[!doc.attr("lecm-signing-v2-aspects:signed-on-paper")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Документ подписан на бумажном носителе. Действие недоступно]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>9ea0e0f6-e0aa-443d-b22c-2c6847435cd5
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[@signingRoutesService.getState(doc.nodeRef) != "NEW" AND (@signingRoutesService.getState(doc.nodeRef) != "UNDEF" OR @signingRoutesService.getHistoryIterationsCount(doc.nodeRef) > 0)]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действия при наличии завершенных итераций]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>a2d09f00-ad56-421e-9713-82f6dc2f0a44
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value><![CDATA[width]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value><![CDATA[30em]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>cfe56ea5-db7e-4fd8-bbd4-b4ab4e1629f9
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[isESSigningRequired]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                </nodes>
+                                                            </subFolder>
+                                                        </subFolders>
+                                                    </node>
+                                                    <node>
+                                                        <type>UserWorkflowEntity</type>
                                                         <name>5c01a4c4-439d-48a7-a83c-3de0d7b9084e</name>
                                                         <properties>
                                                             <property>
@@ -14074,6 +14623,35 @@ notifications.sendNotificationFromCurrentUser({
                                                                     </node>
                                                                     <node>
                                                                         <type>conditionAccess</type>
+                                                                        <name>acaf471c-e0aa-4565-a5b7-46a0efc456d1
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[!doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действия для подписания без ЭП]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
                                                                         <name>bb511eec-f676-4200-a216-4ce6ed72101b
                                                                         </name>
                                                                         <properties>
@@ -14118,6 +14696,34 @@ notifications.sendNotificationFromCurrentUser({
                                                                                 <name>inputFromValue</name>
                                                                                 <value>
                                                                                     <![CDATA[repeatFromPrevious]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>f6e0e3f1-b2d2-4b80-a050-2472559aca25
+                                                                        </name>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[isESSigningRequired]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>inputFromType</name>
@@ -14897,6 +15503,20 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
+                                        <name>lecm-approval-route_approvalFolder</name>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
                                         <name>lecm-contract-table-structure_stages-assoc</name>
                                         <properties>
                                             <property>
@@ -15350,20 +15970,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                             <property>
                                                 <name>editableField</name>
                                                 <value><![CDATA[true]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-approval-route_approvalFolder</name>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -15607,6 +16213,20 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
+                                        <name>lecm-approval-route_approvalFolder</name>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
                                         <name>lecm-contract-table-structure_stages-assoc</name>
                                         <properties>
                                             <property>
@@ -16056,20 +16676,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-signing-v2-aspects_signingDate</name>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-approval-route_approvalFolder</name>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -16521,6 +17127,20 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
+                                        <name>lecm-approval-route_approvalFolder</name>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
                                         <name>lecm-contract-table-structure_stages-assoc</name>
                                         <properties>
                                             <property>
@@ -16970,20 +17590,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-signing-v2-aspects_signingDate</name>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[true]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-approval-route_approvalFolder</name>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
