@@ -229,6 +229,10 @@
                 <property name="lecm-protocol-ts:points-assoc-text-content">
                     <type>d:text</type>
                 </property>
+                <property name="lecm-protocol-ts:points-assoc-jsonData">
+                    <type>d:text</type>
+                    <index enabled="false"/>
+                </property>
             </properties>
             <associations>
                 <association name="lecm-protocol-ts:points-assoc">
