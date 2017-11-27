@@ -159,8 +159,8 @@ public class ErrandsReportAttachmentAssociationPolicy implements NodeServicePoli
         NodeRef executionTableData = nodeService.getTargetAssocs(errandDoc, ErrandsService.ASSOC_ERRANDS_TS_EXECUTION_REPORTS).get(0).getTargetRef();
         Boolean attachmentIsUsed = isAttachmentUsedInTable(coexecutorsTableData, ErrandsService.ASSOC_ERRANDS_TS_COEXECUTOR_ATTACHMENT, reportNodeRef, attachment) ||
                 isAttachmentUsedInTable(executionTableData, ErrandsService.ASSOC_ERRANDS_TS_EXECUTOR_ATTACHMENT, reportNodeRef, attachment);
-
-        if (!attachmentIsUsed) {
+        Boolean isPendingDeletion = nodeService.hasAspect(attachment, ContentModel.ASPECT_PENDING_DELETE);
+        if (!attachmentIsUsed && !isPendingDeletion) {
             documentAttachmentsService.deleteAttachment(attachment);
         }
     }

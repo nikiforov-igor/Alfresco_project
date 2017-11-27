@@ -5,7 +5,7 @@
 
 <#assign controlId = fieldHtmlId + "-cntrl">
 <#assign aDateTime = .now>
-<#assign containerId = fieldHtmlId + "-container-" + aDateTime?iso_utc>
+<#assign containerId = fieldHtmlId + "-container-" + (aDateTime?iso_utc)?replace(":", "_")>
 <#assign bubblingId = containerId/>
 
 <#assign attributeForShow = ""/>
