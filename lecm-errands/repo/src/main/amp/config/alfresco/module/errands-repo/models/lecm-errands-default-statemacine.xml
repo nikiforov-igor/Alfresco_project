@@ -7429,6 +7429,7 @@ ErrandsCompletionSignalScript.processCompletionSignal();]]></value>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var document = bpm_package.children[0];
 if (document) {
+    document.reset();
     document.properties["lecm-errands:wait-for-execution-date"] = new Date();
     document.save();
     var additionalDoc = errands.getAdditionalDocument(document.nodeRef.toString());
@@ -7456,6 +7457,7 @@ if (document) {
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var document = stm_document;
 if (document) {
+    document.reset();
     var prevStatus = statemachine.getPreviousStatusName(document);
     if ((!prevStatus || prevStatus == "Черновик") && !regnumbers.isDocumentRegistered(document)) {
         var regNumberCode;
@@ -7578,6 +7580,7 @@ if (document) {
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var doc = bpm_package.children[0];
 if (doc) {
+  doc.reset();
   var controllerAssoc = doc.assocs["lecm-errands:controller-assoc"];
   if (controllerAssoc && controllerAssoc.length){
     doc.properties["lecm-document-aspects:is-on-control"] = true;
@@ -7602,6 +7605,7 @@ if (doc) {
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var document = stm_document;
+  document.reset();
   errands.resetCancelSignal(document);
   edsDocument.resetCompletionSignal(document);
   edsDocument.resetChildChangeSignal(document);]]></value>
@@ -7624,6 +7628,7 @@ if (doc) {
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var document = bpm_package.children[0];
 if (document) {
+  document.reset();
   var prevStatus = statemachine.getPreviousStatusName(document);
   if (!prevStatus || prevStatus == "Черновик") {
 
@@ -7694,6 +7699,7 @@ if (document) {
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[if (errands.isTransferRightToBaseDocument()) {
   var document = stm_document;
+  document.reset();
   var baseDocumentAssoc = document.assocs["lecm-errands:base-assoc"];
   if (baseDocumentAssoc && baseDocumentAssoc.length) {
     var baseDocument = baseDocumentAssoc[0];
@@ -7741,6 +7747,7 @@ if (document) {
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var document = bpm_package.children[0];
 if (document) {
+  document.reset();
   document.properties["lecm-errands:number"] = document.properties["lecm-document:regnum"];
   document.save();
 }]]></value>
@@ -7763,8 +7770,9 @@ if (document) {
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[(function() {
-var errand = stm_document,
-    isExpired = !!errand.properties['lecm-errands:is-expired'],
+var errand = stm_document;
+errand.reset();
+var isExpired = !!errand.properties['lecm-errands:is-expired'],
     initiators = errand.assocs['lecm-errands:initiator-assoc'],
     executors =  errand.assocs['lecm-errands:executor-assoc'],
     controllers = errand.assocs['lecm-errands:controller-assoc'],
