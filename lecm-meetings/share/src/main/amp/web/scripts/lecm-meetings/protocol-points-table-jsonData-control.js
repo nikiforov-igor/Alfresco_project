@@ -33,7 +33,7 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
                             if (oResults.items.some(function (item) {
                                     return item.primaryDocument.type == 'lecm-meetings:document';
                                 }, this)) {
-                                datagrid.setOptions({
+                                this.widgets.tableDateGrid.setOptions({
                                     reportersFilterEnabled: false
                                 })
                             }
