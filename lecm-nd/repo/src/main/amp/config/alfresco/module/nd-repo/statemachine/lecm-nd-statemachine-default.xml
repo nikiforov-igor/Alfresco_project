@@ -5892,7 +5892,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[true]]></value>
+                                                <value><![CDATA[false]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -6219,7 +6219,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Owner]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ResponsibleEmployeeExtended]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
