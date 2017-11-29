@@ -21,10 +21,19 @@
 .direct-answer .answer-comment .control.dnd-uploader img.uploader-button {
     margin: 0;
 }
-.direct-answer .answer-comment .attachments-list .ci-value-div > span {
-    height: 20px;
-    line-height: 20px;
-}
-.direct-answer .answer-comment .attachments-list .ci-value-div > span span {
+.dnd-uploader .attachments-list a > img,
+.dnd-uploader ul.attachments-list li img.move-icon,
+.dnd-uploader ul.attachments-list li img.remove-icon,
+.dnd-uploader ul.attachments-list li img.newVersion-icon{
     vertical-align: text-bottom;
+}
+.direct-answer .answer-comment .control.dnd-uploader fieldset {
+    padding: 1.2em 1.5em 0.5em 1.5em;
+}
+.control.dnd-uploader .attachments-list li.selected{
+    background-color: white;
+}
+.direct-answer .answer-comment .attachments-list .ci-value-div > span {
+    height: 1.5em;
+    line-height: 1.5em;
 }

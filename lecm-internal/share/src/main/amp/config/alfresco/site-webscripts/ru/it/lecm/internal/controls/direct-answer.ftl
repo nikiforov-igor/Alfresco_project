@@ -228,7 +228,7 @@
                     itemNodeRef: "",
                     currentValue: "",
                     suppressRefreshEvent: true,
-                    useDnD: false
+                    useDnD: true
                 });
         uploader.disable();
         directAnswer.setUploader(uploader);
