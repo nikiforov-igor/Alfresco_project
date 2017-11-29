@@ -499,4 +499,46 @@
 			</form>
 		</forms>
 	</config>
+
+
+	<config evaluator="model-type" condition="lecm-global-settings:base">
+		<forms>
+			<form id="lecm.eds.controls">
+				<field-visibility>
+					<show id="allowPastDate" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="allowPastDate" label="Разрешить выбор прошедшей даты в качестве срока исполнения">
+						<control template="/ru/it/lecm/eds/controls/values-checkboxes-control.ftl">
+							<control-param name="config"><![CDATA[
+                                            [
+												{
+                                            		key: 'Errand',
+                                            		value: 'false'
+                                            	},
+                                            	{
+                                            		key: 'Incoming',
+                                            		value: 'false'
+                                            	},
+                                            	{
+                                            		key: 'Internal',
+                                            		value: 'false'
+                                            	},
+                                            	{
+                                            		key: 'ORD',
+                                            		value: 'false'
+                                            	},
+                                            	{
+                                            		key: 'Protocol',
+                                            		value: 'false'
+                                            	}
+                                            ]
+                            ]]></control-param>
+							<control-param name="nameColumnId">label.column.object.type</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
 </alfresco-config>
