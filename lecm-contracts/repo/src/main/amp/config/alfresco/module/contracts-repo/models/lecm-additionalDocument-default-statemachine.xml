@@ -3272,7 +3272,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required")==true]]></value>
+                                                                                    <![CDATA[doc.assocAttr("lecm-additional-document:additionalDocumentType", "lecm-doc-dic-dt:es-sign-required")==true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -3643,7 +3643,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[!doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required")]]></value>
+                                                                                    <![CDATA[doc.assocAttr("lecm-additional-document:additionalDocumentType", "lecm-doc-dic-dt:es-sign-required") != true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -11021,7 +11021,7 @@ if (contractAssocs != null && contractAssocs.length == 1) {
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required")==true]]></value>
+                                                                                    <![CDATA[doc.assocAttr("lecm-additional-document:additionalDocumentType", "lecm-doc-dic-dt:es-sign-required")==true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -11222,7 +11222,7 @@ if (contractAssocs != null && contractAssocs.length == 1) {
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[!doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required")]]></value>
+                                                                                    <![CDATA[doc.assocAttr("lecm-additional-document:additionalDocumentType", "lecm-doc-dic-dt:es-sign-required") != true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>

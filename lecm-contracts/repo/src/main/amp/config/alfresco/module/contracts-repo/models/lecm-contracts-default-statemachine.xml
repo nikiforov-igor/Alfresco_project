@@ -4816,7 +4816,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[!doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required")]]></value>
+                                                                                    <![CDATA[doc.assocAttr("lecm-contract:typeContract-assoc", "lecm-doc-dic-dt:es-sign-required") != true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -5075,7 +5075,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required")==true]]></value>
+                                                                                    <![CDATA[doc.assocAttr("lecm-contract:typeContract-assoc", "lecm-doc-dic-dt:es-sign-required")==true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -6211,7 +6211,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
   var typeAssoc = document.assocs["lecm-contract:typeContract-assoc"];
   if (typeAssoc) {
       var documentTypeDictionary = typeAssoc[0];
-      document.properties["lecm-signing-v2-aspects:isESSigningRequired"] = documentTypeDictionary.properties["lecm-doc-dic-dt:es-sign-required"];
+      document.properties["lecm-signing-v2-aspects:isESSigningRequired"] = documentTypeDictionary.properties["lecm-doc-dic-dt:es-sign-required"] === true;
       document.save();
   }
 })();]]></value>
@@ -14376,7 +14376,7 @@ notifications.sendNotificationFromCurrentUser({
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required")==true]]></value>
+                                                                                    <![CDATA[doc.assocAttr("lecm-contract:typeContract-assoc", "lecm-doc-dic-dt:es-sign-required")==true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -14633,7 +14633,7 @@ notifications.sendNotificationFromCurrentUser({
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[!doc.assocAttr("lecm-eds-document:document-type-assoc", "lecm-doc-dic-dt:es-sign-required")]]></value>
+                                                                                    <![CDATA[doc.assocAttr("lecm-contract:typeContract-assoc", "lecm-doc-dic-dt:es-sign-required") != true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
