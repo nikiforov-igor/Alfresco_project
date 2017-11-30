@@ -515,37 +515,18 @@
                     </field>
                 </appearance>
             </form>
-            <form id="default-create-form">
-                <create-form template="/ru/it/lecm/contracts/forms/stage-create-edit-form.ftl"/>
+            <form id="json-datagrid-item">
                 <field-visibility>
-                    <show id="lecm-contract-table-structure:stage-status" force="true"/>
-                    <show id="lecm-document:indexTableRow"/>
-                    <show id="lecm-contract-table-structure:name"/>
-                    <show id="lecm-contract-table-structure:start-date"/>
-                    <show id="lecm-contract-table-structure:end-date"/>
-                    <show id="lecm-contract-table-structure:start-date-real"/>
-                    <show id="lecm-contract-table-structure:end-date-real"/>
-                    <show id="lecm-contract-table-structure:stage-amount"/>
-                    <show id="lecm-contract-table-structure:stage-comment"/>
-                    <show id="lecm-contract-table-structure:attachments-temp-assoc"/>
+                    <show id="lecm-document:indexTableRow" force="true"/>
+                    <show id="lecm-contract-table-structure:name" force="true"/>
+                    <show id="lecm-contract-table-structure:start-date" force="true"/>
+                    <show id="lecm-contract-table-structure:end-date" force="true"/>
+                    <show id="lecm-contract-table-structure:stage-amount" force="true"/>
+                    <show id="lecm-contract-table-structure:stage-comment" force="true"/>
                 </field-visibility>
                 <appearance>
+                    <field id="lecm-contract-table-structure:stage-amount" help=""/>
                     <field id="lecm-document:indexTableRow" help-id="label.stage.number.help"/>
-                    <field id="lecm-contract-table-structure:stage-status">
-                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
-                            <control-param name="readonly">true</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-contract-table-structure:attachments-temp-assoc" >
-                        <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
-                            <control-param name="uploadDirectoryPath">{usertemp}</control-param>
-                            <control-param name="directoryName">label.contracts.attachments</control-param>
-                            <control-param name="showUploadNewVersion">true</control-param>
-                            <control-param name="checkRights">false</control-param>
-                            <control-param name="suppressRefreshEvent">true</control-param>
-                            <control-param name="showPreview">false</control-param>
-                        </control>
-                    </field>
                     <field id="lecm-contract-table-structure:stage-comment">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
