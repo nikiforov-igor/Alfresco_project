@@ -24,13 +24,13 @@
 (function () {
     function init() {
         LogicECM.module.Base.Util.loadScripts([
-            'scripts/lecm-eds-documents/controls/values-checkboxes-control.js'
+            'scripts/lecm-eds-documents/controls/checkbox-set-control.js'
         ], createDatagrid);
     }
 
     function createDatagrid() {
-        var control = new LogicECM.module.EDS.ValueCheckboxesControl('${fieldHtmlId}').setOptions({
-            valueConfig: ${field.control.params.config},
+        var control = new LogicECM.module.EDS.CheckboxSet('${fieldHtmlId}').setOptions({
+            valueSet: ${field.control.params.set},
         <#if field.control.params.nameColumnId??>
             nameColumnId: "${field.control.params.nameColumnId}",
         </#if>

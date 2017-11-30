@@ -509,8 +509,8 @@
 				</field-visibility>
 				<appearance>
 					<field id="allowPastDate" label="Разрешить выбор прошедшей даты в качестве срока исполнения">
-						<control template="/ru/it/lecm/eds/controls/values-checkboxes-control.ftl">
-							<control-param name="config"><![CDATA[
+						<control template="/ru/it/lecm/eds/controls/checkbox-set-control.ftl">
+							<control-param name="set"><![CDATA[
                                             [
 												{
                                             		key: 'Errand',

@@ -9,17 +9,17 @@ LogicECM.module.EDS = LogicECM.module.EDS || {};
 (function () {
     var Dom = YAHOO.util.Dom;
 
-    LogicECM.module.EDS.ValueCheckboxesControl = function (htmlId) {
-        LogicECM.module.EDS.ValueCheckboxesControl.superclass.constructor.call(this, "LogicECM.module.EDS.ValueCheckboxesControl", htmlId);
+    LogicECM.module.EDS.CheckboxSet = function (htmlId) {
+        LogicECM.module.EDS.CheckboxSet.superclass.constructor.call(this, "LogicECM.module.EDS.CheckboxSet", htmlId);
         return this;
     };
 
-    YAHOO.extend(LogicECM.module.EDS.ValueCheckboxesControl, Alfresco.component.Base,
+    YAHOO.extend(LogicECM.module.EDS.CheckboxSet, Alfresco.component.Base,
         {
             controlId: null,
 
             options: {
-                valueConfig: {},
+                valueSet: {},
                 formArguments: {},
                 fieldId: null,
                 nameColumnId: "label.column.name"
@@ -27,7 +27,7 @@ LogicECM.module.EDS = LogicECM.module.EDS || {};
 
             onReady: function () {
                 this.controlId = this.id + "-cntrl";
-                if (this.options.valueConfig && this.options.valueConfig.length) {
+                if (this.options.valueSet && this.options.valueSet.length) {
                     this.renderTable();
                 }
             },
@@ -43,9 +43,9 @@ LogicECM.module.EDS = LogicECM.module.EDS || {};
             },
 
             renderTable: function() {
-                this.fillDefaultFromArgs(this.options.valueConfig, this.options.formArguments);
+                this.fillDefaultFromArgs(this.options.valueSet, this.options.formArguments);
 
-                this.widgets.dataSource = new YAHOO.util.DataSource(this.options.valueConfig);
+                this.widgets.dataSource = new YAHOO.util.DataSource(this.options.valueSet);
                 this.widgets.dataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
                 this.widgets.dataSource.responseSchema = {
                     fields: ["key", "name", "value"]
