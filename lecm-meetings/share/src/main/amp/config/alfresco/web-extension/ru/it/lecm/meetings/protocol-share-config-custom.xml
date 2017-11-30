@@ -95,7 +95,7 @@
 					</field>
 				</appearance>
 			</form>
-			<form id="default-create-form">
+			<form id="json-datagrid-item">
 				<field-visibility>
 					<show id="lecm-document:indexTableRow" force="true"/>
 					<show id="lecm-protocol-ts:point-status-assoc"/>
