@@ -5151,6 +5151,37 @@ AutoApprovalScript.doAuto(stm_document, 'APPROVED_AUTO', msg, 'APPROVAL_AUTO');]
                                                     </node>
                                                     <node>
                                                         <type>transition</type>
+                                                        <name>d8ae2b8c-2559-4db1-abe5-b118235e7b6d</name>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[true]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[@approvalRoutesService.getState(doc.nodeRef) == "ACTIVE" AND doc.attr("lecm-routes-v2:decision") != NULL and doc.attr("lecm-routes-v2:decision") == "REJECTED_AUTO"]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[<import resource="classpath:/alfresco/module/eds-documents-repo/workflow/scripts/eds-auto-approval.js">
+var msg = 'Документ ' + documentScript.wrapperDocumentLink(stm_document, '{lecm-document:ext-present-string}') + ' был автоматически отправлен на доработку в связи с превышением срока согласования';
+AutoApprovalScript.doAuto(stm_document, 'REJECTED_AUTO', msg, 'REJECTED_AUTO');]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>transition</type>
                                                         <name>dc7a0981-6b00-4cbe-b722-7a8c63542ecf</name>
                                                         <properties>
                                                             <property>
