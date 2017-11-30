@@ -43,7 +43,7 @@
                     </field>
                     <field id="lecm-eds-document:execution-date">
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="minLimitCurrentDate">true</control-param>
+                            <control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-ORD', false)}</control-param>
                         </control>
                     </field>
                     <field id="lecm-eds-document:summaryContent">
@@ -610,7 +610,7 @@
                     </field>
                     <field id="lecm-eds-document:execution-date">
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="minLimitCurrentDate">true</control-param>
+                            <control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-ORD', false)}</control-param>
                         </control>
                     </field>
                     <field id="lecm-eds-document:summaryContent">
@@ -803,7 +803,7 @@
                     </field>
                     <field id="lecm-eds-document:execution-date" set="ord-document-form-common-set">
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="minLimitCurrentDate">true</control-param>
+                            <control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-ORD', false)}</control-param>
                         </control>
                     </field>
                     <field id="lecm-eds-document:summaryContent" set="ord-document-form-common-set">

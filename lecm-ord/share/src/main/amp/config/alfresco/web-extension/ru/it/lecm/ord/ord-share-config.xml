@@ -137,6 +137,9 @@
                         <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
                     </field>
                     <field id="lecm-ord-table-structure:execution-date" set="limitation-date">
+                        <control>
+                            <control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-ORD', false)}</control-param>
+                        </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.commonLimitationDateValidation" event="change"  message-id="Alfresco.forms.validation.mandatory.message"/>
                         </constraint-handlers>
@@ -275,6 +278,9 @@
                     <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
                 </field>
                 <field id="lecm-ord-table-structure:execution-date" set="limitation-date">
+                    <control>
+                        <control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-ORD', false)}</control-param>
+                    </control>
                     <constraint-handlers>
                         <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.commonLimitationDateValidation" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
                     </constraint-handlers>

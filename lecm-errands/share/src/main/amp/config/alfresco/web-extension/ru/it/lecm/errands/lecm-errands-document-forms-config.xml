@@ -326,6 +326,9 @@
                         <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
                     </field>
                     <field id="lecm-errands:limitation-date" set="limitation-date">
+                        <control>
+                            <control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-Errand', false)}</control-param>
+                        </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
                         </constraint-handlers>
@@ -728,6 +731,9 @@
                         <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
                     </field>
                     <field id="lecm-errands:limitation-date" set="limitation-date">
+                        <control>
+                            <control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-Errand', false)}</control-param>
+                        </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
                         </constraint-handlers>
@@ -1217,7 +1223,7 @@
                     </field>
                     <field id="lecm-errands:limitation-date" set="limitation-date">
                         <control>
-                            <control-param name="minLimitCurrentDate">true</control-param>
+                            <control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-Errand', false)}</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
@@ -1514,7 +1520,7 @@
                     </field>
                     <field id="lecm-errands:limitation-date" set="limitation-date">
                         <control>
-                            <control-param name="minLimitCurrentDate">true</control-param>
+                            <control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-Errand', false)}</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
@@ -1726,6 +1732,9 @@
                         <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
                     </field>
                     <field id="lecm-errands:limitation-date" set="limitation-date" mandatory="true">
+                        <control>
+                            <control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-Errand', false)}</control-param>
+                        </control>
                         <constraint-handlers>
                             <constraint message-id="Alfresco.forms.validation.mandatory.message" type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
                         </constraint-handlers>
@@ -1798,6 +1807,9 @@
                         <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
                     </field>
                     <field id="lecm-errands:limitation-date" set="limitation-date" mandatory="true">
+                        <control>
+                            <control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-Errand', false)}</control-param>
+                        </control>
                         <constraint-handlers>
                             <constraint message-id="Alfresco.forms.validation.mandatory.message" type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
                         </constraint-handlers>
@@ -1892,6 +1904,7 @@
                     <field id="lecm-errands:limitation-date" set="limitation-date" mandatory="true">
                         <control>
                             <control-param name="maxLimitArg">parentDocLimitationDate</control-param>
+                            <control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-Errand', false)}</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
@@ -1996,6 +2009,7 @@
                     <field id="lecm-errands:limitation-date" set="limitation-date" mandatory="true">
                         <control>
                             <control-param name="maxLimitArg">parentDocLimitationDate</control-param>
+                            <control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-Errand', false)}</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>

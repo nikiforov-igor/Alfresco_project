@@ -49,7 +49,9 @@
                         </control>
                     </field>
                     <field id="lecm-eds-document:execution-date" set="common">
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-Protocol', false)}</control-param>
+                        </control>
                     </field>
                     <field id="lecm-eds-document:summaryContent" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
@@ -415,7 +417,9 @@
                         </control>
                     </field>
                     <field id="lecm-eds-document:execution-date">
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-Protocol', false)}</control-param>
+                        </control>
                     </field>
                     <field id="lecm-eds-document:summaryContent">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>

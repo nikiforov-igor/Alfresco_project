@@ -86,7 +86,9 @@
 					</field>
 					<field id="lecm-protocol-ts:executor-assoc" mandatory="true"/>
 					<field id="lecm-protocol-ts:execution-date" >
-						<control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
+						<control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+							<control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-Protocol', false)}</control-param>
+						</control>
 					</field>
 					<field id="lecm-protocol-ts:note" >
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
@@ -205,7 +207,9 @@
 						</control>
 					</field>
 					<field id="lecm-protocol-ts:execution-date" set="item1">
-						<control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
+						<control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+							<control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-Protocol', false)}</control-param>
+						</control>
 					</field>
 					<field id="lecm-protocol-ts:execution-date-real" read-only="true" set="item1"/>
 					<field id="lecm-protocol-ts:note" set="item1">
@@ -338,7 +342,9 @@
 					</field>
 					<field id="lecm-protocol-ts:executor-assoc" mandatory="true" set="item1"/>
 					<field id="lecm-protocol-ts:execution-date" set="item1">
-						<control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
+						<control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+							<control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-Protocol', false)}</control-param>
+						</control>
 					</field>
 					<field id="lecm-protocol-ts:execution-date-real" read-only="true"  set="item1">
 						<control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
@@ -439,7 +445,9 @@
 					</field>
 					<field id="lecm-protocol-ts:executor-assoc" mandatory="true"/>
 					<field id="lecm-protocol-ts:execution-date">
-						<control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
+						<control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+							<control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-Protocol', false)}</control-param>
+						</control>
 					</field>
 					<field id="lecm-protocol-ts:note">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">

@@ -198,7 +198,7 @@
 
                     <field id="lecm-eds-document:execution-date">
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="minLimitCurrentDate">true</control-param>
+                            <control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-Incoming', false)}</control-param>
                         </control>
                     </field>
                     <field id="lecm-document-aspects:is-on-control"/>
@@ -415,7 +415,7 @@
 
                     <field set="common" id="lecm-eds-document:execution-date">
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="minLimitCurrentDate">true</control-param>
+                            <control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-Incoming', false)}</control-param>
                         </control>
                     </field>
                     <field set="common" id="lecm-document-aspects:is-on-control"/>
@@ -944,7 +944,7 @@
                     <field id="lecm-incoming:is-not-registered"/>
                     <field id="lecm-eds-document:execution-date">
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="minLimitCurrentDate">true</control-param>
+                            <control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-Incoming', false)}</control-param>
                         </control>
                     </field>
 
