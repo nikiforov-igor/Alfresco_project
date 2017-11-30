@@ -41,7 +41,7 @@
                     </field>
                     <field id="lecm-internal:response-date">
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="minLimitCurrentDate">true</control-param>
+                            <control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-Internal', false)}</control-param>
                         </control>
                     </field>
                     <field id="lecm-internal:recipients-assoc">
@@ -649,7 +649,7 @@
                     </field>
                     <field id="lecm-internal:response-date" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="minLimitCurrentDate">true</control-param>
+                            <control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-Internal', false)}</control-param>
                         </control>
                     </field>
 
@@ -898,7 +898,7 @@
                     </field>
                     <field id="lecm-internal:response-date">
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="minLimitCurrentDate">true</control-param>
+                            <control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-Internal', false)}</control-param>
                         </control>
                     </field>
 

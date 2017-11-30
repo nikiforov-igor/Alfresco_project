@@ -121,6 +121,9 @@
                         <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
                     </field>
                     <field id="lecm-resolutions:limitation-date" set="limitation-date"  mandatory="true">
+                        <control>
+                            <control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-Errand', false)}</control-param>
+                        </control>
                         <constraint-handlers>
                             <constraint message-id="Alfresco.forms.validation.mandatory.message" type="MANDATORY" validation-handler="LogicECM.module.Resolutions.limitationDateValidation" event="change" />
                         </constraint-handlers>
@@ -505,7 +508,11 @@
                             <control-param name="textCode">label.errand.limitless</control-param>
                         </control>
                     </field>
-                    <field id="lecm-resolutions:limitation-date" set="limitation-date"  mandatory="true"/>
+                    <field id="lecm-resolutions:limitation-date" set="limitation-date"  mandatory="true">
+                        <control>
+                            <control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-Errand', false)}</control-param>
+                        </control>
+                    </field>
 
                     <field id="lecm-resolutions:errands-json" set="execution">
                         <control template="/ru/it/lecm/resolutions/controls/resolution-execution-datagrid-control.ftl">
@@ -683,6 +690,9 @@
                         <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
                     </field>
                     <field id="lecm-resolutions:limitation-date" set="limitation-date"  mandatory="true">
+                        <control>
+                            <control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-Errand', false)}</control-param>
+                        </control>
                         <constraint-handlers>
                             <constraint message-id="Alfresco.forms.validation.mandatory.message" type="MANDATORY" validation-handler="LogicECM.module.Resolutions.limitationDateValidation" event="change" />
                         </constraint-handlers>

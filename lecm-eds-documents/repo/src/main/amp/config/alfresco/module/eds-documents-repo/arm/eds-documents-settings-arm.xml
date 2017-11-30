@@ -19,6 +19,14 @@
 									<![CDATA[page/components/console/eds-global-settings]]>
 								</property>
 							</item>
+							<item name="cm:Настройка ограничений на выбор прошедшей даты" type="lecm-arm:html-node">
+								<property name="cm:name"><![CDATA[Настройка ограничений на выбор прошедшей даты]]></property>
+								<property name="lecm-arm:order"><![CDATA[60]]></property>
+								<property name="lecm-arm:expression"><![CDATA[user.isAdmin()]]></property>
+								<property name="lecm-arm:html-url">
+									<![CDATA[page/components/console/global-settings?key=lecm.eds.controls]]>
+								</property>
+							</item>
 						</items>
 					</item>
 				</items>
