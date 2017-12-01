@@ -191,6 +191,7 @@
                         <control template="/ru/it/lecm/documents/controls/document-table-jsonData-control.ftl">
                             <control-param name="attributeForShow">lecm-contract-table-structure:name</control-param>
                             <control-param name="datagridFormId">datagrid</control-param>
+                            <control-param name="editFormId">json-datagrid-item-edit</control-param>
                             <control-param name="isTableSortable">false</control-param>
                             <control-param name="deleteMessageFunction">LogicECM.module.Contracts.getStageDeleteMessage</control-param>
                             <control-param name="editFormTitleMsg">stage.edit.form.title</control-param>
