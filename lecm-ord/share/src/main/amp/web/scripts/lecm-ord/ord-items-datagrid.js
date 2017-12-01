@@ -204,8 +204,9 @@ LogicECM.ORD = LogicECM.ORD || {};
         showActionsEvaluator: function (rowData) {
             var itemStatus = rowData.itemData["assoc_lecm-ord-table-structure_item-status-assoc"];
             var isItemStatusOk = itemStatus && itemStatus.displayValue == "Ожидает исполнения";
-            var isEmployeeOk = (this.options.currentDocStatus == "На регистрации" && this.options.currentUser.roles.includes("DA_REGISTRAR_DYN") && this.options.currentUser.roles.includes("DA_REGISTRARS")) ||
-                (this.options.currentDocStatus != "На регистрации" && this.options.currentUser.roles.includes("BR_INITIATOR"));
+            var isEmployeeOk =
+                ((this.options.currentDocStatus == "На регистрации" && this.options.currentUser.roles.indexOf("DA_REGISTRAR_DYN") >= 0 && this.options.currentUser.roles.indexOf("DA_REGISTRARS") >= 0) ||
+                (this.options.currentDocStatus != "На регистрации" && this.options.currentUser.roles.indexOf("BR_INITIATOR") >= 0));
             return isItemStatusOk && isEmployeeOk;
         }
 
