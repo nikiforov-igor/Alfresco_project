@@ -535,7 +535,7 @@
             <form id="json-datagrid-item-edit">
                 <create-form template="/ru/it/lecm/contracts/forms/stage-create-edit-form.ftl"/>
                 <field-visibility>
-                    <show id="lecm-contract-table-structure:stage-status" force="true"/>
+                    <show id="lecm-contract-table-structure:stage-status"/>
                     <show id="lecm-document:indexTableRow"/>
                     <show id="lecm-contract-table-structure:name"/>
                     <show id="lecm-contract-table-structure:start-date"/>
