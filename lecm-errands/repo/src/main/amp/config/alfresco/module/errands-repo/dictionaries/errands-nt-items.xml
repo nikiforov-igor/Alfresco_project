@@ -28,7 +28,7 @@
             <item name="cm:ERRANDS_APPROACHING_DEADLINE" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ERRANDS_APPROACHING_DEADLINE]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Приближается срок выполнения поручения: {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}]]></property>
+                    <![CDATA[Приближается срок исполнения поручения: {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Приближается срок исполнения]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>

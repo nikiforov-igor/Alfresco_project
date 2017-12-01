@@ -1,6 +1,7 @@
 package ru.it.lecm.errands.shedule;
 
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.quartz.CronTrigger;
 import org.quartz.SchedulerException;
@@ -22,6 +23,7 @@ import ru.it.lecm.base.beans.BaseTransactionalSchedule;
 public class EveryDayNotificationShedule extends BaseTransactionalSchedule {
 
     private DocumentService documentService;
+    private NamespaceService namespaceService;
 
     public EveryDayNotificationShedule() {
         super();
@@ -29,6 +31,10 @@ public class EveryDayNotificationShedule extends BaseTransactionalSchedule {
 
     public void setDocumentService(DocumentService documentService) {
         this.documentService = documentService;
+    }
+
+    public void setNamespaceService(NamespaceService namespaceService) {
+        this.namespaceService = namespaceService;
     }
 
     @Override
@@ -61,16 +67,10 @@ public class EveryDayNotificationShedule extends BaseTransactionalSchedule {
         statuses.add("!Черновик");
         statuses.add("!Исполнено");
 
-        List<NodeRef> errandsDocuments = documentService.getDocumentsByFilter(types, paths, statuses, null, null);
+        QName dateProperty = ErrandsService.PROP_ERRANDS_LIMITATION_DATE;
+        String property = dateProperty.toPrefixString(namespaceService);
+        filters = "ISNOTNULL: '" + property + "' AND NOT @" + property.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-") + ":''";
 
-        // в списке подписок у которых текущая дата меньше либо равна дате исполнения
-        List<NodeRef> appropErrands = new ArrayList<NodeRef>();
-        for (NodeRef errand : errandsDocuments) {
-            Date endDate = (Date) nodeService.getProperty(errand, ErrandsService.PROP_ERRANDS_LIMITATION_DATE);
-            if (endDate != null && (now.before(endDate) || now.equals(endDate))) {
-                appropErrands.add(errand);
-            }
-        }
-        return appropErrands;
+        return documentService.getDocumentsByFilter(types, paths, statuses, filters, null);
     }
 }
