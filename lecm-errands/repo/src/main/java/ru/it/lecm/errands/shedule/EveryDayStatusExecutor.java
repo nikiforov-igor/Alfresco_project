@@ -45,7 +45,7 @@ public class EveryDayStatusExecutor extends ActionExecuterAbstractBase {
         // формируем уведомление Исполнителю, Инициатору и Контролеру:
         notificationsService.sendNotificationByTemplate(nodeRef, getEmployeeList(nodeRef), "ERRANDS_EXCEEDED_DEADLINE");
         // формируем запись в журнал
-        String logText = "Поручение #mainobject не исполнено в установленный срок";
+        String logText = "Истек срок исполнения поручения #mainobject";
         businessJournalService.log(nodeRef, "DOCUMENT_EXPIRED", logText);
     }
 
