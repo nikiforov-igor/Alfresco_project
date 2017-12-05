@@ -2,7 +2,7 @@
 <items updateMode="CreateOrUpdate">
     <item name="cm:Внутренние. Завершить работу" type="lecm-group-actions:script-action">
         <property name="lecm-group-actions:expression">
-            <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") OR user.currentUser().hasBusinessRole("DA_REGISTRAR_DYN") OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "DA_RECIPIENT_DYN")]]></property>
+            <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "DA_REGISTRAR_DYN") OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "DA_RECIPIENT_DYN")]]></property>
         <property name="cm:name"><![CDATA[Внутренние. Завершить работу]]></property>
         <property name="lecm-group-actions:statuses"><![CDATA[Направлен]]></property>
         <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
