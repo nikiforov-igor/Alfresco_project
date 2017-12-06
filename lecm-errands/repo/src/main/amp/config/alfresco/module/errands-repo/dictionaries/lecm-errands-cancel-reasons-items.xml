@@ -2,8 +2,8 @@
 <items>
     <item name="lecm-dic:Причины отмены поручений" type="lecm-dic:dictionary">
         <items updateMode="CreateOrUpdate">
-            <item name="cm:Не акутально" type="lecm-errands-dic:errand-cancel-reason">
-                <property name="lecm-errands-dic:errand-cancel-reason-name"><![CDATA[Не акутально]]></property>
+            <item name="cm:Не актуально" type="lecm-errands-dic:errand-cancel-reason">
+                <property name="lecm-errands-dic:errand-cancel-reason-name"><![CDATA[Не актуально]]></property>
             </item>
             <item name="cm:Исполнено другим поручением" type="lecm-errands-dic:errand-cancel-reason">
                 <property name="lecm-errands-dic:errand-cancel-reason-name"><![CDATA[Исполнено другим поручением]]></property>
