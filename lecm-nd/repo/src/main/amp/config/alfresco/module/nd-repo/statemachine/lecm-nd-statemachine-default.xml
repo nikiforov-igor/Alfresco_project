@@ -1967,12 +1967,16 @@
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[(function() {
-	var document = stm_document,
-		isReservationRunning = document.properties['lecm-reservation-aspects:isReservationRunning'],
-		documentRegnum = document.properties["lecm-document:regnum"],
-		projectNumber = document.properties["lecm-document-aspects:reg-project-data-number"],
-		presentString = document.properties["lecm-document:present-string"],
-		presentStringWithProjectNumber = presentString.replace(documentRegnum, projectNumber);
+	var document = stm_document;
+	if (document) {
+      document.reset();
+    }
+
+    var isReservationRunning = document.properties['lecm-reservation-aspects:isReservationRunning'],
+    documentRegnum = document.properties["lecm-document:regnum"],
+    projectNumber = document.properties["lecm-document-aspects:reg-project-data-number"],
+    presentString = document.properties["lecm-document:present-string"],
+    presentStringWithProjectNumber = presentString.replace(documentRegnum, projectNumber);
 
 	if (isReservationRunning) {
 		statemachine.terminateWorkflowsByDefinition(document, 'regnumReservationExecution', null, null);
@@ -2014,8 +2018,11 @@
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[(function(){
     var nd = stm_document;
-    regnumbers.registerDocument(nd, "ND_NUMBER");
-    nd.save();
+    if (nd) {
+      nd.reset();
+      regnumbers.registerDocument(nd, "ND_NUMBER");
+      nd.save();
+    }
 })();]]></value>
                                                             </property>
                                                         </properties>
