@@ -5934,81 +5934,7 @@ AutoApprovalScript.doAuto(stm_document, 'REJECTED_AUTO', msg, 'REJECTED_AUTO');]
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders>
-                                            <subFolder>
-                                                <name>transitions</name>
-                                                <nodes>
-                                                    <node>
-                                                        <type>userTransition</type>
-                                                        <name>6d0bf5c4-ee1b-4e81-920d-048e3fb1ea2b</name>
-                                                        <properties>
-                                                            <property>
-                                                                <name>transition-script</name>
-                                                                <value><![CDATA[]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[true]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>transitionLabel</name>
-                                                                <value><![CDATA[Завершение работы]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>do-not-ask-for-confirmation</name>
-                                                                <value><![CDATA[false]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects>
-                                                            <transitionLabelAspect/>
-                                                            <transitionStatusAspect/>
-                                                        </aspects>
-                                                        <associations>
-                                                            <association>
-                                                                <type>transitionStatus</type>
-                                                                <reference>Закрыт</reference>
-                                                            </association>
-                                                        </associations>
-                                                        <roleAssociations/>
-                                                        <subFolders>
-                                                            <subFolder>
-                                                                <name>variables</name>
-                                                                <nodes>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>ec9662dd-1b4b-47ba-b462-561ba2b8ea68
-                                                                        </name>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Действие недоступно]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                </nodes>
-                                                            </subFolder>
-                                                        </subFolders>
-                                                    </node>
-                                                </nodes>
-                                            </subFolder>
-                                        </subFolders>
+                                        <subFolders/>
                                     </node>
                                     <node>
                                         <type>WaitForDocumentChange</type>
@@ -6156,7 +6082,7 @@ AutoApprovalScript.doAuto(stm_document, 'REJECTED_AUTO', msg, 'REJECTED_AUTO');]
                                                         <properties>
                                                             <property>
                                                                 <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[false]]></value>
+                                                                <value><![CDATA[true]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>do-not-ask-for-confirmation</name>
