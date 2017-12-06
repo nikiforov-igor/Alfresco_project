@@ -1967,16 +1967,16 @@
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[(function() {
-	var document = stm_document,
-		isReservationRunning = document.properties['lecm-reservation-aspects:isReservationRunning'],
-		documentRegnum = document.properties["lecm-document:regnum"],
-		projectNumber = document.properties["lecm-document-aspects:reg-project-data-number"],
-		presentString = document.properties["lecm-document:present-string"],
-		presentStringWithProjectNumber = presentString.replace(documentRegnum, projectNumber);
-
-    if (document) {
+	var document = stm_document;
+	if (document) {
       document.reset();
     }
+
+    var isReservationRunning = document.properties['lecm-reservation-aspects:isReservationRunning'],
+    documentRegnum = document.properties["lecm-document:regnum"],
+    projectNumber = document.properties["lecm-document-aspects:reg-project-data-number"],
+    presentString = document.properties["lecm-document:present-string"],
+    presentStringWithProjectNumber = presentString.replace(documentRegnum, projectNumber);
 
 	if (isReservationRunning) {
 		statemachine.terminateWorkflowsByDefinition(document, 'regnumReservationExecution', null, null);
