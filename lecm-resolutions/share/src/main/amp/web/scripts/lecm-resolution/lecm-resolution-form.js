@@ -107,11 +107,20 @@
         var parentExecutionDate = Alfresco.util.fromISO8601(baseDocExecutionDate);
 
         var executionDateRadio = form["prop_lecm-resolutions_limitation-date-radio"];
-        if (executionDateRadio && executionDateRadio.value) {
-            if (executionDateRadio.value == "DATE") {
+        if (!executionDateRadio) {
+            return;
+        }
+        var executionDateRadioValue;
+        if (executionDateRadio instanceof HTMLCollection) {
+            executionDateRadioValue = executionDateRadio.item().value;
+        } else {
+            executionDateRadioValue = executionDateRadio.value;
+        }
+        if (executionDateRadioValue) {
+            if (executionDateRadioValue== "DATE") {
                 var executionDateDate = form["prop_lecm-resolutions_limitation-date"];
                 compareExecutionDate(parentExecutionDate, Alfresco.util.fromISO8601(executionDateDate.value));
-            } else if (executionDateRadio.value == "DAYS") {
+            } else if (executionDateRadioValue == "DAYS") {
                 var executionDateDays = form["prop_lecm-resolutions_limitation-date-days"];
                 var executionDateType = form["prop_lecm-resolutions_limitation-date-type"];
                 if (executionDateDays && executionDateDays.value && executionDateType && executionDateType.value) {
