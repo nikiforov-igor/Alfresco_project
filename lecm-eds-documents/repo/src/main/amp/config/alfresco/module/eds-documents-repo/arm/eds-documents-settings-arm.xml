@@ -24,7 +24,7 @@
 								<property name="lecm-arm:order"><![CDATA[60]]></property>
 								<property name="lecm-arm:expression"><![CDATA[user.isAdmin()]]></property>
 								<property name="lecm-arm:html-url">
-									<![CDATA[page/components/console/global-settings?key=lecm.eds.controls]]>
+									<![CDATA[page/components/console/global-settings?key=lecm.eds.controls&titleId=label.settings.allowPastDate]]>
 								</property>
 							</item>
 						</items>
