@@ -4,6 +4,7 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -161,7 +162,10 @@ public class ErrandsReportAttachmentAssociationPolicy implements NodeServicePoli
                 isAttachmentUsedInTable(executionTableData, ErrandsService.ASSOC_ERRANDS_TS_EXECUTOR_ATTACHMENT, reportNodeRef, attachment);
         Boolean isPendingDeletion = nodeService.hasAspect(attachment, ContentModel.ASPECT_PENDING_DELETE);
         if (!attachmentIsUsed && !isPendingDeletion) {
-            documentAttachmentsService.deleteAttachment(attachment);
+            AuthenticationUtil.runAsSystem(() -> {
+                documentAttachmentsService.deleteAttachment(attachment);
+                return null;
+            });
         }
     }
 
