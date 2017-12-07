@@ -111,10 +111,10 @@
             return;
         }
         var executionDateRadioValue;
-        if (executionDateRadio instanceof NodeList) {
-            executionDateRadioValue = executionDateRadio.value;
-        } else if (executionDateRadio instanceof HTMLCollection) {
+        if (executionDateRadio instanceof HTMLCollection) {
             executionDateRadioValue = executionDateRadio.item().value;
+        } else {
+            executionDateRadioValue = executionDateRadio.value;
         }
         if (executionDateRadioValue) {
             if (executionDateRadioValue== "DATE") {
