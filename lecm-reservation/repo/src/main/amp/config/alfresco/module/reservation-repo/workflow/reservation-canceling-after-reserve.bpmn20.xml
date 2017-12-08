@@ -27,6 +27,13 @@
                         lecmPermission.setRunAsUserSystem();
                         document.save();
                         lecmPermission.popAuthentication();
+
+                        if (registrarsList) {
+                            for (var i=0; i < registrarsList.size(); i++) {
+                                lecmPermission.revokeDynamicRole(document, registrarsList.get(i), 'LECM_REGISTRAR_DYN');
+                                lecmPermission.revokeDynamicRole(document, registrarsList.get(i), 'RESERVATION_PERFORMER_DYN');
+                            }
+                        }
                     ]]></activiti:string>
                 </activiti:field>
             </activiti:executionListener>
@@ -164,12 +171,6 @@
                                         registrars.forEach(function(empl) {
                                             document.removeAssociation(empl, 'lecm-document-aspects:registrator-assoc');
                                         });
-                                    }
-                                    if (registrarsList) {
-                                        for (var i=0; i < registrarsList.size(); i++) {
-                                            lecmPermission.revokeDynamicRole(document, registrarsList.get(i), 'LECM_REGISTRAR_DYN');
-                                            lecmPermission.revokeDynamicRole(document, registrarsList.get(i), 'RESERVATION_PERFORMER_DYN');
-                                        }
                                     }
 
                                     var bjMsg = '#initiator отменил резервирование номера для документа #mainobject. Возвращен номер проекта документа:' + projectNumber;
