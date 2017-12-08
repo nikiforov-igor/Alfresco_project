@@ -16,6 +16,9 @@
     width: 100%;
     resize: vertical;
     box-sizing: border-box;
+    border: 0;
+    outline: 1px solid #ccc;
+    outline-offset: 0;
 }
 .direct-answer .answer-comment .control.dnd-uploader,
 .direct-answer .answer-comment .control.dnd-uploader img.uploader-button {
