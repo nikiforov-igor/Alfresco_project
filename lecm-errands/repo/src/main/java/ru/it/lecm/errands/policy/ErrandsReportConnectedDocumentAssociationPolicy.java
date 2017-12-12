@@ -4,6 +4,7 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -148,13 +149,19 @@ public class ErrandsReportConnectedDocumentAssociationPolicy implements NodeServ
         //удаляем связь если не нужна
         if (!docIsUsed) {
             //ищем нужную связь
-            List<NodeRef> connections = documentConnectionService.getConnections(errandNodeRef);
-            for (NodeRef con : connections) {
-                NodeRef conDoc = nodeService.getTargetAssocs(con, DocumentConnectionService.ASSOC_CONNECTED_DOCUMENT).get(0).getTargetRef();
-                if (conDoc.equals(connectedDoc)) {
-                    documentConnectionService.deleteConnection(con);
+            final List<NodeRef> connections = documentConnectionService.getConnections(errandNodeRef);
+            AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+                @Override
+                public Void doWork() throws Exception {
+                    for (NodeRef con : connections) {
+                        NodeRef conDoc = nodeService.getTargetAssocs(con, DocumentConnectionService.ASSOC_CONNECTED_DOCUMENT).get(0).getTargetRef();
+                        if (conDoc.equals(connectedDoc)) {
+                            documentConnectionService.deleteConnection(con);
+                        }
+                    }
+                    return null;
                 }
-            }
+            });
         }
     }
 
