@@ -37,9 +37,11 @@
             if(propName == "lecm-errands_report-recipient-type") {
                 if (!requiredReport) {
                     recipientField.options[3].hidden = false;
+                    recipientField.options[3].disabled = false;
                     Dom.get(args[1].formId + '_prop_' + propName).selectedIndex = 3;
                 } else {
                     recipientField.options[3].hidden = true;
+                    recipientField.options[3].disabled = true;
                     if (Dom.get(args[1].formId + '_prop_' + propName).selectedIndex == 3) {
                         Dom.get(args[1].formId + '_prop_' + propName).selectedIndex = 0;
                     }
