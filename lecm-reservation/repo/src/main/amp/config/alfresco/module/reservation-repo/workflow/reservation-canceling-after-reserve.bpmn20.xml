@@ -27,12 +27,7 @@
                         lecmPermission.setRunAsUserSystem();
                         document.save();
                         lecmPermission.popAuthentication();
-                        var registrars = document.assocs["lecm-document-aspects:registrator-assoc"];
-                        if (registrars && registrars.length) {
-                            registrars.forEach(function(empl) {
-                                document.removeAssociation(empl, 'lecm-document-aspects:registrator-assoc');
-                            });
-                        }
+
                         if (registrarsList) {
                             for (var i=0; i < registrarsList.size(); i++) {
                                 lecmPermission.revokeDynamicRole(document, registrarsList.get(i), 'LECM_REGISTRAR_DYN');
@@ -166,10 +161,18 @@
                                     document.properties['lecm-document-aspects:reg-data-number'] = null;
                                     document.properties['lecm-document:regnum'] = projectNumber;
                                     document.properties['lecm-document:doc-date'] = document.properties['lecm-document-aspects:reg-project-data-date'];
+
                                     lecmPermission.pushAuthentication();
                                     lecmPermission.setRunAsUserSystem();
                                     document.save();
                                     lecmPermission.popAuthentication();
+
+                                    var registrars = document.assocs["lecm-document-aspects:registrator-assoc"];
+                                    if (registrars && registrars.length) {
+                                        registrars.forEach(function(empl) {
+                                            document.removeAssociation(empl, 'lecm-document-aspects:registrator-assoc');
+                                        });
+                                    }
 
                                     var bjMsg = '#initiator отменил резервирование номера для документа #mainobject. Возвращен номер проекта документа:' + projectNumber;
                                     businessJournal.log(document.nodeRef.toString(), 'RESERVATION', bjMsg, []);
