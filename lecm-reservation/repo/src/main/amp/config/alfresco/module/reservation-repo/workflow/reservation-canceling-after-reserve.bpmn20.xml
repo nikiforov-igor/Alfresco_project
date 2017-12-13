@@ -163,8 +163,9 @@
                                     var projectNumber = document.properties['lecm-document-aspects:reg-project-data-number'];
                                     document.properties['lecm-reservation-aspects:isReserved'] = false;
                                     document.properties['lecm-document-aspects:reg-data-date'] = null;
-                                    document.properties['lecm-document-aspects:reg-data-number'] = projectNumber;
+                                    document.properties['lecm-document-aspects:reg-data-number'] = null;
                                     document.properties['lecm-document:regnum'] = projectNumber;
+                                    document.properties['lecm-document:doc-date'] = document.properties['lecm-document-aspects:reg-project-data-date'];
                                     lecmPermission.pushAuthentication();
                                     lecmPermission.setRunAsUserSystem();
                                     document.save();
