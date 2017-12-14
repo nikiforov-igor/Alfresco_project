@@ -272,8 +272,10 @@
 
 					<field id="lecm-document:indexTableRow" read-only="true" help="" force="true" set="item0"/>
 					<field id="lecm-protocol-ts:point-status-assoc" read-only="true" set="item0">
-						<control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
-							<control-param name="formatString">{lecm-protocol-ts:point-status-assoc/cm:name}</control-param>
+						<control template="/ru/it/lecm/base-share/components/controls/substitude-text-control.ftl">
+							<control-param name="value">
+								#{@substitudeService.formatNodeTitle(doc.nodeRef,"{lecm-protocol-ts:point-status-assoc/cm:name}")}
+							</control-param>
 						</control>
 					</field>
 					<field id="lecm-protocol-ts:point-formulation" set="item1"/>
@@ -355,9 +357,9 @@
 						</control>
 					</field>
 					<field id="lecm-protocol-ts:errand-assoc" set="item1">
-						<control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
-							<control-param name="formatString">
-								<![CDATA[<a href='/{~SHARE_CONTEXT}/page/document?nodeRef={lecm-protocol-ts:errand-assoc/nodeRef}'>{lecm-protocol-ts:errand-assoc/lecm-document:present-string}</a>]]>
+						<control template="/ru/it/lecm/base-share/components/controls/substitude-text-control.ftl">
+							<control-param name="value">
+								<![CDATA[#{@substitudeService.formatNodeTitle(doc.nodeRef,"<a href='/{~SHARE_CONTEXT}/page/document?nodeRef={lecm-protocol-ts:errand-assoc/nodeRef}'>{lecm-protocol-ts:errand-assoc/lecm-document:present-string}</a>")}]]>
 							</control-param>
 						</control>
 					</field>
