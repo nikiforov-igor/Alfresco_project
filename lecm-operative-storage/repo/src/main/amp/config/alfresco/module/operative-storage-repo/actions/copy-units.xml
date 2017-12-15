@@ -46,6 +46,7 @@
                         "displayName":"Выбор раздела (годового и управления)",
                         "id":"lecm-os:nomenclature-unit-section-and-year-control",
                         "params":[
+                            {"name":"endpointMany","value":"false"},
                             {"name":"plane","value":"false"},
                             {"name":"endpointType","value":"lecm-dic:hierarchical_dictionary_values"},
                             {"name":"showSelectedItemsPath","value":"false"},
