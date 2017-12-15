@@ -274,7 +274,7 @@
 					<field id="lecm-protocol-ts:point-status-assoc" read-only="true" set="item0">
 						<control template="/ru/it/lecm/base-share/components/controls/substitude-text-control.ftl">
 							<control-param name="value">
-								#{@substitudeService.formatNodeTitle(doc.nodeRef,"{lecm-protocol-ts:point-status-assoc/cm:name}")}
+								#{doc.assocAttr("lecm-protocol-ts:point-status-assoc","cm:name")}
 							</control-param>
 						</control>
 					</field>

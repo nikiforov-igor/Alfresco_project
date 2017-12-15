@@ -60,7 +60,7 @@
                     <field id="lecm-ord-table-structure:item-status-assoc" read-only="true">
                         <control template="/ru/it/lecm/base-share/components/controls/substitude-text-control.ftl">
                             <control-param name="value">
-                                #{@substitudeService.formatNodeTitle(doc.nodeRef,"{lecm-ord-table-structure:item-status-assoc/cm:name}")}
+                                #{doc.assocAttr("lecm-ord-table-structure:item-status-assoc","cm:name")}
                             </control-param>
                         </control>
                     </field>
