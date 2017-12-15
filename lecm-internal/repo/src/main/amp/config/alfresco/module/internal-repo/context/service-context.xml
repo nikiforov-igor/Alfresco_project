@@ -170,6 +170,12 @@
                 <value>lecm-eds-document:document-type-assoc</value>
             </list>
         </property>
+        <property name="categoriesToCopy">
+            <list>
+                <value>Внутренний</value>
+                <value>Прочее</value>
+            </list>
+        </property>
     </bean>
 
     <bean id="internalCopySettingsBean" parent="documentCopySettingsBean">

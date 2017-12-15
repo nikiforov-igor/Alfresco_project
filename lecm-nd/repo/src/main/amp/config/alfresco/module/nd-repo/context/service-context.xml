@@ -181,6 +181,7 @@
         <property name="categoriesToCopy">
             <list>
                 <value>Документ</value>
+                <value>Прочее</value>
             </list>
         </property>
     </bean>

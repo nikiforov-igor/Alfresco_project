@@ -88,9 +88,15 @@
 		<value>lecm-document:subject-assoc</value>
 	</util:list>
 
-	<bean id="outgoing.copySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings"
-		  p:propsToCopy-ref="outgoing.copySettings.propsToCopy"
-		  p:assocsToCopy-ref="outgoing.copySettings.assocsToCopy" />
+	<util:list id="outgoing.copySetting.categoriesToCopy">
+        <value>Исходящий</value>
+        <value>Прочее</value>
+    </util:list>
+
+    <bean id="outgoing.copySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings"
+          p:propsToCopy-ref="outgoing.copySettings.propsToCopy"
+          p:assocsToCopy-ref="outgoing.copySettings.assocsToCopy"
+          p:categoriesToCopy-ref="outgoing.copySetting.categoriesToCopy"/>
 
 	<util:map id="outgoing.copySettings.bean.settings">
 		<entry key="lecm-outgoing:document" value-ref="outgoing.copySettings"/>

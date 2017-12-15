@@ -115,6 +115,7 @@
         <property name="categoriesToCopy">
             <list>
                 <value>Документ</value>
+                <value>Приложения</value>
             </list>
         </property>
         <property name="tableDataToCopy">
