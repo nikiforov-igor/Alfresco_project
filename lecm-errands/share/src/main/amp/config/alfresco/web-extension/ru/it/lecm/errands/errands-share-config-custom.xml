@@ -1607,6 +1607,7 @@
                     <field id="lecmErrandWf:limitationDateDays" set="limitation-date" mandatory="true">
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.createErrandWFLimitationDateValidation" event="change" />
+                            <constraint type="NUMBER" validation-handler="LogicECM.module.Errands.OValidation" event="keyup" message-id="message.constraint.number.positive"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecmErrandWf:limitationDateType" set="limitation-date">

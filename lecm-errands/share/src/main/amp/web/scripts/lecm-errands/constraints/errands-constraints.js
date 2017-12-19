@@ -78,3 +78,7 @@ LogicECM.module.Errands.createErrandWFLimitationDateValidation =
         return LogicECM.module.Errands.commonLimitationDateValidation(field, args, event, form, silent, message, props);
     };
 
+
+LogicECM.module.Errands.OValidation = function (field, args, event, form, silent, message) {
+    return !/^0+$/.test(field.value);
+};

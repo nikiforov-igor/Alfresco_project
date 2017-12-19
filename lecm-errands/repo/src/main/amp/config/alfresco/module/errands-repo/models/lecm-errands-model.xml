@@ -177,7 +177,7 @@
                         </constraint>
 						<constraint type="MINMAX">
 							<parameter name="minValue">
-								<value>1</value>
+								<value>0</value>
 							</parameter>
 							<parameter name="maxValue">
 								<value>2147483647</value>
