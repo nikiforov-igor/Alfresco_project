@@ -80,5 +80,35 @@ LogicECM.module.Errands.createErrandWFLimitationDateValidation =
 
 
 LogicECM.module.Errands.OValidation = function (field, args, event, form, silent, message) {
-    return !/^0+$/.test(field.value);
+    args = {
+        maxValue: 2147483647,
+        minValue: 1
+    };
+    var isValid = Alfresco.forms.validation.numberRange(field, args, event, form, silent, message);
+
+    this.message = LogicECM.module.Errands.OValidation.MessageHandler;
+
+    this.args.fieldId = field.id;
+
+    if (!this.args.messageHandlerBinded) {
+        this.args.messageHandlerBinded = true;
+        return form._runValidations(event, field.id, Alfresco.forms.Form.NOTIFICATION_LEVEL_CONTAINER);
+    }
+
+    return isValid;
+};
+
+LogicECM.module.Errands.OValidation.MessageHandler = function (args) {
+    var fieldValue = "";
+    if (args.fieldId) {
+        var field = Dom.get(args.fieldId);
+        if (field) {
+            fieldValue = field.value;
+        }
+    }
+    if (!/^0+$/.test(fieldValue)) {
+        return Alfresco.util.message("Alfresco.forms.validation.numberRange.message");
+    } else {
+        return Alfresco.util.message("message.constraint.number.positive");
+    }
 };
