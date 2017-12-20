@@ -245,7 +245,7 @@
                             <control-param name="createIterationFormId">createIteration</control-param>
                             <control-param name="createStageInlineFormId">editStageParametersInlineForm</control-param>
                             <control-param name="expandDataSource">ru/it/lecm/routes-v2/stages/stageExpanded</control-param>
-                            <control-param name="expandedDataSource">components/form?formId=viewApprovalResult</control-param>
+                            <control-param name="expandedDataSource">lecm/components/form?formId=viewApprovalResult</control-param>
                             <control-param name="newListTitleMsgId">title.new.approval.list</control-param>
                             <control-param name="repeatRouteDialogFormId">repeatPreviousApprovalRouteDialog</control-param>
                             <control-param name="newListConfirmationMsgId">message.new.approval.list.confirmation</control-param>

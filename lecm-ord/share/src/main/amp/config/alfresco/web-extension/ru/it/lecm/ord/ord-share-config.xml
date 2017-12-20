@@ -58,8 +58,10 @@
                         </control>
                     </field>
                     <field id="lecm-ord-table-structure:item-status-assoc" read-only="true">
-                        <control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
-                            <control-param name="formatString">{lecm-ord-table-structure:item-status-assoc/cm:name}</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/substitude-text-control.ftl">
+                            <control-param name="value">
+                                #{doc.assocAttr("lecm-ord-table-structure:item-status-assoc","cm:name")}
+                            </control-param>
                         </control>
                     </field>
                     <field id="lecm-base-dummy-aspects:script" set="buttons">
@@ -160,8 +162,10 @@
                         </control>
                     </field>
                     <field id="lecm-ord-table-structure:item-status-assoc" read-only="true" set="bottom">
-                        <control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
-                            <control-param name="formatString">{lecm-ord-table-structure:item-status-assoc/cm:name}</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/substitude-text-control.ftl">
+                            <control-param name="value">
+                                #{@substitudeService.formatNodeTitle(doc.nodeRef,"{lecm-ord-table-structure:item-status-assoc/cm:name}")}
+                            </control-param>
                         </control>
                     </field>
                     <field id="lecm-ord-table-structure:errand-assoc" read-only="true" set="bottom"/>
