@@ -320,7 +320,7 @@
                     <field id="lecm-errands:limitation-date-days" set="limitation-date" mandatory="true">
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
-                            <constraint type="NUMBER" validation-handler="LogicECM.module.Errands.OValidation" event="keyup" message-id="message.constraint.number.positive"/>
+                            <constraint type="MINMAX" validation-handler="LogicECM.module.Errands.OValidation" event="keyup" message-id="message.constraint.number.positive"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-errands:limitation-date-type" set="limitation-date">
@@ -1516,7 +1516,7 @@
                     <field id="lecm-errands:limitation-date-days" set="limitation-date" mandatory="true">
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
-                            <constraint type="NUMBER" validation-handler="LogicECM.module.Errands.OValidation" event="keyup" message-id="message.constraint.number.positive"/> 
+                            <constraint type="MINMAX" validation-handler="LogicECM.module.Errands.OValidation" event="keyup" message-id="message.constraint.number.positive"/> 
                         </constraint-handlers>
                     </field>
                     <field id="lecm-errands:limitation-date-type" set="limitation-date">
@@ -1730,7 +1730,7 @@
                     <field id="lecm-errands:limitation-date-days" set="limitation-date" mandatory="true">
                         <constraint-handlers>
                             <constraint message-id="Alfresco.forms.validation.mandatory.message" type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
-                            <constraint type="NUMBER" validation-handler="LogicECM.module.Errands.OValidation" event="keyup" message-id="message.constraint.number.positive"/>
+                            <constraint type="MINMAX" validation-handler="LogicECM.module.Errands.OValidation" event="keyup" message-id="message.constraint.number.positive"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-errands:limitation-date-type" set="limitation-date">
@@ -1806,7 +1806,7 @@
                     <field id="lecm-errands:limitation-date-days" set="limitation-date" mandatory="true">
                         <constraint-handlers>
                             <constraint message-id="Alfresco.forms.validation.mandatory.message" type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
-                            <constraint type="NUMBER" validation-handler="LogicECM.module.Errands.OValidation" event="keyup" message-id="message.constraint.number.positive"/>
+                            <constraint type="MINMAX" validation-handler="LogicECM.module.Errands.OValidation" event="keyup" message-id="message.constraint.number.positive"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-errands:limitation-date-type" set="limitation-date">
@@ -1902,7 +1902,7 @@
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
                             <constraint type="INVALID" validation-handler="LogicECM.module.Resolutions.ErrandsExecutionDateValidation" message-id="message.errandExecutionDate.laterResolution" event="keyup"/>
-                            <constraint type="NUMBER" validation-handler="LogicECM.module.Errands.OValidation" event="keyup" message-id="message.constraint.number.positive"/>
+                            <constraint type="MINMAX" validation-handler="LogicECM.module.Errands.OValidation" event="keyup" message-id="message.constraint.number.positive"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-errands:limitation-date-type" set="limitation-date">
@@ -2008,7 +2008,7 @@
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
                             <constraint type="INVALID" validation-handler="LogicECM.module.Resolutions.ErrandsExecutionDateValidation" message-id="message.errandExecutionDate.laterResolution" event="keyup"/>
-                            <constraint type="NUMBER" validation-handler="LogicECM.module.Errands.OValidation" event="keyup" message-id="message.constraint.number.positive"/>
+                            <constraint type="MINMAX" validation-handler="LogicECM.module.Errands.OValidation" event="keyup" message-id="message.constraint.number.positive"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-errands:limitation-date-type" set="limitation-date">
