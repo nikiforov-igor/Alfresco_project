@@ -4,6 +4,7 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.ConcurrencyFailureException;
@@ -125,19 +126,14 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
     @Override
     public Date convertComplexDate(String radio, Date date, String daysType, Integer daysCount) {
         if (COMPLEX_DATE_RADIO_DATE.equals(radio)) {
-            return date;
+            return date != null ? DateUtils.truncate(date, Calendar.DAY_OF_MONTH) : null;
         } else if (COMPLEX_DATE_RADIO_DAYS.equals(radio) && daysCount != null && daysType != null) {
             Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.HOUR_OF_DAY, 12);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
-
+            date = DateUtils.truncate(cal.getTime(), Calendar.DAY_OF_MONTH);
             if (COMPLEX_DATE_DAYS_WORK.equals(daysType)) {
-                return calendarBean.getNextWorkingDateByDays(cal.getTime(), daysCount);
+                return calendarBean.getNextWorkingDateByDays(date, daysCount);
             } else if (COMPLEX_DATE_DAYS_CALENDAR.equals(daysType)) {
-                cal.add(Calendar.DAY_OF_YEAR, daysCount);
-                return cal.getTime();
+                return DateUtils.addDays(date, daysCount);
             }
         }
         return null;
