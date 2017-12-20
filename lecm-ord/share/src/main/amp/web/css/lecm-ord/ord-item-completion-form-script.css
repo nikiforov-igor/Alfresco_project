@@ -1,5 +1,4 @@
 .ord-item-completion-option-set .control .container .value-div:not(:empty) {
-    border: 1px solid #ccc;
     margin-bottom: 5px;
     padding-bottom: 5px;
 }
