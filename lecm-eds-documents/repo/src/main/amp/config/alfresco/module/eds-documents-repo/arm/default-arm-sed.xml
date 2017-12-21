@@ -26864,8 +26864,6 @@
                                         <assocs>
                                             <assoc type="lecm-arm:filters-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По типу"/>
-                                            <assoc type="lecm-arm:filters-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/Я - регистратор"/>
                                             <assoc type="lecm-arm:fields-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Резервирование номера/Запросы на резервирование/0e9a559d-6701-42d6-8f5f-63f4c8736c53"/>
                                             <assoc type="lecm-arm:fields-assoc"
@@ -27071,8 +27069,6 @@
                                         <assocs>
                                             <assoc type="lecm-arm:filters-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По типу"/>
-                                            <assoc type="lecm-arm:filters-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/Я - регистратор"/>
                                             <assoc type="lecm-arm:fields-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Резервирование номера/Запросы на отмену резервирования/f3b32d44-d530-456c-9827-f7c263d110b3"/>
                                             <assoc type="lecm-arm:fields-assoc"
@@ -27105,8 +27101,6 @@
                                 <assocs>
                                     <assoc type="lecm-arm:filters-assoc"
                                            path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По типу"/>
-                                    <assoc type="lecm-arm:filters-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/Я - регистратор"/>
                                     <assoc type="lecm-arm:fields-assoc"
                                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Резервирование номера/7398a4a0-b9c4-4165-93cf-167f373803d7"/>
                                     <assoc type="lecm-arm:fields-assoc"
