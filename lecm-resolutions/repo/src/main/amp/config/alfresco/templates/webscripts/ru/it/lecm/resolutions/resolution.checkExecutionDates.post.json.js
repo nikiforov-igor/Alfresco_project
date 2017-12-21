@@ -11,6 +11,11 @@ if (json.has("resolutionExecutionDate") && json.has("errandsExecutionDates")) {
         resolutionJson.has("date-type") ? resolutionJson.get("date-type") : null,
         resolutionJson.has("date-days") ? resolutionJson.get("date-days") : null);
 
+    if (resolutionExecutionDate) {
+        resolutionExecutionDate = new Date(resolutionExecutionDate.getTime());
+        resolutionExecutionDate.setHours(0, 0, 0, 0);
+    }
+
     var errandsExecutionDates = [];
 
     for (var i = 0; i < errandsExecutionDatesJson.length(); i++) {
@@ -21,7 +26,10 @@ if (json.has("resolutionExecutionDate") && json.has("errandsExecutionDates")) {
             errandJson.has("date") ? errandJson.get("date") : null,
             errandJson.has("date-type") ? errandJson.get("date-type") : null,
             errandJson.has("date-days") ? errandJson.get("date-days") : null);
-
+        if (errandExecutionDate) {
+            errandExecutionDate = new Date(errandExecutionDate.getTime());
+            errandExecutionDate.setHours(0, 0, 0, 0);
+        }
         var valid = resolutionExecutionDate == null || errandExecutionDate == null || (resolutionExecutionDate.getTime() >= errandExecutionDate.getTime());
         total = total && valid;
         results.push(valid);
