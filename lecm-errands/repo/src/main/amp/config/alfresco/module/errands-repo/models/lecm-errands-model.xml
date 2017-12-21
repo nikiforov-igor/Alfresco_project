@@ -172,9 +172,17 @@
                     <default>1</default>
                     <constraints>
                         <constraint type="REGEX">
-                            <parameter name="expression"><value>^[0-9]+$</value></parameter>
+                            <parameter name="expression"><value>^[1-9][0-9]*$</value></parameter>
                             <parameter name="requiresMatch"><value>true</value></parameter>
                         </constraint>
+						<constraint type="MINMAX">
+							<parameter name="minValue">
+								<value>0</value>
+							</parameter>
+							<parameter name="maxValue">
+								<value>2147483647</value>
+							</parameter>
+						</constraint>
                     </constraints>
                 </property>
                 <property name="lecm-errands:limitation-date-type">
