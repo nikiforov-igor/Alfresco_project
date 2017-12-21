@@ -178,13 +178,16 @@ LogicECM.module.Incoming = LogicECM.module.Incoming || {};
                 if (searchTextEl && !searchTextEl.value) {
                     for (var i = 1; i < this.checkboxElements.length; i++) {
                         if (!this.checkboxElements[i].disabled && this.checkboxElements[i].checked) {
-                            searchButton._button.disabled = false;
+                            searchButton._setDisabled(false);
+                            searchButton._configs.disabled.value=false;
                             return;
                         }
                     }
-                    searchButton._button.disabled = true;
+                    searchButton._setDisabled(true);
+                    searchButton._configs.disabled.value=true;
                 } else {
-                    searchButton._button.disabled = false;
+                    searchButton._setDisabled(false);
+                    searchButton._configs.disabled.value=false;
                 }
             }
         },
