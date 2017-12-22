@@ -143,13 +143,7 @@
 
 							var answerObject = search.findNode(task.getVariableLocal("answer"));
 							var curator = search.findNode(task.getVariableLocal("initiatorEmployee"));
-							var author = document.assocs["lecm-document:author-assoc"][0];
-							var docExecutor = document.assocs["lecm-eds-document:executor-assoc"][0];
-							var curators = [];
-							curators.push(author);
-							if (!docExecutor.nodeRef.equals(author.nodeRef)) {
-							    curators.push(docExecutor);
-							}
+							var initiators = lecmPermission.getEmployeesByDynamicRole(document, "BR_INITIATOR");
 							var currentUser = orgstructure.getCurrentEmployee();
 							var newDocumentRef = task.getVariable("lecmWorkflowDocument_createdNodeRef");
 							if (newDocumentRef != null && newDocumentRef != "") {
@@ -177,7 +171,7 @@
                                     answerObject.save();
 
                                     notifications.sendNotificationFromCurrentUser({
-                                        recipients: curators,
+                                        recipients: initiators,
                                         templateCode: 'INTERNAL_ACCEPT',
                                         templateConfig: {
                                             mainObject: document,
@@ -217,7 +211,7 @@
                                     answerObject.save();
 
                                     notifications.sendNotificationFromCurrentUser({
-                                        recipients: curators,
+                                        recipients: initiators,
                                         templateCode: 'INTERNAL_ANSWER',
                                         templateConfig: {
                                             mainObject: document,
