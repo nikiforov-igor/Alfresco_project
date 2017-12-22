@@ -57,7 +57,7 @@ public class FilterYearSectionsProcessor extends SearchQueryProcessor {
 		NodeRef currentEmployeeOrg = orgstructureService.getEmployeeOrganization(currentEmployee);
 		NodeRef currentEmployeeOrgUnit = orgstructureService.getUnitByOrganization(currentEmployeeOrg);
 
-		sbQuery.append("@os\\-aspects\\:nomenclature\\-organization\\-assoc\\-ref:\"").append(currentEmployeeOrgUnit).append("\" OR ISNULL:\"os-aspects:nomenclature-organization-assoc-ref\" OR NOT EXISTS:\"os-aspects:nomenclature-organization-assoc-ref\"");
+		sbQuery.append("@os\\-aspects\\:nomenclature\\-organization\\-assoc\\-ref:\"").append(currentEmployeeOrgUnit).append("\"");
 
 		return sbQuery.toString();
 	}
