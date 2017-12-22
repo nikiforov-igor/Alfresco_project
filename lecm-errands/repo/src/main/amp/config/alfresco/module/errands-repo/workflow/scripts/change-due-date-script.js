@@ -12,6 +12,7 @@ function processDueDateChanges(params) {
     var newLimitationDate = null;
     var oldLimitDate = document.properties["lecm-errands:limitation-date"];
     var oldLimitRadio = document.properties["lecm-errands:limitation-date-radio"];
+    var isExpired = !!document.properties["lecm-errands:is-expired"];
     if (isSignal) {
         limitless = document.properties["lecm-eds-aspect:duedate-limitless"];
         shiftSize = document.properties["lecm-eds-aspect:duedate-shift-size"];
@@ -56,6 +57,15 @@ function processDueDateChanges(params) {
         var shortLimitDays = edsGlobalSettings.getSettingsShortLimitDays();
         document.properties["lecm-errands:is-limit-short"] = fromWFELimitDays <= shortLimitDays;
         document.properties["lecm-errands:limitation-date-radio"] = dateRadio;
+        if (isExpired) {
+            var now = new Date();
+            now.setHours(0, 0, 0, 0);
+            var dueDate = new Date(newLimitationDate);
+            dueDate.setHours(0, 0, 0, 0);
+            if (dueDate.getTime() > now.getTime()) {
+                document.properties["lecm-errands:is-expired"] = false;
+            }
+        }
     } else if (dateRadio == "LIMITLESS") {
         limitless = true;
         if (oldLimitDate && oldLimitRadio != "LIMITLESS") {
@@ -64,6 +74,9 @@ function processDueDateChanges(params) {
             document.properties["lecm-errands:is-limit-short"] = false;
             document.properties["lecm-errands:half-limit-date"] = null;
             dueDateString = "Без срока";
+            if (isExpired) {
+                document.properties["lecm-errands:is-expired"] = false;
+            }
         } else {
             changed = false;
         }

@@ -4,6 +4,7 @@ var LECMResolutionActions = {
         var shiftSize = document.properties["lecm-eds-aspect:duedate-shift-size"];
         var newDate = document.properties["lecm-eds-aspect:new-limitation-date"];
         var reason = document.properties["lecm-eds-aspect:change-duedate-reason"];
+        var isExpired = !!document.properties["lecm-resolutions:is-expired"];
 
         var oldLimitRadio = document.properties["lecm-resolutions:limitation-date-radio"];
         lecmPermission.pushAuthentication();
@@ -12,6 +13,9 @@ var LECMResolutionActions = {
             if (oldLimitRadio != "LIMITLESS") {
                 document.properties["lecm-resolutions:limitation-date-radio"] = "LIMITLESS";
                 document.properties["lecm-resolutions:limitation-date"] = null;
+                if (isExpired) {
+                    document.properties["lecm-resolutions:is-expired"] = false;
+                }
                 document.save();
             } else {
                 return;
@@ -24,6 +28,16 @@ var LECMResolutionActions = {
             } else {
                 document.properties["lecm-resolutions:limitation-date-radio"] = "DATE";
                 document.properties["lecm-resolutions:limitation-date"] = newDate;
+            }
+
+            if (isExpired) {
+                var now = new Date();
+                now.setHours(0, 0, 0, 0);
+                var dueDate = new Date(newDate);
+                dueDate.setHours(0, 0, 0, 0);
+                if (dueDate.getTime() > now.getTime()) {
+                    document.properties["lecm-resolutions:is-expired"] = false;
+                }
             }
             document.save();
         }
