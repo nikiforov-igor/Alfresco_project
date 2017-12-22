@@ -3984,7 +3984,8 @@ var registrationRequired = document.assocs["lecm-eds-document:document-type-asso
     var internal = stm_document;
     regnumbers.registerDocument(internal, "INTERNAL_DOC_NUMBER");
     internal.save();
-
+	var currentUser =  orgstructure.getCurrentEmployee();
+    documentMembers.addMemberWithoutCheckPermission(internal, currentUser, 'LECM_BASIC_PG_Reader', true);
     var variables = base.getValueConverter().convertValueForJava({
         withSigning: false,
         workflowDefinition: 'lecmInternalDirect',
