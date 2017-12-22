@@ -82,7 +82,17 @@
 								 type: "button",
 								 label: "${msg('protocol.point.execute.button')}",
 								 onclick: {
-								  fn: function(){executePoint(); LogicECM.module.Base.Util.hideViewDialog(); },
+								  fn: function(){
+								      executePoint();
+                                      var formContainer = Dom.get("${formId}-container");
+                                      if (formContainer) {
+                                          var panel = formContainer.offsetParent;
+                                          var closeButton = YAHOO.util.Selector.query("a.container-close", panel, true);
+                                          if (closeButton) {
+                                              closeButton.click();
+                                          }
+                                      }
+								  },
 								  scope: this
 								 }
 								});
