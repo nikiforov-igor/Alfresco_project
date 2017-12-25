@@ -41,6 +41,7 @@
 					 lecm.sign2.helper.model.bootstrap,
                      lecm.signing-v2.helper.model.bootstrap,
                      approvalRoutesService,
+                     review.model.bootstrap,
                      signingRoutesService">
         <property name="models">
             <list>
@@ -190,7 +191,7 @@
     <bean id="internal.reports.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="reportsEditorService,reportsEditor.LogicEcmDictionariesBootstrap,
           reportsEditorOnCreateAssocsPolicy,reportsEditorTemplatePolicy,
-          dataSourcePolicy,reportDescriptorPolicy">
+          dataSourcePolicy,reportDescriptorPolicy,reporting.LogicEcmDictionariesBootstrap">
         <property name="rootPath" value="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты"/>
         <property name="dictionaries">
             <list>
