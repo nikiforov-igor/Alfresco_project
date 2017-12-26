@@ -618,6 +618,7 @@
                     <show id="lecm-base-dummy-aspects:script3" force="true"/>
                     <show id="lecm-base-dummy-aspects:script4" force="true"/>
                     <show id="lecm-review-ts:review-table-assoc"/>
+                    <show id="lecm-base-dummy-aspects:script5" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="common" appearance="" label="Атрибуты" /> <!-- tab1 -->
@@ -850,6 +851,14 @@
                             <control-param name="addEmployeeToStageMsgId">label.signing.routes.stage.addEmployee</control-param>
                         </control>
                     </field>
+                    <field id="lecm-base-dummy-aspects:script5" set="common">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-internal/manage-visibility-for-recipients-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">recipientsVisibilityManagerLoaded</control-param>
+                            <control-param name="fieldsToHide">assoc_lecm-approval-route_approvalFolder</control-param>
+                        </control>
+                    </field>
+
                 </appearance>
             </form>
             <!-- Форма редактирования-->
