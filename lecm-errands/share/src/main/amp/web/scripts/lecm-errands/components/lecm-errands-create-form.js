@@ -71,34 +71,9 @@
         routeButton.click();
     }
 
-    function checkDatePickerCurrentValue(args) {
-        var dateField = document.getElementById(args[1].formId + "_prop_lecm-errands_limitation-date");
-
-        var datePicker;
-        var elements = document.getElementsByName("prop_lecm-errands_limitation-date-radio");
-        for (var i = 0; i < elements.length; i++) {
-            if (elements[i].value === "DATE") {
-                datePicker = elements[i];
-            }
-        }
-
-        if (!datePicker || !dateField) {
-            return;
-        }
-
-        if (dateField.value) {
-            datePicker.checked = "checked";
-        }
-    }
-
     function titleChangeHandler(layer, args) {
-        if (!args[1]) {
-            return;
-        }
-        checkDatePickerCurrentValue(args);
-
         var textArea = document.getElementsByName("prop_lecm-errands_content")[0];
-        if (!textArea || textArea.value.length) {
+        if (!args[1] || !textArea || textArea.value.length) {
             return;
         }
 

@@ -35,11 +35,15 @@
             }
 		}
 
+        var limitationDateProp = "lecm-errands_limitation-date";
+        var limitationDateField = Dom.get(obj.formId + "_prop_" + limitationDateProp);
+        var limitationDateRadioProp = "lecm-errands_limitation-date-radio";
+        var limitationDateRadio = Dom.get(obj.formId + "_prop_" + limitationDateRadioProp);
+
 		if(nodeRef) {
 		    var titleProp = "lecm-errands_title";
             var contentProp = "lecm-errands_content";
             var reportRequiredProp = "lecm-errands_report-required";
-            var limitationDateRadioProp = "lecm-errands_limitation-date-radio";
             var reportRequiredChangedFireEvent = "errandReportRequiredChanged";
             var limitationDateRadioChangedEvent = "changeLimitationDateRadio";
 		    if (layer == "createErrandsWFErrandTypeChanged") {
@@ -53,7 +57,6 @@
             var titleElement = Dom.get(obj.formId + "_prop_" + titleProp);
             var contentElement = Dom.get(obj.formId + "_prop_" + contentProp);
             var reportRequiredElement = Dom.get(obj.formId + "_prop_" + reportRequiredProp);
-            var limitationDateRadio = Dom.get(obj.formId + "_prop_" + limitationDateRadioProp);
             if (errandsTypes[nodeRef]) {
                 if (titleElement) {
                     titleElement.value = errandsTypes[nodeRef].defaultTitle;
@@ -100,5 +103,11 @@
             }
 
 		}
+        else {
+            if (limitationDateRadio && limitationDateField && limitationDateField.value) {
+                var dateRadioButton = YAHOO.util.Selector.query("input[type=radio][value='DATE']", limitationDateRadio.parentElement, true);
+                dateRadioButton.checked = true;
+            }
+        }
 	}
 })();
