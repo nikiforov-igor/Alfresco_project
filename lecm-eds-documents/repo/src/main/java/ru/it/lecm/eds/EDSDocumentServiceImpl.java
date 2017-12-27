@@ -9,9 +9,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.ConcurrencyFailureException;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
+import ru.it.lecm.documents.beans.DocumentGlobalSettingsService;
 import ru.it.lecm.eds.api.EDSDocumentService;
+import ru.it.lecm.eds.api.EDSGlobalSettingsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.signing_v2.api.SigningAspectsModel;
+import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.io.Serializable;
@@ -33,6 +36,7 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
 
     private IWorkCalendar calendarBean;
     private OrgstructureBean orgstructureService;
+    private DocumentGlobalSettingsService documentGlobalSettingsService;
 
     private DocumentAttachmentsService documentAttachmentsService;
 
@@ -68,6 +72,10 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
 
     public void setCalendarBean(IWorkCalendar calendarBean) {
         this.calendarBean = calendarBean;
+    }
+
+    public void setDocumentGlobalSettingsService(DocumentGlobalSettingsService documentGlobalSettingsService) {
+        this.documentGlobalSettingsService = documentGlobalSettingsService;
     }
 
     @Override
@@ -196,5 +204,19 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
             }
         }
         return result;
+    }
+
+    public Boolean isHideFieldsForRecipient(NodeRef document, String... statuses) {
+        boolean isHide = documentGlobalSettingsService.isHideProperties();
+        if (isHide && statuses.length > 0) {
+            String documentStatus = (String) nodeService.getProperty(document, StatemachineModel.PROP_STATUS);
+            isHide = !documentStatus.isEmpty() && Arrays.asList(statuses).contains(documentStatus);
+        }
+        if (isHide) {
+            List<NodeRef> recipients = findNodesByAssociationRef(document, ASSOC_RECIPIENTS, null, ASSOCIATION_TYPE.TARGET);
+            NodeRef currentUser = orgstructureService.getCurrentEmployee();
+            return recipients.contains(currentUser);
+        }
+        return false;
     }
 }
