@@ -76,10 +76,7 @@ LogicECM.module.EDS = LogicECM.module.EDS || {};
                 YAHOO.util.Event.onAvailable(this.id + "-select-all-records", function () {
                     YAHOO.util.Event.on(this.id + "-select-all-records", 'click', this.selectAllClick, this, true);
                     /*initial state*/
-                    var selectAllCheckBox = Dom.get(this.id + "-select-all-records");
-                    if (selectAllCheckBox) {
-                        selectAllCheckBox.checked = this.checkIfAllBoxesSelected();
-                    }
+                    this.setSelectAllCheckboxState();
                 }, this, true);
 
                 Dom.setStyle(this.id + "-body", "visibility", "visible");
@@ -88,10 +85,7 @@ LogicECM.module.EDS = LogicECM.module.EDS || {};
                     var inputId = e.target.id + '-hidden';
                     Dom.get(inputId).value = e.target.checked;
 
-                    var selectAllCheckBox = Dom.get(this.id + "-select-all-records");
-                    if (selectAllCheckBox) {
-                        selectAllCheckBox.checked = this.checkIfAllBoxesSelected();
-                    }
+                    this.setSelectAllCheckboxState();
                 }, this, true);
             },
 
@@ -151,13 +145,16 @@ LogicECM.module.EDS = LogicECM.module.EDS || {};
                 }
             },
 
-            checkIfAllBoxesSelected: function () {
-                var checkboxes = Selector.query('input[type="checkbox"]', this.widgets.dataTable.getTbodyEl());
-                var allChecked = (checkboxes.length > 0);
-                for (var i = 0; i < checkboxes.length; i++) {
-                    allChecked = allChecked && checkboxes[i].checked;
+            setSelectAllCheckboxState: function () {
+                var selectAllCheckBox = Dom.get(this.id + "-select-all-records");
+                if (selectAllCheckBox) {
+                    var checkboxes = Selector.query('input[type="checkbox"]', this.widgets.dataTable.getTbodyEl());
+                    var allChecked = (checkboxes.length > 0);
+                    for (var i = 0; i < checkboxes.length; i++) {
+                        allChecked = allChecked && checkboxes[i].checked;
+                    }
+                    selectAllCheckBox.checked = allChecked;
                 }
-                return allChecked;
             }
         });
 })();
