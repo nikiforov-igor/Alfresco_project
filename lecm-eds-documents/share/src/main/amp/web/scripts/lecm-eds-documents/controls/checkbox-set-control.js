@@ -75,6 +75,11 @@ LogicECM.module.EDS = LogicECM.module.EDS || {};
 
                 YAHOO.util.Event.onAvailable(this.id + "-select-all-records", function () {
                     YAHOO.util.Event.on(this.id + "-select-all-records", 'click', this.selectAllClick, this, true);
+                    /*initial state*/
+                    var selectAllCheckBox = Dom.get(this.id + "-select-all-records");
+                    if (selectAllCheckBox) {
+                        selectAllCheckBox.checked = this.checkIfAllBoxesSelected();
+                    }
                 }, this, true);
 
                 Dom.setStyle(this.id + "-body", "visibility", "visible");
@@ -82,6 +87,11 @@ LogicECM.module.EDS = LogicECM.module.EDS || {};
                 this.widgets.dataTable.subscribe("checkboxClickEvent", function (e) {
                     var inputId = e.target.id + '-hidden';
                     Dom.get(inputId).value = e.target.checked;
+
+                    var selectAllCheckBox = Dom.get(this.id + "-select-all-records");
+                    if (selectAllCheckBox) {
+                        selectAllCheckBox.checked = this.checkIfAllBoxesSelected();
+                    }
                 }, this, true);
             },
 
@@ -139,6 +149,15 @@ LogicECM.module.EDS = LogicECM.module.EDS || {};
                 for (var i = 0; i < checkboxes.length; i++) {
                     fnCheck(checkboxes[i]);
                 }
+            },
+
+            checkIfAllBoxesSelected: function () {
+                var checkboxes = Selector.query('input[type="checkbox"]', this.widgets.dataTable.getTbodyEl());
+                var allChecked = (checkboxes.length > 0);
+                for (var i = 0; i < checkboxes.length; i++) {
+                    allChecked = allChecked && checkboxes[i].checked;
+                }
+                return allChecked;
             }
         });
 })();
