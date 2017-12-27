@@ -71,6 +71,14 @@
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[40]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[par_recipient]]></property>
                         <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
+                        <property name="lecm-rpeditor:dataColumnControlParams">
+                            <![CDATA[
+                            additionalFilter=;
+                            useStrictFilterByOrg=false;
+                            isShowNotActiveCheckBox=true;
+                            notActiveCheckBoxLabelId=label.control.employees-show-dismissed
+                            ]]>
+                        </property>
                         <assocs>
                             <assoc type="lecm-rpeditor:columnTypeAssoc"
                                    path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>

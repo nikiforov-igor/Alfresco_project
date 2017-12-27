@@ -992,8 +992,10 @@
                             <control-param name="plane">true</control-param>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
                             <control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
-                            <control-param name="useStrictFilterByOrg">true</control-param>
-                            <control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
+                            <control-param name="useStrictFilterByOrg">false</control-param>
+                            <control-param name="additionalFilter"></control-param>
+                            <control-param name="isShowNotActiveCheckBox">true</control-param>
+                            <control-param name="notActiveCheckBoxLabelId">label.control.employees-show-dismissed</control-param>
                         </control>
                     </field>
                     <field id="lecm-events:subject-assoc">
@@ -1008,6 +1010,10 @@
                             <control-param name="pickerItemsScript">/lecm/events/members/picker/items</control-param>
                             <control-param name="sortSelected">true</control-param>
                             <control-param name="verticalList">true</control-param>
+                            <control-param name="additionalFilter"></control-param>
+                            <control-param name="useStrictFilterByOrg">false</control-param>
+                            <control-param name="isShowNotActiveCheckBox">true</control-param>
+                            <control-param name="notActiveCheckBoxLabelId">label.control.employees-show-dismissed</control-param>
                         </control>
                     </field>
                     <field id="lecm-events:invited-members-assoc">
@@ -1015,6 +1021,22 @@
                             <control-param name="itemType">lecm-representative:representative-type</control-param>
                             <control-param name="sortSelected">true</control-param>
                             <control-param name="verticalList">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-meetings:chairman-assoc">
+                        <control>
+                            <control-param name="additionalFilter"></control-param>
+                            <control-param name="useStrictFilterByOrg">false</control-param>
+                            <control-param name="isShowNotActiveCheckBox">true</control-param>
+                            <control-param name="notActiveCheckBoxLabelId">label.control.employees-show-dismissed</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-meetings:secretary-assoc">
+                        <control>
+                            <control-param name="additionalFilter"></control-param>
+                            <control-param name="useStrictFilterByOrg">false</control-param>
+                            <control-param name="isShowNotActiveCheckBox">true</control-param>
+                            <control-param name="notActiveCheckBoxLabelId">label.control.employees-show-dismissed</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -1064,6 +1086,10 @@
                     <field id="lecm-meetings:chairman-assoc">
                         <control>
                             <control-param name="endpointMany">true</control-param>
+                            <control-param name="additionalFilter"></control-param>
+                            <control-param name="useStrictFilterByOrg">false</control-param>
+                            <control-param name="isShowNotActiveCheckBox">true</control-param>
+                            <control-param name="notActiveCheckBoxLabelId">label.control.employees-show-dismissed</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="change"/>
@@ -1072,11 +1098,19 @@
                     <field id="lecm-meetings:secretary-assoc">
                         <control>
                             <control-param name="endpointMany">true</control-param>
+                            <control-param name="additionalFilter"></control-param>
+                            <control-param name="useStrictFilterByOrg">false</control-param>
+                            <control-param name="isShowNotActiveCheckBox">true</control-param>
+                            <control-param name="notActiveCheckBoxLabelId">label.control.employees-show-dismissed</control-param>
                         </control>
                     </field>
                     <field id="lecm-events:initiator-assoc">
                         <control>
                             <control-param name="endpointMany">true</control-param>
+                            <control-param name="additionalFilter"></control-param>
+                            <control-param name="useStrictFilterByOrg">false</control-param>
+                            <control-param name="isShowNotActiveCheckBox">true</control-param>
+                            <control-param name="notActiveCheckBoxLabelId">label.control.employees-show-dismissed</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="change"/>

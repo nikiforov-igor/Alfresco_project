@@ -1241,6 +1241,14 @@
                             <control-param name="person_getArgumentsFromForm">LogicECM.getExtArgsForPerson</control-param>
                         </control>
                     </field>
+                    <field id="lecm-document:author-assoc">
+                        <control>
+                            <control-param name="additionalFilter"></control-param>
+                            <control-param name="useStrictFilterByOrg">false</control-param>
+                            <control-param name="isShowNotActiveCheckBox">true</control-param>
+                            <control-param name="notActiveCheckBoxLabelId">label.control.employees-show-dismissed</control-param>
+                        </control>
+                    </field>
                 </appearance>
             </form>
             <form id="datagrid">
