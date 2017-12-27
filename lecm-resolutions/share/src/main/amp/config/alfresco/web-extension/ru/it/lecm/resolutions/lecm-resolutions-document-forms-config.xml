@@ -321,6 +321,10 @@
                     <field id="lecm-resolutions:author-assoc">
                         <control>
                             <control-param name="endpointMany">true</control-param>
+                            <control-param name="additionalFilter"></control-param>
+                            <control-param name="useStrictFilterByOrg">false</control-param>
+                            <control-param name="isShowNotActiveCheckBox">true</control-param>
+                            <control-param name="notActiveCheckBoxLabelId">label.control.employees-show-dismissed</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
@@ -329,6 +333,10 @@
                     <field id="lecm-document:author-assoc" label-id="label.document.creator">
                         <control>
                             <control-param name="endpointMany">true</control-param>
+                            <control-param name="additionalFilter"></control-param>
+                            <control-param name="useStrictFilterByOrg">false</control-param>
+                            <control-param name="isShowNotActiveCheckBox">true</control-param>
+                            <control-param name="notActiveCheckBoxLabelId">label.control.employees-show-dismissed</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
@@ -342,6 +350,10 @@
                     <field id="lecm-resolutions:controller-assoc">
                         <control>
                             <control-param name="endpointMany">true</control-param>
+                            <control-param name="additionalFilter"></control-param>
+                            <control-param name="useStrictFilterByOrg">false</control-param>
+                            <control-param name="isShowNotActiveCheckBox">true</control-param>
+                            <control-param name="notActiveCheckBoxLabelId">label.control.employees-show-dismissed</control-param>
                         </control>
                     </field>
                     <field id="lecm-resolutions:limitation-date">
@@ -398,8 +410,11 @@
                             <control-param name="employee_nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
                             <control-param name="employee_plane">true</control-param>
                             <control-param name="employee_showSearch">true</control-param>
-                            <control-param name="employee_useStrictFilterByOrg">true</control-param>
+                            <control-param name="employee_useStrictFilterByOrg">false</control-param>
                             <control-param name="employee_sortProp">lecm-orgstr:employee-short-name</control-param>
+                            <control-param name="employee_additionalFilter"></control-param>
+                            <control-param name="employee_isShowNotActiveCheckBox">true</control-param>
+                            <control-param name="employee_notActiveCheckBoxLabelId">label.control.employees-show-dismissed</control-param>
                             <!-- lecm-orgstr:organization-unit -->
                             <control-param name="orgUnit_label">Подразделение</control-param>
                             <control-param name="orgUnit_endpointType">lecm-orgstr:organization-unit</control-param>
@@ -429,6 +444,22 @@
                             <control-param name="reviewItem_showAssocViewForm">true</control-param>
                             <control-param name="reviewItem_childrenDataSource">lecm/review/ds/allowedReviewLists</control-param>
                             <control-param name="reviewItem_sortProp">cm:title</control-param>
+                        </control>
+                    <field id="lecm-resolutions:author-assoc">
+                        <control>
+                            <control-param name="additionalFilter"></control-param>
+                            <control-param name="useStrictFilterByOrg">false</control-param>
+                            <control-param name="isShowNotActiveCheckBox">true</control-param>
+                            <control-param name="notActiveCheckBoxLabelId">label.control.employees-show-dismissed</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-resolutions:controller-assoc">
+                    </field>
+                        <control>
+                            <control-param name="additionalFilter"></control-param>
+                            <control-param name="useStrictFilterByOrg">false</control-param>
+                            <control-param name="isShowNotActiveCheckBox">true</control-param>
+                            <control-param name="notActiveCheckBoxLabelId">label.control.employees-show-dismissed</control-param>
                         </control>
                     </field>
                 </appearance>

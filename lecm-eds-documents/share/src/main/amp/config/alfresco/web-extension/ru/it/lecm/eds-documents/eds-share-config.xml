@@ -226,6 +226,14 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-document:present-string" label="Название"/>
+					<field id="lecm-document:author-assoc">
+						<control>
+							<control-param name="additionalFilter"></control-param>
+							<control-param name="useStrictFilterByOrg">false</control-param>
+							<control-param name="isShowNotActiveCheckBox">true</control-param>
+							<control-param name="notActiveCheckBoxLabelId">label.control.employees-show-dismissed</control-param>
+						</control>
+					</field>
 				</appearance>
 			</form>
 			<form id="searchColumns">
@@ -291,6 +299,10 @@
 					<field id="lecm-document:author-assoc" label-id="label.creator">
 						<control>
 							<control-param name="endpointMany">true</control-param>
+							<control-param name="additionalFilter"></control-param>
+							<control-param name="useStrictFilterByOrg">false</control-param>
+							<control-param name="isShowNotActiveCheckBox">true</control-param>
+							<control-param name="notActiveCheckBoxLabelId">label.control.employees-show-dismissed</control-param>
 						</control>
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
@@ -350,6 +362,10 @@
                     <field id="lecm-document:author-assoc" label-id="label.creator">
                         <control>
                             <control-param name="endpointMany">true</control-param>
+							<control-param name="additionalFilter"></control-param>
+							<control-param name="useStrictFilterByOrg">false</control-param>
+							<control-param name="isShowNotActiveCheckBox">true</control-param>
+							<control-param name="notActiveCheckBoxLabelId">label.control.employees-show-dismissed</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
@@ -363,6 +379,29 @@
                     </field>
                 </appearance>
             </form>
+			<form id="search-editor-fields">
+				<field-visibility>
+					<show id="lecm-document:doc-type"/>
+					<show id="lecm-document:title"/>
+					<show id="lecm-document:regnum"/>
+					<show id="lecm-document:present-string"/>
+					<show id="lecm-document:doc-date"/>
+					<show id="lecm-statemachine:status" force="true"/>
+					<show id="lecm-document:subject-assoc"/>
+					<show id="lecm-document:author-assoc"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-document:present-string" label="Название"/>
+					<field id="lecm-document:author-assoc">
+						<control>
+							<control-param name="additionalFilter"></control-param>
+							<control-param name="useStrictFilterByOrg">false</control-param>
+							<control-param name="isShowNotActiveCheckBox">true</control-param>
+							<control-param name="notActiveCheckBoxLabelId">label.control.employees-show-dismissed</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
         </forms>
     </config>
 

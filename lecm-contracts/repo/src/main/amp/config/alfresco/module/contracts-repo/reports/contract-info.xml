@@ -48,12 +48,19 @@
                         </assocs>
                     </item>
                     <item name="cm:Инициатор" type="lecm-rpeditor:reportDataColumn">
-                        <property name="cm:name"><![CDATA[Инициатор]]></property>
+                        <property name="lecm-rpeditor:dataColumnControlParams">
+                            <![CDATA[
+                            additionalFilter=;
+                            useStrictFilterByOrg=false;
+                            isShowNotActiveCheckBox=true;
+                            notActiveCheckBoxLabelId=label.control.employees-show-dismissed
+                            ]]>
+                        </property>
                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[lecm-orgstr:employee]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[]]></property>
-                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[initiator]]></property>
+                        <property name="cm:name"><![CDATA[Инициатор]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[7]]></property>
-                        <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[initiator]]></property>
                         <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
                         <assocs>
                             <assoc type="lecm-rpeditor:columnTypeAssoc"

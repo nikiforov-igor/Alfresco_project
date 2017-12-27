@@ -1274,6 +1274,11 @@
                     </field>
                     <field id="lecm-incoming:recipient-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                            <control-param name="additionalFilter"></control-param>
+                            <control-param name="useStrictFilterByOrg">false</control-param>
+                            <control-param name="isShowNotActiveCheckBox">true</control-param>
+                            <control-param name="notActiveCheckBoxLabelId">label.control.employees-show-dismissed</control-param>
+                            <control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
                             <control-param name="plane">true</control-param>
                             <control-param name="endpointType">lecm-orgstr:employee</control-param>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
@@ -1371,9 +1376,12 @@
                             <control-param name="employee_nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
                             <control-param name="employee_plane">true</control-param>
                             <control-param name="employee_showSearch">true</control-param>
-                            <control-param name="employee_useStrictFilterByOrg">true</control-param>
+                            <control-param name="employee_useStrictFilterByOrg">false</control-param>
                             <control-param name="employee_showAssocViewForm">true</control-param>
                             <control-param name="employee_sortProp">lecm-orgstr:employee-short-name</control-param>
+                            <control-param name="employee_additionalFilter"></control-param>
+                            <control-param name="employee_isShowNotActiveCheckBox">true</control-param>
+                            <control-param name="employee_notActiveCheckBoxLabelId">label.control.employees-show-dismissed</control-param>
                             <!-- lecm-orgstr:organization-unit -->
                             <control-param name="organization_label">Организация</control-param>
                             <control-param name="organization_endpointType">lecm-orgstr:organization-unit</control-param>
@@ -1488,6 +1496,22 @@
                             <control-param name="employeesDefaultValueDS"></control-param>
                             <control-param name="representativesDefaultValueDS">lecm/contractors/getMainRepresentative?contractor={contractor}</control-param>
                             <control-param name="doNotCheckAccess">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-document:author-assoc">
+                        <control>
+                            <control-param name="additionalFilter"></control-param>
+                            <control-param name="useStrictFilterByOrg">false</control-param>
+                            <control-param name="isShowNotActiveCheckBox">true</control-param>
+                            <control-param name="notActiveCheckBoxLabelId">label.control.employees-show-dismissed</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-document-aspects:registrator-assoc">
+                        <control>
+                            <control-param name="additionalFilter"></control-param>
+                            <control-param name="useStrictFilterByOrg">false</control-param>
+                            <control-param name="isShowNotActiveCheckBox">true</control-param>
+                            <control-param name="notActiveCheckBoxLabelId">label.control.employees-show-dismissed</control-param>
                         </control>
                     </field>
                 </appearance>
