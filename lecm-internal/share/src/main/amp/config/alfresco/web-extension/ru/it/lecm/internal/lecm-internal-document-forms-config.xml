@@ -623,6 +623,8 @@
                 <appearance>
                     <set id="common" appearance="" label="Атрибуты" /> <!-- tab1 -->
                     <set id="approvalAndSigning" appearance="" label="Согласование и подписание"/>
+                    <set id="approval" parent="approvalAndSigning" appearance="" template="/ru/it/lecm/base-share/components/hidden-set.ftl"/>
+                    <set id="signing" appearance="" parent="approvalAndSigning"/>
                     <set id="answers" appearance="" label="Ответы" />
 
                     <set id="execution-tab" label-id="tab.label.execution"/>
@@ -787,7 +789,7 @@
                             <control-param name="allowDelete">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-approval-route:approvalFolder" set="approvalAndSigning" label-id="label.forms.approval">                
+                    <field id="lecm-approval-route:approvalFolder" set="approval" label-id="label.forms.approval">                
                         <control template="/ru/it/lecm/routes-v2/controls/routes-datagrid-control.ftl">
                             <control-param name="noRoutesLabel">label.approval.routes.no-route</control-param>
                             <control-param name="routeDataScript">lecm/routes-v2/approvalRoutes/getRouteData</control-param>
@@ -818,7 +820,7 @@
                             <control-param name="showPrintButton">true</control-param>
                         </control>                 
                     </field>
-                    <field id="lecm-signing-route:signingFolder" set="approvalAndSigning" label-id="label.forms.signing">
+                    <field id="lecm-signing-route:signingFolder" set="signing" label-id="label.forms.signing">
                         <control template="/ru/it/lecm/routes-v2/controls/routes-datagrid-control.ftl">
                             <control-param name="noRoutesLabel">label.signing.routes.no-route</control-param>
                             <control-param name="removeWorkFolderScript">lecm/routes-v2/signingRoutes/removeWorkFolder</control-param>
@@ -854,8 +856,8 @@
                     <field id="lecm-base-dummy-aspects:script5" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-internal/manage-visibility-for-recipients-script.js</control-param>
-                            <control-param name="scriptLoadedFireAction">#{@edsService.isHideFieldsForRecipient(doc.getNodeRef(), 'Направлен','На регистрации') ? 'recipientsVisibilityManagerLoaded' : ''}</control-param>
-                            <control-param name="fieldsToHide">assoc_lecm-approval-route_approvalFolder</control-param>
+                            <control-param name="scriptLoadedFireAction">#{@edsService.isHideFieldsForRecipient(doc.getNodeRef(), 'Направлен','На регистрации') ? '' : 'recipientsVisibilityManagerLoaded'}</control-param>
+                            <control-param name="setsToProcess">approval</control-param>
                         </control>
                     </field>
 

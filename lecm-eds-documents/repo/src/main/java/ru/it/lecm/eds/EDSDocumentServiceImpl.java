@@ -11,7 +11,6 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentGlobalSettingsService;
 import ru.it.lecm.eds.api.EDSDocumentService;
-import ru.it.lecm.eds.api.EDSGlobalSettingsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.signing_v2.api.SigningAspectsModel;
 import ru.it.lecm.statemachine.StatemachineModel;

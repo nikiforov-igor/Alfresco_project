@@ -5,18 +5,15 @@
 
     function process(layer, args) {
         var formID = args[1].formId;
-        var fieldsToHide = args[1].fieldsToHide;
-        if (formID && fieldsToHide) {
-            fieldsToHide = fieldsToHide.split(",");
+        var sets = args[1].setsToProcess;
+        sets = sets ? sets.split(",") : [];
+        if (formID && sets.length) {
             var form = Dom.get(formID + "-form-container");
             if (form) {
-                fieldsToHide.forEach(function (field) {
-                    var els = Selector.query("[id^='" + formID + "_" + field + "'][class*='control']", form);
-                    if (els) {
-                        els.forEach(function(el) {
-                            Dom.setStyle(el, "display", "none");
-                            Dom.addClass(el, "hidden");
-                        });
+                sets.forEach(function(setId){
+                    var setEl = Selector.query("." + formID + "-form-panel." + setId, form, true);
+                    if (setEl) {
+                        Dom.removeClass(setEl, "hidden1");
                     }
                 });
             }
