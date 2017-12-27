@@ -147,6 +147,13 @@ public interface EDSDocumentService {
     public List<NodeRef> getCategoriesToSign(NodeRef documentRef, String documentTypeAssocName);
 
     /**
+     * Скрывать ли поля для получателя документа.
+     * @param document документ
+     * @return
+     */
+    Boolean isHideFieldsForRecipient(NodeRef document);
+
+    /**
      * Скрывать ли поля для получателя документа на указанных статусах.
      * @param document документ
      * @param statuses статусы

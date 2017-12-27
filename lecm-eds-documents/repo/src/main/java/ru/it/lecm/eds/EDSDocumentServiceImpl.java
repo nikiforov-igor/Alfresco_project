@@ -205,17 +205,25 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
         return result;
     }
 
-    public Boolean isHideFieldsForRecipient(NodeRef document, String... statuses) {
+    public Boolean isHideFieldsForRecipient(NodeRef document) {
         boolean isHide = documentGlobalSettingsService.isHideProperties();
-        if (isHide && statuses.length > 0) {
-            String documentStatus = (String) nodeService.getProperty(document, StatemachineModel.PROP_STATUS);
-            isHide = !documentStatus.isEmpty() && Arrays.asList(statuses).contains(documentStatus);
-        }
         if (isHide) {
             List<NodeRef> recipients = findNodesByAssociationRef(document, ASSOC_RECIPIENTS, null, ASSOCIATION_TYPE.TARGET);
             NodeRef currentUser = orgstructureService.getCurrentEmployee();
             return recipients.contains(currentUser);
         }
         return false;
+    }
+
+    public Boolean isHideFieldsForRecipient(NodeRef document, String... statuses) {
+        if (statuses != null && statuses.length > 0) {
+            String documentStatus = (String) nodeService.getProperty(document, StatemachineModel.PROP_STATUS);
+            if (!documentStatus.isEmpty() && Arrays.asList(statuses).contains(documentStatus)) {
+                return isHideFieldsForRecipient(document);
+            } else {
+                return false;
+            }
+        }
+        return isHideFieldsForRecipient(document);
     }
 }
