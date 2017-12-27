@@ -855,7 +855,7 @@
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-internal/manage-visibility-for-recipients-script.js</control-param>
                             <control-param name="scriptLoadedFireAction">#{@edsService.isHideFieldsForRecipient(doc.getNodeRef(), 'Направлен','На регистрации') ? 'recipientsVisibilityManagerLoaded' : ''}</control-param>
-                            <control-param name="fieldsToHide">assoc_lecm-approval-route-route_signingFolder</control-param>
+                            <control-param name="fieldsToHide">assoc_lecm-approval-route_approvalFolder</control-param>
                         </control>
                     </field>
 
