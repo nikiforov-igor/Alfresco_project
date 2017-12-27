@@ -102,8 +102,7 @@
                 }
             }
 
-		}
-        else {
+		} else {
             if (limitationDateRadio && limitationDateField && limitationDateField.value) {
                 var dateRadioButton = YAHOO.util.Selector.query("input[type=radio][value='DATE']", limitationDateRadio.parentElement, true);
                 dateRadioButton.checked = true;
