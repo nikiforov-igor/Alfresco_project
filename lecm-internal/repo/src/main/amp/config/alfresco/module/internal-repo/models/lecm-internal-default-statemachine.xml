@@ -6159,6 +6159,36 @@ AutoApprovalScript.doAuto(stm_document, 'REJECTED_AUTO', msg, 'REJECTED_AUTO');]
                                                 <nodes>
                                                     <node>
                                                         <type>ScriptActionEntity</type>
+                                                        <name>34684f61-b0ec-40e8-9462-0571be2958ca</name>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Права получателей]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[var document = bpm_package.children[0];
+if (document) {
+  var recipients = document.assocs["lecm-eds-document:recipients-assoc"];
+  if (recipients) {
+    for (var i = 0; i < recipients.length; i++) {
+      var employee = recipients[i];
+      if ("" + edsGlobalSettings.isHidePropsForRecipients() == "true") {
+        lecmPermission.revokeDynamicRole(document, employee, "DA_RECIPIENT_DYN");
+        lecmPermission.grantDynamicRole(document, employee, "DA_RECIPIENT_DYN", "LECM_BASIC_PG_ActionPerformer_Lite");
+      }
+    }
+  }
+}]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
                                                         <name>7a5add12-a712-44d0-875d-83db1b3c6a86</name>
                                                         <properties>
                                                             <property>
