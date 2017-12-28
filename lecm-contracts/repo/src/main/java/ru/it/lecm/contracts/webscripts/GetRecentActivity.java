@@ -23,6 +23,7 @@ import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
+import ru.it.lecm.base.beans.SearchQueryProcessorService;
 import ru.it.lecm.businessjournal.beans.BusinessJournalRecord;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.contracts.beans.ContractsBeanImpl;
@@ -37,8 +38,13 @@ public class GetRecentActivity extends DeclarativeWebScript {
 	private SearchService searchService;
 	private int maxDays;
 	private int maxRecords;
+    private SearchQueryProcessorService processorService;
 
-	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+    public void setProcessorService(SearchQueryProcessorService processorService) {
+        this.processorService = processorService;
+    }
+
+    public void setBusinessJournalService(BusinessJournalService businessJournalService) {
 		this.businessJournalService = businessJournalService;
 	}
 
@@ -84,9 +90,10 @@ public class GetRecentActivity extends DeclarativeWebScript {
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
 
-		final String searchQuery = String.format("+TYPE:\"%s\" OR +TYPE:\"%s\" AND (NOT @lecm\\-statemachine\\-aspects\\:is\\-final:true OR (@lecm\\-statemachine\\-aspects\\:is\\-final:true AND %s:[%s TO %s]))",
-				ContractsBeanImpl.TYPE_CONTRACTS_DOCUMENT, ContractsBeanImpl.TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT,
-				ContentModel.PROP_MODIFIED, solrDateFormat.format(minDate), solrDateFormat.format(now));
+        final String searchQuery = String.format("+TYPE:\"%s\" OR +TYPE:\"%s\" AND (NOT @lecm\\-statemachine\\-aspects\\:is\\-final:true OR (@lecm\\-statemachine\\-aspects\\:is\\-final:true AND %s:[%s TO %s])) AND "
+                        + processorService.processQuery("{{IN_SAME_ORGANIZATION}}"),
+                ContractsBeanImpl.TYPE_CONTRACTS_DOCUMENT, ContractsBeanImpl.TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT,
+                ContentModel.PROP_MODIFIED, solrDateFormat.format(minDate), solrDateFormat.format(now));
 
 		sp.setQuery(searchQuery);
 		ResultSet results = null;
