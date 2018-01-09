@@ -254,7 +254,6 @@
                     <show id="lecm-internal:response-date"/>
                     <show id="lecm-internal:recipients-assoc"/>
                     <show id="lecm-eds-document:summaryContent"/>
-                    <show id="lecm-signing-v2-aspects:signerEmployeeAssoc"/>
                     <show id="lecm-document-aspects:response-to-assoc"/>
                     <show id="lecm-eds-document:sheets-number"/>
                     <show id="lecm-document:subject-assoc"/>
@@ -327,14 +326,6 @@
                         </control>
                     </field>
                     <field id="lecm-eds-document:file-register-assoc"/>
-                    <field id="lecm-signing-v2-aspects:signerEmployeeAssoc">
-                        <control>
-                            <control-param name="useStrictFilterByOrg">true</control-param>
-                            <control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
-                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS,LECM_ES_SIGNERS</control-param>
-                            <control-param name="endpointMany">true</control-param>
-                        </control>
-                    </field>
                     <field id="lecm-eds-document:sheets-number">
                         <control template="/ru/it/lecm/base-share/components/controls/number.ftl">
                             <control-param name="maxLength">9</control-param>
