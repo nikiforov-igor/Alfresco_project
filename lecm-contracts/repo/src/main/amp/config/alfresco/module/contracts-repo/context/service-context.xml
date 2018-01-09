@@ -503,6 +503,7 @@
 		<property name="businessJournalService" ref="businessJournalService"/>
 		<property name="maxDays" value="${lecm.contracts.dashlet.recentActivity.maxDays}"/>
 		<property name="maxRecords" value="${lecm.contracts.dashlet.recentActivity.maxRecords}"/>
+        <property name="processorService" ref="searchQueryProcessorService"/>
 	</bean>
 
     <bean id="contracts.ConfigToRepositoryLoader" parent="configsToRepositoryLoader">
