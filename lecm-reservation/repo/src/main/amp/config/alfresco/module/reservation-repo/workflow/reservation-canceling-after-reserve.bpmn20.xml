@@ -81,8 +81,7 @@
                         execution.setVariableLocal('registrarsList', registrarsListItems);
                         execution.setVariable('reservateInitiator', base.getWorkflowNodeConverter().convertNode(currentEmployee.nodeRef));
                         var cancelReason = execution.getVariableLocal('lecmRegnumRes_cancelReasonAfterReserve');
-                        var cancelReasonLink = "<a href='#' title=" + cancelReason + ">отмену</a>";
-                        var logText = "#initiator запросил " + cancelReasonLink + " резерва регистрационных данных #mainobject";
+                        var logText = "#initiator запросил " + base.wrapperTitle("отмену", cancelReason) + " резерва регистрационных данных #mainobject";
                         businessJournal.log(document.nodeRef.toString(), 'RESERVATION', logText, []);
                     ]]></activiti:string>
                 </activiti:field>
