@@ -2145,6 +2145,13 @@ if (document) {
   /* Автор */
   var creatorAssoc = stm_document.assocs["lecm-resolutions:author-assoc"];
   if (creatorAssoc && creatorAssoc.length) {
+    //убираем права для всех авторов кроме того, что в ассоциации
+    var creators = lecmPermission.getEmployeesByDynamicRole(stm_document, "RESOLUTION_AUTHOR_DYN");
+    for(var key in creators) {
+        if(creatorAssoc[0] != creators[key]) {
+            lecmPermission.revokeDynamicRole(stm_document, creators[key], "RESOLUTION_AUTHOR_DYN");
+        }
+    }
     statemachine.grandDynamicRoleForEmployee(stm_document, creatorAssoc[0], "RESOLUTION_AUTHOR_DYN", task);
     documentMembers.addMemberWithoutCheckPermission(stm_document, creatorAssoc[0], 'LECM_BASIC_PG_Reader', true);
     if (baseDoc) {
