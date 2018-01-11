@@ -315,13 +315,7 @@ LogicECM.ORD = LogicECM.ORD || {};
                 scope: this
             });
         },
-        onAddRow: function (me, asset, owner, actionsConfig, confirmFunction) {
-            if (this.doubleClickLock) {
-                return;
-            }
-            this.doubleClickLock = true;
-            this.showCreateDialog(this.datagridMeta, null, null, true, me);
-        },
+
         onActionCompletePoint: function (me, asset, owner, actionsConfig, confirmFunction) {
             var nodeRef = arguments[0].nodeRef;
             if (nodeRef) {
@@ -372,10 +366,22 @@ LogicECM.ORD = LogicECM.ORD || {};
                 completePointDialog.show();
             }
         },
+
         showCreateDialog: function (meta, callback, successMessage, isAddRowClicked, dataRow) {
-            if (this.editDialogOpening) return;
+            if (this.editDialogOpening) {
+                return;
+            }
             this.editDialogOpening = true;
-            var me = this;
+
+            var config = {
+                meta: meta,
+                callback: callback,
+                successMessage: successMessage,
+                context: this,
+                isAddRowClicked: isAddRowClicked,
+                dataRow: dataRow,
+                useThreadCreation: !isAddRowClicked
+            };
 
             var formId = this.id.substring(0, this.id.indexOf("_assoc_lecm-ord-table-structure_items-assoc-container"));
             var executionDateEl = Dom.get(formId + "_prop_lecm-eds-document_execution-date");
@@ -383,16 +389,19 @@ LogicECM.ORD = LogicECM.ORD || {};
             if (executionDateEl) {
                 executionDateFormValue = executionDateEl.value;
             }
+
             var controllerEl = Dom.get(formId + "_assoc_lecm-ord_controller-assoc");
             var controllerFormValue = null;
             if (controllerEl) {
                 controllerFormValue = controllerEl.value;
             }
+
             var subjectEl = Dom.get(formId + "_assoc_lecm-document_subject-assoc");
             var subjectFormValue = null;
             if (subjectEl) {
                 subjectFormValue = subjectEl.value;
             }
+
             // Intercept before dialog show
             Alfresco.util.Ajax.jsonPost({
                 url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
@@ -422,28 +431,7 @@ LogicECM.ORD = LogicECM.ORD || {};
                             } else if (data[2]) {
                                 args["assoc_lecm-ord-table-structure_controller-assoc"] = data[2];
                             }
-                            var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
-                                var addMsg = meta.addMessage;
-                                var contId = p_dialog.id + "-form-container";
-                                Alfresco.util.populateHTML(
-                                    [contId + "_h", addMsg ? addMsg : this.msg(this.options.createFormTitleMsg)]
-                                );
-                                if (meta.itemType && meta.itemType != "") {
-                                    Dom.addClass(contId, meta.itemType.replace(":", "_") + "_edit");
-                                }
-                                me.editDialogOpening = false;
-                                if (isAddRowClicked) {
-                                    if (dataRow) {
-                                        var tempIndexTag = Dom.get(p_dialog.id + "_prop_lecm-document_indexTableRow");
-                                        if (tempIndexTag) {
-                                            var index = eval(dataRow.itemData["prop_lecm-document_indexTableRow"].value);
-                                            tempIndexTag.value = index + 1;
-                                        }
-                                    }
-                                    this.doubleClickLock = false;
-                                }
-                                p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
-                            };
+
                             var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
                             var templateRequestParams = {
                                 itemKind: "type",
@@ -467,40 +455,23 @@ LogicECM.ORD = LogicECM.ORD || {};
                                     actionUrl: null,
                                     destroyOnHide: true,
                                     doBeforeDialogShow: {
-                                        fn: doBeforeDialogShow,
-                                        scope: this
+                                        fn: this.doBeforeCreateDialogShow,
+                                        scope: this,
+                                        obj: config
                                     },
                                     onSuccess: {
-                                        fn: function DataGrid_onActionCreate_success(response) {
-                                            if (callback) {// вызов дополнительного события
-                                                callback.call(this, response.json.persistedObject);
-                                            } else { // вызов события по умолчанию
-                                                YAHOO.Bubbling.fire("nodeCreated",
-                                                    {
-                                                        nodeRef: response.json.persistedObject,
-                                                        bubblingLabel: this.options.bubblingLabel
-                                                    });
-                                                YAHOO.Bubbling.fire("dataItemCreated", // обновить данные в гриде
-                                                    {
-                                                        nodeRef: response.json.persistedObject,
-                                                        bubblingLabel: this.options.bubblingLabel
-                                                    });
-                                                Alfresco.util.PopupManager.displayMessage(
-                                                    {
-                                                        text: this.msg(successMessage ? successMessage : "message.save.success")
-                                                    });
-                                            }
-                                            this.editDialogOpening = false;
+                                        scope: this,
+                                        fn: function (response, config) {
+                                            this.doOnCreateNode(response, config, null);
                                         },
-                                        scope: this
+                                        obj: config
                                     },
                                     onFailure: {
-                                        fn: function DataGrid_onActionCreate_failure(response) {
-                                            LogicECM.module.Base.Util.displayErrorMessageWithDetails(me.msg("logicecm.base.error"), me.msg("message.save.failure"), response.json.message);
-                                            me.editDialogOpening = false;
-                                            this.widgets.cancelButton.set("disabled", false);
+                                        fn: function  (response, config) {
+                                            this.doOnFailure(response, config);
                                         },
-                                        scope: createDetails
+                                        scope: this,
+                                        obj: config
                                     }
                                 }).show();
                         }
@@ -511,6 +482,7 @@ LogicECM.ORD = LogicECM.ORD || {};
                 scope: this
             });
         },
+
         onActionExecutePoint: function (me, asset, owner, actionsConfig, confirmFunction) {
             var scope = this;
             var nodeRef = arguments[0].nodeRef;
