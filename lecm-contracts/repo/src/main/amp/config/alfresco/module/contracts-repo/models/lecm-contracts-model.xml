@@ -182,6 +182,14 @@
 						<tokenised>false</tokenised>
 					</index>
 				</property>
+				<property name="lecm-contract:currency-assoc-text-content">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
 			</properties>
 			<associations>
 				<!-- Контрагенты -->
