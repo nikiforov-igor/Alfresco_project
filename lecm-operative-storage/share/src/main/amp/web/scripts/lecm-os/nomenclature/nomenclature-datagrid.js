@@ -654,7 +654,7 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 				status = rowData.itemData["prop_lecm-os_nomenclature-case-status"],
 				archive = rowData.itemData["prop_lecm-os_nomenclature-case-to-archive"];
 
-			return (type == "lecm-os:nomenclature-case") && (status.value == "CLOSED") && (archive);
+			return (type == "lecm-os:nomenclature-case") && (status.value == "CLOSED") && (archive && archive.value);
 		},
 
 		closeNomenclatureYearEvaluator: function(rowData) {
