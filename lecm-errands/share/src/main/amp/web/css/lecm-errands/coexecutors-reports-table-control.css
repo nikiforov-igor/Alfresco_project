@@ -31,6 +31,10 @@
     float: left;
 }
 
+.form-field.with-grid.coexecutors-report .coexecutors-reports-additional-block .reports-filter-block input[type="checkbox"] {
+    margin-right: 2px;
+}
+
 .form-field.with-grid.coexecutors-report .coexecutors-reports-additional-block .reports-filter-block > label {
     float: right;
 }
