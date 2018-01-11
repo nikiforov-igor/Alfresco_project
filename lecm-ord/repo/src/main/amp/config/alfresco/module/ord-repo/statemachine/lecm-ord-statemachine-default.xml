@@ -3985,8 +3985,35 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var doc = bpm_package.children[0];
 if (doc) {
-  doc.properties["lecm-ord:transition-to-on-execution-date"] = new Date();
-  doc.save();
+    doc.reset();
+    doc.properties["lecm-ord:transition-to-on-execution-date"] = new Date();
+
+    var tableAssocs = doc.assocs["lecm-ord-table-structure:items-assoc"];
+    if (tableAssocs && tableAssocs.length) {
+        var table = tableAssocs[0];
+        var pointAssocs = table.childAssocs["cm:contains"];
+        if (pointAssocs && pointAssocs.length) {
+            var tableItem;
+            for (var i = 0; i < pointAssocs.length; i++) {
+                tableItem = pointAssocs[i];
+                if (tableItem.properties["lecm-ord-table-structure:limitation-date-radio"] == "DAYS") {
+
+                    var computedDate = edsDocument.convertComplexDateString(
+                        tableItem.properties["lecm-ord-table-structure:limitation-date-radio"],
+                        new Date().toISOString(),
+                        tableItem.properties["lecm-ord-table-structure:limitation-date-type"],
+                        tableItem.properties["lecm-ord-table-structure:limitation-date-days"]);
+                    if (computedDate) {
+                        tableItem.properties["lecm-ord-table-structure:execution-date"] = computedDate;
+                        tableItem.properties["lecm-ord-table-structure:limitation-date-text"] = computedDate.toString();
+                        tableItem.properties["lecm-ord-table-structure:limitation-date-radio"] = "DATE";
+                    }
+                    tableItem.save();
+                }
+            }
+        }
+    }
+    doc.save();
 }]]></value>
                                                             </property>
                                                         </properties>
