@@ -594,7 +594,6 @@
 
                     <field id="lecm-os:nomenclature-case-close-date" set="set2" read-only="true">
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="minLimitCurrentDate">true</control-param>
                         </control>
                     </field>
 
@@ -712,7 +711,6 @@
 
                     <field id="lecm-os:nomenclature-case-close-date" set="dates">
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="minLimitCurrentDate">true</control-param>
                         </control>
                     </field>
 
@@ -825,7 +823,6 @@
                     </field>
                     <field id="lecm-os:nomenclature-case-close-date" set="dates">
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="minLimitCurrentDate">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-os:nomenclature-case-volumes-number" set="set3" read-only="true"/>
