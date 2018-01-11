@@ -3678,7 +3678,7 @@ if (document !== null) {
                                                         <properties>
                                                             <property>
                                                                 <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[false]]></value>
+                                                                <value><![CDATA[true]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>do-not-ask-for-confirmation</name>
@@ -3691,7 +3691,7 @@ if (document !== null) {
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[]]></value>
+                                                                <value><![CDATA[statemachine.terminateWorkflowsByDefinition(stm_document, 'eventsResourceReservation', null, null);]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -3725,7 +3725,7 @@ if (document !== null) {
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[]]></value>
+                                                                <value><![CDATA[statemachine.terminateWorkflowsByDefinition(stm_document, 'eventsResourceReservation', null, null);]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -3900,49 +3900,61 @@ if (document !== null) {
                                                             </property>
                                                             <property>
                                                                 <name>actionScript</name>
-                                                                <value><![CDATA[(function(){
-  var meeting = stm_document;
-  meeting.properties["lecm-events:show-in-calendar"]=true;
-  meeting.properties["lecm-events:send-notifications"]=true;
-  meeting.save();
-  var tableAssocs = meeting.assocs["lecm-meetings-ts:items-assoc"];
-  if (tableAssocs!==null && tableAssocs.length > 0){
-    var table = tableAssocs[0];
-    var  itemAssocs = table.childAssocs["cm:contains"];
-    if (itemAssocs!==null && itemAssocs.length > 0 ){
-      /* Проверяем документы */
-      for (var i=0; i<itemAssocs.length ;i++ ) {
-		var item = itemAssocs[i];
-        var documents = item.assocs["lecm-meetings-ts:documents-assoc"];
-        if (documents!==null && documents.length>0) {
-		for (var j=0; j<documents.length ;j++ ) {
-			var document = documents[j];
-			documentConnection.createConnection(meeting, document, 'forInformation', true );
-		}
+                                                                <value><![CDATA[(function() {
+    var meeting = stm_document;
+    meeting.properties["lecm-events:show-in-calendar"]=true;
+    meeting.properties["lecm-events:send-notifications"]=true;
+    meeting.save();
+    var tableAssocs = meeting.assocs["lecm-meetings-ts:items-assoc"];
+    if (tableAssocs!==null && tableAssocs.length > 0){
+        var table = tableAssocs[0];
+        var itemAssocs = table.childAssocs["cm:contains"];
+        if (itemAssocs!==null && itemAssocs.length > 0 ){
+            /* Проверяем документы */
+            for (var i=0; i<itemAssocs.length ;i++ ) {
+                var item = itemAssocs[i];
+                var documents = item.assocs["lecm-meetings-ts:documents-assoc"];
+                if (documents!==null && documents.length>0) {
+                    for (var j=0; j<documents.length ;j++ ) {
+                        var document = documents[j];
+                        documentConnection.createConnection(meeting, document, 'forInformation', true );
+                    }
+                }
+            }
         }
-      }
     }
-  }
-  /*Notify responsible for resources*/
-  var resources = events.getEventResources(meeting);
-  if (resources !== null && resources.length>0) {
-    for (var k=0; k<resources.length ;k++ ) {
-      var responsible = events.getResourceResponsible(resources[k]);
-      if (responsible!==null) {
-		  notifications.sendNotification({
-		  recipients: responsible,
-		  templateCode: 'MEETINGS_RESPONSIBLE_FOR_RESOURCES',
-		  templateConfig: {
-		    mainObject: meeting
-		  }
-		});
-      }
+    /*Notify responsible for resources*/
+    var resources = events.getEventResources(meeting);
+    if ((resources !== null) && (resources.length > 0)) {
+        var resourcesCount = resources.length;
+        for (var k = 0; k < resourcesCount; k++) {
+            var resource = resources[k];
+            var responsibleList = events.getResourceResponsible(resource);
+            if (responsibleList !== null) {
+                // добавим динамическую роль для ответственных
+                var responsibleCount = responsibleList.length;
+                for (var j = 0; j < responsibleCount; j++) {
+                    statemachine.grandDynamicRoleForEmployee(meeting, responsibleList[j], "EVENTS_RESPONSIBLE_FOR_RESOURCES_DYN", task);
+                }
+                // отправим уведомление ответственным
+                notifications.sendNotification({
+                    recipients: responsibleList,
+                    templateCode: 'MEETINGS_RESPONSIBLE_FOR_RESOURCES',
+                    templateConfig: {
+                        mainObject: meeting
+                    }
+                });
+                if (resource.properties["lecm-events-dic:resources-require-approval"]) {
+                    // ресурс требует утверждения - сформируем задачи на утверждение
+                    events.createResourceConfirmationTasks(meeting.nodeRef, resource.nodeRef);
+                }
+            }
+        }
     }
-  }
-  events.notifyMeeteengCreated(stm_document, true, false);
-  /*create repeated*/
-  meetings.createRepetedMeetings(stm_document);
-}());]]></value>
+    events.notifyMeeteengCreated(stm_document, true, false);
+    /*create repeated*/
+    meetings.createRepetedMeetings(stm_document);
+})();]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>
