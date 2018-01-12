@@ -21,6 +21,7 @@
 		  p:ordReportsService-ref="ordReportsService"
 		  p:stateMachineService-ref="stateMachineHelper"
 		  p:errandsService-ref="errandsService"
-		  p:notificationsService-ref="notificationsService"/>
+		  p:notificationsService-ref="notificationsService"
+		  p:edsService-ref="edsService" />
 
 </beans>
