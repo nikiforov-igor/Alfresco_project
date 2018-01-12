@@ -58,6 +58,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	private NotificationsService notificationsService;
 	private ErrandsService errandsService;
 	private StateMachineServiceBean stateMachineService;
+    private EDSDocumentService edsService;
 
 
 	private ORDReportsService ordReportsService;
@@ -117,6 +118,10 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	public void setStateMachineService(StateMachineServiceBean stateMachineService) {
 		this.stateMachineService = stateMachineService;
 	}
+
+    public void setEdsService(EDSDocumentService edsService) {
+        this.edsService = edsService;
+    }
 
 	private String getOrdURL(final ScriptNode ordRef) {
 		NodeRef ordDocumentRef = ordRef.getNodeRef();
@@ -298,7 +303,28 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 			for (ChildAssociationRef pointAssoc : pointAssocs) {
 				NodeRef point = pointAssoc.getChildRef();
 
-				//свойства поручения
+                String pointDateText = (String) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_DATE_TEXT);
+                String pointDateDays = nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_DATE_DAYS).toString();
+                String pointDateRadio = (String) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_DATE_RADIO);
+                String pointDateType = (String) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_DATE_TYPE);
+                Date limitationDate = (Date) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_EXECUTION_DATE);
+
+                //пересчет даты пункта ОРД
+                if (EDSDocumentService.COMPLEX_DATE_RADIO_DAYS.equals(pointDateRadio)) {
+                    Integer daysInt = StringUtils.isNotEmpty(pointDateDays) ? Integer.parseInt(pointDateDays) : null;
+                    Date computedDate = edsService.convertComplexDate(pointDateRadio, new Date(), pointDateType, daysInt);
+
+                    if (computedDate != null) {
+                        pointDateRadio = EDSDocumentService.COMPLEX_DATE_RADIO_DATE;
+                        limitationDate = computedDate;
+                        pointDateText = computedDate.toString();
+
+                        nodeService.setProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_DATE_RADIO, pointDateRadio);
+                        nodeService.setProperty(point, ORDModel.PROP_ORD_TABLE_EXECUTION_DATE, limitationDate);
+                        nodeService.setProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_DATE_TEXT, pointDateText);
+                    }
+                }
+                //свойства поручения
 				Map<String, String> properties = new HashMap<String, String>();
 				//заголовок
 				Integer pointNumber = (Integer) nodeService.getProperty(point, DocumentTableService.PROP_INDEX_TABLE_ROW);
@@ -329,10 +355,10 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 					properties.put(ErrandsService.PROP_ERRANDS_REPORT_RECIPIENT_TYPE.toPrefixString(namespaceService), "NOT_REQUIRED");
 				}
 				//Срок исполнения
-				properties.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_TEXT.toPrefixString(namespaceService), (String) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_DATE_TEXT));
-				properties.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_DAYS.toPrefixString(namespaceService),  nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_DATE_DAYS).toString());
-				properties.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_RADIO.toPrefixString(namespaceService), (String) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_DATE_RADIO));
-				properties.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_TYPE.toPrefixString(namespaceService), (String) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_DATE_TYPE));
+				properties.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_TEXT.toPrefixString(namespaceService), pointDateText);
+				properties.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_DAYS.toPrefixString(namespaceService),  pointDateDays);
+				properties.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_RADIO.toPrefixString(namespaceService), pointDateRadio);
+				properties.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_TYPE.toPrefixString(namespaceService), pointDateType);
 				properties.put(ErrandsService.PROP_ERRANDS_REPORT_REQUIRED.toPrefixString(namespaceService), nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_REPORT_REQUIRED).toString());
 
 				//индекс
@@ -385,7 +411,6 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				NodeRef errand = documentService.createDocument(ErrandsService.TYPE_ERRANDS.toPrefixString(namespaceService), properties, associations);
 
 				// срок поручения
-				Date limitationDate = (Date) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_EXECUTION_DATE);
 				if (limitationDate != null) {
 					nodeService.setProperty(errand, ErrandsService.PROP_ERRANDS_LIMITATION_DATE, limitationDate);
 				}
