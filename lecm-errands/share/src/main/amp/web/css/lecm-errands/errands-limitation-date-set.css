@@ -7,7 +7,7 @@
     float: left;
 }
 .errands-limitation-date-set .errands-limitation-date-set-radio .control .value-div {
-    width: 12px;
+    width: 16px;
 }
 .errands-limitation-date-set .errands-limitation-date-set-radio .control label.checkbox {
     display: none;
@@ -15,6 +15,7 @@
 .errands-limitation-date-set .errands-limitation-date-set-radio .control input {
     margin-top: 8px;
     margin-bottom: 20px;
+    padding: 0px;
 }
 .errands-limitation-date-set .errands-limitation-date-set-radio .buttons-div {
     padding: 0;
