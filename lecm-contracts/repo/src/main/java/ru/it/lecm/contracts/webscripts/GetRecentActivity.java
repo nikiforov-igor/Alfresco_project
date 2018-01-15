@@ -90,7 +90,7 @@ public class GetRecentActivity extends DeclarativeWebScript {
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
 
-        String searchQuery = String.format("+TYPE:\"%s\" OR +TYPE:\"%s\" AND (NOT @lecm\\-statemachine\\-aspects\\:is\\-final:true OR (@lecm\\-statemachine\\-aspects\\:is\\-final:true AND %s:[%s TO %s])) AND {{IN_SAME_ORGANIZATION}}",
+        String searchQuery = String.format("(+TYPE:\"%s\" OR +TYPE:\"%s\" AND (NOT @lecm\\-statemachine\\-aspects\\:is\\-final:true OR (@lecm\\-statemachine\\-aspects\\:is\\-final:true AND %s:[%s TO %s]))) AND {{IN_SAME_ORGANIZATION}}",
                 ContractsBeanImpl.TYPE_CONTRACTS_DOCUMENT, ContractsBeanImpl.TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT,
                 ContentModel.PROP_MODIFIED, solrDateFormat.format(minDate), solrDateFormat.format(now));
 
