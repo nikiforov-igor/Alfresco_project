@@ -127,12 +127,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 							Dom.addClass(this.startDatePicker.id + "-date", "invalid");
 							Dom.addClass(this.endDatePicker.id + "-date", "invalid");
 							return false;
-						} else {
-							Dom.removeClass(this.startDatePicker.id + "-date", "invalid");
-							Dom.removeClass(this.endDatePicker.id + "-date", "invalid");
-							return true;
 						}
 					}
+                    Dom.removeClass(this.startDatePicker.id + "-date", "invalid");
+                    Dom.removeClass(this.endDatePicker.id + "-date", "invalid");
+                    return true;
 				}
 			}
 		});
