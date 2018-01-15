@@ -424,7 +424,7 @@
                     <!-- Инициатор -->
                     <show id="lecm-errands:initiator-assoc"/>
                     <!-- Срок исполнения -->
-                    <show id="lecm-errands:limitation-date"/>
+                    <show id="lecm-errands:limitation-date-text"/>
                     <!-- Важное -->
                     <show id="lecm-errands:is-important"/>
                     <!-- Статус -->
