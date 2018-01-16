@@ -106,6 +106,13 @@
             if (limitationDateRadio && limitationDateField && limitationDateField.value) {
                 var dateRadioButton = YAHOO.util.Selector.query("input[type=radio][value='DATE']", limitationDateRadio.parentElement, true);
                 dateRadioButton.checked = true;
+                limitationDateRadio.value = "DATE";
+
+                YAHOO.Bubbling.fire("changeLimitationDateRadio", {
+                    value: limitationDateRadio.value,
+                    formId: obj.formId,
+                    fieldId: "lecm-errands:limitation-date-radio"
+                });
             }
         }
 	}

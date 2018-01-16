@@ -20,6 +20,25 @@
     Bubbling.on('sendResolution', sendResolution);
     Bubbling.on('resolutionCreateFormScriptLoaded', init);
     Bubbling.on('resolutionEditFormScriptLoaded', init);
+    Bubbling.on("mandatoryControlValueUpdated", updateControlHandler, this);
+
+    function updateControlHandler(layer, args) {
+        if(!args || !args[1] || !args[1].options){
+            return;
+        }
+        if(args[1].options.fieldId === 'lecm-resolutions:limitation-date' && args[1].options.currentValue != ''){
+            var limitationDateRadio = Dom.get(args[1].currentValueHtmlId + "-radio");
+            var dateRadioButton = YAHOO.util.Selector.query("input[type=radio][value='DATE']", limitationDateRadio.parentElement, true);
+            dateRadioButton.checked = true;
+            limitationDateRadio.value = "DATE";
+
+            YAHOO.Bubbling.fire("changeResolutionLimitationDateRadio", {
+                value: limitationDateRadio.value,
+                formId: args[1].options.formId,
+                fieldId: "lecm-resolutions:limitation-date-radio"
+            });
+        }
+    }
 
     function saveDraft(layer, args) {
         var form;
