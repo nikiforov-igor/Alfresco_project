@@ -320,7 +320,7 @@
                     <field id="lecm-errands:limitation-date-days" set="limitation-date" mandatory="true">
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
-                            <constraint type="REGEX" event="keyup" validation-handler="Alfresco.forms.validation.regexMatch" message-id="message.constraint.number.positive"/>
+                            <constraint type="REGEX" event="keyup" validation-handler="Alfresco.forms.validation.repoRegexMatch" message-id="message.constraint.number.positive"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-errands:limitation-date-type" set="limitation-date">
@@ -726,7 +726,7 @@
                     <field id="lecm-errands:limitation-date-days" set="limitation-date" mandatory="true">
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
-                            <constraint type="REGEX" event="keyup" validation-handler="Alfresco.forms.validation.regexMatch" message-id="message.constraint.number.positive"/>
+                            <constraint type="REGEX" event="keyup" validation-handler="Alfresco.forms.validation.repoRegexMatch" message-id="message.constraint.number.positive"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-errands:limitation-date-type" set="limitation-date">
