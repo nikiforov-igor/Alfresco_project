@@ -107,31 +107,34 @@ function processDueDateChanges(params) {
             edsDocument.resetChangeDueDateSignal(document);
         }
         lecmPermission.popAuthentication();
-        var recipients = [];
-        var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
-        var coexecutorsAssoc = document.assocs["lecm-errands:coexecutors-assoc"];
-        var controllerAssoc = document.assocs["lecm-errands:controller-assoc"];
-        if (executorAssoc && executorAssoc.length == 1) {
-            recipients.push(executorAssoc[0]);
-        }
-        if (coexecutorsAssoc && coexecutorsAssoc.length) {
-            for (i = 0; i < coexecutorsAssoc.length; i++) {
-                recipients.push(coexecutorsAssoc[i]);
+        var periodically = document.properties["lecm-errands:periodically"];
+        if (!periodically) {
+            var recipients = [];
+            var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
+            var coexecutorsAssoc = document.assocs["lecm-errands:coexecutors-assoc"];
+            var controllerAssoc = document.assocs["lecm-errands:controller-assoc"];
+            if (executorAssoc && executorAssoc.length == 1) {
+                recipients.push(executorAssoc[0]);
             }
-        }
-        if (controllerAssoc && controllerAssoc.length == 1) {
-            recipients.push(controllerAssoc[0]);
-        }
-        notifications.sendNotificationFromCurrentUser({
-            recipients: recipients,
-            templateCode: 'ERRANDS_CHANGE_DUE_DATE',
-            templateConfig: {
-                mainObject: document,
-                eventExecutor: currentUser,
-                dueDate: dueDateString,
-                reason: changeDateReason
+            if (coexecutorsAssoc && coexecutorsAssoc.length) {
+                for (i = 0; i < coexecutorsAssoc.length; i++) {
+                    recipients.push(coexecutorsAssoc[i]);
+                }
             }
-        });
+            if (controllerAssoc && controllerAssoc.length == 1) {
+                recipients.push(controllerAssoc[0]);
+            }
+            notifications.sendNotificationFromCurrentUser({
+                recipients: recipients,
+                templateCode: 'ERRANDS_CHANGE_DUE_DATE',
+                templateConfig: {
+                    mainObject: document,
+                    eventExecutor: currentUser,
+                    dueDate: dueDateString,
+                    reason: changeDateReason
+                }
+            });
+        }
         logObjects.push(dueDateString);
         logText = "#initiator ";
         logText += documentScript.wrapperTitle("изменил", changeDateReason);

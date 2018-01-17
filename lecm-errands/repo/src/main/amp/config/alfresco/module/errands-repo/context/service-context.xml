@@ -738,4 +738,157 @@
         <property name="statusesOrder" value="${lecm.eds.execution.statistics.statuses.order}"/>
         <property name="executedStatus" value="${lecm.eds.execution.statistics.statuses.executed}"/>
     </bean>
+
+    <bean id="periodicalErrandsExecutor" class="ru.it.lecm.errands.shedule.PeriodicalErrandsExecutor" parent="action-executer">
+        <property name="ignoreLock" value="false"/>
+        <property name="publicAction" value="false" />
+        <property name="nodeService" ref="nodeService"/>
+        <property name="documentService" ref="documentService"/>
+        <property name="namespaceService" ref="namespaceService"/>
+        <property name="copyService" ref="copyService"/>
+        <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
+        <property name="exceptionProcessors">
+            <list>
+                <ref bean="createDateExceptionProcessor"/>
+                <ref bean="controlDateExceptionProcessor"/>
+                <ref bean="excecutorNotActiveExceptionProcessor"/>
+                <ref bean="сoexcecutorNotActiveExceptionProcessor"/>
+                <ref bean="сontrollerNotActiveExceptionProcessor"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="baseCreationExceptionProcessor"
+          class="ru.it.lecm.errands.shedule.periodicalErrandsCreation.BaseCreationExceptionProcessor" abstract="true">
+        <property name="nodeService" ref="nodeService"/>
+        <property name="errandsService" ref="errandsService"/>
+        <property name="personService" ref="personService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
+    </bean>
+
+    <bean id="createDateExceptionProcessor"
+          class="ru.it.lecm.errands.shedule.periodicalErrandsCreation.CreateDateExceptionProcessor"
+          parent="baseCreationExceptionProcessor">
+        <property name="workCalendar" ref="WorkCalendarService"/>
+        <property name="wCalendarService" ref="WCalendarService"/>
+    </bean>
+
+    <bean id="controlDateExceptionProcessor"
+          class="ru.it.lecm.errands.shedule.periodicalErrandsCreation.ControlDateExceptionProcessor"
+          parent="baseCreationExceptionProcessor">
+        <property name="edsDocumentService" ref="edsService"/>
+        <property name="workCalendar" ref="WorkCalendarService"/>
+        <property name="wCalendarService" ref="WCalendarService"/>
+    </bean>
+
+    <bean id="excecutorNotActiveExceptionProcessor"
+          class="ru.it.lecm.errands.shedule.periodicalErrandsCreation.ExcecutorNotActiveExceptionProcessor"
+          parent="baseCreationExceptionProcessor">
+        <property name="notificationsService" ref="notificationsService"/>
+    </bean>
+
+    <bean id="сoexcecutorNotActiveExceptionProcessor"
+          class="ru.it.lecm.errands.shedule.periodicalErrandsCreation.CoexcecutorNotActiveExceptionProcessor"
+          parent="baseCreationExceptionProcessor">
+        <property name="notificationsService" ref="notificationsService"/>
+    </bean>
+
+    <bean id="сontrollerNotActiveExceptionProcessor"
+          class="ru.it.lecm.errands.shedule.periodicalErrandsCreation.ControllerNotActiveExceptionProcessor"
+          parent="baseCreationExceptionProcessor">
+        <property name="notificationsService" ref="notificationsService"/>
+    </bean>
+
+    <bean id="periodicalErrandsSchedule" class="ru.it.lecm.errands.shedule.PeriodicalErrandsShedule">
+        <property name="transactionMode">
+            <value>ISOLATED_TRANSACTIONS</value>
+        </property>
+        <property name="compensatingActionMode">
+            <value>IGNORE</value>
+        </property>
+        <property name="jobName">
+            <value>periodical-errands-sys-agent</value>
+        </property>
+        <property name="jobGroup">
+            <value>periodical-errands</value>
+        </property>
+        <property name="triggerName">
+            <value>periodical-errands-sys-agent-trigger</value>
+        </property>
+        <property name="triggerGroup">
+            <value>periodical-errands-sys-agent-trigger-group</value>
+        </property>
+        <property name="scheduler">
+            <ref bean="schedulerFactory"/>
+        </property>
+        <property name="actionService">
+            <ref bean="ActionService"/>
+        </property>
+        <property name="transactionService">
+            <ref bean="TransactionService"/>
+        </property>
+        <property name="runAsUser">
+            <value>System</value>
+        </property>
+        <property name="cronExpression">
+            <value>${errands.periodical.cronExpression}</value>
+        </property>
+        <property name="documentService" ref="documentService"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="errandsService" ref="errandsService"/>
+    </bean>
+
+    <bean id="periodicalErrandsToExecutedExecutor" class="ru.it.lecm.errands.shedule.PeriodicalErrandsToExecutedExecutor" parent="action-executer">
+        <property name="ignoreLock" value="false"/>
+        <property name="publicAction" value="false" />
+        <property name="nodeService" ref="nodeService"/>
+        <property name="errandsService" ref="errandsService"/>
+        <property name="stateMachineService" ref="stateMachineHelper"/>
+    </bean>
+
+    <bean id="periodicalErrandsToExecutedSchedule" class="ru.it.lecm.errands.shedule.PeriodicalErrandsToExecutedShedule">
+        <property name="transactionMode">
+            <value>ISOLATED_TRANSACTIONS</value>
+        </property>
+        <property name="compensatingActionMode">
+            <value>IGNORE</value>
+        </property>
+        <property name="jobName">
+            <value>periodical-errands-to-executed-sys-agent</value>
+        </property>
+        <property name="jobGroup">
+            <value>periodical-errands-to-executed</value>
+        </property>
+        <property name="triggerName">
+            <value>periodical-errands-to-executed-sys-agent-trigger</value>
+        </property>
+        <property name="triggerGroup">
+            <value>periodical-errands-to-executed-sys-agent-trigger-group</value>
+        </property>
+        <property name="scheduler">
+            <ref bean="schedulerFactory"/>
+        </property>
+        <property name="actionService">
+            <ref bean="ActionService"/>
+        </property>
+        <property name="transactionService">
+            <ref bean="TransactionService"/>
+        </property>
+        <property name="runAsUser">
+            <value>System</value>
+        </property>
+        <property name="cronExpression">
+            <value>${errands.periodical.transitToExecute.cronExpression}</value>
+        </property>
+        <property name="documentService" ref="documentService"/>
+        <property name="errandsService" ref="errandsService"/>
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
+
+    <bean id="errandsPeriodEndDatePolicy" class="ru.it.lecm.errands.policy.ErrandsPeriodEndDatePolicy"
+          init-method="init" depends-on="errands.LogicEcmModelsBootstrap">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
 </beans>

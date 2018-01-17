@@ -89,9 +89,9 @@
 			<parameter name="allowedValues">
 				<list>
 					<value>DATERANGE</value>
+					<value>ENDLESS</value>
 					<value>DURING</value>
 					<value>REPEAT_COUNT</value>
-					<value>ENDLESS</value>
 				</list>
 			</parameter>
 		</constraint>
@@ -112,6 +112,31 @@
 					<value>DECLINE</value>
 					<value>ONCONTROL</value>
 					<value>PROJECT</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="lecm-errands:settings-create-date-not-working-day-action-const" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>MOVE_TO_NEXT_WORKING_DAY</value>
+					<value>DO_NOT_CREATE</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="lecm-errands:settings-control-deadline-not-working-day-action-const" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>MOVE_TO_PREVIOUS_WORKING_DAY</value>
+					<value>MOVE_TO_NEXT_WORKING_DAY</value>
+					<value>DO_NOT_CREATE</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="lecm-errands:settings-employee-not-active-action-const" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>NOTIFY_ADMIN</value>
+					<value>NOTIFY_ADMIN_AND_AUTHOR</value>
 				</list>
 			</parameter>
 		</constraint>
@@ -259,6 +284,9 @@
 				<!--Дата окончания периода-->
 				<property name="lecm-errands:period-end">
 					<type>d:date</type>
+				</property>
+				<property name="lecm-errands:period-end-text">
+					<type>d:text</type>
 				</property>
 				<!-- В течение -->
 				<property name="lecm-errands:period-during">
@@ -707,6 +735,56 @@
 				<property name="lecm-errands:settings-hide-additional-attrs">
 					<type>d:boolean</type>
 					<default>true</default>
+				</property>
+				<!-- Если дата создания очередного поручения приходится на нерабочий день -->
+				<property name="lecm-errands:settings-create-date-not-working-day-action">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<default>MOVE_TO_NEXT_WORKING_DAY</default>
+					<constraints>
+						<constraint ref="lecm-errands:settings-create-date-not-working-day-action-const"/>
+					</constraints>
+				</property>
+				<!-- Если контрольный срок приходится на нерабочий день -->
+				<property name="lecm-errands:settings-control-deadline-not-working-day-action">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<default>MOVE_TO_NEXT_WORKING_DAY</default>
+					<constraints>
+						<constraint ref="lecm-errands:settings-control-deadline-not-working-day-action-const"/>
+					</constraints>
+				</property>
+				<!-- Если исполнитель неактивен в Системе (уволен, заблокирован логин и пр.) -->
+				<property name="lecm-errands:settings-executor-not-active-action">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<default>NOTIFY_ADMIN_AND_AUTHOR</default>
+					<constraints>
+						<constraint ref="lecm-errands:settings-employee-not-active-action-const"/>
+					</constraints>
+				</property>
+				<!-- Если соисполнитель неактивен в Системе (уволен, заблокирован логин и пр.) -->
+				<property name="lecm-errands:settings-coexecutor-not-active-action">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<default>NOTIFY_ADMIN_AND_AUTHOR</default>
+					<constraints>
+						<constraint ref="lecm-errands:settings-employee-not-active-action-const"/>
+					</constraints>
+				</property>
+				<!-- Если контролер неактивен в Системе (уволен, заблокирован логин и пр.) -->
+				<property name="lecm-errands:settings-controller-not-active-action">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<default>NOTIFY_ADMIN_AND_AUTHOR</default>
+					<constraints>
+						<constraint ref="lecm-errands:settings-employee-not-active-action-const"/>
+					</constraints>
+				</property>
+				<!-- Отложенные для создания поручения в формате json {"13-05-2017": {nodRef...}, "14-05-2017": {nodRef...}} -->
+				<property name="lecm-errands:settings-delayed-errand-creation-by-date">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
 				</property>
 		    </properties>
 	    </type>

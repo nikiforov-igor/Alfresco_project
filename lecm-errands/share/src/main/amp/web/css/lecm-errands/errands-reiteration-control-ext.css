@@ -1,3 +1,7 @@
 .reiteration .summary {
     max-width: 15em;
 }
+
+.reiteration.viewmode .container {
+    padding: 0;
+}

@@ -43,7 +43,8 @@
                                             recipients.push(coexecutorsAssocs[i]);
                                         }
                                     }
-                                    if (recipients && recipients.length) {
+                                    var periodically = document.properties["lecm-errands:periodically"];
+                                    if (!periodically && recipients && recipients.length) {
                                         notifications.sendNotificationFromCurrentUser({
                                             recipients: recipients,
                                             templateCode: 'ERRANDS_CHANGE_CONTROLLER',
@@ -88,16 +89,17 @@
                                     if (newControllerAssoc && newControllerAssoc.length == 1) {
                                         newController = newControllerAssoc[0];
                                     }
-
-                                    notifications.sendNotificationFromCurrentUser({
-                                        recipients: [newController],
-                                        templateCode: 'ERRANDS_CONTROLLER_ASSIGN',
-                                        templateConfig: {
-                                            mainObject: document,
-                                            eventExecutor: currentEmployee
-                                        },
-                                        dontCheckAccessToObject: true
-                                    });
+                                    if (!periodically) {
+                                        notifications.sendNotificationFromCurrentUser({
+                                            recipients: [newController],
+                                            templateCode: 'ERRANDS_CONTROLLER_ASSIGN',
+                                            templateConfig: {
+                                                mainObject: document,
+                                                eventExecutor: currentEmployee
+                                            },
+                                            dontCheckAccessToObject: true
+                                        });
+                                    }
                                 }
                             }]]>
                         </activiti:string>

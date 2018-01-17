@@ -46,7 +46,7 @@
 //]]></script>
 
 
-<div id="${fieldHtmlId}-parent" class="control reiteration editmode">
+<div id="${fieldHtmlId}-parent" class="control reiteration <#if disabled>viewmode<#else>editmode</#if>">
     <div class="label-div">
         <label for="${fieldHtmlId}-displayValue">
         ${field.label?html}:
@@ -62,7 +62,7 @@
 <#else>
     <div class="container">
         <div class="value-div">
-            <span class="mandatory-highlightable"><a id="${fieldHtmlId}-displayValue" href="#" onclick="return false;"></a></span>
+            <span class="mandatory-highlightable"><a id="${fieldHtmlId}-displayValue" href="javascript:void(0)" onclick="return false;"></a></span>
         </div>
     </div>
 </#if>
@@ -74,5 +74,5 @@
     <option name="WEEKLY" value="WEEKLY">${msg("label.reiteration-control.options.weekly")}</option>
     <option name="MONTHLY" value="MONTHLY">${msg("label.reiteration-control.options.monthly")}</option>
     <option name="QUARTERLY" value="QUARTERLY">${msg("label.reiteration-control.options.quarterly")}</option>
-    <option name="ANNUALLY" value="ANNUALLY">${msg("label.reiteration-control.options.annually")}</option>
+    <#--<option name="ANNUALLY" value="ANNUALLY">${msg("label.reiteration-control.options.annually")}</option>-->
 </select>

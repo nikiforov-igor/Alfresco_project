@@ -2341,6 +2341,20 @@
                                         <property name="lecm-arm:order"><![CDATA[50]]></property>
                                         <property name="lecm-arm:types"><![CDATA[]]></property>
                                     </item>
+                                    <item name="cm:На периодическом исполнении" type="lecm-arm:node">
+                                        <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                                        <property name="lecm-arm:search-query">
+                                            <![CDATA[@lecm\-errands\:initiator\-assoc\-ref:'#current-user' AND @lecm\-statemachine\:status:'На периодическом исполнении']]></property>
+                                        <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
+                                        <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                        <property name="lecm-arm:counter-description"><![CDATA[]]></property>
+                                        <property name="cm:name"><![CDATA[На периодическом исполнении]]></property>
+                                        <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                        <property name="lecm-arm:expression"><![CDATA[]]></property>
+                                        <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
+                                        <property name="lecm-arm:order"><![CDATA[60]]></property>
+                                        <property name="lecm-arm:types"><![CDATA[]]></property>
+                                    </item>
                                     <item name="cm:dab9e21a-45ed-4a3c-8a03-4541f768cc52" type="lecm-arm:field">
                                         <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                         <property name="lecm-arm:order"><![CDATA[2]]></property>
@@ -6944,7 +6958,7 @@
                                                     <item name="cm:f0c168cf-7b20-4b32-972f-e13d4ba54383"
                                                           type="lecm-arm:statuses-child-rule">
                                                         <property name="lecm-arm:selected-statuses">
-                                                            <![CDATA[Ожидает исполнения,На исполнении,На контроле,На доработке,Исполнено,Отменено]]></property>
+                                                            <![CDATA[Ожидает исполнения,На исполнении,На контроле,На доработке,На периодическом исполнении,Исполнено,Отменено]]></property>
                                                         <property name="cm:name">
                                                             <![CDATA[f0c168cf-7b20-4b32-972f-e13d4ba54383]]></property>
                                                         <property name="lecm-arm:statuses-rule"><![CDATA[SELECTED]]></property>
