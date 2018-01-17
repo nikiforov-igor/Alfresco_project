@@ -183,6 +183,7 @@
                             <control-param name="editFormId">edit</control-param>
                             <control-param name="jsDependencies">scripts/lecm-ord/ord-items-create-form-datagrid.js</control-param>
                             <control-param name="jsObjectName">LogicECM.ORD.PointsCreateFormDatagrid</control-param>
+                            <control-param name="useSequentialCreation">true</control-param>
                         </control>
                     </field>
                     <field id="confirmCompletionHandler">
@@ -917,6 +918,7 @@
                             <control-param name="jsObjectName">LogicECM.ORD.PointsTS</control-param>
                             <control-param name="showActions">true</control-param>
                             <control-param name="refreshAfterCreate">true</control-param>
+                            <control-param name="useSequentialCreation">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-signing-v2-aspects:signed-on-paper" set="ord-document-form-common-set">

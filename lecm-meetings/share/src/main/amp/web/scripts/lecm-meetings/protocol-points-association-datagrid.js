@@ -151,82 +151,10 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
             }).show();
         },
 
-        showCreateDialog: function (meta, callback, successMessage) {
-            if (this.editDialogOpening) return;
-            this.editDialogOpening = true;
-            var me = this;
-            // Intercept before dialog show
-            var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
-                var addMsg = meta.addMessage;
-                var contId = p_dialog.id + "-form-container";
-                Alfresco.util.populateHTML(
-                    [contId + "_h", addMsg ? addMsg : this.msg(this.options.createFormTitleMsg)]
-                );
-                if (meta.itemType && meta.itemType != "") {
-                    Dom.addClass(contId, meta.itemType.replace(":", "_") + "_edit");
-                }
-                me.editDialogOpening = false;
-
-                p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
-            };
-
-            var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
-            var templateRequestParams = {
-                itemKind: "type",
-                itemId: meta.itemType,
-                destination: meta.nodeRef,
-                mode: "create",
-                formId: meta.createFormId != null ? meta.createFormId : "",
-                submitType: "json",
-                showCancelButton: true,
-				showCaption: false
-            };
-
-            templateRequestParams.args = JSON.stringify({
+        updateTemplateParams: function (params) {
+            params.args = JSON.stringify({
                 allowedForPoint: this.getAllowedEmployees()
             });
-
-            var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
-            createDetails.setOptions({
-                width: "50em",
-                templateUrl: templateUrl,
-                templateRequestParams: templateRequestParams,
-                actionUrl: null,
-                destroyOnHide: true,
-                doBeforeDialogShow: {
-                    fn: doBeforeDialogShow,
-                    scope: this
-                },
-                onSuccess: {
-                    fn: function (response) {
-                        if (callback) {
-                            callback.call(this, response.json.persistedObject);
-                        } else {
-                            YAHOO.Bubbling.fire("nodeCreated", {
-                                nodeRef: response.json.persistedObject,
-                                bubblingLabel: this.options.bubblingLabel
-                            });
-                            YAHOO.Bubbling.fire("dataItemCreated", {
-                                nodeRef: response.json.persistedObject,
-                                bubblingLabel: this.options.bubblingLabel
-                            });
-                            Alfresco.util.PopupManager.displayMessage({
-                                text: this.msg(successMessage ? successMessage : "message.save.success")
-                            });
-                        }
-                        this.editDialogOpening = false;
-                    },
-                    scope: this
-                },
-                onFailure: {
-                    fn: function (response) {
-                        LogicECM.module.Base.Util.displayErrorMessageWithDetails(me.msg("logicecm.base.error"), me.msg("message.save.failure"), response.json.message);
-                        me.editDialogOpening = false;
-                        this.widgets.cancelButton.set("disabled", false);
-                    },
-                    scope: createDetails
-                }
-            }).show();
         }
     }, true);
 
