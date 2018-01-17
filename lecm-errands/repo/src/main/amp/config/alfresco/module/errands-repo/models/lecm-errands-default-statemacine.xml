@@ -7710,7 +7710,7 @@ if (document) {
                 }
             }
         }
-        regnumbers.registerDocument(document, regNumberCode)
+        regnumbers.registerDocument(document, regNumberCode);
     }
 }]]></value>
                                                             </property>
