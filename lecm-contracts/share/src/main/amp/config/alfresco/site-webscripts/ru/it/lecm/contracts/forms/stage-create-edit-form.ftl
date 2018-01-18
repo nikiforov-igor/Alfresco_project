@@ -175,7 +175,7 @@
 			], createDateRange);
 		}
 		function createDateRange() {
-			new LogicECM.DateRange("${formId}").setOptions({
+			new LogicECM.DateRange("${htmlId}").setOptions({
 				startDateHtmlId: "${htmlId}_${propStartDate}",
 				endDateHtmlId: "${htmlId}_${propEndDate}"
 			}).setMessages(${messages});
