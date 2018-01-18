@@ -785,6 +785,7 @@
 				<property name="lecm-errands:settings-delayed-errand-creation-by-date">
 					<type>d:text</type>
 					<mandatory>false</mandatory>
+					<index enabled="false"/>
 				</property>
 		    </properties>
 	    </type>

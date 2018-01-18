@@ -16,7 +16,7 @@ public interface EDSDocumentService {
     String COMPLEX_DATE_RADIO_DATE = "DATE";
     String COMPLEX_DATE_RADIO_LIMITLESS = "LIMITLESS";
 
-    String GRAND_DYNAMIC_ROLE_CODE_INITIATOR = "BR_INITIATOR";
+    String DYNAMIC_ROLE_CODE_INITIATOR = "BR_INITIATOR";
 
     String COMPLEX_DATE_DAYS_WORK = "WORK";
     String COMPLEX_DATE_DAYS_CALENDAR = "CALENDAR";
@@ -36,7 +36,6 @@ public interface EDSDocumentService {
 	QName ASSOC_RECIPIENTS = QName.createQName(EDS_NAMESPACE_URI, "recipients-assoc");
     QName ASSOC_EXECUTOR = QName.createQName(EDS_NAMESPACE_URI, "executor-assoc");
     QName ASSOC_COMPLETION_SIGNAL_SENDER = QName.createQName(EDS_ASPECTS_NAMESPACE_URI, "completion-signal-sender-assoc");
-
 	QName PROP_EXECUTION_DATE = QName.createQName(EDS_NAMESPACE_URI, "execution-date");
     QName PROP_IS_EXPIRED = QName.createQName(EDS_NAMESPACE_URI, "is-expired");
     QName PROP_EXECUTOR_TEXT_CONTENT = QName.createQName(EDS_NAMESPACE_URI, "executor-assoc-text-content");

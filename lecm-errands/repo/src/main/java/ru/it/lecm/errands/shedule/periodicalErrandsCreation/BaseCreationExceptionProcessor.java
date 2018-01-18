@@ -96,7 +96,7 @@ public abstract class BaseCreationExceptionProcessor implements ExceptionProcess
      * Добавление в список получателей автора поручения
      */
     protected void addAuthorToRecipients(Set<NodeRef> recipients, NodeRef errandNodeRef) {
-        List<NodeRef> authors = lecmPermissionService.getEmployeesByDynamicRole(errandNodeRef, EDSDocumentService.GRAND_DYNAMIC_ROLE_CODE_INITIATOR);
+        List<NodeRef> authors = lecmPermissionService.getEmployeesByDynamicRole(errandNodeRef, EDSDocumentService.DYNAMIC_ROLE_CODE_INITIATOR);
         if (authors != null && authors.size() > 0) {
             recipients.addAll(authors);
         }
