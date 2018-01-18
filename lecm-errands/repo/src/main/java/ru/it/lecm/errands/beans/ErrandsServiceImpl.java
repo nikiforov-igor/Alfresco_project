@@ -727,15 +727,17 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
                 try {
                     final JSONObject json = new JSONObject(delayedErrandsByDateJson);
                     final JSONArray dates = json.names();
+                    Set<NodeRef> someDateResult;
                     if (dates != null) {
                         for (int i = 0; i < dates.length(); i++) {
                             final String dateStr = dates.optString(i, null);
                             if (dateStr != null) {
                                 final JSONArray errandRefsArray = json.getJSONArray(dateStr);
-                                results.put(dateStr, new HashSet<>(errandRefsArray.length()));
+                                someDateResult = new HashSet<>(errandRefsArray.length());
                                 for (int j = 0; j < errandRefsArray.length(); j++) {
-                                    results.get(dateStr).add(new NodeRef(errandRefsArray.getString(j)));
+                                    someDateResult.add(new NodeRef(errandRefsArray.getString(j)));
                                 }
+                                results.put(dateStr, someDateResult);
                             }
                         }
                     }
