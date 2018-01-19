@@ -63,8 +63,7 @@ public class ControllerNotActiveExceptionProcessor extends BaseCreationException
                         if (!isEmployeeActive(controllerAssoc.getTargetRef())) {
                             final Map<String, Object> objects = new HashMap<>();
                             objects.put("actor", controllerAssoc.getTargetRef());
-                            objects.put("docMemberRole", "Контролёр");
-                            notificationsService.sendNotificationByTemplate(errandNodeRef,  new ArrayList<NodeRef>(recipients), "ERRANDS_ACTOR_NOT_ACTIVE", objects);
+                            notificationsService.sendNotificationByTemplate(errandNodeRef,  new ArrayList<NodeRef>(recipients), "ERRANDS_CONTROLER_NOT_ACTIVE", objects);
                         }
                     }
                 }

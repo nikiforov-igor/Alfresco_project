@@ -415,12 +415,36 @@
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
                 </assocs>
             </item>
-            <item name="cm:ERRANDS_ACTOR_NOT_ACTIVE" type="lecm-notification-template:template">
-                <property name="cm:name"><![CDATA[ERRANDS_ACTOR_NOT_ACTIVE]]></property>
+            <item name="cm:ERRANDS_EXECUTOR_NOT_ACTIVE" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[ERRANDS_EXECUTOR_NOT_ACTIVE]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#docMemberRole} {#actor.wrapAsLink(#actor.attribute("lecm-orgstr:employee-short-name"))} периодического поручения {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} неактивен в системе]]></property>
+                    <![CDATA[Исполнитель {#actor.wrapAsLink(#actor.attribute("lecm-orgstr:employee-short-name"))} периодического поручения {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} неактивен в системе]]></property>
                 <property name="lecm-notification-template:description">
-                    <![CDATA[Поручение. Участник не активен]]></property>
+                    <![CDATA[Поручение. Исполнитель не активен]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
+            <item name="cm:ERRANDS_COEXECUTOR_NOT_ACTIVE" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[ERRANDS_COEXECUTOR_NOT_ACTIVE]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Соисполнитель {#actor.wrapAsLink(#actor.attribute("lecm-orgstr:employee-short-name"))} периодического поручения {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} неактивен в системе]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Поручение. Соисполнитель не активен]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
+            <item name="cm:ERRANDS_CONTROLER_NOT_ACTIVE" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[ERRANDS_CONTROLER_NOT_ACTIVE]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Контролер {#actor.wrapAsLink(#actor.attribute("lecm-orgstr:employee-short-name"))} периодического поручения {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} неактивен в системе]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Поручение. Контролер не активен]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"

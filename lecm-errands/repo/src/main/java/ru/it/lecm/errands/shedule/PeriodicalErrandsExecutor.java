@@ -84,46 +84,55 @@ public class PeriodicalErrandsExecutor extends ActionExecuterAbstractBase {
                 String type = rule.getString("type");
                 JSONArray data = rule.has("data") ? rule.getJSONArray("data") : new JSONArray();
                 Calendar calendar = GregorianCalendar.getInstance();
-                if (type.equals(DAILY)) {
-                    createErrand = true;
-                } else if (type.equals(WEEK_DAYS)) {
-                    int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-                    if (dayOfWeek == Calendar.SUNDAY) {
-                        dayOfWeek = 7;
-                    } else {
-                        dayOfWeek -= 1;
-                    }
-                    for (int i = 0; i < data.length(); i++) {
-                        int value = data.getInt(i);
-                        if (value == dayOfWeek) {
-                            createErrand = true;
-                            break;
+                switch (type) {
+                    case DAILY:
+                        createErrand = true;
+                        break;
+                    case WEEK_DAYS:
+                        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+                        if (dayOfWeek == Calendar.SUNDAY) {
+                            dayOfWeek = 7;
+                        } else {
+                            dayOfWeek -= 1;
                         }
-                    }
-                } else if (type.equals(MONTH_DAYS)) {
-                    int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-                    for (int i = 0; i < data.length(); i++) {
-                        int value = data.getInt(i);
-                        if (value == dayOfMonth) {
-                            createErrand = true;
-                            break;
-                        }
-                    }
-                } else if (type.equals(QUARTERLY)) {
-                    int currentMonthValue = calendar.get(Calendar.MONTH) + 1;
-                    int currentDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-                    Date startDate = (Date) nodeService.getProperty(periodicalErrandNodeRef, ErrandsService.PROP_ERRANDS_PERIOD_START);
-                    calendar.setTime(startDate);
-                    int startMonthValue = calendar.get(Calendar.MONTH) + 1;
-                    if (currentMonthValue % 3 == startMonthValue % 3) {
                         for (int i = 0; i < data.length(); i++) {
                             int value = data.getInt(i);
-                            if (value == currentDayOfMonth) {
+                            if (value == dayOfWeek) {
                                 createErrand = true;
                                 break;
                             }
                         }
-                    }
+                        break;
+                    case MONTH_DAYS:
+                        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+                        for (int i = 0; i < data.length(); i++) {
+                            int value = data.getInt(i);
+                            if (value == dayOfMonth) {
+                                createErrand = true;
+                                break;
+                            }
+                        }
+                        break;
+                    case QUARTERLY:
+                        int currentMonthValue = calendar.get(Calendar.MONTH) + 1;
+                        int currentDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+                        Date startDate = (Date) nodeService.getProperty(periodicalErrandNodeRef, ErrandsService.PROP_ERRANDS_PERIOD_START);
+                        calendar.setTime(startDate);
+                        int startMonthValue = calendar.get(Calendar.MONTH) + 1;
+                        if (currentMonthValue % 3 == startMonthValue % 3) {
+                            for (int i = 0; i < data.length(); i++) {
+                                int value = data.getInt(i);
+                                if (value == currentDayOfMonth) {
+                                    createErrand = true;
+                                    break;
+                                }
+                            }
+                        }
+                        break;
+                    default:
+                        logger.warn("Error parse periodical rule. Property 'type' has not supported value");
+                        break;
+
                 }
             } catch (JSONException e) {
                 logger.warn("Error parse periodical rule", e);
@@ -135,6 +144,7 @@ public class PeriodicalErrandsExecutor extends ActionExecuterAbstractBase {
     @Override
     protected void executeImpl(Action action, final NodeRef periodicalErrandNodeRef) {
         logger.info("Start process periodical errand [{}]", periodicalErrandNodeRef);
+        final String systemLogin = AuthenticationUtil.getFullyAuthenticatedUser();
         try {
             boolean createErrand = false;
             createErrand = doesRuleAllowCreation(periodicalErrandNodeRef);
@@ -153,9 +163,7 @@ public class PeriodicalErrandsExecutor extends ActionExecuterAbstractBase {
                     }
                 }
             }
-
             final String userLogin = nodeService.getProperty(periodicalErrandNodeRef, ContentModel.PROP_CREATOR).toString();
-            final String systemLogin = AuthenticationUtil.getFullyAuthenticatedUser();
             AuthenticationUtil.setFullyAuthenticatedUser(userLogin);
             final boolean finalCreateErrand = createErrand;
             AuthenticationUtil.runAs(() -> {
@@ -251,10 +259,11 @@ public class PeriodicalErrandsExecutor extends ActionExecuterAbstractBase {
                 }
                 return null;
             },  userLogin);
-            AuthenticationUtil.setFullyAuthenticatedUser(systemLogin);
         } catch (Throwable e) {
             logger.error("PeriodicalErrandsExecutor failed to execute for periodical errand [" + periodicalErrandNodeRef + "]", e);
             throw e;
+        } finally {
+            AuthenticationUtil.setFullyAuthenticatedUser(systemLogin);
         }
     }
 

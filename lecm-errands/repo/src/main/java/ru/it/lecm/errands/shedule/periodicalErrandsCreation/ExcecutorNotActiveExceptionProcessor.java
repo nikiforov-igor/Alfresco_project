@@ -55,8 +55,7 @@ public class ExcecutorNotActiveExceptionProcessor extends BaseCreationExceptionP
                     final NodeRef executor = executorAssocs.get(0).getTargetRef();
                     final Map<String, Object> objects = new HashMap<>();
                     objects.put("actor", executor);
-                    objects.put("docMemberRole", "Исполнитель");
-                    notificationsService.sendNotificationByTemplate(errandNodeRef, new ArrayList<NodeRef>(recipients), "ERRANDS_ACTOR_NOT_ACTIVE", objects);
+                    notificationsService.sendNotificationByTemplate(errandNodeRef, new ArrayList<NodeRef>(recipients), "ERRANDS_EXECUTOR_NOT_ACTIVE", objects);
                 }
             }
         } catch (Throwable e) {

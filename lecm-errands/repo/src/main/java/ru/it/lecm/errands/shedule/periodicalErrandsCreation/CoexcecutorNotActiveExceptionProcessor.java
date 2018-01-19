@@ -63,8 +63,7 @@ public class CoexcecutorNotActiveExceptionProcessor extends BaseCreationExceptio
                         if (!isEmployeeActive(coexecutorAssoc.getTargetRef())) {
                             final Map<String, Object> objects = new HashMap<>();
                             objects.put("actor", coexecutorAssoc.getTargetRef());
-                            objects.put("docMemberRole", "Соисполнитель");
-                            notificationsService.sendNotificationByTemplate(errandNodeRef,  new ArrayList<NodeRef>(recipients), "ERRANDS_ACTOR_NOT_ACTIVE", objects);
+                            notificationsService.sendNotificationByTemplate(errandNodeRef,  new ArrayList<NodeRef>(recipients), "ERRANDS_COEXECUTOR_NOT_ACTIVE", objects);
                         }
                     }
                 }
