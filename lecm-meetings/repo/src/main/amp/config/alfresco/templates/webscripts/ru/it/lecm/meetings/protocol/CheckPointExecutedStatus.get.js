@@ -9,7 +9,7 @@ function main() {
 		model.isExecuted = false;
 	}
 
-	if ("true" !== isExecuted) {
+	if (!isExecuted) {
 		var node = search.findNode(pointRef);
 		var protocol = node.parent.parent.parent;
 		var registrar = protocol.assocs['lecm-document-aspects:registrator-assoc'];
