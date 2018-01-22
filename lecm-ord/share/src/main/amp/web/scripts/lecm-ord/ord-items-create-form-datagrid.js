@@ -39,9 +39,21 @@ LogicECM.ORD = LogicECM.ORD || {};
     YAHOO.lang.augmentObject(LogicECM.ORD.PointsCreateFormDatagrid.prototype, {
 
         showCreateDialog: function (meta, callback, successMessage) {
-            if (this.editDialogOpening) return;
+            if (this.editDialogOpening) {
+                return;
+            }
             this.editDialogOpening = true;
-            var me = this;
+
+            var config = {
+                meta: meta,
+                callback: callback,
+                successMessage: successMessage,
+                context: this,
+                isAddRowClicked: false,
+                dataRow: null,
+                useSequentialCreation: this.options.useSequentialCreation
+            };
+
             var args = {};
             this.formId = this.id.substring(0, this.id.indexOf("_assoc"));
             var executeDateField = Dom.get(this.formId + "_prop_lecm-eds-document_execution-date");
@@ -56,18 +68,6 @@ LogicECM.ORD = LogicECM.ORD || {};
             if (controllerField && controllerField.value) {
                 args["assoc_lecm-ord-table-structure_controller-assoc"] = controllerField.value;
             }
-            var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
-                var addMsg = meta.addMessage;
-                var contId = p_dialog.id + "-form-container";
-                Alfresco.util.populateHTML(
-                    [contId + "_h", addMsg ? addMsg : this.msg(this.options.createFormTitleMsg)]
-                );
-                if (meta.itemType && meta.itemType != "") {
-                    Dom.addClass(contId, meta.itemType.replace(":", "_") + "_edit");
-                }
-                me.editDialogOpening = false;
-                p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
-            };
 
             var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
             var templateRequestParams = {
@@ -83,7 +83,7 @@ LogicECM.ORD = LogicECM.ORD || {};
             };
 
             // Using Forms Service, so always create new instance
-            var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
+            var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails-" + Alfresco.util.generateDomId());
             createDetails.setOptions(
                 {
                     width: "50em",
@@ -92,40 +92,23 @@ LogicECM.ORD = LogicECM.ORD || {};
                     actionUrl: null,
                     destroyOnHide: true,
                     doBeforeDialogShow: {
-                        fn: doBeforeDialogShow,
-                        scope: this
+                        fn: this.doBeforeCreateDialogShow,
+                        scope: this,
+                        obj: config
                     },
                     onSuccess: {
-                        fn: function DataGrid_onActionCreate_success(response) {
-                            if (callback) {// вызов дополнительного события
-                                callback.call(this, response.json.persistedObject);
-                            } else { // вызов события по умолчанию
-                                YAHOO.Bubbling.fire("nodeCreated",
-                                    {
-                                        nodeRef: response.json.persistedObject,
-                                        bubblingLabel: this.options.bubblingLabel
-                                    });
-                                YAHOO.Bubbling.fire("dataItemCreated", // обновить данные в гриде
-                                    {
-                                        nodeRef: response.json.persistedObject,
-                                        bubblingLabel: this.options.bubblingLabel
-                                    });
-                                Alfresco.util.PopupManager.displayMessage(
-                                    {
-                                        text: this.msg(successMessage ? successMessage : "message.save.success")
-                                    });
-                            }
-                            this.editDialogOpening = false;
+                        scope: this,
+                        fn: function (response, config) {
+                            this.doOnCreateNode(response, config, null);
                         },
-                        scope: this
+                        obj: config
                     },
                     onFailure: {
-                        fn: function DataGrid_onActionCreate_failure(response) {
-                            LogicECM.module.Base.Util.displayErrorMessageWithDetails(me.msg("logicecm.base.error"), me.msg("message.save.failure"), response.json.message);
-                            me.editDialogOpening = false;
-                            this.widgets.cancelButton.set("disabled", false);
+                        fn: function  (response, config) {
+                            this.doOnFailure(response, config);
                         },
-                        scope: createDetails
+                        scope: this,
+                        obj: config
                     }
                 }).show();
         }

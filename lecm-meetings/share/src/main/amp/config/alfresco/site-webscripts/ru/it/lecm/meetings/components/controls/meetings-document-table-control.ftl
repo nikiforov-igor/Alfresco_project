@@ -88,6 +88,11 @@
 
 <#assign editable = ((params.editable!"true") == "true") && !(field.disabled) && (form.mode?string=="edit") >
 
+<#assign useSequentialCreation = false/>
+<#if field.control.params.useSequentialCreation??>
+    <#assign useSequentialCreation = (field.control.params.useSequentialCreation == "true")/>
+</#if>
+
 <script type="text/javascript">//<![CDATA[
 (function() {
 	function drawForm(){
@@ -110,6 +115,7 @@
                 sort: "${sort?string}",
                 externalCreateId: "${form.arguments.externalCreateId!""}",
                 refreshAfterCreate: ${refreshAfterCreate?string},
+                useSequentialCreation: ${useSequentialCreation?string},
 				<#if params.deleteMessageFunction??>
 					deleteMessageFunction: "${params.deleteMessageFunction}",
 				</#if>

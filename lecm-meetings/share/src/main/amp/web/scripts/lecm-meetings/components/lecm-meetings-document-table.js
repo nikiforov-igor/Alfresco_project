@@ -255,7 +255,8 @@ LogicECM.module = LogicECM.module || {};
 						createFormTitleMsg: this.options.createFormTitleMsg,
 						viewFormTitleMsg: this.options.viewFormTitleMsg,
                         expandable: this.options.expandable,
-                        expandDataSource: this.options.expandDataSource
+                        expandDataSource: this.options.expandDataSource,
+                        useSequentialCreation: this.options.useSequentialCreation
 					}).setMessages(this.options.messages);
 				}
 

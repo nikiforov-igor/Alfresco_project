@@ -171,7 +171,8 @@ LogicECM.ORD = LogicECM.ORD || {};
                     expandable: expandable,
                     expandDataSource: this.options.expandDataSource,
                     excludeColumns: ["lecm-ord-table-structure:controller-assoc"],
-                    showOtherActionColumn: true
+                    showOtherActionColumn: true,
+                    useSequentialCreation: this.options.useSequentialCreation
                 }).setMessages(this.options.messages);
             }
 
@@ -380,7 +381,7 @@ LogicECM.ORD = LogicECM.ORD || {};
                 context: this,
                 isAddRowClicked: isAddRowClicked,
                 dataRow: dataRow,
-                useSequentialCreation: !isAddRowClicked
+                useSequentialCreation: !isAddRowClicked && this.options.useSequentialCreation
             };
 
             var formId = this.id.substring(0, this.id.indexOf("_assoc_lecm-ord-table-structure_items-assoc-container"));
