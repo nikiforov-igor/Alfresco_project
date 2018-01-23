@@ -739,14 +739,44 @@
         <property name="executedStatus" value="${lecm.eds.execution.statistics.statuses.executed}"/>
     </bean>
 
+    <bean id="periodicalErrandDuplicateCopySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings">
+        <property name="propsToCopy">
+            <list>
+                <value>lecm-errands:title</value>
+                <value>lecm-errands:content</value>
+                <value>lecm-errands:is-important</value>
+                <value>lecm-errands:just-in-time</value>
+                <value>lecm-errands:report-required</value>
+                <value>lecm-errands:report-recipient-type</value>
+            </list>
+        </property>
+        <property name="assocsToCopy">
+            <list>
+                <value>lecm-errands:type-assoc</value>
+                <value>lecm-errands:initiator-assoc</value>
+                <value>lecm-errands:executor-assoc</value>
+                <value>lecm-errands:controller-assoc</value>
+                <value>lecm-errands:coexecutors-assoc</value>
+                <value>lecm-errands:links-assoc</value>
+                <value>lecm-document:subject-assoc</value>
+            </list>
+        </property>
+        <property name="categoriesToCopy">
+            <list>
+                <value>Поручение</value>
+                <value>Контроль</value>
+                <value>Исполнение</value>
+                <value>Отчеты соисполнителей</value>
+            </list>
+        </property>
+    </bean>
+
     <bean id="periodicalErrandsExecutor" class="ru.it.lecm.errands.shedule.PeriodicalErrandsExecutor" parent="action-executer">
         <property name="ignoreLock" value="false"/>
         <property name="publicAction" value="false" />
         <property name="nodeService" ref="nodeService"/>
         <property name="documentService" ref="documentService"/>
-        <property name="namespaceService" ref="namespaceService"/>
-        <property name="copyService" ref="copyService"/>
-        <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
+        <property name="copySettings" ref="periodicalErrandDuplicateCopySettings"/>
         <property name="exceptionProcessors">
             <list>
                 <ref bean="createDateExceptionProcessor"/>
@@ -759,7 +789,7 @@
     </bean>
 
     <bean id="baseCreationExceptionProcessor"
-          class="ru.it.lecm.errands.shedule.periodicalErrandsCreation.BaseCreationExceptionProcessor" abstract="true">
+          class="ru.it.lecm.errands.shedule.processors.BaseCreationExceptionProcessor" abstract="true">
         <property name="nodeService" ref="nodeService"/>
         <property name="errandsService" ref="errandsService"/>
         <property name="personService" ref="personService"/>
@@ -768,14 +798,14 @@
     </bean>
 
     <bean id="createDateExceptionProcessor"
-          class="ru.it.lecm.errands.shedule.periodicalErrandsCreation.CreateDateExceptionProcessor"
+          class="ru.it.lecm.errands.shedule.processors.CreateDateExceptionProcessor"
           parent="baseCreationExceptionProcessor">
         <property name="workCalendar" ref="WorkCalendarService"/>
         <property name="wCalendarService" ref="WCalendarService"/>
     </bean>
 
     <bean id="controlDateExceptionProcessor"
-          class="ru.it.lecm.errands.shedule.periodicalErrandsCreation.ControlDateExceptionProcessor"
+          class="ru.it.lecm.errands.shedule.processors.ControlDateExceptionProcessor"
           parent="baseCreationExceptionProcessor">
         <property name="edsDocumentService" ref="edsService"/>
         <property name="workCalendar" ref="WorkCalendarService"/>
@@ -783,19 +813,19 @@
     </bean>
 
     <bean id="excecutorNotActiveExceptionProcessor"
-          class="ru.it.lecm.errands.shedule.periodicalErrandsCreation.ExcecutorNotActiveExceptionProcessor"
+          class="ru.it.lecm.errands.shedule.processors.ExcecutorNotActiveExceptionProcessor"
           parent="baseCreationExceptionProcessor">
         <property name="notificationsService" ref="notificationsService"/>
     </bean>
 
     <bean id="сoexcecutorNotActiveExceptionProcessor"
-          class="ru.it.lecm.errands.shedule.periodicalErrandsCreation.CoexcecutorNotActiveExceptionProcessor"
+          class="ru.it.lecm.errands.shedule.processors.CoexcecutorNotActiveExceptionProcessor"
           parent="baseCreationExceptionProcessor">
         <property name="notificationsService" ref="notificationsService"/>
     </bean>
 
     <bean id="сontrollerNotActiveExceptionProcessor"
-          class="ru.it.lecm.errands.shedule.periodicalErrandsCreation.ControllerNotActiveExceptionProcessor"
+          class="ru.it.lecm.errands.shedule.processors.ControllerNotActiveExceptionProcessor"
           parent="baseCreationExceptionProcessor">
         <property name="notificationsService" ref="notificationsService"/>
     </bean>

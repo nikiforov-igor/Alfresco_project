@@ -1,9 +1,8 @@
-package ru.it.lecm.errands.shedule.periodicalErrandsCreation;
+package ru.it.lecm.errands.shedule.processors;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import ru.it.lecm.errands.ErrandsService;
-import ru.it.lecm.errands.shedule.exceptionProcessor.ProcessorParamName;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 import ru.it.lecm.wcalendar.calendar.ICalendar;
 

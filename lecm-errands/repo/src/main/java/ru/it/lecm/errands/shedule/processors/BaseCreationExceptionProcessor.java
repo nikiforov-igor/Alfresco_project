@@ -1,4 +1,4 @@
-package ru.it.lecm.errands.shedule.periodicalErrandsCreation;
+package ru.it.lecm.errands.shedule.processors;
 
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -9,8 +9,6 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.errands.ErrandsService;
-import ru.it.lecm.errands.shedule.exceptionProcessor.ExceptionProcessor;
-import ru.it.lecm.errands.shedule.exceptionProcessor.ProcessorParamName;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 
@@ -25,7 +23,7 @@ import java.util.Set;
  *
  * Базовый процессор(обработчик) исключительных ситуаций по периодическому созданию поручений
  */
-public abstract class BaseCreationExceptionProcessor implements ExceptionProcessor {
+public abstract class BaseCreationExceptionProcessor {
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     protected NodeService nodeService;
@@ -61,6 +59,18 @@ public abstract class BaseCreationExceptionProcessor implements ExceptionProcess
     public boolean isAllowCreation(Map<ProcessorParamName, Object> params) {
         return true;
     }
+
+    /**
+     * Проверка необходимости запуска процессора
+     * @param params параметры для работы процессора
+     */
+    public abstract boolean checkConditionsToProcess(final Map<ProcessorParamName, Object> params);
+
+    /**
+     * Запуск процессора для выполнения действий по обработке исключительной ситуации
+     * @param params параметры для работы процессора
+     */
+    public abstract void processException(final Map<ProcessorParamName, Object> params);
 
     /**
      * Проверка сотрудника на активность(не уволен, не выключен, ...)
@@ -100,5 +110,10 @@ public abstract class BaseCreationExceptionProcessor implements ExceptionProcess
         if (authors != null && authors.size() > 0) {
             recipients.addAll(authors);
         }
+    }
+
+    public enum ProcessorParamName {
+        PERIODICAL_ERRAND,
+        ERRAND
     }
 }

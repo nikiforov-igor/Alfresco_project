@@ -16,13 +16,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.documents.beans.*;
 import ru.it.lecm.errands.ErrandsService;
-import ru.it.lecm.errands.shedule.exceptionProcessor.ProcessorParamName;
-import ru.it.lecm.errands.shedule.periodicalErrandsCreation.BaseCreationExceptionProcessor;
+import ru.it.lecm.errands.shedule.processors.BaseCreationExceptionProcessor;
+import ru.it.lecm.errands.shedule.processors.BaseCreationExceptionProcessor.ProcessorParamName;
 
 import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 /**
  * User: mshafeev
@@ -35,9 +34,8 @@ public class PeriodicalErrandsExecutor extends ActionExecuterAbstractBase {
 
     private NodeService nodeService;
     private DocumentService documentService;
-    private DocumentAttachmentsService documentAttachmentsService;
-    private CopyService copyService;
-    private NamespaceService namespaceService;
+
+    private DocumentCopySettings copySettings;
 
     private final static String WEEK_DAYS = "WEEKLY";
     private final static String MONTH_DAYS = "MONTHLY";
@@ -55,24 +53,20 @@ public class PeriodicalErrandsExecutor extends ActionExecuterAbstractBase {
         this.documentService = documentService;
     }
 
-    public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {
-        this.documentAttachmentsService = documentAttachmentsService;
-    }
-
-    public void setNamespaceService(NamespaceService namespaceService) {
-        this.namespaceService = namespaceService;
-    }
-
-    public void setCopyService(CopyService copyService) {
-        this.copyService = copyService;
-    }
-
     public List<BaseCreationExceptionProcessor> getExceptionProcessors() {
         return exceptionProcessors;
     }
 
     public void setExceptionProcessors(List<BaseCreationExceptionProcessor> exceptionProcessors) {
         this.exceptionProcessors = exceptionProcessors;
+    }
+
+    public void setCopySettings(DocumentCopySettings copySettings) {
+        this.copySettings = copySettings;
+    }
+
+    public DocumentCopySettings getCopySettings() {
+        return copySettings;
     }
 
     private boolean doesRuleAllowCreation(NodeRef periodicalErrandNodeRef) {
@@ -149,7 +143,7 @@ public class PeriodicalErrandsExecutor extends ActionExecuterAbstractBase {
             boolean createErrand = false;
             createErrand = doesRuleAllowCreation(periodicalErrandNodeRef);
 
-            Map<ProcessorParamName, Object> processorParams = new HashMap<ProcessorParamName, Object>();
+            Map<ProcessorParamName, Object> processorParams = new HashMap<>();
             processorParams.put(ProcessorParamName.PERIODICAL_ERRAND, periodicalErrandNodeRef);
 
             // Проверка не запрещает ли создание поручения хотя бы один из обработчиков исключений создания
@@ -168,7 +162,7 @@ public class PeriodicalErrandsExecutor extends ActionExecuterAbstractBase {
             final boolean finalCreateErrand = createErrand;
             AuthenticationUtil.runAs(() -> {
                 if (finalCreateErrand) {
-                    NodeRef newErrand = documentService.duplicateDocument(periodicalErrandNodeRef);
+                    NodeRef newErrand = documentService.duplicateDocument(periodicalErrandNodeRef, copySettings);
                     logger.debug("Created errand [{}] based on periodical errand [{}]", newErrand, periodicalErrandNodeRef);
                     processorParams.put(ProcessorParamName.ERRAND, newErrand);
 
@@ -198,48 +192,6 @@ public class PeriodicalErrandsExecutor extends ActionExecuterAbstractBase {
                     }
                     additionalProps.put(ErrandsService.PROP_ERRANDS_IS_SHORT, true);
                     nodeService.addProperties(newErrand, additionalProps);
-
-                    //copy Categories
-                    DocumentCopySettings settings = DocumentCopySettingsBean.getSettingsForDocType(ErrandsService.TYPE_ERRANDS.toPrefixString(namespaceService));
-                    List<String> copiedCategories = new ArrayList<>();
-                    if (settings != null) {
-                        copiedCategories = settings.getCategoriesToCopy();
-                    }
-                    List<NodeRef> categoriesRefs = documentAttachmentsService.getCategories(periodicalErrandNodeRef);
-                    List<String> finalCopiedCategories = copiedCategories;
-                    List<String> categoriesToCopy = categoriesRefs.stream()
-                            .map(ref -> documentAttachmentsService.getCategoryName(ref))
-                            .filter(cat -> !finalCopiedCategories.contains(cat))
-                            .collect(Collectors.toList());
-                    for (String category : categoriesToCopy) {
-                        NodeRef originalCategoryRef = documentAttachmentsService.getCategory(category, periodicalErrandNodeRef);
-
-                        NodeRef categoryFolder = documentAttachmentsService.getCategory(category, newErrand);
-                        if (originalCategoryRef != null && categoryFolder != null) {
-                            List<ChildAssociationRef> childs = nodeService.getChildAssocs(originalCategoryRef);
-                            for (ChildAssociationRef child : childs) {
-                                NodeRef childRef = child.getChildRef();
-                                List<AssociationRef> parentDocAssocs = nodeService.getTargetAssocs(childRef, DocumentService.ASSOC_PARENT_DOCUMENT);
-                                for (AssociationRef parentDocAssoc : parentDocAssocs) {
-                                    //для всех вложений получаем ссылку на родительский документ
-                                    NodeRef parentDoc = parentDocAssoc.getTargetRef();
-                                    // временно удаляем ассоциацию
-                                    nodeService.removeAssociation(childRef, parentDoc, DocumentService.ASSOC_PARENT_DOCUMENT);
-                                    try {
-                                        copyService.copyAndRename(childRef, categoryFolder, ContentModel.ASSOC_CONTAINS,
-                                                QName.createQName(ContentModel.PROP_CONTENT.getNamespaceURI(), nodeService.getProperty(childRef, ContentModel.PROP_NAME).toString()),
-                                                false);
-                                    } finally {
-                                        // возвращаем удаленную ассоциацию
-                                        try {
-                                            nodeService.createAssociation(childRef, parentDoc, DocumentService.ASSOC_PARENT_DOCUMENT);
-                                        } catch (AssociationExistsException ignored) {
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
 
                     int childErrandsCount = 0;
                     List<AssociationRef> childErrands = nodeService.getSourceAssocs(periodicalErrandNodeRef, ErrandsService.ASSOC_ADDITIONAL_ERRANDS_DOCUMENT);

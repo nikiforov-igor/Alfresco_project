@@ -1,9 +1,8 @@
-package ru.it.lecm.errands.shedule.periodicalErrandsCreation;
+package ru.it.lecm.errands.shedule.processors;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.errands.ErrandsService;
-import ru.it.lecm.errands.shedule.exceptionProcessor.ProcessorParamName;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 import ru.it.lecm.wcalendar.calendar.ICalendar;
 
@@ -33,7 +32,6 @@ public class ControlDateExceptionProcessor extends BaseCreationExceptionProcesso
         this.wCalendarService = wCalendarService;
     }
 
-    @Override
     public boolean checkConditionsToProcess(Map<ProcessorParamName, Object> params) {
         final NodeRef periodicalErrand = (NodeRef) params.get(ProcessorParamName.PERIODICAL_ERRAND);
         Date controlDate = edsDocumentService.convertComplexDate(
@@ -45,7 +43,6 @@ public class ControlDateExceptionProcessor extends BaseCreationExceptionProcesso
         return controlDate != null && !wCalendarService.isWorkingDay(controlDate);
     }
 
-    @Override
     public void processException(final Map<ProcessorParamName, Object> params) {
         try {
             final NodeRef errandNodeRef = (NodeRef) params.get(ProcessorParamName.ERRAND);
