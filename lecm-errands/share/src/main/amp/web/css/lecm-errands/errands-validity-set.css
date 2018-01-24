@@ -3,100 +3,148 @@
 }
 
 .errands-validity-set .errands-validity-set-radio {
-     float: left;
-}
-.errands-validity-set .errands-validity-set-radio .container {
-    min-width:10px;
     float: left;
 }
+
+.errands-validity-set .errands-validity-set-radio .container {
+    min-width: 10px;
+    float: left;
+}
+
 .errands-validity-set .errands-validity-set-radio .control .value-div {
     width: 12px;
 }
+
 .errands-validity-set .errands-validity-set-radio .control label.checkbox {
     display: none;
 }
+
 .errands-validity-set .errands-validity-set-radio .control input {
     margin-top: 8px;
-    margin-bottom: 22px;
+    margin-bottom: 20px;
 }
-.errands-validity-set .errands-validity-set-radio .control input:nth-child(2){
-    margin-bottom: 40px;
+
+.errands-validity-set .errands-validity-set-radio .control input:nth-child(2) {
+    margin-bottom: 25px;
 }
-.errands-validity-set .errands-validity-set-radio .control input:last-of-type{
-    margin-top: 12px;
+
+.errands-validity-set .errands-validity-set-radio .control input:last-of-type {
+    margin-top: 10px;
 }
-.errands-validity-set .errands-validity-set-dates {
-    float:left;
+
+.errands-validity-set .errands-validity-set-end-date {
+    float: left;
     width: calc(100% - 210px);
-    margin-bottom:0;
+    margin-bottom: 0;
 }
-.errands-validity-set .errands-validity-set-dates .buttons-div{
+
+.errands-validity-set .errands-validity-set-end-date .buttons-div {
     display: block;
 }
-.errands-validity-set .errands-validity-set-dates .daterange-start-date .label-div {
+
+.errands-validity-set .errands-validity-set-end-date .daterange-start-date .label-div {
     display: none;
 }
-.errands-validity-set .errands-validity-set-dates .daterange-set .column,
-.errands-validity-set .errands-validity-set-dates .daterange-set .column.last {
-    width:50%;
-    float:left
+
+.errands-validity-set .errands-validity-set-end-date .daterange-set .column,
+.errands-validity-set .errands-validity-set-end-date .daterange-set .column.last {
+    width: 50%;
+    float: left
 }
-.errands-validity-set .errands-validity-set-dates .daterange-set .column.last .label-div{
-    width:auto;
-    padding:0;
+
+.errands-validity-set .errands-validity-set-end-date .daterange-set .column.last .label-div {
+    width: auto;
+    padding: 0;
 }
-.errands-validity-set .errands-validity-set-dates .daterange-set {
-    margin-bottom:0;
+
+.errands-validity-set .errands-validity-set-end-date .daterange-set {
+    margin-bottom: 0;
 }
+
 .errands-validity-set .errands-validity-set-during {
-    float:left;
+    float: left;
     width: calc(100% - 210px);
 }
-.errands-validity-set .errands-validity-set-during .yui-g .yui-u.first .label-div{
+
+.errands-validity-set .errands-validity-set-during .set > div > div.first .label-div {
     text-align: left;
-    width:calc(100% - 75px);
-    display:block;
-    padding-right:0;
-}
-.errands-validity-set .errands-validity-set-reiteration-count .yui-g .yui-u.first .container,
-.errands-validity-set .errands-validity-set-during .yui-g .yui-u.first .container{
-    width: 50px;
+    padding-right: 0px;;
     float: left;
+    width: auto;
+    display: block;
+
 }
-.errands-validity-set .errands-validity-set-during .yui-g .yui-u .label-div{
-    display:none;
+
+.errands-validity-set .errands-validity-set-reiteration-count .alf-g .alf-u.first .container,
+.errands-validity-set .errands-validity-set-during .set > div > div.first .container {
+    width: 50px;
+    float: right;
+    display: block;
 }
-.errands-validity-set .errands-validity-set-during .yui-g .yui-u .container,
-.errands-validity-set .errands-validity-set-reiteration-count .container{
+
+.errands-validity-set .errands-validity-set-during .alf-g .alf-u .label-div {
+    display: none;
+}
+
+.errands-validity-set .errands-validity-set-during .alf-g .alf-u .container,
+.errands-validity-set .errands-validity-set-reiteration-count .container {
     min-width: 50px;
 }
+
 .errands-validity-set .errands-validity-set-during .control.editmode .container .value-div input[type=text] {
     margin-bottom: 0;
 }
+
 .errands-validity-set .errands-validity-set-reiteration-count {
-    float:left;
+    float: left;
     width: calc(100% - 210px);
 }
+
 .errands-validity-set .errands-validity-set-reiteration-count .count-label-div {
-    float:left;
-    line-height:28px;
+    float: left;
+    line-height: 28px;
 }
-.errands-validity-set .errands-validity-set-reiteration-count .yui-g .yui-u.first .label-div{
-     text-align: left;
-     width:auto;
-     display:block;
- }
-.errands-validity-set .errands-validity-set-reiteration-count .yui-g .yui-u .label-div{
-    display:none;
+
+.errands-validity-set .errands-validity-set-reiteration-count .alf-g .alf-u.first .label-div {
+    text-align: left;
+    width: auto;
+    padding-right: 0px;;
+    display: block;
+}
+.errands-validity-set .errands-validity-set-reiteration-count .alf-g .alf-u .label-div {
+    display: none;
 }
 .errands-validity-set .errands-validity-set-period-endless {
-    float:left;
+    float: left;
     width: calc(100% - 210px);
 }
-.errands-validity-set .errands-validity-set-period-endless .label-div{
-    display:none;
+
+.errands-validity-set .errands-validity-set-period-endless .label-div {
+    display: none;
 }
-.errands-validity-set .errands-validity-set-period-endless .value-div{
+
+.errands-validity-set .errands-validity-set-period-endless .value-div {
     padding-left: 0;
 }
 
+.errands-validity-set .errands-validity-set-end-date .label-div {
+    display: none;
+}
+
+.errands-validity-set .errands-validity-set-reiteration-count .alf-g .alf-u,
+.errands-validity-set .errands-validity-set-during .alf-g .alf-u {
+    width: 74.5%;
+}
+
+.errands-validity-set .errands-validity-set-reiteration-count .alf-g .alf-u.first,
+.errands-validity-set .errands-validity-set-during .alf-g .alf-u.first {
+    width: 25.5%;
+}
+
+.block3 .set .set-title,
+.periodicallySet .set .set-title{
+    border-bottom: none;
+    width: 180px;
+    text-align: right;
+    font-size: 100%;
+}

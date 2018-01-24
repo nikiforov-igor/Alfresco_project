@@ -738,4 +738,167 @@
         <property name="statusesOrder" value="${lecm.eds.execution.statistics.statuses.order}"/>
         <property name="executedStatus" value="${lecm.eds.execution.statistics.statuses.executed}"/>
     </bean>
+
+    <bean id="periodicalErrandDuplicateCopySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings">
+        <property name="propsToCopy">
+            <list>
+                <value>lecm-errands:title</value>
+                <value>lecm-errands:content</value>
+                <value>lecm-errands:is-important</value>
+                <value>lecm-errands:just-in-time</value>
+                <value>lecm-errands:report-required</value>
+                <value>lecm-errands:report-recipient-type</value>
+            </list>
+        </property>
+        <property name="assocsToCopy">
+            <list>
+                <value>lecm-errands:type-assoc</value>
+                <value>lecm-errands:initiator-assoc</value>
+                <value>lecm-errands:executor-assoc</value>
+                <value>lecm-errands:controller-assoc</value>
+                <value>lecm-errands:coexecutors-assoc</value>
+                <value>lecm-errands:links-assoc</value>
+                <value>lecm-document:subject-assoc</value>
+            </list>
+        </property>
+        <property name="categoriesToCopy">
+            <list>
+                <value>Поручение</value>
+                <value>Контроль</value>
+                <value>Исполнение</value>
+                <value>Отчеты соисполнителей</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="periodicalErrandsExecutor" class="ru.it.lecm.errands.shedule.PeriodicalErrandsExecutor" parent="action-executer">
+        <property name="ignoreLock" value="false"/>
+        <property name="publicAction" value="false" />
+        <property name="nodeService" ref="nodeService"/>
+        <property name="documentService" ref="documentService"/>
+        <property name="copySettings" ref="periodicalErrandDuplicateCopySettings"/>
+        <property name="exceptionProcessors">
+            <list>
+                <ref bean="createDateExceptionProcessor"/>
+                <ref bean="controlDateExceptionProcessor"/>
+                <ref bean="excecutorNotActiveExceptionProcessor"/>
+                <ref bean="сoexcecutorNotActiveExceptionProcessor"/>
+                <ref bean="сontrollerNotActiveExceptionProcessor"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="baseCreationExceptionProcessor"
+          class="ru.it.lecm.errands.shedule.processors.BaseCreationExceptionProcessor" abstract="true">
+        <property name="nodeService" ref="nodeService"/>
+        <property name="errandsService" ref="errandsService"/>
+        <property name="personService" ref="personService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
+    </bean>
+
+    <bean id="createDateExceptionProcessor"
+          class="ru.it.lecm.errands.shedule.processors.CreateDateExceptionProcessor"
+          parent="baseCreationExceptionProcessor">
+        <property name="workCalendar" ref="WorkCalendarService"/>
+        <property name="wCalendarService" ref="WCalendarService"/>
+    </bean>
+
+    <bean id="controlDateExceptionProcessor"
+          class="ru.it.lecm.errands.shedule.processors.ControlDateExceptionProcessor"
+          parent="baseCreationExceptionProcessor">
+        <property name="edsDocumentService" ref="edsService"/>
+        <property name="workCalendar" ref="WorkCalendarService"/>
+        <property name="wCalendarService" ref="WCalendarService"/>
+    </bean>
+
+    <bean id="excecutorNotActiveExceptionProcessor"
+          class="ru.it.lecm.errands.shedule.processors.ExcecutorNotActiveExceptionProcessor"
+          parent="baseCreationExceptionProcessor">
+        <property name="notificationsService" ref="notificationsService"/>
+    </bean>
+
+    <bean id="сoexcecutorNotActiveExceptionProcessor"
+          class="ru.it.lecm.errands.shedule.processors.CoexcecutorNotActiveExceptionProcessor"
+          parent="baseCreationExceptionProcessor">
+        <property name="notificationsService" ref="notificationsService"/>
+    </bean>
+
+    <bean id="сontrollerNotActiveExceptionProcessor"
+          class="ru.it.lecm.errands.shedule.processors.ControllerNotActiveExceptionProcessor"
+          parent="baseCreationExceptionProcessor">
+        <property name="notificationsService" ref="notificationsService"/>
+    </bean>
+
+    <bean id="periodicalErrandsSchedule" class="ru.it.lecm.errands.shedule.PeriodicalErrandsShedule" parent="baseTransactionalSchedule">
+        <property name="jobName">
+            <value>periodical-errands-sys-agent</value>
+        </property>
+        <property name="jobGroup">
+            <value>periodical-errands</value>
+        </property>
+        <property name="triggerName">
+            <value>periodical-errands-sys-agent-trigger</value>
+        </property>
+        <property name="triggerGroup">
+            <value>periodical-errands-sys-agent-trigger-group</value>
+        </property>
+        <property name="cronExpression">
+            <value>${errands.periodical.cronExpression}</value>
+        </property>
+        <property name="firstStartExpression">
+            <value>0 */15 * * * ?</value>
+        </property>
+        <property name="onServerStart">
+            <value>false</value>
+        </property>
+        <property name="actionName">
+            <value>periodicalErrandsExecutor</value>
+        </property>
+        <property name="documentService" ref="documentService"/>
+        <property name="errandsService" ref="errandsService"/>
+    </bean>
+
+    <bean id="periodicalErrandsToExecutedExecutor" class="ru.it.lecm.errands.shedule.PeriodicalErrandsToExecutedExecutor" parent="action-executer">
+        <property name="ignoreLock" value="false"/>
+        <property name="publicAction" value="false" />
+        <property name="nodeService" ref="nodeService"/>
+        <property name="errandsService" ref="errandsService"/>
+        <property name="stateMachineService" ref="stateMachineHelper"/>
+    </bean>
+
+    <bean id="periodicalErrandsToExecutedSchedule" class="ru.it.lecm.errands.shedule.PeriodicalErrandsToExecutedShedule" parent="baseTransactionalSchedule">
+        <property name="jobName">
+            <value>periodical-errands-to-executed-sys-agent</value>
+        </property>
+        <property name="jobGroup">
+            <value>periodical-errands-to-executed</value>
+        </property>
+        <property name="triggerName">
+            <value>periodical-errands-to-executed-sys-agent-trigger</value>
+        </property>
+        <property name="triggerGroup">
+            <value>periodical-errands-to-executed-sys-agent-trigger-group</value>
+        </property>
+        <property name="cronExpression">
+            <value>${errands.periodical.transitToExecute.cronExpression}</value>
+        </property>
+        <property name="firstStartExpression">
+            <value>0 */15 * * * ?</value>
+        </property>
+        <property name="onServerStart">
+            <value>false</value>
+        </property>
+        <property name="actionName">
+            <value>periodicalErrandsToExecutedExecutor</value>
+        </property>
+        <property name="documentService" ref="documentService"/>
+        <property name="errandsService" ref="errandsService"/>
+    </bean>
+
+    <bean id="errandsPeriodEndDatePolicy" class="ru.it.lecm.errands.policy.ErrandsPeriodEndDatePolicy"
+          init-method="init" depends-on="errands.LogicEcmModelsBootstrap">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
 </beans>

@@ -766,6 +766,34 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                                     if (value != null) {
                                         props.put(ErrandsService.PROP_ERRANDS_IS_PERIODICALLY, (Serializable) value);
                                     }
+                                    value = properties.get("lecmErrandWf_reiterationRule");
+                                    if (value != null) {
+                                        props.put(ErrandsService.PROP_ERRANDS_PERIODICAL_RULE, (Serializable) value);
+                                    }
+                                    value = properties.get("lecmErrandWf_periodStart");
+                                    if (value != null) {
+                                        props.put(ErrandsService.PROP_ERRANDS_PERIOD_START, (Serializable) value);
+                                    }
+                                    value = properties.get("lecmErrandWf_periodicallyRadio");
+                                    if (value != null) {
+                                        props.put(ErrandsService.PROP_ERRANDS_PERIODICALLY_RADIO, (Serializable) value);
+                                    }
+                                    value = properties.get("lecmErrandWf_periodEnd");
+                                    if (value != null) {
+                                        props.put(ErrandsService.PROP_ERRANDS_PERIOD_END, (Serializable) value);
+                                    }
+                                    value = properties.get("lecmErrandWf_periodDuring");
+                                    if (value != null) {
+                                        props.put(ErrandsService.PROP_ERRANDS_PERIOD_DURING, (Serializable) value);
+                                    }
+                                    value = properties.get("lecmErrandWf_periodDuringType");
+                                    if (value != null) {
+                                        props.put(ErrandsService.PROP_ERRANDS_PERIOD_DURING_TYPE, (Serializable) value);
+                                    }
+                                    value = properties.get("lecmErrandWf_reiterationCount");
+                                    if (value != null) {
+                                        props.put(ErrandsService.PROP_ERRANDS_REITERATION_COUNT, (Serializable) value);
+                                    }
                                     value = properties.get("lecmErrandWf_reportRequired");
                                     if (value != null) {
                                         props.put(ErrandsService.PROP_ERRANDS_REPORT_REQUIRED, (Serializable) value);

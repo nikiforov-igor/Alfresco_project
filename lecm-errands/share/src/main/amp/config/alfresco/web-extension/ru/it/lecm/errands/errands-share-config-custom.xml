@@ -449,12 +449,36 @@
 					<show id="lecm-errands:settings-mode-choosing-executors"/>
 					<show id="lecm-errands:settings-transfer-rights"/>
                     <show id="lecm-errands:settings-hide-additional-attrs"/>
+                    <show id="lecm-errands:settings-create-date-not-working-day-action"/>
+                    <show id="lecm-errands:settings-control-deadline-not-working-day-action"/>
+                    <show id="lecm-errands:settings-executor-not-active-action"/>
+                    <show id="lecm-errands:settings-coexecutor-not-active-action"/>
+                    <show id="lecm-errands:settings-controller-not-active-action"/>
 				</field-visibility>
-				<appearance>
-					<field id="lecm-errands:settings-mode-choosing-executors">
-						<control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
-					</field>
-				</appearance>
+                <appearance>
+                    <set id="errandSettings" appearance=""/>
+                    <set id="periodicallySettings" template="/ru/it/lecm/ord/components/class-set.ftl" appearance="title" label-id="label.errand.periodically.settings.title"/>
+                    <field id="lecm-errands:settings-mode-choosing-executors" set="errandSettings">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
+                    <field id="lecm-errands:settings-transfer-rights" set="errandSettings"/>
+                    <field id="lecm-errands:settings-hide-additional-attrs" set="errandSettings"/>
+                    <field id="lecm-errands:settings-create-date-not-working-day-action" set="periodicallySettings">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
+                    <field id="lecm-errands:settings-control-deadline-not-working-day-action" set="periodicallySettings">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
+                    <field id="lecm-errands:settings-executor-not-active-action" set="periodicallySettings">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
+                    <field id="lecm-errands:settings-coexecutor-not-active-action" set="periodicallySettings">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
+                    <field id="lecm-errands:settings-controller-not-active-action" set="periodicallySettings">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
+                </appearance>
 			</form>
 		</forms>
 	</config>
@@ -1529,7 +1553,17 @@
                     <show id="lecmErrandWf:limitationDateType"/>
                     <show id="lecmErrandWf:limitationDate" />
                     <!-- Периодичность -->
+                    <show id="period-dates-script" force="true"/>
                     <show id="lecmErrandWf:periodically"/>
+                    <show id="lecmErrandWf:reiterationRule"/>
+                    <show id="lecmErrandWf:periodStart"/>
+                    <show id="lecmErrandWf:periodicallyRadio"/>
+                    <show id="lecmErrandWf:periodEnd"/>
+                    <show id="lecm-base-dummy-aspects:script2" force="true"/>
+                    <show id="lecmErrandWf:periodDuring"/>
+                    <show id="lecmErrandWf:periodDuringType"/>
+                    <show id="lecmErrandWf:reiterationCount"/>
+                    <show id="lecm-base-dummy-aspects:script3" force="true"/>
                     <!-- Контролер-->
                     <show id="lecmErrandWf:controllerAssoc"/>
                     <!-- Требуется отчет -->
@@ -1544,11 +1578,18 @@
                     <show id="change-errand-type-script" force="true"/>
                     <show id="report-required-handler-script" force="true"/>
                     <show id="packageItems"/>
+                    <show id="errands-create-form-script" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="exist-business-role" template="/ru/it/lecm/errands/controls/errands-choosing-set.ftl" />
                     <set id="limitation-date"  template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
-                    <set id="block2"/>
+                    <set id="block2-1"/>
+                    <set id="block3"  template="/ru/it/lecm/base-share/components/hidden-set.ftl"/>
+                    <set id="errand-validity" parent="block3" template="/ru/it/lecm/errands/controls/errands-validity-set.ftl" appearance="title" label-id="label.errand.periodically.period.title"/>
+                    <set id="validity-end-date" parent="errand-validity"/>
+                    <set id="during" parent="errand-validity" template="/org/alfresco/components/form/2-column-set.ftl"/>
+                    <set id="repeat" parent="errand-validity" template="/org/alfresco/components/form/2-column-set.ftl"/>
+                    <set id="block2-2"/>
 
                     <field id="lecmErrandWf:typeAssoc" mandatory="true">
                         <control>
@@ -1623,13 +1664,70 @@
                         </control>
                     </field>
 
-                    <field id="lecmErrandWf:periodically" set="block2" read-only="true">
+                    <field id="lecmErrandWf:periodically" set="block2-1">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
                             <control-param name="changeFireAction">periodicallyErrandChange</control-param>
                         </control>
                     </field>
 
-                    <field id="lecmErrandWf:controllerAssoc" set="block2">
+                    <field id="lecmErrandWf:reiterationRule" set="block3">
+                        <control template="/ru/it/lecm/errands/controls/errands-reiteration-control.ftl">
+                            <control-param name="defaultType">DAILY</control-param>
+                        </control>
+                    </field>
+                    <field id="lecmErrandWf:periodStart" label="" set="errand-validity">
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.createErrandWFPeriodValidation" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
+                            <constraint type="DATE" validation-handler="LogicECM.module.Errands.createErrandWFPeriodEndDateValidation" message-id="LogicECM.module.Errands.periodEndDateValidation.message" event="change"/>
+                        </constraint-handlers>
+                    </field>
+
+                    <field id="lecmErrandWf:periodicallyRadio" set="errand-validity" mandatory="true">
+                        <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
+                            <control-param name="defaultValue">DATERANGE</control-param>
+                            <control-param name="fireChangeEventName">changePeriodEndDateRadio</control-param>
+                        </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.createErrandWFPeriodValidation" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
+                        </constraint-handlers>
+                    </field>
+
+                    <field id="lecmErrandWf:periodEnd" label="" set="validity-end-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.createErrandWFPeriodValidation" message-id="Alfresco.forms.validation.mandatory.message" event="change"/>
+                            <constraint type="DATE" validation-handler="LogicECM.module.Errands.createErrandWFPeriodEndDateValidation" message-id="LogicECM.module.Errands.periodEndDateValidation.message" event="change"/>
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-base-dummy-aspects:script2" set="errand-validity">
+                        <control template="/ru/it/lecm/eds/controls/static-text-control.ftl">
+                            <control-param name="textCode">label.errand.period-endless</control-param>
+                        </control>
+                    </field>
+                    <field id="lecmErrandWf:periodDuring" label-id="label.errand.during" set="during">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.createErrandWFPeriodValidation" message-id="Alfresco.forms.validation.mandatory.message" event="change"/>
+                            <constraint type="NUMBER" validation-handler="LogicECM.module.Errands.positiveNumberValidation" message-id="LogicECM.module.Errands.positiveNumberValidation.message" event="change"/>
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecmErrandWf:periodDuringType" set="during">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
+
+                    <field id="lecmErrandWf:reiterationCount" label-id="label.errand.endAfter" set="repeat">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.createErrandWFPeriodValidation" message-id="Alfresco.forms.validation.mandatory.message" event="change"/>
+                            <constraint type="NUMBER" validation-handler="LogicECM.module.Errands.positiveNumberValidation" message-id="LogicECM.module.Errands.positiveNumberValidation.message" event="change"/>
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-base-dummy-aspects:script3" set="repeat">
+                        <control template="/ru/it/lecm/eds/controls/static-text-control.ftl">
+                            <control-param name="textCode">label.errand.reiterationCount</control-param>
+                        </control>
+                    </field>
+
+                    <field id="lecmErrandWf:controllerAssoc" set="block2-2">
                         <control>
                             <control-param name="showSearch">true</control-param>
                             <control-param name="changeItemsFireAction">createErrandsWFErrandControllerChanged</control-param>
@@ -1637,21 +1735,21 @@
                         </control>
                     </field>
 
-                    <field id="lecmErrandWf:reportRequired" set="block2">
+                    <field id="lecmErrandWf:reportRequired" set="block2-2">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
                             <control-param name="changeFireAction">createErrandsWFErrandReportRequiredChanged</control-param>
                         </control>
                     </field>
 
-                    <field id="lecmErrandWf:reportRecipientType" set="block2">
+                    <field id="lecmErrandWf:reportRecipientType" set="block2-2">
                         <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
                     </field>
 
-                    <field id="lecmErrandWf:isImportant" set="block2">
+                    <field id="lecmErrandWf:isImportant" set="block2-2">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
                     </field>
 
-                    <field id="lecmErrandWf:subjectAssoc" set="block2">
+                    <field id="lecmErrandWf:subjectAssoc" set="block2-2">
                         <control>
                             <control-param name="defaultValueDataSource">lecm/errands/getDefaultSubject</control-param>
                         </control>
@@ -1666,6 +1764,18 @@
                             <control-param name="daysTypeField">lecmErrandWf:limitationDateType</control-param>
                         </control>
                     </field>
+                    <field id="period-dates-script">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-errands/period-dates-listener.js</control-param>
+                            <control-param name="scriptLoadedFireAction">periodDatesScriptLoaded</control-param>
+                            <control-param name="bubblingName">changePeriodEndDateRadio</control-param>
+                            <control-param name="startDateField">lecmErrandWf:periodStart</control-param>
+                            <control-param name="endDateField">lecmErrandWf:periodEnd</control-param>
+                            <control-param name="duringCountField">lecmErrandWf:periodDuring</control-param>
+                            <control-param name="duringTypeField">lecmErrandWf:periodDuringType</control-param>
+                            <control-param name="reiterationCountField">lecmErrandWf:reiterationCount</control-param>
+                        </control>
+                    </field>
                     <field id="report-required-handler-script" >
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-report-required-handler.js</control-param>
@@ -1673,6 +1783,12 @@
                     </field>
                     <field id="packageItems">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="errands-create-form-script">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-errands/components/lecm-errands-create-form.js</control-param>
+                            <control-param name="scriptLoadedFireAction">errandsCreateFormScriptLoaded</control-param>
+                        </control>
                     </field>
                 </appearance>
             </form>

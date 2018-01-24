@@ -93,7 +93,7 @@
             var submitButtonElement = Dom.get(formId + "-form-submit-button");
             submitButtonElement.innerHTML = Alfresco.util.message("label.route-errand");
         });
-        
+
         Alfresco.util.Ajax.request({
             url: Alfresco.constants.PROXY_URI + "lecm/errands/isHideAdditionAttributes",
             successCallback: {

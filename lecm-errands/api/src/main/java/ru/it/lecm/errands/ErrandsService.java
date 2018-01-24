@@ -5,6 +5,8 @@ import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * User: AIvkin Date: 09.07.13 Time: 12:09
@@ -66,8 +68,18 @@ public interface ErrandsService {
     QName PROP_ERRANDS_LIMITATION_DATE_TYPE = QName.createQName(ERRANDS_NAMESPACE_URI,"limitation-date-type");
     QName PROP_ERRANDS_HALF_LIMIT_DATE = QName.createQName(ERRANDS_NAMESPACE_URI,"half-limit-date");
     QName PROP_ERRANDS_IS_LIMIT_SHORT_DATE = QName.createQName(ERRANDS_NAMESPACE_URI,"is-limit-short");
+    QName PROP_ERRANDS_TRANSIT_TO_EXECUTED = QName.createQName(ERRANDS_NAMESPACE_URI,"transit-to-executed");
 
+    QName PROP_ERRANDS_PERIODICALLY_RADIO= QName.createQName(ERRANDS_NAMESPACE_URI, "periodically-radio");
+    QName PROP_ERRANDS_PERIOD_START= QName.createQName(ERRANDS_NAMESPACE_URI, "period-start");
+    QName PROP_ERRANDS_PERIOD_END= QName.createQName(ERRANDS_NAMESPACE_URI, "period-end");
+    QName PROP_ERRANDS_PERIOD_END_TEXT= QName.createQName(ERRANDS_NAMESPACE_URI, "period-end-text");
+    QName PROP_ERRANDS_PERIOD_ENDLESS= QName.createQName(ERRANDS_NAMESPACE_URI, "period-endless");
+    QName PROP_ERRANDS_PERIOD_DURING_TYPE= QName.createQName(ERRANDS_NAMESPACE_URI, "period-during-type");
+    QName PROP_ERRANDS_PERIOD_DURING= QName.createQName(ERRANDS_NAMESPACE_URI, "period-during");
+    QName PROP_ERRANDS_REITERATION_COUNT= QName.createQName(ERRANDS_NAMESPACE_URI, "reiteration-count");
     QName PROP_ERRANDS_IS_PERIODICALLY = QName.createQName(ERRANDS_NAMESPACE_URI, "periodically");
+    QName PROP_ERRANDS_PERIODICAL_RULE = QName.createQName(ERRANDS_NAMESPACE_URI,"reiteration-rule");
 
     QName PROP_ERRANDS_CANCELLATION_SIGNAL = QName.createQName(ERRANDS_NAMESPACE_URI,"cancellation-signal");
     QName PROP_ERRANDS_CANCELLATION_SIGNAL_REASON = QName.createQName(ERRANDS_NAMESPACE_URI,"cancellation-signal-reason");
@@ -97,6 +109,12 @@ public interface ErrandsService {
     String SETTINGS_PROP_MODE_CHOOSING_EXECUTORS_UNIT = "UNIT";
     QName SETTINGS_PROP_TRANSFER_RIGHT = QName.createQName(ERRANDS_NAMESPACE_URI, "settings-transfer-rights");
     QName SETTINGS_HIDE_ADDITIONAL_ATTRS = QName.createQName(ERRANDS_NAMESPACE_URI, "settings-hide-additional-attrs");
+    QName SETTINGS_CREATE_DATE_NOT_WORKING_DAY_ACTION = QName.createQName(ERRANDS_NAMESPACE_URI, "settings-create-date-not-working-day-action");
+    QName SETTINGS_CONTROL_DEADLINE_NOT_WORKING_DAY_ACTION = QName.createQName(ERRANDS_NAMESPACE_URI, "settings-control-deadline-not-working-day-action");
+    QName SETTINGS_EXECUTOR_NOT_ACTIVE_ACTION = QName.createQName(ERRANDS_NAMESPACE_URI, "settings-executor-not-active-action");
+    QName SETTINGS_COEXECUTOR_NOT_ACTIVE_ACTION = QName.createQName(ERRANDS_NAMESPACE_URI, "settings-coexecutor-not-active-action");
+    QName SETTINGS_CONTROLLER_NOT_ACTIVE_ACTION = QName.createQName(ERRANDS_NAMESPACE_URI, "settings-controller-not-active-action");
+    QName SETTINGS_DELAYED_ERRAND_CREATION_BY_DATE = QName.createQName(ERRANDS_NAMESPACE_URI, "settings-delayed-errand-creation-by-date");
 
     QName USER_SETTINGS_PROP_WITHOUT_INITIATOR_APPROVAL = QName.createQName(ERRANDS_NAMESPACE_URI, "user-settings-without-initiator-approval");
     QName USER_SETTINGS_ASSOC_DEFAULT_INITIATOR = QName.createQName(ERRANDS_NAMESPACE_URI, "user-settings-default-initiator-assoc");
@@ -368,8 +386,79 @@ public interface ErrandsService {
      */
     void resetCancelSignal(NodeRef errand);
 
+    /**
+     *  Настройка поручений: Действие Если дата создания очередного поручения приходится на нерабочий день
+     */
+    CreateDateNotWorkingDayAction getCreateDateNotWorkingDayAction();
+
+    /**
+     *  Настройка поручений: Действие Если контрольный срок приходится на нерабочий день
+     */
+    ControlDeadlineNotWorkingDayAction getControlDeadlineNotWorkingDayAction();
+
+    /**
+     *  Настройка поручений: Действие Если исполнитель неактивен в Системе
+     */
+    EmployeeNotActiveAction getExecutorNotActiveAction();
+
+    /**
+     *  Настройка поручений: Действие Если соисполнитель  неактивен в Системе
+     */
+    EmployeeNotActiveAction getCoexecutorNotActiveAction();
+
+    /**
+     *  Настройка поручений: Действие Если контролер неактивен в Системе
+     */
+    EmployeeNotActiveAction getControllerNotActiveAction();
+
+    /**
+     * Чтение из настроек поручений списка поручений с отложенным созданием
+     */
+    Map<String, Set<NodeRef>> getDelayedErrandsByDate();
+
+    /**
+     * Запись в настройки поручений списка поручений с отложенным созданием
+     */
+    void setDelayedErrandsByDate(Map<String, Set<NodeRef>> delayedErrandsByDate);
+
     enum ModeChoosingExecutors {
         ORGANIZATION,
         UNIT
+    }
+
+    enum CreateDateNotWorkingDayAction {
+        MOVE_TO_NEXT_WORKING_DAY,
+        DO_NOT_CREATE
+    }
+
+    enum ControlDeadlineNotWorkingDayAction {
+        MOVE_TO_NEXT_WORKING_DAY,
+        MOVE_TO_PREVIOUS_WORKING_DAY,
+        DO_NOT_CREATE
+    }
+
+    enum EmployeeNotActiveAction {
+        NOTIFY_ADMIN,
+        NOTIFY_ADMIN_AND_AUTHOR
+    }
+
+    enum LimitationDateRadio {
+        DAYS,
+        DATE,
+        LIMITLESS
+    }
+
+    enum PeriodicallyRadio {
+        DATERANGE,
+        ENDLESS,
+        DURING,
+        REPEAT_COUNT
+    }
+
+    enum PeriodDuringType {
+        DAYS,
+        WEEKS,
+        MONTHS,
+        YEARS
     }
 }

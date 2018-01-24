@@ -40,6 +40,7 @@
 				</list>
 			</parameter>
 		</constraint>
+
 	</constraints>
 	<types>
 		<type name="lecmErrandWf:removeDraft">
@@ -667,9 +668,66 @@
 						</constraint>
 					</constraints>
 				</property>
+				<!-- Направлять периодически -->
 				<property name="lecmErrandWf:periodically">
 					<type>d:boolean</type>
 					<default>false</default>
+				</property>
+				<!--Повторять-->
+				<property name="lecmErrandWf:reiterationRule">
+					<type>d:text</type>
+				</property>
+				<!--Дата начала периода-->
+				<property name="lecmErrandWf:periodStart">
+					<title>Дата начала периода</title>
+					<type>d:date</type>
+				</property>
+				<!--Окончание периода-->
+				<property name="lecmErrandWf:periodicallyRadio">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<constraints>
+						<constraint name="lecmErrandWf:periodicallyRadioConst" type="LIST">
+							<parameter name="allowedValues">
+								<list>
+									<value>DATERANGE</value>
+									<value>ENDLESS</value>
+									<value>DURING</value>
+									<value>REPEAT_COUNT</value>
+								</list>
+							</parameter>
+						</constraint>
+					</constraints>
+				</property>
+				<!--Дата окончания периода-->
+				<property name="lecmErrandWf:periodEnd">
+					<title>Дата окончания периода</title>
+					<type>d:date</type>
+				</property>
+				<!-- В течение -->
+				<property name="lecmErrandWf:periodDuring">
+					<type>d:int</type>
+					<default>10</default>
+				</property>
+				<property name="lecmErrandWf:periodDuringType">
+					<type>d:text</type>
+					<constraints>
+						<constraint name="lecmErrandWf:periodDuringConst" type="LIST">
+							<parameter name="allowedValues">
+								<list>
+									<value>DAYS</value>
+									<value>WEEKS</value>
+									<value>MONTHS</value>
+									<value>YEARS</value>
+								</list>
+							</parameter>
+						</constraint>
+					</constraints>
+				</property>
+				<!--число повторений-->
+				<property name="lecmErrandWf:reiterationCount">
+					<type>d:int</type>
+					<default>10</default>
 				</property>
 				<property name="lecmErrandWf:reportRequired">
 					<type>d:boolean</type>

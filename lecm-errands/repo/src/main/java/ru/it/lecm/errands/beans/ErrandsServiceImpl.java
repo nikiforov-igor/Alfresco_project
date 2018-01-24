@@ -12,6 +12,11 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.FileFilterMode;
 import org.alfresco.util.Pair;
+import org.apache.commons.lang.time.DateUtils;
+import org.apache.commons.lang3.EnumUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.ConcurrencyFailureException;
@@ -31,6 +36,8 @@ import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -659,4 +666,110 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         }
     }
 
+
+    @Override
+    public CreateDateNotWorkingDayAction getCreateDateNotWorkingDayAction() {
+        NodeRef settings = getSettingsNode();
+        if (settings != null) {
+            String createDateNotWorkingDayAction = (String) nodeService.getProperty(settings, SETTINGS_CREATE_DATE_NOT_WORKING_DAY_ACTION);
+            return EnumUtils.getEnum(CreateDateNotWorkingDayAction.class, createDateNotWorkingDayAction);
+        }
+        return CreateDateNotWorkingDayAction.MOVE_TO_NEXT_WORKING_DAY;
+    }
+
+    @Override
+    public ControlDeadlineNotWorkingDayAction getControlDeadlineNotWorkingDayAction() {
+        NodeRef settings = getSettingsNode();
+        if (settings != null) {
+            String controlDeadlineNotWorkingDayAction = (String) nodeService.getProperty(settings, SETTINGS_CONTROL_DEADLINE_NOT_WORKING_DAY_ACTION);
+            return EnumUtils.getEnum(ControlDeadlineNotWorkingDayAction.class, controlDeadlineNotWorkingDayAction);
+        }
+        return ControlDeadlineNotWorkingDayAction.MOVE_TO_NEXT_WORKING_DAY;
+    }
+
+    @Override
+    public EmployeeNotActiveAction getExecutorNotActiveAction() {
+        NodeRef settings = getSettingsNode();
+        if (settings != null) {
+            String employeeNotActiveAction = (String) nodeService.getProperty(settings, SETTINGS_EXECUTOR_NOT_ACTIVE_ACTION);
+            return EnumUtils.getEnum(EmployeeNotActiveAction.class, employeeNotActiveAction);
+        }
+        return EmployeeNotActiveAction.NOTIFY_ADMIN_AND_AUTHOR;
+    }
+
+    @Override
+    public EmployeeNotActiveAction getCoexecutorNotActiveAction() {
+        NodeRef settings = getSettingsNode();
+        if (settings != null) {
+            String employeeNotActiveAction = (String) nodeService.getProperty(settings, SETTINGS_COEXECUTOR_NOT_ACTIVE_ACTION);
+            return EnumUtils.getEnum(EmployeeNotActiveAction.class, employeeNotActiveAction);
+        }
+        return EmployeeNotActiveAction.NOTIFY_ADMIN_AND_AUTHOR;
+    }
+
+    @Override
+    public EmployeeNotActiveAction getControllerNotActiveAction() {
+        NodeRef settings = getSettingsNode();
+        if (settings != null) {
+            String employeeNotActiveAction = (String) nodeService.getProperty(settings, SETTINGS_CONTROLLER_NOT_ACTIVE_ACTION);
+            return EnumUtils.getEnum(EmployeeNotActiveAction.class, employeeNotActiveAction);
+        }
+        return EmployeeNotActiveAction.NOTIFY_ADMIN_AND_AUTHOR;
+    }
+
+    @Override
+    public Map<String, Set<NodeRef>> getDelayedErrandsByDate() {
+        NodeRef settings = getSettingsNode();
+        Map<String, Set<NodeRef>> results = new HashMap<String, Set<NodeRef>>();
+        if (settings != null) {
+            String delayedErrandsByDateJson = (String) nodeService.getProperty(settings, SETTINGS_DELAYED_ERRAND_CREATION_BY_DATE);
+            if (delayedErrandsByDateJson != null) {
+                try {
+                    final JSONObject json = new JSONObject(delayedErrandsByDateJson);
+                    final JSONArray dates = json.names();
+                    Set<NodeRef> someDateResult;
+                    if (dates != null) {
+                        for (int i = 0; i < dates.length(); i++) {
+                            final String dateStr = dates.optString(i, null);
+                            if (dateStr != null) {
+                                final JSONArray errandRefsArray = json.getJSONArray(dateStr);
+                                someDateResult = new HashSet<>(errandRefsArray.length());
+                                for (int j = 0; j < errandRefsArray.length(); j++) {
+                                    someDateResult.add(new NodeRef(errandRefsArray.getString(j)));
+                                }
+                                results.put(dateStr, someDateResult);
+                            }
+                        }
+                    }
+                } catch (JSONException e) {
+                    logger.error("Failed to get 'delayedErrandsByDate' map from json string.", e);
+                }
+            }
+        }
+        return results;
+    }
+
+    @Override
+    public void setDelayedErrandsByDate(Map<String, Set<NodeRef>> delayedErrandsByDate) {
+        NodeRef settings = getSettingsNode();
+        if (settings != null && delayedErrandsByDate != null) {
+            try {
+                final JSONObject delayedErrandsByDateJson = new JSONObject();
+                for (Map.Entry<String, Set<NodeRef>> errandsByDate : delayedErrandsByDate.entrySet()) {
+                    final Set<NodeRef> errandsRefs = errandsByDate.getValue();
+                    final JSONArray errandsJsonArray = new JSONArray();
+                    if (errandsRefs != null && !errandsRefs.isEmpty()) {
+                        for (NodeRef errandRef : errandsRefs) {
+                            errandsJsonArray.put(errandRef.toString());
+                        }
+                    }
+                    delayedErrandsByDateJson.put(errandsByDate.getKey(), errandsJsonArray);
+                }
+                String delayedErrandsByDateJsonStr = delayedErrandsByDateJson.toString();
+                nodeService.setProperty(settings, SETTINGS_DELAYED_ERRAND_CREATION_BY_DATE, delayedErrandsByDateJsonStr);
+            } catch (JSONException e) {
+                logger.error("Failed to save json string for 'delayedErrandsByDate' map.", e);
+            }
+        }
+    }
 }

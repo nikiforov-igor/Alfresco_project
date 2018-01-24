@@ -3,15 +3,12 @@ package ru.it.lecm.eds.policy;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
-import org.alfresco.service.cmr.notification.NotificationService;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AuthenticationService;
-import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import ru.it.lecm.base.beans.LecmBasePropertiesService;
-import ru.it.lecm.base.policies.LogicECMAssociationPolicy;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.notifications.beans.NotificationsService;
@@ -20,7 +17,6 @@ import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.StatemachineModel;
 
-import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -28,7 +24,6 @@ import java.util.*;
  */
 public class EDSExecutorPolicy implements NodeServicePolicies.OnCreateAssociationPolicy, NodeServicePolicies.OnDeleteAssociationPolicy {
 
-    private static final String GRAND_DYNAMIC_ROLE_CODE_INITIATOR = "BR_INITIATOR";
     private PolicyComponent policyComponent;
     private NodeService nodeService;
     private LecmPermissionService lecmPermissionService;
@@ -141,7 +136,7 @@ public class EDSExecutorPolicy implements NodeServicePolicies.OnCreateAssociatio
             NodeRef initiator = orgstructureService.getCurrentEmployee();
             Map<String, Object> templateConfig = new HashMap<>();
             templateConfig.put("mainObject", documentRef);
-            stateMachineService.grandDynamicRoleForEmployee(documentRef, docExecutorRef, GRAND_DYNAMIC_ROLE_CODE_INITIATOR);
+            stateMachineService.grandDynamicRoleForEmployee(documentRef, docExecutorRef, EDSDocumentService.DYNAMIC_ROLE_CODE_INITIATOR);
             if (docAuthorRef != null && !docAuthorRef.equals(docExecutorRef) && nodeService.getProperty(documentRef, StatemachineModel.PROP_STATUS) != null) {
                 notificationsService.sendNotification(author, initiator, Collections.singletonList(docExecutorRef), "EDS_EXECUTOR_NEW", templateConfig, true);
             }
@@ -169,7 +164,7 @@ public class EDSExecutorPolicy implements NodeServicePolicies.OnCreateAssociatio
             Map<String, Object> templateConfig = new HashMap<>();
             templateConfig.put("mainObject", documentRef);
             if (!docCompilerRef.equals(docExecutorRef)) {
-                lecmPermissionService.revokeDynamicRole(GRAND_DYNAMIC_ROLE_CODE_INITIATOR, documentRef, docExecutorRef.getId());
+                lecmPermissionService.revokeDynamicRole(EDSDocumentService.DYNAMIC_ROLE_CODE_INITIATOR, documentRef, docExecutorRef.getId());
             }
             notificationsService.sendNotification(author, initiator, Collections.singletonList(docExecutorRef), "EDS_EXECUTOR_OLD", templateConfig, true);
         }

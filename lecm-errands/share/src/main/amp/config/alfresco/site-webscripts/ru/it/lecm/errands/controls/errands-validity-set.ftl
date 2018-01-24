@@ -21,20 +21,23 @@
 </#list>
 
 <div class="errands-validity-set">
-    <div class="errands-validity-set-radio">
+    <div class="errands-validity-set-start-date">
         <@formLib.renderField field=form.fields[thisSetFields[0].id]/>
     </div>
-    <div class="errands-validity-set-dates">
+    <div class="errands-validity-set-radio">
+        <@formLib.renderField field=form.fields[thisSetFields[1].id]/>
+    </div>
+    <div class="errands-validity-set-end-date">
         <@formLib.renderSet set = thisSetSubsets[0]/>
+    </div>
+    <div class="errands-validity-set-period-endless">
+        <@formLib.renderField field=form.fields[thisSetFields[2].id]/>
     </div>
     <div class="errands-validity-set-during">
         <@formLib.renderSet set = thisSetSubsets[1]/>
     </div>
     <div class="errands-validity-set-reiteration-count">
         <@formLib.renderSet set = thisSetSubsets[2]/>
-    </div>
-    <div class="errands-validity-set-period-endless">
-        <@formLib.renderField field=form.fields[thisSetFields[1].id]/>
     </div>
     <div class="clear"></div>
 </div>

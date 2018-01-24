@@ -12,42 +12,45 @@ function processChangeExecutor(newExecutor, reason) {
             documentMembers.addMemberWithoutCheckPermission(baseDocumentAssoc[0], newExecutor, "LECM_BASIC_PG_Reader", true);
         }
     }
+    var periodically = document.properties["lecm-errands:periodically"];
+    if (!periodically) {
+        notifications.sendNotificationFromCurrentUser({
+            recipients: [newExecutor],
+            templateCode: 'ERRANDS_CHANGE_EXECUTOR_NEW',
+            templateConfig: {
+                mainObject: document,
+                eventExecutor: currentUser
+            }
+        });
+        notifications.sendNotificationFromCurrentUser({
+            recipients: [executor],
+            templateCode: 'ERRANDS_CHANGE_EXECUTOR_OLD',
+            templateConfig: {
+                mainObject: document,
+                eventExecutor: currentUser,
+                reason: reason
+            }
+        });
 
-    notifications.sendNotificationFromCurrentUser({
-        recipients: [newExecutor],
-        templateCode: 'ERRANDS_CHANGE_EXECUTOR_NEW',
-        templateConfig: {
-            mainObject: document,
-            eventExecutor: currentUser
+        var recipients = [];
+        var controllerAssoc = document.assocs["lecm-errands:controller-assoc"];
+        var coexecutorsAssoc = document.assocs["lecm-errands:coexecutors-assoc"];
+        if (controllerAssoc && controllerAssoc.length == 1) {
+            recipients.push(controllerAssoc[0]);
         }
-    });
-    notifications.sendNotificationFromCurrentUser({
-        recipients: [executor],
-        templateCode: 'ERRANDS_CHANGE_EXECUTOR_OLD',
-        templateConfig: {
-            mainObject: document,
-            eventExecutor: currentUser,
-            reason: reason
+        if (coexecutorsAssoc && coexecutorsAssoc.length) {
+            for (var i = 0; i < coexecutorsAssoc.length; i++) {
+                recipients.push(coexecutorsAssoc[i]);
+            }
         }
-    });
-    var recipients = [];
-    var controllerAssoc = document.assocs["lecm-errands:controller-assoc"];
-    var coexecutorsAssoc = document.assocs["lecm-errands:coexecutors-assoc"];
-    if (controllerAssoc && controllerAssoc.length == 1) {
-        recipients.push(controllerAssoc[0]);
+        notifications.sendNotificationFromCurrentUser({
+            recipients: recipients,
+            templateCode: 'ERRANDS_CHANGE_EXECUTOR',
+            templateConfig: {
+                mainObject: document,
+                eventExecutor: currentUser,
+                reason: reason
+            }
+        });
     }
-    if (coexecutorsAssoc && coexecutorsAssoc.length) {
-        for (var i = 0; i < coexecutorsAssoc.length; i++) {
-            recipients.push(coexecutorsAssoc[i]);
-        }
-    }
-    notifications.sendNotificationFromCurrentUser({
-        recipients: recipients,
-        templateCode: 'ERRANDS_CHANGE_EXECUTOR',
-        templateConfig: {
-            mainObject: document,
-            eventExecutor: currentUser,
-            reason: reason
-        }
-    });
 }

@@ -21,3 +21,17 @@
     padding-left: 0;
     margin-left: 10px;
 }
+
+.errands-settings .set .set-title {
+    border-bottom: none;
+    font-weight: bold;
+}
+
+.errands-settings .set .periodicallySettings .label-div {
+    text-align: right;
+    width: 40%
+}
+
+.errands-settings .set .periodicallySettings .container {
+    width: 58%;
+}
