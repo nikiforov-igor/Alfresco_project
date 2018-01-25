@@ -67,6 +67,7 @@
 
         <receiveTask id="requestDueDateChangeReceiveTask" name="Receive Task"></receiveTask>
 
+		<!--Если будут выдаваться динамические права, то необходимо завести блок activiti:taskListener event="assignment"-->
         <userTask id="changeRequestedDueDate" name="Перенести срок поручения" activiti:assignee="${requestDueDateChangeAssignee}" activiti:formKey="lecmErrandWf:requestDueDateChangeTask">
             <extensionElements>
                 <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">

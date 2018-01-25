@@ -61,6 +61,7 @@
             </extensionElements>
             <script>var test=1;</script>
         </scriptTask>
+		<!--Если будут выдаваться динамические права, то необходимо завести блок activiti:taskListener event="assignment"-->
 	    <userTask id="requestCancelTask" name="Запрос на отмену" activiti:assignee='${requestCancelAssignee}' activiti:formKey="lecmErrandWf:requestCancelTask">
 		    <extensionElements>
 			    <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
