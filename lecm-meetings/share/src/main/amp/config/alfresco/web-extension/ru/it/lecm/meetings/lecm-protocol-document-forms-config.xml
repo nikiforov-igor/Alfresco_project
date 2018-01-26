@@ -484,6 +484,7 @@
                             <control-param name="jsDependencies">scripts/lecm-meetings/protocol-points-association-datagrid.js</control-param>
                             <control-param name="jsObjectName">LogicECM.module.Meetings.protocolPointsAssociationDataGrid</control-param>
                             <control-param name="useSequentialCreation">true</control-param>
+                            <control-param name="isTableSortable">false</control-param>
                         </control>
                     </field>
 
