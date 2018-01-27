@@ -92,7 +92,7 @@ LogicECM.module.Errands.commonPeriodValidation =
             var isValid = startDate && startDate.value;
 
             if (endRadio) {
-                if (field.name == "prop_lecm-errands_period-start") {
+                if (field.name == props.startProp) {
                     return isValid;
                 } else if (isValid && field.name == props.endProp && endRadio.value == "DATERANGE") {
                     return endDateEl && endDateEl.value;
@@ -167,12 +167,12 @@ LogicECM.module.Errands.periodEndDateValidation = function (field, args, event, 
 
 LogicECM.module.Errands.createErrandWFPeriodEndDateValidation = function (field, args, event, form, silent, message) {
     var props = {
-        startProp: "prop_lecmErrandWF_periodStart",
-        endProp: "prop_lecmErrandWF_periodEnd",
-        radioProp: "prop_lecmErrandWF_periodicallyRadio",
-        duringProp: "prop_lecmErrandWF_periodDuring",
-        repeatCountProp: "prop_lecmErrandWF_reiterationCount",
-        periodicallyProp: "prop_lecmErrandWF_periodically"
+        startProp: "prop_lecmErrandWf_periodStart",
+        endProp: "prop_lecmErrandWf_periodEnd",
+        radioProp: "prop_lecmErrandWf_periodicallyRadio",
+        duringProp: "prop_lecmErrandWf_periodDuring",
+        repeatCountProp: "prop_lecmErrandWf_reiterationCount",
+        periodicallyProp: "prop_lecmErrandWf_periodically"
     };
     return LogicECM.module.Errands.commonPeriodEndDateValidation(field, args, event, form, silent, message, props);
 };
