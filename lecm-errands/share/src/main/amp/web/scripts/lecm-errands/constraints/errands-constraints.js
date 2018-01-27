@@ -85,6 +85,7 @@ LogicECM.module.Errands.commonPeriodValidation =
         if (periodicallyEl && periodicallyEl.value == "true") {
             var startDate = field.form[props.startProp];
             var endRadio = field.form[props.radioProp];
+            endRadio = getCheckedRadio(endRadio);
             var endDateEl = field.form[props.endProp];
             var duringEl = field.form[props.duringProp];
             var reiterationCountEl = field.form[props.repeatCountProp];
@@ -139,6 +140,7 @@ LogicECM.module.Errands.commonPeriodEndDateValidation = function (field, args, e
     if (periodicallyEl && periodicallyEl.value == "true") {
         var startDate = field.form[props.startProp];
         var endRadio = field.form[props.radioProp];
+        endRadio = getCheckedRadio(endRadio);
         var endDateEl = field.form[props.endProp];
 
         var isValid = startDate && startDate.value;
@@ -181,3 +183,15 @@ LogicECM.module.Errands.positiveNumberValidation = function (field, args, event,
     var pattern = /^[1-9][0-9]*$/;
     return pattern.test(field.value);
 };
+
+function getCheckedRadio(radio) {
+    if (radio instanceof HTMLCollection) {
+        for (var i = 0; i < radio.length; i++) {
+            var radioInput = radio[i];
+            if (radioInput.checked) {
+                return radioInput;
+            }
+        }
+    }
+    return radio;
+}
