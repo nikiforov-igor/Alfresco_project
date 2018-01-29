@@ -94,20 +94,20 @@
 
                 var isValid = startDate && startDate.value;
 
-                if (endRadio) {
-                    if (field.name == "prop_lecm-errands_period-start") {
-                        return isValid;
-                    } else if (isValid && field.name == props.endProp && endRadio.value == "DATERANGE") {
-                        return endDateEl && endDateEl.value;
-                    } else if (field.name == props.duringProp && endRadio.value == "DURING") {
-                        return duringEl && duringEl.value;
-                    } else if (field.name == props.repeatCountProp && endRadio.value == "REPEAT_COUNT") {
-                        return reiterationCountEl && reiterationCountEl.value;
-                    }
+            if (endRadio) {
+                if (field.name == props.startProp) {
+                    return isValid;
+                } else if (isValid && field.name == props.endProp && endRadio.value == "DATERANGE") {
+                    return endDateEl && endDateEl.value;
+                } else if (field.name == props.duringProp && endRadio.value == "DURING") {
+                    return duringEl && duringEl.value;
+                } else if (field.name == props.repeatCountProp && endRadio.value == "REPEAT_COUNT") {
+                    return reiterationCountEl && reiterationCountEl.value;
                 }
             }
-            return true;
-        };
+        }
+        return true;
+    };
 
     LogicECM.module.Errands.periodValidation =
         function (field, args, event, form, silent, message) {
@@ -169,17 +169,17 @@
         return LogicECM.module.Errands.commonPeriodEndDateValidation(field, args, event, form, silent, message, props);
     };
 
-    LogicECM.module.Errands.createErrandWFPeriodEndDateValidation = function (field, args, event, form, silent, message) {
-        var props = {
-            startProp: "prop_lecmErrandWF_periodStart",
-            endProp: "prop_lecmErrandWF_periodEnd",
-            radioProp: "prop_lecmErrandWF_periodicallyRadio",
-            duringProp: "prop_lecmErrandWF_periodDuring",
-            repeatCountProp: "prop_lecmErrandWF_reiterationCount",
-            periodicallyProp: "prop_lecmErrandWF_periodically"
-        };
-        return LogicECM.module.Errands.commonPeriodEndDateValidation(field, args, event, form, silent, message, props);
+LogicECM.module.Errands.createErrandWFPeriodEndDateValidation = function (field, args, event, form, silent, message) {
+    var props = {
+        startProp: "prop_lecmErrandWf_periodStart",
+        endProp: "prop_lecmErrandWf_periodEnd",
+        radioProp: "prop_lecmErrandWf_periodicallyRadio",
+        duringProp: "prop_lecmErrandWf_periodDuring",
+        repeatCountProp: "prop_lecmErrandWf_reiterationCount",
+        periodicallyProp: "prop_lecmErrandWf_periodically"
     };
+    return LogicECM.module.Errands.commonPeriodEndDateValidation(field, args, event, form, silent, message, props);
+};
 
     LogicECM.module.Errands.positiveNumberValidation = function (field, args, event, form, silent, message) {
         var pattern = /^[1-9][0-9]*$/;
