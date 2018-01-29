@@ -72,7 +72,7 @@
                             document = bpm_package.children[0];
                             employee = orgstructure.getEmployeeByLogin(assignee);
                             /*добавляем актуального исполнителя в динамические бизнес роли*/
-                            lecmPermission.grantDynamicRole(document, employee, "ERRANDS_INITIATOR", "LECM_BASIC_PG_ActionPerformer");
+                            lecmPermission.grantDynamicRole(document, employee, "BR_INITIATOR", "LECM_BASIC_PG_Employee");
                           }
                         })();]]></activiti:string>
                     </activiti:field>
