@@ -11,6 +11,10 @@
     float: left;
 }
 
+.errands-validity-set .errands-validity-set-radio .control .label-div {
+    width: 160px;
+}
+
 .errands-validity-set .errands-validity-set-radio .control .value-div {
     width: 12px;
 }
@@ -34,7 +38,7 @@
 
 .errands-validity-set .errands-validity-set-end-date {
     float: left;
-    width: calc(100% - 210px);
+    width: calc(100% - 190px);
     margin-bottom: 0;
 }
 
@@ -63,7 +67,7 @@
 
 .errands-validity-set .errands-validity-set-during {
     float: left;
-    width: calc(100% - 210px);
+    width: calc(100% - 190px);
 }
 
 .errands-validity-set .errands-validity-set-during .set > div > div.first .label-div {
@@ -97,7 +101,7 @@
 
 .errands-validity-set .errands-validity-set-reiteration-count {
     float: left;
-    width: calc(100% - 210px);
+    width: calc(100% - 190px);
 }
 
 .errands-validity-set .errands-validity-set-reiteration-count .count-label-div {
@@ -116,7 +120,7 @@
 }
 .errands-validity-set .errands-validity-set-period-endless {
     float: left;
-    width: calc(100% - 210px);
+    width: calc(100% - 190px);
 }
 
 .errands-validity-set .errands-validity-set-period-endless .label-div {
@@ -133,12 +137,12 @@
 
 .errands-validity-set .errands-validity-set-reiteration-count .alf-g .alf-u,
 .errands-validity-set .errands-validity-set-during .alf-g .alf-u {
-    width: 74.5%;
+    width: calc(100% - 120px);
 }
 
 .errands-validity-set .errands-validity-set-reiteration-count .alf-g .alf-u.first,
 .errands-validity-set .errands-validity-set-during .alf-g .alf-u.first {
-    width: 25.5%;
+    width: 110px;
 }
 
 .block3 .set .set-title,
