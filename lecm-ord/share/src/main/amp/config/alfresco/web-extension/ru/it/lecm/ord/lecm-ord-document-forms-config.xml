@@ -184,6 +184,7 @@
                             <control-param name="jsDependencies">scripts/lecm-ord/ord-items-create-form-datagrid.js</control-param>
                             <control-param name="jsObjectName">LogicECM.ORD.PointsCreateFormDatagrid</control-param>
                             <control-param name="useSequentialCreation">true</control-param>
+                            <control-param name="isTableSortable">false</control-param>
                         </control>
                     </field>
                     <field id="confirmCompletionHandler">
