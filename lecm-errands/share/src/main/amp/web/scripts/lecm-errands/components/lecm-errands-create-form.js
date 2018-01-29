@@ -139,7 +139,41 @@
                 }
             });
         }
+        processTemplatefields();
+    }
 
+    function processTemplatefields() {
+        if (formId) {
+            var formComponent = Alfresco.util.ComponentManager.find({id: formId}, true)[0];
+            if (formComponent && formComponent.options && formComponent.options.args) {
+                var formArgs = formComponent.options.args;
+                if (formArgs["prop_lecm-errands_limitation-date"]) {
+                    var limitationDateRadioField = "lecm-errands:limitation-date-radio";
+                    var limitationDateRadioReadyEl = LogicECM.module.Base.Util.getComponentReadyElementId(formId, limitationDateRadioField);
+                    YAHOO.util.Event.onAvailable(limitationDateRadioReadyEl, function() {
+                        var limitationDateRadio = Dom.get(formId + "_prop_" + limitationDateRadioField.replace(":", "_"));
+                        var dateRadioButton = YAHOO.util.Selector.query("input[type=radio][value='DATE']", limitationDateRadio.parentElement, true);
+                        dateRadioButton.checked = true;
+                        limitationDateRadio.value = "DATE";
+                        YAHOO.Bubbling.fire("changeLimitationDateRadio", {
+                            value: limitationDateRadio.value,
+                            formId: formId,
+                            fieldId: limitationDateRadioField
+                        });
+                    });
+                } else if (formArgs["assoc_lecm-errands_type-assoc"]) {
+                    var selected = {};
+                    selected[formArgs["assoc_lecm-errands_type-assoc"]] = {};
+                    YAHOO.Bubbling.fire("errandTypeChanged", {
+                        selectedItems: selected,
+                        formId: formId,
+                        fieldId: "lecm-errands:type-assoc",
+                        onlyDateReinit: true
+                    });
+                }
+            }
+
+        }
     }
 
     function doBeforeSubmit(args) {
