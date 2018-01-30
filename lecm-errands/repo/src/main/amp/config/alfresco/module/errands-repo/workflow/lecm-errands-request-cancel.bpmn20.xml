@@ -71,6 +71,22 @@
 					    </activiti:string>
 				    </activiti:field>
 			    </activiti:taskListener>
+				<activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+					<activiti:field name="script">
+						<activiti:string><![CDATA[(function() { /* assign */
+                          var assignee = '' + task.getAssignee();
+                          var previousAssignee = '' + task.getVariableLocal('previousAssignee');
+                          var document, employee;
+                          if (previousAssignee != assignee) {
+                            task.setVariableLocal('previousAssignee', assignee);
+                            document = bpm_package.children[0];
+                            employee = orgstructure.getEmployeeByLogin(assignee);
+                            /*добавляем актуального исполнителя в динамические бизнес роли*/
+                            lecmPermission.grantDynamicRole(document, employee, "BR_INITIATOR", "LECM_BASIC_PG_Employee");
+                          }
+                        })();]]></activiti:string>
+					</activiti:field>
+				</activiti:taskListener>
 			    <activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 				    <activiti:field name="script">
 					    <activiti:string><![CDATA[
