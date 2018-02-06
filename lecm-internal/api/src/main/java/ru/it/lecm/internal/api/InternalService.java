@@ -7,6 +7,9 @@
 package ru.it.lecm.internal.api;
 
 import org.alfresco.service.namespace.QName;
+import org.springframework.extensions.surf.util.I18NUtil;
+
+import java.util.EnumMap;
 
 /**
  *
@@ -33,4 +36,7 @@ public interface InternalService {
 
 	public final static QName PROP_INTERNAL_RESPONSE_DATE = QName.createQName(INTERNAL_NAMESPACE, "response-date");
 
+	enum INTERNAL_STATUSES { INTERNAL_DIRECTED_STATUS, INTERNAL_CLOSED_STATUS};
+
+	String getInternalStatusName(INTERNAL_STATUSES code);
 }

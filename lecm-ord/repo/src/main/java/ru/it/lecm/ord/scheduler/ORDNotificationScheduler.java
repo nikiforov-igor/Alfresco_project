@@ -13,6 +13,7 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseTransactionalSchedule;
+import ru.it.lecm.ord.api.ORDDocumentService;
 import ru.it.lecm.ord.api.ORDModel;
 import ru.it.lecm.statemachine.StatemachineModel;
 
@@ -22,9 +23,15 @@ import ru.it.lecm.statemachine.StatemachineModel;
  */
 public class ORDNotificationScheduler extends BaseTransactionalSchedule {
 
+	private ORDDocumentService ordDocumentService;
+
 	private DateFormat dateFormat = new SimpleDateFormat("yyyy\\-M\\-dd'T'HH");
-	private final String searchQueryFormat = "TYPE:\"%s\" AND =@%s:\"На исполнении\"";
+	private final String searchQueryFormat = "TYPE:\"%s\" AND =@%s:\"%s\"";
 	private final static Logger logger = LoggerFactory.getLogger(ORDNotificationScheduler.class);
+
+	public void setOrdDocumentService(ORDDocumentService ordDocumentService) {
+		this.ordDocumentService = ordDocumentService;
+	}
 
 	public void setDateFormat(DateFormat dateFormat) {
 		this.dateFormat = dateFormat;
@@ -41,7 +48,7 @@ public class ORDNotificationScheduler extends BaseTransactionalSchedule {
 		SearchParameters sp = new SearchParameters();
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
-		String searchQuery = String.format(searchQueryFormat, ORDModel.TYPE_ORD.toString(), StatemachineModel.PROP_STATUS);
+		String searchQuery = String.format(searchQueryFormat, ORDModel.TYPE_ORD.toString(), StatemachineModel.PROP_STATUS, ordDocumentService.getOrdStatusName(ORDModel.ORD_STATUSES.EXECUTION_STATUS));
 		sp.setQuery(searchQuery.replaceAll("-", "\\\\-"));
 		ResultSet results = null;
 		try {

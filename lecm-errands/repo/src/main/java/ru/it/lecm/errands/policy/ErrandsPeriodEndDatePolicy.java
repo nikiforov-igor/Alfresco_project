@@ -8,6 +8,7 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.apache.commons.lang.time.DateUtils;
+import org.springframework.extensions.surf.util.I18NUtil;
 import ru.it.lecm.errands.ErrandsService;
 
 import java.io.Serializable;
@@ -59,7 +60,12 @@ public class ErrandsPeriodEndDatePolicy implements NodeServicePolicies.OnUpdateP
                 newPeriodEndDate = null;
                 Integer repeatCount = (Integer) after.get(ErrandsService.PROP_ERRANDS_REITERATION_COUNT);
                 if (repeatCount != null) {
-                    newPeriodEndDateText = "После " + repeatCount + " повторений";
+                    String periodEndRepeatTextTemplate = I18NUtil.getMessage("lecm-errands_document.period.end.repeat.textTemplate", I18NUtil.getLocale());
+                    if (periodEndRepeatTextTemplate != null) {
+                        newPeriodEndDateText = periodEndRepeatTextTemplate.replace("{repeatCount}", repeatCount.toString());
+                    } else {
+                        newPeriodEndDateText = "После " + repeatCount + " повторений";
+                    }
                 }
             } else if (Objects.equals(ErrandsService.PeriodicallyRadio.DURING.toString(), newDateRadio)) {
                 Date startPeriodDate = (Date) after.get(ErrandsService.PROP_ERRANDS_PERIOD_START);

@@ -31,6 +31,11 @@ public class InternalNotificationSchedule extends BaseTransactionalSchedule {
 	private NotificationsService notificationsService;
 	private DocumentConnectionService connectionService;
 	private DocumentGlobalSettingsService documentGlobalSettingsService;
+	private InternalService internalService;
+
+	public void setInternalService(InternalService internalService) {
+		this.internalService = internalService;
+	}
 
 	public void setDocumentService(DocumentService documentService) {
 		this.documentService = documentService;
@@ -64,7 +69,7 @@ public class InternalNotificationSchedule extends BaseTransactionalSchedule {
 			List<NodeRef> connectedRefs = connectionService.getConnectedDocuments(internal, "inResponseTo", InternalService.TYPE_INTERNAL);
 			for (NodeRef connectedRef : connectedRefs) {
 				String status = (String) nodeService.getProperty(connectedRef, StatemachineModel.PROP_STATUS);
-				if ("Направлен".equals(status) || "Закрыт".equals(status)) {
+				if (internalService.getInternalStatusName(InternalService.INTERNAL_STATUSES.INTERNAL_DIRECTED_STATUS).equals(status) || internalService.getInternalStatusName(InternalService.INTERNAL_STATUSES.INTERNAL_CLOSED_STATUS).equals(status)) {
 					connectedDocs.add(connectedRef);
 				}
 			}
@@ -139,7 +144,7 @@ public class InternalNotificationSchedule extends BaseTransactionalSchedule {
         paths.add(documentService.getDocumentsFolderPath());
 
         List<String> statuses = new ArrayList<>();
-        statuses.add("Направлен");
+        statuses.add(internalService.getInternalStatusName(InternalService.INTERNAL_STATUSES.INTERNAL_DIRECTED_STATUS));
 
         String filters = "@lecm\\-eds\\-document\\:execution\\-date: [\"" + BaseBean.DateFormatISO8601.format(start) + "\" to \"" + BaseBean.DateFormatISO8601.format(end) + "\"]";
         return documentService.getDocumentsByFilter(types, paths, statuses, filters, null);

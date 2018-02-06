@@ -16,6 +16,7 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.extensions.surf.util.I18NUtil;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
@@ -51,6 +52,7 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 	private LecmPermissionService lecmPermissionService;
 	private MeetingsService meetingsService;
 	private StateMachineServiceBean stateMachineService;
+	private String defaultCategoryName;
 
 	public MeetingsService getMeetingsService() {
 		return meetingsService;
@@ -122,6 +124,9 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 	}
 
 	public void init() {
+
+		defaultCategoryName = I18NUtil.getMessage("lecm.meetings.attachments.categories.default", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.meetings.attachments.categories.default", I18NUtil.getLocale()) : FILE_DEFAULT_CATEGORY;
+
 		transactionListener = new MeetingsPolicyTransactionListener();
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
@@ -250,10 +255,10 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 
 	private void moveFiles(NodeRef document, NodeRef row) {
 		if (null != document && null != row) {
-			List<AssociationRef> files = nodeService.getTargetAssocs(row, MeetingsService.ASSOC_MEETINGS_TS_ITEM_ATTACHMENTS);
+					List<AssociationRef> files = nodeService.getTargetAssocs(row, MeetingsService.ASSOC_MEETINGS_TS_ITEM_ATTACHMENTS);
 			for (AssociationRef fileAssoc : files) {
 				NodeRef file = fileAssoc.getTargetRef();
-				documentAttachmentsService.addAttachment(file, documentAttachmentsService.getCategory(FILE_DEFAULT_CATEGORY, document));
+				documentAttachmentsService.addAttachment(file, documentAttachmentsService.getCategory(defaultCategoryName, document));
 			}
 		}
 	}

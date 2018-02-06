@@ -4,9 +4,8 @@ import java.util.*;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.AssociationRef;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.namespace.QName;
+import org.springframework.extensions.surf.util.I18NUtil;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -27,12 +26,21 @@ public class ORDDocumentServiceImpl extends BaseBean implements ORDDocumentServi
 	private DocumentService documentService;
 	private DocumentTableService documentTableService;
     private OrgstructureBean orgstructureBean;
+	private EDSDocumentService edsDocumentService;
+
+	private EnumMap<ORDModel.ORD_STATUSES, String> ordStatusesMap;
+
+	private  EnumMap<ORDModel.ATTACHMENT_CATEGORIES,String> attachmentCategoriesMap;
 
     public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
         this.orgstructureBean = orgstructureBean;
     }
 
-    public void setDocumentTableService(DocumentTableService documentTableService) {
+	public void setEdsDocumentService(EDSDocumentService edsDocumentService) {
+		this.edsDocumentService = edsDocumentService;
+	}
+
+	public void setDocumentTableService(DocumentTableService documentTableService) {
 		this.documentTableService = documentTableService;
 	}
 
@@ -52,12 +60,13 @@ public class ORDDocumentServiceImpl extends BaseBean implements ORDDocumentServi
 	}
 
 	@Override
-	public void changePointStatus(NodeRef point, ORDModel.P_STATUSES statusKey){
-		String status = ORDModel.POINT_STATUSES.get(statusKey);
-		if (null != status){
-			NodeRef newPointStatus = lecmDictionaryService.getDictionaryValueByParam(ORDModel.ORD_POINT_DICTIONARY_NAME, ContentModel.PROP_NAME, status);
-			List<NodeRef> targetStatus = Arrays.asList(newPointStatus);
-			nodeService.setAssociations(point, ORDModel.ASSOC_ORD_TABLE_ITEM_STATUS, targetStatus);
+	public void changePointStatus(NodeRef point, String statusKey){
+		if (point != null && statusKey != null) {
+			NodeRef newPointStatus = lecmDictionaryService.getDictionaryValueByParam(ORDModel.ORD_POINT_DICTIONARY_NAME, ORDModel.PROP_ORD_DIC_POINT_STATUS_CODE, statusKey);
+			if (newPointStatus != null) {
+				List<NodeRef> targetStatus = Arrays.asList(newPointStatus);
+				nodeService.setAssociations(point, ORDModel.ASSOC_ORD_TABLE_ITEM_STATUS, targetStatus);
+			}
 		}
 	}
 
@@ -82,17 +91,16 @@ public class ORDDocumentServiceImpl extends BaseBean implements ORDDocumentServi
 	}
 
 	@Override
-	public Boolean checkPointStatus(NodeRef point, ORDModel.P_STATUSES statusKey){
-		String status = getPointStatus(point);
-		if (null != status){
-			if ( ORDModel.POINT_STATUSES.get(statusKey).equals(status) ){
-				return true;
-			}
-			else{
-				return false;
+	public Boolean checkPointStatus(NodeRef point, String statusCode) {
+		String pointStatus = getPointStatus(point);
+		String statusByCode = null;
+		if (statusCode != null) {
+			NodeRef statusRef = lecmDictionaryService.getDictionaryValueByParam(ORDModel.ORD_POINT_DICTIONARY_NAME, ORDModel.PROP_ORD_DIC_POINT_STATUS_CODE, statusCode);
+			if (statusRef != null) {
+				statusByCode = (String) nodeService.getProperty(statusRef, ContentModel.PROP_NAME);
 			}
 		}
-		return false;
+		return null != pointStatus && pointStatus.equals(statusByCode);
 	}
 
 	@Override
@@ -178,5 +186,34 @@ public class ORDDocumentServiceImpl extends BaseBean implements ORDDocumentServi
 
     public void setDocumentService(DocumentService documentService) {
 		this.documentService = documentService;
+	}
+
+
+	@Override
+	protected void initServiceImpl() {
+		ordStatusesMap = new EnumMap<ORDModel.ORD_STATUSES,String>(ORDModel.ORD_STATUSES.class){{
+			put(ORDModel.ORD_STATUSES.CANCELED_FAKE_STATUS, I18NUtil.getMessage("lecm.ord.statemachine-status.cancelled", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.ord.statemachine-status.cancelled", I18NUtil.getLocale()) : "Отменен");
+			put(ORDModel.ORD_STATUSES.DELETED_STATUS, I18NUtil.getMessage("lecm.ord.statemachine-status.removed", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.ord.statemachine-status.removed", I18NUtil.getLocale()) : "Удален");
+			put(ORDModel.ORD_STATUSES.EXECUTION_STATUS, I18NUtil.getMessage("lecm.ord.statemachine-status.on-execution", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.ord.statemachine-status.on-execution", I18NUtil.getLocale()) : "На исполнении");
+
+		}};
+
+		attachmentCategoriesMap = new EnumMap<ORDModel.ATTACHMENT_CATEGORIES,String>(ORDModel.ATTACHMENT_CATEGORIES.class){{
+			put(ORDModel.ATTACHMENT_CATEGORIES.DOCUMENT, I18NUtil.getMessage("lecm.ord.document.attachment.category.DOCUMENT.title", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.ord.document.attachment.category.DOCUMENT.title", I18NUtil.getLocale()) : "Документ");
+			put(ORDModel.ATTACHMENT_CATEGORIES.APPLICATIONS, I18NUtil.getMessage("lecm.ord.document.attachment.category.APPENDIX.title", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.ord.document.attachment.category.APPENDIX.title", I18NUtil.getLocale()) : "Приложения");
+			put(ORDModel.ATTACHMENT_CATEGORIES.AGREEMENTS, I18NUtil.getMessage("lecm.ord.document.attachment.category.APPROVAL.title", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.ord.document.attachment.category.APPROVAL.title", I18NUtil.getLocale()) : "Согласования");
+			put(ORDModel.ATTACHMENT_CATEGORIES.ORIGINAL, I18NUtil.getMessage("lecm.ord.document.attachment.category.ORIGINAL.title", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.ord.document.attachment.category.ORIGINAL.title", I18NUtil.getLocale()) : "Подлинник");
+			put(ORDModel.ATTACHMENT_CATEGORIES.OTHERS, I18NUtil.getMessage("lecm.ord.document.attachment.category.OTHER.title", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.ord.document.attachment.category.OTHER.title", I18NUtil.getLocale()) : "Прочее");
+		}};
+	}
+
+	@Override
+	public String getOrdStatusName(ORDModel.ORD_STATUSES code) {
+		return ordStatusesMap != null ? ordStatusesMap.get(code) : null;
+	}
+
+	@Override
+	public String getAttachmentCategoryName(ORDModel.ATTACHMENT_CATEGORIES code) {
+		return attachmentCategoriesMap != null ? attachmentCategoriesMap.get(code) : null;
 	}
 }

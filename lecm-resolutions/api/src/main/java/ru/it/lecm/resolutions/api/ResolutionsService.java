@@ -2,6 +2,7 @@ package ru.it.lecm.resolutions.api;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+import org.springframework.extensions.surf.util.I18NUtil;
 import ru.it.lecm.documents.beans.DocumentService;
 
 import java.util.List;
@@ -46,6 +47,8 @@ public interface ResolutionsService {
     QName ASSOC_BASE = QName.createQName(RESOLUTION_NAMESPACE_URI, "base-assoc");
     QName ASSOC_AUTHOR = QName.createQName(RESOLUTION_NAMESPACE_URI, "author-assoc");
     QName ASSOC_CONTROLLER = QName.createQName(RESOLUTION_NAMESPACE_URI, "controller-assoc");
+
+    String getResolutionOnExecutionStatusName();
 
     boolean checkResolutionErrandsExecutionDate(NodeRef resolution);
 

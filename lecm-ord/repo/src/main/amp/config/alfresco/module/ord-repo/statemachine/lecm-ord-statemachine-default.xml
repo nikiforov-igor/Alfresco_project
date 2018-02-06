@@ -626,11 +626,13 @@ if (doc) {
 	  var cancelDoc = canceldDocAssoc[i];
       var cancelDocType = cancelDoc.getTypeShort();
       if (cancelDocType == "lecm-ord:document") {
-      	    cancelDoc.properties["lecm-statemachine:status"] = "Отменен";
+            ordCancelStatus = edsDocument.getStatusTextByCodeFromDictionary("Статусы ОРД", "CANCELLED_STATUS");
+      	    cancelDoc.properties["lecm-statemachine:status"] = ordCancelStatus;
       } else if (cancelDocType == "lecm-nd:document") {
         var ndStatus = cancelDoc.properties["lecm-statemachine:status"];
         if (ndStatus == "Действует") {
-          	cancelDoc.properties["lecm-statemachine:status"] = "Отменен";
+            ndCancelStatus = edsDocument.getStatusTextByCodeFromDictionary("Статусы НД", "CANCELLED_STATUS");
+          	cancelDoc.properties["lecm-statemachine:status"] = ndCancelStatus;
         } else {
         	cancelDoc.addAspect("lecm-document-aspects:cancelled");
         }

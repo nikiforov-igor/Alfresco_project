@@ -9,6 +9,7 @@ import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.extensions.surf.util.I18NUtil;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentEventService;
@@ -40,6 +41,8 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
     private OrgstructureBean orgstructureService;
 
     private PersonService personService;
+
+    private EnumMap<ATTACHMENT_CATEGORIES,String> attachmentCategoriesMap;
 
     public PersonService getPersonService() {
         return personService;
@@ -95,13 +98,15 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
     }
 
     @Override
-    public void changePointStatus(NodeRef point, ProtocolService.P_STATUSES statusKey) {
-        String status = ProtocolService.POINT_STATUSES.get(statusKey);
-        if (null != status) {
-            NodeRef newPointStatus = lecmDictionaryService.getDictionaryValueByParam(ProtocolService.PROTOCOL_POINT_DICTIONARY_NAME, ContentModel.PROP_NAME, status);
-            List<NodeRef> targetStatus = Arrays.asList(newPointStatus);
-            nodeService.setAssociations(point, ProtocolService.ASSOC_PROTOCOL_POINT_STATUS, targetStatus);
-        }
+    public void changePointStatus(NodeRef point, String statusKey) {
+       if (point != null && statusKey != null) {
+           NodeRef newPointStatus = lecmDictionaryService.getDictionaryValueByParam(ProtocolService.PROTOCOL_POINT_DICTIONARY_NAME, ProtocolService.PROP_PROTOCOL_DIC_POINT_STATUS_CODE, statusKey);
+           if (newPointStatus != null) {
+               List<NodeRef> targetStatus = Arrays.asList(newPointStatus);
+               nodeService.setAssociations(point, ProtocolService.ASSOC_PROTOCOL_POINT_STATUS, targetStatus);
+           }
+       }
+
     }
 
     @Override
@@ -125,16 +130,19 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
     }
 
     @Override
-    public Boolean checkPointStatus(NodeRef point, ProtocolService.P_STATUSES statusKey) {
-        String status = getPointStatus(point);
-        if (null != status) {
-            if (ProtocolService.POINT_STATUSES.get(statusKey).equals(status)) {
-                return true;
-            } else {
-                return false;
+    public Boolean checkPointStatus(NodeRef point, String statusKey) {
+        if (point != null) {
+            String pointStatus = getPointStatus(point);
+            String statusByCode = null;
+            if (statusKey != null) {
+                NodeRef statusRef = lecmDictionaryService.getDictionaryValueByParam(ProtocolService.PROTOCOL_POINT_DICTIONARY_NAME, ProtocolService.PROP_PROTOCOL_DIC_POINT_STATUS_CODE, statusKey);
+                if (statusRef != null) {
+                    statusByCode = (String) nodeService.getProperty(statusRef, ContentModel.PROP_NAME);
+                }
             }
+            return null != pointStatus && pointStatus.equals(statusByCode);
         }
-        return false;
+        return null;
     }
 
     @Override
@@ -169,10 +177,18 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
                 Date protocolRegDate = (Date) nodeService.getProperty(protocol, DocumentService.PROP_REG_DATA_DOC_DATE);
                 String protocolRegDateStr = new SimpleDateFormat("dd.MM.yyyy").format(protocolRegDate);
 
-                StringBuilder errandTtitle = new StringBuilder();
-                errandTtitle.append("Пункт № ").append(pointNumber.toString()).append(" документа ").append(protocolDocType);
-                errandTtitle.append(" №").append(protocolNumber).append(" от ").append(protocolRegDateStr);
-                properties.put("lecm-errands:title", errandTtitle.toString());
+                String errandTitle = "";
+                String presentString = I18NUtil.getMessage("lecm.protocol.point.present-string", I18NUtil.getLocale());
+                if (presentString != null) {
+                    errandTitle = presentString.replace("{pointNumber}", pointNumber.toString())
+                            .replace("{protocolDocType}", protocolDocType)
+                            .replace("{protocolNumber}", protocolNumber)
+                            .replace("{protocolRegDate}", protocolRegDateStr);
+                } else {
+                    errandTitle = "Пункт № " + pointNumber.toString() + " документа " + protocolDocType +
+                            " №" + protocolNumber + " от " + protocolRegDateStr;
+                }
+                properties.put("lecm-errands:title", errandTitle);
                 //содержание
                 String content = (String) nodeService.getProperty(point, ProtocolService.PROP_PROTOCOL_POINT_FORMULATION);
                 properties.put("lecm-errands:content", content);
@@ -209,7 +225,7 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
                     associations.put("lecm-document:subject-assoc", StringUtils.join(subjects, ","));
                 }
 
-                NodeRef errand = documentService.createDocument("lecm-errands:document", properties, associations);
+                NodeRef errand = documentService.createDocument(ErrandsService.TYPE_ERRANDS.toPrefixString(namespaceService), properties, associations);
 
                 // выдадим права инициатору
                 if (null != errandInitiator) {
@@ -219,7 +235,7 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
                 // срок поручения
                 Date limitationDate = (Date) nodeService.getProperty(point, ProtocolService.PROP_PROTOCOL_POINT_EXEC_DATE);
                 nodeService.setProperty(errand, ErrandsService.PROP_ERRANDS_LIMITATION_DATE, limitationDate);
-				nodeService.setProperty(errand, ErrandsService.PROP_ERRANDS_IS_EXPIRED, checkPointStatus(point, P_STATUSES.EXPIRED_STATUS));
+				nodeService.setProperty(errand, ErrandsService.PROP_ERRANDS_IS_EXPIRED, checkPointStatus(point, P_STATUSES_CODES.EXPIRED_STATUS.toString()));
 
                 //создадим ассоциацию между между Протоколом и созданным поручением, системная связь создастся автоматически
                 nodeService.createAssociation(errand, protocol, ErrandsService.ASSOC_ADDITIONAL_ERRANDS_DOCUMENT);
@@ -244,13 +260,15 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
             Set<QName> pointType = new HashSet<QName>(Arrays.asList(ProtocolService.TYPE_PROTOCOL_TS_POINT));
             List<ChildAssociationRef> pointAssocs = nodeService.getChildAssocs(table, pointType);
 
-            String status = ProtocolService.POINT_STATUSES.get(P_STATUSES.REMOVED_STATUS);
-            NodeRef newPointStatus = lecmDictionaryService.getDictionaryValueByParam(ProtocolService.PROTOCOL_POINT_DICTIONARY_NAME, ContentModel.PROP_NAME, status);
-            List<NodeRef> targetStatus = Arrays.asList(newPointStatus);
+            String statusKey = P_STATUSES_CODES.REMOVED_STATUS.toString();
+            NodeRef newPointStatus = lecmDictionaryService.getDictionaryValueByParam(ProtocolService.PROTOCOL_POINT_DICTIONARY_NAME, PROP_PROTOCOL_DIC_POINT_STATUS_CODE, statusKey);
+            if (newPointStatus != null) {
+                List<NodeRef> targetStatus = Arrays.asList(newPointStatus);
 
-            for (ChildAssociationRef pointAssoc : pointAssocs) {
-                NodeRef point = pointAssoc.getChildRef();
-                nodeService.setAssociations(point, ProtocolService.ASSOC_PROTOCOL_POINT_STATUS, targetStatus);
+                for (ChildAssociationRef pointAssoc : pointAssocs) {
+                    NodeRef point = pointAssoc.getChildRef();
+                    nodeService.setAssociations(point, ProtocolService.ASSOC_PROTOCOL_POINT_STATUS, targetStatus);
+                }
             }
         }
     }
@@ -278,5 +296,36 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
 
         return true;
 
+    }
+
+    public String getPointStatusByCodeFromDictionary(String statusKey){
+        NodeRef statusRef = lecmDictionaryService.getDictionaryValueByParam(ProtocolService.PROTOCOL_POINT_DICTIONARY_NAME, PROP_PROTOCOL_DIC_POINT_STATUS_CODE, statusKey);
+        if (statusRef != null) {
+            return (String) nodeService.getProperty(statusRef, ContentModel.PROP_NAME);
+        }
+        return null;
+    }
+
+    public String getPointStatusCodeByStatusTextFromDictionary(String statusText){
+        NodeRef statusRef = lecmDictionaryService.getDictionaryValueByParam(ProtocolService.PROTOCOL_POINT_DICTIONARY_NAME, ContentModel.PROP_NAME, statusText);
+        if (statusRef != null) {
+            return (String) nodeService.getProperty(statusRef, PROP_PROTOCOL_DIC_POINT_STATUS_CODE);
+        }
+        return null;
+    }
+
+    @Override
+    protected void initServiceImpl() {
+        attachmentCategoriesMap = new EnumMap<ATTACHMENT_CATEGORIES,String>(ATTACHMENT_CATEGORIES.class){{
+            put(ATTACHMENT_CATEGORIES.DOCUMENT, I18NUtil.getMessage("lecm.protocol.document.attachment.category.DOCUMENT.title", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.protocol.document.attachment.category.DOCUMENT.title", I18NUtil.getLocale()) : "Документ");
+            put(ATTACHMENT_CATEGORIES.APPLICATIONS, I18NUtil.getMessage("lecm.protocol.document.attachment.category.APPENDICES.title", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.protocol.document.attachment.category.APPENDICES.title", I18NUtil.getLocale()) : "Приложения");
+            put(ATTACHMENT_CATEGORIES.ORIGINAL, I18NUtil.getMessage("lecm.protocol.document.attachment.category.ORIGINAL.title", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.protocol.document.attachment.category.ORIGINAL.title", I18NUtil.getLocale()) : "Подлинник");
+            put(ATTACHMENT_CATEGORIES.OTHERS, I18NUtil.getMessage("lecm.protocol.document.attachment.category.OTHER.title", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.protocol.document.attachment.category.OTHER.title", I18NUtil.getLocale()) : "Прочее");
+        }};
+    }
+
+    @Override
+    public String getAttachmentCategoryName(ATTACHMENT_CATEGORIES code) {
+        return attachmentCategoriesMap != null ? attachmentCategoriesMap.get(code) : null;
     }
 }

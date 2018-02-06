@@ -30,7 +30,7 @@
 	                                    attachment.properties["cm:name"] = "Отчет соисполнителя " + currentUser.properties["lecm-orgstr:employee-short-name"] + ", от " + dateString;
 	                                    attachment.save();
 
-	                                    var category = documentAttachments.getCategoryByName("Отчеты соисполнителей", document);
+	                                    var category = documentAttachments.getCategoryByName(msg.get("lecm.errands.attachments.categories.coexecutors-reports"), document);
 	                                    if (category != null) {
 	                                        attachment.move(category);
 	                                    }

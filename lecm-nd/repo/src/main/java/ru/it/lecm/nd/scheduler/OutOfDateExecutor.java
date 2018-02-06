@@ -17,6 +17,7 @@ import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.nd.NDDocumentServiceImpl;
+import ru.it.lecm.nd.api.NDModel;
 import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.util.List;
@@ -41,7 +42,7 @@ public class OutOfDateExecutor extends ActionExecuterAbstractBase {
 	@Override
 	protected void executeImpl(Action action, NodeRef actionedUponNodeRef) {
 		logger.info(String.format("ND [%s] is cancelling.", actionedUponNodeRef.toString()));
-		nodeService.setProperty(actionedUponNodeRef, StatemachineModel.PROP_STATUS, "Срок действия окончен");
+		nodeService.setProperty(actionedUponNodeRef, StatemachineModel.PROP_STATUS, ndDocumentService.getNDStatusName(NDModel.ND_STATUSES.OUT_OF_DATE_STATUS));
 
         //логирование
         String bjMessage = "Документ " + ndDocumentService.wrapperLink(actionedUponNodeRef, "№ {~REGNUM} от {~REGDATE}", documentService.getDocumentUrl(actionedUponNodeRef))+ " завершил срок действия";

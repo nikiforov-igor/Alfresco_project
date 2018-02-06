@@ -12,7 +12,6 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.FileFilterMode;
 import org.alfresco.util.Pair;
-import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.lang3.EnumUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,6 +19,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.ConcurrencyFailureException;
+import org.springframework.extensions.surf.util.I18NUtil;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.LecmObjectsService;
 import ru.it.lecm.base.beans.TransactionNeededException;
@@ -36,8 +36,6 @@ import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -49,6 +47,8 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 
     final protected Logger logger = LoggerFactory.getLogger(ErrandsServiceImpl.class);
 
+    private EnumMap<ATTACHMENT_CATEGORIES, String> attachmentCategoriesMap;
+    private EnumMap<ERRANDS_STATUSES, String> errandStatusesMap;
 
     private static enum FilterEnum {
         ALL,
@@ -109,7 +109,36 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 		if (null == getDashletSettingsNode()) {
 			dashletSettingsNode = createDashletSettingsNode();
 		}
+
+        errandStatusesMap = new EnumMap<ERRANDS_STATUSES,String>(ERRANDS_STATUSES.class){{
+            put(ERRANDS_STATUSES.ERRAND_REMOVED_STATUS,I18NUtil.getMessage("lecm.errands.statemachine-status.removed", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.errands.statemachine-status.removed", I18NUtil.getLocale()) : "Удалено");
+            put(ERRANDS_STATUSES.ERRAND_CANCELLED_STATUS, I18NUtil.getMessage("lecm.errands.statemachine-status.cancelled", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.errands.statemachine-status.cancelled", I18NUtil.getLocale()) : "Отменено");
+            put(ERRANDS_STATUSES.ERRAND_NOT_EXECUTED_STATUS, I18NUtil.getMessage("lecm.errands.statemachine-status.not-executed", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.errands.statemachine-status.not-executed", I18NUtil.getLocale()) : "Не исполнено");
+            put(ERRANDS_STATUSES.ERRAND_EXECUTED_STATUS, I18NUtil.getMessage("lecm.errands.statemachine-status.executed", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.errands.statemachine-status.executed", I18NUtil.getLocale()) : "Исполнено");
+            put(ERRANDS_STATUSES.ERRAND_WAIT_FOR_EXECUTION_STATUS, I18NUtil.getMessage("lecm.errands.statemachine-status.wait-for-execution", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.errands.statemachine-status.wait-for-execution", I18NUtil.getLocale()) : "Ожидает исполнения");
+            put(ERRANDS_STATUSES.ERRAND_ON_EXECUTION_STATUS, I18NUtil.getMessage("lecm.errands.statemachine-status.on-execution", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.errands.statemachine-status.on-execution", I18NUtil.getLocale()) : "На исполнении");
+            put(ERRANDS_STATUSES.ERRAND_REPORT_CHECK_STATUS, I18NUtil.getMessage("lecm.errands.statemachine-status.report-check", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.errands.statemachine-status.report-check", I18NUtil.getLocale()) : "На проверке отчета");
+            put(ERRANDS_STATUSES.ERRAND_ON_REWORK_STATUS, I18NUtil.getMessage("lecm.errands.statemachine-status.on-rework", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.errands.statemachine-status.on-rework", I18NUtil.getLocale()) : "На доработке");
+            put(ERRANDS_STATUSES.ERRAND_PERIODICALLY_STATUS, I18NUtil.getMessage("lecm.errands.statemachine-status.periodically-execution", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.errands.statemachine-status.periodically-execution", I18NUtil.getLocale()) : "На периодическом исполнении");
+        }};
+
+        attachmentCategoriesMap = new EnumMap<ATTACHMENT_CATEGORIES,String>(ATTACHMENT_CATEGORIES.class){{
+            put(ATTACHMENT_CATEGORIES.ERRAND, I18NUtil.getMessage("lecm.errands.document.attachment.category.ERRAND.title", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.errands.document.attachment.category.ERRAND.title", I18NUtil.getLocale()) : "Поручение");
+            put(ATTACHMENT_CATEGORIES.CONTROL, I18NUtil.getMessage("lecm.errands.document.attachment.category.CONTROL.title", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.errands.document.attachment.category.CONTROL.title", I18NUtil.getLocale()) : "Контроль");
+            put(ATTACHMENT_CATEGORIES.EXECUTION, I18NUtil.getMessage("lecm.errands.document.attachment.category.EXECUTION.title", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.errands.document.attachment.category.EXECUTION.title", I18NUtil.getLocale()) : "Исполнение");
+            put(ATTACHMENT_CATEGORIES.COEXECUTORS_REPORTS, I18NUtil.getMessage("lecm.errands.document.attachment.category.EXECUTION_REPORTS.title", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.errands.document.attachment.category.EXECUTION_REPORTS.title", I18NUtil.getLocale()) : "Отчеты соисполнителей");
+        }};
 	}
+
+    @Override
+    public String getErrandStatusName(ERRANDS_STATUSES code) {
+        return errandStatusesMap != null ? errandStatusesMap.get(code) : null;
+    }
+
+    @Override
+    public String getAttachmentCategoryName(ATTACHMENT_CATEGORIES code) {
+        return attachmentCategoriesMap != null ? attachmentCategoriesMap.get(code) : null;
+    }
 
     @Override
     public NodeRef getServiceRootFolder() {
@@ -335,14 +364,14 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
                     } else {
                         continue;
                     }
-                    if ("Удалено".equals(status)) {
+                    if (Objects.equals(getErrandStatusName(ERRANDS_STATUSES.ERRAND_REMOVED_STATUS),status)) {
                         continue;
                     }
                 } else {
                     if (!stateMachineService.isFinal(errand)) {
                         continue;
                     }
-                    if ("Удалено".equals(status)) {
+                    if (Objects.equals(getErrandStatusName(ERRANDS_STATUSES.ERRAND_REMOVED_STATUS),status)) {
                         continue;
                     }
                 }
@@ -405,7 +434,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         List<SortDefinition> sort = new ArrayList<SortDefinition>();
         List<NodeRef> sortingErrands = new ArrayList<NodeRef>();
         List<NodeRef> result = new ArrayList<NodeRef>();
-        List<String> status = stateMachineService.getStatuses("lecm-errands:document", true, false);
+        List<String> status = stateMachineService.getStatuses(ErrandsService.TYPE_ERRANDS, true, false);
 
         NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
         // сортируем поручения по важности, просроченности и по сроку исполнения
@@ -438,7 +467,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         List<SortDefinition> sort = new ArrayList<SortDefinition>();
         List<NodeRef> sortingErrands = new ArrayList<NodeRef>();
         List<NodeRef> result = new ArrayList<NodeRef>();
-        List<String> status = stateMachineService.getStatuses("lecm-errands:document", true, false);
+        List<String> status = stateMachineService.getStatuses(ErrandsService.TYPE_ERRANDS, true, false);
 
         // сортируем по наименованию поручения и по сроку исполнения
         sort.add(new SortDefinition(SortDefinition.SortType.FIELD, "@" + PROP_ERRANDS_NUMBER.toString(), false));

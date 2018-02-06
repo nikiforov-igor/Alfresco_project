@@ -2588,7 +2588,8 @@ protocolService.setPointsStatusRemoved(protocol);]]></value>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
                                                                 <value>
-                                                                    <![CDATA[protocolService.changePointStatusByErrand(stm_document);]]></value>
+                                                                    <![CDATA[<import resource="classpath:/alfresco/module/meetings-repo/workflow/scripts/protocol-scripts.js">
+                                                                    ProtocolScript.changePointStatusByErrand(stm_document);]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>

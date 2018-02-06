@@ -42,7 +42,7 @@ public class ContractsWebScriptBean extends BaseWebScript {
     private DocumentMembersService documentMembersService;
     private LecmTransactionHelper lecmTransactionHelper;
 
-    private final String[] contractsDocsFinalStatuses = {"Аннулирован", "Отменен", "Исполнен"};
+    private final String[] contractsDocsFinalStatuses = {ContractsBeanImpl.ContractAnnulledStatus, ContractsBeanImpl.ContractCancelledStatus, ContractsBeanImpl.ContractExecutedStatus};
 
     public void setDocumentMembersService(DocumentMembersService documentMembersService) {
         this.documentMembersService = documentMembersService;

@@ -191,7 +191,7 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
             return report.status && report.status == "ONCONTROL";
         },
         transferActionEvaluator: function (report) {
-            var isDocumentStatusOK = "На исполнении" == this.currentDocumentStatus || "На доработке" == this.currentDocumentStatus;
+            var isDocumentStatusOK = Alfresco.util.message("lecm.errands.statemachine-status.on-execution") == this.currentDocumentStatus || Alfresco.util.message("lecm.errands.statemachine-status.on-rework") == this.currentDocumentStatus;
             return report.status && report.status == "ACCEPT" && isDocumentStatusOK;
         },
         editActionEvaluator: function (report) {

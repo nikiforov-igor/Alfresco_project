@@ -15,7 +15,9 @@
     <util:list id="ord.models.labels">
 		<value>alfresco/module/${artifactId}/messages/lecm-ord-model</value>
 		<value>alfresco/module/${artifactId}/messages/lecm-ord-table-model</value>
-	</util:list>
+        <value>alfresco/module/${artifactId}/messages/lecm-ord-dictionaries</value>
+        <value>alfresco/module/${artifactId}/messages/lecm-ord-messages</value>
+    </util:list>
 
     <util:list id="ord.dictionaries">
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-ord-type.xml</value>
@@ -83,7 +85,8 @@
 
 	<bean id="ordReportsService" parent="baseBean"
 		  class="ru.it.lecm.ord.ORDReportsServiceImpl"
-		  p:reportsManager-ref="reportsManager"/>
+		  p:reportsManager-ref="reportsManager"
+        p:ordDocumentService-ref="ordDocumentService"/>
 
 	<!--service for various document utils-->
 	<bean id="ordDocumentService" parent="baseBean"
@@ -91,7 +94,8 @@
 		  p:lecmDictionaryService-ref="serviceDictionary"
           p:documentService-ref="documentService"
           p:orgstructureBean-ref="serviceOrgstructure"
-          p:documentTableService-ref="documentTableService"/>
+          p:documentTableService-ref="documentTableService"
+          p:edsDocumentService-ref="edsService"/>
 
 
         <bean id="ordCopySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings">
@@ -167,7 +171,8 @@
           p:triggerName="ord-notification-trigger"
           p:triggerGroup="ord-trigger"
           p:cronExpression="0 0 8/12 * * ? *"
-		  p:actionName="ordNotificationExecutor"/>
+		  p:actionName="ordNotificationExecutor"
+        p:ordDocumentService-ref="ordDocumentService"/>
 
 	<!--notification executor for scheduler-->
     <bean id="ordNotificationExecutor" class="ru.it.lecm.ord.scheduler.ORDNotificationExecutor" parent="action-executer"

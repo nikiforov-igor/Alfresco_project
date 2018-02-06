@@ -1,8 +1,6 @@
 package ru.it.lecm.contracts.beans;
 
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
@@ -13,9 +11,10 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
-import org.springframework.context.ApplicationEvent;
+import org.springframework.extensions.surf.util.I18NUtil;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
@@ -64,11 +63,32 @@ public class ContractsBeanImpl extends BaseBean {
     public static final String CONTRACTS_ROOT_ID = "CONTRACTS_ROOT_ID";
     public static final String CONTRACTS_DASHLET_SETTINGS_ID = "Настройки дашлета";
 
+    public static final String CONTRACTS_STAGE_STATUSES_DIC_NAME = "Статусы этапов";
+    public static final QName PROP_CONTRACT_STAGE_STATUS_CODE = QName.createQName(CONTRACT_DIC_NAMESPACE_URI, "lecm-contract-dic:stage-status-code");
+
+    public static String ContractActiveStatus = "Действует";
+    public static String ContractСlosedStatus = "Закрыт";
+    public static String ContractRegistratedStatus = "Зарегистрирован";
+    public static String ContractAnnulledStatus = "Аннулирован";
+    public static String ContractCancelledStatus = "Отменен";
+    public static String ContractExecutedStatus = "Исполнен";
+
+    public static String OldContractStageСlosedStatus = "Закрыт";
+    public static String OldContractStageNotStartedStatus = "Не начат";
+    public static String OldContractStageInWorkStatus = "В работе";
+
+    public static enum STAGE_STATUSES_CONSTR {CLOSED, NOT_STARTED, IN_WORK};
+
     public NodeRef dashletSettings = null;
 
     private SearchService searchService;
     private DocumentService documentService;
     private NamespaceService namespaceService;
+    private DictionaryBean dictionaryBean;
+
+    public void setDictionaryBean(DictionaryBean dictionaryBean) {
+        this.dictionaryBean = dictionaryBean;
+    }
 
     public void setSearchService(SearchService searchService) {
         this.searchService = searchService;
@@ -124,7 +144,35 @@ public class ContractsBeanImpl extends BaseBean {
 				dashletSettings = nodeService.getChildByName(serviceRoot, ContentModel.ASSOC_CONTAINS, CONTRACTS_DASHLET_SETTINGS_ID);
 			}
 		}
-	}
+
+		if (I18NUtil.getMessage("lecm.contract.statemachine-status.active", I18NUtil.getLocale()) != null) {
+            ContractActiveStatus = I18NUtil.getMessage("lecm.contract.statemachine-status.active", I18NUtil.getLocale());
+        }
+        if (I18NUtil.getMessage("lecm.contract.statemachine-status.closed", I18NUtil.getLocale()) != null) {
+            ContractСlosedStatus = I18NUtil.getMessage("lecm.contract.statemachine-status.closed", I18NUtil.getLocale());
+        }
+        if (I18NUtil.getMessage("lecm.contract.statemachine-status.registrated", I18NUtil.getLocale()) != null) {
+            ContractRegistratedStatus = I18NUtil.getMessage("lecm.contract.statemachine-status.registrated", I18NUtil.getLocale());
+        }
+        if (I18NUtil.getMessage("lecm.contract.statemachine-status.final.annulled", I18NUtil.getLocale()) != null) {
+            ContractAnnulledStatus = I18NUtil.getMessage("lecm.contract.statemachine-status.final.annulled", I18NUtil.getLocale());
+        }
+        if (I18NUtil.getMessage("lecm.contract.statemachine-status.final.cancelled", I18NUtil.getLocale()) != null) {
+            ContractCancelledStatus = I18NUtil.getMessage("lecm.contract.statemachine-status.final.cancelled", I18NUtil.getLocale());
+        }
+        if (I18NUtil.getMessage("lecm.contract.statemachine-status.final.executed", I18NUtil.getLocale()) != null) {
+            ContractExecutedStatus = I18NUtil.getMessage("lecm.contract.statemachine-status.final.executed", I18NUtil.getLocale());
+        }
+        if (I18NUtil.getMessage("lecm.contracts.stage.status.CLOSED", I18NUtil.getLocale()) != null) {
+            OldContractStageСlosedStatus = I18NUtil.getMessage("lecm.contracts.stage.status.CLOSED", I18NUtil.getLocale());
+        }
+        if (I18NUtil.getMessage("lecm.contracts.stage.status.NOT_STARTED", I18NUtil.getLocale()) != null) {
+            OldContractStageNotStartedStatus = I18NUtil.getMessage("lecm.contracts.stage.status.NOT_STARTED", I18NUtil.getLocale());
+        }
+        if (I18NUtil.getMessage("lecm.contracts.stage.status.IN_WORK", I18NUtil.getLocale()) != null) {
+            OldContractStageInWorkStatus = I18NUtil.getMessage("lecm.contracts.stage.status.IN_WORK", I18NUtil.getLocale());
+        }
+    }
 
     /**
      * Поиск договоров

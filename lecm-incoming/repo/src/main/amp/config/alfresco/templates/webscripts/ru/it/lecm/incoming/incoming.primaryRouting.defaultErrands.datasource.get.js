@@ -20,8 +20,8 @@ if (incoming) {
         var errandTypeToReview, errandTypeToExecute;
         var errandTypesDictionary = dictionary.getDictionaryByName("Типы поручений");
         if (errandTypesDictionary) {
-            errandTypeToReview = errandTypesDictionary.childByNamePath("На рассмотрение");
-            errandTypeToExecute = errandTypesDictionary.childByNamePath("На исполнение (неконтрольное)");
+            errandTypeToReview = errandTypesDictionary.childByNamePath(msg.get("lecm.errands.dictionary.types.errandTypeToReview"));
+            errandTypeToExecute = errandTypesDictionary.childByNamePath(msg.get("lecm.errands.dictionary.types.errandTypeToExecute"));
         }
 
         var incomingType = null;

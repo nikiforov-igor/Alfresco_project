@@ -17,6 +17,11 @@ import java.util.List;
 public class ResolutionsExpiredShedule extends BaseTransactionalSchedule {
 
     private DocumentService documentService;
+    private ResolutionsService resolutionsService;
+
+    public void setResolutionsService(ResolutionsService resolutionsService) {
+        this.resolutionsService = resolutionsService;
+    }
 
     public ResolutionsExpiredShedule() {
         super();
@@ -39,7 +44,7 @@ public class ResolutionsExpiredShedule extends BaseTransactionalSchedule {
 
         types.add(ResolutionsService.TYPE_RESOLUTION_DOCUMENT);
         paths.add(documentService.getDocumentsFolderPath());
-        statuses.add("На исполнении");
+        statuses.add(resolutionsService.getResolutionOnExecutionStatusName());
 
         // Фильтр по датам
         String filters = "@lecm\\-resolutions\\:limitation\\-date: [MIN to NOW]";

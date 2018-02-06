@@ -2,6 +2,7 @@ package ru.it.lecm.contracts.schedule;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+import ru.it.lecm.contracts.beans.ContractsBeanImpl;
 import ru.it.lecm.documents.beans.DocumentGlobalSettingsService;
 import ru.it.lecm.documents.beans.DocumentService;
 
@@ -69,7 +70,9 @@ public class ContractStageEndDateNotificationSchedule extends BaseTransactionalS
 
         paths.add(documentService.getDocumentsFolderPath());
 
-        filters = "@lecm\\-contract\\-table\\-structure\\:end\\-date: [\"" + MIN + "\" to \"" + MAX + "\"]  AND NOT lecm\\-contract\\-table\\-structure\\:stage\\-status:\"Закрыт\"";
+        filters = "@lecm\\-contract\\-table\\-structure\\:end\\-date: [\"" + MIN + "\" to \"" + MAX + "\"]  AND" +
+                " NOT lecm\\-contract\\-table\\-structure\\:stage\\-status:\"" + ContractsBeanImpl.OldContractStageСlosedStatus + "\" AND" +
+                " NOT lecm\\-contract\\-table\\-structure\\:stage\\-status:\"" + ContractsBeanImpl.STAGE_STATUSES_CONSTR.CLOSED.toString() + "\"";
 
         return documentService.getDocumentsByFilter(types, paths, null, filters, null);
     }

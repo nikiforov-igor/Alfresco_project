@@ -12,7 +12,7 @@ var ExecuteErrandScript = {
         }
         var completionReason = doc.properties["lecm-eds-aspect:completion-signal-reason"];
         var isProcessExecutedChild = children.some(function (child) {
-            var isStatusOk = child.properties["lecm-statemachine:status"] == "Исполнено";
+            var isStatusOk = child.properties["lecm-statemachine:status"] == msg.get("lecm.errands.statemachine-status.executed");
             var isAutoClose = child.properties["lecm-errands:auto-close"];
             var isCompleteReasonOk = child.properties["lecm-errands:execution-report"] == completionReason;
             return isStatusOk && isAutoClose && isCompleteReasonOk;
@@ -36,7 +36,7 @@ var ExecuteErrandScript = {
         var i;
         for (i = 0; i < childrenErrands.length; i++) {
             if (!statemachine.isDraft(childrenErrands[i]) && statemachine.isFinal(childrenErrands[i].nodeRef.toString())) {
-                if (childrenErrands[i].properties["lecm-statemachine:status"] == "Исполнено") {
+                if (childrenErrands[i].properties["lecm-statemachine:status"] == msg.get("lecm.errands.statemachine-status.executed")) {
                     childErrandExecuted = true;
                 }
             } else {
@@ -47,7 +47,7 @@ var ExecuteErrandScript = {
         var childResolutionCompleted = false;
         for (i = 0; i < childrenResolutions.length; i++) {
             if (!statemachine.isDraft(childrenResolutions[i]) && statemachine.isFinal(childrenResolutions[i].nodeRef.toString())) {
-                if (childrenResolutions[i].properties["lecm-statemachine:status"] == "Завершено") {
+                if (childrenResolutions[i].properties["lecm-statemachine:status"] == msg.get("lecm.resolutions.statemachine-status.completed")) {
                     childResolutionCompleted = true;
                 }
             } else {

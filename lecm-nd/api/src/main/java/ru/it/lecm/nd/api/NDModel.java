@@ -8,6 +8,7 @@ package ru.it.lecm.nd.api;
 
 import java.util.EnumMap;
 import org.alfresco.service.namespace.QName;
+import org.springframework.extensions.surf.util.I18NUtil;
 
 /**
  *
@@ -25,12 +26,8 @@ public final class NDModel {
 
 	public final static QName ASSOC_ND_REGISTRAR = QName.createQName(ND_NAMESPACE, "registrar-assoc");
 
-	public static enum ND_STATUSES { ACTIVE_STATUS, CANCELED_STATUS, DELETED_STATUS };
-	public static final EnumMap<ND_STATUSES,String> STATUSES = new EnumMap<ND_STATUSES,String>(ND_STATUSES.class){{
-		put(ND_STATUSES.ACTIVE_STATUS, "Действует");
-		put(ND_STATUSES.CANCELED_STATUS, "Отменен");
-		put(ND_STATUSES.DELETED_STATUS, "Удален");
-	}};
+
+	public static enum ND_STATUSES { ACTIVE_STATUS, CANCELED_STATUS, DELETED_STATUS, OUT_OF_DATE_STATUS, PUT_IN_WORK_STATUS};
 
 	private NDModel() throws IllegalAccessException {
 		throw new IllegalAccessException("You cannot create any instance of NDModel class.");

@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentFilter;
+import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.util.ArrayList;
@@ -23,6 +24,11 @@ public class ErrandsFilter extends DocumentFilter {
     final public static String ID = "errandsFilter";
 
     private IWorkCalendar workCalendar;
+    private ErrandsService errandsService;
+
+    public void setErrandsService(ErrandsService errandsService) {
+        this.errandsService = errandsService;
+    }
 
     public void setWorkCalendar(IWorkCalendar workCalendar) {
         this.workCalendar = workCalendar;
@@ -117,7 +123,7 @@ public class ErrandsFilter extends DocumentFilter {
 
                 switch (DateEnum.valueOf(dateFilter.toUpperCase())) {
                     case EXPIRED: {
-                        query += (query.length() > 0 ? " AND " : "") + " (@" + PROP_EXPIRED + ":true AND NOT (@lecm\\-statemachine\\:status:\"Удалено\" @lecm\\-statemachine\\:status:\"Отменено\" @lecm\\-statemachine\\:status:\"Исполнено\" @lecm\\-statemachine\\:status:\"Не исполнено\")) ";
+                        query += (query.length() > 0 ? " AND " : "") + " (@" + PROP_EXPIRED + ":true AND NOT (@lecm\\-statemachine\\:status:\"" + errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUSES.ERRAND_REMOVED_STATUS) + "\" @lecm\\-statemachine\\:status:\"" + errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUSES.ERRAND_CANCELLED_STATUS) + "\" @lecm\\-statemachine\\:status:\"" + errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUSES.ERRAND_EXECUTED_STATUS) + "\" @lecm\\-statemachine\\:status:\"" + errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUSES.ERRAND_NOT_EXECUTED_STATUS) + "\")) ";
                         break;
                     }
                     case DEADLINE: {

@@ -45,6 +45,7 @@
             <list>
                 <value>alfresco/module/${artifactId}/messages/lecm-contracts-model</value>
                 <value>alfresco/module/${artifactId}/messages/lecm-additional-document-model</value>
+                <value>alfresco/module/${artifactId}/messages/lecm-contracts-messages</value>
             </list>
         </property>
     </bean>

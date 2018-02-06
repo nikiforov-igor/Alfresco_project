@@ -2,8 +2,10 @@ package ru.it.lecm.errands;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+import org.springframework.extensions.surf.util.I18NUtil;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -148,6 +150,16 @@ public interface ErrandsService {
     QName ASSOC_ERRANDS_CO_EXECUTORS_FIRST_LEVEL = QName.createQName(ERRANDS_ASPECT_NAMESPACE_URI, "errands-co-executors-assoc");
 
     QName PROP_ERRANDS_EXECUTORS_REF = QName.createQName(ERRANDS_ASPECT_NAMESPACE_URI, "errands-executors-assoc-ref");
+
+    public static enum ATTACHMENT_CATEGORIES { ERRAND, CONTROL, EXECUTION, COEXECUTORS_REPORTS};
+    public static enum ERRANDS_STATUSES { ERRAND_REMOVED_STATUS, ERRAND_CANCELLED_STATUS, ERRAND_NOT_EXECUTED_STATUS,
+        ERRAND_EXECUTED_STATUS, ERRAND_WAIT_FOR_EXECUTION_STATUS, ERRAND_ON_EXECUTION_STATUS, ERRAND_REPORT_CHECK_STATUS, ERRAND_ON_REWORK_STATUS, ERRAND_PERIODICALLY_STATUS};
+
+
+    String getErrandStatusName(ERRANDS_STATUSES code);
+
+    String getAttachmentCategoryName(ATTACHMENT_CATEGORIES code);
+
     /**
      * Получение папки для черновиков
      *

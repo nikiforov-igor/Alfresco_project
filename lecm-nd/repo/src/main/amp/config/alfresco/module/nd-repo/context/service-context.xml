@@ -13,6 +13,7 @@
 
     <util:list id="nd.models.labels">
         <value>alfresco/module/${artifactId}/messages/lecm-nd-model</value>
+        <value>alfresco/module/${artifactId}/messages/lecm-nd-messages</value>
     </util:list>
 
     <util:list id="nd.dictionaries">
@@ -80,6 +81,7 @@
           p:triggerGroup="nd-trigger"
           p:actionName="inWorkExecutor"
           p:cronExpression="0 15 * * * ? *"
+          p:ndDocumentService-ref="NDDocumentService"
     />
 
     <bean id="inWorkExecutor" class="ru.it.lecm.nd.scheduler.InWorkExecutor" parent="action-executer"
@@ -97,6 +99,7 @@
 		  p:actionName="outOfDateExecutor"
           p:cronExpression="0 30 * * * ? *"
           p:runAsUser="System"
+          p:ndDocumentService-ref="NDDocumentService"
     />
 
     <bean id="outOfDateExecutor" class="ru.it.lecm.nd.scheduler.OutOfDateExecutor" parent="action-executer"
@@ -119,8 +122,9 @@
         p:tags-ref="nd.rn.tags"
     />
 
-	<bean id="NDDocumentService" class="ru.it.lecm.nd.NDDocumentServiceImpl" parent="baseBean"/>
-
+	<bean id="NDDocumentService" class="ru.it.lecm.nd.NDDocumentServiceImpl" parent="baseBean">
+        <property name="ordDocumentService" ref="ordDocumentService"/>
+    </bean>
 
     <bean id="nd.reports.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="reportsEditorService,reportsEditor.LogicEcmDictionariesBootstrap,

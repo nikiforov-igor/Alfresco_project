@@ -39,9 +39,9 @@ public class ContractStagesPolicy implements NodeServicePolicies.OnUpdatePropert
         String oldStatus = (String) before.get(ContractsBeanImpl.PROP_STAGE_STATUS);
         String newStatus = (String) after.get(ContractsBeanImpl.PROP_STAGE_STATUS);
         if (newStatus != null && !newStatus.equals(oldStatus)) {
-            if ("В работе".equals(newStatus)) {
+            if (ContractsBeanImpl.OldContractStageInWorkStatus.equals(newStatus) || ContractsBeanImpl.STAGE_STATUSES_CONSTR.IN_WORK.toString().equals(newStatus)) {
                 nodeService.setProperty(nodeRef, ContractsBeanImpl.PROP_STAGE_START_DATE_REAL, new Date());
-            } else if ("Закрыт".equals(newStatus)) {
+            } else if (ContractsBeanImpl.OldContractStageСlosedStatus.equals(newStatus) || ContractsBeanImpl.STAGE_STATUSES_CONSTR.CLOSED.toString().equals(newStatus)) {
                 nodeService.setProperty(nodeRef, ContractsBeanImpl.PROP_STAGE_END_DATE_REAL, new Date());
             }
         }

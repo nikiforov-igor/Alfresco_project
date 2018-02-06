@@ -20,6 +20,7 @@ import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.extensions.surf.util.I18NUtil;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.base.beans.LecmTransactionHelper;
 import ru.it.lecm.base.beans.RepositoryStructureHelper;
@@ -44,10 +45,10 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 
     final static protected Logger logger = LoggerFactory.getLogger(ErrandsWebScriptBean.class);
 
-    public static final String EXECUTION_KEY = "Ожидает исполнения";
-    public static final String ON_EXECUTION_KEY = "На исполнении";
-    public static final String ON_REPORT_CHECK_KEY = "На проверке отчета";
-    public static final String ON_COMPLETION_KEY = "На доработке";
+    public static final String EXECUTION_KEY = "EXECUTION_KEY";
+    public static final String ON_EXECUTION_KEY = "ON_EXECUTION_KEY";
+    public static final String ON_REPORT_CHECK_KEY = "ON_REPORT_CHECK_KEY";
+    public static final String ON_COMPLETION_KEY = "ON_COMPLETION_KEY";
     public static final int DEADLINE_DAY_COUNT = 5;
     private ErrandsService errandsService;
 
@@ -964,6 +965,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         return value;
     }
 
+    @Deprecated
     public void changeStatusDocumentByExecution(ScriptNode doc) {
         NodeRef nodeRef = doc.getNodeRef();
         QName documentType = QName.createQName("lecm-incoming:document", namespaceService);
@@ -971,9 +973,13 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         AssociationRef assocErrandsExecutors = nodeService.getTargetAssocs(nodeRef, errandsService.ASSOC_ERRANDS_EXECUTOR).get(0);
         List<NodeRef> nodeRefList = documentConnectionService.getConnectedWithDocument(nodeRef, "onBasis", documentType);
 
+        String incomingDirectedStatus = I18NUtil.getMessage("lecm.incoming.statemachine-status.direct_to_execution", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.incoming.statemachine-status.direct_to_execution", I18NUtil.getLocale()) : "Направлен на исполнение";
+        String incomingOnReviewStatus = I18NUtil.getMessage("lecm.incoming.statemachine-status.on_review", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.incoming.statemachine-status.on_review", I18NUtil.getLocale()) : "На рассмотрении";
+        String incomingRegistratedStatus = I18NUtil.getMessage("lecm.incoming.statemachine-status.registrated", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.incoming.statemachine-status.registrated", I18NUtil.getLocale()) : "Зарегистрирован";
+
         for (NodeRef ref : nodeRefList) {
             String status = String.valueOf(nodeService.getProperty(ref, StatemachineModel.PROP_STATUS));
-            if (status.equals("Направлен на исполнение") || status.equals("На рассмотрении") || status.equals("Зарегистрирован")) {
+            if (status.equals(incomingDirectedStatus) || status.equals(incomingOnReviewStatus) || status.equals(incomingRegistratedStatus)) {
                 nodeService.setProperty(ref, transitionFromErrand, assocErrandsExecutors.getTargetRef());
             }
         }

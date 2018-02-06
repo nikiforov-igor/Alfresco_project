@@ -36,7 +36,8 @@
 		<property name="labels">
 			<list>
 				<value>alfresco/module/${artifactId}/messages/lecm-errands-model</value>
-			</list>
+                <value>alfresco/module/${artifactId}/messages/lecm-errands-messages</value>
+            </list>
 		</property>
 	</bean>
 
@@ -73,7 +74,7 @@
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-errands-connection-types-items.xml</value>
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-errands-cancel-reasons.xml</value>
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-errands-cancel-reasons-items.xml</value>
-			</list>
+            </list>
 		</property>
 	</bean>
 
@@ -150,11 +151,11 @@
                 <entry key="lecm-errands:document">
                     <map>
                         <entry key="Все" value="!Отменено, !Удалено, !Исполнено, !Не исполнено"/>
-                        <entry key="Ожидает исполнения" value="Ожидает исполнения"/>
-                        <entry key="На исполнении" value="На исполнении"/>
+                        <entry key="EXECUTION_KEY" value="Ожидает исполнения"/>
+                        <entry key="ON_EXECUTION_KEY" value="На исполнении"/>
                         <entry key="На утверждении" value="На утверждении инициатором, На утверждении контролером"/>
-                        <entry key="На проверке отчета" value="На контроле"/>
-                        <entry key="На доработке" value="На доработке"/>
+                        <entry key="ON_REPORT_CHECK_KEY" value="На контроле"/>
+                        <entry key="ON_COMPLETION_KEY" value="На доработке"/>
                     </map>
                 </entry>
             </map>
@@ -256,7 +257,8 @@
         <property name="orgstructureService" ref="serviceOrgstructure"/>
         <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
         <property name="reportTypeQname" ref="coexecutorReportTypeQname"/>
-        <property name="associationQname" ref="coexecutorReportAttachmentAssocQname"/>
+        <property name="associationQname" ref="coexecutorReportAttachmentAssocQname" />
+        <property name="errandsService" ref="errandsService"/>
     </bean>
 
     <bean id="errandsExecutionConnectedDocumentAssociationPolicy" class="ru.it.lecm.errands.policy.ErrandsReportConnectedDocumentAssociationPolicy"
@@ -530,6 +532,7 @@
         <property name="notificationsService" ref="notificationsService"/>
         <property name="nodeService" ref="nodeService"/>
         <property name="edsGlobalSettingsService" ref="edsGlobalSettingsService"/>
+        <property name="errandsService" ref="errandsService"/>
     <property name="publicAction" value="false" />
     </bean>
 
@@ -564,6 +567,7 @@
 
     <bean id="errandsFilter" class="ru.it.lecm.errands.beans.ErrandsFilter" depends-on="errandsService" parent="documentsFilter" init-method="register">
         <property name="workCalendar" ref="WorkCalendarService"/>
+        <property name="errandsService" ref="errandsService"/>
     </bean>
 
     <bean id="errandsCopySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings">

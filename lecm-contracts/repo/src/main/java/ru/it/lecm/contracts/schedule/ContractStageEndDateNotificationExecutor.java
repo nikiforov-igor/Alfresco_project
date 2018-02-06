@@ -8,6 +8,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import ru.it.lecm.contracts.beans.ContractsBeanImpl;
 import ru.it.lecm.documents.beans.DocumentGlobalSettingsService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -75,7 +76,7 @@ public class ContractStageEndDateNotificationExecutor extends ActionExecuterAbst
     protected void executeImpl(Action action, NodeRef stageRef) {
         NodeRef contractRef = documentTableService.getDocumentByTableDataRow(stageRef);
         final String contractStatus = (String) nodeService.getProperty(contractRef, QName.createQName("lecm-statemachine:status", namespaceService));
-        if (!"Действует".equals(contractStatus)) {
+        if (!ContractsBeanImpl.ContractActiveStatus.equals(contractStatus)) {
             return; //Рассылать уведомления необходимо только по действующим договорам
         }
 

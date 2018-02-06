@@ -62,10 +62,7 @@ public class EveryDayNotificationShedule extends BaseTransactionalSchedule {
 
         paths.add(documentService.getDocumentsFolderPath());
 
-        statuses.add("!Отменено");
-        statuses.add("!Не исполнено");
-        statuses.add("!Черновик");
-        statuses.add("!Исполнено");
+        filters = "@lecm\\-statemachine\\-aspects\\:is\\-draft: false AND (NOT ASPECT:\"lecm-statemachine-aspects:is-final-aspect\" OR @lecm\\-statemachine\\-aspects\\:is\\-final: false) AND @lecm\\-errands\\:is\\-expired: false";
 
         QName dateProperty = ErrandsService.PROP_ERRANDS_LIMITATION_DATE;
         String property = dateProperty.toPrefixString(namespaceService);

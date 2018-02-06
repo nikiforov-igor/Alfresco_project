@@ -59,7 +59,7 @@ public class PeriodicalErrandsToExecutedShedule extends BaseTransactionalSchedul
         List<QName> types = new ArrayList<>(1);
         types.add(ErrandsService.TYPE_ERRANDS);
         List<String> statuses = new ArrayList<>(1);
-        statuses.add("На периодическом исполнении");
+        statuses.add(errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUSES.ERRAND_PERIODICALLY_STATUS));
 
         String filters = "@lecm\\-errands\\:period\\-end:[MIN to \"" + BaseBean.DateFormatISO8601.format(currentDate) + "\"] OR " +
                 " @lecm\\-errands\\:periodically\\-radio:\"" + ErrandsService.PeriodicallyRadio.REPEAT_COUNT.toString() + "\"";

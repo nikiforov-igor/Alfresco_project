@@ -10,4 +10,6 @@ import org.alfresco.service.cmr.repository.NodeRef;
 public interface NDDocumentService {
 	
 	public boolean checkApprovalORDExists(NodeRef nd);
+
+	String getNDStatusName(NDModel.ND_STATUSES code);
 }

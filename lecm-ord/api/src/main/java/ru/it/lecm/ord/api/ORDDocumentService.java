@@ -10,11 +10,13 @@ import java.util.List;
  */
 public interface ORDDocumentService {
 
+	public String getOrdStatusName(ORDModel.ORD_STATUSES code);
+	public String getAttachmentCategoryName(ORDModel.ATTACHMENT_CATEGORIES code);
 	public String getDocumentURL(NodeRef documentRef);
-	public void changePointStatus(NodeRef point, ORDModel.P_STATUSES statusKey);
+	public void changePointStatus(NodeRef point, String statusKey);
 	public NodeRef getErrandLinkedPoint(NodeRef errand);
 	public String getPointStatus(NodeRef point);
-	public Boolean checkPointStatus(NodeRef point, ORDModel.P_STATUSES statusKey);
+	public Boolean checkPointStatus(NodeRef point, String statusKey);
 	public Boolean haveNotPointsWithController(NodeRef document);
 	public Boolean haveNotPointsWithDueDate(NodeRef document);
 	public List<NodeRef> getOrdDocumentPoints(NodeRef document);

@@ -6,7 +6,7 @@ if (resolutionRef && base.isNodeRef(resolutionRef)) {
     var resolution = search.findNode(resolutionRef);
     if (resolution) {
         var status = resolution.properties["lecm-statemachine:status"];
-        if (status != "На исполнении" && status != "Аннулировано" && status != "Завершено") {
+        if (status != msg.get("lecm.resolutions.statemachine-status.on-execution") && status != msg.get("lecm.resolutions.statemachine-status.annulled") && status != msg.get("lecm.resolutions.statemachine-status.completed")) {
             fromJson = true;
 
             var items = [];

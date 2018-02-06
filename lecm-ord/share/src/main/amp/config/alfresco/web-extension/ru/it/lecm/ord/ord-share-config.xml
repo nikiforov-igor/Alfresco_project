@@ -551,4 +551,24 @@
             <workflow name="activiti$lecm-ord_document"/>
         </hidden-workflows>
     </config>
+    <config evaluator="node-type" condition="lecm-ord-dic:ord-point-status">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-ord-dic:ord-point-status-code"/>
+                    <show id="cm:name"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+    <config evaluator="model-type" condition="lecm-ord-dic:ord-point-status">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-ord-dic:ord-point-status-code"/>
+                    <show id="cm:name"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
 </alfresco-config>

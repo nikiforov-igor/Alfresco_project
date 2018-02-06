@@ -11,6 +11,7 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseTransactionalSchedule;
+import ru.it.lecm.nd.api.NDDocumentService;
 import ru.it.lecm.nd.api.NDModel;
 import ru.it.lecm.statemachine.StatemachineModel;
 
@@ -25,13 +26,18 @@ import ru.it.lecm.statemachine.StatemachineModel;
  */
 public class InWorkScheduler extends BaseTransactionalSchedule {
 
-	private final String searchQueryFormat = "TYPE:\"%s\" AND @%s:[MIN TO NOW] AND =@%s:\"Введен в действие\"";
+	private NDDocumentService ndDocumentService;
+
+	private final String searchQueryFormat = "TYPE:\"%s\" AND @%s:[MIN TO NOW] AND =@%s:\"%s\"";
 	private final static Logger logger = LoggerFactory.getLogger(InWorkScheduler.class);
 
 	public InWorkScheduler() {
 		super();
 	}
 
+	public void setNdDocumentService(NDDocumentService ndDocumentService) {
+		this.ndDocumentService = ndDocumentService;
+	}
 	@Override
 	public List<NodeRef> getNodesInTx() {
 
@@ -39,7 +45,7 @@ public class InWorkScheduler extends BaseTransactionalSchedule {
 		SearchParameters sp = new SearchParameters();
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
-		String searchQuery = String.format(searchQueryFormat, NDModel.TYPE_ND.toString(), NDModel.PROP_ND_BEGIN, StatemachineModel.PROP_STATUS);
+		String searchQuery = String.format(searchQueryFormat, NDModel.TYPE_ND.toString(), NDModel.PROP_ND_BEGIN, StatemachineModel.PROP_STATUS, ndDocumentService.getNDStatusName(NDModel.ND_STATUSES.PUT_IN_WORK_STATUS));
 		sp.setQuery(searchQuery.replaceAll("-", "\\\\-"));
 		ResultSet results = null;
 		try {

@@ -79,15 +79,15 @@
             Dom.addClass(executionReportsSet, 'hidden1');
             Dom.removeClass(noItemsBlock, 'hidden1');
         } else {
-            if (!declinedReportsCount || (reportStatus == "Отклонен" && declinedReportsCount <= 1)) {
+            if (!declinedReportsCount || (reportStatus == Alfresco.util.message("lecm.errands.report-status.decline") && declinedReportsCount <= 1)) {
                 Dom.addClass(reportsTableDiv, 'hidden1');
             }
-            if (reportStatus == "Отклонен") {
+            if (reportStatus == Alfresco.util.message("lecm.errands.report-status.decline")) {
                 Dom.addClass(reportStatusBlock, "decline");
             } else {
                 Dom.addClass(reportDeclineReasonEl, "hidden1");
             }
-            if (!isExecutor && reportStatus == "Проект") {
+            if (!isExecutor && reportStatus == Alfresco.util.message("lecm.errands.report-status.project")) {
                 Dom.addClass(reportFieldsDiv, 'hidden1');
                 Dom.addClass(reportStatusBlock, 'hidden1');
                 executionReportsSet.insertBefore(reportInProcessBlock,executionReportsSet.firstElementChild);

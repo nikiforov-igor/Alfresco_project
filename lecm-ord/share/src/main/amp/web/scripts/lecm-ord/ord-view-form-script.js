@@ -22,7 +22,7 @@
                     fn: function (response) {
                         if (response && response.json.formatString) {
                             var status = response.json.formatString;
-                            var statusOk = status == "На исполнении" || status == "Работа завершена";
+                            var statusOk = status == Alfresco.util.message("lecm.ord.statemachine-status.on-execution") || status == Alfresco.util.message("lecm.ord.statemachine-status.work-completed");
                             if (!statusOk) {
                                 Event.onContentReady(formId + "_prop_lecm-eds-aspect_execution-state", function () {
                                     Event.onContentReady(formId + "_prop_lecm-review-ts_doc-review-state", function () {

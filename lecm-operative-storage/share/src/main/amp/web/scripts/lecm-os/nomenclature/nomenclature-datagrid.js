@@ -625,7 +625,7 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 				yearStatus = rowData.itemData["prop_lecm-os_nomenclature-year-section-status-fake"],
 				statuses = ["CLOSED", "PROJECT"];
 
-			return ("lecm-os:nomenclature-case" == type) && (statuses.indexOf(status.value) >= 0) && (yearStatus.value == "Утверждена");
+			return ("lecm-os:nomenclature-case" == type) && (statuses.indexOf(status.value) >= 0) && (yearStatus.value == Alfresco.util.message("label.lecm-os.nomenclature-year-section-status.APPROVED"));
 		},
 
 		closeNDEvaluator: function(rowData) {

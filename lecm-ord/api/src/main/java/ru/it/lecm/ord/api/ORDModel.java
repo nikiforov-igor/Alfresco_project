@@ -2,6 +2,7 @@ package ru.it.lecm.ord.api;
 
 import java.util.EnumMap;
 import org.alfresco.service.namespace.QName;
+import org.springframework.extensions.surf.util.I18NUtil;
 
 /**
  *
@@ -12,6 +13,7 @@ public final class ORDModel {
 	public final static String ORD_PREFIX = "lecm-ord";
 	public final static String ORD_TABLE_PREFIX = "lecm-ord-table-structure";
 	public final static String ORD_NAMESPACE = "http://www.it.ru/lecm/ORD/1.0";
+	public final static String ORD_DIC_NAMESPACE = "http://www.it.ru/logicECM/ORD/dictionaries/1.0";
 	public final static String ORD_TABLE_NAMESPACE = "http://www.it.ru/lecm/ORD/table-structure/1.0";
 
 	public final static String DOCUMENT_FILE_REGISTER_NAMESPACE = "http://www.it.ru/logicECM/document/dictionaries/fileRegister/1.0";
@@ -44,6 +46,13 @@ public final class ORDModel {
 	public final static QName ASSOC_ORD_TABLE_ITEM_COMPILER = QName.createQName(ORD_TABLE_NAMESPACE,"compiler-assoc");
 	public final static QName ASSOC_DOCUMENT_FILE_REGISTER_UNIT = QName.createQName(DOCUMENT_FILE_REGISTER_NAMESPACE, "organization-unit-assoc");
 
+	public static final QName PROP_ORD_DIC_POINT_STATUS_CODE = QName.createQName(ORD_DIC_NAMESPACE, "ord-point-status-code");
+
+
+	public static enum ORD_STATUSES { CANCELED_FAKE_STATUS, DELETED_STATUS, EXECUTION_STATUS};
+	public static enum P_STATUSES_CODES {WAIT_PERFORMANCE_STATUS, PERFORMANCE_STATUS, EXECUTED_STATUS, NOT_EXECUTED_STATUS, EXPIRED_STATUS, CANCELED_STATUS, EXECUTED_BY_CONTROLLER_STATUS, CANCELED_BY_CONTROLLER_STATUS};
+	public enum ATTACHMENT_CATEGORIES { DOCUMENT, APPLICATIONS, AGREEMENTS, ORIGINAL, OTHERS };
+
 	public static final String ORD_POINT_DICTIONARY_NAME = "Статусы пунктов ОРД";
 	public static final String ORD_POINT_PERFORMANCE_STATUS = "На исполнении";
 	public static final String ORD_POINT_WAIT_PERFORMANCE_STATUS = "Ожидает исполнения";
@@ -53,32 +62,6 @@ public final class ORDModel {
 	public static final String ORD_POINT_EXECUTED_BY_CONTROLLER_STATUS = "Исполнен Контролером";
 	public static final String ORD_POINT_CANCELED_BY_CONTROLLER_STATUS = "Отменен Контролером";
 
-	public static enum ORD_STATUSES { CANCELED_FAKE_STATUS, DELETED_STATUS };
-	public static final EnumMap<ORD_STATUSES,String> STATUSES = new EnumMap<ORD_STATUSES,String>(ORD_STATUSES.class){{
-		put(ORD_STATUSES.CANCELED_FAKE_STATUS, "Отменен");
-		put(ORD_STATUSES.DELETED_STATUS, "Удален");
-	}};
-
-	public static enum P_STATUSES {WAIT_PERFORMANCE_STATUS, PERFORMANCE_STATUS, EXECUTED_STATUS, NOT_EXECUTED_STATUS, EXPIRED_STATUS, CANCELED_STATUS, EXECUTED_BY_CONTROLLER_STATUS, CANCELED_BY_CONTROLLER_STATUS};
-	public static final EnumMap<P_STATUSES,String> POINT_STATUSES = new EnumMap<P_STATUSES,String>(P_STATUSES.class){{
-		put(P_STATUSES.WAIT_PERFORMANCE_STATUS, "Ожидает исполнения");
-		put(P_STATUSES.PERFORMANCE_STATUS, "На исполнении");
-		put(P_STATUSES.EXECUTED_STATUS, "Исполнен");
-		put(P_STATUSES.NOT_EXECUTED_STATUS, "Не исполнен");
-		put(P_STATUSES.EXPIRED_STATUS, "Просрочен");
-		put(P_STATUSES.CANCELED_STATUS, "Отменен");
-		put(P_STATUSES.EXECUTED_BY_CONTROLLER_STATUS,"Исполнен Контролером");
-		put(P_STATUSES.CANCELED_BY_CONTROLLER_STATUS,"Отменен Контролером");
-	}};
-
-	public static enum ATTACHMENT_CATEGORIES { DOCUMENT, APPLICATIONS, AGREEMENTS, ORIGINAL, OTHERS };
-	public static final EnumMap<ATTACHMENT_CATEGORIES,String> ATTACHMENT_CATEGORIES_MAP = new EnumMap<ATTACHMENT_CATEGORIES,String>(ATTACHMENT_CATEGORIES.class){{
-		put(ATTACHMENT_CATEGORIES.DOCUMENT, "Документ");
-		put(ATTACHMENT_CATEGORIES.APPLICATIONS, "Приложения");
-		put(ATTACHMENT_CATEGORIES.AGREEMENTS, "Согласования");
-		put(ATTACHMENT_CATEGORIES.ORIGINAL, "Подлинник");
-		put(ATTACHMENT_CATEGORIES.OTHERS, "Прочее");
-	}};
 
 	private ORDModel() throws IllegalAccessException {
 		throw new IllegalAccessException("You cannot create any instance of ORDModel class.");

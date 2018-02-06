@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.ConcurrencyFailureException;
+import org.springframework.extensions.surf.util.I18NUtil;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.eds.api.EDSDocumentService;
@@ -44,6 +45,12 @@ public class ResolutionsServiceImpl extends BaseBean implements ResolutionsServi
     @Override
     public NodeRef getServiceRootFolder() {
         return getFolder(RESOLUTIONS_ROOT_ID);
+    }
+
+    @Override
+    public String getResolutionOnExecutionStatusName() {
+        return I18NUtil.getMessage("lecm.resolutions.statemachine-status.on-execution", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.resolutions.statemachine-status.on-execution", I18NUtil.getLocale()) : "На исполнении";
+
     }
 
     @Override

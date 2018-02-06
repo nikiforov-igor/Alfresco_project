@@ -25,9 +25,12 @@
                         fn: function (response) {
                             if (response && response.json.formatString) {
                                 var status = response.json.formatString;
-                                if (status == "Черновик" || status == "На доработке" || status == "На утверждении") {
+                                if (status == Alfresco.util.message("lecm.resolutions.statemachine-status.draft") ||
+                                    status == Alfresco.util.message("lecm.resolutions.statemachine-status.on-rework") ||
+                                    status == Alfresco.util.message("lecm.resolutions.statemachine-status.on-approvment")) {
                                     showSet(formId, "reviewers-list-hidden");
-                                } else if (status == "На исполнении" || status == "Завершено") {
+                                } else if (status == Alfresco.util.message("lecm.resolutions.statemachine-status.on-execution") ||
+                                    status == Alfresco.util.message("lecm.resolutions.statemachine-status.completec")) {
                                     showSet(formId, "reviewers-table-hidden");
                                 }
                             }
