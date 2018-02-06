@@ -30,7 +30,7 @@
                                     status == Alfresco.util.message("lecm.resolutions.statemachine-status.on-approvment")) {
                                     showSet(formId, "reviewers-list-hidden");
                                 } else if (status == Alfresco.util.message("lecm.resolutions.statemachine-status.on-execution") ||
-                                    status == Alfresco.util.message("lecm.resolutions.statemachine-status.completec")) {
+                                    status == Alfresco.util.message("lecm.resolutions.statemachine-status.completed")) {
                                     showSet(formId, "reviewers-table-hidden");
                                 }
                             }

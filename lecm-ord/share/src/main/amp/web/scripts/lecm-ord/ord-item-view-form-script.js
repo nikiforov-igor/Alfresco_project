@@ -23,7 +23,7 @@
                             url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
                             dataObj: {
                                 nodeRef: itemNodeRef,
-                                substituteString: "{lecm-ord-table-structure:item-status-assoc/lecm-ord-dic:ord-point-status-code},{lecm-ord-table-structure:controller-assoc-ref},{lecm-ord-table-structure:executor-assoc-ref},{lecm-ord-table-structure:report-required},{../..lecm-ord-table-structure:items-assoc/lecm-ord:controller-assoc-ref}"
+                                substituteString: "{lecm-ord-table-structure:item-status-assoc-text-content},{lecm-ord-table-structure:controller-assoc-ref},{lecm-ord-table-structure:executor-assoc-ref},{lecm-ord-table-structure:report-required},{../..lecm-ord-table-structure:items-assoc/lecm-ord:controller-assoc-ref}"
                             },
                             successCallback: {
                                 fn: function (response) {
@@ -34,7 +34,7 @@
                                         var executor = data[2];
                                         var report_required = data[3] == "true";
                                         var ordController = data[4];
-                                        if (itemStatus == "PERFORMANCE_STATUS") {
+                                        if (itemStatus == Alfresco.util.message("lecm.ord.item.status.on-execution")) {
                                             var actionButtonElement = Selector.query("." + formId + "-form-panel.buttons.hidden1 > span", formContainer, true);
                                             var closeViewFormButton = formButtons.firstElementChild;
                                             if (currentUser == executor && !report_required) {
