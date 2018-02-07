@@ -121,7 +121,10 @@ public class ErrandsReportAttachmentAssociationPolicy implements NodeServicePoli
         } else {
             errandDoc = documentTableService.getDocumentByTableDataRow(associationRef.getSourceRef());
         }
-        NodeRef category = documentAttachmentsService.getCategory(errandsService.getAttachmentCategoryName(ErrandsService.ATTACHMENT_CATEGORIES.EXECUTION), errandDoc);
+        NodeRef category = documentAttachmentsService.getCategory(ErrandsService.ATTACHMENT_CATEGORIES.EXECUTION.getHistoryValue(), errandDoc);
+        if (category == null) {
+            category = documentAttachmentsService.getCategory(errandsService.getAttachmentCategoryName(ErrandsService.ATTACHMENT_CATEGORIES.EXECUTION), errandDoc);
+        }
         if (category != null) {
             final List<String> attachmentsNames = getAttachmentsNames(documentAttachmentsService.getAttachmentsByCategory(category));
             final String attachFileName = (String) nodeService.getProperty(attachment, ContentModel.PROP_NAME);

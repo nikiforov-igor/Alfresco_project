@@ -1,5 +1,6 @@
 package ru.it.lecm.contracts.beans;
 
+import com.google.common.collect.Sets;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -72,6 +73,8 @@ public class ContractsBeanImpl extends BaseBean {
     public static String ContractAnnulledStatus = "Аннулирован";
     public static String ContractCancelledStatus = "Отменен";
     public static String ContractExecutedStatus = "Исполнен";
+    private static final String[] defaultContractsDocsFinalStatuses = {"Аннулирован", "Отменен", "Исполнен"};
+    public static Set<String> contractsDocsFinalStatuses = Sets.newHashSet(defaultContractsDocsFinalStatuses);
 
     public static enum STAGE_STATUSES_CONSTR {
         CLOSED("Закрыт"),
@@ -188,6 +191,8 @@ public class ContractsBeanImpl extends BaseBean {
         if (I18NUtil.getMessage("lecm.contracts.stage.status.IN_WORK", I18NUtil.getLocale()) != null) {
             STAGE_STATUSES_CONSTR.IN_WORK.setHistoryValue(I18NUtil.getMessage("lecm.contracts.stage.status.IN_WORK", I18NUtil.getLocale()));
         }
+
+        Collections.addAll(contractsDocsFinalStatuses, ContractAnnulledStatus, ContractCancelledStatus, ContractExecutedStatus);
     }
 
     /**

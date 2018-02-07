@@ -462,7 +462,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				String errandStatus = (String) nodeService.getProperty(sender, StatemachineModel.PROP_STATUS);
 				NodeRef point = ordDocumentService.getErrandLinkedPoint(sender);
 				if (null!=point){
-					if (errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUSES.ERRAND_EXECUTED_STATUS).equals(errandStatus)){
+					if (ErrandsService.ERRANDS_STATUSES.ERRAND_EXECUTED_STATUS.getHistoryValue().equals(errandStatus) || errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUSES.ERRAND_EXECUTED_STATUS).equals(errandStatus)){
 						// переведем пункт в статус "Исполнен"
 						ordDocumentService.changePointStatus(point, ORDModel.P_STATUSES_CODES.EXECUTED_STATUS.toString());
 						//установим атрибут дату исполнеия
@@ -473,7 +473,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 						List<String> secondaryObj = Arrays.asList(point.toString());
 						businessJournalService.log("System", ord, "POINT_STATUS_CHANGE", bjMessage, secondaryObj);
 					}
-					if (errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUSES.ERRAND_NOT_EXECUTED_STATUS).equals(errandStatus)){
+					if (ErrandsService.ERRANDS_STATUSES.ERRAND_NOT_EXECUTED_STATUS.getHistoryValue().equals(errandStatus) || errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUSES.ERRAND_NOT_EXECUTED_STATUS).equals(errandStatus)){
 						// переведем пункт в статус "Не исполнен"
 						ordDocumentService.changePointStatus(point, ORDModel.P_STATUSES_CODES.NOT_EXECUTED_STATUS.toString());
 						//установим атрибут дата исполнеия
@@ -486,7 +486,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 					}
 
 					Boolean is_expired = (Boolean) nodeService.getProperty(sender,ErrandsService.PROP_ERRANDS_IS_EXPIRED);
-					if (!errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUSES.ERRAND_EXECUTED_STATUS).equals(errandStatus) && is_expired){
+					if (!ErrandsService.ERRANDS_STATUSES.ERRAND_EXECUTED_STATUS.getHistoryValue().equals(errandStatus) && !errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUSES.ERRAND_EXECUTED_STATUS).equals(errandStatus) && is_expired){
 						// переведем пункт в статус "Просрочен"
 						ordDocumentService.changePointStatus(point, ORDModel.P_STATUSES_CODES.EXPIRED_STATUS.toString());
 						//запись в бизнес журнал о том, что пункт перешел в статус просрочен

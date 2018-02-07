@@ -364,14 +364,14 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
                     } else {
                         continue;
                     }
-                    if (Objects.equals(getErrandStatusName(ERRANDS_STATUSES.ERRAND_REMOVED_STATUS),status)) {
+                    if (ERRANDS_STATUSES.ERRAND_REMOVED_STATUS.getHistoryValue().equals(status) || Objects.equals(getErrandStatusName(ERRANDS_STATUSES.ERRAND_REMOVED_STATUS),status)) {
                         continue;
                     }
                 } else {
                     if (!stateMachineService.isFinal(errand)) {
                         continue;
                     }
-                    if (Objects.equals(getErrandStatusName(ERRANDS_STATUSES.ERRAND_REMOVED_STATUS),status)) {
+                    if (ERRANDS_STATUSES.ERRAND_REMOVED_STATUS.getHistoryValue().equals(status) || Objects.equals(getErrandStatusName(ERRANDS_STATUSES.ERRAND_REMOVED_STATUS),status)) {
                         continue;
                     }
                 }

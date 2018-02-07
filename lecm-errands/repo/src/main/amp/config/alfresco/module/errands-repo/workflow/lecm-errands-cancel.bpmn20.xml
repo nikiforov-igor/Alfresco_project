@@ -33,10 +33,19 @@
                                         countChildErrands = connectedDocuments.length;
                                     }
                                     var documentRefLink = document.nodeRef.toString().replace("://", "/");
-                                    query = "!" + msg.get("lecm.errands.statemachine-status.removed");
-                                    query += ", !" + msg.get("lecm.errands.statemachine-status.executed");
-                                    query += ", !" + msg.get("lecm.errands.statemachine-status.not-executed");
-                                    query += ", !" + msg.get("lecm.errands.statemachine-status.cancelled");
+                                    query = "!Отменено, !Удалено, !Исполнено, !Не исполнено")
+                                    if (msg.get("lecm.errands.statemachine-status.removed") && msg.get("lecm.errands.statemachine-status.removed") != "Удалено") {
+                                        query += ", !" + msg.get("lecm.errands.statemachine-status.removed");
+                                    }
+                                    if (msg.get("lecm.errands.statemachine-status.executed") && msg.get("lecm.errands.statemachine-status.executed") != "Исполнено") {
+                                        query += ", !" + msg.get("lecm.errands.statemachine-status.executed");
+                                    }
+                                    if (msg.get("lecm.errands.statemachine-status.not-executed") && msg.get("lecm.errands.statemachine-status.not-executed") != "Исполнено") {
+                                        query += ", !" + msg.get("lecm.errands.statemachine-status.not-executed");
+                                    }
+                                    if (msg.get("lecm.errands.statemachine-status.cancelled") && msg.get("lecm.errands.statemachine-status.cancelled") != "Отменено") {
+                                        query += ", !" + msg.get("lecm.errands.statemachine-status.cancelled");
+                                    }
                                     var url = "/" + base.getShareContext() + "/page/errands-list?query=" + encodeURIComponent(query);
                                     url += "&formId=" + encodeURIComponent("Все");
                                     url += "#filter=errandsChildFilter|" + documentRefLink;

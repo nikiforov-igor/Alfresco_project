@@ -45,7 +45,11 @@ public class InWorkScheduler extends BaseTransactionalSchedule {
 		SearchParameters sp = new SearchParameters();
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
+
 		String searchQuery = String.format(searchQueryFormat, NDModel.TYPE_ND.toString(), NDModel.PROP_ND_BEGIN, StatemachineModel.PROP_STATUS, ndDocumentService.getNDStatusName(NDModel.ND_STATUSES.PUT_IN_WORK_STATUS));
+		if (!NDModel.ND_STATUSES.PUT_IN_WORK_STATUS.getHistoryValue().equals(ndDocumentService.getNDStatusName(NDModel.ND_STATUSES.PUT_IN_WORK_STATUS))) {
+			searchQuery += " =@lecm\\-statemachine\\:status:\"" + NDModel.ND_STATUSES.PUT_IN_WORK_STATUS.getHistoryValue() + "\"";
+		}
 		sp.setQuery(searchQuery.replaceAll("-", "\\\\-"));
 		ResultSet results = null;
 		try {

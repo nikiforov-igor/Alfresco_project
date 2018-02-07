@@ -14,16 +14,35 @@ function main() {
     var uri = '';
 
     uri = addParamToUrl('/lecm/document/attachments/api/getAttachmentsByCategory', 'documentNodeRef', model.nodeRef);
-    uri = addParamToUrl(uri, 'category', encodeURIComponent(Alfresco.util.message("lecm-errands_document.attachmentCategory.ERRAND.title")));
-    model.attachments = doGetCall(uri);
+    uri = addParamToUrl(uri, 'category', encodeURIComponent("Поручение"));
+    var attachments = doGetCall(uri);
+
+    if (!attachments) {
+        uri = addParamToUrl('/lecm/document/attachments/api/getAttachmentsByCategory', 'documentNodeRef', model.nodeRef);
+        uri = addParamToUrl(uri, 'category', encodeURIComponent(Alfresco.util.message("lecm-errands_document.attachmentCategory.ERRAND.title")));
+        attachments = doGetCall(uri);
+    }
+    model.attacments = attachments;
 
     uri = addParamToUrl('/lecm/document/attachments/api/getAttachmentsByCategory', 'documentNodeRef', model.nodeRef);
-    uri = addParamToUrl(uri, 'category', encodeURIComponent(Alfresco.util.message("lecm-errands_document.attachmentCategory.EXECUTION.title")));
-    model.attachmentsExec = doGetCall(uri);
+    uri = addParamToUrl(uri, 'category', encodeURIComponent("Исполнение"));
+    var attachmentsExec = doGetCall(uri);
+    if (attachmentsExec) {
+        uri = addParamToUrl('/lecm/document/attachments/api/getAttachmentsByCategory', 'documentNodeRef', model.nodeRef);
+        uri = addParamToUrl(uri, 'category', encodeURIComponent(Alfresco.util.message("lecm-errands_document.attachmentCategory.EXECUTION.title")));
+        attachmentsExec = doGetCall(uri);
+    }
+    model.attachmentsExec = attachmentsExec;
 
     uri = addParamToUrl('/lecm/document/attachments/api/getAttachmentsByCategory', 'documentNodeRef', model.nodeRef);
-    uri = addParamToUrl(uri, 'category', encodeURIComponent(Alfresco.util.message("lecm-errands_document.attachmentCategory.CONTROL.title")));
-    model.attachmentsControl = doGetCall(uri);
+    uri = addParamToUrl(uri, 'category', encodeURIComponent("Контроль"));
+    var attachmentsControl = doGetCall(uri);
+    if (!attachmentsControl) {
+        uri = addParamToUrl('/lecm/document/attachments/api/getAttachmentsByCategory', 'documentNodeRef', model.nodeRef);
+        uri = addParamToUrl(uri, 'category', encodeURIComponent(Alfresco.util.message("lecm-errands_document.attachmentCategory.CONTROL.title")));
+        attachmentsControl = doGetCall(uri);
+    }
+    model.attachmentsControl = attachmentsControl;
 
     uri = addParamToUrl('/lecm/errands/api/getCoexecutors', 'nodeRef', model.nodeRef);
     model.coexecs = doGetCall(uri);

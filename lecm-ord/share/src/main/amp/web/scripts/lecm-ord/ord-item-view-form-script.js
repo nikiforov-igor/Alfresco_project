@@ -34,7 +34,7 @@
                                         var executor = data[2];
                                         var report_required = data[3] == "true";
                                         var ordController = data[4];
-                                        if (itemStatus == Alfresco.util.message("lecm.ord.item.status.on-execution")) {
+                                        if (itemStatus == "На исполнении" || itemStatus == Alfresco.util.message("lecm.ord.item.status.on-execution")) {
                                             var actionButtonElement = Selector.query("." + formId + "-form-panel.buttons.hidden1 > span", formContainer, true);
                                             var closeViewFormButton = formButtons.firstElementChild;
                                             if (currentUser == executor && !report_required) {

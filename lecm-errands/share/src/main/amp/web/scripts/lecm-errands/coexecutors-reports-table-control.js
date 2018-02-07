@@ -185,7 +185,8 @@ LogicECM.errands = LogicECM.errands || {};
                 Dom.removeClass(transferSelectedReportsButton.parentElement, "hidden");
             }
             var buttonEl = YAHOO.util.Selector.query("span button", transferSelectedReportsButton, true);
-            var isStatusOK = Alfresco.util.message("lecm.errands.statemachine-status.on-execution") == datagrid.options.currentDocumentStatus || Alfresco.util.message("lecm.errands.statemachine-status.on-rework") == datagrid.options.currentDocumentStatus;
+            var isStatusOK = "На исполнении" == datagrid.options.currentDocumentStatus || "На доработке" == datagrid.options.currentDocumentStatus;
+            isStatusOK = isStatusOK || Alfresco.util.message("lecm.errands.statemachine-status.on-execution") == datagrid.options.currentDocumentStatus || Alfresco.util.message("lecm.errands.statemachine-status.on-rework") == datagrid.options.currentDocumentStatus;
 
             YAHOO.Bubbling.on("selectedItemsChanged", function (layer, args) {
                 if (datagrid.options.bubblingLabel == args[1]) {

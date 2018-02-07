@@ -24,6 +24,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * User: mshafeev
@@ -42,9 +43,7 @@ public class ContractsWebScriptBean extends BaseWebScript {
     private DocumentMembersService documentMembersService;
     private LecmTransactionHelper lecmTransactionHelper;
 
-    private final String[] contractsDocsFinalStatuses = {ContractsBeanImpl.ContractAnnulledStatus, ContractsBeanImpl.ContractCancelledStatus, ContractsBeanImpl.ContractExecutedStatus};
-
-    public void setDocumentMembersService(DocumentMembersService documentMembersService) {
+     public void setDocumentMembersService(DocumentMembersService documentMembersService) {
         this.documentMembersService = documentMembersService;
     }
 
@@ -342,10 +341,7 @@ public class ContractsWebScriptBean extends BaseWebScript {
         List<QName> docType = new ArrayList<QName>();
         docType.add(ContractsBeanImpl.TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT);
 
-        List<String> statuses = new ArrayList<String>();
-        for (String finalStatus : contractsDocsFinalStatuses) {
-            statuses.add((activeDocs ? "!" : "") + finalStatus);
-        }
+        List<String> statuses = ContractsBeanImpl.contractsDocsFinalStatuses.stream().map(finalStatus -> (activeDocs ? "!" : "") + finalStatus).collect(Collectors.toList());
         List<NodeRef> additionalDocuments = this.documentService.getDocumentsByFilter(docType, getElements(Context.getCurrentContext().getElements(paths)), statuses, filter.toString(), null);
         return createScriptable(additionalDocuments);
     }

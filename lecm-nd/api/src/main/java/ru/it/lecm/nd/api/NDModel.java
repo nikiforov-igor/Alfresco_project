@@ -26,8 +26,22 @@ public final class NDModel {
 
 	public final static QName ASSOC_ND_REGISTRAR = QName.createQName(ND_NAMESPACE, "registrar-assoc");
 
+    public static enum ND_STATUSES {
+        ACTIVE_STATUS("Действует"),
+        CANCELED_STATUS("Отменен"),
+        DELETED_STATUS("Удален"),
+        OUT_OF_DATE_STATUS("Срок действия окончен"),
+        PUT_IN_WORK_STATUS("Введен в действие");
+        private String historyValue = "";
 
-	public static enum ND_STATUSES { ACTIVE_STATUS, CANCELED_STATUS, DELETED_STATUS, OUT_OF_DATE_STATUS, PUT_IN_WORK_STATUS};
+        ND_STATUSES(String historyValue) {
+            this.historyValue = historyValue;
+        }
+
+        public String getHistoryValue() {
+            return historyValue;
+        }
+    }
 
 	private NDModel() throws IllegalAccessException {
 		throw new IllegalAccessException("You cannot create any instance of NDModel class.");

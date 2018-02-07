@@ -89,9 +89,9 @@ var LECMResolutionActions = {
             var executedErrandsCount = 0;
             if (childrenErrands && childrenErrands.length) {
                 childrenErrands.forEach(function (errand) {
-                    if (msg.get("lecm.errands.statemachine-status.executed") == errand.properties["lecm-statemachine:status"]) {
+                    if ("Исполнено" == errand.properties["lecm-statemachine:status" || msg.get("lecm.errands.statemachine-status.executed") == errand.properties["lecm-statemachine:status"]) {
                         executedErrandsCount++;
-                    } else if (msg.get("lecm.errands.statemachine-status.cancelled") == errand.properties["lecm-statemachine:status"]) {
+                    } else if ("Отменено" == errand.properties["lecm-statemachine:status"] || msg.get("lecm.errands.statemachine-status.cancelled") == errand.properties["lecm-statemachine:status"]) {
                         canceledErrandsCount++;
                     }
                 });

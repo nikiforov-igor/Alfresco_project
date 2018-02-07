@@ -36,7 +36,18 @@ public interface InternalService {
 
 	public final static QName PROP_INTERNAL_RESPONSE_DATE = QName.createQName(INTERNAL_NAMESPACE, "response-date");
 
-	enum INTERNAL_STATUSES { INTERNAL_DIRECTED_STATUS, INTERNAL_CLOSED_STATUS};
+    enum INTERNAL_STATUSES {
+        INTERNAL_DIRECTED_STATUS("Направлен"), INTERNAL_CLOSED_STATUS("Закрыт");
+        private String historyValue = "";
+
+        INTERNAL_STATUSES(String historyValue) {
+            this.historyValue = historyValue;
+        }
+
+        public String getHistoryValue() {
+            return historyValue;
+        }
+    }
 
 	String getInternalStatusName(INTERNAL_STATUSES code);
 }

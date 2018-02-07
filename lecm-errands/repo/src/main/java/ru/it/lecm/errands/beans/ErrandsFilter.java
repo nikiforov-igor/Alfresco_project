@@ -123,7 +123,21 @@ public class ErrandsFilter extends DocumentFilter {
 
                 switch (DateEnum.valueOf(dateFilter.toUpperCase())) {
                     case EXPIRED: {
-                        query += (query.length() > 0 ? " AND " : "") + " (@" + PROP_EXPIRED + ":true AND NOT (@lecm\\-statemachine\\:status:\"" + errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUSES.ERRAND_REMOVED_STATUS) + "\" @lecm\\-statemachine\\:status:\"" + errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUSES.ERRAND_CANCELLED_STATUS) + "\" @lecm\\-statemachine\\:status:\"" + errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUSES.ERRAND_EXECUTED_STATUS) + "\" @lecm\\-statemachine\\:status:\"" + errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUSES.ERRAND_NOT_EXECUTED_STATUS) + "\")) ";
+                        query += (query.length() > 0 ? " AND " : "") + " (@" + PROP_EXPIRED + ":true AND NOT (@lecm\\-statemachine\\:status:\"" + ErrandsService.ERRANDS_STATUSES.ERRAND_REMOVED_STATUS.getHistoryValue() + "\" " +
+                                "@lecm\\-statemachine\\:status:\"" + ErrandsService.ERRANDS_STATUSES.ERRAND_CANCELLED_STATUS.getHistoryValue() + "\" @lecm\\-statemachine\\:status:\"" + ErrandsService.ERRANDS_STATUSES.ERRAND_EXECUTED_STATUS.getHistoryValue() + "\"" +
+                                " @lecm\\-statemachine\\:status:\"" + ErrandsService.ERRANDS_STATUSES.ERRAND_NOT_EXECUTED_STATUS.getHistoryValue() + "\")) ";
+                        if (!ErrandsService.ERRANDS_STATUSES.ERRAND_REMOVED_STATUS.getHistoryValue().equals(errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUSES.ERRAND_REMOVED_STATUS))) {
+                            query += "AND NOT @lecm\\-statemachine\\:status:\"" + errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUSES.ERRAND_REMOVED_STATUS) + "\"";
+                        }
+                        if (!ErrandsService.ERRANDS_STATUSES.ERRAND_CANCELLED_STATUS.getHistoryValue().equals(errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUSES.ERRAND_CANCELLED_STATUS))) {
+                            query += "AND NOT @lecm\\-statemachine\\:status:\"" + errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUSES.ERRAND_CANCELLED_STATUS) + "\"";
+                        }
+                        if (!ErrandsService.ERRANDS_STATUSES.ERRAND_EXECUTED_STATUS.getHistoryValue().equals(errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUSES.ERRAND_EXECUTED_STATUS))) {
+                            query += "AND NOT @lecm\\-statemachine\\:status:\"" + errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUSES.ERRAND_EXECUTED_STATUS) + "\"";
+                        }
+                        if (!ErrandsService.ERRANDS_STATUSES.ERRAND_NOT_EXECUTED_STATUS.getHistoryValue().equals(errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUSES.ERRAND_NOT_EXECUTED_STATUS))) {
+                            query += "AND NOT @lecm\\-statemachine\\:status:\"" + errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUSES.ERRAND_NOT_EXECUTED_STATUS) + "\"";
+                        }
                         break;
                     }
                     case DEADLINE: {

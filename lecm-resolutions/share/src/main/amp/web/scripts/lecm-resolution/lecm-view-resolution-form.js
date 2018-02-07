@@ -25,11 +25,13 @@
                         fn: function (response) {
                             if (response && response.json.formatString) {
                                 var status = response.json.formatString;
-                                if (status == Alfresco.util.message("lecm.resolutions.statemachine-status.draft") ||
+                                if (status == "Черновик" || status == "На доработке" || status == "На утверждении" ||
+                                    status == Alfresco.util.message("lecm.resolutions.statemachine-status.draft") ||
                                     status == Alfresco.util.message("lecm.resolutions.statemachine-status.on-rework") ||
                                     status == Alfresco.util.message("lecm.resolutions.statemachine-status.on-approvment")) {
                                     showSet(formId, "reviewers-list-hidden");
-                                } else if (status == Alfresco.util.message("lecm.resolutions.statemachine-status.on-execution") ||
+                                } else if (status == "На исполнении" || status == "Завершено" ||
+                                    status == Alfresco.util.message("lecm.resolutions.statemachine-status.on-execution") ||
                                     status == Alfresco.util.message("lecm.resolutions.statemachine-status.completed")) {
                                     showSet(formId, "reviewers-table-hidden");
                                 }

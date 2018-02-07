@@ -49,8 +49,20 @@ public final class ORDModel {
 	public static final QName PROP_ORD_DIC_POINT_STATUS_CODE = QName.createQName(ORD_DIC_NAMESPACE, "ord-point-status-code");
 
 
-	public static enum ORD_STATUSES { CANCELED_FAKE_STATUS, DELETED_STATUS, EXECUTION_STATUS};
-	public static enum P_STATUSES_CODES {WAIT_PERFORMANCE_STATUS, PERFORMANCE_STATUS, EXECUTED_STATUS, NOT_EXECUTED_STATUS, EXPIRED_STATUS, CANCELED_STATUS, EXECUTED_BY_CONTROLLER_STATUS, CANCELED_BY_CONTROLLER_STATUS};
+    public static enum ORD_STATUSES {
+        CANCELED_FAKE_STATUS("Отменен"), DELETED_STATUS("Удален"), EXECUTION_STATUS("На исполнении");
+        private String historyValue = "";
+
+        ORD_STATUSES(String historyValue) {
+            this.historyValue = historyValue;
+        }
+
+        public String getHistoryValue() {
+            return historyValue;
+        }
+    }
+
+    public static enum P_STATUSES_CODES {WAIT_PERFORMANCE_STATUS, PERFORMANCE_STATUS, EXECUTED_STATUS, NOT_EXECUTED_STATUS, EXPIRED_STATUS, CANCELED_STATUS, EXECUTED_BY_CONTROLLER_STATUS, CANCELED_BY_CONTROLLER_STATUS};
 	public enum ATTACHMENT_CATEGORIES { DOCUMENT, APPLICATIONS, AGREEMENTS, ORIGINAL, OTHERS };
 
 	public static final String ORD_POINT_DICTIONARY_NAME = "Статусы пунктов ОРД";
@@ -61,7 +73,6 @@ public final class ORDModel {
 	public static final String ORD_POINT_EXPIRED_STATUS = "Просрочен";
 	public static final String ORD_POINT_EXECUTED_BY_CONTROLLER_STATUS = "Исполнен Контролером";
 	public static final String ORD_POINT_CANCELED_BY_CONTROLLER_STATUS = "Отменен Контролером";
-
 
 	private ORDModel() throws IllegalAccessException {
 		throw new IllegalAccessException("You cannot create any instance of ORDModel class.");

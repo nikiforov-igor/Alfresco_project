@@ -255,10 +255,15 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 
 	private void moveFiles(NodeRef document, NodeRef row) {
 		if (null != document && null != row) {
-					List<AssociationRef> files = nodeService.getTargetAssocs(row, MeetingsService.ASSOC_MEETINGS_TS_ITEM_ATTACHMENTS);
+			List<AssociationRef> files = nodeService.getTargetAssocs(row, MeetingsService.ASSOC_MEETINGS_TS_ITEM_ATTACHMENTS);
+			NodeRef category = documentAttachmentsService.getCategory(FILE_DEFAULT_CATEGORY, document);
+			if (category == null) {
+				documentAttachmentsService.getCategory(defaultCategoryName, document);
+			}
 			for (AssociationRef fileAssoc : files) {
 				NodeRef file = fileAssoc.getTargetRef();
-				documentAttachmentsService.addAttachment(file, documentAttachmentsService.getCategory(defaultCategoryName, document));
+
+				documentAttachmentsService.addAttachment(file, category);
 			}
 		}
 	}

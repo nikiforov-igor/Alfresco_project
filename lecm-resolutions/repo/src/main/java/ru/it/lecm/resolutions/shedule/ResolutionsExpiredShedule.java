@@ -44,7 +44,10 @@ public class ResolutionsExpiredShedule extends BaseTransactionalSchedule {
 
         types.add(ResolutionsService.TYPE_RESOLUTION_DOCUMENT);
         paths.add(documentService.getDocumentsFolderPath());
-        statuses.add(resolutionsService.getResolutionOnExecutionStatusName());
+        statuses.add(ResolutionsService.RESOLUTION_OLD_ON_EXECUTION_STATUS);
+        if (!ResolutionsService.RESOLUTION_OLD_ON_EXECUTION_STATUS.equals(resolutionsService.getResolutionOnExecutionStatusName())) {
+            statuses.add(resolutionsService.getResolutionOnExecutionStatusName());
+        }
 
         // Фильтр по датам
         String filters = "@lecm\\-resolutions\\:limitation\\-date: [MIN to NOW]";

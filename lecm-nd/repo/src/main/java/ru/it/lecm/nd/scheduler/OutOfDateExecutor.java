@@ -42,8 +42,12 @@ public class OutOfDateExecutor extends ActionExecuterAbstractBase {
 	@Override
 	protected void executeImpl(Action action, NodeRef actionedUponNodeRef) {
 		logger.info(String.format("ND [%s] is cancelling.", actionedUponNodeRef.toString()));
-		nodeService.setProperty(actionedUponNodeRef, StatemachineModel.PROP_STATUS, ndDocumentService.getNDStatusName(NDModel.ND_STATUSES.OUT_OF_DATE_STATUS));
-
+        String currentStatus = (String) nodeService.getProperty(actionedUponNodeRef, StatemachineModel.PROP_STATUS);
+        if (NDModel.ND_STATUSES.ACTIVE_STATUS.getHistoryValue().equals(currentStatus)) {
+            nodeService.setProperty(actionedUponNodeRef, StatemachineModel.PROP_STATUS, NDModel.ND_STATUSES.OUT_OF_DATE_STATUS.getHistoryValue());
+        } else {
+            nodeService.setProperty(actionedUponNodeRef, StatemachineModel.PROP_STATUS, ndDocumentService.getNDStatusName(NDModel.ND_STATUSES.OUT_OF_DATE_STATUS));
+        }
         //логирование
         String bjMessage = "Документ " + ndDocumentService.wrapperLink(actionedUponNodeRef, "№ {~REGNUM} от {~REGDATE}", documentService.getDocumentUrl(actionedUponNodeRef))+ " завершил срок действия";
         bjMessage = substitudeBean.formatNodeTitle(actionedUponNodeRef, bjMessage);

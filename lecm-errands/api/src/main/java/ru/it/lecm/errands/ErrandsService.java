@@ -151,10 +151,41 @@ public interface ErrandsService {
 
     QName PROP_ERRANDS_EXECUTORS_REF = QName.createQName(ERRANDS_ASPECT_NAMESPACE_URI, "errands-executors-assoc-ref");
 
-    public static enum ATTACHMENT_CATEGORIES { ERRAND, CONTROL, EXECUTION, COEXECUTORS_REPORTS};
-    public static enum ERRANDS_STATUSES { ERRAND_REMOVED_STATUS, ERRAND_CANCELLED_STATUS, ERRAND_NOT_EXECUTED_STATUS,
-        ERRAND_EXECUTED_STATUS, ERRAND_WAIT_FOR_EXECUTION_STATUS, ERRAND_ON_EXECUTION_STATUS, ERRAND_REPORT_CHECK_STATUS, ERRAND_ON_REWORK_STATUS, ERRAND_PERIODICALLY_STATUS};
+    public static enum ATTACHMENT_CATEGORIES { ERRAND("Поручение"), CONTROL("Контроль"), EXECUTION("Исполнение"), COEXECUTORS_REPORTS("Отчеты соисполнителей");
+        String historyValue;
+        ATTACHMENT_CATEGORIES(String historyValue) {
+            this.historyValue = historyValue;
+        }
 
+        public String getHistoryValue() {
+            return historyValue;
+        }};
+
+    public static enum ERRANDS_STATUSES {
+        ERRAND_REMOVED_STATUS("Удалено"),
+        ERRAND_CANCELLED_STATUS("Отменено"),
+        ERRAND_NOT_EXECUTED_STATUS("Не исполнено"),
+        ERRAND_EXECUTED_STATUS("Исполнено"),
+        ERRAND_WAIT_FOR_EXECUTION_STATUS("Ожидает исполнения"),
+        ERRAND_ON_EXECUTION_STATUS("На исполнении"),
+        ERRAND_REPORT_CHECK_STATUS("На проверке отчета"),
+        ERRAND_ON_REWORK_STATUS("На доработке"),
+        ERRAND_PERIODICALLY_STATUS("На периодическом исполнении");
+
+        private String historyValue = "";
+
+        ERRANDS_STATUSES(String historyValue) {
+            this.historyValue = historyValue;
+        }
+
+        public String getHistoryValue() {
+            return historyValue;
+        }
+
+        ERRANDS_STATUSES() {
+
+        }
+    }
 
     String getErrandStatusName(ERRANDS_STATUSES code);
 

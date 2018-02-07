@@ -48,6 +48,8 @@ public interface ResolutionsService {
     QName ASSOC_AUTHOR = QName.createQName(RESOLUTION_NAMESPACE_URI, "author-assoc");
     QName ASSOC_CONTROLLER = QName.createQName(RESOLUTION_NAMESPACE_URI, "controller-assoc");
 
+    String RESOLUTION_OLD_ON_EXECUTION_STATUS = "На исполнении";
+
     String getResolutionOnExecutionStatusName();
 
     boolean checkResolutionErrandsExecutionDate(NodeRef resolution);

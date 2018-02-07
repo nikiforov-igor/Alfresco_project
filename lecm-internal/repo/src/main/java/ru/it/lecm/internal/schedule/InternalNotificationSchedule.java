@@ -69,7 +69,8 @@ public class InternalNotificationSchedule extends BaseTransactionalSchedule {
 			List<NodeRef> connectedRefs = connectionService.getConnectedDocuments(internal, "inResponseTo", InternalService.TYPE_INTERNAL);
 			for (NodeRef connectedRef : connectedRefs) {
 				String status = (String) nodeService.getProperty(connectedRef, StatemachineModel.PROP_STATUS);
-				if (internalService.getInternalStatusName(InternalService.INTERNAL_STATUSES.INTERNAL_DIRECTED_STATUS).equals(status) || internalService.getInternalStatusName(InternalService.INTERNAL_STATUSES.INTERNAL_CLOSED_STATUS).equals(status)) {
+				if (InternalService.INTERNAL_STATUSES.INTERNAL_DIRECTED_STATUS.getHistoryValue().equals(status) || InternalService.INTERNAL_STATUSES.INTERNAL_CLOSED_STATUS.getHistoryValue().equals(status) ||
+						internalService.getInternalStatusName(InternalService.INTERNAL_STATUSES.INTERNAL_DIRECTED_STATUS).equals(status) || internalService.getInternalStatusName(InternalService.INTERNAL_STATUSES.INTERNAL_CLOSED_STATUS).equals(status)) {
 					connectedDocs.add(connectedRef);
 				}
 			}

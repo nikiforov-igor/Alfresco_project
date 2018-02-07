@@ -15,7 +15,7 @@ var OrdScript = {
                         if (pointStatusAssoc) {
                             pointStatus = pointStatusAssoc[0].properties["cm:name"];
                         }
-                        if (msg.get("lecm.errands.statemachine-status.executed").equals(status)) {
+                        if ("Исполнено" == status || msg.get("lecm.errands.statemachine-status.executed") == status) {
                             ordStatemachine.changePointStatus(point, "EXECUTED_STATUS");
                             pointStatusAssoc = point.assocs["lecm-ord-table-structure:item-status-assoc"];
                             if (pointStatusAssoc) {
@@ -26,7 +26,7 @@ var OrdScript = {
                                 bjMessage = "Пункт номер " + pointNumber + " документа #mainobject перешел в статус " + newPointStatus;
                                 businessJournal.log(ord.nodeRef.toString(), 'POINT_STATUS_CHANGE', bjMessage, [point]);
                             }
-                        } else if (msg.get("lecm.errands.statemachine-status.not-executed").equals(status)){
+                        } else if ("Не исполнено" == status || msg.get("lecm.errands.statemachine-status.not-executed") == status){
                             ordStatemachine.changePointStatus(point, "NOT_EXECUTED_STATUS");
                             pointStatusAssoc = point.assocs["lecm-ord-table-structure:item-status-assoc"];
                             if (pointStatusAssoc) {
@@ -37,7 +37,7 @@ var OrdScript = {
                                 bjMessage = "Пункт номер " + pointNumber + " документа #mainobject перешел в статус" + newPointStatus;
                                 businessJournal.log(ord.nodeRef.toString(), 'POINT_STATUS_CHANGE', bjMessage, [point]);
                             }
-                        } else if (!msg.get("lecm.errands.statemachine-status.executed").equals(status) && isExpired) {
+                        } else if ((msg.get("lecm.errands.statemachine-status.executed") != status && "Исполнено" != status) && isExpired) {
                             ordStatemachine.changePointStatus(point, "EXPIRED_STATUS");
                             pointStatusAssoc = point.assocs["lecm-ord-table-structure:item-status-assoc"];
                             if (pointStatusAssoc) {
