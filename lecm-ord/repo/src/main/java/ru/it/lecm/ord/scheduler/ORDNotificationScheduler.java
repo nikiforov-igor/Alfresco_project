@@ -50,7 +50,7 @@ public class ORDNotificationScheduler extends BaseTransactionalSchedule {
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
 		String searchQuery = String.format(searchQueryFormat, ORDModel.TYPE_ORD.toString(), StatemachineModel.PROP_STATUS, ordDocumentService.getOrdStatusName(ORDModel.ORD_STATUSES.EXECUTION_STATUS));
 		if (!ORDModel.ORD_STATUSES.EXECUTION_STATUS.getHistoryValue().equals(ordDocumentService.getOrdStatusName(ORDModel.ORD_STATUSES.EXECUTION_STATUS))) {
-			searchQuery += " =@lecm\\-statemachine\\:status:\"" + ORDModel.ORD_STATUSES.EXECUTION_STATUS.getHistoryValue() + "\"";
+			searchQuery += " @" + StatemachineModel.PROP_STATUS + ":\"" + ORDModel.ORD_STATUSES.EXECUTION_STATUS.getHistoryValue() + "\"";
 		}
 		sp.setQuery(searchQuery.replaceAll("-", "\\\\-"));
 		ResultSet results = null;
