@@ -14,7 +14,7 @@
     <types>
         <!--Справочник статусов пункта протокоал-->
         <type name="lecm-protocol-dic:protocol-point-status">
-            <title>ORD Document Type</title>
+            <title>Protocol's point status</title>
             <parent>lecm-dic:plane_dictionary_values</parent>
             <properties>
                 <property name="lecm-protocol-dic:protocol-point-status-code">
