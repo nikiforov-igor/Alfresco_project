@@ -46,7 +46,7 @@
                                 }
                                 ordPoints.forEach(function(point){
                                     var pointStatusAssoc = point.assocs["lecm-ord-table-structure:item-status-assoc"][0];
-                                    var pointStatusCode = pointStatusAssoc.properties["lecm-eds-dic:status-code"];
+                                    var pointStatusCode = pointStatusAssoc.properties["lecm-ord-dic:ord-point-status-code"];
                                     if (pointStatusCode = "PERFORMANCE_STATUS") {
                                         ordStatemachine.changePointStatus(point.nodeRef.toString(), statusCode);
                                         point.properties["lecm-ord-table-structure:item-comment"] = comment;
