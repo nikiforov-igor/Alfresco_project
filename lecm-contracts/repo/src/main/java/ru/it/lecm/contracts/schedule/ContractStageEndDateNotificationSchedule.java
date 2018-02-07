@@ -71,7 +71,7 @@ public class ContractStageEndDateNotificationSchedule extends BaseTransactionalS
         paths.add(documentService.getDocumentsFolderPath());
 
         filters = "@lecm\\-contract\\-table\\-structure\\:end\\-date: [\"" + MIN + "\" to \"" + MAX + "\"]  AND" +
-                " NOT lecm\\-contract\\-table\\-structure\\:stage\\-status:\"" + ContractsBeanImpl.OldContractStageСlosedStatus + "\" AND" +
+                " NOT lecm\\-contract\\-table\\-structure\\:stage\\-status:\"" + ContractsBeanImpl.STAGE_STATUSES_CONSTR.CLOSED.getHistoryValue() + "\" AND" +
                 " NOT lecm\\-contract\\-table\\-structure\\:stage\\-status:\"" + ContractsBeanImpl.STAGE_STATUSES_CONSTR.CLOSED.toString() + "\"";
 
         return documentService.getDocumentsByFilter(types, paths, null, filters, null);

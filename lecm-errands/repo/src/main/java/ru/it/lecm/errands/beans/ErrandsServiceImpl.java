@@ -19,7 +19,6 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.ConcurrencyFailureException;
-import org.springframework.extensions.surf.util.I18NUtil;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.LecmObjectsService;
 import ru.it.lecm.base.beans.TransactionNeededException;
@@ -28,6 +27,7 @@ import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.DocumentEventCategory;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.resolutions.api.ResolutionsService;
@@ -111,22 +111,22 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 		}
 
         errandStatusesMap = new EnumMap<ERRANDS_STATUSES,String>(ERRANDS_STATUSES.class){{
-            put(ERRANDS_STATUSES.ERRAND_REMOVED_STATUS,I18NUtil.getMessage("lecm.errands.statemachine-status.removed", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.errands.statemachine-status.removed", I18NUtil.getLocale()) : "Удалено");
-            put(ERRANDS_STATUSES.ERRAND_CANCELLED_STATUS, I18NUtil.getMessage("lecm.errands.statemachine-status.cancelled", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.errands.statemachine-status.cancelled", I18NUtil.getLocale()) : "Отменено");
-            put(ERRANDS_STATUSES.ERRAND_NOT_EXECUTED_STATUS, I18NUtil.getMessage("lecm.errands.statemachine-status.not-executed", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.errands.statemachine-status.not-executed", I18NUtil.getLocale()) : "Не исполнено");
-            put(ERRANDS_STATUSES.ERRAND_EXECUTED_STATUS, I18NUtil.getMessage("lecm.errands.statemachine-status.executed", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.errands.statemachine-status.executed", I18NUtil.getLocale()) : "Исполнено");
-            put(ERRANDS_STATUSES.ERRAND_WAIT_FOR_EXECUTION_STATUS, I18NUtil.getMessage("lecm.errands.statemachine-status.wait-for-execution", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.errands.statemachine-status.wait-for-execution", I18NUtil.getLocale()) : "Ожидает исполнения");
-            put(ERRANDS_STATUSES.ERRAND_ON_EXECUTION_STATUS, I18NUtil.getMessage("lecm.errands.statemachine-status.on-execution", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.errands.statemachine-status.on-execution", I18NUtil.getLocale()) : "На исполнении");
-            put(ERRANDS_STATUSES.ERRAND_REPORT_CHECK_STATUS, I18NUtil.getMessage("lecm.errands.statemachine-status.report-check", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.errands.statemachine-status.report-check", I18NUtil.getLocale()) : "На проверке отчета");
-            put(ERRANDS_STATUSES.ERRAND_ON_REWORK_STATUS, I18NUtil.getMessage("lecm.errands.statemachine-status.on-rework", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.errands.statemachine-status.on-rework", I18NUtil.getLocale()) : "На доработке");
-            put(ERRANDS_STATUSES.ERRAND_PERIODICALLY_STATUS, I18NUtil.getMessage("lecm.errands.statemachine-status.periodically-execution", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.errands.statemachine-status.periodically-execution", I18NUtil.getLocale()) : "На периодическом исполнении");
+            put(ERRANDS_STATUSES.ERRAND_REMOVED_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.removed", "Удалено"));
+            put(ERRANDS_STATUSES.ERRAND_CANCELLED_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.cancelled", "Отменено"));
+            put(ERRANDS_STATUSES.ERRAND_NOT_EXECUTED_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.not-executed", "Не исполнено"));
+            put(ERRANDS_STATUSES.ERRAND_EXECUTED_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.executed", "Исполнено"));
+            put(ERRANDS_STATUSES.ERRAND_WAIT_FOR_EXECUTION_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.wait-for-execution", "Ожидает исполнения"));
+            put(ERRANDS_STATUSES.ERRAND_ON_EXECUTION_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.on-execution", "На исполнении"));
+            put(ERRANDS_STATUSES.ERRAND_REPORT_CHECK_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.report-check", "На проверке отчета"));
+            put(ERRANDS_STATUSES.ERRAND_ON_REWORK_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.on-rework", "На доработке"));
+            put(ERRANDS_STATUSES.ERRAND_PERIODICALLY_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.periodically-execution", "На периодическом исполнении"));
         }};
 
         attachmentCategoriesMap = new EnumMap<ATTACHMENT_CATEGORIES,String>(ATTACHMENT_CATEGORIES.class){{
-            put(ATTACHMENT_CATEGORIES.ERRAND, I18NUtil.getMessage("lecm.errands.document.attachment.category.ERRAND.title", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.errands.document.attachment.category.ERRAND.title", I18NUtil.getLocale()) : "Поручение");
-            put(ATTACHMENT_CATEGORIES.CONTROL, I18NUtil.getMessage("lecm.errands.document.attachment.category.CONTROL.title", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.errands.document.attachment.category.CONTROL.title", I18NUtil.getLocale()) : "Контроль");
-            put(ATTACHMENT_CATEGORIES.EXECUTION, I18NUtil.getMessage("lecm.errands.document.attachment.category.EXECUTION.title", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.errands.document.attachment.category.EXECUTION.title", I18NUtil.getLocale()) : "Исполнение");
-            put(ATTACHMENT_CATEGORIES.COEXECUTORS_REPORTS, I18NUtil.getMessage("lecm.errands.document.attachment.category.EXECUTION_REPORTS.title", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.errands.document.attachment.category.EXECUTION_REPORTS.title", I18NUtil.getLocale()) : "Отчеты соисполнителей");
+            put(ATTACHMENT_CATEGORIES.ERRAND, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.document.attachment.category.ERRAND.title", "Поручение"));
+            put(ATTACHMENT_CATEGORIES.CONTROL, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.document.attachment.category.CONTROL.title", "Контроль"));
+            put(ATTACHMENT_CATEGORIES.EXECUTION, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.document.attachment.category.EXECUTION.title", "Исполнение"));
+            put(ATTACHMENT_CATEGORIES.COEXECUTORS_REPORTS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.document.attachment.category.EXECUTION_REPORTS.title", "Отчеты соисполнителей"));
         }};
 	}
 

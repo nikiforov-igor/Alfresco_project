@@ -153,7 +153,7 @@
                         <entry key="Все" value="!Отменено, !Удалено, !Исполнено, !Не исполнено"/>
                         <entry key="EXECUTION_KEY" value="Ожидает исполнения"/>
                         <entry key="ON_EXECUTION_KEY" value="На исполнении"/>
-                        <entry key="На утверждении" value="На утверждении инициатором, На утверждении контролером"/>
+                        <entry key="ON_APPROVAL_KEY" value="На утверждении инициатором, На утверждении контролером"/>
                         <entry key="ON_REPORT_CHECK_KEY" value="На контроле"/>
                         <entry key="ON_COMPLETION_KEY" value="На доработке"/>
                     </map>

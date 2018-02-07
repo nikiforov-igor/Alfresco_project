@@ -2,6 +2,7 @@ package ru.it.lecm.eds.api;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+import org.springframework.extensions.surf.util.I18NUtil;
 
 import java.util.Date;
 import java.util.List;
@@ -161,4 +162,8 @@ public interface EDSDocumentService {
      * @return
      */
     Boolean isHideFieldsForRecipient(NodeRef document, String... statuses);
+
+    static String getFromMessagesOrDefaultValue(String messageId, final String defaultValue) {
+        return I18NUtil.getMessage(messageId, I18NUtil.getLocale()) != null ? I18NUtil.getMessage(messageId, I18NUtil.getLocale()) : defaultValue;
+    }
 }

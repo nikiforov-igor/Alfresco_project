@@ -16,12 +16,12 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.extensions.surf.util.I18NUtil;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentTableService;
+import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.events.beans.EventsService;
 import ru.it.lecm.meetings.beans.MeetingsService;
 import ru.it.lecm.security.LecmPermissionService;
@@ -125,7 +125,7 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 
 	public void init() {
 
-		defaultCategoryName = I18NUtil.getMessage("lecm.meetings.attachments.categories.default", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.meetings.attachments.categories.default", I18NUtil.getLocale()) : FILE_DEFAULT_CATEGORY;
+		defaultCategoryName = EDSDocumentService.getFromMessagesOrDefaultValue("lecm.meetings.attachments.categories.default", FILE_DEFAULT_CATEGORY);
 
 		transactionListener = new MeetingsPolicyTransactionListener();
 

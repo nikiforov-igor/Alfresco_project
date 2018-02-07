@@ -73,12 +73,25 @@ public class ContractsBeanImpl extends BaseBean {
     public static String ContractCancelledStatus = "Отменен";
     public static String ContractExecutedStatus = "Исполнен";
 
-    public static String OldContractStageСlosedStatus = "Закрыт";
-    public static String OldContractStageNotStartedStatus = "Не начат";
-    public static String OldContractStageInWorkStatus = "В работе";
+    public static enum STAGE_STATUSES_CONSTR {
+        CLOSED("Закрыт"),
+        NOT_STARTED("Не начат"),
+        IN_WORK("В работе");
 
-    public static enum STAGE_STATUSES_CONSTR {CLOSED, NOT_STARTED, IN_WORK};
+        STAGE_STATUSES_CONSTR(String historyValue) {
+            this.historyValue = historyValue;
+        }
 
+        private String historyValue = "";
+
+        public String getHistoryValue() {
+            return historyValue;
+        }
+
+        private void setHistoryValue(String historyValue) {
+            this.historyValue = historyValue;
+        }
+    }
     public NodeRef dashletSettings = null;
 
     private SearchService searchService;
@@ -163,14 +176,17 @@ public class ContractsBeanImpl extends BaseBean {
         if (I18NUtil.getMessage("lecm.contract.statemachine-status.final.executed", I18NUtil.getLocale()) != null) {
             ContractExecutedStatus = I18NUtil.getMessage("lecm.contract.statemachine-status.final.executed", I18NUtil.getLocale());
         }
+
         if (I18NUtil.getMessage("lecm.contracts.stage.status.CLOSED", I18NUtil.getLocale()) != null) {
-            OldContractStageСlosedStatus = I18NUtil.getMessage("lecm.contracts.stage.status.CLOSED", I18NUtil.getLocale());
+            STAGE_STATUSES_CONSTR.CLOSED.setHistoryValue(I18NUtil.getMessage("lecm.contracts.stage.status.CLOSED", I18NUtil.getLocale()));
         }
+
         if (I18NUtil.getMessage("lecm.contracts.stage.status.NOT_STARTED", I18NUtil.getLocale()) != null) {
-            OldContractStageNotStartedStatus = I18NUtil.getMessage("lecm.contracts.stage.status.NOT_STARTED", I18NUtil.getLocale());
+            STAGE_STATUSES_CONSTR.NOT_STARTED.setHistoryValue(I18NUtil.getMessage("lecm.contracts.stage.status.NOT_STARTED", I18NUtil.getLocale()));
         }
+
         if (I18NUtil.getMessage("lecm.contracts.stage.status.IN_WORK", I18NUtil.getLocale()) != null) {
-            OldContractStageInWorkStatus = I18NUtil.getMessage("lecm.contracts.stage.status.IN_WORK", I18NUtil.getLocale());
+            STAGE_STATUSES_CONSTR.IN_WORK.setHistoryValue(I18NUtil.getMessage("lecm.contracts.stage.status.IN_WORK", I18NUtil.getLocale()));
         }
     }
 

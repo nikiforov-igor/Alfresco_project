@@ -5,8 +5,8 @@ import java.util.EnumMap;
 import java.util.List;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.springframework.extensions.surf.util.I18NUtil;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.nd.api.NDDocumentService;
 import ru.it.lecm.nd.api.NDModel;
 import ru.it.lecm.ord.api.ORDDocumentService;
@@ -53,11 +53,11 @@ public class NDDocumentServiceImpl extends BaseBean implements NDDocumentService
 	@Override
 	protected void initServiceImpl() {
 		ndStatusesMap = new EnumMap<NDModel.ND_STATUSES,String>(NDModel.ND_STATUSES.class){{
-			put(NDModel.ND_STATUSES.ACTIVE_STATUS, I18NUtil.getMessage("lecm.nd.statemachine-status.active", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.nd.statemachine-status.active", I18NUtil.getLocale()) : "Действует");
-			put(NDModel.ND_STATUSES.CANCELED_STATUS, I18NUtil.getMessage("lecm.nd.statemachine-status.cancelled", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.nd.statemachine-status.cancelled", I18NUtil.getLocale()) : "Отменен");
-			put(NDModel.ND_STATUSES.DELETED_STATUS, I18NUtil.getMessage("lecm.nd.statemachine-status.removed", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.nd.statemachine-status.removed", I18NUtil.getLocale()) : "Удален");
-			put(NDModel.ND_STATUSES.OUT_OF_DATE_STATUS, I18NUtil.getMessage("lecm.nd.statemachine-status.out-of-date", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.nd.statemachine-status.out-of-date", I18NUtil.getLocale()) : "Срок действия окончен");
-			put(NDModel.ND_STATUSES.PUT_IN_WORK_STATUS, I18NUtil.getMessage("lecm.nd.statemachine-status.put-in-work", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.nd.statemachine-status.put-in-work", I18NUtil.getLocale()) : "Введен в действие");
+			put(NDModel.ND_STATUSES.ACTIVE_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.nd.statemachine-status.active", "Действует"));
+			put(NDModel.ND_STATUSES.CANCELED_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.nd.statemachine-status.cancelled", "Отменен"));
+			put(NDModel.ND_STATUSES.DELETED_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.nd.statemachine-status.removed", "Удален"));
+			put(NDModel.ND_STATUSES.OUT_OF_DATE_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.nd.statemachine-status.out-of-date", "Срок действия окончен"));
+			put(NDModel.ND_STATUSES.PUT_IN_WORK_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.nd.statemachine-status.put-in-work", "Введен в действие"));
 		}};
 	}
 

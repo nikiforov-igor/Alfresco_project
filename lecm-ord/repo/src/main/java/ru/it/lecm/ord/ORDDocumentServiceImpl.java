@@ -192,18 +192,18 @@ public class ORDDocumentServiceImpl extends BaseBean implements ORDDocumentServi
 	@Override
 	protected void initServiceImpl() {
 		ordStatusesMap = new EnumMap<ORDModel.ORD_STATUSES,String>(ORDModel.ORD_STATUSES.class){{
-			put(ORDModel.ORD_STATUSES.CANCELED_FAKE_STATUS, I18NUtil.getMessage("lecm.ord.statemachine-status.cancelled", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.ord.statemachine-status.cancelled", I18NUtil.getLocale()) : "Отменен");
-			put(ORDModel.ORD_STATUSES.DELETED_STATUS, I18NUtil.getMessage("lecm.ord.statemachine-status.removed", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.ord.statemachine-status.removed", I18NUtil.getLocale()) : "Удален");
-			put(ORDModel.ORD_STATUSES.EXECUTION_STATUS, I18NUtil.getMessage("lecm.ord.statemachine-status.on-execution", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.ord.statemachine-status.on-execution", I18NUtil.getLocale()) : "На исполнении");
+			put(ORDModel.ORD_STATUSES.CANCELED_FAKE_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.ord.statemachine-status.cancelled", "Отменен"));
+			put(ORDModel.ORD_STATUSES.DELETED_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.ord.statemachine-status.removed", "Удален"));
+			put(ORDModel.ORD_STATUSES.EXECUTION_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.ord.statemachine-status.on-execution", "На исполнении"));
 
 		}};
 
 		attachmentCategoriesMap = new EnumMap<ORDModel.ATTACHMENT_CATEGORIES,String>(ORDModel.ATTACHMENT_CATEGORIES.class){{
-			put(ORDModel.ATTACHMENT_CATEGORIES.DOCUMENT, I18NUtil.getMessage("lecm.ord.document.attachment.category.DOCUMENT.title", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.ord.document.attachment.category.DOCUMENT.title", I18NUtil.getLocale()) : "Документ");
-			put(ORDModel.ATTACHMENT_CATEGORIES.APPLICATIONS, I18NUtil.getMessage("lecm.ord.document.attachment.category.APPENDIX.title", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.ord.document.attachment.category.APPENDIX.title", I18NUtil.getLocale()) : "Приложения");
-			put(ORDModel.ATTACHMENT_CATEGORIES.AGREEMENTS, I18NUtil.getMessage("lecm.ord.document.attachment.category.APPROVAL.title", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.ord.document.attachment.category.APPROVAL.title", I18NUtil.getLocale()) : "Согласования");
-			put(ORDModel.ATTACHMENT_CATEGORIES.ORIGINAL, I18NUtil.getMessage("lecm.ord.document.attachment.category.ORIGINAL.title", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.ord.document.attachment.category.ORIGINAL.title", I18NUtil.getLocale()) : "Подлинник");
-			put(ORDModel.ATTACHMENT_CATEGORIES.OTHERS, I18NUtil.getMessage("lecm.ord.document.attachment.category.OTHER.title", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.ord.document.attachment.category.OTHER.title", I18NUtil.getLocale()) : "Прочее");
+			put(ORDModel.ATTACHMENT_CATEGORIES.DOCUMENT, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.ord.document.attachment.category.DOCUMENT.title", "Документ"));
+			put(ORDModel.ATTACHMENT_CATEGORIES.APPLICATIONS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.ord.document.attachment.category.APPENDIX.title", "Приложения"));
+			put(ORDModel.ATTACHMENT_CATEGORIES.AGREEMENTS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.ord.document.attachment.category.APPROVAL.title", "Согласования"));
+			put(ORDModel.ATTACHMENT_CATEGORIES.ORIGINAL, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.ord.document.attachment.category.ORIGINAL.title", "Подлинник"));
+			put(ORDModel.ATTACHMENT_CATEGORIES.OTHERS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.ord.document.attachment.category.OTHER.title", "Прочее"));
 		}};
 	}
 

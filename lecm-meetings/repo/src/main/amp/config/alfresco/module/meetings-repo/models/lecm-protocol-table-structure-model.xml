@@ -14,6 +14,7 @@
     <namespaces>
         <namespace uri="http://www.it.ru/logicECM/protocol/table-structure/1.0" prefix="lecm-protocol-ts"/>
     </namespaces>
+
     <types>
         <type name="lecm-protocol-ts:point">
             <title>Point</title>

@@ -7,8 +7,8 @@
 package ru.it.lecm.internal.beans;
 
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.springframework.extensions.surf.util.I18NUtil;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.internal.api.InternalService;
 
 import java.util.EnumMap;
@@ -34,8 +34,8 @@ public class InternalServiceImpl extends BaseBean implements InternalService{
     @Override
     protected void initServiceImpl() {
         internalStatusesMap = new EnumMap<INTERNAL_STATUSES,String>(INTERNAL_STATUSES.class){{
-                put(INTERNAL_STATUSES.INTERNAL_DIRECTED_STATUS, I18NUtil.getMessage("lecm.internal.statemachine-status.directed", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.internal.statemachine-status.directed", I18NUtil.getLocale()) : "Направлен");
-                put(INTERNAL_STATUSES.INTERNAL_CLOSED_STATUS, I18NUtil.getMessage("lecm.internal.statemachine-status.closed", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.internal.statemachine-status.closed", I18NUtil.getLocale()) : "Закрыт");
+                put(INTERNAL_STATUSES.INTERNAL_DIRECTED_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.internal.statemachine-status.directed", "Направлен"));
+                put(INTERNAL_STATUSES.INTERNAL_CLOSED_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.internal.statemachine-status.closed", "Закрыт"));
             }};
     }
 }

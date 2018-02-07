@@ -317,10 +317,10 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
     @Override
     protected void initServiceImpl() {
         attachmentCategoriesMap = new EnumMap<ATTACHMENT_CATEGORIES,String>(ATTACHMENT_CATEGORIES.class){{
-            put(ATTACHMENT_CATEGORIES.DOCUMENT, I18NUtil.getMessage("lecm.protocol.document.attachment.category.DOCUMENT.title", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.protocol.document.attachment.category.DOCUMENT.title", I18NUtil.getLocale()) : "Документ");
-            put(ATTACHMENT_CATEGORIES.APPLICATIONS, I18NUtil.getMessage("lecm.protocol.document.attachment.category.APPENDICES.title", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.protocol.document.attachment.category.APPENDICES.title", I18NUtil.getLocale()) : "Приложения");
-            put(ATTACHMENT_CATEGORIES.ORIGINAL, I18NUtil.getMessage("lecm.protocol.document.attachment.category.ORIGINAL.title", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.protocol.document.attachment.category.ORIGINAL.title", I18NUtil.getLocale()) : "Подлинник");
-            put(ATTACHMENT_CATEGORIES.OTHERS, I18NUtil.getMessage("lecm.protocol.document.attachment.category.OTHER.title", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.protocol.document.attachment.category.OTHER.title", I18NUtil.getLocale()) : "Прочее");
+            put(ATTACHMENT_CATEGORIES.DOCUMENT, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.protocol.document.attachment.category.DOCUMENT.title", "Документ"));
+            put(ATTACHMENT_CATEGORIES.APPLICATIONS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.protocol.document.attachment.category.APPENDICES.title", "Приложения"));
+            put(ATTACHMENT_CATEGORIES.ORIGINAL, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.protocol.document.attachment.category.ORIGINAL.title", "Подлинник"));
+            put(ATTACHMENT_CATEGORIES.OTHERS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.protocol.document.attachment.category.OTHER.title", "Прочее"));
         }};
     }
 

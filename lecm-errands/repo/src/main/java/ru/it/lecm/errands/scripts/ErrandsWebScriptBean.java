@@ -20,12 +20,12 @@ import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.extensions.surf.util.I18NUtil;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.base.beans.LecmTransactionHelper;
 import ru.it.lecm.base.beans.RepositoryStructureHelper;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.*;
+import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.errands.beans.ErrandsServiceImpl;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -973,9 +973,9 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         AssociationRef assocErrandsExecutors = nodeService.getTargetAssocs(nodeRef, errandsService.ASSOC_ERRANDS_EXECUTOR).get(0);
         List<NodeRef> nodeRefList = documentConnectionService.getConnectedWithDocument(nodeRef, "onBasis", documentType);
 
-        String incomingDirectedStatus = I18NUtil.getMessage("lecm.incoming.statemachine-status.direct_to_execution", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.incoming.statemachine-status.direct_to_execution", I18NUtil.getLocale()) : "Направлен на исполнение";
-        String incomingOnReviewStatus = I18NUtil.getMessage("lecm.incoming.statemachine-status.on_review", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.incoming.statemachine-status.on_review", I18NUtil.getLocale()) : "На рассмотрении";
-        String incomingRegistratedStatus = I18NUtil.getMessage("lecm.incoming.statemachine-status.registrated", I18NUtil.getLocale()) != null ? I18NUtil.getMessage("lecm.incoming.statemachine-status.registrated", I18NUtil.getLocale()) : "Зарегистрирован";
+        String incomingDirectedStatus = EDSDocumentService.getFromMessagesOrDefaultValue("lecm.incoming.statemachine-status.direct_to_execution", "Направлен на исполнение");
+        String incomingOnReviewStatus = EDSDocumentService.getFromMessagesOrDefaultValue("lecm.incoming.statemachine-status.on_review", "На рассмотрении");
+        String incomingRegistratedStatus = EDSDocumentService.getFromMessagesOrDefaultValue("lecm.incoming.statemachine-status.registrated", "Зарегистрирован");
 
         for (NodeRef ref : nodeRefList) {
             String status = String.valueOf(nodeService.getProperty(ref, StatemachineModel.PROP_STATUS));

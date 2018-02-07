@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+    <shortname>Update Dictionary and records types</shortname>
+    <description>Update Dictionary and records types</description>
+    <url>/lecm/document/updateDictionaryType?dicName={dicName}&amp;newDicType={newDicType}</url>
+    <format default="json"/>
+    <authentication>admin</authentication>
+    <transaction allow="readwrite">required</transaction>
+</webscript>

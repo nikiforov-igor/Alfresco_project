@@ -105,11 +105,11 @@ public class ContractStageDateNotificationExecutor extends ActionExecuterAbstrac
 
         if (normalStartDate != null && startPoint.equals(normalStartDate) &&
                 (ContractsBeanImpl.STAGE_STATUSES_CONSTR.NOT_STARTED.toString().equals(stageStatus) ||
-                        ContractsBeanImpl.OldContractStageNotStartedStatus.equals(stageStatus))) {
+                        ContractsBeanImpl.STAGE_STATUSES_CONSTR.NOT_STARTED.getHistoryValue().equals(stageStatus))) {
             return true;
         } else if (normalEndDate != null && endPoint.equals(normalEndDate) &&
                 (!ContractsBeanImpl.STAGE_STATUSES_CONSTR.CLOSED.toString().equals(stageStatus) ||
-                !ContractsBeanImpl.OldContractStageСlosedStatus.equals(stageStatus))){
+                !ContractsBeanImpl.STAGE_STATUSES_CONSTR.CLOSED.getHistoryValue().equals(stageStatus))){
             return false;
         }
         return null;
