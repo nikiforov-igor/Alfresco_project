@@ -28,7 +28,6 @@ public class InWorkScheduler extends BaseTransactionalSchedule {
 
 	private NDDocumentService ndDocumentService;
 
-	private final String searchQueryFormat = "TYPE:\"%s\" AND @%s:[MIN TO NOW] AND =@%s:\"%s\"";
 	private final static Logger logger = LoggerFactory.getLogger(InWorkScheduler.class);
 
 	public InWorkScheduler() {
@@ -46,10 +45,15 @@ public class InWorkScheduler extends BaseTransactionalSchedule {
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
 
-		String searchQuery = String.format(searchQueryFormat, NDModel.TYPE_ND.toString(), NDModel.PROP_ND_BEGIN, StatemachineModel.PROP_STATUS, ndDocumentService.getNDStatusName(NDModel.ND_STATUS.PUT_IN_WORK));
+		String searchQuery;
 		if (!NDModel.ND_STATUS.PUT_IN_WORK.getHistoryValue().equals(ndDocumentService.getNDStatusName(NDModel.ND_STATUS.PUT_IN_WORK))) {
-			searchQuery += " =@" + StatemachineModel.PROP_STATUS + ":\"" +  NDModel.ND_STATUS.PUT_IN_WORK.getHistoryValue() + "\"";
+			String extendSearchQueryFormat = "TYPE:\"%1$s\" AND @2$%s:[MIN TO NOW] AND (@%3$s:\"%4$s\" @%3$s:\"%5$s\")";
+			searchQuery = String.format(extendSearchQueryFormat, NDModel.TYPE_ND.toString(), NDModel.PROP_ND_BEGIN, StatemachineModel.PROP_STATUS, ndDocumentService.getNDStatusName(NDModel.ND_STATUS.PUT_IN_WORK), NDModel.ND_STATUS.PUT_IN_WORK.getHistoryValue());
+		} else {
+			String simpleSearchQueryFormat = "TYPE:\"%s\" AND @%s:[MIN TO NOW] AND @%s:\"%s\"";
+			searchQuery = String.format(simpleSearchQueryFormat, NDModel.TYPE_ND.toString(), NDModel.PROP_ND_BEGIN, StatemachineModel.PROP_STATUS, ndDocumentService.getNDStatusName(NDModel.ND_STATUS.PUT_IN_WORK));
 		}
+
 		sp.setQuery(searchQuery.replaceAll("-", "\\\\-"));
 		ResultSet results = null;
 		try {

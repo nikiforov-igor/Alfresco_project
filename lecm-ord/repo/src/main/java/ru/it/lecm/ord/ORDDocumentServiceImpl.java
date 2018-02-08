@@ -59,6 +59,11 @@ public class ORDDocumentServiceImpl extends BaseBean implements ORDDocumentServi
 	}
 
 	@Override
+	public void changePointStatus(NodeRef point, ORDModel.P_STATUSES statusKey){
+		changePointStatus(point, statusKey.toString());
+	}
+
+	@Override
 	public void changePointStatus(NodeRef point, String statusKey){
 		if (point != null && statusKey != null) {
 			NodeRef newPointStatus = lecmDictionaryService.getDictionaryValueByParam(ORDModel.ORD_POINT_DICTIONARY_NAME, ORDModel.PROP_ORD_DIC_POINT_STATUS_CODE, statusKey);
@@ -87,6 +92,11 @@ public class ORDDocumentServiceImpl extends BaseBean implements ORDDocumentServi
 			return statusName;
 		}
 		return null;
+	}
+
+	@Override
+	public Boolean checkPointStatus(NodeRef point, ORDModel.P_STATUSES statusKey){
+		return checkPointStatus(point, statusKey.toString());
 	}
 
 	@Override

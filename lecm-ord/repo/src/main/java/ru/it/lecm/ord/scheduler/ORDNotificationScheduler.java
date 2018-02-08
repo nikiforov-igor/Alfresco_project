@@ -26,7 +26,7 @@ public class ORDNotificationScheduler extends BaseTransactionalSchedule {
 	private ORDDocumentService ordDocumentService;
 
 	private DateFormat dateFormat = new SimpleDateFormat("yyyy\\-M\\-dd'T'HH");
-	private final String searchQueryFormat = "TYPE:\"%s\" AND =@%s:\"%s\"";
+
 	private final static Logger logger = LoggerFactory.getLogger(ORDNotificationScheduler.class);
 
 	public void setOrdDocumentService(ORDDocumentService ordDocumentService) {
@@ -48,9 +48,13 @@ public class ORDNotificationScheduler extends BaseTransactionalSchedule {
 		SearchParameters sp = new SearchParameters();
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
-		String searchQuery = String.format(searchQueryFormat, ORDModel.TYPE_ORD.toString(), StatemachineModel.PROP_STATUS, ordDocumentService.getOrdStatusName(ORDModel.ORD_STATUS.EXECUTION));
+		String searchQuery;
 		if (!ORDModel.ORD_STATUS.EXECUTION.getHistoryValue().equals(ordDocumentService.getOrdStatusName(ORDModel.ORD_STATUS.EXECUTION))) {
-			searchQuery += " @" + StatemachineModel.PROP_STATUS + ":\"" + ORDModel.ORD_STATUS.EXECUTION.getHistoryValue() + "\"";
+			String extendSearchQueryFormat = "TYPE:\"%1$s\" AND (=@%2$s:\"%3$s\" =@%2$s:\"%4$s\")";
+			searchQuery = String.format(extendSearchQueryFormat, ORDModel.TYPE_ORD.toString(), StatemachineModel.PROP_STATUS, ordDocumentService.getOrdStatusName(ORDModel.ORD_STATUS.EXECUTION), ORDModel.ORD_STATUS.EXECUTION.getHistoryValue());
+		} else {
+			String simpleSearchQueryFormat = "TYPE:\"%s\" AND =@%s:\"%s\"";
+			searchQuery = String.format(simpleSearchQueryFormat, ORDModel.TYPE_ORD.toString(), StatemachineModel.PROP_STATUS, ordDocumentService.getOrdStatusName(ORDModel.ORD_STATUS.EXECUTION));
 		}
 		sp.setQuery(searchQuery.replaceAll("-", "\\\\-"));
 		ResultSet results = null;

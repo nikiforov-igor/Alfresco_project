@@ -436,7 +436,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				// создадим ассоциацию пункта с поручением
 				nodeService.createAssociation(point, errand, ORDModel.ASSOC_ORD_TABLE_ERRAND);
 				// переведем пункт в статус "на исполнениии"
-				ordDocumentService.changePointStatus(point, ORDModel.P_STATUSES_CODES.PERFORMANCE_STATUS.toString());
+				ordDocumentService.changePointStatus(point, ORDModel.P_STATUSES.PERFORMANCE_STATUS.toString());
 
 			}
 			//уведомляем контроллера орд
@@ -462,33 +462,36 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				String errandStatus = (String) nodeService.getProperty(sender, StatemachineModel.PROP_STATUS);
 				NodeRef point = ordDocumentService.getErrandLinkedPoint(sender);
 				if (null!=point){
-					if (ErrandsService.ERRANDS_STATUS.EXECUTED.getHistoryValue().equals(errandStatus) || errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUS.EXECUTED).equals(errandStatus)){
+
+					if (ErrandsService.ERRANDS_STATUS.EXECUTED.isStatusEquals(errandStatus, errandsService)){
 						// переведем пункт в статус "Исполнен"
-						ordDocumentService.changePointStatus(point, ORDModel.P_STATUSES_CODES.EXECUTED_STATUS.toString());
+						ordDocumentService.changePointStatus(point, ORDModel.P_STATUSES.EXECUTED_STATUS.toString());
 						//установим атрибут дату исполнеия
 						nodeService.setProperty(point, ORDModel.PROP_ORD_TABLE_EXECUTION_DATE_REAL, new Date());
 						//запись в бизнес журнал о том, что пункт перешел в статус исполнен
 						Integer pointNumber = (Integer) nodeService.getProperty(point, DocumentTableService.PROP_INDEX_TABLE_ROW);
-						String bjMessage = String.format("Пункт номер %s документа #mainobject перешел в статус Исполнен", pointNumber);
+						String statusName = ordDocumentService.getPointStatus(point);
+						String bjMessage = String.format("Пункт номер %s документа #mainobject перешел в статус %s", pointNumber, statusName);
 						List<String> secondaryObj = Arrays.asList(point.toString());
 						businessJournalService.log("System", ord, "POINT_STATUS_CHANGE", bjMessage, secondaryObj);
 					}
-					if (ErrandsService.ERRANDS_STATUS.NOT_EXECUTED.getHistoryValue().equals(errandStatus) || errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUS.NOT_EXECUTED).equals(errandStatus)){
+					if (ErrandsService.ERRANDS_STATUS.NOT_EXECUTED.isStatusEquals(errandStatus, errandsService)){
 						// переведем пункт в статус "Не исполнен"
-						ordDocumentService.changePointStatus(point, ORDModel.P_STATUSES_CODES.NOT_EXECUTED_STATUS.toString());
+						ordDocumentService.changePointStatus(point, ORDModel.P_STATUSES.NOT_EXECUTED_STATUS.toString());
 						//установим атрибут дата исполнеия
 						nodeService.setProperty(point, ORDModel.PROP_ORD_TABLE_EXECUTION_DATE_REAL, new Date());
 						//запись в бизнес журнал о том, что пункт перешел в статус не исполнен
 						Integer pointNumber = (Integer) nodeService.getProperty(point, DocumentTableService.PROP_INDEX_TABLE_ROW);
-						String bjMessage = String.format("Пункт номер %s документа #mainobject перешел в статус Не исполнен", pointNumber);
+						String statusName = ordDocumentService.getPointStatus(point);
+						String bjMessage = String.format("Пункт номер %s документа #mainobject перешел в статус %s", pointNumber, statusName);
 						List<String> secondaryObj = Arrays.asList(point.toString());
 						businessJournalService.log("System", ord, "POINT_STATUS_CHANGE", bjMessage, secondaryObj);
 					}
 
 					Boolean is_expired = (Boolean) nodeService.getProperty(sender,ErrandsService.PROP_ERRANDS_IS_EXPIRED);
-					if (!ErrandsService.ERRANDS_STATUS.EXECUTED.getHistoryValue().equals(errandStatus) && !errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUS.EXECUTED).equals(errandStatus) && is_expired){
+					if (!ErrandsService.ERRANDS_STATUS.EXECUTED.isStatusEquals(errandStatus, errandsService) && is_expired){
 						// переведем пункт в статус "Просрочен"
-						ordDocumentService.changePointStatus(point, ORDModel.P_STATUSES_CODES.EXPIRED_STATUS.toString());
+						ordDocumentService.changePointStatus(point, ORDModel.P_STATUSES.EXPIRED_STATUS.toString());
 						//запись в бизнес журнал о том, что пункт перешел в статус просрочен
 						Integer pointNumber = (Integer) nodeService.getProperty(point, DocumentTableService.PROP_INDEX_TABLE_ROW);
 						String bjMessage = String.format("Исполнение пункта № %s документа #mainobject просрочено", pointNumber);
@@ -536,7 +539,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 		if (null!=sPointRef && !sPointRef.isEmpty()){
 			NodeRef point = new NodeRef(sPointRef);
 			if (nodeService.exists(point)){
-				return ordDocumentService.checkPointStatus(point, ORDModel.P_STATUSES_CODES.EXECUTED_STATUS.toString());
+				return ordDocumentService.checkPointStatus(point, ORDModel.P_STATUSES.EXECUTED_STATUS.toString());
 			}
 		}
 		return false;

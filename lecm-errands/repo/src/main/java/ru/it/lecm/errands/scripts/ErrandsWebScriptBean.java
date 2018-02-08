@@ -45,10 +45,10 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 
     final static protected Logger logger = LoggerFactory.getLogger(ErrandsWebScriptBean.class);
 
-    public static final String EXECUTION_KEY = "EXECUTION_KEY";
-    public static final String ON_EXECUTION_KEY = "ON_EXECUTION_KEY";
-    public static final String ON_REPORT_CHECK_KEY = "ON_REPORT_CHECK_KEY";
-    public static final String ON_COMPLETION_KEY = "ON_COMPLETION_KEY";
+    public static final String KEY_EXECUTION = "EXECUTION_KEY";
+    public static final String KEY_ON_EXECUTION = "ON_EXECUTION_KEY";
+    public static final String KEY_ON_REPORT_CHECK = "ON_REPORT_CHECK_KEY";
+    public static final String KEY_ON_COMPLETION = "ON_COMPLETION_KEY";
     public static final int DEADLINE_DAY_COUNT = 5;
     private ErrandsService errandsService;
 
@@ -394,7 +394,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                         issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_IMPORTANT + ":true ";
                     }
                     case ISSUED_ERRANDS_EXECUTION: {
-                        statuses = getErrandsStatuses(filters, EXECUTION_KEY);
+                        statuses = getErrandsStatuses(filters, KEY_EXECUTION);
                         break;
                     }
                     // на исполнении
@@ -402,7 +402,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                         issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_IMPORTANT + ":true ";
                     }
                     case ISSUED_ERRANDS_ON_EXECUTION: {
-                        statuses = getErrandsStatuses(filters, ON_EXECUTION_KEY);
+                        statuses = getErrandsStatuses(filters, KEY_ON_EXECUTION);
                         break;
                     }
                     //на проверке отчета (на контроле)
@@ -410,7 +410,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                         issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_IMPORTANT + ":true ";
                     }
                     case ISSUED_ERRANDS_ON_CHECK_REPORT: {
-                        statuses = getErrandsStatuses(filters, ON_REPORT_CHECK_KEY);
+                        statuses = getErrandsStatuses(filters, KEY_ON_REPORT_CHECK);
                         break;
                     }
                     // на доработке
@@ -418,7 +418,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                         issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_IMPORTANT + ":true ";
                     }
                     case ISSUED_ERRANDS_ON_COMPLETION: {
-                        statuses = getErrandsStatuses(filters, ON_COMPLETION_KEY);
+                        statuses = getErrandsStatuses(filters, KEY_ON_COMPLETION);
                         break;
                     }
                     //с приближающимся сроком
@@ -492,7 +492,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
             case ISSUED_ERRANDS_EXECUTION_IMPORTANT: {
             }
             case ISSUED_ERRANDS_EXECUTION: {
-                String status = EXECUTION_KEY;
+                String status = KEY_EXECUTION;
                 statusesStr = filters.get(status);
                 form = status;
                 break;

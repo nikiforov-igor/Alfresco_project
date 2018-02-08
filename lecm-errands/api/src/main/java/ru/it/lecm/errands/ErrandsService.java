@@ -6,6 +6,7 @@ import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -180,8 +181,12 @@ public interface ErrandsService {
             return historyValue;
         }
 
-        ERRANDS_STATUS() {
-
+        public Boolean isStatusEquals(String status, ErrandsService errandsService) {
+            Boolean isEquals = historyValue.equals(status);
+            if (errandsService != null) {
+                isEquals = isEquals || Objects.equals(status, errandsService.getErrandStatusName(this));
+            }
+            return isEquals;
         }
     }
 
