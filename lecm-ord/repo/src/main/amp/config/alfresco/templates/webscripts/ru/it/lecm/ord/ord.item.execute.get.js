@@ -16,6 +16,7 @@ if (item) {
     if (controllerAssoc && controllerAssoc.length) {
         recipients.push(controllerAssoc[0]);
     }
+    var status = ordStatemachine.getPointStatusTextByCode("EXECUTED_STATUS");
     notifications.sendNotificationFromCurrentUser({
         recipients: recipients,
         templateCode: 'ORD_ITEM_CHANGE_STATUS',
@@ -24,7 +25,7 @@ if (item) {
             eventExecutor: currentUser,
             number: "Пункт номер " + number,
             numberTitle: title + " " + content,
-            status: "Исполнен",
+            status: status,
             statusTitle: ""
         },
         dontCheckAccessToObject: true

@@ -23,6 +23,11 @@ public class EveryDayNotificationExecutor extends ActionExecuterAbstractBase {
     private NotificationsService notificationsService;
     private NodeService nodeService;
     private EDSGlobalSettingsService edsGlobalSettingsService;
+    private ErrandsService errandsService;
+
+    public void setErrandsService(ErrandsService errandsService) {
+        this.errandsService = errandsService;
+    }
 
     public void setNotificationsService(NotificationsService notificationsService) {
         this.notificationsService = notificationsService;
@@ -82,7 +87,8 @@ public class EveryDayNotificationExecutor extends ActionExecuterAbstractBase {
             }
         }
         // Уведомление о направленном поручении
-        if (nodeService.getProperty(nodeRef, StatemachineModel.PROP_STATUS).equals("Ожидает исполнения")) {
+        if (nodeService.getProperty(nodeRef, StatemachineModel.PROP_STATUS).equals(ErrandsService.ERRANDS_STATUS.WAIT_FOR_EXECUTION.getHistoryValue()) ||
+                nodeService.getProperty(nodeRef, StatemachineModel.PROP_STATUS).equals(errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUS.WAIT_FOR_EXECUTION))) {
             notificationsService.sendNotificationByTemplate(nodeRef, getEmployeeList(nodeRef), "ERRANDS_DIRECTED");
         }
 

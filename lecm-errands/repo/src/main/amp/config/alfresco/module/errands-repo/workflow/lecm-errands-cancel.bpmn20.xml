@@ -33,7 +33,21 @@
                                         countChildErrands = connectedDocuments.length;
                                     }
                                     var documentRefLink = document.nodeRef.toString().replace("://", "/");
-                                    var url = "/" + base.getShareContext() + "/page/errands-list?query=" + encodeURIComponent("!Отменено, !Удалено, !Исполнено, !Не исполнено");
+                                    query = "!Отменено, !Удалено, !Исполнено, !Не исполнено")
+                                    var msg = org.springframework.extensions.surf.util.I18NUtil.getMessage;
+                                    if (msg("lecm.errands.statemachine-status.removed") && msg("lecm.errands.statemachine-status.removed") != "Удалено") {
+                                        query += ", !" + msg("lecm.errands.statemachine-status.removed");
+                                    }
+                                    if (msg("lecm.errands.statemachine-status.executed") && msg("lecm.errands.statemachine-status.executed") != "Исполнено") {
+                                        query += ", !" + msg("lecm.errands.statemachine-status.executed");
+                                    }
+                                    if (msg("lecm.errands.statemachine-status.not-executed") && msg("lecm.errands.statemachine-status.not-executed") != "Исполнено") {
+                                        query += ", !" + msg("lecm.errands.statemachine-status.not-executed");
+                                    }
+                                    if (msg("lecm.errands.statemachine-status.cancelled") && msg("lecm.errands.statemachine-status.cancelled") != "Отменено") {
+                                        query += ", !" + msg("lecm.errands.statemachine-status.cancelled");
+                                    }
+                                    var url = "/" + base.getShareContext() + "/page/errands-list?query=" + encodeURIComponent(query);
                                     url += "&formId=" + encodeURIComponent("Все");
                                     url += "#filter=errandsChildFilter|" + documentRefLink;
 

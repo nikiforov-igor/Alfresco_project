@@ -31,6 +31,7 @@
 	<util:list id="meetingsLabels">
 		<value>alfresco/module/${artifactId}/messages/lecm-meetings-table-structure-model</value>
 		<value>alfresco/module/${artifactId}/messages/lecm-meetings-model</value>
+		<value>alfresco/module/${artifactId}/messages/lecm-meetings-messages</value>
 	</util:list>
 
 	<bean id="meetings.ModelsBootstrap" parent="modelsToRepositoryLoader"
@@ -52,7 +53,23 @@
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-meetings-bj-items.xml</value>
 	</util:list>
 
+	<util:list id="protocolDictionariesModels">
+		<value>alfresco/module/${artifactId}/models/lecm-protocol-dictionaries-model.xml</value>
+	</util:list>
+	<util:list id="protocolDictionariesLabels">
+		<value>alfresco/module/${artifactId}/messages/lecm-protocol-dictionaries</value>
+	</util:list>
 
+	<bean id="protocol.dictionaries.modelsBootstrap" parent="dictionaryModelBootstrap"
+		  depends-on="dictionaryBootstrap
+				,ru.it.lecm.dictionary.dictionary-repo.dictionary
+				,ru.it.lecm.contractors.lecm-contractors-repo.contractors-dictionary-bootstrap
+				,ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap
+				,documents.dictionaries.LogicEcmModelsBootstrap
+                ,eds.dictionary.bootstrap"
+		  p:models-ref="protocolDictionariesModels"
+		  p:labels-ref="protocolDictionariesLabels"
+	/>
 	<util:list id="protocolModels">
 		<value>alfresco/module/${artifactId}/models/lecm-protocol-table-structure-model.xml</value>
 		<value>alfresco/module/${artifactId}/models/lecm-protocol-model.xml</value>
@@ -60,6 +77,7 @@
 	<util:list id="protocolLabels">
 		<value>alfresco/module/${artifactId}/messages/lecm-protocol-table-structure-model</value>
 		<value>alfresco/module/${artifactId}/messages/lecm-protocol-model</value>
+		<value>alfresco/module/${artifactId}/messages/lecm-protocol-messages</value>
 	</util:list>
 
 	<bean id="protocol.ModelsBootstrap" parent="modelsToRepositoryLoader"
@@ -216,11 +234,14 @@
 		  p:businessJournalService-ref="businessJournalService"
 		  p:protocolReportsService-ref="protocolReportsService"
 		  p:extensionName="protocolService"
+		  p:errandsService-ref="errandsService"
 	/>
 
 	<bean id="protocolReportsService" parent="baseBean"
 		  class="ru.it.lecm.meetings.beans.ProtocolReportsServiceImpl"
-		  p:reportsManager-ref="reportsManager"/>
+		  p:reportsManager-ref="reportsManager"
+		  p:protocolService-ref="protocolService"
+	/>
 
 	<bean parent="lecmDictionaryBootstrap" depends-on="groupActionsService">
 		<property name="rootPath" value="/Business platform/LECM/Сервис Групповые операции"/>

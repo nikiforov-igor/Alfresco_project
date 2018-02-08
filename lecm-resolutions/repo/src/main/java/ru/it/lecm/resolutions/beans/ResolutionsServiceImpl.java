@@ -47,6 +47,11 @@ public class ResolutionsServiceImpl extends BaseBean implements ResolutionsServi
     }
 
     @Override
+    public String getResolutionOnExecutionStatusName() {
+        return EDSDocumentService.getFromMessagesOrDefaultValue("lecm.resolutions.statemachine-status.on-execution", "На исполнении");
+    }
+
+    @Override
     public boolean checkResolutionErrandsExecutionDate(NodeRef resolution) {
         if (nodeService.exists(resolution)) {
             String errandsJsonStr = (String) nodeService.getProperty(resolution, PROP_ERRANDS_JSON);

@@ -40,6 +40,7 @@
                 <value>alfresco/module/${artifactId}/messages/lecm-resolutions-model</value>
                 <value>alfresco/module/${artifactId}/messages/lecm-resolutions-aspects-model</value>
                 <value>alfresco/module/${artifactId}/messages/lecm-resolutions-settings-model</value>
+                <value>alfresco/module/${artifactId}/messages/lecm-resolutions-messages</value>
             </list>
         </property>
     </bean>
@@ -86,7 +87,7 @@
     <util:constant id="RESOLUTIONS_ROOT_NAME" static-field="ru.it.lecm.resolutions.api.ResolutionsService.RESOLUTIONS_ROOT_NAME"/>
 
     <bean id="resolutionsService" class="ru.it.lecm.resolutions.beans.ResolutionsServiceImpl" parent="baseBean"
-          depends-on="resolutions.LogicEcmBootstrap, WorkCalendarService, namespaceService">
+          depends-on="resolutions.LogicEcmBootstrap, WorkCalendarService, namespaceService, resolutionsWorkflowBootstrap">
         <property name="namespaceService" ref="namespaceService"/>
         <property name="edsDocumentService" ref="edsService"/>
         <property name="folders">
@@ -168,6 +169,7 @@
         <property name="triggerGroup" value="resolutios-status-trigger"/>
         <property name="actionName" value="resolutionsExpiredExecutor"/>
         <property name="documentService" ref="documentService"/>
+        <property name="resolutionsService" ref="resolutionsService"/>
     </bean>
 
     <bean id="resolutionsExpiredExecutor" class="ru.it.lecm.resolutions.shedule.ResolutionsExpiredExecutor" parent="action-executer">
@@ -257,10 +259,10 @@
                 <entry key="lecm-resolutions:document">
                     <map>
                         <entry key="Все" value="!Отменено, !Удалено, !Исполнено, !Не исполнено"/>
-                        <entry key="На утверждении" value="На утверждении"/>
-                        <entry key="На доработке" value="На доработке"/>
-                        <entry key="На исполнении" value="На исполнении"/>
-                        <entry key="Требуют принятия решения" value="На исполнении"/>
+                        <entry key="ON_APPROVAL_KEY" value="На утверждении"/>
+                        <entry key="ON_COMPLETION_KEY" value="На доработке"/>
+                        <entry key="ON_EXECUTION_KEY" value="На исполнении"/>
+                        <entry key="ON_SOLUTION_KEY" value="На исполнении"/>
                     </map>
                 </entry>
             </map>

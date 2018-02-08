@@ -52,7 +52,7 @@
                             <control-param name="dataSourceLogic">OR</control-param>
                             <control-param name="selectedItemsFormArgs">assoc_lecm-internal_recipients-assoc,lecm-internal:recipients-assoc</control-param>
                             <!-- lecm-orgstr:employee -->
-                            <control-param name="employee_label">Сотрудник</control-param>
+                            <control-param name="employee_label">label.control.employee</control-param>
                             <control-param name="employee_endpointType">lecm-orgstr:employee</control-param>
                             <control-param name="employee_endpointMany">true</control-param>
                             <control-param name="employee_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
@@ -61,7 +61,7 @@
                             <control-param name="employee_showSearch">true</control-param>
                             <control-param name="employee_useStrictFilterByOrg">true</control-param>
                             <!-- lecm-orgstr:organization-unit -->
-                            <control-param name="organization_label">Подразделение</control-param>
+                            <control-param name="organization_label">label.control.orgUnit</control-param>
                             <control-param name="organization_endpointType">lecm-orgstr:organization-unit</control-param>
                             <control-param name="organization_endpointMany">true</control-param>
                             <control-param name="organization_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
@@ -282,7 +282,7 @@
                             <control-param name="selectedItemsFormArgs">lecm-internal:recipients-assoc</control-param>
                             <control-param name="endpointMany">true</control-param>
                             <!-- lecm-orgstr:employee -->
-                            <control-param name="employee_label">Сотрудник</control-param>
+                            <control-param name="employee_label">label.control.employee</control-param>
                             <control-param name="employee_endpointType">lecm-orgstr:employee</control-param>
                             <control-param name="employee_endpointMany">true</control-param>
                             <control-param name="employee_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
@@ -292,7 +292,7 @@
                             <control-param name="employee_useStrictFilterByOrg">true</control-param>
                             <control-param name="employee_additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
                             <!-- lecm-orgstr:organization-unit -->
-                            <control-param name="organization_label">Подразделение</control-param>
+                            <control-param name="organization_label">label.control.orgUnit</control-param>
                             <control-param name="organization_endpointType">lecm-orgstr:organization-unit</control-param>
                             <control-param name="organization_endpointMany">true</control-param>
                             <control-param name="organization_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
@@ -440,7 +440,7 @@
                             <control-param name="autocompleteDataSourceMethodPost">true</control-param>
                             <control-param name="dataSourceLogic">OR</control-param>
                             <!-- lecm-orgstr:employee -->
-                            <control-param name="employee_label">Сотрудник</control-param>
+                            <control-param name="employee_label">label.control.employee</control-param>
                             <control-param name="employee_endpointType">lecm-orgstr:employee</control-param>
                             <control-param name="employee_endpointMany">true</control-param>
                             <control-param name="employee_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
@@ -452,7 +452,7 @@
                             <control-param name="employee_isShowNotActiveCheckBox">true</control-param>
                             <control-param name="employee_notActiveCheckBoxLabelId">label.control.employees-show-dismissed</control-param>
                             <!-- lecm-orgstr:organization-unit -->
-                            <control-param name="organization_label">Подразделение</control-param>
+                            <control-param name="organization_label">label.control.orgUnit</control-param>
                             <control-param name="organization_endpointType">lecm-orgstr:organization-unit</control-param>
                             <control-param name="organization_endpointMany">true</control-param>
                             <control-param name="organization_xPathLocation">..</control-param>
@@ -557,7 +557,7 @@
                             <control-param name="autocompleteDataSourceMethodPost">true</control-param>
                             <control-param name="dataSourceLogic">OR</control-param>
                             <!-- lecm-orgstr:employee -->
-                            <control-param name="employee_label">Сотрудник</control-param>
+                            <control-param name="employee_label">label.control.employee</control-param>
                             <control-param name="employee_endpointType">lecm-orgstr:employee</control-param>
                             <control-param name="employee_endpointMany">true</control-param>
                             <control-param name="employee_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
@@ -569,7 +569,7 @@
                             <control-param name="employee_isShowNotActiveCheckBox">true</control-param>
                             <control-param name="employee_notActiveCheckBoxLabelId">label.control.employees-show-dismissed</control-param>
                             <!-- lecm-orgstr:organization-unit -->
-                            <control-param name="organization_label">Подразделение</control-param>
+                            <control-param name="organization_label">label.control.orgUnit</control-param>
                             <control-param name="organization_endpointType">lecm-orgstr:organization-unit</control-param>
                             <control-param name="organization_endpointMany">true</control-param>
                             <control-param name="organization_xPathLocation">..</control-param>
@@ -688,7 +688,7 @@
                             <control-param name="autocompleteDataSourceMethodPost">true</control-param>
                             <control-param name="dataSourceLogic">OR</control-param>
                             <!-- lecm-orgstr:employee -->
-                            <control-param name="employee_label">Сотрудник</control-param>
+                            <control-param name="employee_label">label.control.employee</control-param>
                             <control-param name="employee_endpointType">lecm-orgstr:employee</control-param>
                             <control-param name="employee_endpointMany">true</control-param>
                             <control-param name="employee_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
@@ -697,7 +697,7 @@
                             <control-param name="employee_showSearch">true</control-param>
                             <control-param name="employee_useStrictFilterByOrg">true</control-param>
                             <!-- lecm-orgstr:organization-unit -->
-                            <control-param name="organization_label">Подразделение</control-param>
+                            <control-param name="organization_label">label.control.orgUnit</control-param>
                             <control-param name="organization_endpointType">lecm-orgstr:organization-unit</control-param>
                             <control-param name="organization_endpointMany">true</control-param>
                             <control-param name="organization_xPathLocation">{currentLocation}</control-param>
@@ -945,7 +945,7 @@
                             <control-param name="autocompleteDataSourceMethodPost">true</control-param>
                             <control-param name="dataSourceLogic">OR</control-param>
                             <!-- lecm-orgstr:employee -->
-                            <control-param name="employee_label">Сотрудник</control-param>
+                            <control-param name="employee_label">label.control.employee</control-param>
                             <control-param name="employee_endpointType">lecm-orgstr:employee</control-param>
                             <control-param name="employee_endpointMany">true</control-param>
                             <control-param name="employee_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
@@ -954,7 +954,7 @@
                             <control-param name="employee_showSearch">true</control-param>
                             <control-param name="employee_useStrictFilterByOrg">true</control-param>
                             <!-- lecm-orgstr:organization-unit -->
-                            <control-param name="organization_label">Подразделение</control-param>
+                            <control-param name="organization_label">label.control.orgUnit</control-param>
                             <control-param name="organization_endpointType">lecm-orgstr:organization-unit</control-param>
                             <control-param name="organization_endpointMany">true</control-param>
                             <control-param name="organization_xPathLocation">{currentLocation}</control-param>

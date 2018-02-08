@@ -55,6 +55,7 @@
             <list>
                 <value>alfresco/module/${artifactId}/messages/lecm-internal-model</value>
                 <value>alfresco/module/${artifactId}/messages/lecm-internal-table-structure-model</value>
+                <value>alfresco/module/${artifactId}/messages/lecm-internal-messages</value>
             </list>
         </property>
     </bean>
@@ -150,6 +151,7 @@
 		<property name="triggerGroup" value="internal-triggers"/>
 		<property name="actionName" value="internalNotificationExecutor"/>
 		<property name="documentGlobalSettingsService" ref="documents.global-settings.service"/>
+        <property name="internalService" ref="internalService"/>
 	</bean>
 	
     <bean id="internalCopySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings">

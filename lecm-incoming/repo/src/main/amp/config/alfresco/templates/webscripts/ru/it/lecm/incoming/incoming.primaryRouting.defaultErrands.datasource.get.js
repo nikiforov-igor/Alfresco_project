@@ -21,7 +21,13 @@ if (incoming) {
         var errandTypesDictionary = dictionary.getDictionaryByName("Типы поручений");
         if (errandTypesDictionary) {
             errandTypeToReview = errandTypesDictionary.childByNamePath("На рассмотрение");
+            if (!errandTypeToReview) {
+                errandTypeToReview = errandTypesDictionary.childByNamePath(msg.get("lecm.errands.dictionary.types.errandTypeToReview"));
+            }
             errandTypeToExecute = errandTypesDictionary.childByNamePath("На исполнение (неконтрольное)");
+            if (!errandTypeToExecute) {
+                errandTypeToExecute = errandTypesDictionary.childByNamePath(msg.get("lecm.errands.dictionary.types.errandTypeToExecute"));
+            }
         }
 
         var incomingType = null;

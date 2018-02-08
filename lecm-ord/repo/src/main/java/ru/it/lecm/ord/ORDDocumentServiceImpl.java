@@ -4,9 +4,7 @@ import java.util.*;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.AssociationRef;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -27,12 +25,21 @@ public class ORDDocumentServiceImpl extends BaseBean implements ORDDocumentServi
 	private DocumentService documentService;
 	private DocumentTableService documentTableService;
     private OrgstructureBean orgstructureBean;
+	private EDSDocumentService edsDocumentService;
+
+	private EnumMap<ORDModel.ORD_STATUS, String> ordStatusesMap;
+
+	private  EnumMap<ORDModel.ATTACHMENT_CATEGORIES,String> attachmentCategoriesMap;
 
     public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
         this.orgstructureBean = orgstructureBean;
     }
 
-    public void setDocumentTableService(DocumentTableService documentTableService) {
+	public void setEdsDocumentService(EDSDocumentService edsDocumentService) {
+		this.edsDocumentService = edsDocumentService;
+	}
+
+	public void setDocumentTableService(DocumentTableService documentTableService) {
 		this.documentTableService = documentTableService;
 	}
 
@@ -53,11 +60,17 @@ public class ORDDocumentServiceImpl extends BaseBean implements ORDDocumentServi
 
 	@Override
 	public void changePointStatus(NodeRef point, ORDModel.P_STATUSES statusKey){
-		String status = ORDModel.POINT_STATUSES.get(statusKey);
-		if (null != status){
-			NodeRef newPointStatus = lecmDictionaryService.getDictionaryValueByParam(ORDModel.ORD_POINT_DICTIONARY_NAME, ContentModel.PROP_NAME, status);
-			List<NodeRef> targetStatus = Arrays.asList(newPointStatus);
-			nodeService.setAssociations(point, ORDModel.ASSOC_ORD_TABLE_ITEM_STATUS, targetStatus);
+		changePointStatus(point, statusKey.toString());
+	}
+
+	@Override
+	public void changePointStatus(NodeRef point, String statusKey){
+		if (point != null && statusKey != null) {
+			NodeRef newPointStatus = lecmDictionaryService.getDictionaryValueByParam(ORDModel.ORD_POINT_DICTIONARY_NAME, ORDModel.PROP_ORD_DIC_POINT_STATUS_CODE, statusKey);
+			if (newPointStatus != null) {
+				List<NodeRef> targetStatus = Arrays.asList(newPointStatus);
+				nodeService.setAssociations(point, ORDModel.ASSOC_ORD_TABLE_ITEM_STATUS, targetStatus);
+			}
 		}
 	}
 
@@ -83,16 +96,20 @@ public class ORDDocumentServiceImpl extends BaseBean implements ORDDocumentServi
 
 	@Override
 	public Boolean checkPointStatus(NodeRef point, ORDModel.P_STATUSES statusKey){
-		String status = getPointStatus(point);
-		if (null != status){
-			if ( ORDModel.POINT_STATUSES.get(statusKey).equals(status) ){
-				return true;
-			}
-			else{
-				return false;
+		return checkPointStatus(point, statusKey.toString());
+	}
+
+	@Override
+	public Boolean checkPointStatus(NodeRef point, String statusCode) {
+		String pointStatus = getPointStatus(point);
+		String statusByCode = null;
+		if (statusCode != null) {
+			NodeRef statusRef = lecmDictionaryService.getDictionaryValueByParam(ORDModel.ORD_POINT_DICTIONARY_NAME, ORDModel.PROP_ORD_DIC_POINT_STATUS_CODE, statusCode);
+			if (statusRef != null) {
+				statusByCode = (String) nodeService.getProperty(statusRef, ContentModel.PROP_NAME);
 			}
 		}
-		return false;
+		return null != pointStatus && pointStatus.equals(statusByCode);
 	}
 
 	@Override
@@ -178,5 +195,34 @@ public class ORDDocumentServiceImpl extends BaseBean implements ORDDocumentServi
 
     public void setDocumentService(DocumentService documentService) {
 		this.documentService = documentService;
+	}
+
+
+	@Override
+	protected void initServiceImpl() {
+		ordStatusesMap = new EnumMap<ORDModel.ORD_STATUS,String>(ORDModel.ORD_STATUS.class){{
+			put(ORDModel.ORD_STATUS.CANCELED_FAKE, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.ord.statemachine-status.cancelled", "Отменен"));
+			put(ORDModel.ORD_STATUS.DELETED, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.ord.statemachine-status.removed", "Удален"));
+			put(ORDModel.ORD_STATUS.EXECUTION, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.ord.statemachine-status.on-execution", "На исполнении"));
+
+		}};
+
+		attachmentCategoriesMap = new EnumMap<ORDModel.ATTACHMENT_CATEGORIES,String>(ORDModel.ATTACHMENT_CATEGORIES.class){{
+			put(ORDModel.ATTACHMENT_CATEGORIES.DOCUMENT, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.ord.document.attachment.category.DOCUMENT.title", "Документ"));
+			put(ORDModel.ATTACHMENT_CATEGORIES.APPLICATIONS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.ord.document.attachment.category.APPENDIX.title", "Приложения"));
+			put(ORDModel.ATTACHMENT_CATEGORIES.AGREEMENTS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.ord.document.attachment.category.APPROVAL.title", "Согласования"));
+			put(ORDModel.ATTACHMENT_CATEGORIES.ORIGINAL, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.ord.document.attachment.category.ORIGINAL.title", "Подлинник"));
+			put(ORDModel.ATTACHMENT_CATEGORIES.OTHERS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.ord.document.attachment.category.OTHER.title", "Прочее"));
+		}};
+	}
+
+	@Override
+	public String getOrdStatusName(ORDModel.ORD_STATUS code) {
+		return ordStatusesMap != null ? ordStatusesMap.get(code) : null;
+	}
+
+	@Override
+	public String getAttachmentCategoryName(ORDModel.ATTACHMENT_CATEGORIES code) {
+		return attachmentCategoriesMap != null ? attachmentCategoriesMap.get(code) : null;
 	}
 }

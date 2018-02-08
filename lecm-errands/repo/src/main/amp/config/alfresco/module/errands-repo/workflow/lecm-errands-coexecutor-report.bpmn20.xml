@@ -29,8 +29,11 @@
 										var dateString = dateFormat.format(new java.util.Date());
 	                                    attachment.properties["cm:name"] = "Отчет соисполнителя " + currentUser.properties["lecm-orgstr:employee-short-name"] + ", от " + dateString;
 	                                    attachment.save();
-
-	                                    var category = documentAttachments.getCategoryByName("Отчеты соисполнителей", document);
+                                        var msg = org.springframework.extensions.surf.util.I18NUtil.getMessage;
+                                        var category = documentAttachments.getCategoryByName("Отчеты соисполнителей", document);
+                                        if (!category) {
+	                                        category = documentAttachments.getCategoryByName(msg("lecm.errands.document.attachment.category.EXECUTION_REPORTS.title"), document);
+	                                    }
 	                                    if (category != null) {
 	                                        attachment.move(category);
 	                                    }

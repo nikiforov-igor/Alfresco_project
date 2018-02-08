@@ -29,10 +29,10 @@ public class ResolutionsWebScriptBean extends BaseWebScript {
     private OrgstructureBean orgstructureService;
     private IWorkCalendar workCalendar;
 
-    public static final String ON_APPROVAL_KEY = "На утверждении";
-    public static final String ON_COMPLETION_KEY = "На доработке";
-    public static final String ON_EXECUTION_KEY = "На исполнении";
-    public static final String ON_SOLUTION_KEY = "Требуют принятия решения";
+    public static final String ON_APPROVAL_KEY = "ON_APPROVAL_KEY";
+    public static final String ON_COMPLETION_KEY = "ON_COMPLETION_KEY";
+    public static final String ON_EXECUTION_KEY = "ON_EXECUTION_KEY";
+    public static final String ON_SOLUTION_KEY = "ON_SOLUTION_KEY";
     public static final int DEADLINE_DAY_COUNT = 5;
 
     public void setNamespaceService(NamespaceService namespaceService) {

@@ -3480,9 +3480,9 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>actionScript</name>
-                                                                <value><![CDATA[(function(){
-  errands.changeStatusDocumentByExecution(stm_document);
-})();]]></value>
+                                                                <value><![CDATA[<import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/errands-scripts.js">
+  ErrandsScript.changeStatusDocumentByExecution(stm_document);
+]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>

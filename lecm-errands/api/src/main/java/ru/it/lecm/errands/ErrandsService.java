@@ -6,6 +6,7 @@ import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -148,6 +149,47 @@ public interface ErrandsService {
     QName ASSOC_ERRANDS_CO_EXECUTORS_FIRST_LEVEL = QName.createQName(ERRANDS_ASPECT_NAMESPACE_URI, "errands-co-executors-assoc");
 
     QName PROP_ERRANDS_EXECUTORS_REF = QName.createQName(ERRANDS_ASPECT_NAMESPACE_URI, "errands-executors-assoc-ref");
+
+    public static enum ATTACHMENT_CATEGORIES { ERRAND("Поручение"), CONTROL("Контроль"), EXECUTION("Исполнение"), COEXECUTORS_REPORTS("Отчеты соисполнителей");
+        String historyValue;
+        ATTACHMENT_CATEGORIES(String historyValue) {
+            this.historyValue = historyValue;
+        }
+
+        public String getHistoryValue() {
+            return historyValue;
+        }};
+
+    public static enum ERRANDS_STATUS {
+        REMOVED("Удалено"),
+        CANCELLED("Отменено"),
+        NOT_EXECUTED("Не исполнено"),
+        EXECUTED("Исполнено"),
+        WAIT_FOR_EXECUTION("Ожидает исполнения"),
+        ON_EXECUTION("На исполнении"),
+        REPORT_CHECK("На проверке отчета"),
+        ON_REWORK("На доработке"),
+        PERIODICALLY("На периодическом исполнении");
+
+        private String historyValue;
+
+        ERRANDS_STATUS(String historyValue) {
+            this.historyValue = historyValue;
+        }
+
+        public String getHistoryValue() {
+            return historyValue;
+        }
+
+        public Boolean isStatusEquals(String status, ErrandsService errandsService) {
+            return historyValue.equals(status) || (errandsService != null && Objects.equals(status, errandsService.getErrandStatusName(this))) ;
+        }
+    }
+
+    String getErrandStatusName(ERRANDS_STATUS code);
+
+    String getAttachmentCategoryName(ATTACHMENT_CATEGORIES code);
+
     /**
      * Получение папки для черновиков
      *

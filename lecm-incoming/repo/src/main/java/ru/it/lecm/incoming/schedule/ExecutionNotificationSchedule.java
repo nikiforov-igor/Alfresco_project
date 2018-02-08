@@ -70,16 +70,11 @@ public class ExecutionNotificationSchedule extends BaseTransactionalSchedule {
         List<String> statuses = new ArrayList<String>();
 
         types.add(IncomingServiceImpl.TYPE_INCOMING);
-        statuses.add("!Черновик");
-        statuses.add("!Закрыт");
-        statuses.add("!Исполнен");
-        statuses.add("!Удален");
-        statuses.add("!Принят");
         paths.add(documentService.getDocumentsFolderPath());
 
         DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
-        filters = "@lecm\\-eds\\-document\\:execution\\-date: [\"" + DateFormatISO8601.format(start) + "\" to \"" + DateFormatISO8601.format(end) + "\"]";
+        filters = "@lecm\\-statemachine\\-aspects\\:is\\-draft: false AND (NOT ASPECT: \"lecm-statemachine-aspects:is-final-aspect\" OR @lecm\\-statemachine\\-aspects\\:is\\-final: false) AND @lecm\\-eds\\-document\\:execution\\-date: [\"" + DateFormatISO8601.format(start) + "\" to \"" + DateFormatISO8601.format(end) + "\"]";
         return documentService.getDocumentsByFilter(types, paths, statuses, filters, null);
     }
 

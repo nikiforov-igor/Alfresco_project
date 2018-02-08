@@ -35,7 +35,7 @@ LogicECM.ORD = LogicECM.ORD || {};
                 nodeRef: null,
                 roles: []
             };
-            var allowedStatuses = ["Черновик", "Проект", "Согласован", "На доработке", "Подписан", "На регистрации"];
+            var allowedStatuses = ["Черновик", "Проект", "Согласован", "На доработке", "Подписан", "На регистрации", this.msg("lecm.ord.statemachine-status.draft"), this.msg("lecm.ord.statemachine-status.project"), this.msg("lecm.ord.statemachine-status.approved"), this.msg("lecm.ord.statemachine-status.on-rework"), this.msg("lecm.ord.statemachine-status.signed"), this.msg("lecm.ord.statemachine-status.on-registration")];
 
             Alfresco.util.Ajax.jsonGet({
                 url: Alfresco.constants.PROXY_URI + "lecm/ord/items/getInfo",
@@ -66,8 +66,8 @@ LogicECM.ORD = LogicECM.ORD || {};
                                 evaluator: this.showExecuteActionEvaluator
                             });
                             if (allowedStatuses.indexOf(docStatus) >= 0 &&
-                                ((docStatus == "На регистрации" && currentUser.roles.indexOf("DA_REGISTRAR_DYN") >= 0 && currentUser.roles.indexOf("DA_REGISTRARS") >= 0) ||
-                                (docStatus != "На регистрации" && currentUser.roles.indexOf("BR_INITIATOR") >= 0))) {
+                                (((docStatus == "На регистрации" || docStatus == this.msg("lecm.ord.statemachine-status.on-registration")) && currentUser.roles.indexOf("DA_REGISTRAR_DYN") >= 0 && currentUser.roles.indexOf("DA_REGISTRARS") >= 0) ||
+                                ((docStatus != "На регистрации" && docStatus != this.msg("lecm.ord.statemachine-status.on-registration")) && currentUser.roles.indexOf("BR_INITIATOR") >= 0))) {
                                 if (!this.options.disabled && this.options.mode == "edit") {
                                     if (this.options.allowEdit === true) {
                                         actions.push({
@@ -188,7 +188,7 @@ LogicECM.ORD = LogicECM.ORD || {};
             var itemStatus = rowData.itemData["assoc_lecm-ord-table-structure_item-status-assoc"];
             var controller = rowData.itemData["assoc_lecm-ord-table-structure_controller-assoc"];
             var executor = rowData.itemData["assoc_lecm-ord-table-structure_executor-assoc"];
-            var isStatusOk = itemStatus && itemStatus.displayValue == "На исполнении";
+            var isStatusOk = itemStatus && (itemStatus.displayValue == "На исполнении" || itemStatus.displayValue == Alfresco.util.message("lecm.ord.item.status.on-execution"));
             var isEmployeeOk = (this.options.currentUser.isController || (controller && this.options.currentUser.nodeRef == controller.value)) && (executor && this.options.currentUser.nodeRef != executor.value);
             return isStatusOk && isEmployeeOk;
         },
@@ -198,16 +198,16 @@ LogicECM.ORD = LogicECM.ORD || {};
             var executor = rowData.itemData["assoc_lecm-ord-table-structure_executor-assoc"];
             var reportRequired = rowData.itemData["prop_lecm-ord-table-structure_report-required"];
             var isReportRequired = reportRequired && reportRequired.value;
-            var isStatusOk = itemStatus && itemStatus.displayValue == "На исполнении";
+            var isStatusOk = itemStatus && (itemStatus.displayValue == "На исполнении" || itemStatus.displayValue == Alfresco.util.message("lecm.ord.item.status.on-execution"));
             var isEmployeeOk = !isReportRequired && ((this.options.currentUser.nodeRef == executor.value) || ((this.options.currentUser.isController && this.options.currentUser.nodeRef == executor.value) || (controller && executor.value == controller.value)));
             return isStatusOk && isEmployeeOk;
         },
         showActionsEvaluator: function (rowData) {
             var itemStatus = rowData.itemData["assoc_lecm-ord-table-structure_item-status-assoc"];
-            var isItemStatusOk = itemStatus && itemStatus.displayValue == "Ожидает исполнения";
+            var isItemStatusOk = itemStatus && (itemStatus.displayValue == "Ожидает исполнения" || itemStatus.displayValue == Alfresco.util.message("lecm.ord.item.status.wait-for-execution"));
             var isEmployeeOk =
-                ((this.options.currentDocStatus == "На регистрации" && this.options.currentUser.roles.indexOf("DA_REGISTRAR_DYN") >= 0 && this.options.currentUser.roles.indexOf("DA_REGISTRARS") >= 0) ||
-                (this.options.currentDocStatus != "На регистрации" && this.options.currentUser.roles.indexOf("BR_INITIATOR") >= 0));
+                (((this.options.currentDocStatus == "На регистрации" || this.options.currentDocStatus == Alfresco.util.message("lecm.ord.statemachine-status.on-registration")) && this.options.currentUser.roles.indexOf("DA_REGISTRAR_DYN") >= 0 && this.options.currentUser.roles.indexOf("DA_REGISTRARS") >= 0) ||
+                ((this.options.currentDocStatus != "На регистрации" && this.options.currentDocStatus != Alfresco.util.message("lecm.ord.statemachine-status.on-registration")) && this.options.currentUser.roles.indexOf("BR_INITIATOR") >= 0));
             return isItemStatusOk && isEmployeeOk;
         }
 

@@ -28,7 +28,7 @@
 					</field>
 					<field id="lecmRegnumRes:mode">
 						<control template="/ru/it/lecm/workflow/reservation/controls/activiti-transitions-reservation-radiobuttons.ftl">
-							<control-param name="options">REG_DATE|На дату#alf#NO_REG_DATE|Без указания даты</control-param>
+							<control-param name="options">REG_DATE|lecm.reservation.request.mode.with-date#alf#NO_REG_DATE|lecm.reservation.request.mode.without-date</control-param>
 						</control>
 					</field>
 					<field id="lecmRegnumRes:date">
@@ -65,7 +65,7 @@
 					</field>
 					<field id="lecmRegnumRes:decision" mandatory="true">
 						<control template="/ru/it/lecm/workflow/reservation/controls/activiti-transitions-reserve-radiobuttons.ftl">
-							<control-param name="options">RESERVED|Одобрить запрос#alf#REJECTED|Отклонить запрос</control-param>
+							<control-param name="options">RESERVED|lecm.reservation.decision.approved#alf#REJECTED|lecm.reservation.decision.rejected</control-param>
 						</control>
 					</field>
 					<field id="lecmRegnumRes:rejectReason" label-id="ru.it.reservation.title.rejectReason" help-id="lecm.reservation.reject-reason.help-id">
@@ -133,7 +133,7 @@
 					</field>
 					<field id="lecmRegnumRes:requestCancelDecision" mandatory="true">
 						<control template="/ru/it/lecm/workflow/reservation/controls/activiti-transitions-reserve-radiobuttons.ftl">
-							<control-param name="options">APPROVED|Одобрить запрос#alf#REJECTED|Отклонить запрос</control-param>
+							<control-param name="options">APPROVED|lecm.reservation.decision.approved#alf#REJECTED|lecm.reservation.decision.rejected</control-param>
 							<control-param name="positiveDecision">APPROVED</control-param>
 							<control-param name="rejectReasonProp">prop_lecmRegnumRes_requestCancelRejectReason</control-param>
 							<control-param name="decisionProp">prop_lecmRegnumRes_requestCancelDecision</control-param>

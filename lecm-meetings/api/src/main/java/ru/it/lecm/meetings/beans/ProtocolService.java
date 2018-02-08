@@ -2,6 +2,7 @@ package ru.it.lecm.meetings.beans;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+import org.springframework.extensions.surf.util.I18NUtil;
 
 import java.util.EnumMap;
 
@@ -11,6 +12,7 @@ import java.util.EnumMap;
  */
 public interface ProtocolService {
 	String PROTOCOL_NAMESPACE = "http://www.it.ru/logicECM/protocol/1.0";
+	String PROTOCOL_DICTIONARY_NAMESPACE = "http://www.it.ru/logicECM/protocol/dictionaries/1.0";
 	String PROTOCOL_TS_NAMESPACE = "http://www.it.ru/logicECM/protocol/table-structure/1.0";
 	
 	QName TYPE_PROTOCOL = QName.createQName(PROTOCOL_NAMESPACE, "document");
@@ -30,31 +32,24 @@ public interface ProtocolService {
 	QName ASSOC_PROTOCOL_POINT_STATUS = QName.createQName(PROTOCOL_TS_NAMESPACE, "point-status-assoc");
 	QName ASSOC_PROTOCOL_TEMP_ITEM = QName.createQName(PROTOCOL_NAMESPACE, "temp-items-assoc");
 
-	enum P_STATUSES { PERFORMANCE_STATUS, EXECUTED_STATUS, NOT_EXECUTED_STATUS, EXPIRED_STATUS, REMOVED_STATUS;};
-	EnumMap<P_STATUSES,String> POINT_STATUSES = new EnumMap<P_STATUSES,String>(P_STATUSES.class){{
-		put(P_STATUSES.PERFORMANCE_STATUS, "На исполнении");
-		put(P_STATUSES.EXECUTED_STATUS, "Исполнен");
-		put(P_STATUSES.NOT_EXECUTED_STATUS, "Не исполнен");
-		put(P_STATUSES.EXPIRED_STATUS, "Просрочен");
-		put(P_STATUSES.REMOVED_STATUS, "Удален");
-	}};
-
+	enum P_STATUSES { PERFORMANCE_STATUS, EXECUTED_STATUS, NOT_EXECUTED_STATUS, EXPIRED_STATUS, REMOVED_STATUS};
 
 	enum ATTACHMENT_CATEGORIES { DOCUMENT, APPLICATIONS, ORIGINAL, OTHERS;};
-	EnumMap<ATTACHMENT_CATEGORIES,String> ATTACHMENT_CATEGORIES_MAP = new EnumMap<ATTACHMENT_CATEGORIES,String>(ATTACHMENT_CATEGORIES.class){{
-		put(ATTACHMENT_CATEGORIES.DOCUMENT, "Документ");
-		put(ATTACHMENT_CATEGORIES.APPLICATIONS, "Приложения");
-		put(ATTACHMENT_CATEGORIES.ORIGINAL, "Подлинник");
-		put(ATTACHMENT_CATEGORIES.OTHERS, "Прочее");
-	}};
-	String PROTOCOL_POINT_DICTIONARY_NAME = "Статусы пунктов протокола";
 
+	String PROTOCOL_POINT_DICTIONARY_NAME = "Статусы пунктов протокола";
+	QName PROP_PROTOCOL_DIC_POINT_STATUS_CODE = QName.createQName(PROTOCOL_DICTIONARY_NAMESPACE, "protocol-point-status-code");
+
+	void changePointStatus(NodeRef point, String statusKey);
 	void changePointStatus(NodeRef point, ProtocolService.P_STATUSES statusKey);
 
 	NodeRef getErrandLinkedPoint(NodeRef errand);
 	Boolean checkPointStatus(NodeRef point, ProtocolService.P_STATUSES statusKey);
+	Boolean checkPointStatus(NodeRef point, String statusKey);
 	String getPointStatus(NodeRef point);
 	void formErrands(final NodeRef protocol);
 	void setPointsStatusRemoved(final NodeRef protocol);
 	boolean checkProtocolPointsFields(NodeRef protocol);
+	String getPointStatusByCodeFromDictionary(String statusKey);
+	String getPointStatusCodeByStatusTextFromDictionary(String statusText);
+	String getAttachmentCategoryName(ATTACHMENT_CATEGORIES code);
 }

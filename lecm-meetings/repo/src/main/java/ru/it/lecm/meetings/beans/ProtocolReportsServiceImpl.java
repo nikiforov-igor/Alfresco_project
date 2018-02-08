@@ -10,6 +10,11 @@ import ru.it.lecm.reports.api.ReportsManager;
 @Deprecated
 public class ProtocolReportsServiceImpl extends BaseBean implements ProtocolReportsService {
     private ReportsManager reportsManager;
+    private ProtocolService protocolService;
+
+    public void setProtocolService(ProtocolService protocolService) {
+        this.protocolService = protocolService;
+    }
 
     public void setReportsManager(ReportsManager reportsManager) {
         this.reportsManager = reportsManager;
@@ -18,7 +23,7 @@ public class ProtocolReportsServiceImpl extends BaseBean implements ProtocolRepo
     @Override
     public NodeRef generateDocumentReport(final String reportCode, final String templateCode, final String documentRef) {
         NodeRef documentNodeRef = new NodeRef(documentRef);
-        String categoryName = ProtocolService.ATTACHMENT_CATEGORIES_MAP.get(ProtocolService.ATTACHMENT_CATEGORIES.DOCUMENT);
+        String categoryName = protocolService.getAttachmentCategoryName(ProtocolService.ATTACHMENT_CATEGORIES.DOCUMENT);
         return reportsManager.buildReportAndAttachToDocumentCategory(documentNodeRef, reportCode, templateCode, categoryName);
     }
 

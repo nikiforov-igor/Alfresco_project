@@ -1,11 +1,8 @@
 package ru.it.lecm.contracts.schedule;
 
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.quartz.CronTrigger;
-import org.quartz.SchedulerException;
 import ru.it.lecm.contracts.beans.ContractsBeanImpl;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -40,7 +37,7 @@ public class InititatorEveryDayNotificationSchedule extends BaseTransactionalSch
     private List<NodeRef> getContractsAfterExecution() {
         return contractsService.getContractsByFilter(ContractsBeanImpl.PROP_END_DATE, null, new Date(),
                 Arrays.asList(contractsService.getDocumentsFolderPath()),
-                Arrays.asList("Зарегистрирован", "Действует"), null, null, false);
+                Arrays.asList(ContractsBeanImpl.ContractRegistratedStatus, ContractsBeanImpl.ContractActiveStatus), null, null, false);
     }
 
     private List<NodeRef> getContractsOnExecution() {
@@ -48,7 +45,7 @@ public class InititatorEveryDayNotificationSchedule extends BaseTransactionalSch
 
         List<NodeRef> contracts = contractsService.getContractsByFilter(ContractsBeanImpl.PROP_START_DATE, null, now,
                 Arrays.asList(contractsService.getDocumentsFolderPath()),
-                Arrays.asList("Зарегистрирован"), null, null, false);
+                Arrays.asList(ContractsBeanImpl.ContractRegistratedStatus), null, null, false);
 
         // в списке договора у которых дата начала меньше текущей, из них учтем только те, у которых текущая дата < даты окончания
         List<NodeRef> appropContracts = new ArrayList<NodeRef>();

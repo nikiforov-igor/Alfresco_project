@@ -83,7 +83,7 @@
                             <control-param name="cssClasses">with-ex-search</control-param>
                             <control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
                             <!-- lecm-contractor:contractor-type -->
-                            <control-param name="contractor_label">Внешний контрагент</control-param>
+                            <control-param name="contractor_label">label.control.outer-contractor</control-param>
                             <control-param name="contractor_endpointType">lecm-contractor:contractor-type</control-param>
                             <control-param name="contractor_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
                             <control-param name="contractor_nameSubstituteString">{lecm-contractor:shortname}</control-param>
@@ -104,7 +104,7 @@
                             <control-param name="contractor_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
                             <control-param name="contractor_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
                             <!-- lecm-contractor:contractor-type -->
-                            <control-param name="organisation_label">Внутренний контрагент</control-param>
+                            <control-param name="organisation_label">label.control.inner-contractor</control-param>
                             <control-param name="organisation_endpointType">lecm-contractor:contractor-type</control-param>
                             <control-param name="organisation_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
                             <control-param name="organisation_nameSubstituteString">{lecm-contractor:shortname}</control-param>
@@ -122,7 +122,7 @@
                             <control-param name="organisation_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
                             <control-param name="organisation_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
                             <!-- lecm-contractor:physical-person-type -->
-                            <control-param name="person_label">Физическое лицо</control-param>
+                            <control-param name="person_label">label.control.person</control-param>
                             <control-param name="person_endpointType">lecm-contractor:physical-person-type</control-param>
                             <control-param name="person_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
                             <control-param name="person_nameSubstituteString">{lecm-contractor:lastName} {lecm-contractor:firstName} {lecm-contractor:middleName}</control-param>
@@ -328,7 +328,7 @@
                             <control-param name="cssClasses">with-ex-search</control-param>
                             <control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
                             <!-- lecm-contractor:contractor-type -->
-                            <control-param name="contractor_label">Внешний контрагент</control-param>
+                            <control-param name="contractor_label">label.control.outer-contractor</control-param>
                             <control-param name="contractor_endpointType">lecm-contractor:contractor-type</control-param>
                             <control-param name="contractor_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
                             <control-param name="contractor_nameSubstituteString">{lecm-contractor:shortname}</control-param>
@@ -349,7 +349,7 @@
                             <control-param name="contractor_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
                             <control-param name="contractor_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
                             <!-- lecm-contractor:contractor-type -->
-                            <control-param name="organisation_label">Внутренний контрагент</control-param>
+                            <control-param name="organisation_label">label.control.inner-contractor</control-param>
                             <control-param name="organisation_endpointType">lecm-contractor:contractor-type</control-param>
                             <control-param name="organisation_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
                             <control-param name="organisation_nameSubstituteString">{lecm-contractor:shortname}</control-param>
@@ -367,7 +367,7 @@
                             <control-param name="organisation_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
                             <control-param name="organisation_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
                             <!-- lecm-contractor:physical-person-type -->
-                            <control-param name="person_label">Физическое лицо</control-param>
+                            <control-param name="person_label">label.control.person</control-param>
                             <control-param name="person_endpointType">lecm-contractor:physical-person-type</control-param>
                             <control-param name="person_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
                             <control-param name="person_nameSubstituteString">{lecm-contractor:lastName} {lecm-contractor:firstName} {lecm-contractor:middleName}</control-param>
@@ -790,7 +790,7 @@
                             <control-param name="cssClasses">with-ex-search</control-param>
                             <control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
                             <!-- lecm-contractor:contractor-type -->
-                            <control-param name="contractor_label">Внешний контрагент</control-param>
+                            <control-param name="contractor_label">label.control.outer-contractor</control-param>
                             <control-param name="contractor_endpointType">lecm-contractor:contractor-type</control-param>
                             <control-param name="contractor_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
                             <control-param name="contractor_nameSubstituteString">{lecm-contractor:shortname}</control-param>
@@ -811,7 +811,7 @@
                             <control-param name="contractor_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
                             <control-param name="contractor_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
                             <!-- lecm-contractor:contractor-type -->
-                            <control-param name="organisation_label">Внутренний контрагент</control-param>
+                            <control-param name="organisation_label">label.control.inner-contractor</control-param>
                             <control-param name="organisation_endpointType">lecm-contractor:contractor-type</control-param>
                             <control-param name="organisation_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
                             <control-param name="organisation_nameSubstituteString">{lecm-contractor:shortname}</control-param>
@@ -829,7 +829,7 @@
                             <control-param name="organisation_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
                             <control-param name="organisation_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
                             <!-- lecm-contractor:physical-person-type -->
-                            <control-param name="person_label">Физическое лицо</control-param>
+                            <control-param name="person_label">label.control.person</control-param>
                             <control-param name="person_endpointType">lecm-contractor:physical-person-type</control-param>
                             <control-param name="person_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
                             <control-param name="person_nameSubstituteString">{lecm-contractor:lastName} {lecm-contractor:firstName} {lecm-contractor:middleName}</control-param>
@@ -1052,7 +1052,7 @@
                             <control-param name="cssClasses">with-ex-search</control-param>
                             <control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
                             <!-- lecm-contractor:contractor-type -->
-                            <control-param name="contractor_label">Внешний контрагент</control-param>
+                            <control-param name="contractor_label">label.control.outer-contractor</control-param>
                             <control-param name="contractor_endpointType">lecm-contractor:contractor-type</control-param>
                             <control-param name="contractor_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
                             <control-param name="contractor_nameSubstituteString">{lecm-contractor:shortname}</control-param>
@@ -1073,7 +1073,7 @@
                             <control-param name="contractor_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
                             <control-param name="contractor_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
                             <!-- lecm-contractor:contractor-type -->
-                            <control-param name="organisation_label">Внутренний контрагент</control-param>
+                            <control-param name="organisation_label">label.control.inner-contractor</control-param>
                             <control-param name="organisation_endpointType">lecm-contractor:contractor-type</control-param>
                             <control-param name="organisation_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
                             <control-param name="organisation_nameSubstituteString">{lecm-contractor:shortname}</control-param>
@@ -1091,7 +1091,7 @@
                             <control-param name="organisation_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
                             <control-param name="organisation_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
                             <!-- lecm-contractor:physical-person-type -->
-                            <control-param name="person_label">Физическое лицо</control-param>
+                            <control-param name="person_label">label.control.person</control-param>
                             <control-param name="person_endpointType">lecm-contractor:physical-person-type</control-param>
                             <control-param name="person_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
                             <control-param name="person_nameSubstituteString">{lecm-contractor:lastName} {lecm-contractor:firstName} {lecm-contractor:middleName}</control-param>
@@ -1179,7 +1179,7 @@
                             <control-param name="cssClasses">with-ex-search</control-param>
                             <control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
                             <!-- lecm-contractor:contractor-type -->
-                            <control-param name="contractor_label">Внешний контрагент</control-param>
+                            <control-param name="contractor_label">label.control.outer-contractor</control-param>
                             <control-param name="contractor_endpointType">lecm-contractor:contractor-type</control-param>
                             <control-param name="contractor_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
                             <control-param name="contractor_nameSubstituteString">{lecm-contractor:shortname}</control-param>
@@ -1200,7 +1200,7 @@
                             <control-param name="contractor_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
                             <control-param name="contractor_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
                             <!-- lecm-contractor:contractor-type -->
-                            <control-param name="organisation_label">Внутренний контрагент</control-param>
+                            <control-param name="organisation_label">label.control.inner-contractor</control-param>
                             <control-param name="organisation_endpointType">lecm-contractor:contractor-type</control-param>
                             <control-param name="organisation_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
                             <control-param name="organisation_nameSubstituteString">{lecm-contractor:shortname}</control-param>
@@ -1218,7 +1218,7 @@
                             <control-param name="organisation_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
                             <control-param name="organisation_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
                             <!-- lecm-contractor:physical-person-type -->
-                            <control-param name="person_label">Физическое лицо</control-param>
+                            <control-param name="person_label">label.control.person</control-param>
                             <control-param name="person_endpointType">lecm-contractor:physical-person-type</control-param>
                             <control-param name="person_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
                             <control-param name="person_nameSubstituteString">{lecm-contractor:lastName} {lecm-contractor:firstName} {lecm-contractor:middleName}</control-param>
@@ -1700,7 +1700,7 @@
                             <control-param name="cssClasses">with-ex-search</control-param>
                             <control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
                             <!-- lecm-contractor:contractor-type -->
-                            <control-param name="contractor_label">Внешний контрагент</control-param>
+                            <control-param name="contractor_label">label.control.outer-contractor</control-param>
                             <control-param name="contractor_endpointType">lecm-contractor:contractor-type</control-param>
                             <control-param name="contractor_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
                             <control-param name="contractor_nameSubstituteString">{lecm-contractor:shortname}</control-param>
@@ -1721,7 +1721,7 @@
                             <control-param name="contractor_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
                             <control-param name="contractor_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
                             <!-- lecm-contractor:contractor-type -->
-                            <control-param name="organisation_label">Внутренний контрагент</control-param>
+                            <control-param name="organisation_label">label.control.inner-contractor</control-param>
                             <control-param name="organisation_endpointType">lecm-contractor:contractor-type</control-param>
                             <control-param name="organisation_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
                             <control-param name="organisation_nameSubstituteString">{lecm-contractor:shortname}</control-param>
@@ -1739,7 +1739,7 @@
                             <control-param name="organisation_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
                             <control-param name="organisation_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
                             <!-- lecm-contractor:physical-person-type -->
-                            <control-param name="person_label">Физическое лицо</control-param>
+                            <control-param name="person_label">label.control.person</control-param>
                             <control-param name="person_endpointType">lecm-contractor:physical-person-type</control-param>
                             <control-param name="person_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
                             <control-param name="person_nameSubstituteString">{lecm-contractor:lastName} {lecm-contractor:firstName} {lecm-contractor:middleName}</control-param>

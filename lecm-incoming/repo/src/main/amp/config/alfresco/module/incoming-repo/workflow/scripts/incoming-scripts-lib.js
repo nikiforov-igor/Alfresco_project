@@ -1,5 +1,6 @@
 var LECMIncomingActions = {
     processExecutionSignals: function (document) {
+        var msg = org.springframework.extensions.surf.util.I18NUtil.getMessage;
         var reviewState = document.properties["lecm-review-ts:doc-review-state"];
         if (reviewState == "NOT_REQUIRED" || reviewState == "COMPLETE") {
             var hasReview = false;
@@ -37,7 +38,7 @@ var LECMIncomingActions = {
 
                     if (!allResolutionsFinalOrDraft) {
                         oneOrMoreResolutionsOnExecution = childResolutions.some(function (resolution) {
-                            return resolution.properties["lecm-statemachine:status"] == "На исполнении";
+                            return resolution.properties["lecm-statemachine:status"] == "На исполнении" || resolution.properties["lecm-statemachine:status"] == msg("lecm.resolutions.statemachine-status.on-execution");
                         });
                     }
 
@@ -45,7 +46,7 @@ var LECMIncomingActions = {
                         var oneOrMoreExecutedErrands = false;
                         if (hasErrands) {
                             oneOrMoreExecutedErrands = childErrands.some(function (errand) {
-                                return errand.properties["lecm-statemachine:status"] == "Исполнено";
+                                return errand.properties["lecm-statemachine:status"] == "Исполнено" || errand.properties["lecm-statemachine:status"] == msg("lecm.errands.statemachine-status.executed");
                             });
                         }
 
@@ -85,14 +86,14 @@ var LECMIncomingActions = {
                         var allExecutedErrands = true;
                         if (hasErrands) {
                             allExecutedErrands = childErrands.every(function (errand) {
-                                return errand.properties["lecm-statemachine:status"] == "Исполнено";
+                                return errand.properties["lecm-statemachine:status"] == "Исполнено" || errand.properties["lecm-statemachine:status"] == msg("lecm.errands.statemachine-status.executed");
                             });
                         }
                         var hasResolutions = childResolutions && childResolutions.length;
                         var allExecutedResolutions = true;
                         if (hasResolutions) {
                             allExecutedResolutions = childResolutions.every(function (resolution) {
-                                return resolution.properties["lecm-statemachine:status"] == "Завершено";
+                                return resolution.properties["lecm-statemachine:status"] == "Завершено" || resolution.properties["lecm-statemachine:status"] == msg("lecm.resolutions.statemachine-status.completed");
                             });
                         }
 

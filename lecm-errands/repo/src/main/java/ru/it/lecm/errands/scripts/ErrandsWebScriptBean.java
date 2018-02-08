@@ -25,6 +25,7 @@ import ru.it.lecm.base.beans.LecmTransactionHelper;
 import ru.it.lecm.base.beans.RepositoryStructureHelper;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.*;
+import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.errands.beans.ErrandsServiceImpl;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -44,10 +45,10 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 
     final static protected Logger logger = LoggerFactory.getLogger(ErrandsWebScriptBean.class);
 
-    public static final String EXECUTION_KEY = "Ожидает исполнения";
-    public static final String ON_EXECUTION_KEY = "На исполнении";
-    public static final String ON_REPORT_CHECK_KEY = "На проверке отчета";
-    public static final String ON_COMPLETION_KEY = "На доработке";
+    public static final String KEY_EXECUTION = "EXECUTION_KEY";
+    public static final String KEY_ON_EXECUTION = "ON_EXECUTION_KEY";
+    public static final String KEY_ON_REPORT_CHECK = "ON_REPORT_CHECK_KEY";
+    public static final String KEY_ON_COMPLETION = "ON_COMPLETION_KEY";
     public static final int DEADLINE_DAY_COUNT = 5;
     private ErrandsService errandsService;
 
@@ -393,7 +394,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                         issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_IMPORTANT + ":true ";
                     }
                     case ISSUED_ERRANDS_EXECUTION: {
-                        statuses = getErrandsStatuses(filters, EXECUTION_KEY);
+                        statuses = getErrandsStatuses(filters, KEY_EXECUTION);
                         break;
                     }
                     // на исполнении
@@ -401,7 +402,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                         issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_IMPORTANT + ":true ";
                     }
                     case ISSUED_ERRANDS_ON_EXECUTION: {
-                        statuses = getErrandsStatuses(filters, ON_EXECUTION_KEY);
+                        statuses = getErrandsStatuses(filters, KEY_ON_EXECUTION);
                         break;
                     }
                     //на проверке отчета (на контроле)
@@ -409,7 +410,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                         issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_IMPORTANT + ":true ";
                     }
                     case ISSUED_ERRANDS_ON_CHECK_REPORT: {
-                        statuses = getErrandsStatuses(filters, ON_REPORT_CHECK_KEY);
+                        statuses = getErrandsStatuses(filters, KEY_ON_REPORT_CHECK);
                         break;
                     }
                     // на доработке
@@ -417,7 +418,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                         issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_IMPORTANT + ":true ";
                     }
                     case ISSUED_ERRANDS_ON_COMPLETION: {
-                        statuses = getErrandsStatuses(filters, ON_COMPLETION_KEY);
+                        statuses = getErrandsStatuses(filters, KEY_ON_COMPLETION);
                         break;
                     }
                     //с приближающимся сроком
@@ -491,7 +492,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
             case ISSUED_ERRANDS_EXECUTION_IMPORTANT: {
             }
             case ISSUED_ERRANDS_EXECUTION: {
-                String status = EXECUTION_KEY;
+                String status = KEY_EXECUTION;
                 statusesStr = filters.get(status);
                 form = status;
                 break;
@@ -964,6 +965,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         return value;
     }
 
+    @Deprecated
     public void changeStatusDocumentByExecution(ScriptNode doc) {
         NodeRef nodeRef = doc.getNodeRef();
         QName documentType = QName.createQName("lecm-incoming:document", namespaceService);
@@ -971,9 +973,13 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         AssociationRef assocErrandsExecutors = nodeService.getTargetAssocs(nodeRef, errandsService.ASSOC_ERRANDS_EXECUTOR).get(0);
         List<NodeRef> nodeRefList = documentConnectionService.getConnectedWithDocument(nodeRef, "onBasis", documentType);
 
+        String incomingDirectedStatus = EDSDocumentService.getFromMessagesOrDefaultValue("lecm.incoming.statemachine-status.direct_to_execution", "Направлен на исполнение");
+        String incomingOnReviewStatus = EDSDocumentService.getFromMessagesOrDefaultValue("lecm.incoming.statemachine-status.on_review", "На рассмотрении");
+        String incomingRegistratedStatus = EDSDocumentService.getFromMessagesOrDefaultValue("lecm.incoming.statemachine-status.registrated", "Зарегистрирован");
+
         for (NodeRef ref : nodeRefList) {
             String status = String.valueOf(nodeService.getProperty(ref, StatemachineModel.PROP_STATUS));
-            if (status.equals("Направлен на исполнение") || status.equals("На рассмотрении") || status.equals("Зарегистрирован")) {
+            if (status.equals(incomingDirectedStatus) || status.equals(incomingOnReviewStatus) || status.equals(incomingRegistratedStatus)) {
                 nodeService.setProperty(ref, transitionFromErrand, assocErrandsExecutors.getTargetRef());
             }
         }

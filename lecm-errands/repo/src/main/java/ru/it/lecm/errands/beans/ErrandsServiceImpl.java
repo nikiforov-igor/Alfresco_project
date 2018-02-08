@@ -12,7 +12,6 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.FileFilterMode;
 import org.alfresco.util.Pair;
-import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.lang3.EnumUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,6 +27,7 @@ import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.DocumentEventCategory;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.resolutions.api.ResolutionsService;
@@ -36,8 +36,6 @@ import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -49,6 +47,8 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 
     final protected Logger logger = LoggerFactory.getLogger(ErrandsServiceImpl.class);
 
+    private EnumMap<ATTACHMENT_CATEGORIES, String> attachmentCategoriesMap;
+    private EnumMap<ERRANDS_STATUS, String> errandStatusesMap;
 
     private static enum FilterEnum {
         ALL,
@@ -109,7 +109,36 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 		if (null == getDashletSettingsNode()) {
 			dashletSettingsNode = createDashletSettingsNode();
 		}
+
+        errandStatusesMap = new EnumMap<ERRANDS_STATUS,String>(ERRANDS_STATUS.class){{
+            put(ERRANDS_STATUS.REMOVED, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.removed", "Удалено"));
+            put(ERRANDS_STATUS.CANCELLED, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.cancelled", "Отменено"));
+            put(ERRANDS_STATUS.NOT_EXECUTED, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.not-executed", "Не исполнено"));
+            put(ERRANDS_STATUS.EXECUTED, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.executed", "Исполнено"));
+            put(ERRANDS_STATUS.WAIT_FOR_EXECUTION, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.wait-for-execution", "Ожидает исполнения"));
+            put(ERRANDS_STATUS.ON_EXECUTION, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.on-execution", "На исполнении"));
+            put(ERRANDS_STATUS.REPORT_CHECK, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.report-check", "На проверке отчета"));
+            put(ERRANDS_STATUS.ON_REWORK, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.on-rework", "На доработке"));
+            put(ERRANDS_STATUS.PERIODICALLY, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.periodically-execution", "На периодическом исполнении"));
+        }};
+
+        attachmentCategoriesMap = new EnumMap<ATTACHMENT_CATEGORIES,String>(ATTACHMENT_CATEGORIES.class){{
+            put(ATTACHMENT_CATEGORIES.ERRAND, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.document.attachment.category.ERRAND.title", "Поручение"));
+            put(ATTACHMENT_CATEGORIES.CONTROL, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.document.attachment.category.CONTROL.title", "Контроль"));
+            put(ATTACHMENT_CATEGORIES.EXECUTION, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.document.attachment.category.EXECUTION.title", "Исполнение"));
+            put(ATTACHMENT_CATEGORIES.COEXECUTORS_REPORTS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.document.attachment.category.EXECUTION_REPORTS.title", "Отчеты соисполнителей"));
+        }};
 	}
+
+    @Override
+    public String getErrandStatusName(ERRANDS_STATUS code) {
+        return errandStatusesMap != null ? errandStatusesMap.get(code) : null;
+    }
+
+    @Override
+    public String getAttachmentCategoryName(ATTACHMENT_CATEGORIES code) {
+        return attachmentCategoriesMap != null ? attachmentCategoriesMap.get(code) : null;
+    }
 
     @Override
     public NodeRef getServiceRootFolder() {
@@ -335,14 +364,14 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
                     } else {
                         continue;
                     }
-                    if ("Удалено".equals(status)) {
+                    if (ERRANDS_STATUS.REMOVED.isStatusEquals(status, this)) {
                         continue;
                     }
                 } else {
                     if (!stateMachineService.isFinal(errand)) {
                         continue;
                     }
-                    if ("Удалено".equals(status)) {
+                    if (ERRANDS_STATUS.REMOVED.isStatusEquals(status, this)) {
                         continue;
                     }
                 }
@@ -405,7 +434,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         List<SortDefinition> sort = new ArrayList<SortDefinition>();
         List<NodeRef> sortingErrands = new ArrayList<NodeRef>();
         List<NodeRef> result = new ArrayList<NodeRef>();
-        List<String> status = stateMachineService.getStatuses("lecm-errands:document", true, false);
+        List<String> status = stateMachineService.getStatuses(ErrandsService.TYPE_ERRANDS, true, false);
 
         NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
         // сортируем поручения по важности, просроченности и по сроку исполнения
@@ -438,7 +467,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         List<SortDefinition> sort = new ArrayList<SortDefinition>();
         List<NodeRef> sortingErrands = new ArrayList<NodeRef>();
         List<NodeRef> result = new ArrayList<NodeRef>();
-        List<String> status = stateMachineService.getStatuses("lecm-errands:document", true, false);
+        List<String> status = stateMachineService.getStatuses(ErrandsService.TYPE_ERRANDS, true, false);
 
         // сортируем по наименованию поручения и по сроку исполнения
         sort.add(new SortDefinition(SortDefinition.SortType.FIELD, "@" + PROP_ERRANDS_NUMBER.toString(), false));

@@ -41,7 +41,7 @@ LogicECM.errands = LogicECM.errands || {};
                                 var resp = response.json.formatString.split(",");
                                 var currentReportStatus = resp[0];
                                 var reportRef = resp[1];
-                                if (currentReportStatus == "Отклонен" && reportRef) {
+                                if ((currentReportStatus == "Отклонен" || currentReportStatus == Alfresco.util.message("lecm.errands.report-status.decline")) && reportRef) {
                                     this.filter = "@lecm\\-errands\\-ts:execution\\-report\\-status:\"DECLINE\" AND NOT ID:\"" + reportRef + "\"";
                                 }
                             }

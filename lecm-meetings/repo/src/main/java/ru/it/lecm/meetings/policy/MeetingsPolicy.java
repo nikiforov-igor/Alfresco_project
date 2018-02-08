@@ -21,6 +21,7 @@ import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentTableService;
+import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.events.beans.EventsService;
 import ru.it.lecm.meetings.beans.MeetingsService;
 import ru.it.lecm.security.LecmPermissionService;
@@ -51,6 +52,7 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 	private LecmPermissionService lecmPermissionService;
 	private MeetingsService meetingsService;
 	private StateMachineServiceBean stateMachineService;
+	private String defaultCategoryName;
 
 	public MeetingsService getMeetingsService() {
 		return meetingsService;
@@ -122,6 +124,9 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 	}
 
 	public void init() {
+
+		defaultCategoryName = EDSDocumentService.getFromMessagesOrDefaultValue("lecm.meetings.attachments.categories.default", FILE_DEFAULT_CATEGORY);
+
 		transactionListener = new MeetingsPolicyTransactionListener();
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
@@ -251,9 +256,14 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 	private void moveFiles(NodeRef document, NodeRef row) {
 		if (null != document && null != row) {
 			List<AssociationRef> files = nodeService.getTargetAssocs(row, MeetingsService.ASSOC_MEETINGS_TS_ITEM_ATTACHMENTS);
+			NodeRef category = documentAttachmentsService.getCategory(FILE_DEFAULT_CATEGORY, document);
+			if (category == null) {
+				documentAttachmentsService.getCategory(defaultCategoryName, document);
+			}
 			for (AssociationRef fileAssoc : files) {
 				NodeRef file = fileAssoc.getTargetRef();
-				documentAttachmentsService.addAttachment(file, documentAttachmentsService.getCategory(FILE_DEFAULT_CATEGORY, document));
+
+				documentAttachmentsService.addAttachment(file, category);
 			}
 		}
 	}

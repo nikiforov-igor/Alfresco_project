@@ -25,6 +25,12 @@ LogicECM.module = LogicECM.module || {};
 			// setup the transitions array
 			this._processTransitions();
 
+			if (this.options.transitions) {
+				this.options.transitions.forEach(function(transition) {
+					transition.label = Alfresco.util.message(transition.label);
+				})
+			}
+
 			// generate buttons for each transition
 			this._generateTransitionButtons();
 		},

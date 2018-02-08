@@ -3,28 +3,34 @@
 	<item name="lecm-dic:Статусы пунктов ОРД" type="lecm-dic:dictionary">
         <property name="cm:name">Статусы пунктов ОРД</property>
         <property name="lecm-dic:description">Справочник статусов пунктов ОРД</property>
-        <property name="lecm-dic:type">lecm-dic:plane_dictionary_values</property>
+        <property name="lecm-dic:type">lecm-ord-dic:ord-point-status</property>
         <property name="lecm-dic:attributeForShow">cm:name</property>
         <property name="lecm-dic:plane">true</property>
         <property name="lecm-dic:active">true</property>
 		<items>
-			<item name="cm:Ожидает исполнения" type="lecm-dic:plane_dictionary_values">
+			<item name="cm:Ожидает исполнения" type="lecm-ord-dic:ord-point-status">
 				<property name="cm:name">Ожидает исполнения</property>
+				<property name="lecm-ord-dic:ord-point-status-code">WAIT_PERFORMANCE_STATUS</property>
 			</item>
-			<item name="cm:На исполнении" type="lecm-dic:plane_dictionary_values">
+			<item name="cm:На исполнении" type="lecm-ord-dic:ord-point-status">
 				<property name="cm:name">На исполнении</property>
+				<property name="lecm-ord-dic:ord-point-status-code">PERFORMANCE_STATUS</property>
 			</item>
-			<item name="cm:Исполнен" type="lecm-dic:plane_dictionary_values">
+			<item name="cm:Исполнен" type="lecm-ord-dic:ord-point-status">
 				<property name="cm:name">Исполнен</property>
+				<property name="lecm-ord-dic:ord-point-status-code">EXECUTED_STATUS</property>
 			</item>
-			<item name="cm:Отменен" type="lecm-dic:plane_dictionary_values">
+			<item name="cm:Отменен" type="lecm-ord-dic:ord-point-status">
 				<property name="cm:name">Отменен</property>
+				<property name="lecm-ord-dic:ord-point-status-code">CANCELED_STATUS</property>
 			</item>
-			<item name="cm:Исполнен Контролером" type="lecm-dic:plane_dictionary_values">
+			<item name="cm:Исполнен Контролером" type="lecm-ord-dic:ord-point-status">
 				<property name="cm:name">Исполнен Контролером</property>
+				<property name="lecm-ord-dic:ord-point-status-code">EXECUTED_BY_CONTROLLER_STATUS</property>
 			</item>
-			<item name="cm:Отменен Контролером" type="lecm-dic:plane_dictionary_values">
+			<item name="cm:Отменен Контролером" type="lecm-ord-dic:ord-point-status">
 				<property name="cm:name">Отменен Контролером</property>
+				<property name="lecm-ord-dic:ord-point-status-code">CANCELED_BY_CONTROLLER_STATUS</property>
 			</item>
 		</items>
 	</item>

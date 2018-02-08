@@ -19,9 +19,9 @@
         <constraint name="lecm-contract-table-structure:stage-status-constraint" type="LIST">
             <parameter name="allowedValues">
                 <list>
-                    <value>Не начат</value>
-                    <value>В работе</value>
-                    <value>Закрыт</value>
+                    <value>NOT_STARTED</value>
+                    <value>IN_WORK</value>
+                    <value>CLOSED</value>
                 </list>
             </parameter>
         </constraint>
@@ -78,7 +78,7 @@
 	            <!-- Статус этапа -->
 	            <property name="lecm-contract-table-structure:stage-status">
 		            <type>d:text</type>
-		            <default>Не начат</default>
+		            <default>NOT_STARTED</default>
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>

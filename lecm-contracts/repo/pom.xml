@@ -137,18 +137,23 @@
             <version>${platform.version}</version>
             <scope>provided</scope>
         </dependency>
-		<!--<dependency>
-			<groupId>ru.it.lecm.workflow</groupId>
-			<artifactId>workflow-repo-api</artifactId>
-			<version>${platform.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>ru.it.lecm.workflow.approval</groupId>
-			<artifactId>approval-repo-api</artifactId>
-			<version>${platform.version}</version>
-			<scope>provided</scope>
-		</dependency> -->
+        <dependency>
+            <groupId>ru.it.lecm.dictionary</groupId>
+            <artifactId>dictionary-repo-api</artifactId>
+            <version>${platform.version}</version>
+        </dependency>
+        <!--<dependency>
+            <groupId>ru.it.lecm.workflow</groupId>
+            <artifactId>workflow-repo-api</artifactId>
+            <version>${platform.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.workflow.approval</groupId>
+            <artifactId>approval-repo-api</artifactId>
+            <version>${platform.version}</version>
+            <scope>provided</scope>
+        </dependency> -->
     </dependencies>
     <!--
        The scm is required for the buildnumber-maven-plugin which is required

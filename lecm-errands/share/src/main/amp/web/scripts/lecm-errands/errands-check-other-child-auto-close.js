@@ -25,7 +25,7 @@
                             fn: function (response) {
                                 if (response && response.json.formatString) {
                                     var docType = response.json.formatString;
-                                    if (docType == "Поручение") {
+                                    if (docType == "Поручение" || docType == Alfresco.util.message("lecm.errands.docType.label")) {
                                         checkOtherChildAutoClose(parentDocRef);
                                     }
                                 }

@@ -103,9 +103,13 @@ public class ContractStageDateNotificationExecutor extends ActionExecuterAbstrac
             normalEndDate = calendar.getTime();
         }
 
-        if (normalStartDate != null && startPoint.equals(normalStartDate) && "Не начат".equals(stageStatus)) {
+        if (normalStartDate != null && startPoint.equals(normalStartDate) &&
+                (ContractsBeanImpl.STAGE_STATUSES_CONSTR.NOT_STARTED.toString().equals(stageStatus) ||
+                        ContractsBeanImpl.STAGE_STATUSES_CONSTR.NOT_STARTED.getHistoryValue().equals(stageStatus))) {
             return true;
-        } else if (normalEndDate != null && endPoint.equals(normalEndDate) && !"Закрыт".equals(stageStatus)){
+        } else if (normalEndDate != null && endPoint.equals(normalEndDate) &&
+                (!ContractsBeanImpl.STAGE_STATUSES_CONSTR.CLOSED.toString().equals(stageStatus) ||
+                !ContractsBeanImpl.STAGE_STATUSES_CONSTR.CLOSED.getHistoryValue().equals(stageStatus))){
             return false;
         }
         return null;
