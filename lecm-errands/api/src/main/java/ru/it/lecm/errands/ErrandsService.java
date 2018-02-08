@@ -182,11 +182,7 @@ public interface ErrandsService {
         }
 
         public Boolean isStatusEquals(String status, ErrandsService errandsService) {
-            Boolean isEquals = historyValue.equals(status);
-            if (errandsService != null) {
-                isEquals = isEquals || Objects.equals(status, errandsService.getErrandStatusName(this));
-            }
-            return isEquals;
+            return historyValue.equals(status) || (errandsService != null && Objects.equals(status, errandsService.getErrandStatusName(this))) ;
         }
     }
 
