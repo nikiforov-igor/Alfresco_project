@@ -48,7 +48,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     final protected Logger logger = LoggerFactory.getLogger(ErrandsServiceImpl.class);
 
     private EnumMap<ATTACHMENT_CATEGORIES, String> attachmentCategoriesMap;
-    private EnumMap<ERRANDS_STATUSES, String> errandStatusesMap;
+    private EnumMap<ERRANDS_STATUS, String> errandStatusesMap;
 
     private static enum FilterEnum {
         ALL,
@@ -110,16 +110,16 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 			dashletSettingsNode = createDashletSettingsNode();
 		}
 
-        errandStatusesMap = new EnumMap<ERRANDS_STATUSES,String>(ERRANDS_STATUSES.class){{
-            put(ERRANDS_STATUSES.ERRAND_REMOVED_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.removed", "Удалено"));
-            put(ERRANDS_STATUSES.ERRAND_CANCELLED_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.cancelled", "Отменено"));
-            put(ERRANDS_STATUSES.ERRAND_NOT_EXECUTED_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.not-executed", "Не исполнено"));
-            put(ERRANDS_STATUSES.ERRAND_EXECUTED_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.executed", "Исполнено"));
-            put(ERRANDS_STATUSES.ERRAND_WAIT_FOR_EXECUTION_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.wait-for-execution", "Ожидает исполнения"));
-            put(ERRANDS_STATUSES.ERRAND_ON_EXECUTION_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.on-execution", "На исполнении"));
-            put(ERRANDS_STATUSES.ERRAND_REPORT_CHECK_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.report-check", "На проверке отчета"));
-            put(ERRANDS_STATUSES.ERRAND_ON_REWORK_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.on-rework", "На доработке"));
-            put(ERRANDS_STATUSES.ERRAND_PERIODICALLY_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.periodically-execution", "На периодическом исполнении"));
+        errandStatusesMap = new EnumMap<ERRANDS_STATUS,String>(ERRANDS_STATUS.class){{
+            put(ERRANDS_STATUS.REMOVED, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.removed", "Удалено"));
+            put(ERRANDS_STATUS.CANCELLED, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.cancelled", "Отменено"));
+            put(ERRANDS_STATUS.NOT_EXECUTED, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.not-executed", "Не исполнено"));
+            put(ERRANDS_STATUS.EXECUTED, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.executed", "Исполнено"));
+            put(ERRANDS_STATUS.WAIT_FOR_EXECUTION, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.wait-for-execution", "Ожидает исполнения"));
+            put(ERRANDS_STATUS.ON_EXECUTION, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.on-execution", "На исполнении"));
+            put(ERRANDS_STATUS.REPORT_CHECK, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.report-check", "На проверке отчета"));
+            put(ERRANDS_STATUS.ON_REWORK, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.on-rework", "На доработке"));
+            put(ERRANDS_STATUS.PERIODICALLY, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.errands.statemachine-status.periodically-execution", "На периодическом исполнении"));
         }};
 
         attachmentCategoriesMap = new EnumMap<ATTACHMENT_CATEGORIES,String>(ATTACHMENT_CATEGORIES.class){{
@@ -131,7 +131,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 	}
 
     @Override
-    public String getErrandStatusName(ERRANDS_STATUSES code) {
+    public String getErrandStatusName(ERRANDS_STATUS code) {
         return errandStatusesMap != null ? errandStatusesMap.get(code) : null;
     }
 
@@ -364,14 +364,14 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
                     } else {
                         continue;
                     }
-                    if (ERRANDS_STATUSES.ERRAND_REMOVED_STATUS.getHistoryValue().equals(status) || Objects.equals(getErrandStatusName(ERRANDS_STATUSES.ERRAND_REMOVED_STATUS),status)) {
+                    if (ERRANDS_STATUS.REMOVED.getHistoryValue().equals(status) || Objects.equals(getErrandStatusName(ERRANDS_STATUS.REMOVED),status)) {
                         continue;
                     }
                 } else {
                     if (!stateMachineService.isFinal(errand)) {
                         continue;
                     }
-                    if (ERRANDS_STATUSES.ERRAND_REMOVED_STATUS.getHistoryValue().equals(status) || Objects.equals(getErrandStatusName(ERRANDS_STATUSES.ERRAND_REMOVED_STATUS),status)) {
+                    if (ERRANDS_STATUS.REMOVED.getHistoryValue().equals(status) || Objects.equals(getErrandStatusName(ERRANDS_STATUS.REMOVED),status)) {
                         continue;
                     }
                 }

@@ -87,8 +87,8 @@ public class EveryDayNotificationExecutor extends ActionExecuterAbstractBase {
             }
         }
         // Уведомление о направленном поручении
-        if (nodeService.getProperty(nodeRef, StatemachineModel.PROP_STATUS).equals(ErrandsService.ERRANDS_STATUSES.ERRAND_WAIT_FOR_EXECUTION_STATUS.getHistoryValue()) ||
-                nodeService.getProperty(nodeRef, StatemachineModel.PROP_STATUS).equals(errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUSES.ERRAND_WAIT_FOR_EXECUTION_STATUS))) {
+        if (nodeService.getProperty(nodeRef, StatemachineModel.PROP_STATUS).equals(ErrandsService.ERRANDS_STATUS.WAIT_FOR_EXECUTION.getHistoryValue()) ||
+                nodeService.getProperty(nodeRef, StatemachineModel.PROP_STATUS).equals(errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUS.WAIT_FOR_EXECUTION))) {
             notificationsService.sendNotificationByTemplate(nodeRef, getEmployeeList(nodeRef), "ERRANDS_DIRECTED");
         }
 

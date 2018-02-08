@@ -85,14 +85,10 @@ public class ContractsBeanImpl extends BaseBean {
             this.historyValue = historyValue;
         }
 
-        private String historyValue = "";
+        private String historyValue;
 
         public String getHistoryValue() {
             return historyValue;
-        }
-
-        private void setHistoryValue(String historyValue) {
-            this.historyValue = historyValue;
         }
     }
     public NodeRef dashletSettings = null;
@@ -178,18 +174,6 @@ public class ContractsBeanImpl extends BaseBean {
         }
         if (I18NUtil.getMessage("lecm.contract.statemachine-status.final.executed", I18NUtil.getLocale()) != null) {
             ContractExecutedStatus = I18NUtil.getMessage("lecm.contract.statemachine-status.final.executed", I18NUtil.getLocale());
-        }
-
-        if (I18NUtil.getMessage("lecm.contracts.stage.status.CLOSED", I18NUtil.getLocale()) != null) {
-            STAGE_STATUSES_CONSTR.CLOSED.setHistoryValue(I18NUtil.getMessage("lecm.contracts.stage.status.CLOSED", I18NUtil.getLocale()));
-        }
-
-        if (I18NUtil.getMessage("lecm.contracts.stage.status.NOT_STARTED", I18NUtil.getLocale()) != null) {
-            STAGE_STATUSES_CONSTR.NOT_STARTED.setHistoryValue(I18NUtil.getMessage("lecm.contracts.stage.status.NOT_STARTED", I18NUtil.getLocale()));
-        }
-
-        if (I18NUtil.getMessage("lecm.contracts.stage.status.IN_WORK", I18NUtil.getLocale()) != null) {
-            STAGE_STATUSES_CONSTR.IN_WORK.setHistoryValue(I18NUtil.getMessage("lecm.contracts.stage.status.IN_WORK", I18NUtil.getLocale()));
         }
 
         Collections.addAll(contractsDocsFinalStatuses, ContractAnnulledStatus, ContractCancelledStatus, ContractExecutedStatus);

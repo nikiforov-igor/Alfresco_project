@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface ORDDocumentService {
 
-	public String getOrdStatusName(ORDModel.ORD_STATUSES code);
+	public String getOrdStatusName(ORDModel.ORD_STATUS code);
 	public String getAttachmentCategoryName(ORDModel.ATTACHMENT_CATEGORIES code);
 	public String getDocumentURL(NodeRef documentRef);
 	public void changePointStatus(NodeRef point, String statusKey);

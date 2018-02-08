@@ -2,10 +2,8 @@ package ru.it.lecm.errands;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
-import org.springframework.extensions.surf.util.I18NUtil;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
-import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -161,20 +159,20 @@ public interface ErrandsService {
             return historyValue;
         }};
 
-    public static enum ERRANDS_STATUSES {
-        ERRAND_REMOVED_STATUS("Удалено"),
-        ERRAND_CANCELLED_STATUS("Отменено"),
-        ERRAND_NOT_EXECUTED_STATUS("Не исполнено"),
-        ERRAND_EXECUTED_STATUS("Исполнено"),
-        ERRAND_WAIT_FOR_EXECUTION_STATUS("Ожидает исполнения"),
-        ERRAND_ON_EXECUTION_STATUS("На исполнении"),
-        ERRAND_REPORT_CHECK_STATUS("На проверке отчета"),
-        ERRAND_ON_REWORK_STATUS("На доработке"),
-        ERRAND_PERIODICALLY_STATUS("На периодическом исполнении");
+    public static enum ERRANDS_STATUS {
+        REMOVED("Удалено"),
+        CANCELLED("Отменено"),
+        NOT_EXECUTED("Не исполнено"),
+        EXECUTED("Исполнено"),
+        WAIT_FOR_EXECUTION("Ожидает исполнения"),
+        ON_EXECUTION("На исполнении"),
+        REPORT_CHECK("На проверке отчета"),
+        ON_REWORK("На доработке"),
+        PERIODICALLY("На периодическом исполнении");
 
-        private String historyValue = "";
+        private String historyValue;
 
-        ERRANDS_STATUSES(String historyValue) {
+        ERRANDS_STATUS(String historyValue) {
             this.historyValue = historyValue;
         }
 
@@ -182,12 +180,12 @@ public interface ErrandsService {
             return historyValue;
         }
 
-        ERRANDS_STATUSES() {
+        ERRANDS_STATUS() {
 
         }
     }
 
-    String getErrandStatusName(ERRANDS_STATUSES code);
+    String getErrandStatusName(ERRANDS_STATUS code);
 
     String getAttachmentCategoryName(ATTACHMENT_CATEGORIES code);
 

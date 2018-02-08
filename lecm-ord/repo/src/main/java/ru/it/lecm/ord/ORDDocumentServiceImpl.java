@@ -5,7 +5,6 @@ import java.util.*;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.springframework.extensions.surf.util.I18NUtil;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -28,7 +27,7 @@ public class ORDDocumentServiceImpl extends BaseBean implements ORDDocumentServi
     private OrgstructureBean orgstructureBean;
 	private EDSDocumentService edsDocumentService;
 
-	private EnumMap<ORDModel.ORD_STATUSES, String> ordStatusesMap;
+	private EnumMap<ORDModel.ORD_STATUS, String> ordStatusesMap;
 
 	private  EnumMap<ORDModel.ATTACHMENT_CATEGORIES,String> attachmentCategoriesMap;
 
@@ -191,10 +190,10 @@ public class ORDDocumentServiceImpl extends BaseBean implements ORDDocumentServi
 
 	@Override
 	protected void initServiceImpl() {
-		ordStatusesMap = new EnumMap<ORDModel.ORD_STATUSES,String>(ORDModel.ORD_STATUSES.class){{
-			put(ORDModel.ORD_STATUSES.CANCELED_FAKE_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.ord.statemachine-status.cancelled", "Отменен"));
-			put(ORDModel.ORD_STATUSES.DELETED_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.ord.statemachine-status.removed", "Удален"));
-			put(ORDModel.ORD_STATUSES.EXECUTION_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.ord.statemachine-status.on-execution", "На исполнении"));
+		ordStatusesMap = new EnumMap<ORDModel.ORD_STATUS,String>(ORDModel.ORD_STATUS.class){{
+			put(ORDModel.ORD_STATUS.CANCELED_FAKE, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.ord.statemachine-status.cancelled", "Отменен"));
+			put(ORDModel.ORD_STATUS.DELETED, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.ord.statemachine-status.removed", "Удален"));
+			put(ORDModel.ORD_STATUS.EXECUTION, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.ord.statemachine-status.on-execution", "На исполнении"));
 
 		}};
 
@@ -208,7 +207,7 @@ public class ORDDocumentServiceImpl extends BaseBean implements ORDDocumentServi
 	}
 
 	@Override
-	public String getOrdStatusName(ORDModel.ORD_STATUSES code) {
+	public String getOrdStatusName(ORDModel.ORD_STATUS code) {
 		return ordStatusesMap != null ? ordStatusesMap.get(code) : null;
 	}
 

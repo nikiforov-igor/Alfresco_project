@@ -1,8 +1,6 @@
 package ru.it.lecm.ord.api;
 
-import java.util.EnumMap;
 import org.alfresco.service.namespace.QName;
-import org.springframework.extensions.surf.util.I18NUtil;
 
 /**
  *
@@ -49,11 +47,11 @@ public final class ORDModel {
 	public static final QName PROP_ORD_DIC_POINT_STATUS_CODE = QName.createQName(ORD_DIC_NAMESPACE, "ord-point-status-code");
 
 
-    public static enum ORD_STATUSES {
-        CANCELED_FAKE_STATUS("Отменен"), DELETED_STATUS("Удален"), EXECUTION_STATUS("На исполнении");
-        private String historyValue = "";
+    public static enum ORD_STATUS {
+        CANCELED_FAKE("Отменен"), DELETED("Удален"), EXECUTION("На исполнении");
+        private String historyValue;
 
-        ORD_STATUSES(String historyValue) {
+        ORD_STATUS(String historyValue) {
             this.historyValue = historyValue;
         }
 

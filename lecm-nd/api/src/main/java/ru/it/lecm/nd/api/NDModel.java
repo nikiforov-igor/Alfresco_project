@@ -6,9 +6,7 @@
 
 package ru.it.lecm.nd.api;
 
-import java.util.EnumMap;
 import org.alfresco.service.namespace.QName;
-import org.springframework.extensions.surf.util.I18NUtil;
 
 /**
  *
@@ -26,15 +24,15 @@ public final class NDModel {
 
 	public final static QName ASSOC_ND_REGISTRAR = QName.createQName(ND_NAMESPACE, "registrar-assoc");
 
-    public static enum ND_STATUSES {
-        ACTIVE_STATUS("Действует"),
-        CANCELED_STATUS("Отменен"),
-        DELETED_STATUS("Удален"),
-        OUT_OF_DATE_STATUS("Срок действия окончен"),
-        PUT_IN_WORK_STATUS("Введен в действие");
-        private String historyValue = "";
+    public static enum ND_STATUS {
+        ACTIVE("Действует"),
+        CANCELED("Отменен"),
+        DELETED("Удален"),
+        OUT_OF_DATE("Срок действия окончен"),
+        PUT_IN_WORK("Введен в действие");
+        private String historyValue;
 
-        ND_STATUSES(String historyValue) {
+        ND_STATUS(String historyValue) {
             this.historyValue = historyValue;
         }
 

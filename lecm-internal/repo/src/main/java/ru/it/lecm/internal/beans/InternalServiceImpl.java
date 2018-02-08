@@ -19,7 +19,7 @@ import java.util.EnumMap;
  */
 public class InternalServiceImpl extends BaseBean implements InternalService{
 
-    private EnumMap<INTERNAL_STATUSES, String> internalStatusesMap;
+    private EnumMap<INTERNAL_STATUS, String> internalStatusesMap;
 
     @Override
     public NodeRef getServiceRootFolder() {
@@ -27,15 +27,15 @@ public class InternalServiceImpl extends BaseBean implements InternalService{
     }
 
     @Override
-    public String getInternalStatusName(INTERNAL_STATUSES code) {
+    public String getInternalStatusName(INTERNAL_STATUS code) {
         return internalStatusesMap != null ? internalStatusesMap.get(code) : null;
     }
 
     @Override
     protected void initServiceImpl() {
-        internalStatusesMap = new EnumMap<INTERNAL_STATUSES,String>(INTERNAL_STATUSES.class){{
-                put(INTERNAL_STATUSES.INTERNAL_DIRECTED_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.internal.statemachine-status.directed", "Направлен"));
-                put(INTERNAL_STATUSES.INTERNAL_CLOSED_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.internal.statemachine-status.closed", "Закрыт"));
+        internalStatusesMap = new EnumMap<INTERNAL_STATUS,String>(INTERNAL_STATUS.class){{
+                put(INTERNAL_STATUS.DIRECTED, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.internal.statemachine-status.directed", "Направлен"));
+                put(INTERNAL_STATUS.CLOSED, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.internal.statemachine-status.closed", "Закрыт"));
             }};
     }
 }

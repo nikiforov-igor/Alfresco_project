@@ -11,5 +11,5 @@ public interface NDDocumentService {
 	
 	public boolean checkApprovalORDExists(NodeRef nd);
 
-	String getNDStatusName(NDModel.ND_STATUSES code);
+	String getNDStatusName(NDModel.ND_STATUS code);
 }

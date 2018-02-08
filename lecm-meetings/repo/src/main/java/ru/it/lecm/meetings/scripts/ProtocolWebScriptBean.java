@@ -98,7 +98,7 @@ public class ProtocolWebScriptBean extends BaseWebScript {
 					Boolean isExpired = (Boolean) nodeService.getProperty(sender,ErrandsService.PROP_ERRANDS_IS_EXPIRED);
 					Boolean justInTime = (Boolean) nodeService.getProperty(sender,ErrandsService.PROP_ERRANDS_JUST_IN_TIME);
 					if (!checkPointExecutedStatus(point) &&
-                            (ErrandsService.ERRANDS_STATUSES.ERRAND_EXECUTED_STATUS.getHistoryValue().equals(errandStatus) || errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUSES.ERRAND_EXECUTED_STATUS).equals(errandStatus))){
+                            (ErrandsService.ERRANDS_STATUS.EXECUTED.getHistoryValue().equals(errandStatus) || errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUS.EXECUTED).equals(errandStatus))){
 						// Переведем пункт в статус "Исполнен":
 						changePointStatus(protocol, point, ProtocolService.P_STATUSES_CODES.EXECUTED_STATUS.toString());
 					}

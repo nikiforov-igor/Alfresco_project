@@ -64,7 +64,7 @@ public class PeriodicalErrandsShedule extends BaseTransactionalSchedule {
         types.add(ErrandsService.TYPE_ERRANDS);
         List<String> statuses = new ArrayList<>(1);
 
-        statuses.add(errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUSES.ERRAND_PERIODICALLY_STATUS));
+        statuses.add(errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUS.PERIODICALLY));
 
        String filters = "@lecm\\-errands\\:period\\-start:[MIN to \"" + startPeriodDate + "\"] AND (@lecm\\-errands\\:period\\-end:[\"" + endPeriodDate + "\" to MAX] OR @lecm\\-errands\\:periodically\\-radio:" +
                 "\"" + ErrandsService.PeriodicallyRadio.ENDLESS.toString() + "\" OR" +

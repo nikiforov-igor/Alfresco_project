@@ -45,9 +45,9 @@ public class OutOfDateScheduler extends BaseTransactionalSchedule {
 		SearchParameters sp = new SearchParameters();
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
-		String searchQuery = String.format(searchQueryFormat, NDModel.TYPE_ND.toString(), NDModel.PROP_ND_END, StatemachineModel.PROP_STATUS, ndDocumentService.getNDStatusName(NDModel.ND_STATUSES.ACTIVE_STATUS));
-		if (!NDModel.ND_STATUSES.ACTIVE_STATUS.getHistoryValue().equals(ndDocumentService.getNDStatusName(NDModel.ND_STATUSES.ACTIVE_STATUS))) {
-			searchQuery += " @" + StatemachineModel.PROP_STATUS + ":\"" + NDModel.ND_STATUSES.ACTIVE_STATUS.getHistoryValue() + "\"";
+		String searchQuery = String.format(searchQueryFormat, NDModel.TYPE_ND.toString(), NDModel.PROP_ND_END, StatemachineModel.PROP_STATUS, ndDocumentService.getNDStatusName(NDModel.ND_STATUS.ACTIVE));
+		if (!NDModel.ND_STATUS.ACTIVE.getHistoryValue().equals(ndDocumentService.getNDStatusName(NDModel.ND_STATUS.ACTIVE))) {
+			searchQuery += " @" + StatemachineModel.PROP_STATUS + ":\"" + NDModel.ND_STATUS.ACTIVE.getHistoryValue() + "\"";
 		}
 		sp.setQuery(searchQuery.replaceAll("-", "\\\\-"));
 		ResultSet results = null;

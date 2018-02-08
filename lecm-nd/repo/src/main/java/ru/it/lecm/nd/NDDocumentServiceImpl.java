@@ -19,7 +19,7 @@ import ru.it.lecm.statemachine.StatemachineModel;
  */
 public class NDDocumentServiceImpl extends BaseBean implements NDDocumentService {
 
-	private EnumMap<NDModel.ND_STATUSES,String> ndStatusesMap;
+	private EnumMap<NDModel.ND_STATUS,String> ndStatusesMap;
 
 	private ORDDocumentService ordDocumentService;
 
@@ -43,7 +43,7 @@ public class NDDocumentServiceImpl extends BaseBean implements NDDocumentService
 		for (AssociationRef ordRef : ordRefs){
 			NodeRef ord = ordRef.getSourceRef();
 			String status = (String) nodeService.getProperty(ord, StatemachineModel.PROP_STATUS);
-			if (!ordDocumentService.getOrdStatusName(ORDModel.ORD_STATUSES.DELETED_STATUS).equals(status)){
+			if (!ordDocumentService.getOrdStatusName(ORDModel.ORD_STATUS.DELETED).equals(status)){
 				return true;
 			}
 		}
@@ -52,17 +52,17 @@ public class NDDocumentServiceImpl extends BaseBean implements NDDocumentService
 
 	@Override
 	protected void initServiceImpl() {
-		ndStatusesMap = new EnumMap<NDModel.ND_STATUSES,String>(NDModel.ND_STATUSES.class){{
-			put(NDModel.ND_STATUSES.ACTIVE_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.nd.statemachine-status.active", "Действует"));
-			put(NDModel.ND_STATUSES.CANCELED_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.nd.statemachine-status.cancelled", "Отменен"));
-			put(NDModel.ND_STATUSES.DELETED_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.nd.statemachine-status.removed", "Удален"));
-			put(NDModel.ND_STATUSES.OUT_OF_DATE_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.nd.statemachine-status.out-of-date", "Срок действия окончен"));
-			put(NDModel.ND_STATUSES.PUT_IN_WORK_STATUS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.nd.statemachine-status.put-in-work", "Введен в действие"));
+		ndStatusesMap = new EnumMap<NDModel.ND_STATUS,String>(NDModel.ND_STATUS.class){{
+			put(NDModel.ND_STATUS.ACTIVE, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.nd.statemachine-status.active", "Действует"));
+			put(NDModel.ND_STATUS.CANCELED, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.nd.statemachine-status.cancelled", "Отменен"));
+			put(NDModel.ND_STATUS.DELETED, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.nd.statemachine-status.removed", "Удален"));
+			put(NDModel.ND_STATUS.OUT_OF_DATE, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.nd.statemachine-status.out-of-date", "Срок действия окончен"));
+			put(NDModel.ND_STATUS.PUT_IN_WORK, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.nd.statemachine-status.put-in-work", "Введен в действие"));
 		}};
 	}
 
 	@Override
-	public String getNDStatusName(NDModel.ND_STATUSES code) {
+	public String getNDStatusName(NDModel.ND_STATUS code) {
 		return ndStatusesMap != null ? ndStatusesMap.get(code) : null;
 	}
 }

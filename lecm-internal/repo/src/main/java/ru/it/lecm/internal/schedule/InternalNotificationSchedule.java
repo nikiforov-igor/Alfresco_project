@@ -69,8 +69,8 @@ public class InternalNotificationSchedule extends BaseTransactionalSchedule {
 			List<NodeRef> connectedRefs = connectionService.getConnectedDocuments(internal, "inResponseTo", InternalService.TYPE_INTERNAL);
 			for (NodeRef connectedRef : connectedRefs) {
 				String status = (String) nodeService.getProperty(connectedRef, StatemachineModel.PROP_STATUS);
-				if (InternalService.INTERNAL_STATUSES.INTERNAL_DIRECTED_STATUS.getHistoryValue().equals(status) || InternalService.INTERNAL_STATUSES.INTERNAL_CLOSED_STATUS.getHistoryValue().equals(status) ||
-						internalService.getInternalStatusName(InternalService.INTERNAL_STATUSES.INTERNAL_DIRECTED_STATUS).equals(status) || internalService.getInternalStatusName(InternalService.INTERNAL_STATUSES.INTERNAL_CLOSED_STATUS).equals(status)) {
+				if (InternalService.INTERNAL_STATUS.DIRECTED.getHistoryValue().equals(status) || InternalService.INTERNAL_STATUS.CLOSED.getHistoryValue().equals(status) ||
+						internalService.getInternalStatusName(InternalService.INTERNAL_STATUS.DIRECTED).equals(status) || internalService.getInternalStatusName(InternalService.INTERNAL_STATUS.CLOSED).equals(status)) {
 					connectedDocs.add(connectedRef);
 				}
 			}
@@ -145,7 +145,7 @@ public class InternalNotificationSchedule extends BaseTransactionalSchedule {
         paths.add(documentService.getDocumentsFolderPath());
 
         List<String> statuses = new ArrayList<>();
-        statuses.add(internalService.getInternalStatusName(InternalService.INTERNAL_STATUSES.INTERNAL_DIRECTED_STATUS));
+        statuses.add(internalService.getInternalStatusName(InternalService.INTERNAL_STATUS.DIRECTED));
 
         String filters = "@lecm\\-eds\\-document\\:execution\\-date: [\"" + BaseBean.DateFormatISO8601.format(start) + "\" to \"" + BaseBean.DateFormatISO8601.format(end) + "\"]";
         return documentService.getDocumentsByFilter(types, paths, statuses, filters, null);
