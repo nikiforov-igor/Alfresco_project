@@ -11,8 +11,8 @@ var ProtocolScript = {
                     if (point) {
                         var isExpired = sender.properties["lecm-errands:is-expired"];
                         var justInTime = sender.properties["lecm-errands:just-in-time"];
-
-                        if (!protocolService.checkPointExecutedStatus(point) && ("Исполнено" == status || status == msg.get("lecm.errands.statemachine-status.executed"))) {
+                        var msg = org.springframework.extensions.surf.util.I18NUtil.getMessage;
+                        if (!protocolService.checkPointExecutedStatus(point) && "Исполнено" == status || (msg && status == msg("lecm.errands.statemachine-status.executed"))) {
                             protocolService.changePointStatus(protocol, point, "EXECUTED_STATUS");
                         } else if (!protocolService.checkPointExecutedStatus(point) && isExpired && justInTime){
                             protocolService.changePointStatus(protocol, point, "NOT_EXECUTED_STATUS");
@@ -21,7 +21,11 @@ var ProtocolScript = {
                         }
                     }
                 }
-                documentEvent.removeEventSender(protocol, sender);
+                try {
+                    documentEvent.removeEventSender(protocol, sender);
+                } catch (e) {
+                    logger.error(e);
+                }
             });
         }
     }

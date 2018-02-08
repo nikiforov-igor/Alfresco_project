@@ -83,15 +83,16 @@ var LECMResolutionActions = {
     },
 
     processChangeChildSignal: function (document) {
+        var msg = org.springframework.extensions.surf.util.I18NUtil.getMessage;
         if (document) {
             var childrenErrands = errands.getChildErrands(document.nodeRef.toString());
             var canceledErrandsCount = 0;
             var executedErrandsCount = 0;
             if (childrenErrands && childrenErrands.length) {
                 childrenErrands.forEach(function (errand) {
-                    if ("Исполнено" == errand.properties["lecm-statemachine:status" || msg.get("lecm.errands.statemachine-status.executed") == errand.properties["lecm-statemachine:status"]) {
+                    if ("Исполнено" == errand.properties["lecm-statemachine:status" || msg("lecm.errands.statemachine-status.executed") == errand.properties["lecm-statemachine:status"]) {
                         executedErrandsCount++;
-                    } else if ("Отменено" == errand.properties["lecm-statemachine:status"] || msg.get("lecm.errands.statemachine-status.cancelled") == errand.properties["lecm-statemachine:status"]) {
+                    } else if ("Отменено" == errand.properties["lecm-statemachine:status"] || msg("lecm.errands.statemachine-status.cancelled") == errand.properties["lecm-statemachine:status"]) {
                         canceledErrandsCount++;
                     }
                 });
