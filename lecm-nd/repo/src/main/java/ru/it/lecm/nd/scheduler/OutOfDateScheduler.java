@@ -46,7 +46,7 @@ public class OutOfDateScheduler extends BaseTransactionalSchedule {
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
 		String searchQuery;
 		if (!NDModel.ND_STATUS.PUT_IN_WORK.getHistoryValue().equals(ndDocumentService.getNDStatusName(NDModel.ND_STATUS.PUT_IN_WORK))) {
-			String extendSearchQueryFormat = "TYPE:\"%1$s\" AND @2$%s:[MIN TO NOW] AND (@%3$s:\"%4$s\" @%3$s:\"%5$s\")";
+			String extendSearchQueryFormat = "TYPE:\"%1$s\" AND @%2$s:[MIN TO NOW] AND (@%3$s:\"%4$s\" @%3$s:\"%5$s\")";
 			searchQuery = String.format(extendSearchQueryFormat, NDModel.TYPE_ND.toString(), NDModel.PROP_ND_END, StatemachineModel.PROP_STATUS, ndDocumentService.getNDStatusName(NDModel.ND_STATUS.ACTIVE), NDModel.ND_STATUS.PUT_IN_WORK.getHistoryValue());
 		} else {
 			String simpleSearchQueryFormat = "TYPE:\"%s\" AND @%s:[MIN TO NOW] AND @%s:\"%s\"";
