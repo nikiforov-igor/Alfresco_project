@@ -1,4 +1,4 @@
-var ErrandsScripts = {
+var ErrandsScript = {
 
     changeStatusDocumentByExecution: function(errand) {
         if (errand) {

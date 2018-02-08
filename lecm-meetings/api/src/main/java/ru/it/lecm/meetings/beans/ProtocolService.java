@@ -32,7 +32,7 @@ public interface ProtocolService {
 	QName ASSOC_PROTOCOL_POINT_STATUS = QName.createQName(PROTOCOL_TS_NAMESPACE, "point-status-assoc");
 	QName ASSOC_PROTOCOL_TEMP_ITEM = QName.createQName(PROTOCOL_NAMESPACE, "temp-items-assoc");
 
-	enum P_STATUSES_CODES { PERFORMANCE_STATUS, EXECUTED_STATUS, NOT_EXECUTED_STATUS, EXPIRED_STATUS, REMOVED_STATUS};
+	enum P_STATUSES { PERFORMANCE_STATUS, EXECUTED_STATUS, NOT_EXECUTED_STATUS, EXPIRED_STATUS, REMOVED_STATUS};
 
 	enum ATTACHMENT_CATEGORIES { DOCUMENT, APPLICATIONS, ORIGINAL, OTHERS;};
 
@@ -40,8 +40,10 @@ public interface ProtocolService {
 	QName PROP_PROTOCOL_DIC_POINT_STATUS_CODE = QName.createQName(PROTOCOL_DICTIONARY_NAMESPACE, "protocol-point-status-code");
 
 	void changePointStatus(NodeRef point, String statusKey);
+	void changePointStatus(NodeRef point, ProtocolService.P_STATUSES statusKey);
 
 	NodeRef getErrandLinkedPoint(NodeRef errand);
+	Boolean checkPointStatus(NodeRef point, ProtocolService.P_STATUSES statusKey);
 	Boolean checkPointStatus(NodeRef point, String statusKey);
 	String getPointStatus(NodeRef point);
 	void formErrands(final NodeRef protocol);

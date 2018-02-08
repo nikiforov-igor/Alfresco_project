@@ -99,15 +99,15 @@ public class ProtocolWebScriptBean extends BaseWebScript {
 					Boolean justInTime = (Boolean) nodeService.getProperty(sender,ErrandsService.PROP_ERRANDS_JUST_IN_TIME);
 					if (!checkPointExecutedStatus(point) && ErrandsService.ERRANDS_STATUS.EXECUTED.isStatusEquals(errandStatus, errandsService)){
 						// Переведем пункт в статус "Исполнен":
-						changePointStatus(protocol, point, ProtocolService.P_STATUSES_CODES.EXECUTED_STATUS.toString());
+						changePointStatus(protocol, point, ProtocolService.P_STATUSES.EXECUTED_STATUS.toString());
 					}
 					else if (!checkPointExecutedStatus(point) && isExpired && justInTime){
 						// Переведем пункт в статус "Не исполнен":
-						changePointStatus(protocol, point, ProtocolService.P_STATUSES_CODES.NOT_EXECUTED_STATUS.toString());
+						changePointStatus(protocol, point, ProtocolService.P_STATUSES.NOT_EXECUTED_STATUS.toString());
 					}
 					else if (!checkPointExecutedStatus(point) && isExpired && !justInTime) {
 						// Переведем пункт в статус "Просрочен":
-						changePointStatus(protocol, point, ProtocolService.P_STATUSES_CODES.EXPIRED_STATUS.toString());
+						changePointStatus(protocol, point, ProtocolService.P_STATUSES.EXPIRED_STATUS.toString());
 					}
 				}
 			}
@@ -144,7 +144,7 @@ public class ProtocolWebScriptBean extends BaseWebScript {
 
 		String newStatus = protocolService.getPointStatusByCodeFromDictionary(statusKey);
 		if (newStatus != null) {
-			boolean isExpired = ProtocolService.P_STATUSES_CODES.EXPIRED_STATUS.toString().equals(statusKey);
+			boolean isExpired = ProtocolService.P_STATUSES.EXPIRED_STATUS.toString().equals(statusKey);
 			String bjMessage = "";
 			if (isExpired) {
 				bjMessage = String.format("Исполнение пункта № %s документа #mainobject просрочено", pointNumber);
@@ -167,7 +167,7 @@ public class ProtocolWebScriptBean extends BaseWebScript {
 		}
 	}
 
-	private Boolean checkPointStatus(String sPointRef, ProtocolService.P_STATUSES_CODES statusKey) {
+	private Boolean checkPointStatus(String sPointRef, ProtocolService.P_STATUSES statusKey) {
 		return null != sPointRef && !sPointRef.isEmpty() && checkPointStatus(new NodeRef(sPointRef), statusKey.toString());
 	}
 
@@ -176,23 +176,23 @@ public class ProtocolWebScriptBean extends BaseWebScript {
 	}
 
 	public Boolean checkPointExecutedStatus(String sPointRef){
-		return checkPointStatus(sPointRef, ProtocolService.P_STATUSES_CODES.EXECUTED_STATUS);
+		return checkPointStatus(sPointRef, ProtocolService.P_STATUSES.EXECUTED_STATUS);
 	}
 
 	public Boolean checkPointExecutedStatus(NodeRef point){
-		return checkPointStatus(point, ProtocolService.P_STATUSES_CODES.EXECUTED_STATUS.toString());
+		return checkPointStatus(point, ProtocolService.P_STATUSES.EXECUTED_STATUS.toString());
 	}
 
 	public Boolean checkPointRemovedStatus(String sPointRef){
-		return checkPointStatus(sPointRef, ProtocolService.P_STATUSES_CODES.REMOVED_STATUS);
+		return checkPointStatus(sPointRef, ProtocolService.P_STATUSES.REMOVED_STATUS);
 	}
 
 	public Boolean checkPointRemovedStatus(NodeRef point){
-		return checkPointStatus(point, ProtocolService.P_STATUSES_CODES.REMOVED_STATUS.toString());
+		return checkPointStatus(point, ProtocolService.P_STATUSES.REMOVED_STATUS.toString());
 	}
 
 	public Boolean checkPointExpiredStatus(ScriptNode point) {
-		return point != null && checkPointStatus(point.getNodeRef(), ProtocolService.P_STATUSES_CODES.EXPIRED_STATUS.toString());
+		return point != null && checkPointStatus(point.getNodeRef(), ProtocolService.P_STATUSES.EXPIRED_STATUS.toString());
 	}
 
 	@Deprecated

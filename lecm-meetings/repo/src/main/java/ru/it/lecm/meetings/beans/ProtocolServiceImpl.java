@@ -106,7 +106,11 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
                nodeService.setAssociations(point, ProtocolService.ASSOC_PROTOCOL_POINT_STATUS, targetStatus);
            }
        }
+    }
 
+    @Override
+    public void changePointStatus(NodeRef point, ProtocolService.P_STATUSES statusKey) {
+        changePointStatus(point, statusKey.toString());
     }
 
     @Override
@@ -143,6 +147,11 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
             return null != pointStatus && pointStatus.equals(statusByCode);
         }
         return null;
+    }
+
+    @Override
+    public Boolean checkPointStatus(NodeRef point, ProtocolService.P_STATUSES statusKey) {
+        return checkPointStatus(point, statusKey.toString());
     }
 
     @Override
@@ -235,7 +244,7 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
                 // срок поручения
                 Date limitationDate = (Date) nodeService.getProperty(point, ProtocolService.PROP_PROTOCOL_POINT_EXEC_DATE);
                 nodeService.setProperty(errand, ErrandsService.PROP_ERRANDS_LIMITATION_DATE, limitationDate);
-				nodeService.setProperty(errand, ErrandsService.PROP_ERRANDS_IS_EXPIRED, checkPointStatus(point, P_STATUSES_CODES.EXPIRED_STATUS.toString()));
+				nodeService.setProperty(errand, ErrandsService.PROP_ERRANDS_IS_EXPIRED, checkPointStatus(point, P_STATUSES.EXPIRED_STATUS.toString()));
 
                 //создадим ассоциацию между между Протоколом и созданным поручением, системная связь создастся автоматически
                 nodeService.createAssociation(errand, protocol, ErrandsService.ASSOC_ADDITIONAL_ERRANDS_DOCUMENT);
@@ -260,7 +269,7 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
             Set<QName> pointType = new HashSet<QName>(Arrays.asList(ProtocolService.TYPE_PROTOCOL_TS_POINT));
             List<ChildAssociationRef> pointAssocs = nodeService.getChildAssocs(table, pointType);
 
-            String statusKey = P_STATUSES_CODES.REMOVED_STATUS.toString();
+            String statusKey = P_STATUSES.REMOVED_STATUS.toString();
             NodeRef newPointStatus = lecmDictionaryService.getDictionaryValueByParam(ProtocolService.PROTOCOL_POINT_DICTIONARY_NAME, PROP_PROTOCOL_DIC_POINT_STATUS_CODE, statusKey);
             if (newPointStatus != null) {
                 List<NodeRef> targetStatus = Arrays.asList(newPointStatus);
