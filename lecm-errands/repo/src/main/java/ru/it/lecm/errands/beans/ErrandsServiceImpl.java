@@ -13,6 +13,7 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.FileFilterMode;
 import org.alfresco.util.Pair;
 import org.apache.commons.lang3.EnumUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,6 +38,7 @@ import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * User: AIvkin
@@ -68,6 +70,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 	private LecmPermissionService lecmPermissionService;
 	private NodeRef settingsNode;
 	private NodeRef dashletSettingsNode;
+    private EDSDocumentService edsDocumentService;
 
     public void setDocumentService(DocumentService documentService) {
         this.documentService = documentService;
@@ -95,6 +98,10 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 
     public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
             this.lecmPermissionService = lecmPermissionService;
+    }
+
+    public void setEdsDocumentService(EDSDocumentService edsDocumentService) {
+        this.edsDocumentService = edsDocumentService;
     }
 
     public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
@@ -800,5 +807,29 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
                 logger.error("Failed to save json string for 'delayedErrandsByDate' map.", e);
             }
         }
+    }
+
+    public Date processPeriodicalErrandControlDate(NodeRef errandRef){
+        String dateRadio = (String) nodeService.getProperty(errandRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE_RADIO);
+        Date periodicalLimitDate = (Date) nodeService.getProperty(errandRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE);
+        Date newLimitDate = null;
+        if ("DATE".equals(dateRadio)) {
+            if (periodicalLimitDate != null) {
+                periodicalLimitDate = DateUtils.truncate(periodicalLimitDate, Calendar.DAY_OF_MONTH);
+                Date now = new Date();
+                now = DateUtils.truncate(now, Calendar.DAY_OF_MONTH);
+                Date createdDate = (Date) nodeService.getProperty(errandRef, ContentModel.PROP_CREATED);
+                createdDate = DateUtils.truncate(createdDate, Calendar.DAY_OF_MONTH);
+                long dateDif = TimeUnit.DAYS.convert(periodicalLimitDate.getTime() - createdDate.getTime(), TimeUnit.MILLISECONDS);
+                newLimitDate = DateUtils.addDays(now, (int) dateDif);
+            }
+        } else if ("DAYS".equals(dateRadio)) {
+            newLimitDate =  edsDocumentService.convertComplexDate(
+                    (String) nodeService.getProperty(errandRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE_RADIO),
+                    (Date) nodeService.getProperty(errandRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE),
+                    (String) nodeService.getProperty(errandRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE_TYPE),
+                    (Integer) nodeService.getProperty(errandRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE_DAYS));
+        }
+        return newLimitDate;
     }
 }
