@@ -11,6 +11,11 @@
         <value>alfresco/module/${artifactId}/models/lecm-outgoing-dictionaries-model.xml</value>
     </util:list>
 
+	<util:list id="outgoing.models.labels">
+		<value>alfresco/module/${artifactId}/messages/lecm-outgoing-model</value>
+		<value>alfresco/module/${artifactId}/messages/lecm-outgoing-dictionaries-model</value>
+	</util:list>
+
 	<bean id="outgoing.model.bootstrap" parent="modelsToRepositoryLoader"
 		  depends-on="dictionaryBootstrap,
 					  documents.LogicEcmModelsBootstrap,
@@ -24,7 +29,7 @@
                       approvalRoutesService,
                       signingRoutesService"
 		  p:models-ref="outgoing.models"
-		  p:labels="alfresco/module/${artifactId}/messages/lecm-outgoing-model"/>
+		  p:labels-ref="outgoing.models.labels"/>
 
 	<util:list id="outgoing.dictionaries">
 		<value>alfresco/module/${artifactId}/dictionaries/outgoing-bj-items.xml</value>
