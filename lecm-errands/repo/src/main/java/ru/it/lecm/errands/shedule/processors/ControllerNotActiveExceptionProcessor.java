@@ -41,7 +41,7 @@ public class ControllerNotActiveExceptionProcessor extends BaseCreationException
     @Override
     public void processException(final Map<ProcessorParamName, Object> params) {
         try {
-            final NodeRef errandNodeRef = (NodeRef) params.get(ProcessorParamName.ERRAND);
+            final NodeRef errandNodeRef = (NodeRef) params.get(ProcessorParamName.PERIODICAL_ERRAND);
             if (errandNodeRef != null) {
                 final Set<NodeRef> recipients = new HashSet<>();
                 // Уведомляем админинстратору
