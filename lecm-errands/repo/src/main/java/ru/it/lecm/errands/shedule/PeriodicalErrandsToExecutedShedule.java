@@ -66,17 +66,20 @@ public class PeriodicalErrandsToExecutedShedule extends BaseTransactionalSchedul
 
         List<NodeRef> periodicalErrands = documentService.getDocumentsByFilter(types, null, statuses, filters, null);
 
-        // Фильтруем по количеству повторов
+        // Фильтруем по количеству повторов/ по наличию отложенных
         periodicalErrands = periodicalErrands.stream().filter(new Predicate<NodeRef>() {
             @Override
             public boolean test(NodeRef nodeRef) {
+                boolean isReiterationCountValid = true;
                 final String periodicallyRadio = (String) nodeService.getProperty(nodeRef, ErrandsService.PROP_ERRANDS_PERIODICALLY_RADIO);
                 if (ErrandsService.PeriodicallyRadio.REPEAT_COUNT.toString().equals(periodicallyRadio)) {
                     List<NodeRef> childErrands = errandsService.getChildErrands(nodeRef);
                     Integer reiterationCount = (Integer) nodeService.getProperty(nodeRef, ErrandsService.PROP_ERRANDS_REITERATION_COUNT);
-                    return childErrands != null && reiterationCount != null && childErrands.size() == reiterationCount;
+                    isReiterationCountValid = childErrands != null && reiterationCount != null && childErrands.size() == reiterationCount;
                 }
-                return true;
+                boolean isDelayedCountValid = !errandsService.hasDelayedPeriodicalErrands(nodeRef);
+
+                return isReiterationCountValid && isDelayedCountValid;
             }
         }).collect(Collectors.toList());
 

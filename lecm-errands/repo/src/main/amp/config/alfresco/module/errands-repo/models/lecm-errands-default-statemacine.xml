@@ -7889,8 +7889,11 @@ if (doc) {
         }
       }
       if (countErrandsFinal == childrenErrands.length) {
-        doc.properties["lecm-errands:transit-to-executed"] = true;
-        doc.save();
+        var hasDelayedErrands = errands.hasDelayedPeriodicalErrands(doc);
+        if (!hasDelayedErrands) {
+            doc.properties["lecm-errands:transit-to-executed"] = true;
+            doc.save();
+        }
       }
     }
   }

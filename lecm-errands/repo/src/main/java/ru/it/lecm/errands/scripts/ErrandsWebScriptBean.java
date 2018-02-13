@@ -1005,4 +1005,8 @@ public class ErrandsWebScriptBean extends BaseWebScript {
     public boolean isTransferRightToBaseDocument() {
         return errandsService.isTransferRightToBaseDocument();
     }
+
+    public boolean hasDelayedPeriodicalErrands(ScriptNode periodicalErrand){
+        return errandsService.hasDelayedPeriodicalErrands(periodicalErrand.getNodeRef());
+    }
 }

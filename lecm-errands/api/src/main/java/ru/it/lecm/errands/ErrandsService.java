@@ -463,6 +463,13 @@ public interface ErrandsService {
      */
     void setDelayedErrandsByDate(Map<String, Set<NodeRef>> delayedErrandsByDate);
 
+    /**
+     * Проверить наличие отложенных поручений по периодическому поручению
+     * @param periodicalErrand периодическое поручение
+     * @return наличие отложенных поручений по периодическому поручению
+     */
+    public Boolean hasDelayedPeriodicalErrands(NodeRef periodicalErrand);
+
     enum ModeChoosingExecutors {
         ORGANIZATION,
         UNIT
