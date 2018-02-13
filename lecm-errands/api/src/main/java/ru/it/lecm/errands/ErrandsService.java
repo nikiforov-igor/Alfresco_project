@@ -4,6 +4,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -462,6 +463,13 @@ public interface ErrandsService {
      * Запись в настройки поручений списка поручений с отложенным созданием
      */
     void setDelayedErrandsByDate(Map<String, Set<NodeRef>> delayedErrandsByDate);
+
+    /**
+     * Вычисление срока поручения, по периодическому
+     * @param errandRef поручение
+     * @return срок
+     */
+    Date calculatePeriodicalErrandControlDate(NodeRef errandRef);
 
     enum ModeChoosingExecutors {
         ORGANIZATION,

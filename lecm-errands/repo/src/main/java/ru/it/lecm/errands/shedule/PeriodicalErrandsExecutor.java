@@ -6,9 +6,7 @@ import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.action.ParameterDefinition;
 import org.alfresco.service.cmr.repository.*;
-import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import org.apache.commons.lang.time.DateUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,7 +19,6 @@ import ru.it.lecm.errands.shedule.processors.BaseCreationExceptionProcessor.Proc
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 /**
  * User: mshafeev
@@ -34,7 +31,7 @@ public class PeriodicalErrandsExecutor extends ActionExecuterAbstractBase {
 
     private NodeService nodeService;
     private DocumentService documentService;
-
+    private ErrandsService errandsService;
     private DocumentCopySettings copySettings;
 
     private final static String WEEK_DAYS = "WEEKLY";
@@ -59,6 +56,10 @@ public class PeriodicalErrandsExecutor extends ActionExecuterAbstractBase {
 
     public void setExceptionProcessors(List<BaseCreationExceptionProcessor> exceptionProcessors) {
         this.exceptionProcessors = exceptionProcessors;
+    }
+
+    public void setErrandsService(ErrandsService errandsService) {
+        this.errandsService = errandsService;
     }
 
     public void setCopySettings(DocumentCopySettings copySettings) {
@@ -169,24 +170,10 @@ public class PeriodicalErrandsExecutor extends ActionExecuterAbstractBase {
                     //set up limitation date
                     Map<QName, Serializable> additionalProps = new HashMap<>();
                     String dateRadio = (String) nodeService.getProperty(periodicalErrandNodeRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE_RADIO);
-                    if ("DATE".equals(dateRadio)) {
-                        Date periodicalLimitDate = (Date) nodeService.getProperty(periodicalErrandNodeRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE);
-                        if (periodicalLimitDate != null) {
-                            Date now = new Date();
-                            Date createdDate = (Date) nodeService.getProperty(periodicalErrandNodeRef, ContentModel.PROP_CREATED);
-                            long dateDif = TimeUnit.DAYS.convert(periodicalLimitDate.getTime() - createdDate.getTime(), TimeUnit.MILLISECONDS);
-                            Date newLimitDate = DateUtils.addDays(now, (int) dateDif);
-                            additionalProps.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE, newLimitDate);
-                            additionalProps.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_RADIO, "DATE");
-                        }
-                    } else if ("DAYS".equals(dateRadio)) {
-                        Integer days = (Integer) nodeService.getProperty(periodicalErrandNodeRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE_DAYS);
-                        if (days != null) {
-                            Date newLimitDate = DateUtils.addDays(new Date(), days);
-                            additionalProps.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE, newLimitDate);
-                            additionalProps.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_RADIO, "DATE");
-                        }
-
+                    Date date  = errandsService.calculatePeriodicalErrandControlDate(periodicalErrandNodeRef);
+                    if (date != null) {
+                        additionalProps.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE, date);
+                        additionalProps.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_RADIO, "DATE");
                     } else if ("LIMITLESS".equals(dateRadio)) {
                         additionalProps.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_RADIO, "LIMITLESS");
                     }
