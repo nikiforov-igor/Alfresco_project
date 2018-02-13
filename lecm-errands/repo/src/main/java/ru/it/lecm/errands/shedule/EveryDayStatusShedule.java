@@ -49,6 +49,8 @@ public class EveryDayStatusShedule extends BaseTransactionalSchedule {
         paths.add(documentService.getDocumentsFolderPath());
 
         filters = "@lecm\\-statemachine\\-aspects\\:is\\-draft: false AND (NOT ASPECT:\"lecm-statemachine-aspects:is-final-aspect\" OR @lecm\\-statemachine\\-aspects\\:is\\-final: false) AND @lecm\\-errands\\:is\\-expired: false";
+        filters += " AND @lecm\\-errands\\:periodically: false";
+
         // Фильтр по датам
         QName dateProperty = ErrandsService.PROP_ERRANDS_LIMITATION_DATE;
 
