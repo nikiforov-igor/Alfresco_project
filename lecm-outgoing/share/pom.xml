@@ -119,7 +119,7 @@
 				<filtering>true</filtering>
 				<directory>src/main/java</directory>
 				<excludes>
-					<exclude>**.java</exclude>
+					<exclude>**/*.java</exclude>
 				</excludes>
 			</resource>
 		</resources>
