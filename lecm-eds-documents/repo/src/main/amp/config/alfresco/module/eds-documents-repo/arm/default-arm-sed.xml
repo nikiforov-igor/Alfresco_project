@@ -1795,7 +1795,7 @@
                             <item name="cm:Поручения в работе" type="lecm-arm:node">
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                 <property name="lecm-arm:search-query">
-                                    <![CDATA[(@lecm\-errands\:initiator\-assoc\-ref:"#current-user" OR (@lecm\-errands\:executor\-assoc\-ref:"#current-user" AND NOT @lecm\-errands\:type\-assoc\-ref:{{FILTER_BY_DICTIONARY_ATTRIBUTE_VALUE({dictionary:'Типы поручений', attribute:'lecm-errands-dic:errand-type-launch-review', value:true})}}) OR @lecm\-errands\:coexecutors\-assoc\-ref:"*#current-user*" OR @lecm\-errands\:controller\-assoc\-ref:"#current-user") AND NOT @lecm\-statemachine\-aspects\:is\-final:true AND NOT @lecm\-statemachine\-aspects\:is\-draft:true AND NOT @lecm\-statemachine\:status:"На периодическом исполнении"]]></property>
+                                    <![CDATA[(@lecm\-errands\:initiator\-assoc\-ref:"#current-user" OR @lecm\-document\:author\-assoc\-ref:"#current-user" OR (@lecm\-errands\:executor\-assoc\-ref:"#current-user" AND NOT @lecm\-errands\:type\-assoc\-ref:{{FILTER_BY_DICTIONARY_ATTRIBUTE_VALUE({dictionary:'Типы поручений', attribute:'lecm-errands-dic:errand-type-launch-review', value:true})}}) OR @lecm\-errands\:coexecutors\-assoc\-ref:"*#current-user*" OR @lecm\-errands\:controller\-assoc\-ref:"#current-user") AND NOT @lecm\-statemachine\-aspects\:is\-final:true AND NOT @lecm\-statemachine\-aspects\:is\-draft:true]]></property>
                                 <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                 <property name="lecm-arm:counter-description"><![CDATA[]]></property>
@@ -2344,7 +2344,7 @@
                                     <item name="cm:На периодическом исполнении" type="lecm-arm:node">
                                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                         <property name="lecm-arm:search-query">
-                                            <![CDATA[@lecm\-errands\:initiator\-assoc\-ref:'#current-user' AND @lecm\-statemachine\:status:'На периодическом исполнении']]></property>
+                                            <![CDATA[(@lecm\-errands\:initiator\-assoc\-ref:'#current-user' OR @lecm\-document\:author\-assoc\-ref:'#current-user') AND @lecm\-statemachine\:status:'На периодическом исполнении']]></property>
                                         <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                         <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                         <property name="lecm-arm:counter-description"><![CDATA[]]></property>
