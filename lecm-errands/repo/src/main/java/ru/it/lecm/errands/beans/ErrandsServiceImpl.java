@@ -809,7 +809,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         }
     }
 
-    public Date processPeriodicalErrandControlDate(NodeRef errandRef){
+    public Date calculatePeriodicalErrandControlDate(NodeRef errandRef){
         String dateRadio = (String) nodeService.getProperty(errandRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE_RADIO);
         Date periodicalLimitDate = (Date) nodeService.getProperty(errandRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE);
         Date newLimitDate = null;

@@ -28,7 +28,7 @@ public class ControlDateExceptionProcessor extends BaseCreationExceptionProcesso
 
     public boolean checkConditionsToProcess(Map<ProcessorParamName, Object> params) {
         final NodeRef periodicalErrand = (NodeRef) params.get(ProcessorParamName.PERIODICAL_ERRAND);
-        Date controlDate = errandsService.processPeriodicalErrandControlDate(periodicalErrand);
+        Date controlDate = errandsService.calculatePeriodicalErrandControlDate(periodicalErrand);
         return controlDate != null && !wCalendarService.isWorkingDay(controlDate);
     }
 

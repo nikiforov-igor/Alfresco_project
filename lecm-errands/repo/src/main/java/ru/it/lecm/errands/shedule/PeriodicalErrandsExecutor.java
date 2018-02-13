@@ -6,9 +6,7 @@ import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.action.ParameterDefinition;
 import org.alfresco.service.cmr.repository.*;
-import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import org.apache.commons.lang.time.DateUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,7 +19,6 @@ import ru.it.lecm.errands.shedule.processors.BaseCreationExceptionProcessor.Proc
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 /**
  * User: mshafeev
@@ -173,7 +170,7 @@ public class PeriodicalErrandsExecutor extends ActionExecuterAbstractBase {
                     //set up limitation date
                     Map<QName, Serializable> additionalProps = new HashMap<>();
                     String dateRadio = (String) nodeService.getProperty(periodicalErrandNodeRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE_RADIO);
-                    Date date  = errandsService.processPeriodicalErrandControlDate(periodicalErrandNodeRef);
+                    Date date  = errandsService.calculatePeriodicalErrandControlDate(periodicalErrandNodeRef);
                     if (date != null) {
                         additionalProps.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE, date);
                         additionalProps.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_RADIO, "DATE");

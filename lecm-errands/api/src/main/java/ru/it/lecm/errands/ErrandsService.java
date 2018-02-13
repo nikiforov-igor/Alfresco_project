@@ -469,7 +469,7 @@ public interface ErrandsService {
      * @param errandRef поручение
      * @return срок
      */
-    Date processPeriodicalErrandControlDate(NodeRef errandRef);
+    Date calculatePeriodicalErrandControlDate(NodeRef errandRef);
 
     enum ModeChoosingExecutors {
         ORGANIZATION,
