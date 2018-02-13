@@ -12,6 +12,7 @@
     </util:list>
 
     <util:list id="nd.models.labels">
+        <value>alfresco/module/${artifactId}/messages/lecm-nd-dic-model</value>
         <value>alfresco/module/${artifactId}/messages/lecm-nd-model</value>
         <value>alfresco/module/${artifactId}/messages/lecm-nd-messages</value>
     </util:list>

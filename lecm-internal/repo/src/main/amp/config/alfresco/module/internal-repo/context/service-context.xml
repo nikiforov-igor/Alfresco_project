@@ -54,6 +54,8 @@
         <property name="labels">
             <list>
                 <value>alfresco/module/${artifactId}/messages/lecm-internal-model</value>
+                <value>alfresco/module/${artifactId}/messages/lecm-internal-doc-type-dic-model</value>
+                <value>alfresco/module/${artifactId}/messages/lecm-internal-typical-answers-dic-model</value>
                 <value>alfresco/module/${artifactId}/messages/lecm-internal-table-structure-model</value>
                 <value>alfresco/module/${artifactId}/messages/lecm-internal-messages</value>
             </list>

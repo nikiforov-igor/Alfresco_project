@@ -62,11 +62,12 @@ public class EveryDayNotificationShedule extends BaseTransactionalSchedule {
 
         paths.add(documentService.getDocumentsFolderPath());
 
-        filters = "@lecm\\-statemachine\\-aspects\\:is\\-draft: false AND (NOT ASPECT:\"lecm-statemachine-aspects:is-final-aspect\" OR @lecm\\-statemachine\\-aspects\\:is\\-final: false) AND @lecm\\-errands\\:is\\-expired: false";
+        filters = "@lecm\\-statemachine\\-aspects\\:is\\-draft: false AND (NOT ASPECT:\"lecm-statemachine-aspects:is-final-aspect\" OR @lecm\\-statemachine\\-aspects\\:is\\-final: false)";
+        filters += " AND @lecm\\-errands\\:periodically: false";
 
         QName dateProperty = ErrandsService.PROP_ERRANDS_LIMITATION_DATE;
         String property = dateProperty.toPrefixString(namespaceService);
-        filters = "ISNOTNULL: '" + property + "' AND NOT @" + property.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-") + ":''";
+        filters += " AND ISNOTNULL: '" + property + "' AND NOT @" + property.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-") + ":''";
 
         return documentService.getDocumentsByFilter(types, paths, statuses, filters, null);
     }
