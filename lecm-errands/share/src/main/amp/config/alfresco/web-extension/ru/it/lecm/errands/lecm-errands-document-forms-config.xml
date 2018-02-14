@@ -40,7 +40,6 @@
                     <show id="lecm-errands:reiteration-rule"/>
                     <show id="lecm-errands:period-start"/>
                     <show id="lecm-errands:period-end-text"/>
-                    <show id="lecm-errands:period-endless"/>
                     <!-- Контролер -->
                     <show id="lecm-errands:controller-assoc"/>
                     <!-- Требуется отчет -->
@@ -150,7 +149,7 @@
                     </field>
                     <field id="lecm-errands:periodically" set="commonField1">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
-                            <control-param name="hideFieldsIfNotSelect">lecm-errands:reiteration-rule,lecm-errands:period-start,lecm-errands:period-end,lecm-errands:period-endless</control-param>
+                            <control-param name="hideFieldsIfNotSelect">lecm-errands:reiteration-rule,lecm-errands:period-start,lecm-errands:period-end</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:reiteration-rule" set="periodicallySet">
@@ -158,8 +157,6 @@
                     </field>
                     <field id="lecm-errands:period-start" set="periodicallySet"/>
                     <field id="lecm-errands:period-end-text" set="periodicallySet" label-id="label.errand.period-end"/>
-                    <field id="lecm-errands:period-endless" set="periodicallySet" label-id="label.errand.period-endless"/>
-
                     <field id="lecm-errands:controller-assoc" set="commonField2">
                         <control>
                             <control-param name="showSearch">true</control-param>
