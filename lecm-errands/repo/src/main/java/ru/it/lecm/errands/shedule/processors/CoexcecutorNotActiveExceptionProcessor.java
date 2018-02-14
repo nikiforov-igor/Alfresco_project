@@ -42,7 +42,7 @@ public class CoexcecutorNotActiveExceptionProcessor extends BaseCreationExceptio
     public void processException(final Map<ProcessorParamName, Object> params) {
         try {
             final Set<NodeRef> recipients = new HashSet<>();
-            final NodeRef errandNodeRef = (NodeRef) params.get(ProcessorParamName.ERRAND);
+            final NodeRef errandNodeRef = (NodeRef) params.get(ProcessorParamName.PERIODICAL_ERRAND);
             if (errandNodeRef != null) {
                 // Уведомляем админинстратору
                 NodeRef adminEmployee = getAdminEmployee();
