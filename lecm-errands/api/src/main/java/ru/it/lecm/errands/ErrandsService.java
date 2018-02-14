@@ -471,6 +471,13 @@ public interface ErrandsService {
      */
     Date calculatePeriodicalErrandControlDate(NodeRef errandRef);
 
+    /**
+     * Проверить наличие отложенных поручений по периодическому поручению
+     * @param periodicalErrand периодическое поручение
+     * @return наличие отложенных поручений по периодическому поручению
+     */
+    public Boolean hasDelayedPeriodicalErrands(NodeRef periodicalErrand);
+
     enum ModeChoosingExecutors {
         ORGANIZATION,
         UNIT

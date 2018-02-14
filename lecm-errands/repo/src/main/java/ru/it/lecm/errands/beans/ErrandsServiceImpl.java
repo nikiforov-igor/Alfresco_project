@@ -832,4 +832,11 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         }
         return newLimitDate;
     }
+
+    @Override
+    public Boolean hasDelayedPeriodicalErrands(NodeRef periodicalErrand) {
+        Map<String, Set<NodeRef>> allDelayedErrandsByDate = getDelayedErrandsByDate();
+        Collection<Set<NodeRef>> allDelayedErrands = allDelayedErrandsByDate.values();
+        return allDelayedErrands.stream().anyMatch(set -> set.contains(periodicalErrand));
+    }
 }
