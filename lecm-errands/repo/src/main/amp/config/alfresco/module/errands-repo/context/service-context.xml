@@ -862,6 +862,7 @@
         </property>
         <property name="documentService" ref="documentService"/>
         <property name="errandsService" ref="errandsService"/>
+        <property name="wCalendar" ref="WCalendarService"/>
     </bean>
 
     <bean id="periodicalErrandsToExecutedExecutor" class="ru.it.lecm.errands.shedule.PeriodicalErrandsToExecutedExecutor" parent="action-executer">
