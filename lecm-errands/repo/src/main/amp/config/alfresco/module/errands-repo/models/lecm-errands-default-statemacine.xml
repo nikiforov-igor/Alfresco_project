@@ -7778,43 +7778,6 @@ if (document) {
                                                 <nodes>
                                                     <node>
                                                         <type>transition</type>
-                                                        <name>500ad244-901e-4f0f-ab3e-891fc965da5e</name>
-                                                        <properties>
-                                                            <property>
-                                                                <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[false]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>do-not-ask-for-confirmation</name>
-                                                                <value><![CDATA[false]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>transitionExpression</name>
-                                                                <value>
-                                                                    <![CDATA[doc.hasAspect("lecm-eds-aspect:changeDueDateSignal")]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[<import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/change-due-date-script.js">
-var document = bpm_package.children[0];
-if (document) {
-	var params = {
-		isSignal: true,
-		document: document
-	};
-	processDueDateChanges(params);
-}]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects>
-                                                            <transitionStatusAspect/>
-                                                        </aspects>
-                                                        <associations/>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
-                                                    <node>
-                                                        <type>transition</type>
                                                         <name>5483391d-d350-4e8d-884d-fe7760ff87ad</name>
                                                         <properties>
                                                             <property>
