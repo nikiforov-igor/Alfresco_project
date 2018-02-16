@@ -179,6 +179,7 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                         width: "150px",
                         visible: false,
                         draggable: true,
+                        modal: true,
                         close: true,
                         constraintoviewport: true,
                         buttons: [
@@ -239,8 +240,6 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
 
                 var clicked = Event.getTarget(e);
                 var pickerPanel = Dom.get(this.id + '-dialog-panel').parentNode;
-                var zIndex = parseInt(Dom.getStyle(this.options.formId + "-form-container_c", "z-index"), 10);
-                Dom.setStyle(pickerPanel, "z-index", zIndex ? ++zIndex : 10000);
 
                 var x = Dom.getX(clicked);
                 if (Dom.getX(pickerPanel) != x) {
