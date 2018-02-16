@@ -16,7 +16,12 @@
 }
 
 .errands-validity-set .errands-validity-set-radio .control .value-div {
-    width: 12px;
+    width: 16px;
+}
+
+.errands-validity-set .errands-validity-set-radio .control .buttons-div {
+    padding: 0;
+    margin: 0;
 }
 
 .errands-validity-set .errands-validity-set-radio .control label.checkbox {
@@ -26,6 +31,7 @@
 .errands-validity-set .errands-validity-set-radio .control input {
     margin-top: 8px;
     margin-bottom: 20px;
+    padding-left: 0px;
 }
 
 .errands-validity-set .errands-validity-set-radio .control input:nth-child(2) {
@@ -151,4 +157,18 @@
     width: 180px;
     text-align: right;
     font-size: 100%;
+}
+.yui-panel-container .block3 .set .set-title,
+.periodicallySet .set .set-title{
+    text-align: left;
+}
+/* hack for ie */
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    .yui-panel-container .errands-validity-set .errands-validity-set-radio .control input {
+        margin-bottom: 15px;
+    }
+
+    .yui-panel-container .errands-validity-set .errands-validity-set-radio .control input:last-of-type {
+        margin-top: 8px;
+    }
 }
