@@ -801,7 +801,6 @@
         <property name="personService" ref="personService"/>
         <property name="orgstructureService" ref="serviceOrgstructure"/>
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
-        <property name="absenceService" ref="AbsenceService"/>
     </bean>
 
     <bean id="createDateExceptionProcessor"
