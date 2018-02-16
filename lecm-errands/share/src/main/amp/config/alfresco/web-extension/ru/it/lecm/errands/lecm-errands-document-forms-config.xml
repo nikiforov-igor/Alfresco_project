@@ -77,7 +77,7 @@
                     <set id="execution" label-id="label.errands.forms.tab.execution"/>
                     <set id="statuses" parent="common"/>
                     <set id="commonField1" parent="common"/>
-                    <set id="periodicallySet" parent="common"/>
+                    <set id="periodicallySet" parent="common" template="/ru/it/lecm/base-share/components/hidden-set.ftl"/>
                     <set id="commonField2" parent="common"/>
                     <set id="execution-report" parent="reports" appearance="title" template="/ru/it/lecm/errands/controls/errands-execution-report-set.ftl" label-id="title.errands.execution-reports"/>
                     <set id="lineReports" parent="reports"/>
@@ -147,11 +147,7 @@
                     <field id="lecm-errands:auto-close" set="commonField1">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
                     </field>
-                    <field id="lecm-errands:periodically" set="commonField1">
-                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
-                            <control-param name="hideFieldsIfNotSelect">lecm-errands:reiteration-rule,lecm-errands:period-start,lecm-errands:period-end</control-param>
-                        </control>
-                    </field>
+                    <field id="lecm-errands:periodically" set="commonField1"/>
                     <field id="lecm-errands:reiteration-rule" set="periodicallySet">
                         <control template="/ru/it/lecm/errands/controls/errands-reiteration-control.ftl"/>
                     </field>
