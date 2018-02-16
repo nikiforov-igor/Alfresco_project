@@ -11,6 +11,7 @@ import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
+import ru.it.lecm.wcalendar.absence.IAbsence;
 
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,11 @@ public abstract class BaseCreationExceptionProcessor {
     protected OrgstructureBean orgstructureService;
     protected ErrandsService errandsService;
     protected LecmPermissionService lecmPermissionService;
+    protected IAbsence absenceService;
+
+    public void setAbsenceService(IAbsence absenceService) {
+        this.absenceService = absenceService;
+    }
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -87,7 +93,8 @@ public abstract class BaseCreationExceptionProcessor {
                 && (isActive != null && isActive) // сотрудник активный
                 && (position != null) // у сотрудника указана основная должность
                 && (login != null && !login.isEmpty()) // логин сотрудника не пустой
-                && personService.isEnabled(login); // пользователь не выключен
+                && personService.isEnabled(login) // пользователь не выключен
+                && !absenceService.isEmployeeAbsentToday(employeeNodeRef);//пользоавтель не отсутвует
     }
 
     protected NodeRef getAdminEmployee() {
