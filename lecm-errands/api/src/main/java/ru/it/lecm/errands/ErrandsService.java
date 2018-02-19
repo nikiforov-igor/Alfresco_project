@@ -25,6 +25,10 @@ public interface ErrandsService {
     enum ERRANDS_TS_COEXECUTOR_REPORT_STATUS{
         PROJECT,ONCONTROL,APPROVE,DECLINE
     }
+    String WEEK_DAYS = "WEEKLY";
+    String MONTH_DAYS = "MONTHLY";
+    String DAILY = "DAILY";
+    String QUARTERLY = "QUARTERLY";
 
     String ERRANDS_REPORT_CONNECTION_TYPE = "docReport";
 
@@ -478,6 +482,15 @@ public interface ErrandsService {
      */
     public Boolean hasDelayedPeriodicalErrands(NodeRef periodicalErrand);
 
+    /**
+     * Проверка правила повторения периодического поручения на текущую дату
+     * @param periodicalErrand поручение
+     * @return позволено ли создать поручение согласно правилу пеиодичности сегодня
+     */
+    public Boolean doesRuleAllowCreation(NodeRef periodicalErrand);
+
+    public Boolean doesRuleAllowCreation(NodeRef periodicalErrand, Date date);
+
     enum ModeChoosingExecutors {
         ORGANIZATION,
         UNIT
@@ -485,6 +498,7 @@ public interface ErrandsService {
 
     enum CreateDateNotWorkingDayAction {
         MOVE_TO_NEXT_WORKING_DAY,
+        MOVE_TO_PREVIOUS_WORKING_DAY,
         DO_NOT_CREATE
     }
 

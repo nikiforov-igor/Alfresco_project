@@ -4,12 +4,14 @@ import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.BaseTransactionalSchedule;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.errands.ErrandsService;
+import ru.it.lecm.wcalendar.calendar.ICalendar;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -26,6 +28,7 @@ public class PeriodicalErrandsShedule extends BaseTransactionalSchedule {
 
     private DocumentService documentService;
     private ErrandsService errandsService;
+    private ICalendar wCalendar;
 
     public PeriodicalErrandsShedule() {
         super();
@@ -37,6 +40,10 @@ public class PeriodicalErrandsShedule extends BaseTransactionalSchedule {
 
     public void setDocumentService(DocumentService documentService) {
         this.documentService = documentService;
+    }
+
+    public void setwCalendar(ICalendar wCalendar) {
+        this.wCalendar = wCalendar;
     }
 
     @Override
@@ -57,8 +64,6 @@ public class PeriodicalErrandsShedule extends BaseTransactionalSchedule {
         calendar.add(Calendar.HOUR_OF_DAY, 24);
         Date startPeriod = calendar.getTime();
 
-        String startPeriodDate = BaseBean.DateFormatISO8601.format(startPeriod);
-        String endPeriodDate = BaseBean.DateFormatISO8601.format(endPeriod);
 
         List<QName> types = new ArrayList<>(1);
         types.add(ErrandsService.TYPE_ERRANDS);
@@ -66,7 +71,21 @@ public class PeriodicalErrandsShedule extends BaseTransactionalSchedule {
 
         statuses.add(errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUS.PERIODICALLY));
 
-       String filters = "@lecm\\-errands\\:period\\-start:[MIN to \"" + startPeriodDate + "\"] AND (@lecm\\-errands\\:period\\-end:[\"" + endPeriodDate + "\" to MAX] OR @lecm\\-errands\\:periodically\\-radio:" +
+        int nonWorkingDaysCount = 0;
+        Date date = DateUtils.addDays(new Date(), 1);
+        Boolean isWorking = wCalendar.isWorkingDay(date);
+        while (null != isWorking && !isWorking) {
+            nonWorkingDaysCount++;
+            date = DateUtils.addDays(date, 1);
+            isWorking = wCalendar.isWorkingDay(date);
+        }
+        if (ErrandsService.CreateDateNotWorkingDayAction.MOVE_TO_PREVIOUS_WORKING_DAY.equals(errandsService.getCreateDateNotWorkingDayAction())) {
+            startPeriod = DateUtils.addDays(startPeriod, nonWorkingDaysCount);
+        }
+        String startPeriodDate = BaseBean.DateFormatISO8601.format(startPeriod);
+        String endPeriodDate = BaseBean.DateFormatISO8601.format(endPeriod);
+
+        String filters = "@lecm\\-errands\\:period\\-start:[MIN to \"" + startPeriodDate + "\"] AND (@lecm\\-errands\\:period\\-end:[\"" + endPeriodDate + "\" to MAX] OR @lecm\\-errands\\:periodically\\-radio:" +
                 "\"" + ErrandsService.PeriodicallyRadio.ENDLESS.toString() + "\" OR" +
                 " @lecm\\-errands\\:periodically\\-radio:\"" + ErrandsService.PeriodicallyRadio.REPEAT_COUNT.toString() + "\")";
 
@@ -88,7 +107,19 @@ public class PeriodicalErrandsShedule extends BaseTransactionalSchedule {
             }
         }).collect(Collectors.toSet());
 
-        // Так же в результат добавляем периодические поручения, создание которых было отложено на сегодня
+        if (nonWorkingDaysCount != 0 && ErrandsService.CreateDateNotWorkingDayAction.MOVE_TO_PREVIOUS_WORKING_DAY.equals(errandsService.getCreateDateNotWorkingDayAction())) {
+            Set<NodeRef> filteredErrands = new HashSet<>();
+            for (int i = 0; i <= nonWorkingDaysCount; i++) {
+                date = DateUtils.addDays(new Date(), i);
+                Date finalDate = date;
+                filteredErrands.addAll(periodicalErrands.stream().filter(nodeRef -> errandsService.doesRuleAllowCreation(nodeRef, finalDate)).collect(Collectors.toSet()));
+            }
+            periodicalErrands = filteredErrands;
+        } else {
+            periodicalErrands = periodicalErrands.stream().filter(nodeRef -> errandsService.doesRuleAllowCreation(nodeRef)).collect(Collectors.toSet());
+        }
+
+        // Так же в результат добавляем периодические поручения, создание которых было отложено на сегодня. Отложенные создаются в не зависимости от правила, они же отложенные.
         final Map<String, Set<NodeRef>> delayedErrandsByDate = errandsService.getDelayedErrandsByDate();
         final String todayDateStr = DateFormatUtils.format(new Date(), "dd-MM-yyyy");
         final Set<NodeRef> delayedErrandsForToday = delayedErrandsByDate.get(todayDateStr);
