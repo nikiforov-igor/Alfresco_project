@@ -73,9 +73,11 @@ public class PeriodicalErrandsShedule extends BaseTransactionalSchedule {
 
         int nonWorkingDaysCount = 0;
         Date date = DateUtils.addDays(new Date(), 1);
-        while (!wCalendar.isWorkingDay(date)) {
+        Boolean isWorking = wCalendar.isWorkingDay(date);
+        while (null != isWorking && !isWorking) {
             nonWorkingDaysCount++;
             date = DateUtils.addDays(date, 1);
+            isWorking = wCalendar.isWorkingDay(date);
         }
         if (ErrandsService.CreateDateNotWorkingDayAction.MOVE_TO_PREVIOUS_WORKING_DAY.equals(errandsService.getCreateDateNotWorkingDayAction())) {
             startPeriod = DateUtils.addDays(startPeriod, nonWorkingDaysCount);

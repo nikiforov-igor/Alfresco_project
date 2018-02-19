@@ -483,7 +483,7 @@ public interface ErrandsService {
     public Boolean hasDelayedPeriodicalErrands(NodeRef periodicalErrand);
 
     /**
-     * Проверка правила повторения преиодического поручения на текущую дату
+     * Проверка правила повторения периодического поручения на текущую дату
      * @param periodicalErrand поручение
      * @return позволено ли создать поручение согласно правилу пеиодичности сегодня
      */
