@@ -907,4 +907,32 @@
         <property name="policyComponent" ref="policyComponent"/>
         <property name="nodeService" ref="nodeService"/>
     </bean>
+
+    <bean id="errandsReassignAttributesImporter" class="ru.it.lecm.duties.reassign.importers.DocTypeAttrsImporter" parent="baseDocumentAttributesImporter"
+          depends-on="errands.LogicEcmModelsBootstrap">
+        <property name="documentType" value="lecm-errands:document"/>
+        <property name="attributes">
+            <map>
+                <entry key="lecm-errands:initiator-assoc">
+                    <list>
+                        <value>Черновик</value>
+                    </list>
+                </entry>
+                <entry key="lecm-errands:executor-assoc">
+                    <list>
+                        <value>Черновик</value>
+                    </list>
+                </entry>
+                <entry key="lecm-errands:controller-assoc">
+                    <list>
+                        <value>Черновик</value>
+                        <value>Ожидает исполнения</value>
+                        <value>На исполнении</value>
+                        <value>На контроле</value>
+                        <value>На доработке</value>
+                    </list>
+                </entry>
+            </map>
+        </property>
+    </bean>
 </beans>
