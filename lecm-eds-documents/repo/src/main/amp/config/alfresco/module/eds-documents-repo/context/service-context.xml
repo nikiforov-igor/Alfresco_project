@@ -263,4 +263,10 @@
 			</list>
 		</property>
 	</bean>
+
+	<bean id="potencialRolesAttributesForReassignImporter" class="ru.it.lecm.duties.reassign.importers.DicAttributesImporter" parent="baseDicAttributesImporter"
+		  depends-on="eds.models.bootstrap">
+		<property name="attributes" value="lecm-eds-globset:potential-role-employee-assoc"/>
+		<property name="dictionaryName" value="Потенциальные роли"/>
+	</bean>
 </beans>
