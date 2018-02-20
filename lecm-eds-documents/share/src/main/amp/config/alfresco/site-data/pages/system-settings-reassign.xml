@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+    <title>Прочие настройки</title>
+    <description>Прочие настройки</description>
+    <template-instance>system-settings-reassign</template-instance>
+    <authentication>user</authentication>
+</page>
