@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <template-instance>
-    <template-type>ru/it/lecm/duties-reassign/work-groups-reassign</template-type>
+    <template-type>ru/it/lecm/duties-reassign/system-settings-reassign</template-type>
     <components>
         <!-- Toolbar -->
         <component>

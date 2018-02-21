@@ -148,6 +148,15 @@
             </list>
         </property>
     </bean>
+	<bean id="eds.documents.arm.duties.reassign.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="arm.LogicEcmBootstrap, armService, arm.filters.LogicEcmBootstrap, eds.arm.filters.LogicEcmBootstrap, documents.LogicEcmConnectionTypesBootstrap">
+        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/arm/eds-documents-duties-reassign.xml</value>
+            </list>
+        </property>
+    </bean>
 
 	<bean id="eds.arm.settings.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="arm.LogicEcmBootstrap, armService, arm.filters.LogicEcmBootstrap, eds.arm.filters.LogicEcmBootstrap, documents.LogicEcmConnectionTypesBootstrap">
