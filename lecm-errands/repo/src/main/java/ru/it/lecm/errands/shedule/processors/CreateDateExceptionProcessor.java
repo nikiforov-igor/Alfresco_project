@@ -52,6 +52,8 @@ public class CreateDateExceptionProcessor extends BaseCreationExceptionProcessor
                     }
                     delayedErrandsByDate.get(nextDateStr).add(periodicalErrandNodeRef);
                     errandsService.setDelayedErrandsByDate(delayedErrandsByDate);
+                } else if (ErrandsService.CreateDateNotWorkingDayAction.MOVE_TO_PREVIOUS_WORKING_DAY.equals(errandsService.getCreateDateNotWorkingDayAction())){
+                    // already moved
                 } else if (ErrandsService.CreateDateNotWorkingDayAction.DO_NOT_CREATE.equals(createDateNotWorkingDayAction)) {
                     // ignore creation
                 }

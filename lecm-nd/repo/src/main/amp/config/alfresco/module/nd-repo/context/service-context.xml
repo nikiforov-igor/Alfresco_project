@@ -204,4 +204,22 @@
             </map>
         </property>
     </bean>
+
+    <bean id="ndReassignAttributesImporter" class="ru.it.lecm.duties.reassign.importers.DocTypeAttrsImporter" parent="baseDocumentAttributesImporter"
+          depends-on="nd.document.models.bootstrap">
+        <property name="documentType" value="lecm-nd:document"/>
+        <property name="attributes">
+            <map>
+                <entry key="lecm-eds-document:executor-assoc">
+                    <list>
+                        <value>Черновик</value>
+                        <value>Проект</value>
+                        <value>На согласовании</value>
+                        <value>На подписании</value>
+                        <value>На доработке</value>
+                    </list>
+                </entry>
+            </map>
+        </property>
+    </bean>
 </beans>

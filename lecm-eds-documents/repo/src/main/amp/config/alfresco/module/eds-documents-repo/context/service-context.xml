@@ -276,4 +276,10 @@
 	<bean id="eds.systemSettingsTaskExecutor" class="ru.it.lecm.eds.duties.reassign.executors.SystemSettingsTaskExecutor" parent="dutiesReassignTaskExecutor">
 		<property name="id" value="SYSTEM_SETTINGS"/>
 	</bean>
+
+	<bean id="potencialRolesAttributesForReassignImporter" class="ru.it.lecm.duties.reassign.importers.DicAttributesImporter" parent="baseDicAttributesImporter"
+		  depends-on="eds.models.bootstrap">
+		<property name="attributes" value="lecm-eds-globset:potential-role-employee-assoc"/>
+		<property name="dictionaryName" value="Потенциальные роли"/>
+	</bean>
 </beans>

@@ -119,6 +119,7 @@
 			<parameter name="allowedValues">
 				<list>
 					<value>MOVE_TO_NEXT_WORKING_DAY</value>
+					<value>MOVE_TO_PREVIOUS_WORKING_DAY</value>
 					<value>DO_NOT_CREATE</value>
 				</list>
 			</parameter>

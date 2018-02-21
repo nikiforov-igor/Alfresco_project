@@ -238,4 +238,31 @@
             </map>
         </property>
     </bean>
+
+    <bean id="internalReassignAttributesImporter" class="ru.it.lecm.duties.reassign.importers.DocTypeAttrsImporter" parent="baseDocumentAttributesImporter"
+          depends-on="internal.LogicEcmInternalBootstrap">
+        <property name="documentType" value="lecm-internal:document"/>
+        <property name="attributes">
+            <map>
+                <entry key="lecm-eds-document:executor-assoc">
+                    <list>
+                        <value>Черновик</value>
+                        <value>Проект</value>
+                        <value>На согласовании</value>
+                        <value>На подписании</value>
+                        <value>На доработке</value>
+                    </list>
+                </entry>
+                <entry key="lecm-internal:recipients-assoc">
+                    <list>
+                        <value>Черновик</value>
+                        <value>Проект</value>
+                        <value>На согласовании</value>
+                        <value>На подписании</value>
+                        <value>На доработке</value>
+                    </list>
+                </entry>
+            </map>
+        </property>
+    </bean>
 </beans>

@@ -839,4 +839,77 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         Collection<Set<NodeRef>> allDelayedErrands = allDelayedErrandsByDate.values();
         return allDelayedErrands.stream().anyMatch(set -> set.contains(periodicalErrand));
     }
+
+    @Override
+    public Boolean doesRuleAllowCreation(NodeRef periodicalErrand) {
+        return doesRuleAllowCreation(periodicalErrand, new Date());
+    }
+
+    @Override
+    public Boolean doesRuleAllowCreation(NodeRef periodicalErrand, Date date) {
+        boolean createErrand = false;
+        String ruleContent = (String) nodeService.getProperty(periodicalErrand, ErrandsService.PROP_ERRANDS_PERIODICAL_RULE);
+        if (ruleContent != null) {
+            try {
+                JSONObject rule = new JSONObject(ruleContent);
+                String type = rule.getString("type");
+                JSONArray data = rule.has("data") ? rule.getJSONArray("data") : new JSONArray();
+                Calendar calendar = GregorianCalendar.getInstance();
+                calendar.setTime(date);
+                switch (type) {
+                    case DAILY:
+                        createErrand = true;
+                        break;
+                    case WEEK_DAYS:
+                        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+                        if (dayOfWeek == Calendar.SUNDAY) {
+                            dayOfWeek = 7;
+                        } else {
+                            dayOfWeek -= 1;
+                        }
+                        for (int i = 0; i < data.length(); i++) {
+                            int value = data.getInt(i);
+                            if (value == dayOfWeek) {
+                                createErrand = true;
+                                break;
+                            }
+                        }
+                        break;
+                    case MONTH_DAYS:
+                        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+                        for (int i = 0; i < data.length(); i++) {
+                            int value = data.getInt(i);
+                            if (value == dayOfMonth) {
+                                createErrand = true;
+                                break;
+                            }
+                        }
+                        break;
+                    case QUARTERLY:
+                        int currentMonthValue = calendar.get(Calendar.MONTH) + 1;
+                        int currentDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+                        Date startDate = (Date) nodeService.getProperty(periodicalErrand, ErrandsService.PROP_ERRANDS_PERIOD_START);
+                        calendar.setTime(startDate);
+                        int startMonthValue = calendar.get(Calendar.MONTH) + 1;
+                        if (currentMonthValue % 3 == startMonthValue % 3) {
+                            for (int i = 0; i < data.length(); i++) {
+                                int value = data.getInt(i);
+                                if (value == currentDayOfMonth) {
+                                    createErrand = true;
+                                    break;
+                                }
+                            }
+                        }
+                        break;
+                    default:
+                        logger.warn("Error parse periodical rule. Property 'type' has not supported value");
+                        break;
+
+                }
+            } catch (JSONException e) {
+                logger.warn("Error parse periodical rule", e);
+            }
+        }
+        return createErrand;
+    }
 }
