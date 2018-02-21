@@ -2,7 +2,6 @@
 <items>
     <item name="lecm-dic:Настройки АРМ" type="lecm-dic:dictionary">
         <items updateMode="CreateOrUpdate">
-            </item>
             <item name="cm:АРМ СЭД" type="lecm-arm:arm">
                 <property name="cm:name"><![CDATA[АРМ СЭД]]></property>
                 <property name="lecm-arm:code"><![CDATA[SED]]></property>
