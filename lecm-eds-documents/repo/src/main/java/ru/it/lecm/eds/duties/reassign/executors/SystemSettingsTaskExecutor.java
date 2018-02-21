@@ -5,6 +5,8 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.extensions.surf.util.I18NUtil;
 import ru.it.lecm.duties.reassign.beans.DutiesReassignService;
 import ru.it.lecm.duties.reassign.executors.TaskExecutor;
@@ -19,6 +21,7 @@ import java.util.List;
  * 19.02.2018 13:54
  */
 public class SystemSettingsTaskExecutor extends TaskExecutor {
+    private static final Logger logger = LoggerFactory.getLogger(SystemSettingsTaskExecutor.class);
 
     private static final QName USER_SETTINGS_ASSOC_DEFAULT_INITIATOR = QName.createQName("http://www.it.ru/logicECM/errands/1.0", "user-settings-default-initiator-assoc");
     private static final String ATTRIBUTE = "attribute";
