@@ -21,12 +21,16 @@ import java.util.List;
  * 19.02.2018 13:54
  */
 public class SystemSettingsTaskExecutor extends TaskExecutor {
+
     private static final Logger logger = LoggerFactory.getLogger(SystemSettingsTaskExecutor.class);
 
     private static final QName USER_SETTINGS_ASSOC_DEFAULT_INITIATOR = QName.createQName("http://www.it.ru/logicECM/errands/1.0", "user-settings-default-initiator-assoc");
     private static final String ATTRIBUTE = "attribute";
     private static final String SETTINGS = "settings";
     private static final String TYPE = "type";
+
+    private static final String SUCCEESS_LOG_TEMPLATE = "Сотрудник #object3 изменен на сотрудника #object2 в настройке %s";
+    private static final String FAIL_LOG_TEMPLATE = "Не удалось изменить сотрудника #object3 на сотрудника #object2 в настройке %s";
 
     @Override
     public boolean execute(NodeRef task, JSONObject element) {
@@ -84,17 +88,17 @@ public class SystemSettingsTaskExecutor extends TaskExecutor {
         if (fromAssocRef != null && !fromAssocRef.isEmpty()) {
             NodeRef fromAssoc = new NodeRef(fromAssocRef);
             //Дежурный регистратор
-            List<AssociationRef> registars = nodeService.getSourceAssocs(fromAssoc, EDSGlobalSettingsService.ASSOC_DUTY_REGISTRAR);
-            if (!registars.isEmpty()) {
-                NodeRef registar = registars.get(0).getSourceRef();
+            List<AssociationRef> registarSettingList = nodeService.getSourceAssocs(fromAssoc, EDSGlobalSettingsService.ASSOC_DUTY_REGISTRAR);
+            if (!registarSettingList.isEmpty()) {
+                NodeRef registarSetting = registarSettingList.get(0).getSourceRef();
                 JSONObject element = new JSONObject();
                 try {
-                    element.put(NAME, registar.toString());
-                    element.put(NODE_REF, registar.toString());
-                    element.put(ID, registar.toString());
+                    element.put(NAME, registarSetting.toString());
+                    element.put(NODE_REF, registarSetting.toString());
+                    element.put(ID, registarSetting.toString());
                     element.put(TYPE, EDSGlobalSettingsService.ASSOC_DUTY_REGISTRAR.toString());
                     element.put(ATTRIBUTE, I18NUtil.getMessage("lecm-eds-globset_model.association.lecm-eds-globset_duty-registrar-assoc.title"));
-                    element.put(SETTINGS, I18NUtil.getMessage("system-settings-task-executor.static-path"));
+                    element.put(SETTINGS, I18NUtil.getMessage("system-settings-task-executor.assoc-duty-registrar-path"));
                     result.add(element);
                 } catch (JSONException e) {
                     logger.error(e.getMessage(), e);
@@ -102,18 +106,18 @@ public class SystemSettingsTaskExecutor extends TaskExecutor {
             }
 
             //Автор по умолчанию
-            List<AssociationRef> authors = nodeService.getSourceAssocs(fromAssoc, USER_SETTINGS_ASSOC_DEFAULT_INITIATOR);
-            if (!registars.isEmpty()) {
-                NodeRef author = authors.get(0).getSourceRef();
+            List<AssociationRef> authorSettingList = nodeService.getSourceAssocs(fromAssoc, USER_SETTINGS_ASSOC_DEFAULT_INITIATOR);
+            if (!authorSettingList.isEmpty()) {
+                NodeRef authorSetting = authorSettingList.get(0).getSourceRef();
                 JSONObject element = new JSONObject();
                 try {
-                    element.put(NAME, author.toString());
-                    element.put(NODE_REF, author.toString());
-                    element.put(ID, author.toString());
+                    element.put(NAME, authorSetting.toString());
+                    element.put(NODE_REF, authorSetting.toString());
+                    element.put(ID, authorSetting.toString());
                     element.put(TYPE, USER_SETTINGS_ASSOC_DEFAULT_INITIATOR.toString());
                     element.put(ATTRIBUTE, I18NUtil.getMessage("lecm-errands_model.association.lecm-errands_user-settings-default-initiator-assoc.title"));
                     String employeeName = (String) nodeService.getProperty(fromAssoc, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
-                    String settingsPath = String.format(I18NUtil.getMessage("system-settings-task-executor.dynamic-path"), employeeName);
+                    String settingsPath = String.format(I18NUtil.getMessage("system-settings-task-executor.user-settings-assoc-default-initiator-path"), employeeName);
                     element.put(SETTINGS, settingsPath);
                     result.add(element);
                 } catch (JSONException e) {
@@ -125,12 +129,12 @@ public class SystemSettingsTaskExecutor extends TaskExecutor {
     }
 
     @Override
-    protected String getSuccessLogTemplate(JSONObject jsonObject) throws JSONException {
-        return null;
+    protected String getSuccessLogTemplate(JSONObject element) throws JSONException {
+        return String.format(SUCCEESS_LOG_TEMPLATE, element.getString(ATTRIBUTE));
     }
 
     @Override
-    protected String getFailureLogTemplate(JSONObject jsonObject) throws JSONException {
-        return null;
+    protected String getFailureLogTemplate(JSONObject element) throws JSONException {
+        return String.format(FAIL_LOG_TEMPLATE, element.getString(ATTRIBUTE));
     }
 }
