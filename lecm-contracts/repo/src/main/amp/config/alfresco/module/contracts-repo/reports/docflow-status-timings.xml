@@ -17,6 +17,21 @@
             <item name="cm:9b9ae31f-abbb-42bb-a9c0-3d6eef248e85" type="lecm-rpeditor:reportDataSource">
                 <property name="cm:name"><![CDATA[afee0304-0cb7-4cfe-adff-df5ec3fa3af3]]></property>
                 <items>
+                    <item name="cm:Время обновления" type="lecm-rpeditor:reportDataColumn">
+                        <property name="cm:name"><![CDATA[Время обновления]]></property>
+                        <property name="lecm-rpeditor:dataColumnClass"><![CDATA[REPORT_UPDATE_DATETIME]]></property>
+                        <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[par_UpdateTime]]></property>
+                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[10]]></property>
+                        <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
+                        <assocs>
+                            <assoc type="lecm-rpeditor:columnTypeAssoc"
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
+                            <assoc type="lecm-rpeditor:columnParameterTypeAssoc"
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип параметра/Значение"/>
+                        </assocs>
+                    </item>
                     <item name="cm:Измерение" type="lecm-rpeditor:reportDataColumn">
                         <property name="cm:name"><![CDATA[Измерение]]></property>
                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[d:text]]></property>
