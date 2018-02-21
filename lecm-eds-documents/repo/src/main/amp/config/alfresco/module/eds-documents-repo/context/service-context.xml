@@ -273,7 +273,7 @@
 		</property>
 	</bean>
 
-	<bean id="systemSettingsTaskExecutor" class="ru.it.lecm.eds.duties.reassign.executors.SystemSettingsTaskExecutor" parent="dutiesReassignTaskExecutor">
+	<bean id="eds.systemSettingsTaskExecutor" class="ru.it.lecm.eds.duties.reassign.executors.SystemSettingsTaskExecutor" parent="dutiesReassignTaskExecutor">
 		<property name="id" value="SYSTEM_SETTINGS"/>
 	</bean>
 </beans>
