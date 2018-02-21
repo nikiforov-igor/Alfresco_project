@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Настройки АРМ" type="lecm-dic:dictionary">
+        <items updateMode="CreateOrUpdate">
+            <item name="cm:Передача дел" type="lecm-arm:arm">
+                <items updateMode="CreateOrUpdate">
+                    <item name="cm:Передача дел" type="lecm-arm:accordion">
+                        <items>
+                            <item name="cm:Передача дел" type="lecm-arm:html-node">
+                                <item name="cm:Прочие настройки" type="lecm-arm:html-node">
+                                    <property name="lecm-arm:order"><![CDATA[70]]></property>
+                                    <property name="lecm-arm:html-url">
+                                        <![CDATA[page/system-settings-reassign]]></property>
+                                    <property name="cm:name"><![CDATA[Прочие настройки]]></property>
+                                    <property name="lecm-arm:expression"><![CDATA[]]></property>
+                                </item>
+                            </item>
+                        </items>
+                    </item>
+                </items>
+            </item>
+        </items>
+    </item>
+</items>

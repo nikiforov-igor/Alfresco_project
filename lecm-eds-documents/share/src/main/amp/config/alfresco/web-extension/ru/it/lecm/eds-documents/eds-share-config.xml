@@ -539,6 +539,20 @@
 		</forms>
 	</config>
 
+	<config evaluator="model-type" condition="SYSTEM_SETTINGS">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="attribute"/>
+					<show id="settings"/>
+				</field-visibility>
+				<appearance>
+					<field id="attribute" label-id="review.list.datagrid.column.system-settings.attribute"/>
+					<field id="settings" label-id="review.list.datagrid.column.system-settings.settings"/>
+				</appearance>
+			</form>
+		</forms>
+	</config>
 
 	<config evaluator="model-type" condition="lecm-global-settings:base">
 		<forms>

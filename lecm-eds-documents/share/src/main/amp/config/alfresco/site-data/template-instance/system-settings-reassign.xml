@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<template-instance>
+    <template-type>ru/it/lecm/duties-reassign/system-settings-reassign</template-type>
+    <components>
+        <!-- Toolbar -->
+        <component>
+            <region-id>toolbar</region-id>
+            <url>/lecm/duties-reassign/duties/toolbar</url>
+            <properties>
+                <taskType>SYSTEM_SETTINGS</taskType>
+                <bubblingLabel>reassign-system-settings</bubblingLabel>
+            </properties>
+        </component>
+        <!-- Datagrid -->
+        <component>
+            <region-id>datagrid</region-id>
+            <url>/lecm/duties-reassign/duties/datagrid</url>
+            <properties>
+                <bubblingLabel>reassign-system-settings</bubblingLabel>
+                <taskType>SYSTEM_SETTINGS</taskType>
+            </properties>
+        </component>
+        <!-- Actions -->
+        <component>
+            <region-id>reassign-actions</region-id>
+            <url>/lecm/duties-reassign/actions-component</url>
+            <properties>
+                <bubblingLabel>reassign-system-settings</bubblingLabel>
+            </properties>
+        </component>
+    </components>
+</template-instance>
