@@ -359,4 +359,34 @@
 		<property name="namespaceService" ref="namespaceService"/>
 		<property name="documentService" ref="documentService"/>
 	</bean>
+
+	<bean id="meetingsReassignAttributesImporter" class="ru.it.lecm.duties.reassign.importers.DocTypeAttrsImporter" parent="baseDocumentAttributesImporter"
+		  depends-on="meetings.dictionaries.modelsBootstrap">
+		<property name="documentType" value="lecm-meetings:document"/>
+		<property name="attributes">
+			<map>
+				<entry key="lecm-meetings:chairman-assoc">
+					<list>
+						<value>Новое</value>
+						<value>Согласование повестки</value>
+						<value>Утверждено</value>
+					</list>
+				</entry>
+				<entry key="lecm-meetings:secretary-assoc">
+					<list>
+						<value>Новое</value>
+						<value>Согласование повестки</value>
+						<value>Утверждено</value>
+					</list>
+				</entry>
+				<entry key="lecm-events:temp-members-assoc">
+					<list>
+						<value>Новое</value>
+						<value>Согласование повестки</value>
+						<value>Утверждено</value>
+					</list>
+				</entry>
+			</map>
+		</property>
+	</bean>
 </beans>

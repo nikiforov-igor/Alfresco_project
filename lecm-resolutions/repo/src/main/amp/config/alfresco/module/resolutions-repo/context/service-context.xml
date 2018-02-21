@@ -269,4 +269,26 @@
         </property>
     </bean>
 
+    <bean id="resolutionReassignAttributesImporter" class="ru.it.lecm.duties.reassign.importers.DocTypeAttrsImporter" parent="baseDocumentAttributesImporter"
+          depends-on="resolutions.LogicEcmBootstrap">
+        <property name="documentType" value="lecm-resolutions:document"/>
+        <property name="attributes">
+            <map>
+                <entry key="lecm-resolutions:author-assoc">
+                    <list>
+                        <value>Черновик</value>
+                        <value>На доработке</value>
+                    </list>
+                </entry>
+                <entry key="lecm-resolutions:controller-assoc">
+                    <list>
+                        <value>Черновик</value>
+                        <value>На утверждении</value>
+                        <value>На доработке</value>
+                        <value>На исполнении</value>
+                    </list>
+                </entry>
+            </map>
+        </property>
+    </bean>
 </beans>
