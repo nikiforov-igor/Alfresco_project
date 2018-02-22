@@ -39,6 +39,23 @@
                     </item>
                     <item name="cm:036899d4-2d8d-4818-8855-d0b40454d074" type="lecm-rpeditor:reportDataSource">
                         <property name="cm:name"><![CDATA[734648bc-50ec-4f46-bff7-b969073f6655]]></property>
+                        <items>
+                            <item name="cm:Время обновления" type="lecm-rpeditor:reportDataColumn">
+                                <property name="cm:name"><![CDATA[Время обновления]]></property>
+                                <property name="lecm-rpeditor:dataColumnClass"><![CDATA[REPORT_UPDATE_DATETIME]]></property>
+                                <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[]]></property>
+                                <property name="lecm-rpeditor:dataColumnCode"><![CDATA[par_UpdateTime]]></property>
+                                <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[10]]></property>
+                                <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
+                                <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
+                                <assocs>
+                                    <assoc type="lecm-rpeditor:columnTypeAssoc"
+                                           path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
+                                    <assoc type="lecm-rpeditor:columnParameterTypeAssoc"
+                                           path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип параметра/Значение"/>
+                                </assocs>
+                            </item>
+                        </items>
                     </item>
                     <item name="cm:incoming_errands_sub_tmpl.jrxml" type="cm:content">
                         <property name="cm:name">
@@ -57,6 +74,21 @@
             <item name="cm:b69578f9-605f-4f09-8abd-acd70547eccb" type="lecm-rpeditor:reportDataSource">
                 <property name="cm:name"><![CDATA[79019f09-bf21-44c5-903a-1d3f5e2195b3]]></property>
                 <items>
+                    <item name="cm:Время обновления" type="lecm-rpeditor:reportDataColumn">
+                        <property name="cm:name"><![CDATA[Время обновления]]></property>
+                        <property name="lecm-rpeditor:dataColumnClass"><![CDATA[REPORT_UPDATE_DATETIME]]></property>
+                        <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[par_UpdateTime]]></property>
+                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[10]]></property>
+                        <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
+                        <assocs>
+                            <assoc type="lecm-rpeditor:columnTypeAssoc"
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
+                            <assoc type="lecm-rpeditor:columnParameterTypeAssoc"
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип параметра/Значение"/>
+                        </assocs>
+                    </item>
                     <item name="cm:fe257634-07c7-4d12-bdeb-57405fb6704b" type="lecm-rpeditor:reportDataColumn">
                         <property name="lecm-rpeditor:dataColumnExpression">
                             <![CDATA[{{subreport::incoming_errands_sub}}]]></property>

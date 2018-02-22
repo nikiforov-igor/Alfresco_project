@@ -27,6 +27,21 @@
             <item name="cm:9e68b752-fd2a-4052-a0b1-e6e67206660b" type="lecm-rpeditor:reportDataSource">
                 <property name="cm:name"><![CDATA[553a13ed-7467-4725-9c1e-7083e977b7ae]]></property>
                 <items>
+                    <item name="cm:Время обновления" type="lecm-rpeditor:reportDataColumn">
+                        <property name="cm:name"><![CDATA[Время обновления]]></property>
+                        <property name="lecm-rpeditor:dataColumnClass"><![CDATA[REPORT_UPDATE_DATETIME]]></property>
+                        <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[par_UpdateTime]]></property>
+                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[10]]></property>
+                        <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
+                        <assocs>
+                            <assoc type="lecm-rpeditor:columnTypeAssoc"
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
+                            <assoc type="lecm-rpeditor:columnParameterTypeAssoc"
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип параметра/Значение"/>
+                        </assocs>
+                    </item>
                     <item name="cm:1efafe31-7fa0-413d-b02e-ab2eb449476b" type="lecm-rpeditor:reportDataColumn">
                         <property name="lecm-rpeditor:dataColumnExpression">
                             <![CDATA[{{subreport::resolutions_sub}}]]></property>

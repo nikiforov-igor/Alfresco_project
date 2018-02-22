@@ -17,6 +17,21 @@
             <item name="cm:24a4acdd-bf71-4326-9ce5-96f2fe6973b9" type="lecm-rpeditor:reportDataSource">
                 <property name="cm:name"><![CDATA[46f485e9-1b4f-4880-92c7-33976491b542]]></property>
                 <items>
+                    <item name="cm:Время обновления" type="lecm-rpeditor:reportDataColumn">
+                        <property name="cm:name"><![CDATA[Время обновления]]></property>
+                        <property name="lecm-rpeditor:dataColumnClass"><![CDATA[REPORT_UPDATE_DATETIME]]></property>
+                        <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[par_UpdateTime]]></property>
+                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[10]]></property>
+                        <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
+                        <assocs>
+                            <assoc type="lecm-rpeditor:columnTypeAssoc"
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
+                            <assoc type="lecm-rpeditor:columnParameterTypeAssoc"
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип параметра/Значение"/>
+                        </assocs>
+                    </item>
                     <item name="cm:Период регистрации" type="lecm-rpeditor:reportDataColumn">
                         <property name="lecm-rpeditor:dataColumnControlParams">
                             <![CDATA[fromDateDefault=START_YEAR;fillDates=true;toDateDefault=NOW]]></property>
@@ -141,6 +156,23 @@
                 <items>
                     <item name="cm:23dc2f24-72d4-417f-a153-09958834725d" type="lecm-rpeditor:reportDataSource">
                         <property name="cm:name"><![CDATA[2a38a9f0-97b5-4808-8c7a-bfe77ec4f36b]]></property>
+                        <items>
+                            <item name="cm:Время обновления" type="lecm-rpeditor:reportDataColumn">
+                                <property name="cm:name"><![CDATA[Время обновления]]></property>
+                                <property name="lecm-rpeditor:dataColumnClass"><![CDATA[REPORT_UPDATE_DATETIME]]></property>
+                                <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[]]></property>
+                                <property name="lecm-rpeditor:dataColumnCode"><![CDATA[par_UpdateTime]]></property>
+                                <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[10]]></property>
+                                <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
+                                <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
+                                <assocs>
+                                    <assoc type="lecm-rpeditor:columnTypeAssoc"
+                                           path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
+                                    <assoc type="lecm-rpeditor:columnParameterTypeAssoc"
+                                           path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип параметра/Значение"/>
+                                </assocs>
+                            </item>
+                        </items>
                     </item>
                     <item name="cm:Шаблон" type="lecm-rpeditor:reportTemplate">
                         <property name="lecm-rpeditor:templateCode"><![CDATA[tmpl]]></property>
