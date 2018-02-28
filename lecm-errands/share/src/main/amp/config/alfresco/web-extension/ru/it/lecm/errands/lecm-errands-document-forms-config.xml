@@ -284,7 +284,7 @@
                     <set id="limitation-date" parent="common" label-id="label.limitation-date" template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>/>
                     <set id="afterDateSet1" parent="common"/>
                     <set id="periodicallySet" parent="common" template="/ru/it/lecm/base-share/components/hidden-set.ftl"/>
-                    <set id="errand-validity" parent="periodicallySet" template="/ru/it/lecm/errands/controls/errands-validity-set.ftl" appearance="title" label-id="label.errand.periodically.period.title"/>
+                    <set id="errand-validity" parent="periodicallySet" template="/ru/it/lecm/errands/controls/errands-validity-set.ftl"/>
                     <set id="validity-end-date" parent="errand-validity"/>
                     <set id="during" parent="errand-validity" template="/org/alfresco/components/form/2-column-set.ftl"/>
                     <set id="repeat" parent="errand-validity" template="/org/alfresco/components/form/2-column-set.ftl"/>
@@ -770,7 +770,7 @@
                     <set id="limitation-date"  template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
                     <set id="block2-1" template="/ru/it/lecm/base-share/components/hidden-set.ftl"/>
                     <set id="block3"  template="/ru/it/lecm/base-share/components/hidden-set.ftl"/>
-                    <set id="errand-validity" parent="block3" template="/ru/it/lecm/errands/controls/errands-validity-set.ftl" appearance="title" label-id="label.errand.periodically.period.title"/>
+                    <set id="errand-validity" parent="block3" template="/ru/it/lecm/errands/controls/errands-validity-set.ftl"/>
                     <set id="validity-end-date" parent="errand-validity"/>
                     <set id="during" parent="errand-validity" template="/org/alfresco/components/form/2-column-set.ftl"/>
                     <set id="repeat" parent="errand-validity" template="/org/alfresco/components/form/2-column-set.ftl"/>
@@ -1319,7 +1319,7 @@
                     <set id="limitation-date"  template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
                     <set id="block2-1" template="/ru/it/lecm/base-share/components/hidden-set.ftl"/>
                     <set id="block3"  template="/ru/it/lecm/base-share/components/hidden-set.ftl"/>
-                    <set id="errand-validity" parent="block3" template="/ru/it/lecm/errands/controls/errands-validity-set.ftl" appearance="title" label-id="label.errand.periodically.period.title"/>
+                    <set id="errand-validity" parent="block3" template="/ru/it/lecm/errands/controls/errands-validity-set.ftl"/>
                     <set id="validity-end-date" parent="errand-validity" />
                     <set id="during" parent="errand-validity" template="/org/alfresco/components/form/2-column-set.ftl"/>
                     <set id="repeat" parent="errand-validity" template="/org/alfresco/components/form/2-column-set.ftl"/>
@@ -1653,7 +1653,7 @@
                     <set id="limitation-date"  template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
                     <set id="block2-1" template="/ru/it/lecm/base-share/components/hidden-set.ftl"/>
                     <set id="block3"  template="/ru/it/lecm/base-share/components/hidden-set.ftl"/>
-                    <set id="errand-validity" parent="block3" template="/ru/it/lecm/errands/controls/errands-validity-set.ftl" appearance="title" label-id="label.errand.periodically.period.title"/>
+                    <set id="errand-validity" parent="block3" template="/ru/it/lecm/errands/controls/errands-validity-set.ftl"/>
                     <set id="validity-end-date" parent="errand-validity"/>
                     <set id="during" parent="errand-validity" template="/org/alfresco/components/form/2-column-set.ftl"/>
                     <set id="repeat" parent="errand-validity" template="/org/alfresco/components/form/2-column-set.ftl"/>
