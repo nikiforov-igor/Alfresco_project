@@ -299,7 +299,7 @@
             <value>0 0 3 */1 * ?</value>
         </property>
         <property name="onServerStart">
-            <value>true</value>
+            <value>false</value>
         </property>
         <property name="firstStartExpression">
             <value>0 */30 * * * ?</value>
@@ -336,7 +336,7 @@
     <bean id="contractsStageDateNotificationSchedule"
           class="ru.it.lecm.contracts.schedule.ContractStageDateNotificationSchedule" parent="baseTransactionalSchedule">
         <property name="onServerStart">
-            <value>true</value>
+            <value>false</value>
         </property>
         <property name="cronExpression">
             <value>0 0 5 */1 * ?</value>
