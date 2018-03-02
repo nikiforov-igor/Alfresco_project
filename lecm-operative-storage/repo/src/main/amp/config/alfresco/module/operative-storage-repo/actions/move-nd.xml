@@ -48,7 +48,31 @@
 				<property name="lecm-group-actions:field-is-mandatory"><![CDATA[true]]></property>
 				<property name="lecm-group-actions:field-type"><![CDATA[lecm-os:nomenclature-unit-section]]></property>
 				<property name="lecm-group-actions:field-priority"><![CDATA[0]]></property>
-                <property name="lecm-group-actions:field-control"/>
+                <property name="lecm-group-actions:field-control">
+                    <![CDATA[{
+                        "template":"/ru/it/lecm/base-share/components/controls/association-control.ftl",
+                        "displayName":"Выбор раздела (годового и управления)",
+                        "id":"lecm-os:nomenclature-unit-section-and-year-control",
+                        "params":[
+                            {"name":"endpointMany","value":"false"},
+                            {"name":"plane","value":"false"},
+                            {"name":"endpointType","value":"lecm-os:nomenclature-unit-section"},
+                            {"name":"showSelectedItemsPath","value":"false"},
+                            {"name":"showCreateNewLink","value":"false"},
+                            {"name":"sortProp","value":"cm:title"},
+                            {"name":"treeItemType","value":"lecm-dic:hierarchical_dictionary_values"},
+                            {"name":"nameSubstituteString","value":"{cm:title|lecm-os:nomenclature-year-section-year}"},
+                            {"name":"treeNodeSubstituteString","value":"{cm:title|lecm-os:nomenclature-year-section-year}"},
+                            {"name":"showCreateNewButton","value":"false"},
+                            {"name":"childrenDataSource","value":"lecm/os/nomenclature/datasource/avaliableUnits"},
+                            {"name":"showSearch","value":"false"},
+                            {"name":"additionalFilter","value":"{{FILTER_YEARS_BY_ORG({allowAdmin: true})}} AND NOT @lecm\\\\-os\\\\:nomenclature\\\\-unit\\\\-section\\\\-status:\\\"CLOSED\\\""},
+                            {"name":"changeItemsFireAction","value":"osUnitCopyItemChanged"},
+                            {"name":"rootLocation","value":"/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел"},
+                            {"name":"treeBranchesDatasource","value":"lecm/nomenclature/tree/notClosed"}
+                        ]
+                    }]]>
+                </property>
 			</item>
 		</items>
     </item>
