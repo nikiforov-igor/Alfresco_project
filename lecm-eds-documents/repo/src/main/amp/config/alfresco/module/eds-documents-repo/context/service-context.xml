@@ -149,7 +149,7 @@
         </property>
     </bean>
 	<bean id="eds.documents.arm.duties.reassign.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
-          depends-on="arm.LogicEcmBootstrap, armService, arm.filters.LogicEcmBootstrap, eds.arm.filters.LogicEcmBootstrap, documents.LogicEcmConnectionTypesBootstrap">
+          depends-on="arm.LogicEcmBootstrap, armService, arm.filters.LogicEcmBootstrap, eds.arm.filters.LogicEcmBootstrap, documents.LogicEcmConnectionTypesBootstrap, dutiesReassign.arm.settings.LogicEcmBootstrap">
         <property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
         <property name="dictionaries">
             <list>
@@ -164,7 +164,6 @@
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/arm/default-arm-sed.xml</value>
-				<value>alfresco/module/${artifactId}/arm/eds-documents-settings-arm.xml</value>
 			</list>
 		</property>
 	</bean>
