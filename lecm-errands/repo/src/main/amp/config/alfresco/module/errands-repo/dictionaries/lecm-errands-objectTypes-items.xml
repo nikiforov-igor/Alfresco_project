@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Тип объекта" type="lecm-dic:dictionary">
+        <items updateMode="CreateOrUpdate">
+            <item name="cm:Пользовательские настройки поручений" type="lecm-busjournal:objectType">
+                <property name="cm:name">Пользовательские настройки поручений</property>
+                <property name="lecm-busjournal:objectType-code">ERRANDS_USER_SETTINGS</property>
+                <property name="lecm-busjournal:objectType-class">lecm-errands:user-settings</property>
+                <property name="lecm-busjournal:objectType-template">Настройки поручений ({@@substitudeService.getObjectDescription(@serviceOrgstructure.getEmployeeByPerson(doc.attr('cm:creator')))})</property>
+            </item>
+        </items>
+    </item>
+</items>
