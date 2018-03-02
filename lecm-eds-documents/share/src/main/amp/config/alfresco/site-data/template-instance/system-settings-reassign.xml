@@ -28,5 +28,12 @@
                 <bubblingLabel>reassign-system-settings</bubblingLabel>
             </properties>
         </component>
+        <component>
+            <region-id>forbidden</region-id>
+            <url>/lecm/base/forbidden</url>
+            <properties>
+                <message>duties.reassign.isDisabled</message>
+            </properties>
+        </component>
     </components>
 </template-instance>
