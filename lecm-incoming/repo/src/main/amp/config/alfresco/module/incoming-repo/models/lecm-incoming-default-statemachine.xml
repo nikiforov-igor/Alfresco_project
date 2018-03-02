@@ -6833,54 +6833,6 @@ if (document) {
                                         <subFolders/>
                                     </node>
                                     <node>
-                                        <type>ScriptAction</type>
-                                        <name>1ba0da8a-a889-4ba8-8518-8518e8d52ed6</name>
-                                        <properties>
-                                            <property>
-                                                <name>actionExecution</name>
-                                                <value><![CDATA[start]]></value>
-                                            </property>
-                                            <property>
-                                                <name>actionId</name>
-                                                <value><![CDATA[ScriptAction]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders>
-                                            <subFolder>
-                                                <name>transitions</name>
-                                                <nodes>
-                                                    <node>
-                                                        <type>ScriptActionEntity</type>
-                                                        <name>195718f3-663b-4372-a098-01b0c478596c</name>
-                                                        <properties>
-                                                            <property>
-                                                                <name>scriptLabel</name>
-                                                                <value>
-                                                                    <![CDATA[Добавление динамической роли "СЭД.Инициатор"]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>actionScript</name>
-                                                                <value><![CDATA[/* Добавление динамической роли "СЭД.Инициатор" */
-(function(){
-    var incoming = stm_document,
-        currentEmployee = orgstructure.getCurrentEmployee();
-    lecmPermission.grantDynamicRole(incoming, currentEmployee, "DA_INITIATOR_DYN", "LECM_BASIC_PG_Owner");
-})();]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects/>
-                                                        <associations/>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
-                                                </nodes>
-                                            </subFolder>
-                                        </subFolders>
-                                    </node>
-                                    <node>
                                         <type>StartWorkflow</type>
                                         <name>206b9a98-a0ff-4545-b214-352be7f27da9</name>
                                         <properties>
