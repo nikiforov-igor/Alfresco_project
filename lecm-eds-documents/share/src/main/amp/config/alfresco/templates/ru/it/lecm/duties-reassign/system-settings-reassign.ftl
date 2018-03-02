@@ -7,7 +7,11 @@ LogicECM.module.DutiesReassign = LogicECM.module.DutiesReassign || {};
 //]]>
 </script>
 
-<@bpage.basePageSimple showToolbar=true>
-    <@region id="datagrid" scope="template" />
-    <@region id="reassign-actions" scope="template" />
+<@bpage.basePageSimple showToolbar=reassignIsEnabled>
+    <#if reassignIsEnabled>
+        <@region id="datagrid" scope="template" />
+        <@region id="reassign-actions" scope="template" />
+    <#else>
+        <@region id="forbidden" scope="template"/>
+    </#if>
 </@bpage.basePageSimple>
