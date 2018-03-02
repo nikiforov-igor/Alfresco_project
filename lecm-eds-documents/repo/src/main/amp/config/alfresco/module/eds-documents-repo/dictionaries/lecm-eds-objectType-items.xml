@@ -8,6 +8,12 @@
                 <property name="lecm-busjournal:objectType-class">lecm-eds-globset:potential-role</property>
                 <property name="lecm-busjournal:objectType-template">Роль: {lecm-eds-globset:potential-role-business-role-assoc-text-content} {lecm-eds-globset:potential-role-employee-assoc-text-content} {lecm-eds-globset:potential-role-organization-element-assoc-text-content}</property>
             </item>
+            <item name="cm:Глобальные настройки СЭД" type="lecm-busjournal:objectType">
+                <property name="cm:name">Глобальные настройки СЭД</property>
+                <property name="lecm-busjournal:objectType-code">EDS_GLOBAL_SETTINGS</property>
+                <property name="lecm-busjournal:objectType-class">lecm-eds-globset:settings</property>
+                <property name="lecm-busjournal:objectType-template">Глобальные настройки СЭД</property>
+            </item>
         </items>
     </item>
 </items>
