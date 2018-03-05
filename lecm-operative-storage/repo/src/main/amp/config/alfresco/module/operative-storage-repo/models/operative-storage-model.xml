@@ -65,6 +65,9 @@
         <type name="lecm-os:base">
             <title>Базовый тип для номенклатуры</title>
             <parent>lecm-dic:hierarchical_dictionary_values</parent>
+            <mandatory-aspects>
+                <aspect>lecm-dic:aspect_system</aspect>
+            </mandatory-aspects>
         </type>
 
         <type name="lecm-os:nomenclature-year-section">
@@ -135,6 +138,7 @@
             </overrides>
 			<mandatory-aspects>
                 <aspect>os-aspects:linked-organization-aspect</aspect>
+                <aspect>lecm-dic:aspect_system</aspect>
             </mandatory-aspects>
         </type>
 
@@ -493,6 +497,7 @@
             </properties>
             <mandatory-aspects>
                 <aspect>cm:titled</aspect>
+                <aspect>lecm-dic:aspect_system</aspect>
             </mandatory-aspects>
         </type>
 
@@ -527,6 +532,7 @@
             </associations>
             <mandatory-aspects>
                 <aspect>cm:titled</aspect>
+                <aspect>lecm-dic:aspect_system</aspect>
             </mandatory-aspects>
         </type>
 
@@ -542,6 +548,7 @@
             </properties>
             <mandatory-aspects>
                 <aspect>lecm-base-aspects:orderable</aspect>
+                <aspect>lecm-dic:aspect_system</aspect>
             </mandatory-aspects>
         </type>
 
@@ -560,6 +567,9 @@
                     <mandatory>false</mandatory>
                 </property>
             </properties>
+            <mandatory-aspects>
+                <aspect>lecm-dic:aspect_system</aspect>
+            </mandatory-aspects>
         </type>
     </types>
 
