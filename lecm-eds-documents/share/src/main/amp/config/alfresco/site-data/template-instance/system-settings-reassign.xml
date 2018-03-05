@@ -18,6 +18,7 @@
             <properties>
                 <bubblingLabel>reassign-system-settings</bubblingLabel>
                 <taskType>SYSTEM_SETTINGS</taskType>
+                <showActionColumn>false</showActionColumn>
             </properties>
         </component>
         <!-- Actions -->
