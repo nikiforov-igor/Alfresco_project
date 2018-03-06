@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <model name="lecm-errands-dic:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
-	<description>Logic ECM subjects dictionary model</description>
+	<description>Errands dictionaries</description>
 	<author>Logic ECM</author>
 	<version>1.0</version>
 	<imports>
