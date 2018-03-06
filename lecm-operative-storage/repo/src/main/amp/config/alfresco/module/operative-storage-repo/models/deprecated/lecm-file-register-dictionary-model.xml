@@ -41,6 +41,9 @@
 					<default>lecm-doc-dic-fr:level2</default>
 				</property>
 			</overrides>
+            <mandatory-aspects>
+                <aspect>lecm-dic:aspect_system</aspect>
+            </mandatory-aspects>
 		</type>
 
 		<type name="lecm-doc-dic-fr:level2">
@@ -63,6 +66,9 @@
 					<default>lecm-doc-dic-fr:level3</default>
 				</property>
 			</overrides>
+            <mandatory-aspects>
+                <aspect>lecm-dic:aspect_system</aspect>
+            </mandatory-aspects>
 		</type>
 
 		<type name="lecm-doc-dic-fr:level3">
