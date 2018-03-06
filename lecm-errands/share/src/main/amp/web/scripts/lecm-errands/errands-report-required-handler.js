@@ -19,7 +19,9 @@
             } else {
                 recipientField.options[1].disabled = true;
                 recipientField.options[2].disabled = true;
-                recipientField.selectedIndex = 0;
+                if (recipientField.selectedIndex != 3) {
+                    recipientField.selectedIndex = 0;
+                }
             }
         }
     }
