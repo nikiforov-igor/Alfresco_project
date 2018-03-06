@@ -381,7 +381,7 @@ LogicECM.ORD = LogicECM.ORD || {};
                 context: this,
                 isAddRowClicked: isAddRowClicked,
                 dataRow: dataRow,
-                useSequentialCreation: !isAddRowClicked && this.options.useSequentialCreation
+                useSequentialCreation: this.options.useSequentialCreation
             };
 
             var formId = this.id.substring(0, this.id.indexOf("_assoc_lecm-ord-table-structure_items-assoc-container"));
