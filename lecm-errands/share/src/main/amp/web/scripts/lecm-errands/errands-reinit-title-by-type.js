@@ -68,6 +68,7 @@
                     contentProp = "lecmErrandWf_content";
                     reportRequiredProp = "lecmErrandWf_reportRequired";
                     limitationDateRadioProp = "lecmErrandWf_limitationDateRadio";
+                    limitationDateRadio = Dom.get(obj.formId + "_prop_" + limitationDateRadioProp);
                     reportRequiredChangedFireEvent = "createErrandsWFErrandReportRequiredChanged";
                     limitationDateRadioChangedEvent = "createErrandsWFChangeLimitationDateRadio";
                 }
