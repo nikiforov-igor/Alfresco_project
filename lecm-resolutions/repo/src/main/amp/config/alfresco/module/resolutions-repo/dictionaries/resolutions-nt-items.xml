@@ -27,7 +27,7 @@
             <item name="cm:RESOLUTION_REQUIRES_SOLUTION_CLOSERS" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[RESOLUTION_REQUIRES_SOLUTION_CLOSERS]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Работа по всем  поручениям резолюции {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} завершена. Вам необходимо  принять решение о завершении работ по резолюции {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}.]]></property>
+                    <![CDATA[Работа по всем поручениям резолюции {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} завершена. Вам необходимо принять решение о завершении работ по резолюции {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}.]]></property>
                 <property name="lecm-notification-template:description"><![CDATA[Резолюция. Требуется решение Завершающего]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
                 <assocs>

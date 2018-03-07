@@ -119,7 +119,7 @@ var LECMResolutionActions = {
                 if (childrenErrands.length == (executedErrandsCount + canceledErrandsCount)) {
                     if (childrenErrands.length == executedErrandsCount && notReviewRecordsCount == 0) {
                         document.properties["lecm-resolutions:auto-complete"] = true;
-                    } if (childrenErrands.length == canceledErrandsCount) {
+                    } else if (childrenErrands.length == canceledErrandsCount) {
                         if (notReviewRecordsCount > 0) {
                             return;
                         } else {
@@ -127,7 +127,6 @@ var LECMResolutionActions = {
                         }
                     } else {
                         document.properties["lecm-resolutions:require-closers-decision"] = true;
-
                         notifications.sendNotificationFromCurrentUser({
                             recipients: resolutionsScript.getResolutionClosers(document),
                             templateCode: 'RESOLUTION_REQUIRES_SOLUTION_CLOSERS',
