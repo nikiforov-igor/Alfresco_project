@@ -127,17 +127,14 @@ var LECMResolutionActions = {
                         }
                     } else {
                         document.properties["lecm-resolutions:require-closers-decision"] = true;
-                        //отправляем уведомление только если статус резолюции не однозначный (ALFSED-2319)
-                        if(canceledErrandsCount > 0 && executedErrandsCount > 0) {
-                            notifications.sendNotificationFromCurrentUser({
-                                recipients: resolutionsScript.getResolutionClosers(document),
-                                templateCode: 'RESOLUTION_REQUIRES_SOLUTION_CLOSERS',
-                                templateConfig: {
-                                    mainObject: document
-                                },
-                                dontCheckAccessToObject: true
-                            });
-                        }
+                        notifications.sendNotificationFromCurrentUser({
+                            recipients: resolutionsScript.getResolutionClosers(document),
+                            templateCode: 'RESOLUTION_REQUIRES_SOLUTION_CLOSERS',
+                            templateConfig: {
+                                mainObject: document
+                            },
+                            dontCheckAccessToObject: true
+                        });
                     }
                     document.save();
                 }
