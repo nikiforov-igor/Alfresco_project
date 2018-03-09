@@ -103,7 +103,7 @@ public abstract class BaseCreationExceptionProcessor {
         if (adminUserName != null) {
             final NodeRef adminPerson = personService.getPerson(adminUserName);
             if (adminPerson != null) {
-                adminEmployee = orgstructureService.getEmployeeByPerson(adminPerson);
+                adminEmployee = orgstructureService.getEmployeeByPerson(adminPerson, false);
             }
         }
         return adminEmployee;
