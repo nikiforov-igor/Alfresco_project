@@ -11,7 +11,7 @@
     var formButtons;
     var scriptLayer;
 
-    Bubbling.on("errandsExecuteWFScriptLoaded", processForm);
+    Bubbling.on("errandsExecuteWFValueSet", processForm);
     Bubbling.on("editExecutionReportScriptLoaded", processForm);
     Bubbling.on("executeErrandButtonClick", executeErrand);
 
@@ -19,7 +19,7 @@
         if (!form) {
             scriptLayer = layer;
             formId = args[1].formId;
-            if (scriptLayer == "errandsExecuteWFScriptLoaded") {
+            if (scriptLayer == "errandsExecuteWFValueSet") {
                 Event.onContentReady(formId + "_assoc_packageItems", function () {
                     var errandRef = Dom.get(formId + "_assoc_packageItems").value;
                     processCloseChildCheckbox(errandRef, "lecmErrandWf_execute_1CloseChild");
@@ -45,7 +45,7 @@
     function executeErrand(layer, args) {
         if (formId == args[1].formId && Dom.get(formId + "-form")) {
             // поле с формы процесса создания и формы редактирования
-            var executeErrand = Selector.query(scriptLayer == "errandsExecuteWFScriptLoaded" ? 'input[name="prop_lecmErrandWf_execute_1Execute"]'
+            var executeErrand = Selector.query(scriptLayer == "errandsExecuteWFValueSet" ? 'input[name="prop_lecmErrandWf_execute_1Execute"]'
                 : 'input[name="prop_lecm-errands-ts_execution-report-is-execute"]', Dom.get(formId + "-form"), true);
             if (executeErrand) {
                 executeErrand.value = true;
