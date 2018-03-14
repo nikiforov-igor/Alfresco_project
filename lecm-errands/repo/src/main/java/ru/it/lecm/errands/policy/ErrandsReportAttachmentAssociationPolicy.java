@@ -103,7 +103,7 @@ public class ErrandsReportAttachmentAssociationPolicy implements NodeServicePoli
         PropertyCheck.mandatory(this, "nodeService", nodeService);
         PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
         PropertyCheck.mandatory(this, "documentAttachmentsService", documentAttachmentsService);
-
+        PropertyCheck.mandatory(this, "errandsService", errandsService);
 
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
                 reportTypeQname, associationQname, new JavaBehaviour(this, "onCreateAssociation"));

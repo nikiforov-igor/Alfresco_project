@@ -281,6 +281,7 @@
         <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
         <property name="reportTypeQname" ref="errandsTypeQname"/>
         <property name="associationQname" ref="executionAttachmentAssocQname"/>
+        <property name="errandsService" ref="errandsService"/>
     </bean>
 
     <bean id="errandsExecutionReportConnectedDocumentAssociationPolicy" class="ru.it.lecm.errands.policy.ErrandsReportConnectedDocumentAssociationPolicy"
@@ -301,6 +302,7 @@
         <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
         <property name="reportTypeQname" ref="executionReportTypeQname"/>
         <property name="associationQname" ref="executionReportAttachmentAssocQname"/>
+        <property name="errandsService" ref="errandsService"/>
     </bean>
 
     <bean id="errandsLimitationDatePolicy" class="ru.it.lecm.eds.policy.ComplexDatePolicy"
