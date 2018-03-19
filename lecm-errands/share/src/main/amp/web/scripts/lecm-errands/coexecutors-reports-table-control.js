@@ -208,16 +208,20 @@ LogicECM.errands = LogicECM.errands || {};
             }, datagrid, true);
 
             YAHOO.util.Event.on(transferSelectedReportsButton, "click", function () {
-                var selectedRows = this.getSelectedItems();
-                if (selectedRows && selectedRows.length) {
-                    var reportsRefs = selectedRows.map(function(row){
-                        return row.nodeRef;
-                    });
-                    this.doReportsTransfer(reportsRefs);
-                } else {
-                    Alfresco.util.PopupManager.displayMessage({
-                        text: Alfresco.util.message("lecm.errands.coexecutors.reports.msg.not.selected")
-                    });
+                if (!this.transferActionDoubleClickLock) {
+                    this.transferActionDoubleClickLock = true;
+                    var selectedRows = this.getSelectedItems();
+                    if (selectedRows && selectedRows.length) {
+                        var reportsRefs = selectedRows.map(function (row) {
+                            return row.nodeRef;
+                        });
+                        this.doReportsTransfer(reportsRefs);
+                    } else {
+                        Alfresco.util.PopupManager.displayMessage({
+                            text: Alfresco.util.message("lecm.errands.coexecutors.reports.msg.not.selected")
+                        });
+                        this.transferActionDoubleClickLock = false;
+                    }
                 }
 
             }, datagrid, true);
@@ -236,9 +240,12 @@ LogicECM.errands = LogicECM.errands || {};
     LogicECM.errands.CoexecutorsReportsDatagrid = function (htmlId) {
 
         Bubbling.on("onActionTransferCoexecutorReport", function (layer, args) {
-            this.onActionTransferCoexecutorReport({
-                nodeRef: args[1].nodeRef
-            });
+            if (!this.transferActionDoubleClickLock) {
+                this.transferActionDoubleClickLock = true;
+                this.onActionTransferCoexecutorReport({
+                    nodeRef: args[1].nodeRef
+                });
+            }
         }, this, true);
         Bubbling.on("onCoexecutorReportUpdated", function (layer, args) {
             this._itemUpdate(args[1].nodeRef);
@@ -253,6 +260,7 @@ LogicECM.errands = LogicECM.errands || {};
     YAHOO.lang.extend(LogicECM.errands.CoexecutorsReportsDatagrid, LogicECM.module.DocumentTableDataGrid);
 
     YAHOO.lang.augmentObject(LogicECM.errands.CoexecutorsReportsDatagrid.prototype, {
+        transferActionDoubleClickLock: false,
 
         getExpandedFormId: function(record) {
             return this.id + encodeURIComponent(record.getData("nodeRef"));
@@ -296,7 +304,16 @@ LogicECM.errands = LogicECM.errands || {};
                             }
                         }
                     },
-                    failureMessage: Alfresco.util.message("message.details.failure"),
+                    failureCallback: {
+                        scope: this,
+                        fn: function() {
+                            Alfresco.util.PopupManager.displayMessage(
+                                {
+                                    text:me.msg("message.details.failure")
+                                });
+                            this.transferActionDoubleClickLock = false;
+                        }
+                    },
                     scope: this
                 });
         },
@@ -336,6 +353,7 @@ LogicECM.errands = LogicECM.errands || {};
                             simpleDialog.dialog.subscribe('destroy', function (event, args, params) {
                                 LogicECM.module.Base.Util.destroyForm(simpleDialog.id);
                                 LogicECM.module.Base.Util.formDestructor(event, args, params);
+                                this.transferActionDoubleClickLock = false;
                             }, {moduleId: simpleDialog.id}, this);
                         },
                         scope: this
