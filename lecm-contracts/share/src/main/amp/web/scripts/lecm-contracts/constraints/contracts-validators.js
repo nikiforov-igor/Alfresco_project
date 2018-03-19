@@ -29,7 +29,7 @@ LogicECM.module.Contracts.stageDateRangeValidator =
 		if (startDateField && startDateField.value && endDateField && endDateField.value) {
 			var startDate = Alfresco.util.fromISO8601(startDateField.value);
 			var endDate =  Alfresco.util.fromISO8601(endDateField.value);
-			return startDate.getTime() < endDate.getTime();
+			return startDate.getTime() <= endDate.getTime();
 		}
 		return true;
 	};
