@@ -177,22 +177,48 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 		onRemoveItem: function(layer, args) {
 			var nodeRef = args[1].nodeRef;
 			if (nodeRef) {
-				Alfresco.util.Ajax.jsonGet({
-					url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/meeting/removeItem",
-					dataObj: {
-						nodeRef: nodeRef
-					},
-					successCallback: {
-						scope: this,
-						fn: function (response) {
-							var itemBlock = Dom.get(this.ITEM_FORM_PREFIX + nodeRef.replace('workspace://SpacesStore/', '_') + "-form-container");
-							if (itemBlock) {
-								itemBlock.parentNode.removeChild(itemBlock);
+				var me = this;
+				Alfresco.util.PopupManager.displayPrompt(
+					{
+
+						title: me.msg("message.confirm.delete.title"),
+						text: me.msg("message.delete.confirm.delete.point"),
+						buttons:[
+							{
+								text: me.msg("button.delete"),
+								handler:function DataGridActions__onActionDelete_delete() {
+									this.destroy();
+									me.deleteItem(nodeRef);
+								}
+							},
+							{
+								text:me.msg("button.cancel"),
+								handler:function DataGridActions__onActionDelete_cancel() {
+									this.destroy();
+								},
+								isDefault:true
 							}
+						]
+					});
+			}
+		},
+
+		deleteItem: function(nodeRef) {
+			Alfresco.util.Ajax.jsonGet({
+				url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/meeting/removeItem",
+				dataObj: {
+					nodeRef: nodeRef
+				},
+				successCallback: {
+					scope: this,
+					fn: function (response) {
+						var itemBlock = Dom.get(this.ITEM_FORM_PREFIX + nodeRef.replace('workspace://SpacesStore/', '_') + "-form-container");
+						if (itemBlock) {
+							itemBlock.parentNode.removeChild(itemBlock);
 						}
 					}
-				});
-			}
+				}
+			});
 		},
 
 		onChangeTechnicalMembers: function () {
