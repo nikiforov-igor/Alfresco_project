@@ -683,33 +683,37 @@ if (doc) {
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[(function() {
-	var document = stm_document,
-		isReservationRunning = document.properties['lecm-reservation-aspects:isReservationRunning'],
+	var document = stm_document;
+	if (document) {
+		var isReservationRunning = document.properties['lecm-reservation-aspects:isReservationRunning'],
 		documentRegnum = document.properties["lecm-document:regnum"],
 		projectNumber = document.properties["lecm-document-aspects:reg-project-data-number"],
 		presentString = document.properties["lecm-document:present-string"],
-		presentStringWithProjectNumber = presentString.replace(documentRegnum, projectNumber);
+		presentStringWithProjectNumber = presentString.replace(documentRegnum, projectNumber),
+        autoRegistration = document.assocs["lecm-eds-document:document-type-assoc"][0].properties["lecm-doc-dic-dt:auto-registration"];
+		if (!autoRegistration) {
+            if (isReservationRunning) {
+                statemachine.terminateWorkflowsByDefinition(document, 'regnumReservationExecution', null, null);
+            }
+            var initiators = lecmPermission.getEmployeesByDynamicRole(document, "BR_INITIATOR");
+            var eventInitiator = orgstructure.getCurrentEmployee();
+            if (initiators && initiators.length) {
+                notifications.sendNotificationFromCurrentUser({
+                  recipients: initiators,
+                  templateCode: 'EDS_DOCUMENT_REGISTERED',
+                  templateConfig: {
+                      mainObject: document,
+                      initiator: eventInitiator,
+                      presentStringWithProjectNumber: presentStringWithProjectNumber
+                  }
+                });
+            }
 
-	if (isReservationRunning) {
-		statemachine.terminateWorkflowsByDefinition(document, 'regnumReservationExecution', null, null);
-	}
-	var initiators = lecmPermission.getEmployeesByDynamicRole(document, "BR_INITIATOR");
-    var eventInitiator = orgstructure.getCurrentEmployee();
-    if (initiators && initiators.length) {
-        notifications.sendNotificationFromCurrentUser({
-		  recipients: initiators,
-		  templateCode: 'EDS_DOCUMENT_REGISTERED',
-		  templateConfig: {
-			  mainObject: document,
-			  initiator: eventInitiator,
-			  presentStringWithProjectNumber: presentStringWithProjectNumber
-		  }
-		});
+            var logText = "#initiator зарегистрировал документ " + documentScript.wrapperDocumentLink(document, presentStringWithProjectNumber) + ". Присвоен номер {~REGNUM} на дату {~REGDATE}.";
+            logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
+            businessJournal.log(document.nodeRef.toString(), "REGISTRATION", logText, []);
+        }
     }
-
-	var logText = "#initiator зарегистрировал документ " + documentScript.wrapperDocumentLink(document, presentStringWithProjectNumber) + ". Присвоен номер {~REGNUM} на дату {~REGDATE}.";
-	logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
-	businessJournal.log(document.nodeRef.toString(), "REGISTRATION", logText, []);
 })();]]></value>
                                                             </property>
                                                         </properties>
