@@ -4,7 +4,7 @@
 		<forms>
 
 			<dependencies>
-				<js src="/scripts/lecm-contracts/constraints/contracts-currency-validator.js"/>
+				<js src="/scripts/lecm-contracts/constraints/contracts-validators.js"/>
 				<!--js src="/scripts/lecm-contracts/get-stage-delete-message.js"/-->
 			</dependencies>
 
@@ -470,6 +470,19 @@
                     <field id="lecm-contract-table-structure:stage-status">
                         <control template="/ru/it/lecm/base-share/components/controls/view-text-control.ftl"/>
                     </field>
+                    <field id="lecm-contract-table-structure:start-date">
+                        <constraint-handlers>
+                            <constraint type="INVALID" validation-handler="LogicECM.module.Contracts.stageDateRangeValidator" message-id="validation.message.contracts.stage.date.error" event="change"/>
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-contract-table-structure:end-date">
+                        <control>
+                            <control-param name="changeFireAction">mandatoryControlValueUpdated</control-param>
+                        </control>
+                        <constraint-handlers>
+                            <constraint type="INVALID" validation-handler="LogicECM.module.Contracts.stageDateRangeValidator" message-id="validation.message.contracts.stage.date.error" event="change"/>
+                        </constraint-handlers>
+                    </field>
                     <field id="lecm-contract-table-structure:attachments-temp-assoc" >
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
                             <control-param name="uploadDirectoryPath">{usertemp}</control-param>
@@ -508,6 +521,19 @@
                     <show id="lecm-contract-table-structure:stage-comment" force="true"/>
                 </field-visibility>
                 <appearance>
+                    <field id="lecm-contract-table-structure:start-date">
+                        <constraint-handlers>
+                            <constraint type="INVALID" validation-handler="LogicECM.module.Contracts.stageDateRangeValidator" message-id="validation.message.contracts.stage.date.error" event="change"/>
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-contract-table-structure:end-date">
+                        <control>
+                            <control-param name="changeFireAction">mandatoryControlValueUpdated</control-param>
+                        </control>
+                        <constraint-handlers>
+                            <constraint type="INVALID" validation-handler="LogicECM.module.Contracts.stageDateRangeValidator" message-id="validation.message.contracts.stage.date.error" event="change"/>
+                        </constraint-handlers>
+                    </field>
                     <field id="lecm-contract-table-structure:stage-amount" help=""/>
                     <field id="lecm-document:indexTableRow" help-id="label.stage.number.help"/>
                     <field id="lecm-contract-table-structure:stage-comment">
