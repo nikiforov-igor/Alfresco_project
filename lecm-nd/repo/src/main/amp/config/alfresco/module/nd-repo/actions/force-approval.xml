@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<items>
+<items updateMode="CreateOrUpdate">
     <item name="cm:НД. Принудительно согласовать" type="lecm-group-actions:script-action">
         <property name="cm:name"><![CDATA[НД. Принудительно согласовать]]></property>
         <property name="lecm-group-actions:statuses"><![CDATA[На согласовании]]></property>
