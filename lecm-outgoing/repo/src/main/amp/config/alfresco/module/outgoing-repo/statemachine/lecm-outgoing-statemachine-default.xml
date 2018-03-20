@@ -423,11 +423,10 @@
 		presentString = document.properties["lecm-document:present-string"],
 		presentStringWithProjectNumber = presentString.replace(documentRegnum, projectNumber),
 		autoRegistration = document.assocs["lecm-eds-document:document-type-assoc"][0].properties["lecm-doc-dic-dt:auto-registration"];
-		if (!autoRegistration) {
-
-            if (isReservationRunning) {
+		if (isReservationRunning) {
                 statemachine.terminateWorkflowsByDefinition(document, 'regnumReservationExecution', null, null);
             }
+		if (!autoRegistration) {
             var initiators = lecmPermission.getEmployeesByDynamicRole(document, "BR_INITIATOR");
             var eventInitiator = orgstructure.getCurrentEmployee();
             if (initiators && initiators.length) {
