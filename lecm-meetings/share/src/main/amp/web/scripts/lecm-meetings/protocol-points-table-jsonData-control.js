@@ -12,6 +12,26 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
     };
 
     YAHOO.extend(LogicECM.module.Meetings.protocolPointsTableControl, LogicECM.module.DocumentTableControl, {
+
+        getActionsList: function(){
+            var actions = LogicECM.module.Meetings.protocolPointsTableControl.superclass.getActionsList.call(this);
+            if (actions && actions.length) {
+                actions.forEach(function(action) {
+                    switch(action.id) {
+                        case "onMoveTableRowUp":
+                            action.evaluator = LogicECM.module.EDS.Evaluators.documentDataTableItemUp;
+                            break;
+                        case "onMoveTableRowDown":
+                            action.evaluator = LogicECM.module.EDS.Evaluators.documentDataTableItemDown;
+                            break;
+                        default:
+                            break;
+                    }
+                })
+            }
+            return actions;
+        },
+
         setCustomParametersToGrid: function () {
             if (this.widgets.tableDateGrid) {
                 this.widgets.tableDateGrid.options.reportersFilterEnabled = true;

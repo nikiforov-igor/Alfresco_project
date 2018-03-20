@@ -87,7 +87,7 @@
                             <control-param name="editFormTitleMsg">protocol.item.edit.form.title</control-param>
                             <control-param name="createFormTitleMsg">protocol.item.create.form.title</control-param>
                             <control-param name="viewFormTitleMsg">protocol.item.view.form.title</control-param>
-                            <control-param name="jsDependencies">scripts/lecm-meetings/protocol-points-table-jsonData-control.js</control-param>
+                            <control-param name="jsDependencies">scripts/lecm-eds-documents/evaluators.js,scripts/lecm-meetings/protocol-points-table-jsonData-control.js</control-param>
                             <control-param name="jsObjectName">LogicECM.module.Meetings.protocolPointsTableControl</control-param>
                             <control-param name="jsDatagridName">LogicECM.module.Meetings.protocolPointsTableControlJSONDataGrid</control-param>
                             <control-param name="useSequentialCreation">true</control-param>
@@ -196,7 +196,7 @@
                             <control-param name="editFormTitleMsg">protocol.item.edit.form.title</control-param>
                             <control-param name="createFormTitleMsg">protocol.item.create.form.title</control-param>
                             <control-param name="viewFormTitleMsg">protocol.item.view.form.title</control-param>
-                            <control-param name="jsDependencies">scripts/lecm-meetings/protocol-points-table.js</control-param>
+                            <control-param name="jsDependencies">scripts/lecm-eds-documents/evaluators.js,scripts/lecm-meetings/protocol-points-table.js</control-param>
                             <control-param name="jsObjectName">LogicECM.module.Meetings.protocolPointsTable</control-param>
                             <control-param name="useSequentialCreation">true</control-param>
                         </control>
