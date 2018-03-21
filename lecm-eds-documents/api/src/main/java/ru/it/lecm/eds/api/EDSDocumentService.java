@@ -163,6 +163,8 @@ public interface EDSDocumentService {
      */
     Boolean isHideFieldsForRecipient(NodeRef document, String... statuses);
 
+    String getUnitBossDescription(NodeRef unit);
+
     static String getFromMessagesOrDefaultValue(String messageId, final String defaultValue) {
         return I18NUtil.getMessage(messageId, I18NUtil.getLocale()) != null ? I18NUtil.getMessage(messageId, I18NUtil.getLocale()) : defaultValue;
     }
