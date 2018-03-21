@@ -11,6 +11,7 @@ LogicECM.module = LogicECM.module || {};
 
         YAHOO.Bubbling.on("disableControl", this.onDisableControl, this);
         YAHOO.Bubbling.on("enableControl", this.onEnableControl, this);
+        YAHOO.Bubbling.on("reInitializeControl", this.onReInitializeControl, this);
 
         return this;
     };
@@ -25,8 +26,9 @@ LogicECM.module = LogicECM.module || {};
         },
 
         onValueChanged: function (layer) {
+            var value;
             if (layer.target && layer.target.value) {
-                var value = layer.target.value;
+                value = layer.target.value;
 
                 YAHOO.Bubbling.fire('mandatoryControlValueUpdated', this);
                 YAHOO.util.Dom.get(this.id).value = value;
@@ -40,13 +42,15 @@ LogicECM.module = LogicECM.module || {};
         },
 
         onDisableControl: function (layer, args) {
-            if (this.options.formId === args[1].formId && this.options.fieldId === args[1].fieldId) {
-                var input = Dom.get(this.id);
+            var input;
+            var radios;
+            if ((this.options.formId === args[1].formId) && (this.options.fieldId === args[1].fieldId)) {
+                input = Dom.get(this.id);
                 if (input) {
                     input.setAttribute("disabled", "true");
                     input.value = "";
                 }
-				var radios = YAHOO.util.Selector.query('input[name="' + this.options.fieldName + '"]', this.id + "-parent");
+				radios = this._getRadios();
 				if (radios && radios.length) {
 					radios.forEach(function(el) {
 						el.setAttribute("disabled", "true");
@@ -56,13 +60,15 @@ LogicECM.module = LogicECM.module || {};
         },
 
         onEnableControl: function (layer, args) {
-            if (this.options.formId === args[1].formId && this.options.fieldId === args[1].fieldId) {
+            var input;
+            var radios;
+            if ((this.options.formId === args[1].formId) && (this.options.fieldId === args[1].fieldId)) {
                 if (!this.options.disabled) {
-                    var input = Dom.get(this.id);
+                    input = Dom.get(this.id);
                     if (input) {
                         input.removeAttribute("disabled");
                     }
-					var radios = YAHOO.util.Selector.query('input[name="' + this.options.fieldName + '"]', this.id + "-parent");
+                    radios = this._getRadios();
 					if (radios && radios.length) {
 						radios.forEach(function(el) {
 							el.removeAttribute("disabled");
@@ -74,19 +80,60 @@ LogicECM.module = LogicECM.module || {};
 
         onReady: function () {
             LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
-            if (this.options.fieldName) {
-                var radioButtons = YAHOO.util.Selector.query('input[name="' + this.options.fieldName + '"]', this.id + "-parent");
-                if (radioButtons && radioButtons.length) {
-                    for (var i = 0; i < radioButtons.length; i++) {
-                        YAHOO.util.Event.addListener(radioButtons[i], "click", this.onValueChanged, null, this);
-                        if (radioButtons[i].checked) {
-                            this.onValueChanged({
-                                target: radioButtons[i]
-                            });
+            var radios = this._getRadios();
+            var me = this;
+            if (radios && radios.length) {
+                radios.forEach(function(radio) {
+                    YAHOO.util.Event.addListener(radio, "click", me.onValueChanged, null, me);
+                    if (radio.checked) {
+                        me.onValueChanged({
+                            target: radio
+                        });
+                    }
+                });
+            }
+        },
+
+        onReInitializeControl: function (layer, args) {
+            var radios;
+            var radiosCount;
+            var radio;
+            var currentValue;
+            if ((this.options.formId == args[1].formId) && (this.options.fieldId == args[1].fieldId)) {
+                var options = args[1].options;
+                if (options != null) {
+                    this.setOptions(options);
+                }
+                radios = this._getRadios();
+                if (radios && radios.length) {
+                    currentValue = this.options.currentValue;
+                    if (currentValue) {
+                        radiosCount = radios.length;
+                        for (var i = 0; i < radiosCount; i++) {
+                            if (radios[i].value == currentValue) {
+                                radio = radios[i];
+                                break;
+                            }
                         }
                     }
+                    if (!radio) {
+                        radio = radios[0];
+                    }
+                    radio.checked = true;
+                    this.onValueChanged({
+                        target: radio
+                    });
                 }
             }
+        },
+
+        _getRadios: function() {
+            var radios = null;
+            if (this.options.fieldName) {
+                radios = YAHOO.util.Selector.query('input[name="' + this.options.fieldName + '"]', this.id + "-parent");
+            }
+            return radios;
         }
+
     });
 })();
