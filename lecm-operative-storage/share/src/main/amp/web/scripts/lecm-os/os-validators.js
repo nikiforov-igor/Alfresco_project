@@ -9,7 +9,7 @@ LogicECM.module.OS.isCorrectYear = function (field) {
     if (!field) {
         return false;
     }
-    return field.value.length == 4;
+    return /^$|^\d{4}$/g.test(field.value);
 };
 
 LogicECM.module.OS.isOrganizationCentralized = function (field) {
