@@ -185,6 +185,7 @@
 		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
 		<property name="namespaceService" ref="namespaceService"/>
 		<property name="documentGlobalSettingsService" ref="documents.global-settings.service"/>
+		<property name="substitudeBean" ref="substitudeService"/>
     </bean>
 
 	<bean id="edsExecutorPolicy" class="ru.it.lecm.eds.policy.EDSExecutorPolicy"

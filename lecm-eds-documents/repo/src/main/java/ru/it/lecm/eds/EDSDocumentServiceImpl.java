@@ -7,7 +7,9 @@ import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.ConcurrencyFailureException;
+import org.springframework.extensions.surf.util.I18NUtil;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentGlobalSettingsService;
 import ru.it.lecm.eds.api.EDSDocumentService;
@@ -36,11 +38,16 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
     private IWorkCalendar calendarBean;
     private OrgstructureBean orgstructureService;
     private DocumentGlobalSettingsService documentGlobalSettingsService;
+    private SubstitudeBean substitudeBean;
 
     private DocumentAttachmentsService documentAttachmentsService;
 
     public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {
         this.documentAttachmentsService = documentAttachmentsService;
+    }
+
+    public void setSubstitudeBean(SubstitudeBean substitudeBean) {
+        this.substitudeBean = substitudeBean;
     }
 
     public void setNamespaceService(NamespaceService namespaceService) {
@@ -225,5 +232,14 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
             }
         }
         return isHideFieldsForRecipient(document);
+    }
+
+    @Override
+    public String getUnitBossDescription(NodeRef unit) {
+        NodeRef employee = orgstructureService.getUnitBoss(unit);
+        if (employee != null) {
+            return substitudeBean.getObjectDescription(employee);
+        }
+        return I18NUtil.getMessage("label.unit.boss.not.exists", I18NUtil.getLocale());
     }
 }

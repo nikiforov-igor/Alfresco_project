@@ -69,8 +69,9 @@
         </property>
     </bean>
 
-	<bean id="incomingService" class="ru.it.lecm.incoming.beans.IncomingServiceImpl" parent="baseBean"
-	      depends-on="nodeService"/>
+	<bean id="incomingService" class="ru.it.lecm.incoming.beans.IncomingServiceImpl" parent="baseBean">
+        <property name="substitudeBean" ref="substitudeService"/>
+    </bean>
 
     <bean id="incoming.defaultStatemachine" parent="defaultStatemachines">
         <property name="statemachineName" value="lecm-incoming:document" />
