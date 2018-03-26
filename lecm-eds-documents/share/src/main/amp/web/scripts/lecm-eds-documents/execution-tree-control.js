@@ -124,7 +124,7 @@ LogicECM.module = LogicECM.module || {};
                                 var expandShowId = "expand-show-" + nodeRef.replace('workspace://SpacesStore/', '');
                                 var expandHideId = "expand-hide-" + nodeRef.replace('workspace://SpacesStore/', '');
                                 var showExpandLink = false;
-                                if ((oRecord._oData.docType == 'lecm-errands:document' && oRecord._oData.status == Alfresco.util.message("lecm.errands.statemachine-status.on-execution"))
+                                if ((oRecord._oData.docType == 'lecm-errands:document' && oRecord._oData.status == Alfresco.util.message("lecm.errands.statemachine-status.executed"))
                                     || (oRecord._oData.docType == 'lecm-resolutions:document' && (oRecord._oData.status == Alfresco.util.message("lecm.resolutions.statemachine-status.on-execution") || oRecord._oData.status == Alfresco.util.message("lecm.resolutions.statemachine-status.completed")))) {
                                     showExpandLink = true;
                                 }
