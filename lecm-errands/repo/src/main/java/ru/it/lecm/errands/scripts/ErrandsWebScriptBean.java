@@ -1009,4 +1009,9 @@ public class ErrandsWebScriptBean extends BaseWebScript {
     public boolean hasDelayedPeriodicalErrands(ScriptNode periodicalErrand){
         return errandsService.hasDelayedPeriodicalErrands(periodicalErrand.getNodeRef());
     }
+
+    public boolean isPeriodicalStatus(String status) {
+        return errandsService.getErrandStatusName(ErrandsService.ERRANDS_STATUS.PERIODICALLY).equals(status);
+    }
+
 }

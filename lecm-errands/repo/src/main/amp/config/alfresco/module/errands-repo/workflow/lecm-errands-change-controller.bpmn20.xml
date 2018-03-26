@@ -75,8 +75,9 @@
 									    }
 									}
 
+                                    var status = document.properties["lecm-statemachine:status"];
                                     var isOnControl = document.properties["lecm-document-aspects:is-on-control"];
-                                    if (!isOnControl) {
+                                    if (!isOnControl && !errands.isPeriodicalStatus(status)) {
                                         document.properties["lecm-document-aspects:is-on-control"] = true;
                                         document.save();
                                     }
