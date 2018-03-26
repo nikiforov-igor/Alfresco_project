@@ -11048,12 +11048,12 @@ document.save();]]></value>
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.attr("lecm-document:author-assoc-ref") == user.currentUser().employee.toString()]]></value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Вы должны являться автором документа]]></value>
+                                                                                    <![CDATA[Данное действие доступно только Инициатору]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
