@@ -496,7 +496,7 @@ LogicECM.ORD = LogicECM.ORD || {};
                 destroyOnHide: true,
                 buttons: [
                     {
-                        text: Alfresco.util.message("button.resume"),
+                        text: Alfresco.util.message("button.ok"),
                         handler: function () {
                             Alfresco.util.Ajax.jsonGet({
                                 url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/ord/item/execute?nodeRef=' + nodeRef,
