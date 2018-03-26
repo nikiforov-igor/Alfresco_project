@@ -17,6 +17,18 @@
                                 logText += " работу по ОРД:#mainobject";
                                 businessJournal.log(document.nodeRef.toString(), "COMPLETE_DOCUMENT", logText, []);
 
+                                var reviewTableAssoc = document.assocs['lecm-review-ts:review-table-assoc'];
+                                if (reviewTableAssoc) {
+                                    var reviewTsItems = reviewTableAssoc[0].getChildAssocsByType('lecm-review-ts:review-table-item');
+                                    reviewTsItems.forEach(function (item) {
+                                        if (item.properties['lecm-review-ts:review-state'] == "NOT_REVIEWED" || item.properties['lecm-review-ts:review-state'] == "NOT_STARTED") {
+                                            item.properties['lecm-review-ts:review-state'] = "CANCELLED";
+                                            item.properties['lecm-review-ts:review-finish-date'] = new Date();
+                                            item.save();
+                                        }
+                                    });
+                                }
+
                                 var currentUser = orgstructure.getCurrentEmployee();
                                 var ordControllerAssoc = document.assocs["lecm-ord:controller-assoc"];
                                 if (ordControllerAssoc && ordControllerAssoc.length && !ordControllerAssoc[0].equals(currentUser)) {
