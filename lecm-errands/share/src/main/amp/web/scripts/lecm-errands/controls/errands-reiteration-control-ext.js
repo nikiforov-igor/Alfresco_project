@@ -233,6 +233,10 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                     Event.addListener(select, 'change', this.onChangeType, this, true);
                     var items = YAHOO.util.Selector.query('.item', this.id + '-dialog-panel-container');
                     Event.addListener(items, 'click', this.onItemClick, {}, this);
+                    this.balloon = Alfresco.util.createBalloon(select, {
+                        effectType: null,
+                        effectDuration: 0
+                    });
                 }
                 this.setValue(this.getControlValue());
                 this.updateSummary();
@@ -250,7 +254,35 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                     Dom.setY(pickerPanel, y);
                 }
             },
+
+            onOk: function onOk_function() {
+                var value = this.getValue();
+                if (!value) {
+                    if (this.currentPickerType == "week-days") {
+                        this.balloon.html(Alfresco.util.message("message.error.schedule.reiteration-rules-validation.week-days"));
+                    } else if (this.currentPickerType == "month-days") {
+                        this.balloon.html(Alfresco.util.message("message.error.schedule.reiteration-rules-validation.month-days"));
+                    }
+                    this.balloon.show();
+                } else {
+                    this.balloon.hide();
+                    this.updateValue(value);
+                    this.panel.hide();
+                }
+            },
+
+            onCancel: function onCancel() {
+                this.balloon.hide();
+                this.panel.hide();
+            },
+
+            onItemClick: function onItemClick_function(ev){
+                this.balloon.hide();
+                LogicECM.module.Errands.ReiterationExt.superclass.onItemClick.call(this, ev);
+            },
+
             onChangeType: function onChangeType_function(ev, args) {
+                this.balloon.hide();
                 var to = ev.target.value;
                 if (to && this.currentType != to) {
                     this._switchType(this.currentType, to);
