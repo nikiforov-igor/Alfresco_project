@@ -97,14 +97,14 @@ LogicECM.ORD = LogicECM.ORD || {};
                                             id: "onMoveTableRowUp",
                                             permission: "edit",
                                             label: this.msg("actions.tableRowUp"),
-                                            evaluator: this.showActionsEvaluator
+                                            evaluator: this.showItemUp
                                         });
                                         otherActions.push({
                                             type: actionType,
                                             id: "onMoveTableRowDown",
                                             permission: "edit",
                                             label: this.msg("action.tableRowDown"),
-                                            evaluator: this.showActionsEvaluator
+                                            evaluator: this.showItemDown
                                         });
                                     }
                                     if (this.options.allowCreate === true) {

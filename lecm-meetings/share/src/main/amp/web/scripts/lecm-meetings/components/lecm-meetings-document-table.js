@@ -195,13 +195,15 @@ LogicECM.module = LogicECM.module || {};
                             type: actionType,
                             id: "onMoveTableRowUp",
                             permission: "edit",
-                            label: this.msg("actions.tableRowUp")
+                            label: this.msg("actions.tableRowUp"),
+							evaluator: LogicECM.module.DocumentTable.prototype.showItemUp
                         });
                         otherActions.push({
                             type: actionType,
                             id: "onMoveTableRowDown",
                             permission: "edit",
-                            label: this.msg("action.tableRowDown")
+                            label: this.msg("action.tableRowDown"),
+							evaluator: LogicECM.module.DocumentTable.prototype.showItemDown
                         });
                         otherActions.push({
                             type: actionType,
