@@ -12,7 +12,6 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
     };
 
     YAHOO.extend(LogicECM.module.Meetings.protocolPointsTableControl, LogicECM.module.DocumentTableControl, {
-
         setCustomParametersToGrid: function () {
             if (this.widgets.tableDateGrid) {
                 this.widgets.tableDateGrid.options.reportersFilterEnabled = true;
