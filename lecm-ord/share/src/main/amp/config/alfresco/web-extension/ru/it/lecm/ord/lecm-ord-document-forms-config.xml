@@ -914,7 +914,7 @@
                             <control-param name="editFormTitleMsg">ord.item.edit.form.title</control-param>
                             <control-param name="createFormTitleMsg">ord.item.create.form.title</control-param>
                             <control-param name="viewFormTitleMsg">ord.item.view.form.title</control-param>
-                            <control-param name="jsDependencies">scripts/lecm-eds-documents/evaluators.js,scripts/lecm-ord/ord-items-datagrid.js</control-param>
+                            <control-param name="jsDependencies">scripts/lecm-ord/ord-items-datagrid.js</control-param>
                             <control-param name="cssDependencies">css/lecm-ord/ord-items-datagrid.css</control-param>
                             <control-param name="jsObjectName">LogicECM.ORD.PointsTS</control-param>
                             <control-param name="showActions">true</control-param>

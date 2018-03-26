@@ -198,8 +198,7 @@
                             <control-param name="createFormTitleMsg">stage.create.form.title</control-param>
                             <control-param name="viewFormTitleMsg">stage.view.form.title</control-param>
                             <control-param name="allowMove">true</control-param>
-                            <control-param name="jsObjectName">LogicECM.module.Contracts.contractStagesJsonTable</control-param>
-                            <control-param name="jsDependencies">scripts/lecm-eds-documents/evaluators.js,scripts/lecm-contracts/contracts-stages-jsonData-table.js,scripts/lecm-contracts/get-stage-delete-message.js</control-param>
+                            <control-param name="jsDependencies">scripts/lecm-contracts/get-stage-delete-message.js</control-param>
                             <control-param name="useSequentialCreation">true</control-param>
                         </control>
                     </field>
@@ -444,8 +443,7 @@
                             <control-param name="createFormTitleMsg">stage.create.form.title</control-param>
                             <control-param name="viewFormTitleMsg">stage.view.form.title</control-param>
                             <control-param name="allowMove">true</control-param>
-                            <control-param name="jsObjectName">LogicECM.module.Contracts.contractStagesJsonTable</control-param>
-                            <control-param name="jsDependencies">scripts/lecm-eds-documents/evaluators.js,scripts/lecm-contracts/contracts-stages-jsonData-table.js,scripts/lecm-contracts/get-stage-delete-message.js</control-param>
+                            <control-param name="jsDependencies">scripts/lecm-contracts/get-stage-delete-message.js</control-param>
                             <control-param name="useSequentialCreation">true</control-param>
                         </control>
                     </field>
@@ -634,8 +632,6 @@
                             <control-param name="allowCreate">false</control-param>
                             <control-param name="showActions">false</control-param>
                             <control-param name="useSequentialCreation">true</control-param>
-                            <control-param name="jsObjectName">LogicECM.module.Contracts.contractStagesJsonTable</control-param>
-                            <control-param name="jsDependencies">scripts/lecm-eds-documents/evaluators.js,scripts/lecm-contracts/contracts-stages-jsonData-table.js</control-param>
                         </control>
                     </field>
                 </appearance>

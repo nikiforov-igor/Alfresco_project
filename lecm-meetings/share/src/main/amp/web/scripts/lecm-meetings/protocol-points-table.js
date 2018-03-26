@@ -45,14 +45,14 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
                             id: "onMoveTableRowUp",
                             permission: "edit",
                             label: this.msg("actions.tableRowUp"),
-                            evaluator: LogicECM.module.EDS.Evaluators.documentDataTableItemUp
+                            evaluator: this.stageItemUp
                         });
                         otherActions.push({
                             type: actionType,
                             id: "onMoveTableRowDown",
                             permission: "edit",
                             label: this.msg("action.tableRowDown"),
-                            evaluator: LogicECM.module.EDS.Evaluators.documentDataTableItemDown
+                            evaluator: this.stageItemDown
                         });
                     }
                     if (this.options.allowCreate === true) {

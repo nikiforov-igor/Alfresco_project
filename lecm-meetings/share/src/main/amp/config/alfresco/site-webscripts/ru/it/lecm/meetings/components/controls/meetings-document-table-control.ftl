@@ -142,7 +142,6 @@
 	        'scripts/lecm-base/components/lecm-datagrid.js',
             'scripts/lecm-base/components/lecm-toolbar.js',
             'scripts/documents/tables/lecm-document-table.js',
-                    'scripts/lecm-eds-documents/evaluators.js',
             'scripts/lecm-meetings/components/lecm-meetings-document-table.js',
 	        <#if params.jsDependencies??>
 		        <#list params.jsDependencies?split(",") as js>

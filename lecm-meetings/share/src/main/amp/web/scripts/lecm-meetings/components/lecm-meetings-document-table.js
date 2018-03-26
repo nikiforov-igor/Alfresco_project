@@ -196,14 +196,14 @@ LogicECM.module = LogicECM.module || {};
                             id: "onMoveTableRowUp",
                             permission: "edit",
                             label: this.msg("actions.tableRowUp"),
-							evaluator: LogicECM.module.EDS.Evaluators.documentDataTableItemUp
+							evaluator: LogicECM.module.DocumentTable.prototype.showItemUp
                         });
                         otherActions.push({
                             type: actionType,
                             id: "onMoveTableRowDown",
                             permission: "edit",
                             label: this.msg("action.tableRowDown"),
-							evaluator: LogicECM.module.EDS.Evaluators.documentDataTableItemDown
+							evaluator: LogicECM.module.DocumentTable.prototype.showItemDown
                         });
                         otherActions.push({
                             type: actionType,
