@@ -469,7 +469,7 @@ if (doc) {
     var hasOnWaitingExecution = false;
     if (childrenErrands && childrenErrands.length) {
         hasOnWaitingExecution = childrenErrands.some(function(child){
-            return child.properties["lecm-statemachine:status"] == "Ожидает исполнения";
+            return child.properties["lecm-statemachine:status"] == "Ожидает исполнения" || child.properties["lecm-statemachine:status"] == "На периодическом исполнении";
         });
     }
     doc.properties["lecm-ord:transit-to-on-execution"] = hasOnWaitingExecution;

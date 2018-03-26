@@ -238,7 +238,8 @@ if (document) {
                 return resolution.properties["lecm-statemachine:status"] == "На исполнении";
             });
 		var hasErrandOnExecution = errands && errands.some(function(errand) {
-				return errand.properties["lecm-statemachine:status"] == "Ожидает исполнения";
+				var statusProperty = errand.properties["lecm-statemachine:status"];
+          		return statusProperty == "Ожидает исполнения" || statusProperty == "На периодическом исполнении";
 			});
 
         if (hasResolutionOnExecution || hasErrandOnExecution) {
