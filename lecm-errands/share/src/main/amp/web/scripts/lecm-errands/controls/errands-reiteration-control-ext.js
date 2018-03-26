@@ -237,6 +237,9 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                         effectType: null,
                         effectDuration: 0
                     });
+                    this.panel.hideEvent.subscribe(function(){
+                        this.balloon.hide();
+                    }, null, this);
                 }
                 this.setValue(this.getControlValue());
                 this.updateSummary();
@@ -265,15 +268,9 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                     }
                     this.balloon.show();
                 } else {
-                    this.balloon.hide();
                     this.updateValue(value);
                     this.panel.hide();
                 }
-            },
-
-            onCancel: function onCancel() {
-                this.balloon.hide();
-                this.panel.hide();
             },
 
             onItemClick: function onItemClick_function(ev){
