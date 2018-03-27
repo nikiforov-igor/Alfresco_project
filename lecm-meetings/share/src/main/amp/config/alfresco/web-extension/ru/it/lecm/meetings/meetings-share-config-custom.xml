@@ -123,7 +123,6 @@
 							<control-param name="sortSelected">true</control-param>
                             <control-param name="showSearch">true</control-param>
                             <control-param name="plane">true</control-param>
-							<control-param name="checkType">false</control-param>
 							<!--<control-param name="additionalFilter">(TYPE:\"\" AND NOT @lecm-statemachine\\:status:\"Черновик\") </control-param>-->
 						</control>
 					</field>
