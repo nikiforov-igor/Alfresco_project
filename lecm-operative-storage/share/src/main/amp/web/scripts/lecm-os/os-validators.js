@@ -70,10 +70,7 @@ LogicECM.module.OS.isOrgUnitAssociationExists = function(field, args, event, for
     var destination = formData.alf_destination || nodeRef;
     var orgUnit = formData['assoc_lecm-os_nomenclature-unit-section-unit-assoc'];
 
-    if (!orgUnit || (orgUnit == currentValue)) {
-        return true;
-    }
-    if (!destination || !orgUnit) {
+    if (!destination || !orgUnit || (orgUnit == currentValue)) {
         return true;
     }
 
