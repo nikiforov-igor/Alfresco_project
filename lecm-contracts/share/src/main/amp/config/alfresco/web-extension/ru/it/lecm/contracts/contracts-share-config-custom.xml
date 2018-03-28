@@ -3,11 +3,6 @@
 	<config>
 		<forms>
 
-			<dependencies>
-				<js src="/scripts/lecm-contracts/constraints/contracts-validators.js"/>
-				<!--js src="/scripts/lecm-contracts/get-stage-delete-message.js"/-->
-			</dependencies>
-
             <default-controls>
                 <type name="association:lecm-contract-dic:contract-type" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                     <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_договора</control-param>
