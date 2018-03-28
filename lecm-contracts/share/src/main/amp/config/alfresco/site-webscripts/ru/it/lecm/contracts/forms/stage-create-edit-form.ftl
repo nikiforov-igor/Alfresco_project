@@ -94,8 +94,8 @@
 
 				LABEL_IN_WORK = "${msg('label.contracts.start-stage')}",
 				LABEL_CLOSED = "${msg('label.contracts.end-stage')}",
-				STATUS_IN_WORK = "${msg('label.in-work')}",
-				STATUS_CLOSED = "${msg('label.closed')}";
+				STATUS_IN_WORK = "IN_WORK",
+				STATUS_CLOSED = "CLOSED";
 
 			inWorkButton = new Button({
 				id: htmlId + "_inWorkButton",
