@@ -548,10 +548,8 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-document:indexTableRow" help-id="label.stage.number.help"/>
-                    <field id="lecm-contract-table-structure:stage-status">
-                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
-                            <control-param name="readonly">true</control-param>
-                        </control>
+                    <field id="lecm-contract-table-structure:stage-status" read-only="true">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
                     </field>
                     <field id="lecm-contract-table-structure:attachments-temp-assoc" >
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">

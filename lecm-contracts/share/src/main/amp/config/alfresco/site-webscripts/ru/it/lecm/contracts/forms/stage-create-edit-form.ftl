@@ -103,7 +103,10 @@
 				label: LABEL_IN_WORK,
 				container: buttonsContainer,
 				onclick: {
-					fn: function() { inputStatus.value = STATUS_IN_WORK; }
+					fn: function() {
+						inputStatus.removeAttribute("disabled");
+						inputStatus.value = STATUS_IN_WORK;
+					}
 				}
 			});
 
@@ -113,7 +116,10 @@
 				label: LABEL_CLOSED,
 				container: buttonsContainer,
 				onclick: {
-					fn: function() { inputStatus.value = STATUS_CLOSED; }
+					fn: function() {
+                        inputStatus.removeAttribute("disabled");
+						inputStatus.value = STATUS_CLOSED;
+					}
 				}
 			});
 		}
