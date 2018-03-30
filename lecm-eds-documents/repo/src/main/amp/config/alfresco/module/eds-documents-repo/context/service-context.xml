@@ -283,4 +283,10 @@
 		<property name="attributes" value="lecm-eds-globset:potential-role-employee-assoc"/>
 		<property name="dictionaryName" value="Потенциальные роли"/>
 	</bean>
+
+	<bean id="eds.productVersionBean" parent="productVersionBean">
+		<property name="productName" value="EDS" />
+		<property name="productVersion" value="${eds.version}" />
+	</bean>
+
 </beans>
