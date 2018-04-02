@@ -17,6 +17,16 @@
         </forms>
     </config>
 
+    <config evaluator="node-type" condition="lecm-ord-table-structure:itemsTable">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
     <config evaluator="node-type" condition="lecm-ord-table-structure:item">
         <forms>
             <form>
