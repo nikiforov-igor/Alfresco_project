@@ -374,7 +374,8 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				//ассоциации поручения
 				Map<String, String> associations = new HashMap<String, String>();
 				//Тип поручения
-                NodeRef type = dictionaryService.getRecordByParamValue(ErrandsService.ERRANDS_TYPE_DICTIONARY_NAME, ContentModel.PROP_NAME, ErrandsService.ERRAND_TYPE_ON_POINT_ORD);
+				String errandTypeOnORDPointName = EDSDocumentService.getFromMessagesOrDefaultValue("lecm.ord.point.errand.type.name", ErrandsService.ERRAND_TYPE_ON_POINT_ORD);
+				NodeRef type = dictionaryService.getRecordByParamValue(ErrandsService.ERRANDS_TYPE_DICTIONARY_NAME, ContentModel.PROP_NAME, errandTypeOnORDPointName);
 				associations.put(ErrandsService.ASSOC_ERRANDS_TYPE.toPrefixString(namespaceService), type.toString());
 
 				// автор поручения
