@@ -9,6 +9,7 @@
                     <param id="showCreateNewButton" localName="Показывать кнопку создания нового">false</param>
                     <param id="itemType" localName="Тип" visible="false">lecm-contract-dic:contract-type</param>
                     <param id="plane">true</param>
+                    <param id="pickerClasses" visible="true" localName="Дополнительные классы для отображении в диалоге" mandatory="false"/>
                 </control>
             </field-type>
             <field-type id="lecm-contract-dic:contract-documents-type" localName="Вид документа к договору">
@@ -19,6 +20,7 @@
                     <param id="showCreateNewButton" localName="Показывать кнопку создания нового">false</param>
                     <param id="itemType" localName="Тип" visible="false">lecm-contract-dic:contract-documents-type</param>
                     <param id="plane">true</param>
+                    <param id="pickerClasses" visible="true" localName="Дополнительные классы для отображении в диалоге" mandatory="false"/>
                 </control>
             </field-type>
             <field-type id="lecm-currency:currency" localName="Валюты">
@@ -29,6 +31,7 @@
                     <param id="showCreateNewButton" localName="Показывать кнопку создания нового">false</param>
                     <param id="itemType" localName="Тип" visible="false">lecm-currency:currency</param>
                     <param id="plane">true</param>
+                    <param id="pickerClasses" visible="true" localName="Дополнительные классы для отображении в диалоге" mandatory="false"/>
                 </control>
             </field-type>
         </field-types>
