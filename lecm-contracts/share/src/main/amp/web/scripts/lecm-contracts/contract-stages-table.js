@@ -43,13 +43,15 @@ LogicECM.module.Contracts = LogicECM.module.Contracts || {};
                             type: actionType,
                             id: "onMoveTableRowUp",
                             permission: "edit",
-                            label: this.msg("actions.tableRowUp")
+                            label: this.msg("actions.tableRowUp"),
+                            evaluator: this.showItemUp
                         });
                         otherActions.push({
                             type: actionType,
                             id: "onMoveTableRowDown",
                             permission: "edit",
-                            label: this.msg("action.tableRowDown")
+                            label: this.msg("action.tableRowDown"),
+                            evaluator: this.showItemDown
                         });
                     }
                     if (this.options.allowCreate===true) {

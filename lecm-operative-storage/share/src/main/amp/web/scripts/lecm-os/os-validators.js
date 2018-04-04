@@ -9,7 +9,7 @@ LogicECM.module.OS.isCorrectYear = function (field) {
     if (!field) {
         return false;
     }
-    return field.value.length == 4;
+    return /^$|^\d{4}$/g.test(field.value);
 };
 
 LogicECM.module.OS.isOrganizationCentralized = function (field) {
@@ -55,5 +55,36 @@ LogicECM.module.OS.uniqueYear = function (field, args, event, form, silent, mess
         });
     }
 
+    return valid;
+};
+
+LogicECM.module.OS.isOrgUnitAssociationExists = function(field, args, event, form, silent, message) {
+    var valid = false;
+    var nodeRef = null;
+    var currentValue = null;
+    if (args != null) {
+        nodeRef = args.nodeRef;
+        currentValue = args.currentValue;
+    }
+    var formData = form.getFormData();
+    var destination = formData.alf_destination || nodeRef;
+    var orgUnit = formData['assoc_lecm-os_nomenclature-unit-section-unit-assoc'];
+
+    if (!destination || !orgUnit || (orgUnit == currentValue)) {
+        return true;
+    }
+
+    $.ajax({
+        url: Alfresco.constants.PROXY_URI + "/lecm/operative-storage/orgUnitAssociationExists?nodeRef=" + destination + "&orgUnitRef=" + orgUnit,
+        context: this,
+        async: false,
+        success: function(response) {
+            var oResults = response;
+            valid = ((oResults != null) && !oResults.alreadyExists);
+        },
+        error: function() {
+            valid = false;
+        }
+    });
     return valid;
 };

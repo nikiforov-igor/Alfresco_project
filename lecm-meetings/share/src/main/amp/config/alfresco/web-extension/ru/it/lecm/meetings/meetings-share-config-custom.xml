@@ -41,6 +41,16 @@
 		</forms>
 	</config>
 
+	<config evaluator="node-type" condition="lecm-meetings-ts:holding-items-table">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	
 	<config evaluator="model-type" condition="lecm-meetings-ts:item">
 		<forms>
 			<form>
@@ -238,6 +248,7 @@
 							<control-param name="sortSelected">true</control-param>
                             <control-param name="showSearch">true</control-param>
                             <control-param name="plane">true</control-param>
+							<control-param name="checkType">false</control-param>
 							<!--<control-param name="additionalFilter">(TYPE:\"\" AND NOT @lecm-statemachine\\:status:\"Черновик\") </control-param>-->
 						</control>
 					</field>
@@ -340,6 +351,7 @@
 							<control-param name="sortSelected">true</control-param>
                             <control-param name="showSearch">true</control-param>
                             <control-param name="plane">true</control-param>
+							<control-param name="checkType">false</control-param>
 							<!--<control-param name="additionalFilter">(TYPE:\"\" AND NOT @lecm-statemachine\\:status:\"Черновик\") </control-param>-->
 						</control>
 					</field>

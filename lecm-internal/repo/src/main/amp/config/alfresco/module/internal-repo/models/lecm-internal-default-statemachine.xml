@@ -231,7 +231,41 @@
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>4ef6652e-68c2-414a-b092-71302af8c305</name>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value>
+                                                                    <![CDATA[Добавить исполнителя в участники документа]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[(function(){
+  var document = bpm_package.children[0];
+
+  var executor = null;
+  var executorAssoc = document.assocs["lecm-eds-document:executor-assoc"];
+  if (executorAssoc && executorAssoc.length == 1) {
+      executor = executorAssoc[0];
+      documentMembers.addMemberWithoutCheckPermission(document, executor, "LECM_BASIC_PG_Reader", true);
+  }
+})();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                 </nodes>
                             </subFolder>
@@ -6199,33 +6233,37 @@ if (document) {
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[(function() {
-	var document = stm_document,
-		isReservationRunning = document.properties['lecm-reservation-aspects:isReservationRunning'],
+	var document = stm_document;
+	if (document) {
+		var isReservationRunning = document.properties['lecm-reservation-aspects:isReservationRunning'],
 		documentRegnum = document.properties["lecm-document:regnum"],
 		projectNumber = document.properties["lecm-document-aspects:reg-project-data-number"],
 		presentString = document.properties["lecm-document:present-string"],
-		presentStringWithProjectNumber = presentString.replace(documentRegnum, projectNumber);
-
-	if (isReservationRunning) {
-		statemachine.terminateWorkflowsByDefinition(document, 'regnumReservationExecution', null, null);
-	}
-	var initiators = lecmPermission.getEmployeesByDynamicRole(document, "BR_INITIATOR");
-    var eventInitiator = orgstructure.getCurrentEmployee();
-    if (initiators && initiators.length) {
-        notifications.sendNotificationFromCurrentUser({
-			recipients: initiators,
-			templateCode: 'EDS_DOCUMENT_REGISTERED',
-			templateConfig: {
-				mainObject: document,
-				initiator: eventInitiator,
-				presentStringWithProjectNumber: presentStringWithProjectNumber
+		presentStringWithProjectNumber = presentString.replace(documentRegnum, projectNumber),
+        autoRegistration = document.assocs["lecm-eds-document:document-type-assoc"][0].properties["lecm-doc-dic-dt:auto-registration"];
+        if (isReservationRunning) {
+                statemachine.terminateWorkflowsByDefinition(document, 'regnumReservationExecution', null, null);
             }
-		});
-    }
+		if (!autoRegistration) {
+            var initiators = lecmPermission.getEmployeesByDynamicRole(document, "BR_INITIATOR");
+            var eventInitiator = orgstructure.getCurrentEmployee();
+            if (initiators && initiators.length) {
+                notifications.sendNotificationFromCurrentUser({
+                    recipients: initiators,
+                    templateCode: 'EDS_DOCUMENT_REGISTERED',
+                    templateConfig: {
+                        mainObject: document,
+                        initiator: eventInitiator,
+                        presentStringWithProjectNumber: presentStringWithProjectNumber
+                    }
+                });
+            }
 
-	var logText = "#initiator зарегистрировал документ " + documentScript.wrapperDocumentLink(document, presentStringWithProjectNumber) + ". Присвоен номер {~REGNUM} на дату {~REGDATE}.";
-	logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
-	businessJournal.log(document.nodeRef.toString(), "REGISTRATION", logText, []);
+            var logText = "#initiator зарегистрировал документ " + documentScript.wrapperDocumentLink(document, presentStringWithProjectNumber) + ". Присвоен номер {~REGNUM} на дату {~REGDATE}.";
+            logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
+            businessJournal.log(document.nodeRef.toString(), "REGISTRATION", logText, []);
+        }
+	}
 })();]]></value>
                                                             </property>
                                                         </properties>
@@ -11010,12 +11048,12 @@ document.save();]]></value>
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.attr("lecm-document:author-assoc-ref") == user.currentUser().employee.toString()]]></value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Вы должны являться автором документа]]></value>
+                                                                                    <![CDATA[Данное действие доступно только Инициатору]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>

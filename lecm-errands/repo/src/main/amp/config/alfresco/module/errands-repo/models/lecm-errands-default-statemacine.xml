@@ -7752,6 +7752,34 @@ if (document) {
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>d80b21a0-e6a8-41c5-ae34-7c631cc99ed3</name>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value>
+                                                                    <![CDATA[Сигнал в родительский документ]]>
+                                                                </value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value>
+                                                                    <![CDATA[var doc = bpm_package.children[0];
+if(doc){
+    var additionalDoc = errands.getAdditionalDocument(doc.nodeRef.toString());
+    if (additionalDoc) {
+      edsDocument.sendChildChangeSignal(additionalDoc);
+    }
+}]]>
+                                                                </value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
@@ -9093,6 +9121,43 @@ if (doc) {
                                             <subFolder>
                                                 <name>transitions</name>
                                                 <nodes>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>28296e55-7fad-45ee-9877-3918c676e63c</name>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.hasAspect("lecm-eds-aspect:changeDueDateSignal")]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[<import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/change-due-date-script.js">
+var document = bpm_package.children[0];
+if (document) {
+	var params = {
+		isSignal: true,
+		document: document
+	};
+	processDueDateChanges(params);
+}]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
                                                     <node>
                                                         <type>transition</type>
                                                         <name>34a29919-befc-4ba4-bb11-50a4ba5f72ad</name>

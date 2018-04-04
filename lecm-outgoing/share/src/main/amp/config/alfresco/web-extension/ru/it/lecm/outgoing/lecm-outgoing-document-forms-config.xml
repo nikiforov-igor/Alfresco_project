@@ -271,13 +271,13 @@
                     <show id="lecm-eds-document:executor-assoc"/>															<!-- Исполнитель -->
                     <show id="lecm-document-aspects:reg-project-data-number"/>
                     <show id="lecm-document-aspects:reg-project-data-date"/>
-                    <show id="lecm-approval-route:approvalFolder" force="true" for-mode="view"/>
-                    <show id="lecm-signing-route:signingFolder" force="true" for-mode="view"/>
+                    <show id="lecm-approval-route:approvalFolder" force="true"/>
+                    <show id="lecm-signing-route:signingFolder" force="true"/>
                     <show id="lecm-signing-v2-aspects:signed-on-paper"/>
                     <show id="lecm-signing-v2-aspects:signerEmployeeAssoc" force="true"/>
-                    <show id="lecm-signing-v2-aspects:isSigned" force="true" for-mode="view"/>
+                    <show id="lecm-signing-v2-aspects:isSigned" force="true"/>
                     <show id="lecm-signing-v2-aspects:signingDate" force="true"/>
-                    <show id="lecm-document-aspects:registrator-assoc" force="true" for-mode="view"/>
+                    <show id="lecm-document-aspects:registrator-assoc" force="true"/>
                     <show id="lecm-outgoing:is-finishing"/>
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <show id="lecm-base-dummy-aspects:script2" force="true"/>

@@ -149,8 +149,8 @@
                             var document = bpm_package.children[0];
                             var employee = assignee;
 
-                            lecmPermission.grantDynamicRole(document, employee, 'LECM_REGISTRAR_DYN', 'LECM_BASIC_PG_Employee');
-                            lecmPermission.grantDynamicRole(document, employee, 'RESERVATION_PERFORMER_DYN', 'LECM_BASIC_PG_Reader');
+                            statemachine.grandDynamicRoleForEmployee(document, employee, 'LECM_REGISTRAR_DYN');
+                            statemachine.grandDynamicRoleForEmployee(document, employee, "RESERVATION_PERFORMER_DYN");
 						]]></activiti:string>
                     </activiti:field>
                 </activiti:taskListener>

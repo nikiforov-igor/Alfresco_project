@@ -1221,7 +1221,41 @@
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>f3cbfd47-4785-4759-96b3-b421fccfdab1</name>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value>
+                                                                    <![CDATA[Добавить исполнителя в участники документа]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[(function(){
+  var document = bpm_package.children[0];
+
+  var executor = null;
+  var executorAssoc = document.assocs["lecm-eds-document:executor-assoc"];
+  if (executorAssoc && executorAssoc.length == 1) {
+      executor = executorAssoc[0];
+      documentMembers.addMemberWithoutCheckPermission(document, executor, "LECM_BASIC_PG_Reader", true);
+  }
+})();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                 </nodes>
                             </subFolder>
@@ -1969,35 +2003,36 @@
                                                                 <value><![CDATA[(function() {
 	var document = stm_document;
 	if (document) {
-      document.reset();
-    }
+        document.reset();
+        var isReservationRunning = document.properties['lecm-reservation-aspects:isReservationRunning'],
+        documentRegnum = document.properties["lecm-document:regnum"],
+        projectNumber = document.properties["lecm-document-aspects:reg-project-data-number"],
+        presentString = document.properties["lecm-document:present-string"],
+        presentStringWithProjectNumber = presentString.replace(documentRegnum, projectNumber),
+        autoRegistration = document.assocs["lecm-eds-document:document-type-assoc"][0].properties["lecm-doc-dic-dt:auto-registration"];
+        if (isReservationRunning) {
+                statemachine.terminateWorkflowsByDefinition(document, 'regnumReservationExecution', null, null);
+            }
+        if (!autoRegistration) {
+            var initiators = lecmPermission.getEmployeesByDynamicRole(document, "BR_INITIATOR");
+            var eventInitiator = orgstructure.getCurrentEmployee();
+            if (initiators && initiators.length) {
+                notifications.sendNotificationFromCurrentUser({
+                  recipients: initiators,
+                  templateCode: 'EDS_DOCUMENT_REGISTERED',
+                  templateConfig: {
+                      mainObject: document,
+                      initiator: eventInitiator,
+                      presentStringWithProjectNumber: presentStringWithProjectNumber
+                  }
+                });
+            }
 
-    var isReservationRunning = document.properties['lecm-reservation-aspects:isReservationRunning'],
-    documentRegnum = document.properties["lecm-document:regnum"],
-    projectNumber = document.properties["lecm-document-aspects:reg-project-data-number"],
-    presentString = document.properties["lecm-document:present-string"],
-    presentStringWithProjectNumber = presentString.replace(documentRegnum, projectNumber);
-
-	if (isReservationRunning) {
-		statemachine.terminateWorkflowsByDefinition(document, 'regnumReservationExecution', null, null);
+            var logText = "#initiator зарегистрировал документ " + documentScript.wrapperDocumentLink(document, presentStringWithProjectNumber) + ". Присвоен номер {~REGNUM} на дату {~REGDATE}.";
+            logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
+            businessJournal.log(document.nodeRef.toString(), "REGISTRATION", logText, []);
+        }
 	}
-	var initiators = lecmPermission.getEmployeesByDynamicRole(document, "BR_INITIATOR");
-    var eventInitiator = orgstructure.getCurrentEmployee();
-    if (initiators && initiators.length) {
-        notifications.sendNotificationFromCurrentUser({
-		  recipients: initiators,
-		  templateCode: 'EDS_DOCUMENT_REGISTERED',
-		  templateConfig: {
-			  mainObject: document,
-			  initiator: eventInitiator,
-			  presentStringWithProjectNumber: presentStringWithProjectNumber
-		  }
-		});
-    }
-
-	var logText = "#initiator зарегистрировал документ " + documentScript.wrapperDocumentLink(document, presentStringWithProjectNumber) + ". Присвоен номер {~REGNUM} на дату {~REGDATE}.";
-	logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
-	businessJournal.log(document.nodeRef.toString(), "REGISTRATION", logText, []);
 })();]]></value>
                                                             </property>
                                                         </properties>
@@ -8699,7 +8734,41 @@ if (document) {
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>9a9e1e82-91fa-4588-9487-251f0ffcb33b</name>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value>
+                                                                    <![CDATA[Добавить исполнителя в участники документа]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[(function(){
+  var document = bpm_package.children[0];
+
+  var executor = null;
+  var executorAssoc = document.assocs["lecm-eds-document:executor-assoc"];
+  if (executorAssoc && executorAssoc.length == 1) {
+      executor = executorAssoc[0];
+      documentMembers.addMemberWithoutCheckPermission(document, executor, "LECM_BASIC_PG_Reader", true);
+  }
+})();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                 </nodes>
                             </subFolder>
@@ -14566,7 +14635,41 @@ document.save();]]></value>
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>ed841014-5083-4df8-9060-0c20ce64af9e</name>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value>
+                                                                    <![CDATA[Добавить исполнителя в участники документа]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[(function(){
+  var document = bpm_package.children[0];
+
+  var executor = null;
+  var executorAssoc = document.assocs["lecm-eds-document:executor-assoc"];
+  if (executorAssoc && executorAssoc.length == 1) {
+      executor = executorAssoc[0];
+      documentMembers.addMemberWithoutCheckPermission(document, executor, "LECM_BASIC_PG_Reader", true);
+  }
+})();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                 </nodes>
                             </subFolder>
