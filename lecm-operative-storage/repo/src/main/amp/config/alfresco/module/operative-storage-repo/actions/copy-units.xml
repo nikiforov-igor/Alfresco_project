@@ -61,6 +61,7 @@
                             {"name":"additionalFilter","value":"{{FILTER_YEARS_BY_ORG({allowAdmin: true})}} AND NOT @lecm\\\\-os\\\\:nomenclature\\\\-unit\\\\-section\\\\-status:\\\"CLOSED\\\" OR NOT @lecm\\\\-os\\\\:nomenclature\\\\-year\\\\-section\\\\-status:\\\"CLOSED\\\""},
                             {"name":"changeItemsFireAction","value":"osUnitCopyItemChanged"},
                             {"name":"rootLocation","value":"/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел"},
+                            {"name":"pickerClasses","value":"hierarchical-tree"},
                             {"name":"treeBranchesDatasource","value":"lecm/nomenclature/tree/notClosed"}
                         ]
                     }]]></property>

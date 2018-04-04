@@ -272,6 +272,7 @@
                             <control-param name="organization_treeNodeTitleSubstituteString">{cm:name}</control-param>
                             <control-param name="organization_plane">false</control-param>
                             <control-param name="organization_showSearch">true</control-param>
+                            <control-param name="organization_pickerClasses">hierarchical-tree</control-param>
                         </control>
                     </field>
                     <field id="deputies-grid" label-id="label.recomend.deputies.list">

@@ -29,6 +29,11 @@
 	<#assign showViewIncompleteWarning = true>
 </#if>
 
+<#assign pickerClasses = ''>
+<#if  field.control.params.pickerClasses??>
+	<#assign pickerClasses = field.control.params.pickerClasses>
+</#if>
+
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
 
 <div class="form-field potential-role-control">
@@ -49,7 +54,7 @@
 
         <#assign pickerId = controlId + "-picker">
         <div id="${pickerId}" class="object-finder">
-			<div id="${pickerId}-body" class="bd">
+			<div id="${pickerId}-body" class="bd ${pickerClasses}">
 				<#if showSearch>
 					<div class="yui-gb orgchart-picker-menu">
 						<div id="${pickerId}-searchContainer" class="first yui-skin-sam search">

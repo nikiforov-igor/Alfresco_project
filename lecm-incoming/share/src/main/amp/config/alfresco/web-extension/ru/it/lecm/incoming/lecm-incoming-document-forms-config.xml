@@ -181,6 +181,7 @@
                             <control-param name="organization_showSearch">true</control-param>
                             <control-param name="organization_showAssocViewForm">true</control-param>
                             <control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
+                            <control-param name="organization_pickerClasses">hierarchical-tree</control-param>
                         </control>
                     </field>
 
@@ -411,6 +412,7 @@
                             <control-param name="organization_showSearch">true</control-param>
                             <control-param name="organization_showAssocViewForm">true</control-param>
                             <control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
+                            <control-param name="organization_pickerClasses">hierarchical-tree</control-param>
                         </control>
                     </field>
 
@@ -520,6 +522,7 @@
                             <control-param name="organization_showSearch">true</control-param>
                             <control-param name="organization_showAssocViewForm">true</control-param>
                             <control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
+                            <control-param name="organization_pickerClasses">hierarchical-tree</control-param>
                         </control>
                     </field>
                     <field id="lecm-incoming:sender-assoc" mandatory="true">
@@ -917,6 +920,7 @@
                             <control-param name="organization_showAssocViewForm">true</control-param>
                             <control-param name="organization_additionalFilter">ISNOTNULL:\"sys:node-dbid\"</control-param>
                             <control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
+                            <control-param name="organization_pickerClasses">hierarchical-tree</control-param>
                         </control>
                     </field>
                     <field id="lecm-document-aspects:response-to-assoc">
@@ -1096,6 +1100,7 @@
                             <control-param name="organization_showAssocViewForm">true</control-param>
                             <control-param name="organization_additionalFilter">ISNOTNULL:\"sys:node-dbid\"</control-param>
                             <control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
+                            <control-param name="organization_pickerClasses">hierarchical-tree</control-param>
                         </control>
                     </field>
                     <field id="lecm-document-aspects:response-to-assoc">
@@ -1395,6 +1400,7 @@
                             <control-param name="organization_showSearch">true</control-param>
                             <control-param name="organization_showAssocViewForm">true</control-param>
                             <control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
+                            <control-param name="organization_pickerClasses">hierarchical-tree</control-param>
                         </control>
                     </field>
                     <field id="lecm-incoming:sender-assoc" mandatory="true">
