@@ -32,7 +32,7 @@
                     <param id="additionalFilter" localName="Дополнительный фильтр (FTS query)">{{FILTER_YEARS_BY_ORG({allowAdmin: true})}} AND @lecm\\-os\\:nomenclature\\-case\\-status:\"OPEN\"</param>
                     <param id="treeBranchesDatasource" localName="Скрипт для построения дерева">lecm/nomenclature/tree/ApprovedOnly</param>
                     <param id="showParentNodeInTreeView" localName="Показывать корневой узел в дереве">false</param>
-                    <param id="pickerClasses" visible="true" localName="Дополнительные классы для отображении в диалоге" mandatory="false">hierarchical-tree</param>
+                    <param id="pickerClasses" visible="true" localName="Дополнительные css-классы диалога выбора" mandatory="false">hierarchical-tree</param>
                 </control>
             </field-type>
             <field-type id="lecm-os:nomenclature-unit-section" localName="Раздел управления">
@@ -52,7 +52,7 @@
                     <param id="additionalFilter" localName="Дополнительный фильтр (FTS query)">{{FILTER_YEARS_BY_ORG({allowAdmin: true})}} AND NOT @lecm\\-os\\:nomenclature\\-unit\\-section\\-status:\"CLOSED\"</param>
                     <param id="treeBranchesDatasource" localName="Скрипт для построения дерева">lecm/nomenclature/tree/notClosed</param>
                     <param id="showParentNodeInTreeView" localName="Показывать корневой узел в дереве">false</param>
-                    <param id="pickerClasses" visible="true" localName="Дополнительные классы для отображении в диалоге" mandatory="false">hierarchical-tree</param>
+                    <param id="pickerClasses" visible="true" localName="Дополнительные css-классы диалога выбора" mandatory="false">hierarchical-tree</param>
                 </control>
                 <control id="lecm-os:nomenclature-unit-section-and-year-control" template="/ru/it/lecm/base-share/components/controls/association-control.ftl" localName="Выбор раздела (годового и управления)">
                     <param id="rootLocation" localName="Корневая директория" visible="false">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел</param>
@@ -70,7 +70,7 @@
                     <param id="additionalFilter" localName="Дополнительный фильтр (FTS query)">{{FILTER_YEARS_BY_ORG({allowAdmin: true})}} AND NOT @lecm\\-os\\:nomenclature\\-unit\\-section\\-status:\"CLOSED\" OR NOT @lecm\\-os\\:nomenclature\\-year\\-section\\-status:\"CLOSED\"</param>
                     <param id="changeItemsFireAction" localName="Событие после выбора"/><!--osUnitCopyItemChanged-->
                     <param id="treeBranchesDatasource" localName="Скрипт для построения дерева">lecm/nomenclature/tree/notClosed</param>
-                    <param id="pickerClasses" visible="true" localName="Дополнительные классы для отображении в диалоге" mandatory="false">hierarchical-tree</param>
+                    <param id="pickerClasses" visible="true" localName="Дополнительные css-классы диалога выбора" mandatory="false">hierarchical-tree</param>
                 </control>
             </field-type>
             <field-type id="lecm-os:nomenclature-year-section" localName="Годовой раздел">
@@ -82,7 +82,7 @@
                     <param id="additionalFilter" localName="Дополнительный фильтр (FTS query)">{{FILTER_YEARS_BY_ORG({allowAdmin: true})}}</param>
                     <param id="treeBranchesDatasource" localName="Скрипт для построения дерева">lecm/nomenclature/tree</param>
                     <param id="sortProp" localName="Поле для сортировки">lecm-os:nomenclature-year-section-year</param>
-                    <param id="pickerClasses" visible="true" localName="Дополнительные классы для отображении в диалоге" mandatory="false">hierarchical-tree</param>
+                    <param id="pickerClasses" visible="true" localName="Дополнительные css-классы диалога выбора" mandatory="false">hierarchical-tree</param>
                 </control>
             </field-type>
         </field-types>
