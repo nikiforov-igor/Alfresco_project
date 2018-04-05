@@ -65,7 +65,6 @@
                             <control-param name="organization_endpointType">lecm-orgstr:organization-unit</control-param>
                             <control-param name="organization_endpointMany">true</control-param>
                             <control-param name="organization_xPathLocation">{currentLocation}</control-param>
-                            <control-param name="organization_xPathLocation">{currentLocation}</control-param>
                             <control-param name="organization_xPathLocationRoot">{lecmMyOrganization}</control-param>
                             <control-param name="organization_nameSubstituteString"><![CDATA[<span class="organization-unit">{lecm-orgstr:element-short-name}</span>]]></control-param>
                             <control-param name="organization_treeNodeSubstituteString">{lecm-orgstr:element-short-name}</control-param>
