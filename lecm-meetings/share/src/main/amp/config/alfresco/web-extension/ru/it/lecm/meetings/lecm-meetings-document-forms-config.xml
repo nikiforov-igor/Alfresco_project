@@ -165,6 +165,7 @@
                         <control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">
                             <control-param name="sortSelected">true</control-param>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
+                            <control-param name="pickerClasses">hierarchical-tree</control-param>
                         </control>
                     </field>
                     <field id="lecm-events:subject-assoc-ref">
@@ -670,6 +671,7 @@
                         <control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">
                             <control-param name="sortSelected">true</control-param>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
+                            <control-param name="pickerClasses">hierarchical-tree</control-param>
                         </control>
                     </field>
                     <field id="lecm-events:subject-assoc-ref" set="createEventSet">
@@ -885,6 +887,7 @@
                         <control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">
                             <control-param name="sortSelected">true</control-param>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
+                            <control-param name="pickerClasses">hierarchical-tree</control-param>
                         </control>
                     </field>
                 </appearance>

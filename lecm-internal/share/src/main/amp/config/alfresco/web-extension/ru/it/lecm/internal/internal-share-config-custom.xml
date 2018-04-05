@@ -23,6 +23,7 @@
                             <control-param name="itemType">lecm-internal-table-structure:answer</control-param>
                             <control-param name="datagridFormId">answers-datagrid</control-param>
                             <control-param name="allowCreate">false</control-param>
+                            <control-param name="allowEdit">false</control-param>
                         </control>
                     </field>
                 </appearance>

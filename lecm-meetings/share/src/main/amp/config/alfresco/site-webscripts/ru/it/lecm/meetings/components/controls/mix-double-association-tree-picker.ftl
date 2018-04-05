@@ -91,6 +91,11 @@
 	</#list>
 </#if>
 
+<#assign pickerClasses = ''>
+<#if params.pickerClasses??>
+	<#assign pickerClasses = params.pickerClasses>
+</#if>
+
 <#if disabled>
     <div id="${controlId}" class="control association-tree-picker viewmode">
 	    <div class="label-div">
@@ -127,8 +132,8 @@
 					<input type="button" id="${secondControlId}-tree-picker-button" name="-" value="..."/>
 				</div>
 
-				<@renderTreePickerDialogHTML controlId firstPlane firstShowSearch/>
-				<@renderTreePickerDialogHTML secondControlId secondPlane secondShowSearch/>
+				<@renderTreePickerDialogHTML controlId firstPlane firstShowSearch pickerClasses/>
+				<@renderTreePickerDialogHTML secondControlId secondPlane secondShowSearch pickerClasses/>
 			</#if>
 
 			<div class="value-div">

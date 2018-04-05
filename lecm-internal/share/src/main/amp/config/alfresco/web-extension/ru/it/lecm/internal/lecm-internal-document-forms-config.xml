@@ -72,6 +72,7 @@
                             <control-param name="organization_plane">false</control-param>
                             <control-param name="organization_showSearch">true</control-param>
                             <control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
+                            <control-param name="organization_pickerClasses">hierarchical-tree</control-param>
                         </control>
                     </field>
 
@@ -302,6 +303,7 @@
                             <control-param name="organization_plane">false</control-param>
                             <control-param name="organization_showSearch">true</control-param>
                             <control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
+                            <control-param name="organization_pickerClasses">hierarchical-tree</control-param>
                         </control>
                     </field>
 
@@ -462,6 +464,7 @@
                             <control-param name="organization_plane">false</control-param>
                             <control-param name="organization_showSearch">true</control-param>
                             <control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
+                            <control-param name="organization_pickerClasses">hierarchical-tree</control-param>
                         </control>
                     </field>
                     <field id="lecm-eds-aspect:execution-state" label-id="ord.execution.lable">
@@ -579,6 +582,7 @@
                             <control-param name="organization_plane">false</control-param>
                             <control-param name="organization_showSearch">true</control-param>
                             <control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
+                            <control-param name="organization_pickerClasses">hierarchical-tree</control-param>
                         </control>
                     </field>
                     <field id="lecm-signing-v2-aspects:signingDate">
@@ -707,6 +711,7 @@
                             <control-param name="organization_plane">false</control-param>
                             <control-param name="organization_showSearch">true</control-param>
                             <control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
+                            <control-param name="organization_pickerClasses">hierarchical-tree</control-param>
                         </control>
                     </field>
 
@@ -964,6 +969,7 @@
                             <control-param name="organization_plane">false</control-param>
                             <control-param name="organization_showSearch">true</control-param>
                             <control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
+                            <control-param name="pickerClasses">hierarchical-tree</control-param>
                         </control>
                     </field>
 

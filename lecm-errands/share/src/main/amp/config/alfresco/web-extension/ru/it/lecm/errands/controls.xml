@@ -15,6 +15,7 @@
                     <param id="notSelectedOptionLabel" localName="Название  для пустого элемента" description="Название для элемента без значения ассоциации"> </param>
                     <param id="showCreateNewLink" localName="Показывать ссылку создания">false</param>
                     <param id="showCreateNewButton" localName="Показывать кнопку создания">false</param>
+                    <param id="pickerClasses" visible="true" localName="Дополнительные css-классы диалога выбора" mandatory="false"/>
                 </control>
             </field-type>
         </field-types>
