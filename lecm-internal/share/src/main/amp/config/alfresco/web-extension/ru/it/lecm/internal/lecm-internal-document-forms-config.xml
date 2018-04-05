@@ -73,7 +73,6 @@
                             <control-param name="organization_plane">false</control-param>
                             <control-param name="organization_showSearch">true</control-param>
                             <control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
-                            <control-param name="organization_isShowOnlyFirstLayer">true</control-param>
                         </control>
                     </field>
 
@@ -304,7 +303,6 @@
                             <control-param name="organization_plane">false</control-param>
                             <control-param name="organization_showSearch">true</control-param>
                             <control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
-                            <control-param name="organization_isShowOnlyFirstLayer">true</control-param>
                         </control>
                     </field>
 
