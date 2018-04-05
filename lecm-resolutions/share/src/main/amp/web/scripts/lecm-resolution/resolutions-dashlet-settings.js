@@ -18,6 +18,8 @@ LogicECM.module = LogicECM.module || {};
 
     LogicECM.module.ResolutionsDashletSettings = function(htmlId) {
         LogicECM.module.ResolutionsDashletSettings.superclass.constructor.call(this, "LogicECM.module.ResolutionsDashletSettings", htmlId, ["container", "json"]);
+
+        YAHOO.Bubbling.on("beforeFormRuntimeInit", this.beforeFormInit, this);
         return this;
     };
 
@@ -42,49 +44,45 @@ LogicECM.module = LogicECM.module || {};
         },
 
         loadForm: function(settingsNode) {
-            var me = this;
             var htmlId = "resolutions-dashlet-settings-edit-form-" + Alfresco.util.generateDomId();
-            Alfresco.util.Ajax.request(
-                {
-                    url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
-                    dataObj: {
-                        htmlid: htmlId,
-                        itemKind:"node",
-                        itemId: settingsNode,
-                        mode: "edit",
-                        formUI: true,
-                        submitType:"json",
-                        showSubmitButton:"true",
-                        showCaption: false
-                    },
-                    successCallback: {
-                        fn: function (response) {
-                            var container = Dom.get(me.id + "-settings");
-                            container.innerHTML = response.serverResponse.responseText;
+            Alfresco.util.Ajax.request({
+                url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
+                dataObj: {
+                    htmlid: htmlId,
+                    itemKind: "node",
+                    itemId: settingsNode,
+                    mode: "edit",
+                    formUI: true,
+                    submitType: "json",
+                    showSubmitButton: "true",
+                    showCaption: false
+                },
+                successCallback: {
+                    scope: this,
+                    fn: function (response) {
+                        Dom.get(this.id + "-settings").innerHTML = response.serverResponse.responseText;
+                        Dom.get(htmlId+ "-form-submit").value = this.msg("label.save");
+                    }
+                },
+                failureMessage: "message.failure",
+                execScripts: true
+            });
+        },
 
-                            Dom.get(htmlId+ "-form-submit").value = me.msg("label.save");
-
-                            var form = new Alfresco.forms.Form(htmlId + "-form");
-                            form.setSubmitAsJSON(true);
-                            form.setAJAXSubmit(true,
-                                {
-                                    successCallback:
-                                    {
-                                        fn: function () {
-                                            Alfresco.util.PopupManager.displayMessage(
-                                                {
-                                                    text: Alfresco.util.message("message.save.success")
-                                                }
-                                            )},
-                                        scope: this
-                                    }
-                                });
-                            form.init();
+        beforeFormInit: function (layer, args) {
+            YAHOO.Bubbling.unsubscribe("beforeFormRuntimeInit", this.beforeFormInit);
+            var form = args[1].runtime;
+            form.setSubmitAsJSON(true);
+            form.setAJAXSubmit(true, {
+                successCallback: {
+                    scope: this,
+                    fn: function () {
+                        Alfresco.util.PopupManager.displayMessage({
+                            text: Alfresco.util.message("message.save.success")
                         }
-                    },
-                    failureMessage: "message.failure",
-                    execScripts: true
-                });
+                    )}
+                }
+            });
         }
     });
 })();

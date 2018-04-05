@@ -9,6 +9,8 @@ LogicECM.module = LogicECM.module || {};
 
 	LogicECM.module.LecmOSSettings = function(htmlId) {
 		LogicECM.module.LecmOSSettings.superclass.constructor.call(this, 'LogicECM.module.LecmOSSettings', htmlId, ['container', 'json']);
+
+		YAHOO.Bubbling.on("beforeFormRuntimeInit", this.beforeFormInit, this);
 		return this;
 	};
 
@@ -16,6 +18,7 @@ LogicECM.module = LogicECM.module || {};
 		onReady: function() {
 			this.loadSettings();
 		},
+
 		loadSettings: function() {
 			Alfresco.util.Ajax.request({
 				url: Alfresco.constants.PROXY_URI + 'lecm/operative-storage/settings',
@@ -32,6 +35,7 @@ LogicECM.module = LogicECM.module || {};
 				failureMessage: 'message.failure'
 			});
 		},
+
 		loadForm: function(settingsNode) {
 			Alfresco.util.Ajax.request({
 				url: Alfresco.constants.URL_SERVICECONTEXT + 'components/form',
@@ -49,25 +53,26 @@ LogicECM.module = LogicECM.module || {};
 				successCallback: {
 					scope: this,
 					fn: function(response) {
-						var container = Dom.get(this.id + '-settings');
-						container.innerHTML = response.serverResponse.responseText;
-
+						Dom.get(this.id + '-settings').innerHTML = response.serverResponse.responseText;
 						Dom.get('lecm-os-settings-edit-form-form-submit').value = this.msg('label.save');
-
-						var form = new Alfresco.forms.Form('lecm-os-settings-edit-form-form');
-						form.setSubmitAsJSON(true);
-						form.setAJAXSubmit(true, {
-							successCallback: {
-								fn: this.onSuccess,
-								scope: this
-							}
-						});
-						form.init();
 					}
 				},
 				execScripts: true
 			});
 		},
+
+		beforeFormInit: function (layer, args) {
+			YAHOO.Bubbling.unsubscribe("beforeFormRuntimeInit", this.beforeFormInit);
+			var form = args[1].runtime;
+			form.setSubmitAsJSON(true);
+			form.setAJAXSubmit(true, {
+				successCallback: {
+					scope: this,
+					fn: this.onSuccess
+				}
+			});
+		},
+
 		onSuccess: function(response) {
 			YAHOO.Bubbling.fire('formSubmit', this);
 

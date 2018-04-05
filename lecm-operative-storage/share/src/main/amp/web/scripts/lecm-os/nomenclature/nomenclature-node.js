@@ -17,11 +17,11 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 
 	YAHOO.extend(LogicECM.module.Nomenclature.Node, Alfresco.component.Base, {
 		onSelectTreeNode: function(layer, args) {
-			if (args[1].datagridMeta != null && args[1].datagridMeta.nodeRef != null) {
+			if ((args[1].datagridMeta != null) && (args[1].datagridMeta.nodeRef != null)) {
+				YAHOO.Bubbling.on("beforeFormRuntimeInit", this.beforeFormInit, this);
+
 				var nodeRef = args[1].datagridMeta.nodeRef;
-
 				var htmlId = Alfresco.util.generateDomId() + "-nomenclature-node-form";
-
 				Alfresco.util.Ajax.request({
 					url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
 					dataObj: {
@@ -38,29 +38,7 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 						scope: this,
 						fn: function(response) {
 							Dom.get(this.id + "-body").innerHTML = response.serverResponse.responseText;
-
 							Dom.get(htmlId + "-form-submit").value = this.msg("label.save");
-
-							var form = new Alfresco.forms.Form(htmlId + "-form");
-							form.setSubmitAsJSON(true);
-							form.setAJAXSubmit(true, {
-								successCallback: {
-									fn: function(response) {
-										if (response && response.json) {
-											YAHOO.Bubbling.fire("refreshTreeParentNode");
-											Alfresco.util.PopupManager.displayMessage({
-												text: this.msg("message.save.success")
-											});
-										} else {
-											Alfresco.util.PopupManager.displayPrompt({
-												text: Alfresco.util.message("message.save.failure")
-											});
-										}
-									},
-									scope: this
-								}
-							});
-							form.init();
 						}
 					},
 					failureMessage: "message.save.failure",
@@ -69,6 +47,29 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 			} else {
 				Dom.get(this.id + "-body").innerHTML = "";
 			}
+		},
+
+		beforeFormInit: function (layer, args) {
+			YAHOO.Bubbling.unsubscribe("beforeFormRuntimeInit", this.beforeFormInit);
+			var form = args[1].runtime;
+			form.setSubmitAsJSON(true);
+			form.setAJAXSubmit(true, {
+				successCallback: {
+					scope: this,
+					fn: function(response) {
+						if (response && response.json) {
+							YAHOO.Bubbling.fire("refreshTreeParentNode");
+							Alfresco.util.PopupManager.displayMessage({
+								text: this.msg("message.save.success")
+							});
+						} else {
+							Alfresco.util.PopupManager.displayPrompt({
+								text: Alfresco.util.message("message.save.failure")
+							});
+						}
+					}
+				}
+			});
 		}
 	});
 })();
