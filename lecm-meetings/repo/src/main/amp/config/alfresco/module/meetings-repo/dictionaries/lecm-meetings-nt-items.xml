@@ -46,7 +46,7 @@
             <item name="cm:PROTOCOL_REGISTER" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[PROTOCOL_REGISTER]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Документ {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-eds-document:document-type-assoc/cm:name} №{~REGNUM|Не присвоено}"))} поступил на регистрацию]]></property>
+                    <![CDATA[Документ {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-eds-document:document-type-assoc/cm:name} №{~REGNUM|Не присвоено}"))} поступил Вам на регистрацию]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Протокол. Поступил на регистрацию]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
