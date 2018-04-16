@@ -604,6 +604,7 @@
         <forms>
             <form>
                 <field-visibility>
+                    <show id="requestChangeDueDateFormScript" force="true"/>
                     <show id="bpm:workflowDescription"/>
                     <show id="packageItems"/>
                     <show id="lecmErrandWf:requestDueDateChange_1CurrentDueDate"/>
@@ -612,7 +613,6 @@
                     <show id="lecmErrandWf:requestDueDateChange_1ChildDueDate"/>
                     <show id="lecmErrandWf:requestDueDateChange_1Reason"/>
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
-                    <show id="requestChangeDueDateFormScript" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="limitation-date"  template="/ru/it/lecm/errands/controls/wf-due-date-set.ftl"/>
@@ -623,7 +623,10 @@
 		                </control>
 	                </field>
                     <field id="packageItems">
-                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl">
+                            <control-param name="isValueSetFireEvent">true</control-param>
+                            <control-param name="valueSetFireAction">errandsWFChangeDueDateScriptLoaded</control-param>
+                        </control>
                     </field>
                     <field id="lecmErrandWf:requestDueDateChange_1CurrentDueDate" label-id="label.current-due-date" read-only="true">
                         <control template="/ru/it/lecm/documents/controls/workflow/format-packageItems-document.ftl">
@@ -664,7 +667,6 @@
                     <field id="requestChangeDueDateFormScript">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-change-due-date-form-script.js</control-param>
-                            <control-param name="scriptLoadedFireAction">errandsWFChangeDueDateScriptLoaded</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -715,6 +717,7 @@
         <forms>
             <form>
                 <field-visibility>
+                    <show id="requestDueDateChangeTaskFormScript" force="true"/>
                     <show  id="packageItems"/>
                     <show id="lecmErrandWf:requestDueDateChangeTask_1CurrentDueDate"/>
                     <show id="lecmErrandWf:requestDueDateChangeTask_1NewDueDateRadio"/>
@@ -724,13 +727,15 @@
                     <show id="lecmErrandWf:requestDueDateChangeTask_1DateReason"/>
                     <show id="lecmErrandWf:requestDueDateChangeTask_1Result"/>
                     <show id="lecmErrandWf:requestDueDateChangeTask_1RejectReason"/>
-                    <show id="requestDueDateChangeTaskFormScript" force="true"/>
 				</field-visibility>
 				<appearance>
 					<set id="limitation-date"  template="/ru/it/lecm/errands/controls/wf-due-date-set.ftl"/>
                     <set id="block2"/>
                     <field id="packageItems">
-                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl">
+                            <control-param name="isValueSetFireEvent">true</control-param>
+                            <control-param name="valueSetFireAction">requestDueDateChangeTaskFormScriptLoaded</control-param>
+                        </control>
                     </field>
                     <field id="lecmErrandWf:requestDueDateChangeTask_1CurrentDueDate" label-id="label.current-due-date" read-only="true">
                         <control template="/ru/it/lecm/documents/controls/workflow/format-packageItems-document.ftl">
@@ -785,7 +790,6 @@
                     <field id="requestDueDateChangeTaskFormScript">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-change-due-date-form-script.js</control-param>
-                            <control-param name="scriptLoadedFireAction">requestDueDateChangeTaskFormScriptLoaded</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -797,6 +801,7 @@
         <forms>
             <form>
                 <field-visibility>
+                    <show id="changeDueDateFormScript" force="true"/>
                     <show id="packageItems"/>
                     <show id="lecmErrandWf:changeDueDateCurrentDueDate"/>
                     <show id="lecmErrandWf:changeDueDateNewDueDateRadio"/>
@@ -804,13 +809,15 @@
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <show id="lecmErrandWf:changeDueDateChangeChildDueDate"/>
                     <show id="lecmErrandWf:changeDueDateReason"/>
-                    <show id="changeDueDateFormScript" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="limitation-date"  template="/ru/it/lecm/errands/controls/wf-due-date-set.ftl"/>
                     <set id="block2"/>
                     <field id="packageItems">
-                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl">
+                            <control-param name="isValueSetFireEvent">true</control-param>
+                            <control-param name="valueSetFireAction">errandsWFChangeDueDateScriptLoaded</control-param>
+                        </control>
                     </field>
                     <field id="lecmErrandWf:changeDueDateCurrentDueDate" label-id="label.current-due-date" read-only="true">
                         <control template="/ru/it/lecm/documents/controls/workflow/format-packageItems-document.ftl">
@@ -851,7 +858,6 @@
                     <field id="changeDueDateFormScript">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-change-due-date-form-script.js</control-param>
-                            <control-param name="scriptLoadedFireAction">errandsWFChangeDueDateScriptLoaded</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -1128,6 +1134,7 @@
         <forms>
             <form>
                 <field-visibility>
+                    <show id="requestCancelTaskFormScript" force="true"/>
                     <show id="packageItems"/>
                     <show id="lecmErrandWf:requestCancelTask_1Reason"/>
                     <show id="lecmErrandWf:requestCancelTask_1Result"/>
@@ -1135,11 +1142,13 @@
                     <show id="lecmErrandWf:requestCancelTask_1CancelChildren"/>
                     <show id="lecmErrandWf:requestCancelTask_1RejectReason"/>
                     <show id="lecmErrandWf:requestCancelTask_1NewExecutor"/>
-                    <show id="requestCancelTaskFormScript" force="true"/>
                 </field-visibility>
                 <appearance>
                     <field id="packageItems">
-                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl">
+                            <control-param name="isValueSetFireEvent">true</control-param>
+                            <control-param name="valueSetFireAction">requestCancelTaskFormScriptLoaded</control-param>
+                        </control>
                     </field>
                     <field id="lecmErrandWf:requestCancelTask_1Reason" read-only="true">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
@@ -1192,7 +1201,6 @@
                     <field id="requestCancelTaskFormScript">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-cancel-form-script.js</control-param>
-                            <control-param name="scriptLoadedFireAction">requestCancelTaskFormScriptLoaded</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -1330,14 +1338,17 @@
         <forms>
             <form>
 	            <field-visibility>
-		            <show id="packageItems"/>
-		            <show id="lecmErrandWf:cancel_1CancelReason"/>
-                    <show id="lecmErrandWf:cancel_1CancelChildren"/>
                     <show id="errandCancelFormScript" force="true"/>
+                    <show id="packageItems"/>
+                    <show id="lecmErrandWf:cancel_1CancelReason"/>
+                    <show id="lecmErrandWf:cancel_1CancelChildren"/>
 	            </field-visibility>
 	            <appearance>
 		            <field id="packageItems">
-			            <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl">
+                            <control-param name="isValueSetFireEvent">true</control-param>
+                            <control-param name="valueSetFireAction">errandCancelFormScriptLoaded</control-param>
+                        </control>
 		            </field>
                     <field id="lecmErrandWf:cancel_1CancelReason" mandatory="true">
                         <control  template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
@@ -1360,7 +1371,6 @@
                     <field id="errandCancelFormScript">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-cancel-form-script.js</control-param>
-                            <control-param name="scriptLoadedFireAction">errandCancelFormScriptLoaded</control-param>
                         </control>
                     </field>
 	            </appearance>
