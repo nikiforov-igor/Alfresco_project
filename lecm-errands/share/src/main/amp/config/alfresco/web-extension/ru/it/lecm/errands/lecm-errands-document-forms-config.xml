@@ -381,7 +381,9 @@
                         </control>
                     </field>
                     <field id="lecm-errands:period-start" set="errand-validity">
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="changeFireAction">mandatoryControlValueUpdated</control-param>
+                        </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.periodValidation" message-id="Alfresco.forms.validation.mandatory.message" event="change"/>
                             <constraint type="DATE" validation-handler="LogicECM.module.Errands.periodEndDateValidation" message-id="LogicECM.module.Errands.periodEndDateValidation.message" event="change"/>
@@ -399,7 +401,9 @@
                     </field>
 
                     <field id="lecm-errands:period-end" label="" set="validity-end-date">
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="changeFireAction">mandatoryControlValueUpdated</control-param>
+                        </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.periodValidation" message-id="Alfresco.forms.validation.mandatory.message" event="change"/>
                             <constraint type="DATE" validation-handler="LogicECM.module.Errands.periodEndDateValidation" message-id="LogicECM.module.Errands.periodEndDateValidation.message" event="change"/>
@@ -868,7 +872,9 @@
                         </control>
                     </field>
                     <field id="lecm-errands:period-start" set="errand-validity">
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="changeFireAction">mandatoryControlValueUpdated</control-param>
+                        </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.periodValidation" message-id="Alfresco.forms.validation.mandatory.message" event="change"/>
                             <constraint type="DATE" validation-handler="LogicECM.module.Errands.periodEndDateValidation" message-id="LogicECM.module.Errands.periodEndDateValidation.message" event="change"/>
@@ -886,7 +892,9 @@
                     </field>
 
                     <field id="lecm-errands:period-end" label="" set="validity-end-date">
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="changeFireAction">mandatoryControlValueUpdated</control-param>
+                        </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.periodValidation" message-id="Alfresco.forms.validation.mandatory.message" event="change"/>
                             <constraint type="DATE" validation-handler="LogicECM.module.Errands.periodEndDateValidation" message-id="LogicECM.module.Errands.periodEndDateValidation.message" event="change"/>
@@ -1415,7 +1423,9 @@
                         </control>
                     </field>
                     <field id="lecm-errands:period-start" set="errand-validity">
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="changeFireAction">mandatoryControlValueUpdated</control-param>
+                        </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.periodValidation" message-id="Alfresco.forms.validation.mandatory.message" event="change"/>
                             <constraint type="DATE" validation-handler="LogicECM.module.Errands.periodEndDateValidation" message-id="LogicECM.module.Errands.periodEndDateValidation.message" event="change"/>
@@ -1433,7 +1443,9 @@
                     </field>
 
                     <field id="lecm-errands:period-end" label="" set="validity-end-date">
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="changeFireAction">mandatoryControlValueUpdated</control-param>
+                        </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.periodValidation" message-id="Alfresco.forms.validation.mandatory.message" event="change"/>
                             <constraint type="DATE" validation-handler="LogicECM.module.Errands.periodEndDateValidation" message-id="LogicECM.module.Errands.periodEndDateValidation.message" event="change"/>
@@ -1754,7 +1766,9 @@
                         </control>
                     </field>
                     <field id="lecm-errands:period-start" set="errand-validity">
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="changeFireAction">mandatoryControlValueUpdated</control-param>
+                        </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.periodValidation" message-id="Alfresco.forms.validation.mandatory.message" event="change"/>
                             <constraint type="DATE" validation-handler="LogicECM.module.Errands.periodEndDateValidation" message-id="LogicECM.module.Errands.periodEndDateValidation.message" event="change"/>
@@ -1772,7 +1786,9 @@
                     </field>
 
                     <field id="lecm-errands:period-end" label="" set="validity-end-date">
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="changeFireAction">mandatoryControlValueUpdated</control-param>
+                        </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.periodValidation" message-id="Alfresco.forms.validation.mandatory.message" event="change"/>
                             <constraint type="DATE" validation-handler="LogicECM.module.Errands.periodEndDateValidation" message-id="LogicECM.module.Errands.periodEndDateValidation.message" event="change"/>
