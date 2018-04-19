@@ -154,7 +154,7 @@
             <item name="cm:LECM_MEETINGS_DOCUMENT.RESERVATION_RESOURCE_RESULT" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[LECM_MEETINGS_DOCUMENT.RESERVATION_RESOURCE_RESULT]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Резервирование ресурса {#resource.attribute("cm:name")} для {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} {#reserved ? "одобрено" : #wrapTitle("отклонено", #comment)}.]]></property>
+                    <![CDATA[Резервирование ресурса {#resource.attribute("cm:title")} для {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} {#reserved ? "одобрено" : #wrapTitle("отклонено", #comment)}.]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Мероприятие. Результат резервирования ресурса]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
