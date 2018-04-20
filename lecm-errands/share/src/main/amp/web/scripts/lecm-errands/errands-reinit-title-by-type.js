@@ -135,6 +135,7 @@
                     });
                 }
             }
+            YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
         } else {
             loadTypes(reInit,[layer, args, param]);
         }
