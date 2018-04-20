@@ -16,20 +16,7 @@
             processCancelChildCheckbox("lecmErrandWf_cancel_1CancelChildren");
         } else if (layer == "requestCancelTaskFormScriptLoaded") {
             processCancelChildCheckbox("lecmErrandWf_requestCancelTask_1CancelChildren");
-            addMandatoryLabel("lecmErrandWf_requestCancelTask_1RejectReason");
         }
-    }
-
-    function addMandatoryLabel(formatedFieldId) {
-        Event.onContentReady(formId + "_prop_" + formatedFieldId, function () {
-            var rejectReasonElement = Dom.get(formId + "_prop_" + formatedFieldId);
-            var rejectReasonControl = rejectReasonElement.parentElement.parentElement.parentElement;
-            var mandatoryEl = document.createElement('span');
-            mandatoryEl.className = "mandatory-indicator";
-            mandatoryEl.innerHTML = "*";
-            var rejectReasonLabelDiv = Selector.query(".label-div label", rejectReasonControl, true);
-            rejectReasonLabelDiv.appendChild(mandatoryEl);
-        });
     }
 
     function processCancelChildCheckbox(field) {
