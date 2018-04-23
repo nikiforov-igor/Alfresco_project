@@ -99,6 +99,7 @@ function processDueDateChanges(params) {
         lecmPermission.popAuthentication();
     }
     if (changed) {
+        var oldPresentString = document.properties["lecm-document:present-string"];
         lecmPermission.pushAuthentication();
         lecmPermission.setRunAsUserSystem();
         document.properties["lecm-errands:limitation-date-text"] = dueDateString;
@@ -131,7 +132,8 @@ function processDueDateChanges(params) {
                     mainObject: document,
                     eventExecutor: currentUser,
                     dueDate: dueDateString,
-                    reason: changeDateReason
+                    reason: changeDateReason,
+                    presentString: oldPresentString
                 }
             });
         }
