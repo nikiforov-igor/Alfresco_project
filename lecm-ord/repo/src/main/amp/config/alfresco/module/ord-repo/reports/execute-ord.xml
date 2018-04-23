@@ -99,7 +99,7 @@
                         <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[d:boolean]]></property>
                         <property name="cm:name"><![CDATA[Только контрольные]]></property>
-                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[50]]></property>
+                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[55]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[is_control]]></property>
                         <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
                         <assocs>
@@ -143,7 +143,7 @@ isShowNotActiveCheckBox=true;    notActiveCheckBoxLabelId=label.control.employee
                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[lecm-orgstr:employee]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[]]></property>
                         <property name="cm:name"><![CDATA[Подписант]]></property>
-                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[55]]></property>
+                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[50]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[signer]]></property>
                         <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
                         <assocs>
