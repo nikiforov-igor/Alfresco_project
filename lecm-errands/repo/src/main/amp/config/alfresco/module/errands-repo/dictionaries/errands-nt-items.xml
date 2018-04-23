@@ -376,7 +376,7 @@
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
-                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>ERRANDS_CHANGE_DUE_DATE
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
                 </assocs>
             </item>
             <item name="cm:ERRANDS_CHANGE_DUE_DATE" type="lecm-notification-template:template">
