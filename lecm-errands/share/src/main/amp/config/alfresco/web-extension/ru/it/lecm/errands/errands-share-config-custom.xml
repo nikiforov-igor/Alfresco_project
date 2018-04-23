@@ -21,6 +21,7 @@
                <type name="association:lecm-errands-dic:errand-type" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                    <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Типы_x0020_поручений</control-param>
                    <control-param name="plane">true</control-param>
+                   <control-param name="additionalFilter">@lecm\-errands\-dic\:errand\-type\-manual\-selection:true</control-param>
                </type>
             </default-controls>
         </forms>
@@ -1609,7 +1610,6 @@
                     <field id="lecmErrandWf:typeAssoc" mandatory="true">
                         <control>
                             <control-param name="changeItemsFireAction">createErrandsWFErrandTypeChanged</control-param>
-                            <control-param name="additionalFilter">@lecm\-errands\-dic\:errand\-type\-manual\-selection:true</control-param>
                         </control>
                     </field>
                     <field id="change-errand-type-script">
@@ -1668,7 +1668,7 @@
                     <field id="lecmErrandWf:limitationDateType" set="limitation-date">
                         <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
                     </field>
-                    <field id="lecmErrandWf:limitationDate" set="limitation-date">
+                    <field id="lecmErrandWf:limitationDate" mandatory="true" set="limitation-date">
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.createErrandWFLimitationDateValidation" event="change" />
                         </constraint-handlers>
