@@ -356,7 +356,7 @@
                     <field id="lecm-errands:limitation-date-type" set="limitation-date">
                         <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
                     </field>
-                    <field id="lecm-errands:limitation-date" set="limitation-date">
+                    <field id="lecm-errands:limitation-date" set="limitation-date" mandatory="true">
                         <control>
                             <control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-Errand', false)}</control-param>
                         </control>
@@ -846,7 +846,7 @@
                     <field id="lecm-errands:limitation-date-type" set="limitation-date">
                         <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
                     </field>
-                    <field id="lecm-errands:limitation-date" set="limitation-date">
+                    <field id="lecm-errands:limitation-date" set="limitation-date" mandatory="true">
                         <control>
                             <control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-Errand', false)}</control-param>
                         </control>
@@ -1397,7 +1397,7 @@
                     <field id="lecm-errands:limitation-date-type" set="limitation-date">
                         <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
                     </field>
-                    <field id="lecm-errands:limitation-date" set="limitation-date">
+                    <field id="lecm-errands:limitation-date" set="limitation-date" mandatory="true">
                         <control>
                             <control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-Errand', false)}</control-param>
                         </control>
@@ -1740,7 +1740,7 @@
                     <field id="lecm-errands:limitation-date-type" set="limitation-date">
                         <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
                     </field>
-                    <field id="lecm-errands:limitation-date" set="limitation-date">
+                    <field id="lecm-errands:limitation-date" set="limitation-date" mandatory="true">
                         <control>
                             <control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-Errand', false)}</control-param>
                         </control>

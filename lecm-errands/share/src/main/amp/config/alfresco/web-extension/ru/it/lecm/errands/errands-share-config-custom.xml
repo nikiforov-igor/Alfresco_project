@@ -643,12 +643,12 @@
                             <control-param name="fireChangeEventName">changeDueDateRadioEvent</control-param>
                         </control>
                     </field>
-                    <field id="lecmErrandWf:requestDueDateChange_1NewDate" set="limitation-date">
+                    <field id="lecmErrandWf:requestDueDateChange_1NewDate"  mandatory="true" set="limitation-date">
                         <control>
                             <control-param name="minLimitCurrentDate">true</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint type="INVALID" validation-handler="LogicECM.module.Errands.WFChangeDueDateValidation" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.WFChangeDueDateValidation" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-base-dummy-aspects:script" set="limitation-date">
@@ -834,12 +834,12 @@
                             <control-param name="fireChangeEventName">changeDueDateRadioEvent</control-param>
                         </control>
                     </field>
-                    <field id="lecmErrandWf:changeDueDateNewDueDate" set="limitation-date">
+                    <field id="lecmErrandWf:changeDueDateNewDueDate" mandatory="true" set="limitation-date">
                         <control>
                             <control-param name="minLimitCurrentDate">true</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint type="INVALID" validation-handler="LogicECM.module.Errands.WFChangeDueDateValidation" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.WFChangeDueDateValidation" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-base-dummy-aspects:script" set="limitation-date">
