@@ -96,50 +96,50 @@
 
 		<#if hasAddAttachmentPerm>
 	        function drawDndForm(nodeRef, htmlId) {
+                YAHOO.Bubbling.on("beforeFormRuntimeInit", beforeFormInit, this);
+
 		        var formId = htmlId + "-attachemnts";
-	            Alfresco.util.Ajax.request(
-	                    {
-	                        url: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
-	                        dataObj: {
-	                            htmlid: formId,
-	                            itemKind: "node",
-	                            itemId: nodeRef,
-	                            formId: "errands-dnd",
-	                            mode: "edit",
-		                        submitType:"json",
-	                            showSubmitButton: true,
-	                            showResetButton: false,
-	                            showCancelButton: false,
-								showCaption: false
-	                        },
-	                        successCallback: {
-	                            fn: function (response) {
-	                                var container = Dom.get('${id}-dnd');
-	                                if (container != null) {
-	                                    container.innerHTML = response.serverResponse.responseText;
-
-		                                var form = new Alfresco.forms.Form(formId + '-form');
-		                                form.setSubmitAsJSON(true);
-		                                form.setAJAXSubmit(true,
-				                                {
-					                                successCallback:
-					                                {
-						                                fn: function(response) {
-							                                window.location.reload(true);
-						                                },
-						                                scope: this
-					                                }
-				                                });
-		                                form.init();
-
-		                                Dom.setStyle(formId + "-form-buttons", "visibility", "hidden");
-	                                }
-	                            }
-	                        },
-	                        failureMessage: "message.failure",
-	                        execScripts: true
-	                    });
+	            Alfresco.util.Ajax.request({
+                    url: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
+                    dataObj: {
+                        htmlid: formId,
+                        itemKind: "node",
+                        itemId: nodeRef,
+                        formId: "errands-dnd",
+                        mode: "edit",
+                        submitType: "json",
+                        showSubmitButton: true,
+                        showResetButton: false,
+                        showCancelButton: false,
+                        showCaption: false
+                    },
+                    successCallback: {
+                        fn: function (response) {
+                            var container = Dom.get('${id}-dnd');
+                            if (container != null) {
+                                container.innerHTML = response.serverResponse.responseText;
+                                Dom.setStyle(formId + "-form-buttons", "visibility", "hidden");
+                            }
+                        }
+                    },
+                    failureMessage: "message.failure",
+                    execScripts: true
+                });
 	        }
+
+            function beforeFormInit (layer, args) {
+                YAHOO.Bubbling.unsubscribe("beforeFormRuntimeInit", this.beforeFormInit);
+                var form = args[1].runtime;
+                form.setSubmitAsJSON(true);
+                form.setAJAXSubmit(true, {
+                    successCallback: {
+                        scope: this,
+                        fn: function(response) {
+                            window.location.reload(true);
+                        }
+                    }
+                });
+            }
 		</#if>
 
 		<#if hasAttrEditPerm>

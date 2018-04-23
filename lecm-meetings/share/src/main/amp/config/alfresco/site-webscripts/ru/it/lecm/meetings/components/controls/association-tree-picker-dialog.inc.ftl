@@ -1,8 +1,8 @@
-<#macro renderTreePickerDialogHTML controlId plane showSearch>
+<#macro renderTreePickerDialogHTML controlId plane showSearch pickerClasses>
 <#assign pickerId = controlId + "-picker">
 <div id="${pickerId}" class="yui-panel assoc-dialog association-tree-picker">
     <div id="${pickerId}-head" class="hd">${msg("form.control.object-picker.header")}</div>
-    <div id="${pickerId}-body" class="bd">
+    <div id="${pickerId}-body" class="bd <#if pickerClasses??>${pickerClasses}</#if>">
 	    <#if showSearch>
             <div class="control">
                 <div id="${pickerId}-searchContainer" class="container">

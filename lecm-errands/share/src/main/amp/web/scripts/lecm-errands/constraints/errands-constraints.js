@@ -150,7 +150,7 @@
                 return true;
             }
             if (endRadio && endRadio.value == "DATERANGE") {
-                return isValid && endDateEl && endDateEl.value && new Date(endDateEl.value) >= new Date(startDate.value);
+                return isValid && endDateEl && endDateEl.value && new Date(endDateEl.value) > new Date(startDate.value);
             }
         }
         return true;

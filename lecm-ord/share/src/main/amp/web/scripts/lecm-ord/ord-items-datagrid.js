@@ -97,14 +97,14 @@ LogicECM.ORD = LogicECM.ORD || {};
                                             id: "onMoveTableRowUp",
                                             permission: "edit",
                                             label: this.msg("actions.tableRowUp"),
-                                            evaluator: this.showActionsEvaluator
+                                            evaluator: this.showItemUp
                                         });
                                         otherActions.push({
                                             type: actionType,
                                             id: "onMoveTableRowDown",
                                             permission: "edit",
                                             label: this.msg("action.tableRowDown"),
-                                            evaluator: this.showActionsEvaluator
+                                            evaluator: this.showItemDown
                                         });
                                     }
                                     if (this.options.allowCreate === true) {
@@ -496,7 +496,7 @@ LogicECM.ORD = LogicECM.ORD || {};
                 destroyOnHide: true,
                 buttons: [
                     {
-                        text: Alfresco.util.message("button.resume"),
+                        text: Alfresco.util.message("button.ok"),
                         handler: function () {
                             Alfresco.util.Ajax.jsonGet({
                                 url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/ord/item/execute?nodeRef=' + nodeRef,

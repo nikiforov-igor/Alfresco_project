@@ -216,7 +216,8 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
                     associations.put("lecm-errands:initiator-assoc", errandInitiator.toString());
                 }
                 // Тип поручения
-                NodeRef type = lecmDictionaryService.getRecordByParamValue(ErrandsService.ERRANDS_TYPE_DICTIONARY_NAME, ContentModel.PROP_NAME, ErrandsService.ERRAND_TYPE_ON_POINT_PROTOCOL);
+                String errandTypeOnProtocolPointName = EDSDocumentService.getFromMessagesOrDefaultValue("lecm.protocol.point.errand.type.name", ErrandsService.ERRAND_TYPE_ON_POINT_PROTOCOL);
+                NodeRef type = lecmDictionaryService.getRecordByParamValue(ErrandsService.ERRANDS_TYPE_DICTIONARY_NAME, ContentModel.PROP_NAME, errandTypeOnProtocolPointName);
                 associations.put(ErrandsService.ASSOC_ERRANDS_TYPE.toPrefixString(namespaceService), type.toString());
                 //исполнитель
                 List<AssociationRef> pointExecutorAssocs = nodeService.getTargetAssocs(point, ProtocolService.ASSOC_PROTOCOL_POINT_EXECUTOR);

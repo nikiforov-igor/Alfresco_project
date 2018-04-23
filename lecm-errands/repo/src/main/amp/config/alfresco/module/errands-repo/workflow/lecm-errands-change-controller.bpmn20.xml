@@ -75,8 +75,9 @@
 									    }
 									}
 
+                                    var periodically = document.properties["lecm-errands:periodically"];
                                     var isOnControl = document.properties["lecm-document-aspects:is-on-control"];
-                                    if (!isOnControl) {
+                                    if (!isOnControl && !periodically) {
                                         document.properties["lecm-document-aspects:is-on-control"] = true;
                                         document.save();
                                     }

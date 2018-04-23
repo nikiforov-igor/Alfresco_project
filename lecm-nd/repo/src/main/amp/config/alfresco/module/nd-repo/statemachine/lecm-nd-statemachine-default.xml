@@ -1221,7 +1221,41 @@
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>f3cbfd47-4785-4759-96b3-b421fccfdab1</name>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value>
+                                                                    <![CDATA[Добавить исполнителя в участники документа]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[(function(){
+  var document = bpm_package.children[0];
+
+  var executor = null;
+  var executorAssoc = document.assocs["lecm-eds-document:executor-assoc"];
+  if (executorAssoc && executorAssoc.length == 1) {
+      executor = executorAssoc[0];
+      documentMembers.addMemberWithoutCheckPermission(document, executor, "LECM_BASIC_PG_Reader", true);
+  }
+})();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                 </nodes>
                             </subFolder>
@@ -8700,7 +8734,41 @@ if (document) {
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>9a9e1e82-91fa-4588-9487-251f0ffcb33b</name>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value>
+                                                                    <![CDATA[Добавить исполнителя в участники документа]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[(function(){
+  var document = bpm_package.children[0];
+
+  var executor = null;
+  var executorAssoc = document.assocs["lecm-eds-document:executor-assoc"];
+  if (executorAssoc && executorAssoc.length == 1) {
+      executor = executorAssoc[0];
+      documentMembers.addMemberWithoutCheckPermission(document, executor, "LECM_BASIC_PG_Reader", true);
+  }
+})();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                 </nodes>
                             </subFolder>
@@ -14567,7 +14635,41 @@ document.save();]]></value>
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>ed841014-5083-4df8-9060-0c20ce64af9e</name>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value>
+                                                                    <![CDATA[Добавить исполнителя в участники документа]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[(function(){
+  var document = bpm_package.children[0];
+
+  var executor = null;
+  var executorAssoc = document.assocs["lecm-eds-document:executor-assoc"];
+  if (executorAssoc && executorAssoc.length == 1) {
+      executor = executorAssoc[0];
+      documentMembers.addMemberWithoutCheckPermission(document, executor, "LECM_BASIC_PG_Reader", true);
+  }
+})();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                 </nodes>
                             </subFolder>

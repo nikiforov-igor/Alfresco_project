@@ -64,14 +64,15 @@
                             <control-param name="organization_label">label.control.orgUnit</control-param>
                             <control-param name="organization_endpointType">lecm-orgstr:organization-unit</control-param>
                             <control-param name="organization_endpointMany">true</control-param>
-                            <control-param name="organization_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
+                            <control-param name="organization_xPathLocation">{currentLocation}</control-param>
+                            <control-param name="organization_xPathLocationRoot">{lecmMyOrganization}</control-param>
                             <control-param name="organization_nameSubstituteString"><![CDATA[<span class="organization-unit">{lecm-orgstr:element-short-name}</span>]]></control-param>
                             <control-param name="organization_treeNodeSubstituteString">{lecm-orgstr:element-short-name}</control-param>
                             <control-param name="organization_treeNodeTitleSubstituteString">{cm:name}</control-param>
                             <control-param name="organization_plane">false</control-param>
                             <control-param name="organization_showSearch">true</control-param>
                             <control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
-                            <control-param name="organization_additionalFilter">ISNOTNULL:\"sys:node-dbid\"</control-param>
+                            <control-param name="organization_pickerClasses">hierarchical-tree</control-param>
                         </control>
                     </field>
 
@@ -295,14 +296,14 @@
                             <control-param name="organization_label">label.control.orgUnit</control-param>
                             <control-param name="organization_endpointType">lecm-orgstr:organization-unit</control-param>
                             <control-param name="organization_endpointMany">true</control-param>
-                            <control-param name="organization_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
+                            <control-param name="organization_rootLocation">{organization}</control-param>
                             <control-param name="organization_nameSubstituteString"><![CDATA[<span class="organization-unit">{lecm-orgstr:element-short-name}</span>]]></control-param>
                             <control-param name="organization_treeNodeSubstituteString">{lecm-orgstr:element-short-name}</control-param>
                             <control-param name="organization_treeNodeTitleSubstituteString">{cm:name}</control-param>
                             <control-param name="organization_plane">false</control-param>
                             <control-param name="organization_showSearch">true</control-param>
                             <control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
-                            <control-param name="organization_additionalFilter">ISNOTNULL:\"sys:node-dbid\"</control-param>
+                            <control-param name="organization_pickerClasses">hierarchical-tree</control-param>
                         </control>
                     </field>
 
@@ -463,6 +464,7 @@
                             <control-param name="organization_plane">false</control-param>
                             <control-param name="organization_showSearch">true</control-param>
                             <control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
+                            <control-param name="organization_pickerClasses">hierarchical-tree</control-param>
                         </control>
                     </field>
                     <field id="lecm-eds-aspect:execution-state" label-id="ord.execution.lable">
@@ -580,6 +582,7 @@
                             <control-param name="organization_plane">false</control-param>
                             <control-param name="organization_showSearch">true</control-param>
                             <control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
+                            <control-param name="organization_pickerClasses">hierarchical-tree</control-param>
                         </control>
                     </field>
                     <field id="lecm-signing-v2-aspects:signingDate">
@@ -708,6 +711,7 @@
                             <control-param name="organization_plane">false</control-param>
                             <control-param name="organization_showSearch">true</control-param>
                             <control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
+                            <control-param name="organization_pickerClasses">hierarchical-tree</control-param>
                         </control>
                     </field>
 
@@ -965,6 +969,7 @@
                             <control-param name="organization_plane">false</control-param>
                             <control-param name="organization_showSearch">true</control-param>
                             <control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
+                            <control-param name="pickerClasses">hierarchical-tree</control-param>
                         </control>
                     </field>
 

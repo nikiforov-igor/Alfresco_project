@@ -44,13 +44,15 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
                             type: actionType,
                             id: "onMoveTableRowUp",
                             permission: "edit",
-                            label: this.msg("actions.tableRowUp")
+                            label: this.msg("actions.tableRowUp"),
+                            evaluator: this.stageItemUp
                         });
                         otherActions.push({
                             type: actionType,
                             id: "onMoveTableRowDown",
                             permission: "edit",
-                            label: this.msg("action.tableRowDown")
+                            label: this.msg("action.tableRowDown"),
+                            evaluator: this.stageItemDown
                         });
                     }
                     if (this.options.allowCreate === true) {

@@ -3764,8 +3764,15 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
 		executor = executorAssoc[0];
 		documentMembers.addMemberWithoutCheckPermission(document, executor, "LECM_BASIC_PG_Reader", true);
 	}
+
+	var author = null;
+	var authorAssoc = document.assocs["lecm-document:author-assoc"];
+	if (authorAssoc && authorAssoc.length == 1) {
+		author = authorAssoc[0];
+	}
+
 	notifications.sendNotification({
-        recipients: [executor],
+        recipients: [executor, author],
         templateCode: 'OUTGOING_SENT',
         templateConfig: {
             mainObject: stm_document,
@@ -3851,8 +3858,15 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
 		executor = executorAssoc[0];
 		documentMembers.addMemberWithoutCheckPermission(document, executor, "LECM_BASIC_PG_Reader", true);
 	}
+
+	var author = null;
+	var authorAssoc = document.assocs["lecm-document:author-assoc"];
+	if (authorAssoc && authorAssoc.length == 1) {
+		author = authorAssoc[0];
+	}
+
 	notifications.sendNotification({
-        recipients: [executor],
+        recipients: [executor, author],
         templateCode: 'OUTGOING_NO_SEND_REQUIRED',
         templateConfig: {
             mainObject: stm_document,
@@ -12917,12 +12931,12 @@ document.save();]]></value>
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.attr("lecm-document:author-assoc-ref") == user.currentUser().employee.toString()]]></value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Вы должны являться автором документа]]></value>
+                                                                                    <![CDATA[Данное действие доступно только Инициатору]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
