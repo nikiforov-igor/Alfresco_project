@@ -198,3 +198,17 @@ LogicECM.module.Errands.createErrandWFPeriodEndDateValidation = function (field,
         return radio;
     }
 })();
+
+
+LogicECM.module.Errands.requestCancelTaskRejectReasonValidation =
+    function (field, args, event, form, silent, message) {
+        var result = field.form["prop_lecmErrandWf_requestCancelTask_1Result"];
+        var isReject = result && result.value == "REJECTED";
+        if (isReject) {
+            var rejectReason = field.form["prop_lecmErrandWf_requestCancelTask_1RejectReason"];
+            if (rejectReason) {
+                return rejectReason.value.trim().length > 0;
+            }
+        }
+        return true;
+    };
