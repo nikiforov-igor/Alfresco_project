@@ -156,7 +156,7 @@
                 <property name="lecm-notification-template:template">
                     <![CDATA[Резервирование ресурса {#resource.attribute("cm:title")} для {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} {#reserved ? "одобрено" : #wrapTitle("отклонено", #comment)}.]]></property>
                 <property name="lecm-notification-template:description">
-                    <![CDATA[Мероприятие. Результат резервирования ресурса]]></property>
+                    <![CDATA[Совещание. Результат резервирования ресурса]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc" xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -244,7 +244,7 @@
 ]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Совещания. Приглашенные участники. Отмена участия.]]></property>
-                <property name="lecm-notification-template:subject"><![CDATA[Мероприятие {#mainObject.attribute("lecm-events:title")} отменено]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[Совещание {#mainObject.attribute("lecm-events:title")} отменено]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -258,7 +258,7 @@
 ]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Совещания. Приглашенные участники. Отмена совещания]]></property>
-                <property name="lecm-notification-template:subject"><![CDATA[Мероприятие {#mainObject.attribute("lecm-events:title")} отменено]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[Совещание {#mainObject.attribute("lecm-events:title")} отменено]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -288,13 +288,13 @@
                 <property name="lecm-notification-template:template">
                     <![CDATA[{(#attendees.get(#recipientMail) != null ? "Уважаемый(ая) " + #attendees.get(#recipientMail).get('name') : "Уважаемые коллеги") + "!"}
 Обратите внимание, обновилась информация по совещанию {#mainObject.wrapAsLink(#mainObject.attribute("lecm-events:title"))}.
-Мероприятие состоится {#formatDate("dd.MM.yyyy в HH:mm", #mainObject.attribute("lecm-events:from-date"))} по адресу {#location}.
+Совещание состоится {#formatDate("dd.MM.yyyy в HH:mm", #mainObject.attribute("lecm-events:from-date"))} по адресу {#location}.
 
 {#description}
 
 {#initiator}]]></property>
                 <property name="lecm-notification-template:description">
-                    <![CDATA[Совещания. Приглашенные участники. Мероприятие обновлено.]]></property>
+                    <![CDATA[Совещания. Приглашенные участники. Совещание обновлено.]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[Обновление совещания {#mainObject.attribute("lecm-events:title")}]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
@@ -325,15 +325,15 @@
                 <property name="cm:name"><![CDATA[LECM_MEETINGS_DOCUMENT.MEMBERS.CANCEL_EVENT]]></property>
                 <property name="lecm-notification-template:template">
                     <![CDATA[{(#attendees.get(#recipientMail) != null ? "Уважаемый(ая) " + #attendees.get(#recipientMail).get('name') : "Уважаемые коллеги") + "!"}
-Мероприятие {#mainObject.wrapAsLink(#mainObject.attribute("lecm-events:title"))} отменено, либо Вы больше не являетесь его участником.
+Совещание {#mainObject.wrapAsLink(#mainObject.attribute("lecm-events:title"))} отменено, либо Вы больше не являетесь его участником.
 
 Информация об отмененном совещании:
 Время проведения: {#mainObject.attribute("lecm-events:all-day") == true ? #formatDate("dd.MM.yyyy", #mainObject.attribute("lecm-events:from-date")) : "c " + #formatDate("dd.MM.yyyy в HH:mm", #mainObject.attribute("lecm-events:from-date")) + " по " + #formatDate("dd.MM.yyyy в HH:mm", #mainObject.attribute("lecm-events:to-date"))}
 Место проведения: {#location}
 ]]></property>
                 <property name="lecm-notification-template:description">
-                    <![CDATA[Совещания. Участники. Мероприятие или участие отменено]]></property>
-                <property name="lecm-notification-template:subject"><![CDATA[Мероприятие {#mainObject.attribute("lecm-events:title")} отменено]]></property>
+                    <![CDATA[Совещания. Участники. Совещание или участие отменено]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[Совещание {#mainObject.attribute("lecm-events:title")} отменено]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -374,7 +374,7 @@
 {#recipient != null ? "Участие для Вас является " +  (#recipient.attribute("lecm-events-ts:members-participation-required") == true ? "обязательным" : "необязательным"): ""}
 ]]></property>
                 <property name="lecm-notification-template:description">
-                    <![CDATA[Совещания. Участники. Мероприятие обновлено.]]></property>
+                    <![CDATA[Совещания. Участники. Совещание обновлено.]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[Обновление совещания {#mainObject.attribute("lecm-events:title")}]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
