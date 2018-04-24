@@ -10,6 +10,7 @@
     var formId;
     var formButtons;
     var scriptLayer;
+    var errandRef;
 
     Bubbling.on("errandsExecuteWFValueSet", processForm);
     Bubbling.on("editExecutionReportScriptLoaded", processForm);
@@ -19,18 +20,24 @@
         if (!form) {
             scriptLayer = layer;
             formId = args[1].formId;
-            if (scriptLayer == "errandsExecuteWFValueSet") {
-                Event.onContentReady(formId + "_assoc_packageItems", function () {
-                    var errandRef = Dom.get(formId + "_assoc_packageItems").value;
-                    processCloseChildCheckbox(errandRef, "lecmErrandWf_execute_1CloseChild");
-                    processReportTextField(errandRef, "lecmErrandWf_execute_1ReportText");
-                });
-            } else {
-                var form = Alfresco.util.ComponentManager.get(formId);
-                if (form) {
-                    var errandRef = form.options.nodeRef;
-                    processCloseChildCheckbox(errandRef, "lecm-errands-ts_execution-close-child");
-                    processReportTextField(errandRef, "lecm-errands-ts_execution-report-text");
+            if (!errandRef) {
+                if (scriptLayer == "errandsExecuteWFValueSet") {
+                    Event.onContentReady(formId + "_assoc_packageItems", function () {
+                        errandRef = Dom.get(formId + "_assoc_packageItems").value;
+                        if (errandRef) {
+                            processCloseChildCheckbox(errandRef, "lecmErrandWf_execute_1CloseChild");
+                            processReportTextField(errandRef, "lecmErrandWf_execute_1ReportText");
+                        }
+                    });
+                } else {
+                    var form = Alfresco.util.ComponentManager.get(formId);
+                    if (form) {
+                        errandRef = form.options.nodeRef;
+                        if (errandRef) {
+                            processCloseChildCheckbox(errandRef, "lecm-errands-ts_execution-close-child");
+                            processReportTextField(errandRef, "lecm-errands-ts_execution-report-text");
+                        }
+                    }
                 }
             }
             var formEl = Dom.get(formId + "-form");

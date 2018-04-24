@@ -4,7 +4,8 @@
         Selector = YAHOO.util.Selector,
         Bubbling = YAHOO.Bubbling,
         Substitute = YAHOO.lang.substitute;
-    var formId;
+    var formId,
+        errandRef;
 
     Bubbling.on('requestCancelTaskFormScriptLoaded', init);
     Bubbling.on('errandCancelFormScriptLoaded', init);
@@ -20,28 +21,32 @@
     }
 
     function processCancelChildCheckbox(field) {
-        Event.onContentReady(formId + "_assoc_packageItems", function () {
-            var errandRef = Dom.get(formId + "_assoc_packageItems").value;
-            Alfresco.util.Ajax.request({
-                url: Alfresco.constants.PROXY_URI + "lecm/errands/api/hasChildOnLifeCycle",
-                dataObj: {
-                    nodeRef: errandRef
-                },
-                successCallback: {
-                    fn: function (response) {
-                        var hasChildOnLifeCycle = response.json.hasChildOnLifeCycle;
-                        if (!hasChildOnLifeCycle) {
-                            var cancelChildField = Dom.get(formId + "_prop_" + field);
-                            if (cancelChildField) {
-                                cancelChildField.value = false;
-                                Dom.setStyle(cancelChildField.parentElement.parentElement.parentElement, "display", "none");
+        if (!errandRef) {
+            Event.onContentReady(formId + "_assoc_packageItems", function () {
+                var errandRef = Dom.get(formId + "_assoc_packageItems").value;
+                if (errandRef) {
+                    Alfresco.util.Ajax.request({
+                        url: Alfresco.constants.PROXY_URI + "lecm/errands/api/hasChildOnLifeCycle",
+                        dataObj: {
+                            nodeRef: errandRef
+                        },
+                        successCallback: {
+                            fn: function (response) {
+                                var hasChildOnLifeCycle = response.json.hasChildOnLifeCycle;
+                                if (!hasChildOnLifeCycle) {
+                                    var cancelChildField = Dom.get(formId + "_prop_" + field);
+                                    if (cancelChildField) {
+                                        cancelChildField.value = false;
+                                        Dom.setStyle(cancelChildField.parentElement.parentElement.parentElement, "display", "none");
+                                    }
+                                }
                             }
-                        }
-                    }
-                },
-                failureMessage: Alfresco.util.message("message.failure")
+                        },
+                        failureMessage: Alfresco.util.message("message.failure")
+                    });
+                }
             });
-        });
+        }
     }
 
     function onResultValueChanged(layer, args) {
