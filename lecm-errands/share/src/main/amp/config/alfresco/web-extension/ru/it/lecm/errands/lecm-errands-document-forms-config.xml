@@ -310,7 +310,11 @@
                             <control-param name="defaultValueDataSource">lecm/errands/getDefaultInitiator</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:type-assoc" set="beforeDateSet"/>
+                    <field id="lecm-errands:type-assoc" set="beforeDateSet">
+                        <control>
+                            <control-param name="changeItemsFireAction">errandTypeChanged</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-errands:title" set="beforeDateSet">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
@@ -784,7 +788,6 @@
                     <field id="lecm-errands:type-assoc" mandatory="true" >
                         <control>
                             <control-param name="changeItemsFireAction">errandTypeChanged</control-param>
-                            <control-param name="additionalFilter">@lecm\-errands\-dic\:errand\-type\-manual\-selection:true</control-param>
                             <control-param name="blockChangeItemOnInit">true</control-param>
                         </control>
                     </field>
@@ -1057,7 +1060,6 @@
                     <field id="lecm-errands:type-assoc" mandatory="true">
                         <control>
                             <control-param name="changeItemsFireAction">errandTypeChanged</control-param>
-                            <control-param name="additionalFilter">@lecm\-errands\-dic\:errand\-type\-manual\-selection:true</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:title">
@@ -1337,7 +1339,6 @@
                     <field id="lecm-errands:type-assoc" mandatory="true" >
                         <control>
                             <control-param name="changeItemsFireAction">errandTypeChanged</control-param>
-                            <control-param name="additionalFilter">@lecm\-errands\-dic\:errand\-type\-manual\-selection:true</control-param>
                         </control>
                     </field>
                     <field id="change-errand-type-script">
@@ -1675,7 +1676,6 @@
                     <field id="lecm-errands:type-assoc" mandatory="true" >
                         <control>
                             <control-param name="changeItemsFireAction">errandTypeChanged</control-param>
-                            <control-param name="additionalFilter">@lecm\-errands\-dic\:errand\-type\-manual\-selection:true</control-param>
                         </control>
                     </field>
                     <field id="change-errand-type-script">
@@ -1962,7 +1962,6 @@
                     <field id="lecm-errands:type-assoc" set="left" mandatory="true">
                         <control>
                             <control-param name="changeItemsFireAction">errandTypeChanged</control-param>
-                            <control-param name="additionalFilter">@lecm\-errands\-dic\:errand\-type\-manual\-selection:true</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:title" set="left">
@@ -2038,7 +2037,6 @@
                     <field id="lecm-errands:type-assoc" set="left" mandatory="true">
                         <control>
                             <control-param name="changeItemsFireAction">errandTypeChanged</control-param>
-                            <control-param name="additionalFilter">@lecm\-errands\-dic\:errand\-type\-manual\-selection:true</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:title" set="left">
@@ -2116,7 +2114,6 @@
                     <field id="lecm-errands:type-assoc" set="left" mandatory="true">
                         <control>
                             <control-param name="changeItemsFireAction">resolutionErrandTypeChanged</control-param>
-                            <control-param name="additionalFilter">@lecm\-errands\-dic\:errand\-type\-manual\-selection:true</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:title" set="left">
@@ -2222,7 +2219,6 @@
                     <field id="lecm-errands:type-assoc" set="left" mandatory="true">
                         <control>
                             <control-param name="changeItemsFireAction">resolutionEditErrandTypeChanged</control-param>
-                            <control-param name="additionalFilter">@lecm\-errands\-dic\:errand\-type\-manual\-selection:true</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:title" set="left">
