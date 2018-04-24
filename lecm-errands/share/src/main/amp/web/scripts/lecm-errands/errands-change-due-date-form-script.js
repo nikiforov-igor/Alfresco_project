@@ -3,7 +3,8 @@
         Event = YAHOO.util.Event,
         Bubbling = YAHOO.Bubbling,
         Selector = YAHOO.util.Selector;
-    var formId;
+    var formId,
+        errandRef;
     LogicECM.module.Base.Util.loadCSS([
         'css/lecm-errands/errands-change-duedate-form.css'
     ]);
@@ -19,34 +20,38 @@
 
     function init(layer, args) {
         formId = args[1].formId;
-        Event.onContentReady(formId + "_assoc_packageItems", function () {
-            var errandRef = Dom.get(formId + "_assoc_packageItems").value;
-            Alfresco.util.Ajax.request({
-                url: Alfresco.constants.PROXY_URI + "lecm/errands/api/hasChildOnLifeCycle",
-                dataObj: {
-                    nodeRef: errandRef
-                },
-                successCallback: {
-                    fn: function (response) {
-                        var hasChildOnLifeCycle = response.json.hasChildOnLifeCycle;
-                        if (!hasChildOnLifeCycle) {
-                            var changeChildDueDateField = Dom.get(formId + "_prop_lecmErrandWf_changeDueDateChangeChildDueDate");
-                            if (!changeChildDueDateField) {
-                                changeChildDueDateField = Dom.get(formId + "_prop_lecmErrandWf_requestDueDateChange_1ChildDueDate");
+        if (!errandRef) {
+            Event.onContentReady(formId + "_assoc_packageItems", function () {
+                errandRef = Dom.get(formId + "_assoc_packageItems").value;
+                if (errandRef) {
+                    Alfresco.util.Ajax.request({
+                        url: Alfresco.constants.PROXY_URI + "lecm/errands/api/hasChildOnLifeCycle",
+                        dataObj: {
+                            nodeRef: errandRef
+                        },
+                        successCallback: {
+                            fn: function (response) {
+                                var hasChildOnLifeCycle = response.json.hasChildOnLifeCycle;
+                                if (!hasChildOnLifeCycle) {
+                                    var changeChildDueDateField = Dom.get(formId + "_prop_lecmErrandWf_changeDueDateChangeChildDueDate");
+                                    if (!changeChildDueDateField) {
+                                        changeChildDueDateField = Dom.get(formId + "_prop_lecmErrandWf_requestDueDateChange_1ChildDueDate");
+                                    }
+                                    if (!changeChildDueDateField) {
+                                        changeChildDueDateField = Dom.get(formId + "_prop_lecmErrandWf_requestDueDateChangeTask_1ChildDueDate");
+                                    }
+                                    if (changeChildDueDateField) {
+                                        changeChildDueDateField.value = false;
+                                        Dom.setStyle(changeChildDueDateField.parentElement.parentElement.parentElement, "display", "none");
+                                    }
+                                }
                             }
-                            if (!changeChildDueDateField) {
-                                changeChildDueDateField = Dom.get(formId + "_prop_lecmErrandWf_requestDueDateChangeTask_1ChildDueDate");
-                            }
-                            if (changeChildDueDateField) {
-                                changeChildDueDateField.value = false;
-                                Dom.setStyle(changeChildDueDateField.parentElement.parentElement.parentElement, "display", "none");
-                            }
-                        }
-                    }
-                },
-                failureMessage: Alfresco.util.message("message.failure")
+                        },
+                        failureMessage: Alfresco.util.message("message.failure")
+                    });
+                }
             });
-        });
+        }
     }
 
     function process(layer, args) {

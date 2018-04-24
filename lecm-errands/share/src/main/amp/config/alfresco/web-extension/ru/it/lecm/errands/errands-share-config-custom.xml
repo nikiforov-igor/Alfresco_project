@@ -668,6 +668,7 @@
                     <field id="requestChangeDueDateFormScript">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-change-due-date-form-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">errandsWFChangeDueDateScriptLoaded</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -791,6 +792,7 @@
                     <field id="requestDueDateChangeTaskFormScript">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-change-due-date-form-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">requestDueDateChangeTaskFormScriptLoaded</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -859,6 +861,7 @@
                     <field id="changeDueDateFormScript">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-change-due-date-form-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">errandsWFChangeDueDateScriptLoaded</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -1205,6 +1208,7 @@
                     <field id="requestCancelTaskFormScript">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-cancel-form-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">requestCancelTaskFormScriptLoaded</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -1375,6 +1379,7 @@
                     <field id="errandCancelFormScript">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-cancel-form-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">errandCancelFormScriptLoaded</control-param>
                         </control>
                     </field>
 	            </appearance>
@@ -1420,6 +1425,7 @@
                     <field id="executeErrand_WFScript">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-execute-form-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">errandsExecuteWFValueSet</control-param>
                         </control>
                     </field>
                     <field id="packageItems">
