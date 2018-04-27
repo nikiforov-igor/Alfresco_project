@@ -5,24 +5,26 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 LogicECM.module = LogicECM.module || {};
 
 (function () {
+    var Bubbling = YAHOO.Bubbling;
 
     LogicECM.module.SelectOneRadioButtonsController = function (htmlId) {
         LogicECM.module.SelectOneRadioButtonsController.superclass.constructor.call(this, "LogicECM.module.SelectOneRadioButtonsController", htmlId);
 
-        YAHOO.Bubbling.on("disableControl", this.onDisableControl, this);
-        YAHOO.Bubbling.on("enableControl", this.onEnableControl, this);
-        YAHOO.Bubbling.on("reInitializeControl", this.onReInitializeControl, this);
-
+        Bubbling.on("disableControl", this.onDisableControl, this);
+        Bubbling.on("enableControl", this.onEnableControl, this);
+        Bubbling.on("reInitializeControl", this.onReInitializeControl, this);
+        Bubbling.on("resetControl", this.onResetControl, this);
         return this;
     };
 
     YAHOO.extend(LogicECM.module.SelectOneRadioButtonsController, Alfresco.component.Base, {
-
+        originalOptions: null,
         options: {
             formId: null,
             fieldId: null,
             fireChangeEventName: null,
-            fieldName: null
+            fieldName: null,
+            currentValue: null
         },
 
         onValueChanged: function (layer) {
@@ -30,10 +32,10 @@ LogicECM.module = LogicECM.module || {};
             if (layer.target && layer.target.value) {
                 value = layer.target.value;
 
-                YAHOO.Bubbling.fire('mandatoryControlValueUpdated', this);
+                Bubbling.fire('mandatoryControlValueUpdated', this);
                 YAHOO.util.Dom.get(this.id).value = value;
 
-                YAHOO.Bubbling.fire(this.options.fireChangeEventName, {
+                Bubbling.fire(this.options.fireChangeEventName, {
                     value: value,
                     formId: this.options.formId,
                     fieldId: this.options.fieldId
@@ -86,44 +88,49 @@ LogicECM.module = LogicECM.module || {};
                 radios.forEach(function(radio) {
                     YAHOO.util.Event.addListener(radio, "click", me.onValueChanged, null, me);
                     if (radio.checked) {
-                        me.onValueChanged({
+                        me.options.currentValue = radio.value;
+                    }
+                });
+            }
+            this.originalOptions = Alfresco.util.deepCopy(this.options);
+            this.init();
+        },
+
+        init: function() {
+            var radio;
+            var radios = this._getRadios();
+            var radiosCount = radios.length;
+            var currentValue = this.options.currentValue;
+            if (radios && radiosCount) {
+                for (var i = 0; i < radiosCount; i++) {
+                    radio = radios[i];
+                    radio.checked = false;
+                    if (radio.value == currentValue) {
+                        radio.checked = true;
+                        this.onValueChanged({
                             target: radio
                         });
                     }
-                });
+                }
             }
         },
 
         onReInitializeControl: function (layer, args) {
-            var radios;
-            var radiosCount;
-            var radio;
-            var currentValue;
             if ((this.options.formId == args[1].formId) && (this.options.fieldId == args[1].fieldId)) {
                 var options = args[1].options;
                 if (options != null) {
                     this.setOptions(options);
                 }
-                radios = this._getRadios();
-                if (radios && radios.length) {
-                    currentValue = this.options.currentValue;
-                    if (currentValue) {
-                        radiosCount = radios.length;
-                        for (var i = 0; i < radiosCount; i++) {
-                            if (radios[i].value == currentValue) {
-                                radio = radios[i];
-                                break;
-                            }
-                        }
-                    }
-                    if (!radio) {
-                        radio = radios[0];
-                    }
-                    radio.checked = true;
-                    this.onValueChanged({
-                        target: radio
-                    });
-                }
+                this.init();
+            }
+        },
+
+        onResetControl: function (layer, args) {
+            if ((this.options.formId == args[1].formId) && (this.options.fieldId == args[1].fieldId)) {
+                args[1].action = "reInitializeControl";
+                args[1].options = Alfresco.util.deepCopy(this.originalOptions);
+                this.onReInitializeControl("reInitializeControl", args);
+                Bubbling.fire('mandatoryControlValueUpdated', this);
             }
         },
 
