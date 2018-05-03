@@ -1,0 +1,494 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Настройки АРМ" type="lecm-dic:dictionary">
+        <items updateMode="CreateOrUpdate">
+            <item name="cm:Договорная деятельность" type="lecm-arm:arm">
+                <property name="cm:name"><![CDATA[Договорная деятельность]]></property>
+                <property name="lecm-arm:code"><![CDATA[CONTRACTS]]></property>
+                <property name="lecm-arm:show-in-menu"><![CDATA[true]]></property>
+                <property name="lecm-arm:order"><![CDATA[26]]></property>
+                <property name="lecm-arm:show-create-button"><![CDATA[true]]></property>
+                <property name="lecm-arm:show-calendar"><![CDATA[false]]></property>
+                <items updateMode="CreateOrUpdate">
+                    <item name="cm:Моя работа" type="lecm-arm:accordion">
+                        <property name="cm:name"><![CDATA[Моя работа]]></property>
+                        <property name="lecm-arm:order"><![CDATA[0]]></property>
+                        <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                        <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                        <property name="lecm-arm:types"><![CDATA[]]></property>
+                        <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                        <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                        <property name="lecm-arm:expression"><![CDATA[]]></property>
+                        <items>
+                            <item name="cm:Главная" type="lecm-arm:html-node">
+                                <property name="cm:name"><![CDATA[Главная]]></property>
+                                <property name="lecm-arm:order"><![CDATA[10]]></property>
+                                <property name="lecm-arm:html-url"><![CDATA[page/contracts-main]]></property>
+                            </item>
+                            <item name="cm:Черновики" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[Черновики]]></property>
+                                <property name="lecm-arm:order"><![CDATA[20]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:Ожидают отправки по маршруту" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[Ожидают отправки по маршруту]]></property>
+                                <property name="lecm-arm:order"><![CDATA[30]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:На согласовании" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[На согласовании]]></property>
+                                <property name="lecm-arm:order"><![CDATA[40]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:Согласовано" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[Согласовано]]></property>
+                                <property name="lecm-arm:order"><![CDATA[50]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:На подписании" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[На подписании]]></property>
+                                <property name="lecm-arm:order"><![CDATA[60]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:На подписании у контрагента" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[На подписании у контрагента]]></property>
+                                <property name="lecm-arm:order"><![CDATA[70]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:Подписано" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[Подписано]]></property>
+                                <property name="lecm-arm:order"><![CDATA[80]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:На доработке" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[На доработке]]></property>
+                                <property name="lecm-arm:order"><![CDATA[90]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:На ознакомлении" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[На ознакомлении]]></property>
+                                <property name="lecm-arm:order"><![CDATA[100]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:На исполнении" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[На исполнении]]></property>
+                                <property name="lecm-arm:order"><![CDATA[110]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:На регистрации" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[На регистрации]]></property>
+                                <property name="lecm-arm:order"><![CDATA[120]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:Резервирование номера" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[Резервирование номера]]></property>
+                                <property name="lecm-arm:order"><![CDATA[130]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:Отмена резервирования номера" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[Отмена резервирования номера]]></property>
+                                <property name="lecm-arm:order"><![CDATA[140]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:Документы к договорам" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[Документы к договорам]]></property>
+                                <property name="lecm-arm:order"><![CDATA[150]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:Все созданные мной" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[Все созданные мной]]></property>
+                                <property name="lecm-arm:order"><![CDATA[160]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:Последние просмотренные" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[Последние просмотренные]]></property>
+                                <property name="lecm-arm:order"><![CDATA[170]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:Избранное" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[Избранное]]></property>
+                                <property name="lecm-arm:order"><![CDATA[180]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                        </items>
+                    </item>
+                    <item name="cm:Делегирование" type="lecm-arm:accordion">
+                        <property name="cm:name"><![CDATA[Делегирование]]></property>
+                        <property name="lecm-arm:order"><![CDATA[10]]></property>
+                        <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                        <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                        <property name="lecm-arm:types"><![CDATA[]]></property>
+                        <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                        <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                        <property name="lecm-arm:expression"><![CDATA[]]></property>
+                        <items>
+                            <item name="cm:Ожидают отправки по маршруту" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[Ожидают отправки по маршруту]]></property>
+                                <property name="lecm-arm:order"><![CDATA[10]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:На согласовании" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[На согласовании]]></property>
+                                <property name="lecm-arm:order"><![CDATA[20]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:Согласовано" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[Согласовано]]></property>
+                                <property name="lecm-arm:order"><![CDATA[30]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:На подписании" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[На подписании]]></property>
+                                <property name="lecm-arm:order"><![CDATA[40]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:На подписании у контрагента" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[На подписании у контрагента]]></property>
+                                <property name="lecm-arm:order"><![CDATA[50]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:Подписано" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[Подписано]]></property>
+                                <property name="lecm-arm:order"><![CDATA[60]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:На доработке" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[На доработке]]></property>
+                                <property name="lecm-arm:order"><![CDATA[70]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:На ознакомлении" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[На ознакомлении]]></property>
+                                <property name="lecm-arm:order"><![CDATA[80]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:На исполнении" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[На исполнении]]></property>
+                                <property name="lecm-arm:order"><![CDATA[90]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:На регистрации" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[На регистрации]]></property>
+                                <property name="lecm-arm:order"><![CDATA[100]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:Резервирование номера" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[Резервирование номера]]></property>
+                                <property name="lecm-arm:order"><![CDATA[110]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:Отмена резервирования номера" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[Резервирование номера]]></property>
+                                <property name="lecm-arm:order"><![CDATA[120]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:Документы к договорам" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[Документы к договорам]]></property>
+                                <property name="lecm-arm:order"><![CDATA[130]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:Все созданные мной" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[Все созданные мной]]></property>
+                                <property name="lecm-arm:order"><![CDATA[140]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                        </items>
+                    </item>
+                    <item name="cm:Навигатор" type="lecm-arm:accordion">
+                        <property name="cm:name"><![CDATA[Навигатор]]></property>
+                        <property name="lecm-arm:order"><![CDATA[20]]></property>
+                        <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                        <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                        <property name="lecm-arm:types"><![CDATA[]]></property>
+                        <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                        <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                        <property name="lecm-arm:expression"><![CDATA[]]></property>
+                        <items>
+                            <item name="cm:По состоянию" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[По состоянию]]></property>
+                                <property name="lecm-arm:order"><![CDATA[10]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:По тематикам" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[По тематикам]]></property>
+                                <property name="lecm-arm:order"><![CDATA[20]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:По контрагентам" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[По контрагентам]]></property>
+                                <property name="lecm-arm:order"><![CDATA[30]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                        </items>
+                    </item>
+                    <item name="cm:Мои поисковые запросы" type="lecm-arm:accordion">
+                        <property name="cm:name"><![CDATA[Мои поисковые запросы]]></property>
+                        <property name="lecm-arm:order"><![CDATA[30]]></property>
+                        <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                        <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                        <property name="lecm-arm:types"><![CDATA[]]></property>
+                        <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                        <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                        <property name="lecm-arm:expression"><![CDATA[]]></property>
+                        <items>
+                            <item name="cm:Поисковые запросы" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[Поисковые запросы]]></property>
+                                <property name="lecm-arm:order"><![CDATA[10]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:Управление поисковыми запросами" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[Управление поисковыми запросами]]></property>
+                                <property name="lecm-arm:order"><![CDATA[20]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                        </items>
+                    </item>
+                    <item name="cm:Отчеты" type="lecm-arm:accordion">
+                        <property name="cm:name"><![CDATA[Отчеты]]></property>
+                        <property name="lecm-arm:order"><![CDATA[40]]></property>
+                        <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                        <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                        <property name="lecm-arm:types"><![CDATA[]]></property>
+                        <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                        <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                        <property name="lecm-arm:expression"><![CDATA[]]></property>
+                        <items>
+                            <item name="cm:Реестр договоров" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[Реестр договоров]]></property>
+                                <property name="lecm-arm:order"><![CDATA[10]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:Сводный отчет по договорам" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[Сводный отчет по договорам]]></property>
+                                <property name="lecm-arm:order"><![CDATA[20]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                            <item name="cm:Сроки прохождения маршрута" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[Сроки прохождения маршрута]]></property>
+                                <property name="lecm-arm:order"><![CDATA[30]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                        </items>
+                    </item>
+                    <item name="cm:Корзина" type="lecm-arm:accordion">
+                        <property name="cm:name"><![CDATA[Корзина]]></property>
+                        <property name="lecm-arm:order"><![CDATA[50]]></property>
+                        <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                        <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                        <property name="lecm-arm:types"><![CDATA[]]></property>
+                        <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                        <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                        <property name="lecm-arm:expression"><![CDATA[]]></property>
+                        <items>
+                            <item name="cm:Корзина" type="lecm-arm:node">
+                                <property name="cm:name"><![CDATA[Корзина]]></property>
+                                <property name="lecm-arm:order"><![CDATA[0]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                            </item>
+                        </items>
+                    </item>
+                </items>
+            </item>
+        </items>
+    </item>
+</items>

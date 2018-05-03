@@ -489,10 +489,12 @@
     </bean>
 
     <bean id="contracts.arm.settings.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
-          depends-on="arm.settings.LogicEcmBootstrap,eds.documents.arm.settings.LogicEcmBootstrap">
+          depends-on="arm.settings.LogicEcmBootstrap,eds.documents.arm.settings.LogicEcmBootstrap, arm.LogicEcmBootstrap, armService, arm.filters.LogicEcmBootstrap, documents.LogicEcmConnectionTypesBootstrap">
+
         <property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
         <property name="dictionaries">
             <list>
+                <value>alfresco/module/${artifactId}/arm/contracts-arm.xml</value>
                 <value>alfresco/module/${artifactId}/arm/contracts-settings-arm.xml</value>
             </list>
         </property>
