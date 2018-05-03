@@ -109,6 +109,7 @@
 
     function processController() {
         new LogicECM.module.SelectOneRadioButtonsController("${fieldHtmlId}").setOptions({
+            <#-- currentValue будет выставлено в методе onReady (пробежимся по всем радио и если есть выделенный, то его и выберем) -->
             <#if field.control.params.fireChangeEventName??>
                 fireChangeEventName: '${field.control.params.fireChangeEventName}',
             </#if>
