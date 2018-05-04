@@ -13,6 +13,7 @@
 
 <#assign id=args.htmlid/>
 
+<#if hasLinksViewPerm!false>
 <div class="widget-bordered-panel errands-panel">
     <div id="${id}-wide-view">
         <div class="document-metadata-header document-components-panel" id="${id}-results">
@@ -75,3 +76,4 @@
     }
 })();
 //]]></script>
+</#if>
