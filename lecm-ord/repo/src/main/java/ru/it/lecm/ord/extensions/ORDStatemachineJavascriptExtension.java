@@ -388,21 +388,27 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				if (authorAssocs != null && authorAssocs.size() > 0) {
 					NodeRef author = authorAssocs.get(0).getTargetRef();
 					associations.put(ErrandsService.ASSOC_ERRANDS_INITIATOR.toPrefixString(namespaceService), author.toString());
-					documentMembersService.addMemberWithoutCheckPermission(ord, author, "LECM_BASIC_PG_Reader", true);
+					if (errandsService.isTransferRightToBaseDocument()) {
+						documentMembersService.addMemberWithoutCheckPermission(ord, author, "LECM_BASIC_PG_Reader", true);
+					}
 				}
 				//исполнитель
 				List<AssociationRef> pointExecutorAssocs = nodeService.getTargetAssocs(point, ORDModel.ASSOC_ORD_TABLE_EXECUTOR);
 				if (pointExecutorAssocs != null && pointExecutorAssocs.size() > 0) {
 					NodeRef executor = pointExecutorAssocs.get(0).getTargetRef();
 					associations.put(ErrandsService.ASSOC_ERRANDS_EXECUTOR.toPrefixString(namespaceService), executor.toString());
-                    documentMembersService.addMemberWithoutCheckPermission(ord, executor, "LECM_BASIC_PG_Reader", true);
+					if (errandsService.isTransferRightToBaseDocument()) {
+						documentMembersService.addMemberWithoutCheckPermission(ord, executor, "LECM_BASIC_PG_Reader", true);
+					}
                 }
 				//контролер
 				List<AssociationRef> pointControllerAssocs = nodeService.getTargetAssocs(point, ORDModel.ASSOC_ORD_TABLE_CONTROLLER);
 				if (pointControllerAssocs !=null && pointControllerAssocs.size() > 0) {
 					NodeRef Controller = pointControllerAssocs.get(0).getTargetRef();
 					associations.put(ErrandsService.ASSOC_ERRANDS_CONTROLLER.toPrefixString(namespaceService), Controller.toString());
-                    documentMembersService.addMemberWithoutCheckPermission(ord, Controller, "LECM_BASIC_PG_Reader", true);
+					if (errandsService.isTransferRightToBaseDocument()) {
+						documentMembersService.addMemberWithoutCheckPermission(ord, Controller, "LECM_BASIC_PG_Reader", true);
+					}
                 }
 				//соисполнители
 				List<AssociationRef> pointCoExecutorsAssocs = nodeService.getTargetAssocs(point, ORDModel.ASSOC_ORD_TABLE_COEXECUTORS);
@@ -410,7 +416,9 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
                     ArrayList<NodeRef> coexecutorsList = new ArrayList<>();
 					for (AssociationRef coexecutors : pointCoExecutorsAssocs) {
 						coexecutorsList.add(coexecutors.getTargetRef());
-                        documentMembersService.addMemberWithoutCheckPermission(ord, coexecutors.getTargetRef(), "LECM_BASIC_PG_Reader", true);
+						if (errandsService.isTransferRightToBaseDocument()) {
+							documentMembersService.addMemberWithoutCheckPermission(ord, coexecutors.getTargetRef(), "LECM_BASIC_PG_Reader", true);
+						}
                     }
 					associations.put(ErrandsService.ASSOC_ERRANDS_CO_EXECUTORS.toPrefixString(namespaceService), StringUtils.join(coexecutorsList, ","));
 				}
