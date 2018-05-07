@@ -9693,8 +9693,8 @@ if (document) {
                                                                 <value><![CDATA[if (errands.isTransferRightToBaseDocument()) {
   var document = stm_document;
   document.reset();
-  var ordPointAssocs = document.assocs["lecm-ord-table-structure:errand-assoc"];
-  var protocolPointAssocs = document.assocs["lecm-protocol-ts:errand-assoc"];
+  var ordPointAssocs = document.sourceAssocs["lecm-ord-table-structure:errand-assoc"];
+  var protocolPointAssocs = document.sourceAssocs["lecm-protocol-ts:errand-assoc"];
   if ((!ordPointAssocs || !ordPointAssocs.length) && (!protocolPointAssocs || !protocolPointAssocs.length)) {
       var baseDocumentAssoc = document.assocs["lecm-errands:base-assoc"];
       if (baseDocumentAssoc && baseDocumentAssoc.length) {
