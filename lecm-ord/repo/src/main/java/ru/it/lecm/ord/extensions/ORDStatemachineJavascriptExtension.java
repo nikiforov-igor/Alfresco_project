@@ -404,10 +404,10 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				//контролер
 				List<AssociationRef> pointControllerAssocs = nodeService.getTargetAssocs(point, ORDModel.ASSOC_ORD_TABLE_CONTROLLER);
 				if (pointControllerAssocs !=null && pointControllerAssocs.size() > 0) {
-					NodeRef Controller = pointControllerAssocs.get(0).getTargetRef();
-					associations.put(ErrandsService.ASSOC_ERRANDS_CONTROLLER.toPrefixString(namespaceService), Controller.toString());
+					NodeRef controller = pointControllerAssocs.get(0).getTargetRef();
+					associations.put(ErrandsService.ASSOC_ERRANDS_CONTROLLER.toPrefixString(namespaceService), controller.toString());
 					if (errandsService.isTransferRightToBaseDocument()) {
-						documentMembersService.addMemberWithoutCheckPermission(ord, Controller, "LECM_BASIC_PG_Reader", true);
+						documentMembersService.addMemberWithoutCheckPermission(ord, controller, "LECM_BASIC_PG_Reader", true);
 					}
                 }
 				//соисполнители
