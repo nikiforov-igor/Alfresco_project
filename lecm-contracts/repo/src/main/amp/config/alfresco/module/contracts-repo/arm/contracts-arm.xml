@@ -1746,10 +1746,11 @@
                                 <property name="lecm-arm:order"><![CDATA[70]]></property>
                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                 <property name="lecm-arm:types"><![CDATA[]]></property>
-                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
                                 <property name="lecm-arm:search-query"><![CDATA[@lecm\-statemachine\:status:'На подписании у контрагента' AND @lecm\-document\:author\-assoc\-ref:"#current-user"]]></property>
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                                <property name="lecm-arm:expression"><![CDATA[armNode.count() > 0]]></property>
                                 <items>
                                     <item name="cm:df4e4384-b584-f391-cb09-a7e3d7661468" type="lecm-arm:field">
                                         <property name="lecm-arm:field-title">
@@ -2039,18 +2040,17 @@
                                     </item>
                                 </items>
                                 <assocs>
-                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании/7bded4d5-be7b-4a70-8461-0c6ef859c073"/>
-                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании/df4e4384-b584-f391-cb09-a7e3d7661468"/>
-                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании/7b2b2690-d6f1-caeb-00ec-5f49de4f991a"/>
-                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании/a3da5173-a705-5b11-c415-81bc6e7a7263"/>
-                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании/51b94e8c-ffa4-1ead-c52b-71ca5648c3a1"/>
-                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании/5cb3139a-8986-9b91-15d9-ce64666c7636"/>
-                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании/10a09f1f-1672-ce3d-7282-831920c3eeba"/>
-                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании/00fd161e-750d-46c0-86c0-4f99f03057b3"/>
-                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании/4f0444b0-4273-cab8-7fcf-82929d51494a"/>
-                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании/19666623-1b85-345c-9c04-df79b46aba96"/>
-                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании/f450f882-8db7-0dd3-32dc-e2026e405c5e"/>
-                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании/9ed30d04-7932-c0c1-c11f-af0580c4bb5a"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании у контрагента/df4e4384-b584-f391-cb09-a7e3d7661468"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании у контрагента/7b2b2690-d6f1-caeb-00ec-5f49de4f991a"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании у контрагента/a3da5173-a705-5b11-c415-81bc6e7a7263"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании у контрагента/51b94e8c-ffa4-1ead-c52b-71ca5648c3a1"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании у контрагента/5cb3139a-8986-9b91-15d9-ce64666c7636"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании у контрагента/10a09f1f-1672-ce3d-7282-831920c3eeba"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании у контрагента/00fd161e-750d-46c0-86c0-4f99f03057b3"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании у контрагента/4f0444b0-4273-cab8-7fcf-82929d51494a"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании у контрагента/19666623-1b85-345c-9c04-df79b46aba96"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании у контрагента/f450f882-8db7-0dd3-32dc-e2026e405c5e"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании у контрагента/9ed30d04-7932-c0c1-c11f-af0580c4bb5a"/>
                                 </assocs>
                             </item>
                             <item name="cm:Подписано" type="lecm-arm:node">
@@ -2058,70 +2058,2238 @@
                                 <property name="lecm-arm:order"><![CDATA[80]]></property>
                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                 <property name="lecm-arm:types"><![CDATA[]]></property>
-                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
-                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[@lecm\-statemachine\:status:'Подписан' AND (@lecm\-document\:author\-assoc\-ref:"#current-user" OR @lecm\-eds\-document\:executor\-assoc\-ref:"#current-user")]]></property>
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                                <property name="lecm-arm:expression"><![CDATA[armNode.count() > 0]]></property>
+                                <items>
+                                    <item name="cm:4e366497-fb7c-a40d-ae25-4596700891bf" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Номер]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[4e366497-fb7c-a40d-ae25-4596700891bf]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[1]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-document:regnum]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:3452ff34-b4a0-e17c-7dc9-2a5a371328f0" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Дата]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[3452ff34-b4a0-e17c-7dc9-2a5a371328f0]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[2]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-document:doc-date]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:33165331-7672-7da2-2be5-a1f31e966709" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Вид договора]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[33165331-7672-7da2-2be5-a1f31e966709]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[3]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:typeContract-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:7c092d85-772c-c0c2-b3b2-f560c3e725bf" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Контрагент]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[7c092d85-772c-c0c2-b3b2-f560c3e725bf]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[4]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:partner-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[{lecm-contractor:shortname}]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:64183751-1498-f692-753f-359b7bfbd8cf" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Сумма по договору]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[64183751-1498-f692-753f-359b7bfbd8cf]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[5]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:totalAmount]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:a9d46ca4-f04c-df8b-c351-fd3784d8b0e9" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Валюта договора]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[a9d46ca4-f04c-df8b-c351-fd3784d8b0e9]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[6]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:currency-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:e17bbaf9-2841-f5ad-4b93-0725f9df2dfa" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Дата создания]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[e17bbaf9-2841-f5ad-4b93-0725f9df2dfa]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[7]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[cm:created]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:e2208d60-6dcd-8eba-63eb-8c4f51b2f1f0" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Тематика]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[e2208d60-6dcd-8eba-63eb-8c4f51b2f1f0]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[8]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-document:subject-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:360df6f5-ac59-3c71-f401-1949bc9821d0" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Регистрационный № у К/А]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[360df6f5-ac59-3c71-f401-1949bc9821d0]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[9]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:regNumContractor]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:c5717e4a-2266-3509-5b35-907e28b994d4" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Подписант К/А]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[c5717e4a-2266-3509-5b35-907e28b994d4]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[10]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:3d60cbd3-0d3e-f85c-d41f-ab5deecbbb94" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Автор]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[3d60cbd3-0d3e-f85c-d41f-ab5deecbbb94]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[11]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-document:author-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                </items>
+                                <assocs>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/Подписано/4e366497-fb7c-a40d-ae25-4596700891bf"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/Подписано/3452ff34-b4a0-e17c-7dc9-2a5a371328f0"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/Подписано/33165331-7672-7da2-2be5-a1f31e966709"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/Подписано/7c092d85-772c-c0c2-b3b2-f560c3e725bf"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/Подписано/64183751-1498-f692-753f-359b7bfbd8cf"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/Подписано/a9d46ca4-f04c-df8b-c351-fd3784d8b0e9"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/Подписано/e17bbaf9-2841-f5ad-4b93-0725f9df2dfa"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/Подписано/e2208d60-6dcd-8eba-63eb-8c4f51b2f1f0"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/Подписано/360df6f5-ac59-3c71-f401-1949bc9821d0"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/Подписано/c5717e4a-2266-3509-5b35-907e28b994d4"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/Подписано/3d60cbd3-0d3e-f85c-d41f-ab5deecbbb94"/>
+                                </assocs>
                             </item>
                             <item name="cm:На доработке" type="lecm-arm:node">
                                 <property name="cm:name"><![CDATA[На доработке]]></property>
                                 <property name="lecm-arm:order"><![CDATA[90]]></property>
                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                 <property name="lecm-arm:types"><![CDATA[]]></property>
-                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
-                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[@lecm\-statemachine\:status:'На доработке' AND @lecm\-document\:author\-assoc\-ref:"#current-user"]]></property>
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                                <property name="lecm-arm:expression"><![CDATA[armNode.count() > 0]]></property>
+                                <items>
+                                    <item name="cm:9478bff0-082c-e51c-b0e2-1e8a7817a69e" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Номер]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[9478bff0-082c-e51c-b0e2-1e8a7817a69e]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[1]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-document:regnum]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:3a33ab39-13ce-87a7-71b1-d378fbc9b27e" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Дата]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[3a33ab39-13ce-87a7-71b1-d378fbc9b27e]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[2]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-document:doc-date]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:c55f5c2d-b711-33b1-33f7-03b216f07b51" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Вид договора]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[c55f5c2d-b711-33b1-33f7-03b216f07b51]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[3]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:typeContract-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:133b73fb-fd45-d3d5-1759-a15132f05980" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Контрагент]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[133b73fb-fd45-d3d5-1759-a15132f05980]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[4]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:partner-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[{lecm-contractor:shortname}]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:99558ace-5b40-b830-631d-5f5ecaa2e37a" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Сумма по договору]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[99558ace-5b40-b830-631d-5f5ecaa2e37a]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[5]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:totalAmount]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:92bfb3ce-a473-49ea-aef9-26a09104ad56" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Валюта договора]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[92bfb3ce-a473-49ea-aef9-26a09104ad56]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[6]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:currency-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:d7761888-4754-6f5c-c381-3d485a36992e" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Дата создания]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[d7761888-4754-6f5c-c381-3d485a36992e]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[7]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[cm:created]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:172e543e-1127-1000-815a-451cb478b069" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Тематика]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[172e543e-1127-1000-815a-451cb478b069]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[8]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-document:subject-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:e69bf2fe-4201-dd7a-a7f5-01cede402a9b" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Регистрационный № у К/А]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[e69bf2fe-4201-dd7a-a7f5-01cede402a9b]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[9]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:regNumContractor]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:8eb2848f-9019-bfb4-0c6f-dc787df7df46" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Подписант К/А]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[8eb2848f-9019-bfb4-0c6f-dc787df7df46]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[10]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:02832c7e-3da2-0cb0-539e-73589a7ecb70" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Автор]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[02832c7e-3da2-0cb0-539e-73589a7ecb70]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[11]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-document:author-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                </items>
+                                <assocs>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На доработке/9478bff0-082c-e51c-b0e2-1e8a7817a69e"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На доработке/3a33ab39-13ce-87a7-71b1-d378fbc9b27e"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На доработке/c55f5c2d-b711-33b1-33f7-03b216f07b51"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На доработке/133b73fb-fd45-d3d5-1759-a15132f05980"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На доработке/99558ace-5b40-b830-631d-5f5ecaa2e37a"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На доработке/92bfb3ce-a473-49ea-aef9-26a09104ad56"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На доработке/d7761888-4754-6f5c-c381-3d485a36992e"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На доработке/172e543e-1127-1000-815a-451cb478b069"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На доработке/e69bf2fe-4201-dd7a-a7f5-01cede402a9b"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На доработке/8eb2848f-9019-bfb4-0c6f-dc787df7df46"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На доработке/02832c7e-3da2-0cb0-539e-73589a7ecb70"/>
+                                </assocs>
                             </item>
                             <item name="cm:На ознакомлении" type="lecm-arm:node">
                                 <property name="cm:name"><![CDATA[На ознакомлении]]></property>
                                 <property name="lecm-arm:order"><![CDATA[100]]></property>
                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                 <property name="lecm-arm:types"><![CDATA[]]></property>
-                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
-                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[{{ACTIVE_TASKS_ONLY({tasks:['lecmReview:reviewTask'],user:'#current-user'})}} OR @lecm\-review\-ts\:active\-reviewers:"*#current-user*"]]></property>
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                                <property name="lecm-arm:expression"><![CDATA[armNode.count() > 0]]></property>
+                                <items>
+                                    <item name="cm:cbd27fd8-98d5-acab-4998-e346be93a273" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Номер]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[cbd27fd8-98d5-acab-4998-e346be93a273]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[1]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-document:regnum]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:fc6d17d9-a04e-4ddd-aa58-86b9328a5b66" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Дата]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[fc6d17d9-a04e-4ddd-aa58-86b9328a5b66]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[2]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-document:doc-date]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:10a0c42c-18ff-9c3e-7b05-641445c51861" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Вид договора]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[10a0c42c-18ff-9c3e-7b05-641445c51861]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[3]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:typeContract-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:52359d1b-9b11-2541-be71-67d2cc2af2c5" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Контрагент]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[52359d1b-9b11-2541-be71-67d2cc2af2c5]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[4]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:partner-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[{lecm-contractor:shortname}]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:75117047-bcdb-6659-86d2-2357ffa4c896" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Сумма по договору]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[75117047-bcdb-6659-86d2-2357ffa4c896]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[5]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:totalAmount]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:8a56e2ea-c5c9-dfb1-4e5b-3915370c84c1" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Валюта договора]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[8a56e2ea-c5c9-dfb1-4e5b-3915370c84c1]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[6]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:currency-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:ec090c65-5f6f-051c-4806-a6b15b8d068a" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Дата создания]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[ec090c65-5f6f-051c-4806-a6b15b8d068a]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[7]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[cm:created]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:99a45c09-f406-dca4-7433-c44c77e63823" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Тематика]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[99a45c09-f406-dca4-7433-c44c77e63823]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[8]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-document:subject-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:61226b1c-3d70-e2fa-c535-38375e7ea6d7" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Регистрационный № у К/А]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[61226b1c-3d70-e2fa-c535-38375e7ea6d7]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[9]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:regNumContractor]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:e740556e-237d-5bf4-8564-998348f44279" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Подписант К/А]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[e740556e-237d-5bf4-8564-998348f44279]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[10]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:d37b7370-8201-517a-5b6a-8e32cf537aac" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Автор]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[d37b7370-8201-517a-5b6a-8e32cf537aac]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[11]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-document:author-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                </items>
+                                <assocs>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На ознакомлении/cbd27fd8-98d5-acab-4998-e346be93a273"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На ознакомлении/fc6d17d9-a04e-4ddd-aa58-86b9328a5b66"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На ознакомлении/10a0c42c-18ff-9c3e-7b05-641445c51861"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На ознакомлении/52359d1b-9b11-2541-be71-67d2cc2af2c5"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На ознакомлении/75117047-bcdb-6659-86d2-2357ffa4c896"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На ознакомлении/8a56e2ea-c5c9-dfb1-4e5b-3915370c84c1"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На ознакомлении/ec090c65-5f6f-051c-4806-a6b15b8d068a"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На ознакомлении/99a45c09-f406-dca4-7433-c44c77e63823"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На ознакомлении/61226b1c-3d70-e2fa-c535-38375e7ea6d7"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На ознакомлении/e740556e-237d-5bf4-8564-998348f44279"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На ознакомлении/d37b7370-8201-517a-5b6a-8e32cf537aac"/>
+                                </assocs>
                             </item>
                             <item name="cm:На исполнении" type="lecm-arm:node">
                                 <property name="cm:name"><![CDATA[На исполнении]]></property>
                                 <property name="lecm-arm:order"><![CDATA[110]]></property>
                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                 <property name="lecm-arm:types"><![CDATA[]]></property>
-                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[(@lecm\-statemachine\:status:'Зарегистрирован' OR @lecm\-statemachine\:status:'Действует' OR @lecm\-statemachine\:status:'Приостановлено') AND @lecm\-document\:author\-assoc\-ref:"#current-user"]]></property>
                                 <property name="lecm-arm:search-query"><![CDATA[]]></property>
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                                <property name="lecm-arm:expression"><![CDATA[armNode.count() > 0]]></property>
+                                <items>
+                                    <item name="cm:68147e96-2cb8-84d9-e768-a7bbbe6ddb3c" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Номер]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[68147e96-2cb8-84d9-e768-a7bbbe6ddb3c]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[1]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-document:regnum]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:745a31e2-9df2-0580-59c9-7f056bc7b446" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Дата]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[745a31e2-9df2-0580-59c9-7f056bc7b446]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[2]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-document:doc-date]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:3ddfb355-134c-cb23-1d43-824853f7108c" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Вид договора]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[3ddfb355-134c-cb23-1d43-824853f7108c]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[3]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:typeContract-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:ce8f02c5-33e1-2076-9c24-6f19515d1449" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Контрагент]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[ce8f02c5-33e1-2076-9c24-6f19515d1449]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[4]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:partner-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[{lecm-contractor:shortname}]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:5f3ae054-e3d1-f7b1-a752-1755835ab6056" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Сумма по договору]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[5f3ae054-e3d1-f7b1-a752-1755835ab6056]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[5]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:totalAmount]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:cabb15bd-1728-6b73-849e-feced5339f9c" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Валюта договора]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[cabb15bd-1728-6b73-849e-feced5339f9c]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[6]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:currency-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:374cbec7-f727-8aed-51e1-04016ae7cb7c" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Дата создания]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[374cbec7-f727-8aed-51e1-04016ae7cb7c]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[7]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[cm:created]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:88b328b1-eeb5-f992-e593-524ba3ad365c" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Тематика]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[88b328b1-eeb5-f992-e593-524ba3ad365c]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[8]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-document:subject-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:0845c9d5-4a1f-707d-c0ec-1770352483df" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Регистрационный № у К/А]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[0845c9d5-4a1f-707d-c0ec-1770352483df]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[9]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:regNumContractor]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:7a5eff4d-3f0b-6a78-0ad8-d4fa92f0957b" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Подписант К/А]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[7a5eff4d-3f0b-6a78-0ad8-d4fa92f0957b]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[10]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:1409c4ec-f198-e6f0-b3ee-113738d64fa8" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Автор]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[1409c4ec-f198-e6f0-b3ee-113738d64fa8]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[11]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-document:author-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                </items>
+                                <assocs>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На исполнении/68147e96-2cb8-84d9-e768-a7bbbe6ddb3c"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На исполнении/745a31e2-9df2-0580-59c9-7f056bc7b446"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На исполнении/3ddfb355-134c-cb23-1d43-824853f7108c"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На исполнении/ce8f02c5-33e1-2076-9c24-6f19515d1449"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На исполнении/5f3ae054-e3d1-f7b1-a752-1755835ab6056"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На исполнении/cabb15bd-1728-6b73-849e-feced5339f9c"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На исполнении/374cbec7-f727-8aed-51e1-04016ae7cb7c"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На исполнении/88b328b1-eeb5-f992-e593-524ba3ad365c"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На исполнении/0845c9d5-4a1f-707d-c0ec-1770352483df"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На исполнении/7a5eff4d-3f0b-6a78-0ad8-d4fa92f0957b"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На исполнении/1409c4ec-f198-e6f0-b3ee-113738d64fa8"/>
+                                </assocs>
                             </item>
                             <item name="cm:На регистрации" type="lecm-arm:node">
                                 <property name="cm:name"><![CDATA[На регистрации]]></property>
                                 <property name="lecm-arm:order"><![CDATA[120]]></property>
                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                 <property name="lecm-arm:types"><![CDATA[]]></property>
-                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
-                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[@lecm\-statemachine\:status:'Подписан' AND user.currentUser().hasBusinessRole("CONTRACT_RECORDER")]]></property>
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                                <property name="lecm-arm:expression"><![CDATA[armNode.count() > 0]]></property>
+                                <items>
+                                    <item name="cm:130fb14d-ffa2-f7bc-2207-e6aa08342f08" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Номер]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[130fb14d-ffa2-f7bc-2207-e6aa08342f08]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[1]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-document:regnum]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:e402d723-6aed-61e0-90a5-849a6698aec2" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Дата]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[e402d723-6aed-61e0-90a5-849a6698aec2]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[2]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-document:doc-date]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:9e5d7d6c-a4d0-d7cc-0661-f01d9711f91d" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Вид договора]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[9e5d7d6c-a4d0-d7cc-0661-f01d9711f91d]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[3]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:typeContract-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:4b39f773-951f-32f4-a3e1-1317e88bd0a8" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Контрагент]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[4b39f773-951f-32f4-a3e1-1317e88bd0a8]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[4]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:partner-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[{lecm-contractor:shortname}]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:9a45943e-b953-5311-3321-bd9f7e682cff" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Сумма по договору]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[9a45943e-b953-5311-3321-bd9f7e682cff]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[5]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:totalAmount]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:ddc819d8-cea5-9979-b46c-f75406bdec4b" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Валюта договора]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[ddc819d8-cea5-9979-b46c-f75406bdec4b]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[6]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:currency-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:7edbdec4-2a3e-f87e-69f5-3f14de52dbb8" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Дата создания]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[7edbdec4-2a3e-f87e-69f5-3f14de52dbb8]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[7]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[cm:created]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:773bd9a3-c17f-4fe8-aca9-672cd02a5b00" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Тематика]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[773bd9a3-c17f-4fe8-aca9-672cd02a5b00]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[8]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-document:subject-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:754ca512-e66e-40e4-a498-4534d275ae9b" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Регистрационный № у К/А]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[754ca512-e66e-40e4-a498-4534d275ae9b]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[9]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:regNumContractor]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:d5bb1753-11a9-5be2-32cc-9de3935fe91b" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Подписант К/А]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[d5bb1753-11a9-5be2-32cc-9de3935fe91b]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[10]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:c4cea088-6a90-5151-a131-ce1bb2a6980b" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Автор]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[c4cea088-6a90-5151-a131-ce1bb2a6980b]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[11]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-document:author-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                </items>
+                                <assocs>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На регистрации/130fb14d-ffa2-f7bc-2207-e6aa08342f08"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На регистрации/e402d723-6aed-61e0-90a5-849a6698aec2"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На регистрации/9e5d7d6c-a4d0-d7cc-0661-f01d9711f91d"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На регистрации/4b39f773-951f-32f4-a3e1-1317e88bd0a8"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На регистрации/9a45943e-b953-5311-3321-bd9f7e682cff"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На регистрации/ddc819d8-cea5-9979-b46c-f75406bdec4b"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На регистрации/7edbdec4-2a3e-f87e-69f5-3f14de52dbb8"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На регистрации/773bd9a3-c17f-4fe8-aca9-672cd02a5b00"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На регистрации/754ca512-e66e-40e4-a498-4534d275ae9b"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На регистрации/d5bb1753-11a9-5be2-32cc-9de3935fe91b"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На регистрации/c4cea088-6a90-5151-a131-ce1bb2a6980b"/>
+                                </assocs>
                             </item>
                             <item name="cm:Резервирование номера" type="lecm-arm:node">
                                 <property name="cm:name"><![CDATA[Резервирование номера]]></property>
                                 <property name="lecm-arm:order"><![CDATA[130]]></property>
                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                 <property name="lecm-arm:types"><![CDATA[]]></property>
-                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
-                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[(({{ACTIVE_TASKS_ONLY({tasks:['lecmRegnumRes:reserveTask'],user:'#current-user'})}}) OR ({{ACTIVE_TASKS_ONLY({tasks:['lecmRegnumRes:requestReservationCancelingAfterReserveTask'],user:'#current-user'})}})) AND (@lecm\-statemachine\:status:('Проект' OR 'На согласовании' OR 'На подписании' OR 'На доработке' OR 'Согласован' OR 'Подписан' OR 'На регистрации'))]]></property>
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                                <property name="lecm-arm:expression"><![CDATA[armNode.count() > 0]]></property>
+                                <items>
+                                    <item name="cm:34e33d4a-1f39-25ae-7770-67c68a544e6d" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Дата поступления]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[34e33d4a-1f39-25ae-7770-67c68a544e6d]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[0]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-approval-route:currentTaskStartDate]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[{lecm-approval-route:currentTaskStartDate?dd.MM.yyyy HH:mm}]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:deba2eac-fa79-954c-af10-afc196ccca9b" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Номер]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[deba2eac-fa79-954c-af10-afc196ccca9b]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[1]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-document:regnum]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:de48bc47-97ff-b5ed-63aa-b5ccda0b7378" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Дата]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[de48bc47-97ff-b5ed-63aa-b5ccda0b7378]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[2]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-document:doc-date]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:d7eb4b6f-fce2-8bbb-fb35-7403de009f48" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Вид договора]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[d7eb4b6f-fce2-8bbb-fb35-7403de009f48]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[3]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:typeContract-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:6c380e4e-d12a-3165-0724-a28a90cc4238" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Контрагент]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[6c380e4e-d12a-3165-0724-a28a90cc4238]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[4]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:partner-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[{lecm-contractor:shortname}]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:26353b82-1a36-4a2a-2c17-368008919534" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Сумма по договору]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[26353b82-1a36-4a2a-2c17-368008919534]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[5]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:totalAmount]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:76f05359-1f3f-b641-4eac-72da0c297ccd" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Валюта договора]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[76f05359-1f3f-b641-4eac-72da0c297ccd]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[6]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:currency-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:132f1e75-e642-ccb6-2fa2-352c723c97b9" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Дата создания]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[132f1e75-e642-ccb6-2fa2-352c723c97b9]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[7]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[cm:created]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:9ab41f20-7dd9-eadc-58c1-d67a1ddae256" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Тематика]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[9ab41f20-7dd9-eadc-58c1-d67a1ddae256]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[8]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-document:subject-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:7a166ca3-88de-0d7e-485a-336ad598681e" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Регистрационный № у К/А]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[7a166ca3-88de-0d7e-485a-336ad598681e]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[9]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:regNumContractor]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:5ff91756-a0f5-89ee-00fa-1eadc0e77a94" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Подписант К/А]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[5ff91756-a0f5-89ee-00fa-1eadc0e77a94]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[10]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:a1164c5b-e83a-5f8d-1a8a-36113a303b98" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Автор]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[a1164c5b-e83a-5f8d-1a8a-36113a303b98]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[11]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-document:author-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                </items>
+                                <assocs>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/Резервирование номера/34e33d4a-1f39-25ae-7770-67c68a544e6d"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/Резервирование номера/deba2eac-fa79-954c-af10-afc196ccca9b"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/Резервирование номера/de48bc47-97ff-b5ed-63aa-b5ccda0b7378"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/Резервирование номера/d7eb4b6f-fce2-8bbb-fb35-7403de009f48"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/Резервирование номера/6c380e4e-d12a-3165-0724-a28a90cc4238"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/Резервирование номера/26353b82-1a36-4a2a-2c17-368008919534"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/Резервирование номера/76f05359-1f3f-b641-4eac-72da0c297ccd"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/Резервирование номера/132f1e75-e642-ccb6-2fa2-352c723c97b9"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/Резервирование номера/9ab41f20-7dd9-eadc-58c1-d67a1ddae256"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/Резервирование номера/7a166ca3-88de-0d7e-485a-336ad598681e"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/Резервирование номера/5ff91756-a0f5-89ee-00fa-1eadc0e77a94"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/Резервирование номера/a1164c5b-e83a-5f8d-1a8a-36113a303b98"/>
+                                </assocs>
                             </item>
                             <item name="cm:Отмена резервирования номера" type="lecm-arm:node">
                                 <property name="cm:name"><![CDATA[Отмена резервирования номера]]></property>
                                 <property name="lecm-arm:order"><![CDATA[140]]></property>
                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                 <property name="lecm-arm:types"><![CDATA[]]></property>
-                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
-                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[lecm-contract:document]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[ASPECT: "lecm-reservation-aspects:isReservationRunningAspect" AND ((({{ACTIVE_TASKS_ONLY({tasks:['lecmRegnumRes:reserveTask'],user:'#current-user'})}}) AND ISNOTNULL: "lecm-reservation-aspects:isReservationRunning" AND  @lecm\-reservation\-aspects\:isReservationRunning: true) OR ( ({{ACTIVE_TASKS_ONLY({tasks:['lecmRegnumRes:requestReservationCancelingAfterReserveTask'],user:'#current-user'})}}) AND ISNOTNULL:"lecm-reservation-aspects:isReservationCanceling" AND @lecm\-reservation\-aspects\:isReservationCanceling:true))]]></property>
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                                <property name="lecm-arm:expression"><![CDATA[armNode.count() > 0]]></property>
+                                <items>
+                                    <item name="cm:f34edc2c-c592-3133-3dcb-153dad4b7196" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Дата поступления]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[f34edc2c-c592-3133-3dcb-153dad4b7196]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[0]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-approval-route:currentTaskStartDate]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[{lecm-approval-route:currentTaskStartDate?dd.MM.yyyy HH:mm}]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:9245dc96-8906-03ce-d203-a56d2be2122d" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Номер]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[9245dc96-8906-03ce-d203-a56d2be2122d]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[1]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-document:regnum]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:599b643e-ea10-595d-2be4-45920912d10e" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Дата]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[599b643e-ea10-595d-2be4-45920912d10e]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[2]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-document:doc-date]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:6f42edcd-6394-9d53-9820-69ef39a715e6" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Вид договора]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[6f42edcd-6394-9d53-9820-69ef39a715e6]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[3]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:typeContract-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:561ef6fa-7c4d-f710-724f-db20e6ed2284" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Контрагент]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[561ef6fa-7c4d-f710-724f-db20e6ed2284]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[4]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:partner-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[{lecm-contractor:shortname}]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:aa94190c-c2be-1ca6-9185-0676e038841d" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Сумма по договору]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[aa94190c-c2be-1ca6-9185-0676e038841d]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[5]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:totalAmount]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:b9fd0969-d206-fef7-8109-eb6951154505" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Валюта договора]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[b9fd0969-d206-fef7-8109-eb6951154505]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[6]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:currency-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:61e31211-4a03-374e-d07f-23570a9ba89c" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Дата создания]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[61e31211-4a03-374e-d07f-23570a9ba89c]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[7]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[cm:created]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:a8c2d07e-267c-684e-520a-446124a15952" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Тематика]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[a8c2d07e-267c-684e-520a-446124a15952]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[8]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-document:subject-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:ee1ce975-78d1-bec1-149e-1596b2440f2e" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Регистрационный № у К/А]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[ee1ce975-78d1-bec1-149e-1596b2440f2e]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[9]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-contract:regNumContractor]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:7d9f53d6-90a1-5558-cab2-01d20efb2f7a" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Подписант К/А]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[7d9f53d6-90a1-5558-cab2-01d20efb2f7a]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[10]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:55e14efd-6a47-bf84-b216-eaa1928276e3" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Автор]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[55e14efd-6a47-bf84-b216-eaa1928276e3]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[11]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-document:author-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                </items>
+                                <assocs>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/Резервирование номера/f34edc2c-c592-3133-3dcb-153dad4b7196"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании/9245dc96-8906-03ce-d203-a56d2be2122d"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании/599b643e-ea10-595d-2be4-45920912d10e"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании/6f42edcd-6394-9d53-9820-69ef39a715e6"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании/561ef6fa-7c4d-f710-724f-db20e6ed2284"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании/aa94190c-c2be-1ca6-9185-0676e038841d"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании/b9fd0969-d206-fef7-8109-eb6951154505"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании/61e31211-4a03-374e-d07f-23570a9ba89c"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании/a8c2d07e-267c-684e-520a-446124a15952"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании/ee1ce975-78d1-bec1-149e-1596b2440f2e"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании/7d9f53d6-90a1-5558-cab2-01d20efb2f7a"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании/55e14efd-6a47-bf84-b216-eaa1928276e3"/>
+                                </assocs>
                             </item>
                             <item name="cm:Документы к договорам" type="lecm-arm:node">
                                 <property name="cm:name"><![CDATA[Документы к договорам]]></property>
