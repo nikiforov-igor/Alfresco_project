@@ -221,6 +221,7 @@
 		  p:documentEventService-ref="documentEventService"
 		  p:lecmPermissionService-ref="lecmPermissionServiceBean"
 		  p:orgstructureService-ref="serviceOrgstructure"
+		  p:documentMembersService-ref="documentMembersService"
 	/>
 
 	<bean id="protocolScript" parent="baseScript" class="ru.it.lecm.meetings.scripts.ProtocolWebScriptBean"
