@@ -142,7 +142,7 @@
             <item name="cm:LECM_MEETINGS_DOCUMENT.RESPONSIBLE_FOR_RESOURCES" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[LECM_MEETINGS_DOCUMENT.RESPONSIBLE_FOR_RESOURCES]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Запланированное {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} требует привлечения ресурсов, за которые Вы ответственны. Начало {#formatDate("dd.MM.yyyy в HH:mm", #mainObject.attribute("lecm-events:from-date"))}.]]></property>
+                    <![CDATA[Запланированное совещание {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} требует привлечения ресурсов, за которые Вы ответственны. Начало {#formatDate("dd.MM.yyyy в HH:mm", #mainObject.attribute("lecm-events:from-date"))}.]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Совещания. Требует привлечения ресурсов]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
@@ -154,7 +154,7 @@
             <item name="cm:LECM_MEETINGS_DOCUMENT.RESERVATION_RESOURCE_RESULT" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[LECM_MEETINGS_DOCUMENT.RESERVATION_RESOURCE_RESULT]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Резервирование ресурса {#resource.attribute("cm:title")} для {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} {#reserved ? "одобрено" : #wrapTitle("отклонено", #comment)}.]]></property>
+                    <![CDATA[Резервирование ресурса {#resource.attribute("cm:title")} для совещания {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} {#reserved ? "одобрено" : #wrapTitle("отклонено", #comment)}.]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Совещание. Результат резервирования ресурса]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
@@ -343,9 +343,9 @@
             <item name="cm:LECM_MEETINGS_DOCUMENT.CANCEL_RESOURCE_USAGE" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[LECM_MEETINGS_DOCUMENT.CANCEL_RESOURCE_USAGE]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Для запланированного {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} больше не требуется привлечения ресурса, за который вы ответственны ({#resource.attribute("cm:name")})]]></property>
+                    <![CDATA[Для запланированного совещания {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} больше не требуется привлечения ресурса, за который Вы ответственны ({#resource.attribute("cm:name")})]]></property>
                 <property name="lecm-notification-template:description">
-                    <![CDATA[Мероприятия. Отмена привлечения ресурса]]></property>
+                    <![CDATA[Совещания. Отмена привлечения ресурса]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
@@ -356,9 +356,9 @@
             <item name="cm:LECM_MEETINGS_DOCUMENT.RESOURCES_DONT_NEED" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[LECM_MEETINGS_DOCUMENT.RESOURCES_DONT_NEED]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}, требующее привлечение ресурсов, за которые вы ответственны, отменено]]></property>
+                    <![CDATA[Совещание {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}, требующее привлечение ресурсов, за которые Вы ответственны, отменено]]></property>
                 <property name="lecm-notification-template:description">
-                    <![CDATA[Мероприятия. Отмена использования ресурсов]]></property>
+                    <![CDATA[Совещания. Отмена использования ресурсов]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
