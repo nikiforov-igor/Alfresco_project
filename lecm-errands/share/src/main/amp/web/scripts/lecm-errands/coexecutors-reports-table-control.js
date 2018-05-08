@@ -207,7 +207,7 @@ LogicECM.errands = LogicECM.errands || {};
                 }
             }, datagrid, true);
 
-            YAHOO.util.Event.on(transferSelectedReportsButton, "click", function () {
+            YAHOO.util.Event.on(buttonEl, "click", function () {
                 if (!this.transferActionDoubleClickLock) {
                     this.transferActionDoubleClickLock = true;
                     var selectedRows = this.getSelectedItems();
