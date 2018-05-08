@@ -14,7 +14,7 @@
 }
 .errands-limitation-date-set .errands-limitation-date-set-radio .control input {
     margin-top: 8px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     padding: 0px;
 }
 .errands-limitation-date-set .errands-limitation-date-set-radio .buttons-div {
@@ -35,7 +35,7 @@
 
 .errands-limitation-date-set .errands-limitation-date-set-type {
     float: left;
-    width: calc(100% - 260px);
+    width: calc(100% - 255px);
 }
 
 .errands-limitation-date-set .errands-limitation-date-set-date {
