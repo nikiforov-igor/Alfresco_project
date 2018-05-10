@@ -221,7 +221,6 @@
         <forms>
             <form>
             <field-visibility>
-                <show id="lecm-document:indexTableRow" force="true"/>
                 <show id="lecm-ord-table-structure:title"/>
                 <show id="lecm-ord-table-structure:author-assoc"/>
                 <show id="lecm-ord-table-structure:item-content"/>
@@ -338,7 +337,6 @@
             </form>
             <form id="datagrid-create">
                 <field-visibility>
-                    <show id="lecm-document:indexTableRow" force="true"/>
                     <show id="lecm-ord-table-structure:executor-assoc"/>
                 </field-visibility>
             </form>

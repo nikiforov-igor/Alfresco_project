@@ -520,7 +520,6 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="lecm-document:indexTableRow" force="true"/>
                     <show id="lecm-contract-table-structure:name" force="true"/>
                     <show id="lecm-contract-table-structure:start-date" force="true"/>
                     <show id="lecm-contract-table-structure:end-date" force="true"/>
@@ -550,7 +549,6 @@
             </form>
             <form id="json-datagrid-item">
                 <field-visibility>
-                    <show id="lecm-document:indexTableRow" force="true"/>
                     <show id="lecm-contract-table-structure:name" force="true"/>
                     <show id="lecm-contract-table-structure:start-date" force="true"/>
                     <show id="lecm-contract-table-structure:end-date" force="true"/>
