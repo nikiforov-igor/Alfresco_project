@@ -63,6 +63,7 @@
                             <control-param name="uploadDirectoryPath">{usertemp}</control-param>
                             <control-param name="directoryName">Исполнение</control-param>
                             <control-param name="suppressRefreshEvent">true</control-param>
+                            <control-param name="doNotDeleteOnRemove">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands-ts:execution-report-connected-document-assoc">
@@ -224,6 +225,7 @@
                             <control-param name="uploadDirectoryPath">{usertemp}</control-param>
                             <control-param name="directoryName">Исполнение</control-param>
                             <control-param name="suppressRefreshEvent">true</control-param>
+                            <control-param name="doNotDeleteOnRemove">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands-ts:coexecutor-report-connected-document-assoc">
@@ -1445,6 +1447,7 @@
                             <control-param name="uploadDirectoryPath">{usertemp}</control-param>
                             <control-param name="directoryName">Исполнение</control-param>
                             <control-param name="suppressRefreshEvent">true</control-param>
+                            <control-param name="doNotDeleteOnRemove">true</control-param>
                         </control>
                     </field>
                     <field id="lecmErrandWf:execute_1ConnectedDocument">
