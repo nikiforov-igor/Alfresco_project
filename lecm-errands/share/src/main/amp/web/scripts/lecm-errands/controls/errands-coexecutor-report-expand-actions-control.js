@@ -41,6 +41,7 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
         },
         currentDocumentStatus: null,
         editDialogOpening: false,
+        doubleClickLock: false,
 
         onReady: function () {
             this.loadAdditionalData();
@@ -207,7 +208,8 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
         },
         onActionAcceptCoexecutorReport: function (report) {
             var nodeRef = report.nodeRef;
-            if (nodeRef != null) {
+            if (nodeRef != null && !this.doubleClickLock) {
+                this.doubleClickLock = true;
                 Alfresco.util.Ajax.jsonRequest(
                     {
                         method: Alfresco.util.Ajax.GET,
@@ -222,10 +224,21 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                                             text: this.msg("message.details.failure")
                                         });
                                 }
+                                this.doubleClickLock = false;
                             },
                             scope: this
                         },
-                        failureMessage: Alfresco.util.message("message.details.failure"),
+                        failureCallback: {
+                            fn: function (res) {
+                                Alfresco.util.PopupManager.displayPrompt(
+                                    {
+                                        title: Alfresco.util.message("message.failure"),
+                                        text: Alfresco.util.message("message.details.failure")
+                                    });
+                                this.doubleClickLock = false;
+                            },
+                            scope: this
+                        },
                         scope: this
                     });
             }
@@ -233,7 +246,8 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
 
         onActionDeclineCoexecutorReport: function (report) {
             var nodeRef = report.nodeRef;
-            if (nodeRef) {
+            if (nodeRef && !this.doubleClickLock) {
+                this.doubleClickLock = true;
                 var formId = "decline-coexecutor-report";
                 var declineReportDialog = new Alfresco.module.SimpleDialog(this.id + '-' + formId);
                 declineReportDialog.setOptions({
@@ -256,6 +270,7 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                             simpleDialog.dialog.subscribe('destroy', function (event, args, params) {
                                 LogicECM.module.Base.Util.destroyForm(simpleDialog.id);
                                 LogicECM.module.Base.Util.formDestructor(event, args, params);
+                                this.doubleClickLock = false;
                             }, {moduleId: simpleDialog.id}, this);
                         },
                         scope: this
@@ -271,6 +286,7 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                                     });
                             }
                             declineReportDialog.hide();
+                            this.doubleClickLock = false;
                         },
                         scope: this
                     },
@@ -281,6 +297,7 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                                     text: Alfresco.util.message("message.details.failure")
                                 });
                             declineReportDialog.hide();
+                            this.doubleClickLock = false;
                         }
                     }
                 });
