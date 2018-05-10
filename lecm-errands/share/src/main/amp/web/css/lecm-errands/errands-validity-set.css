@@ -30,13 +30,10 @@
 
 .errands-validity-set .errands-validity-set-radio .control input {
     margin-top: 8px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     padding-left: 0px;
 }
 
-.errands-validity-set .errands-validity-set-radio .control input:nth-child(2) {
-    margin-bottom: 25px;
-}
 
 .errands-validity-set .errands-validity-set-radio .control input:last-of-type {
     margin-top: 10px;
