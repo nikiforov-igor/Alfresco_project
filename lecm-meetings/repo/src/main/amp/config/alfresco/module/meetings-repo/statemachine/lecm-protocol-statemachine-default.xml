@@ -252,36 +252,12 @@
                                                 <nodes>
                                                     <node>
                                                         <type>ScriptActionEntity</type>
-                                                        <name>d9f9228b-fa8f-4a2c-af36-e6d8f30fa1f7</name>
-                                                        <properties>
-                                                            <property>
-                                                                <name>scriptLabel</name>
-                                                                <value><![CDATA[Регистрация протокола]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>actionScript</name>
-                                                                <value><![CDATA[(function(){
-    var protocol = stm_document;
-    if (protocol) {
-        protocol.reset();
-        regnumbers.registerDocument(protocol, "PROTOCOL_NUMBER");
-    }
-})();]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects/>
-                                                        <associations/>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
-                                                    <node>
-                                                        <type>ScriptActionEntity</type>
                                                         <name>acbce6f5-a56f-47e4-860a-d6b4cd779e7e</name>
                                                         <properties>
                                                             <property>
                                                                 <name>scriptLabel</name>
                                                                 <value>
-                                                                    <![CDATA[Проверка запущенных запросов на резервирование, уведомление и лог]]></value>
+                                                                    <![CDATA[Регистрация, проверка запущенных запросов на резервирование, уведомление и лог]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>actionScript</name>
@@ -290,6 +266,10 @@
 	var document = stm_document;
     if (document) {
         document.reset();
+
+        regnumbers.registerDocument(document, "PROTOCOL_NUMBER");
+        document.save();
+
 		var isReservationRunning = document.properties['lecm-reservation-aspects:isReservationRunning'],
 		documentRegnum = document.properties["lecm-document:regnum"],
 		projectNumber = document.properties["lecm-document-aspects:reg-project-data-number"],

@@ -1991,37 +1991,12 @@
                                                 <nodes>
                                                     <node>
                                                         <type>ScriptActionEntity</type>
-                                                        <name>e3606744-0950-4b0c-9c04-715caed7683d</name>
-                                                        <properties>
-                                                            <property>
-                                                                <name>scriptLabel</name>
-                                                                <value><![CDATA[Зарегистрировать документ]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>actionScript</name>
-                                                                <value><![CDATA[(function(){
-    var nd = stm_document;
-    if (nd) {
-      nd.reset();
-      regnumbers.registerDocument(nd, "ND_NUMBER");
-      nd.save();
-    }
-})();]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects/>
-                                                        <associations/>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
-                                                    <node>
-                                                        <type>ScriptActionEntity</type>
                                                         <name>1f38ffe5-271f-47c4-8fec-cb823c10119a</name>
                                                         <properties>
                                                             <property>
                                                                 <name>scriptLabel</name>
                                                                 <value>
-                                                                    <![CDATA[Проверка запущенных запросов на резервирование, уведомление и лог]]></value>
+                                                                    <![CDATA[Регистрация, проверка запущенных запросов на резервирование, уведомление и лог]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>actionScript</name>
@@ -2029,6 +2004,10 @@
 	var document = stm_document;
 	if (document) {
         document.reset();
+
+        regnumbers.registerDocument(document, "ND_NUMBER");
+        document.save();
+
         var isReservationRunning = document.properties['lecm-reservation-aspects:isReservationRunning'],
         documentRegnum = document.properties["lecm-document:regnum"],
         projectNumber = document.properties["lecm-document-aspects:reg-project-data-number"],
