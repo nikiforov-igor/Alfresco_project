@@ -2402,9 +2402,6 @@
 
         regnumbers.registerDocument(document, "CONTRACT_REGNUM");
         document.save();
-        var logText = "Договор зарегистрирован, присвоен регистрационный номер: ";
-        logText +=  document.properties["lecm-document:regnum"];
-        businessJournal.log(document.nodeRef.toString(), "EDIT", logText, []);
 
         var	isReservationRunning = document.properties['lecm-reservation-aspects:isReservationRunning'],
             documentRegnum = document.properties["lecm-document:regnum"],
