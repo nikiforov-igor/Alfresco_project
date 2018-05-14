@@ -60,7 +60,6 @@
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-business-journal-objectType-items.xml</value>
-                <value>alfresco/module/${artifactId}/dictionaries/lecm-incoming-roles-items.xml</value>
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-incoming-regnumbers.xml</value>
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-incoming-nt-items.xml</value>
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-connection-available-types-items.xml</value>

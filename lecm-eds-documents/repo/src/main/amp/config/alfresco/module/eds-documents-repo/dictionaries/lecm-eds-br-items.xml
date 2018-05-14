@@ -8,23 +8,11 @@
 				<property name="lecm-orgstr:business-role-is-dynamic">false</property>
 				<property name="lecm-orgstr:business-role-description">Сотрудники, обладающие правами владельца для всех типов документов на всех статусах ЖЦ</property>
 			</item>
-			<item name="cm:СЭД. Подписанты" type="lecm-orgstr:business-role">
-				<property name="cm:name">СЭД. Подписанты</property>
-				<property name="lecm-orgstr:business-role-identifier">DA_SIGNERS</property><!-- Document Automation Signer -->
-				<property name="lecm-orgstr:business-role-is-dynamic">false</property>
-				<property name="lecm-orgstr:business-role-description">Сотрудник, который занимается подписанием документов</property>
-			</item>
 			<item name="cm:СЭД. Регистраторы" type="lecm-orgstr:business-role">
 				<property name="cm:name">СЭД. Регистраторы</property>
 				<property name="lecm-orgstr:business-role-identifier">DA_REGISTRARS</property>
 				<property name="lecm-orgstr:business-role-is-dynamic">false</property>
 				<property name="lecm-orgstr:business-role-description">Сотрудники, имеющие право регистрации всех документов СЭД</property>
-			</item>
-			<item name="cm:СЭД. Подписывающий" type="lecm-orgstr:business-role">
-				<property name="cm:name">СЭД. Подписывающий</property>
-				<property name="lecm-orgstr:business-role-identifier">DA_SIGNER_DYN</property>
-				<property name="lecm-orgstr:business-role-is-dynamic">true</property>
-				<property name="lecm-orgstr:business-role-description">Сотрудник, фактически выполнивший подписание документа</property>
 			</item>
 			<item name="cm:СЭД. Регистратор" type="lecm-orgstr:business-role">
 				<property name="cm:name">СЭД. Регистратор документа</property>
@@ -47,12 +35,6 @@
 			<item name="cm:СЭД. Контролер" type="lecm-orgstr:business-role">
 				<property name="cm:name">СЭД. Контролер</property>
 				<property name="lecm-orgstr:business-role-identifier">DA_CONTROLLER_DYN</property>
-				<property name="lecm-orgstr:business-role-is-dynamic">true</property>
-				<property name="lecm-orgstr:business-role-description">Сотрудник, назначенный Контролером по ОРД документу</property>
-			</item>
-			<item name="cm:СЭД. Исполнитель" type="lecm-orgstr:business-role">
-				<property name="cm:name">СЭД. Исполнитель</property>
-				<property name="lecm-orgstr:business-role-identifier">DA_EXECUTOR_DYN</property>
 				<property name="lecm-orgstr:business-role-is-dynamic">true</property>
 				<property name="lecm-orgstr:business-role-description">Сотрудник, назначенный Контролером по ОРД документу</property>
 			</item>
