@@ -433,7 +433,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				}
 
 				NodeRef errand = documentService.createDocument(ErrandsService.TYPE_ERRANDS.toPrefixString(namespaceService), properties, associations);
-
+				nodeService.addAspect(errand, ErrandsService.ASPECT_SKIP_TRANSFER_RIGHT_TO_PARENT_ASPECT, null);
 				// срок поручения
 				if (limitationDate != null) {
 					nodeService.setProperty(errand, ErrandsService.PROP_ERRANDS_LIMITATION_DATE, limitationDate);

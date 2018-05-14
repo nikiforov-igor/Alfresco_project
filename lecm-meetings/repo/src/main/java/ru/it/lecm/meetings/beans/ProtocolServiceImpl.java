@@ -255,6 +255,7 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
                 }
 
                 NodeRef errand = documentService.createDocument(ErrandsService.TYPE_ERRANDS.toPrefixString(namespaceService), properties, associations);
+                nodeService.addAspect(errand, ErrandsService.ASPECT_SKIP_TRANSFER_RIGHT_TO_PARENT_ASPECT, null);
 
                 // выдадим права инициатору
                 if (null != errandInitiator) {

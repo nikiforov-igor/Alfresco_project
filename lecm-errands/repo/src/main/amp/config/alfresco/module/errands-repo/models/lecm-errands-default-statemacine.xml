@@ -9693,9 +9693,7 @@ if (document) {
                                                                 <value><![CDATA[if (errands.isTransferRightToBaseDocument()) {
   var document = stm_document;
   document.reset();
-  var ordPointAssocs = document.sourceAssocs["lecm-ord-table-structure:errand-assoc"];
-  var protocolPointAssocs = document.sourceAssocs["lecm-protocol-ts:errand-assoc"];
-  if ((!ordPointAssocs || !ordPointAssocs.length) && (!protocolPointAssocs || !protocolPointAssocs.length)) {
+  if (!document.hasAspect("lecm-errands-aspect:skipTransferRightsToParentAspect")) {
       var baseDocumentAssoc = document.assocs["lecm-errands:base-assoc"];
       if (baseDocumentAssoc && baseDocumentAssoc.length) {
         var baseDocument = baseDocumentAssoc[0];
@@ -9722,6 +9720,8 @@ if (document) {
           });
         }
       }
+  } else {
+    document.removeAspect("lecm-errands-aspect:skipTransferRightsToParentAspect");
   }
 }]]></value>
                                                             </property>

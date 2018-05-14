@@ -88,5 +88,6 @@
                 </association>
             </associations>
         </aspect>
+        <aspect name="lecm-errands-aspect:skipTransferRightsToParentAspect"/>
     </aspects>
 </model>
