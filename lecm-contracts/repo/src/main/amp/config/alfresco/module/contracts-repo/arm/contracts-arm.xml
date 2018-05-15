@@ -7092,7 +7092,7 @@
                                         <property name="lecm-arm:types"><![CDATA[]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                                         <property name="lecm-arm:search-type"><![CDATA[]]></property>
-                                        <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                        <property name="lecm-arm:search-query"><![CDATA[(@lecm\-statemachine\:status:'Зарегистрирован' AND @lecm\-document\:author\-assoc\-ref:"#current-user") OR (@lecm\-statemachine\:status:'Действует' AND @lecm\-document\:author\-assoc\-ref:"#current-user") OR (@lecm\-statemachine\:status:'Приостановлен' AND @lecm\-document\:author\-assoc\-ref:"#current-user")]]></property>
                                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                         <items>
                                             <item name="cm:Зарегистрирован" type="lecm-arm:node">
@@ -7134,7 +7134,7 @@
                                         <property name="lecm-arm:types"><![CDATA[]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                                         <property name="lecm-arm:search-type"><![CDATA[]]></property>
-                                        <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                                        <property name="lecm-arm:search-query"><![CDATA[(@lecm\-statemachine\:status:'Исполнен' AND @lecm\-document\:author\-assoc\-ref:"#current-user") OR (@lecm\-statemachine\:status:'Расторгнут' AND @lecm\-document\:author\-assoc\-ref:"#current-user") OR (@lecm\-statemachine\:status:'Отменён' AND @lecm\-document\:author\-assoc\-ref:"#current-user") OR (@lecm\-statemachine\:status:'Аннулирован' AND @lecm\-document\:author\-assoc\-ref:"#current-user")]]></property>
                                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                         <items>
                                             <item name="cm:Исполнен" type="lecm-arm:node">
@@ -7182,24 +7182,212 @@
                                 </items>
                             </item>
                             <item name="cm:По тематикам" type="lecm-arm:node">
-                                <property name="cm:name"><![CDATA[По тематикам]]></property>
-                                <property name="lecm-arm:order"><![CDATA[20]]></property>
-                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
-                                <property name="lecm-arm:types"><![CDATA[]]></property>
-                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
-                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
-                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks">
+                                    <![CDATA[false]]>
+                                </property>
+                                <property name="lecm-arm:search-query">
+                                    <![CDATA[]]>
+                                </property>
+                                <property name="lecm-arm:is-aggregation-node">
+                                    <![CDATA[false]]>
+                                </property>
+                                <property name="cm:name">
+                                    <![CDATA[По тематикам]]>
+                                </property>
+                                <property name="lecm-arm:search-type">
+                                    <![CDATA[]]>
+                                </property>
+                                <property name="lecm-arm:counter-enable">
+                                    <![CDATA[false]]>
+                                </property>
+                                <property name="lecm-arm:order">
+                                    <![CDATA[20]]>
+                                </property>
+                                <property name="lecm-arm:types">
+                                    <![CDATA[]]>
+                                </property>
+                                <items>
+                                    <item name="cm:Тематики" type="lecm-arm:node">
+                                        <property name="lecm-arm:is-select-by-activeTasks">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:search-query">
+                                            <![CDATA[@lecm\-document\:subject\-assoc\-ref:"#value-with-subtree-refs"]]>
+                                        </property>
+                                        <property name="lecm-arm:is-aggregation-node">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[Тематики]]>
+                                        </property>
+                                        <property name="lecm-arm:search-type">
+                                            <![CDATA[]]>
+                                        </property>
+                                        <property name="lecm-arm:expression">
+                                            <![CDATA[]]>
+                                        </property>
+                                        <property name="lecm-arm:counter-enable">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[0]]>
+                                        </property>
+                                        <property name="lecm-arm:types">
+                                            <![CDATA[]]>
+                                        </property>
+                                        <property name="lecm-arm:expand-row-source">
+                                            <![CDATA[]]>
+                                        </property>
+                                        <items>
+                                            <item name="cm:fb24fcee-c105-4038-b6fb-b6df332d3cf9" type="lecm-arm:dictionary-child-rule">
+                                                <property name="lecm-arm:node-rule-sort-config">
+                                                    <![CDATA[]]>
+                                                </property>
+                                                <property name="cm:name">
+                                                    <![CDATA[fb24fcee-c105-4038-b6fb-b6df332d3cf9]]>
+                                                </property>
+                                                <property name="lecm-arm:node-rule-page-count">
+                                                    <![CDATA[-1]]>
+                                                </property>
+                                                <property name="lecm-arm:node-rule-search-template">
+                                                    <![CDATA[]]>
+                                                </property>
+                                                <property name="lecm-arm:levels-limit-enabled">
+                                                    <![CDATA[true]]>
+                                                </property>
+                                                <property name="lecm-arm:levels-limit-end">
+                                                    <![CDATA[10]]>
+                                                </property>
+                                                <property name="lecm-arm:levels-limit-start">
+                                                    <![CDATA[0]]>
+                                                </property>
+                                                <property name="lecm-arm:child-rule-substitute-string">
+                                                    <![CDATA[]]>
+                                                </property>
+                                                <assocs>
+                                                    <assoc type="lecm-arm:child-rule-dictionary-assoc" path="/Business platform/LECM/Сервис Справочники/Тематика"/>
+                                                </assocs>
+                                            </item>
+                                            <item name="cm:f20ed57c-b51d-4b3d-a608-a71c63fc61b8" type="lecm-arm:dictionary-child-rule">
+                                                <property name="lecm-arm:node-rule-sort-config">
+                                                    <![CDATA[]]>
+                                                </property>
+                                                <property name="cm:name">
+                                                    <![CDATA[f20ed57c-b51d-4b3d-a608-a71c63fc61b8]]>
+                                                </property>
+                                                <property name="lecm-arm:node-rule-page-count">
+                                                    <![CDATA[10]]>
+                                                </property>
+                                                <property name="lecm-arm:node-rule-search-template">
+                                                    <![CDATA[]]>
+                                                </property>
+                                                <property name="lecm-arm:levels-limit-enabled">
+                                                    <![CDATA[false]]>
+                                                </property>
+                                                <property name="lecm-arm:child-rule-substitute-string">
+                                                    <![CDATA[]]>
+                                                </property>
+                                                <assocs>
+                                                    <assoc type="lecm-arm:child-rule-dictionary-assoc" path="/Business platform/LECM/Сервис Справочники/Тематика"/>
+                                                </assocs>
+                                            </item>
+                                        </items>
+                                        <assocs>
+                                            <assoc type="lecm-arm:node-child-rule-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Навигатор/По тематикам/Тематики/f20ed57c-b51d-4b3d-a608-a71c63fc61b8"/>
+                                        </assocs>
+                                    </item>
+                                </items>
                             </item>
                             <item name="cm:По контрагентам" type="lecm-arm:node">
-                                <property name="cm:name"><![CDATA[По контрагентам]]></property>
-                                <property name="lecm-arm:order"><![CDATA[30]]></property>
-                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
-                                <property name="lecm-arm:types"><![CDATA[]]></property>
-                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
-                                <property name="lecm-arm:search-query"><![CDATA[]]></property>
-                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks">
+                                    <![CDATA[false]]>
+                                </property>
+                                <property name="lecm-arm:search-query">
+                                    <![CDATA[]]>
+                                </property>
+                                <property name="lecm-arm:is-aggregation-node">
+                                    <![CDATA[false]]>
+                                </property>
+                                <property name="cm:name">
+                                    <![CDATA[По контрагентам]]>
+                                </property>
+                                <property name="lecm-arm:search-type">
+                                    <![CDATA[]]>
+                                </property>
+                                <property name="lecm-arm:expression">
+                                    <![CDATA[]]>
+                                </property>
+                                <property name="lecm-arm:counter-enable">
+                                    <![CDATA[false]]>
+                                </property>
+                                <property name="lecm-arm:order">
+                                    <![CDATA[30]]>
+                                </property>
+                                <property name="lecm-arm:types">
+                                    <![CDATA[]]>
+                                </property>
+                                <property name="lecm-arm:expand-row-source">
+                                    <![CDATA[]]>
+                                </property>
+                                <items>
+                                    <item name="cm:Контрагенты" type="lecm-arm:node">
+                                        <property name="lecm-arm:is-select-by-activeTasks">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:search-query">
+                                            <![CDATA[@lecm\-contract\:partner\-assoc\-ref:"#value-with-subtree-refs"]]>
+                                        </property>
+                                        <property name="lecm-arm:is-aggregation-node">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[Контрагенты]]>
+                                        </property>
+                                        <property name="lecm-arm:search-type">
+                                            <![CDATA[]]>
+                                        </property>
+                                        <property name="lecm-arm:expression">
+                                            <![CDATA[]]>
+                                        </property>
+                                        <property name="lecm-arm:counter-enable">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[0]]>
+                                        </property>
+                                        <property name="lecm-arm:types">
+                                            <![CDATA[]]>
+                                        </property>
+                                        <property name="lecm-arm:expand-row-source">
+                                            <![CDATA[]]>
+                                        </property>
+                                        <items>
+                                            <item name="cm:30aa2819-ca89-4143-916f-66544cb32d3d" type="lecm-arm:query-child-rule">
+                                                <property name="lecm-arm:node-rule-sort-config">
+                                                    <![CDATA[]]>
+                                                </property>
+                                                <property name="lecm-arm:child-rule-substitute-string">
+                                                    <![CDATA[]]>
+                                                </property>
+                                                <property name="cm:name">
+                                                    <![CDATA[30aa2819-ca89-4143-916f-66544cb32d3d]]>
+                                                </property>
+                                                <property name="lecm-arm:node-rule-page-count">
+                                                    <![CDATA[-1]]>
+                                                </property>
+                                                <property name="lecm-arm:node-rule-search-template">
+                                                    <![CDATA[]]>
+                                                </property>
+                                                <property name="lecm-arm:list-query-child-rule">
+                                                    <![CDATA[TYPE:"lecm-contractor:contractor-type" AND NOT ASPECT:"lecm-orgstr-aspects:is-organization-aspect"]]>
+                                                </property>
+                                            </item>
+                                        </items>
+                                        <assocs>
+                                            <assoc type="lecm-arm:node-child-rule-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Навигатор/По контрагентам/Контрагенты/30aa2819-ca89-4143-916f-66544cb32d3d"/>
+                                        </assocs>
+                                    </item>
+                                </items>
                             </item>
                         </items>
                         <assocs>
