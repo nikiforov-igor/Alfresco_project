@@ -20,12 +20,6 @@
 				<property name="lecm-orgstr:business-role-is-dynamic">true</property>
 				<property name="lecm-orgstr:business-role-description">Сотрудник, фактически выполнивший регистрацию документа</property>
 			</item>
-			<item name="cm:Регистратор документа" type="lecm-orgstr:business-role">
-				<property name="cm:name">Регистратор документа</property>
-				<property name="lecm-orgstr:business-role-identifier">LECM_REGISTRAR_DYN</property>
-				<property name="lecm-orgstr:business-role-is-dynamic">true</property>
-				<property name="lecm-orgstr:business-role-description">Сотрудник, фактически выполнивший регистрацию документа</property>
-			</item>
 			<item name="cm:СЭД. Получатель" type="lecm-orgstr:business-role">
 				<property name="cm:name">СЭД. Получатель</property>
 				<property name="lecm-orgstr:business-role-identifier">DA_RECIPIENT_DYN</property>

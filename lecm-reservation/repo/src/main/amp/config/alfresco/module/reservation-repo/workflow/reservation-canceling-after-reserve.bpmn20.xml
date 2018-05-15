@@ -30,7 +30,6 @@
 
                         if (registrarsList) {
                             for (var i=0; i < registrarsList.size(); i++) {
-                                lecmPermission.revokeDynamicRole(document, registrarsList.get(i), 'LECM_REGISTRAR_DYN');
                                 lecmPermission.revokeDynamicRole(document, registrarsList.get(i), 'RESERVATION_PERFORMER_DYN');
                             }
                         }
@@ -127,8 +126,9 @@
                                 var employee = assignee;
 
                                 var workflowRole = task.getVariableLocal('registrarDynamicRole');
-                                var workflowRoleName = workflowRole ? workflowRole : 'LECM_REGISTRAR_DYN';
-                                statemachine.grandDynamicRoleForEmployee(document, employee, workflowRoleName);
+                                if (workflowRole) {
+                                    statemachine.grandDynamicRoleForEmployee(document, employee, workflowRole);
+                                }
                                 statemachine.grandDynamicRoleForEmployee(document, employee, "RESERVATION_PERFORMER_DYN");
                             ]]></activiti:string>
                     </activiti:field>
