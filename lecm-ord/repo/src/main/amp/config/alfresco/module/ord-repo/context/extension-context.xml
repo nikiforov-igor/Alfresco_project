@@ -22,6 +22,6 @@
 		  p:stateMachineService-ref="stateMachineHelper"
 		  p:errandsService-ref="errandsService"
 		  p:notificationsService-ref="notificationsService"
-		  p:edsService-ref="edsService" />
-
+		  p:edsService-ref="edsService"
+		  p:documentMembersService-ref="documentMembersService"/>
 </beans>

@@ -13,6 +13,7 @@ import org.springframework.extensions.surf.util.I18NUtil;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentEventService;
+import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.eds.api.EDSDocumentService;
@@ -42,6 +43,10 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
 
     private PersonService personService;
 
+    private DocumentMembersService documentMembersService;
+
+    private ErrandsService errandsService;
+
     private EnumMap<ATTACHMENT_CATEGORIES,String> attachmentCategoriesMap;
 
     public PersonService getPersonService() {
@@ -58,6 +63,14 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
 
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;
+    }
+
+    public void setErrandsService(ErrandsService errandsService) {
+        this.errandsService = errandsService;
+    }
+
+    public void setDocumentMembersService(DocumentMembersService documentMembersService) {
+        this.documentMembersService = documentMembersService;
     }
 
     public DocumentEventService getDocumentEventService() {
@@ -214,6 +227,9 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
                 // Назначить инициатора поручения
                 if (null != errandInitiator) {
                     associations.put("lecm-errands:initiator-assoc", errandInitiator.toString());
+                    if (errandsService.isTransferRightToBaseDocument()) {
+                        documentMembersService.addMemberWithoutCheckPermission(protocol, errandInitiator, "LECM_BASIC_PG_Reader", true);
+                    }
                 }
                 // Тип поручения
                 String errandTypeOnProtocolPointName = EDSDocumentService.getFromMessagesOrDefaultValue("lecm.protocol.point.errand.type.name", ErrandsService.ERRAND_TYPE_ON_POINT_PROTOCOL);
@@ -224,6 +240,9 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
                 if (pointExecutorAssocs.size() > 0) {
                     NodeRef executor = pointExecutorAssocs.get(0).getTargetRef();
                     associations.put("lecm-errands:executor-assoc", executor.toString());
+                    if (errandsService.isTransferRightToBaseDocument()) {
+                        documentMembersService.addMemberWithoutCheckPermission(protocol, executor, "LECM_BASIC_PG_Reader", true);
+                    }
                 }
                 //тематика поручения
                 List<AssociationRef> subjectAssocs = nodeService.getTargetAssocs(protocol, DocumentService.ASSOC_SUBJECT);
@@ -236,6 +255,7 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
                 }
 
                 NodeRef errand = documentService.createDocument(ErrandsService.TYPE_ERRANDS.toPrefixString(namespaceService), properties, associations);
+                nodeService.addAspect(errand, ErrandsService.ASPECT_SKIP_TRANSFER_RIGHT_TO_PARENT_ASPECT, null);
 
                 // выдадим права инициатору
                 if (null != errandInitiator) {
