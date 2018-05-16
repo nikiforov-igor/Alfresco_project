@@ -3691,7 +3691,9 @@ if (document !== null) {
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[statemachine.terminateWorkflowsByDefinition(stm_document, 'eventsResourceReservation', null, null);]]></value>
+                                                                <value><![CDATA[(function() {
+    statemachine.terminateWorkflowsByDefinition(stm_document, events.WORKFLOW_RESOURCE_RESERVATION_ID, null, null);
+})();]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -3725,7 +3727,10 @@ if (document !== null) {
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[statemachine.terminateWorkflowsByDefinition(stm_document, 'eventsResourceReservation', null, null);]]></value>
+                                                                <value><![CDATA[(function() {
+    statemachine.terminateWorkflowsByDefinition(stm_document, events.WORKFLOW_RESOURCE_RESERVATION_ID, null, null);
+    events.sendCancelNotifications(stm_document);
+})();]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -3939,7 +3944,7 @@ if (document !== null) {
                 // отправим уведомление ответственным
                 notifications.sendNotification({
                     recipients: responsibleList,
-                    templateCode: 'MEETINGS_RESPONSIBLE_FOR_RESOURCES',
+                    templateCode: 'LECM_MEETINGS_DOCUMENT.RESPONSIBLE_FOR_RESOURCES',
                     templateConfig: {
                         mainObject: meeting
                     }
@@ -4176,7 +4181,7 @@ if (document !== null) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[true]]></value>
+                                                <value><![CDATA[false]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -4386,7 +4391,7 @@ if (document !== null) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[true]]></value>
+                                                <value><![CDATA[false]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
