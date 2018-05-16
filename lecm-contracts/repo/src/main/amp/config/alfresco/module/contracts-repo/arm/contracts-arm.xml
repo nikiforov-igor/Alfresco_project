@@ -445,10 +445,10 @@
                                 <property name="cm:name"><![CDATA[Ожидают отправки по маршруту]]></property>
                                 <property name="lecm-arm:order"><![CDATA[30]]></property>
                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
-                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                <property name="lecm-arm:types"><![CDATA[lecm-contract:document]]></property>
                                 <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
-                                <property name="lecm-arm:search-query"><![CDATA[@lecm\-statemachine\:status:'Проект' AND @lecm\-document\:author\-assoc\-ref:"#current-user"]]></property>
+                                <property name="lecm-arm:search-query"><![CDATA[@lecm\-statemachine\:status:'Проект зарегистрирован' AND @lecm\-document\:author\-assoc\-ref:"#current-user"]]></property>
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                 <property name="lecm-arm:expression"><![CDATA[armNode.count() > 0]]></property>
                                 <items>
@@ -7404,6 +7404,9 @@
                             <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Навигатор/01b086f1-8e0f-e8a6-04b3-102e50ab62d2"/>
                             <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Навигатор/e0a7b96d-cf0d-d10b-392d-ba3ff1dbf652"/>
                             <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Навигатор/2a455595-9b68-92d8-60f1-4b46ff4432e5"/>
+                            <assoc type="lecm-arm:filters-assoc" path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По сроку действия"/>
+                            <assoc type="lecm-arm:filters-assoc" path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По сумме договора"/>
+                            <assoc type="lecm-arm:filters-assoc" path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По принадлежности"/>
                         </assocs>
                     </item>
                     <item name="cm:Мои поисковые запросы" type="lecm-arm:accordion">
@@ -7910,20 +7913,20 @@
                                     </item>
                                 </items>
                                 <assocs>
-                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Корзина/85f73512-1166-bcb8-21bc-ea92ec00ddd9"/>
-                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Корзина/f30e4597-9490-6e26-3243-7a667671e1ed"/>
-                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Корзина/055e47bf-b7f6-a8d3-e7ef-788322dc8f8d"/>
-                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Корзина/b4b6607b-9189-aeb8-b294-70387854d832"/>
-                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Корзина/c4b9c226-dd40-a529-0d79-aba6c75532a0"/>
-                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Корзина/8f1da31c-dcf6-b9d4-19d8-9a5a40c92a12"/>
-                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Корзина/160ccb82-3ca4-0fa7-04d6-a69e1f589109"/>
-                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Корзина/74e8dfd6-516f-2dcd-6bed-a93e67ccd487"/>
-                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Корзина/5ec81e9b-a885-c21e-9a27-95f71e11d8d0"/>
-                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Корзина/281642df-f4a4-4fa9-300d-6e9c92d8305a"/>
-                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Корзина/1ef998f6-d795-3058-6532-efee568ae085"/>
-                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Корзина/b71c972b-f292-c92c-4a16-8e3e92565c0b"/>
-                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Корзина/ca506c50-0085-1083-1670-7286c1c91b77"/>
-                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Корзина/7b2a70df-cdff-de9d-24ca-8443b84bc83f"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Корзина/Корзина/85f73512-1166-bcb8-21bc-ea92ec00ddd9"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Корзина/Корзина/f30e4597-9490-6e26-3243-7a667671e1ed"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Корзина/Корзина/055e47bf-b7f6-a8d3-e7ef-788322dc8f8d"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Корзина/Корзина/b4b6607b-9189-aeb8-b294-70387854d832"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Корзина/Корзина/c4b9c226-dd40-a529-0d79-aba6c75532a0"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Корзина/Корзина/8f1da31c-dcf6-b9d4-19d8-9a5a40c92a12"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Корзина/Корзина/160ccb82-3ca4-0fa7-04d6-a69e1f589109"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Корзина/Корзина/74e8dfd6-516f-2dcd-6bed-a93e67ccd487"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Корзина/Корзина/5ec81e9b-a885-c21e-9a27-95f71e11d8d0"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Корзина/Корзина/281642df-f4a4-4fa9-300d-6e9c92d8305a"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Корзина/Корзина/1ef998f6-d795-3058-6532-efee568ae085"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Корзина/Корзина/b71c972b-f292-c92c-4a16-8e3e92565c0b"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Корзина/Корзина/ca506c50-0085-1083-1670-7286c1c91b77"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Корзина/Корзина/7b2a70df-cdff-de9d-24ca-8443b84bc83f"/>
                                 </assocs>
                             </item>
                         </items>

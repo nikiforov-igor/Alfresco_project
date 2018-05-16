@@ -7,8 +7,24 @@
                 <property name="lecm-arm:filter-code">AUTHOR_FILTER</property>
                 <property name="lecm-arm:filter-class">authorArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
-                <property name="lecm-arm:filter-values">MY|Мои,DEPARTMENT|Мое подразделение,ALL|Все</property>
+                <property name="lecm-arm:filter-values">MY|Мои,DEPARTMENT|Мое подразделение</property>
                 <property name="lecm-arm:filter-query">lecm-document:author-assoc-ref,lecm-eds-document:recipients-assoc-ref,lecm-eds-document:reviewers-assoc-ref,lecm-ord:controller-assoc-ref</property>
+            </item>
+            <item name="cm:По сроку действия" type="lecm-arm:filter">
+                <property name="cm:name">По сроку действия</property>
+                <property name="lecm-arm:filter-code">LIMITATION_FILTER</property>
+                <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
+                <property name="lecm-arm:filter-multiple-select">false</property>
+                <property name="lecm-arm:filter-values">@lecm\\-contract:endDate:[NOW TO NOW+30DAY]|Осталось менее 30 дней;@lecm\\-contract:endDate:[MIN TO NOW/DAY]|Срок действия истек</property>
+                <property name="lecm-arm:filter-query">#value</property>
+            </item>
+            <item name="cm:По сумме договора" type="lecm-arm:filter">
+                <property name="cm:name">По сумме договора</property>
+                <property name="lecm-arm:filter-code">CONTRACT_SUM_FILTER</property>
+                <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
+                <property name="lecm-arm:filter-multiple-select">false</property>
+                <property name="lecm-arm:filter-values">@lecm\\-contract:totalAmount:[0 TO 999999]|Менее 1 млн;@lecm\\-contract:totalAmount:[1000000 TO 999999999]|От 1 млн до 1 млрд;@lecm\\-contract:totalAmount:[1000000000 TO MAX]|1 млрд и более</property>
+                <property name="lecm-arm:filter-query">#value</property>
             </item>
             <item name="cm:По срокам" type="lecm-arm:filter">
                 <property name="cm:name">По срокам</property>
