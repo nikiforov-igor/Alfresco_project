@@ -21,23 +21,33 @@ LogicECM.module.Contracts.dashlet = LogicECM.module.Contracts.dashlet || {};
 		},
 		container: null,
 		viewDialog: null,
-		message: {},
+		settings: {},
 
 		onReady: function Contracts_onReady() {
 			this.container = Dom.get(this.id + '_results');
-			this.setMessage();
+			this.setSettings();
 			this.createDialog();
 			this.drawForm();
 		},
 
-		setMessage: function Set_Message() {
-			this.message = {
-				'Все действующие': this.msg('label.info.allContracts'),
-				'Проекты': this.msg('label.info.contractsToDevelop'),
-				'На исполнении': this.msg('label.info.activeContracts'),
-				'Завершенные': this.msg('label.info.inactiveContracts'),
-				'Участники': this.msg('label.info.participants')
-			};
+		setSettings: function Set_Message() {
+            var successCallback = {
+                scope: this,
+                fn: function (serverResponse) {
+                    this.settings = {
+                    	'armCode': serverResponse.json.armCode,
+                        'Участники': this.msg('label.info.participants'),
+                        'Все действующие': {'message': this.msg('label.info.allContracts'), 'path' : serverResponse.json.currentContractsPath},
+                        'Проекты': {'message': this.msg('label.info.contractsToDevelop'), 'path' : serverResponse.json.projectContractsPath},
+                        'На исполнении': {'message': this.msg('label.info.activeContracts'), 'path': serverResponse.json.executionContractsPath}
+                    };
+                }
+            };
+            Alfresco.util.Ajax.jsonGet({
+                url: Alfresco.constants.PROXY_URI + "lecm/contracts/dashlet/settings/url",
+                successCallback: successCallback,
+                failureMessage: this.msg('message.failure')
+            });
 		},
 
 		createRow: function Create_row(innerHtml) {
@@ -75,14 +85,14 @@ LogicECM.module.Contracts.dashlet = LogicECM.module.Contracts.dashlet || {};
 								if (!listItem.skip) {
 									this.createRow(YAHOO.lang.substitute(template, {
 										bold: index === 0 ? 'bold' : '',
-										message: this.message[listItem.key]?this.message[listItem.key]:listItem.key,
-										href: Alfresco.constants.URL_PAGECONTEXT + 'arm?code=SED&path=Договоры/' + encodeURIComponent(listItem.key),
+										message: this.settings[listItem.key] && this.settings[listItem.key].message ? this.settings[listItem.key].message : listItem.key,
+										href: Alfresco.constants.URL_PAGECONTEXT + 'arm?code=' + this.settings.armCode + '&path=' + encodeURIComponent(this.settings[listItem.key].path),
 										amount: listItem.amount
 									}));
 								}
 							}
 							this.createRow(YAHOO.lang.substitute(membersTemplate, {
-								message: this.message[members.key]?this.message[members.key]:members.key,
+								message: this.settings[members.key]?this.settings[members.key]:members.key,
 								onclick: 'LogicECM.module.Contracts.dashlet.Summary.instance.showDialog();',
 								amount: members.amountMembers
 							}));
