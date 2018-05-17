@@ -8203,30 +8203,21 @@
                         <property name="lecm-arm:types">
                             <![CDATA[]]>
                         </property>
+                        <property name="lecm-arm:root-node-html-url">
+                            <![CDATA[]]>
+                        </property>
                         <items>
-                            <item name="cm:Поисковые запросы" type="lecm-arm:node">
-                                <property name="lecm-arm:is-select-by-activeTasks">
-                                    <![CDATA[false]]>
+                            <item name="cm:Поисковые запросы" type="lecm-arm:html-node">
+                                <property name="lecm-arm:order">
+                                    <![CDATA[0]]>
                                 </property>
-                                <property name="lecm-arm:search-query">
-                                    <![CDATA[]]>
-                                </property>
-                                <property name="lecm-arm:is-aggregation-node">
-                                    <![CDATA[false]]>
+                                <property name="lecm-arm:html-url">
+                                    <![CDATA[page/lecm/arm/blank?title=Поисковые запросы&description=Выберите поисковый запрос]]>
                                 </property>
                                 <property name="cm:name">
                                     <![CDATA[Поисковые запросы]]>
                                 </property>
-                                <property name="lecm-arm:search-type">
-                                    <![CDATA[]]>
-                                </property>
-                                <property name="lecm-arm:counter-enable">
-                                    <![CDATA[false]]>
-                                </property>
-                                <property name="lecm-arm:order">
-                                    <![CDATA[0]]>
-                                </property>
-                                <property name="lecm-arm:types">
+                                <property name="lecm-arm:expression">
                                     <![CDATA[]]>
                                 </property>
                                 <items>
@@ -8240,51 +8231,45 @@
                                         <property name="cm:name">
                                             <![CDATA[Запросы]]>
                                         </property>
+                                        <property name="lecm-arm:expression">
+                                            <![CDATA[]]>
+                                        </property>
                                         <items>
-                                            <item name="cm:c5e6fb79-d34f-b407-a87f-b181440f86bc" type="lecm-arm:script-child-rule">
+                                            <item name="cm:bbb3084d-5f7e-4482-a103-448b80b6e408" type="lecm-arm:script-child-rule">
                                                 <property name="lecm-arm:script-child-rule-root">
                                                     <![CDATA[(function() {
-                  var result;
-                  // Возвращаем поисковые шаблоны запросов пользователя типа Scriptable.
-                  result = searchQueries.getStore().getChildren();
+          var result;
+          // Возвращаем поисковые шаблоны запросов пользователя типа Scriptable.
+          result = searchQueries.getStore().getChildren();
 
-                  model.result = result;
-                })();]]>
+          model.result = result;
+        })();]]>
+                                                </property>
+                                                <property name="lecm-arm:child-rule-substitute-string">
+                                                    <![CDATA[]]>
                                                 </property>
                                                 <property name="cm:name">
-                                                    <![CDATA[c5e6fb79-d34f-b407-a87f-b181440f86bc]]>
+                                                    <![CDATA[bbb3084d-5f7e-4482-a103-448b80b6e408]]>
                                                 </property>
                                             </item>
                                         </items>
                                         <assocs>
-                                            <assoc type="lecm-arm:node-child-rule-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Мои поисковые запросы/Поисковые запросы/Запросы/c5e6fb79-d34f-b407-a87f-b181440f86bc"/>
+                                            <assoc type="lecm-arm:node-child-rule-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Мои поисковые запросы/Поисковые запросы/Запросы/bbb3084d-5f7e-4482-a103-448b80b6e408"/>
                                         </assocs>
                                     </item>
                                 </items>
                             </item>
-                            <item name="cm:Управление поисковыми запросами" type="lecm-arm:node">
-                                <property name="lecm-arm:is-select-by-activeTasks">
-                                    <![CDATA[false]]>
+                            <item name="cm:Управление поисковыми запросами" type="lecm-arm:html-node">
+                                <property name="lecm-arm:order">
+                                    <![CDATA[5]]>
                                 </property>
-                                <property name="lecm-arm:search-query">
-                                    <![CDATA[]]>
-                                </property>
-                                <property name="lecm-arm:is-aggregation-node">
-                                    <![CDATA[false]]>
+                                <property name="lecm-arm:html-url">
+                                    <![CDATA[page/search-query-create]]>
                                 </property>
                                 <property name="cm:name">
                                     <![CDATA[Управление поисковыми запросами]]>
                                 </property>
-                                <property name="lecm-arm:search-type">
-                                    <![CDATA[]]>
-                                </property>
-                                <property name="lecm-arm:counter-enable">
-                                    <![CDATA[false]]>
-                                </property>
-                                <property name="lecm-arm:order">
-                                    <![CDATA[5]]>
-                                </property>
-                                <property name="lecm-arm:types">
+                                <property name="lecm-arm:expression">
                                     <![CDATA[]]>
                                 </property>
                             </item>
@@ -8322,9 +8307,9 @@
                             <![CDATA[]]>
                         </property>
                         <items>
-                            <item name="cm:Реестр договоров" type="lecm-arm:reports-node">
+                            <item name="cm:Договоры" type="lecm-arm:reports-node">
                                 <property name="cm:name">
-                                    <![CDATA[Реестр договоров]]>
+                                    <![CDATA[Договоры]]>
                                 </property>
                                 <property name="lecm-arm:expression">
                                     <![CDATA[]]>
@@ -8333,45 +8318,64 @@
                                     <![CDATA[0]]>
                                 </property>
                                 <property name="lecm-arm:reportCodes">
-                                    <![CDATA[contract-registry]]>
+                                    <![CDATA[contract-registry,contract-info,docflow-status-timings]]>
                                 </property>
                                 <property name="lecm-arm:types">
                                     <![CDATA[]]>
                                 </property>
-                            </item>
-                            <item name="cm:Сводный отчет по договорам" type="lecm-arm:reports-node">
-                                <property name="cm:name">
-                                    <![CDATA[Сводный отчет по договорам]]>
-                                </property>
-                                <property name="lecm-arm:expression">
-                                    <![CDATA[]]>
-                                </property>
-                                <property name="lecm-arm:order">
-                                    <![CDATA[0]]>
-                                </property>
-                                <property name="lecm-arm:reportCodes">
-                                    <![CDATA[contract-info]]>
-                                </property>
-                                <property name="lecm-arm:types">
-                                    <![CDATA[]]>
-                                </property>
-                            </item>
-                            <item name="cm:Сроки прохождения маршрута" type="lecm-arm:reports-node">
-                                <property name="cm:name">
-                                    <![CDATA[Сроки прохождения маршрута]]>
-                                </property>
-                                <property name="lecm-arm:expression">
-                                    <![CDATA[]]>
-                                </property>
-                                <property name="lecm-arm:order">
-                                    <![CDATA[0]]>
-                                </property>
-                                <property name="lecm-arm:reportCodes">
-                                    <![CDATA[docflow-status-timings]]>
-                                </property>
-                                <property name="lecm-arm:types">
-                                    <![CDATA[]]>
-                                </property>
+                                <items>
+                                    <item name="cm:Реестр договоров" type="lecm-arm:reports-node">
+                                        <property name="cm:name">
+                                            <![CDATA[Реестр договоров]]>
+                                        </property>
+                                        <property name="lecm-arm:expression">
+                                            <![CDATA[]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[0]]>
+                                        </property>
+                                        <property name="lecm-arm:reportCodes">
+                                            <![CDATA[contract-registry]]>
+                                        </property>
+                                        <property name="lecm-arm:types">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:Сводный отчет по договорам" type="lecm-arm:reports-node">
+                                        <property name="cm:name">
+                                            <![CDATA[Сводный отчет по договорам]]>
+                                        </property>
+                                        <property name="lecm-arm:expression">
+                                            <![CDATA[]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[0]]>
+                                        </property>
+                                        <property name="lecm-arm:reportCodes">
+                                            <![CDATA[contract-info]]>
+                                        </property>
+                                        <property name="lecm-arm:types">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:Сроки прохождения маршрута" type="lecm-arm:reports-node">
+                                        <property name="cm:name">
+                                            <![CDATA[Сроки прохождения маршрута]]>
+                                        </property>
+                                        <property name="lecm-arm:expression">
+                                            <![CDATA[]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[0]]>
+                                        </property>
+                                        <property name="lecm-arm:reportCodes">
+                                            <![CDATA[docflow-status-timings]]>
+                                        </property>
+                                        <property name="lecm-arm:types">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                </items>
                             </item>
                         </items>
                     </item>
