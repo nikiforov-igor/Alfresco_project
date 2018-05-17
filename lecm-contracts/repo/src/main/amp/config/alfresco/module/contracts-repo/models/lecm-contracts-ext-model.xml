@@ -20,12 +20,28 @@
                 <!-- код СЭД-->
                 <property name="lecm-contract-ext:dashlet-settings-code">
                     <type>d:text</type>
-                    <default>SED</default>
+                    <mandatory>true</mandatory>
+                    <default>CONTRACTS</default>
                 </property>
                 <!-- Путь в дереве СЭД-->
                 <property name="lecm-contract-ext:dashlet-settings-path">
                     <type>d:text</type>
-                    <default></default>
+                    <default>Навигатор/По состоянию</default>
+                </property>
+                <!-- Узел «Действующие», путь-->
+                <property name="lecm-contract-ext:current-contracts-path">
+                    <type>d:text</type>
+                    <default>Навигатор/По состоянию/Действует</default>
+                </property>
+                <!-- Узел «Проекты», путь-->
+                <property name="lecm-contract-ext:project-contracts-path">
+                    <type>d:text</type>
+                    <default>Навигатор/По состоянию/Проекты</default>
+                </property>
+                <!-- Узел «На исполнении», путь-->
+                <property name="lecm-contract-ext:execution-contracts-path">
+                    <type>d:text</type>
+                    <default>Навигатор/По состоянию/На исполнении</default>
                 </property>
             </properties>
         </type>
