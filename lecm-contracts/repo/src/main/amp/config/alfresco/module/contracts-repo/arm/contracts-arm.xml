@@ -8393,7 +8393,7 @@
                             <![CDATA[]]>
                         </property>
                         <property name="lecm-arm:expression">
-                            <![CDATA[]]>
+                            <![CDATA[user.currentUser().hasBusinessRole("DA_ENGINEER")]]>
                         </property>
                         <property name="lecm-arm:counter-enable">
                             <![CDATA[false]]>
