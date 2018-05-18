@@ -8323,59 +8323,6 @@
                                 <property name="lecm-arm:types">
                                     <![CDATA[]]>
                                 </property>
-                                <items>
-                                    <item name="cm:Реестр договоров" type="lecm-arm:reports-node">
-                                        <property name="cm:name">
-                                            <![CDATA[Реестр договоров]]>
-                                        </property>
-                                        <property name="lecm-arm:expression">
-                                            <![CDATA[]]>
-                                        </property>
-                                        <property name="lecm-arm:order">
-                                            <![CDATA[0]]>
-                                        </property>
-                                        <property name="lecm-arm:reportCodes">
-                                            <![CDATA[contract-registry]]>
-                                        </property>
-                                        <property name="lecm-arm:types">
-                                            <![CDATA[]]>
-                                        </property>
-                                    </item>
-                                    <item name="cm:Сводный отчет по договорам" type="lecm-arm:reports-node">
-                                        <property name="cm:name">
-                                            <![CDATA[Сводный отчет по договорам]]>
-                                        </property>
-                                        <property name="lecm-arm:expression">
-                                            <![CDATA[]]>
-                                        </property>
-                                        <property name="lecm-arm:order">
-                                            <![CDATA[0]]>
-                                        </property>
-                                        <property name="lecm-arm:reportCodes">
-                                            <![CDATA[contract-info]]>
-                                        </property>
-                                        <property name="lecm-arm:types">
-                                            <![CDATA[]]>
-                                        </property>
-                                    </item>
-                                    <item name="cm:Сроки прохождения маршрута" type="lecm-arm:reports-node">
-                                        <property name="cm:name">
-                                            <![CDATA[Сроки прохождения маршрута]]>
-                                        </property>
-                                        <property name="lecm-arm:expression">
-                                            <![CDATA[]]>
-                                        </property>
-                                        <property name="lecm-arm:order">
-                                            <![CDATA[0]]>
-                                        </property>
-                                        <property name="lecm-arm:reportCodes">
-                                            <![CDATA[docflow-status-timings]]>
-                                        </property>
-                                        <property name="lecm-arm:types">
-                                            <![CDATA[]]>
-                                        </property>
-                                    </item>
-                                </items>
                             </item>
                         </items>
                     </item>
