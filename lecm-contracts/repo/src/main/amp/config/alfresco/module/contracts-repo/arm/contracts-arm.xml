@@ -1051,7 +1051,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[Валюта договора]]>
+                                            <![CDATA[lecm-contract:currency-assoc]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
