@@ -48,7 +48,7 @@
                             <![CDATA[false]]>
                         </property>
                         <property name="lecm-arm:types">
-                            <![CDATA[lecm-contract:document]]>
+                            <![CDATA[lecm-contract:document,lecm-additional-document:additionalDocument]]>
                         </property>
                         <items>
                             <item name="cm:Главная" type="lecm-arm:html-node">
