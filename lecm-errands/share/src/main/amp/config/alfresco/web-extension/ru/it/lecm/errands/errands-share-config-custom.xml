@@ -343,6 +343,14 @@
                 <field-visibility>
                     <show id="lecm-errands-dic:errand-cancel-reason-name" force="true"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-errands-dic:errand-cancel-reason-name">
+                        <constraint-handlers>
+                            <constraint type="LENGTH" event="keyup" validation-handler="Alfresco.forms.validation.length"/>
+                            <constraint type="MANDATORY" event="focus" validation-handler="Alfresco.forms.validation.mandatory"/>
+                        </constraint-handlers>
+                    </field>
+                </appearance>
             </form>
             <form id="datagrid">
                 <field-visibility>
