@@ -1051,7 +1051,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[Валюта договора]]>
+                                            <![CDATA[lecm-contract:currency-assoc]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -1208,7 +1208,7 @@
                                     <![CDATA[false]]>
                                 </property>
                                 <property name="lecm-arm:search-query">
-                                    <![CDATA[@lecm\-statemachine\:status:'Согласовано' AND @lecm\-document\:author\-assoc\-ref:"#current-user"]]>
+                                    <![CDATA[@lecm\-statemachine\:status:'Согласован' AND @lecm\-document\:author\-assoc\-ref:"#current-user"]]>
                                 </property>
                                 <property name="lecm-arm:counter-limitation">
                                     <![CDATA[]]>
@@ -4340,7 +4340,7 @@
                                     <![CDATA[false]]>
                                 </property>
                                 <property name="lecm-arm:search-query">
-                                    <![CDATA[(@lecm\-statemachine\:status:'Проект зарегистрирован' AND @lecm\-document\:author\-assoc\-ref:"#current-user") OR (({{ACTIVE_TASKS_ONLY({tasks:['lecm-approval-v2:approveTask'],user:'#current-user'})}} AND lecm\-statemachine\:status:'На согласовании')) OR (@lecm\-statemachine\:status:'Согласовано' AND @lecm\-document\:author\-assoc\-ref:"#current-user") OR (({{ACTIVE_TASKS_ONLY({tasks:['lecm-signing-v2:signTask'],user:'#current-user'})}} AND lecm\-statemachine\:status:'На подписании')) OR (@lecm\-statemachine\:status:'На подписании у контрагента' AND @lecm\-document\:author\-assoc\-ref:"#current-user") OR (@lecm\-statemachine\:status:'Подписано' AND @lecm\-document\:author\-assoc\-ref:"#current-user") OR (@lecm\-statemachine\:status:'На доработке' AND @lecm\-document\:author\-assoc\-ref:"#current-user")]]>
+                                    <![CDATA[(@lecm\-statemachine\:status:'Проект зарегистрирован' AND @lecm\-document\:author\-assoc\-ref:"#current-user") OR (({{ACTIVE_TASKS_ONLY({tasks:['lecm-approval-v2:approveTask'],user:'#current-user'})}} AND lecm\-statemachine\:status:'На согласовании')) OR (@lecm\-statemachine\:status:'Согласован' AND @lecm\-document\:author\-assoc\-ref:"#current-user") OR (({{ACTIVE_TASKS_ONLY({tasks:['lecm-signing-v2:signTask'],user:'#current-user'})}} AND lecm\-statemachine\:status:'На подписании')) OR (@lecm\-statemachine\:status:'На подписании у контрагента' AND @lecm\-document\:author\-assoc\-ref:"#current-user") OR (@lecm\-statemachine\:status:'Подписано' AND @lecm\-document\:author\-assoc\-ref:"#current-user") OR (@lecm\-statemachine\:status:'На доработке' AND @lecm\-document\:author\-assoc\-ref:"#current-user")]]>
                                 </property>
                                 <property name="lecm-arm:counter-limitation">
                                     <![CDATA[]]>
@@ -4801,7 +4801,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:search-query">
-                                            <![CDATA[@lecm\-statemachine\:status:'Согласовано' AND @lecm\-document\:author\-assoc\-ref:"#current-user"]]>
+                                            <![CDATA[@lecm\-statemachine\:status:'Согласован' AND @lecm\-document\:author\-assoc\-ref:"#current-user"]]>
                                         </property>
                                         <property name="lecm-arm:is-aggregation-node">
                                             <![CDATA[false]]>
@@ -6076,7 +6076,7 @@
                                     <![CDATA[Все созданные мной]]>
                                 </property>
                                 <property name="lecm-arm:search-type">
-                                    <![CDATA[]]>
+                                    <![CDATA[lecm-contract:document]]>
                                 </property>
                                 <property name="lecm-arm:counter-enable">
                                     <![CDATA[false]]>
@@ -6085,7 +6085,7 @@
                                     <![CDATA[160]]>
                                 </property>
                                 <property name="lecm-arm:types">
-                                    <![CDATA[]]>
+                                    <![CDATA[lecm-contract:document]]>
                                 </property>
                                 <items>
                                     <item name="cm:5489c1ce-7ac4-9c1a-fcdf-6dc47f0bcde2" type="lecm-arm:field">
@@ -8323,59 +8323,6 @@
                                 <property name="lecm-arm:types">
                                     <![CDATA[]]>
                                 </property>
-                                <items>
-                                    <item name="cm:Реестр договоров" type="lecm-arm:reports-node">
-                                        <property name="cm:name">
-                                            <![CDATA[Реестр договоров]]>
-                                        </property>
-                                        <property name="lecm-arm:expression">
-                                            <![CDATA[]]>
-                                        </property>
-                                        <property name="lecm-arm:order">
-                                            <![CDATA[0]]>
-                                        </property>
-                                        <property name="lecm-arm:reportCodes">
-                                            <![CDATA[contract-registry]]>
-                                        </property>
-                                        <property name="lecm-arm:types">
-                                            <![CDATA[]]>
-                                        </property>
-                                    </item>
-                                    <item name="cm:Сводный отчет по договорам" type="lecm-arm:reports-node">
-                                        <property name="cm:name">
-                                            <![CDATA[Сводный отчет по договорам]]>
-                                        </property>
-                                        <property name="lecm-arm:expression">
-                                            <![CDATA[]]>
-                                        </property>
-                                        <property name="lecm-arm:order">
-                                            <![CDATA[0]]>
-                                        </property>
-                                        <property name="lecm-arm:reportCodes">
-                                            <![CDATA[contract-info]]>
-                                        </property>
-                                        <property name="lecm-arm:types">
-                                            <![CDATA[]]>
-                                        </property>
-                                    </item>
-                                    <item name="cm:Сроки прохождения маршрута" type="lecm-arm:reports-node">
-                                        <property name="cm:name">
-                                            <![CDATA[Сроки прохождения маршрута]]>
-                                        </property>
-                                        <property name="lecm-arm:expression">
-                                            <![CDATA[]]>
-                                        </property>
-                                        <property name="lecm-arm:order">
-                                            <![CDATA[0]]>
-                                        </property>
-                                        <property name="lecm-arm:reportCodes">
-                                            <![CDATA[docflow-status-timings]]>
-                                        </property>
-                                        <property name="lecm-arm:types">
-                                            <![CDATA[]]>
-                                        </property>
-                                    </item>
-                                </items>
                             </item>
                         </items>
                     </item>
@@ -8393,7 +8340,7 @@
                             <![CDATA[]]>
                         </property>
                         <property name="lecm-arm:expression">
-                            <![CDATA[]]>
+                            <![CDATA[user.currentUser().hasBusinessRole("DA_ENGINEER")]]>
                         </property>
                         <property name="lecm-arm:counter-enable">
                             <![CDATA[false]]>
