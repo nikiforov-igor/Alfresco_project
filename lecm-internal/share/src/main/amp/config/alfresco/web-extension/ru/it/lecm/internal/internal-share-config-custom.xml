@@ -24,6 +24,7 @@
                             <control-param name="datagridFormId">answers-datagrid</control-param>
                             <control-param name="allowCreate">false</control-param>
                             <control-param name="allowEdit">false</control-param>
+                            <control-param name="allowDelete">false</control-param>
                         </control>
                     </field>
                 </appearance>
