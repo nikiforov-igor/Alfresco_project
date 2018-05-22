@@ -145,7 +145,6 @@
                     <!--Ресурсы-->
                     <field id="lecm-events:temp-resources-assoc">
                         <control>
-                            <control-param name="childrenDataSource">lecm/events/resources/picker</control-param>
                             <control-param name="sortSelected">true</control-param>
                             <control-param name="verticalList">true</control-param>
                         </control>
@@ -649,7 +648,6 @@
                     </field>
                     <field id="lecm-events:temp-resources-assoc" set="createEventSet">
                         <control>
-                            <control-param name="childrenDataSource">lecm/events/resources/picker</control-param>
                             <control-param name="sortSelected">true</control-param>
                             <control-param name="verticalList">true</control-param>
                         </control>
