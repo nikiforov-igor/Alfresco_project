@@ -47,10 +47,10 @@ public class InWorkScheduler extends BaseTransactionalSchedule {
 
 		String searchQuery;
 		if (!NDModel.ND_STATUS.PUT_IN_WORK.getHistoryValue().equals(ndDocumentService.getNDStatusName(NDModel.ND_STATUS.PUT_IN_WORK))) {
-			String extendSearchQueryFormat = "TYPE:\"%1$s\" AND @%2$s:[MIN TO NOW/DAY] AND (@%3$s:\"%4$s\" @%3$s:\"%5$s\")";
+			String extendSearchQueryFormat = "TYPE:\"%1$s\" AND @%2$s:[MIN TO NOW/DAY+1DAY] AND (@%3$s:\"%4$s\" @%3$s:\"%5$s\")";
 			searchQuery = String.format(extendSearchQueryFormat, NDModel.TYPE_ND.toString(), NDModel.PROP_ND_BEGIN, StatemachineModel.PROP_STATUS, ndDocumentService.getNDStatusName(NDModel.ND_STATUS.PUT_IN_WORK), NDModel.ND_STATUS.PUT_IN_WORK.getHistoryValue());
 		} else {
-			String simpleSearchQueryFormat = "TYPE:\"%s\" AND @%s:[MIN TO NOW/DAY] AND @%s:\"%s\"";
+			String simpleSearchQueryFormat = "TYPE:\"%s\" AND @%s:[MIN TO NOW/DAY+1DAY] AND @%s:\"%s\"";
 			searchQuery = String.format(simpleSearchQueryFormat, NDModel.TYPE_ND.toString(), NDModel.PROP_ND_BEGIN, StatemachineModel.PROP_STATUS, ndDocumentService.getNDStatusName(NDModel.ND_STATUS.PUT_IN_WORK));
 		}
 
