@@ -313,6 +313,7 @@
                     <field id="lecm-errands:type-assoc" set="beforeDateSet">
                         <control>
                             <control-param name="changeItemsFireAction">errandTypeChanged</control-param>
+                            <control-param name="blockChangeItemOnInit">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:title" set="beforeDateSet">
