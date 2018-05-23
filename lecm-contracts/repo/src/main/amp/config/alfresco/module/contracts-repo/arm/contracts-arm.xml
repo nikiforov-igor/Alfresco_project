@@ -478,7 +478,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                            <![CDATA[lecm-contract:signatoryCounterparty]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -790,7 +790,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                            <![CDATA[lecm-contract:signatoryCounterparty]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -1155,7 +1155,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                            <![CDATA[lecm-contract:signatoryCounterparty]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -1495,7 +1495,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                            <![CDATA[lecm-contract:signatoryCounterparty]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -1860,7 +1860,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                            <![CDATA[lecm-contract:signatoryCounterparty]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -2200,7 +2200,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                            <![CDATA[lecm-contract:signatoryCounterparty]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -2539,7 +2539,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                            <![CDATA[lecm-contract:signatoryCounterparty]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -2878,7 +2878,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                            <![CDATA[lecm-contract:signatoryCounterparty]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -3217,7 +3217,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                            <![CDATA[lecm-contract:signatoryCounterparty]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -3556,7 +3556,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                            <![CDATA[lecm-contract:signatoryCounterparty]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -3921,7 +3921,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                            <![CDATA[lecm-contract:signatoryCounterparty]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -4287,7 +4287,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                            <![CDATA[lecm-contract:signatoryCounterparty]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -6420,7 +6420,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                            <![CDATA[lecm-contract:signatoryCounterparty]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -6998,7 +6998,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                            <![CDATA[lecm-contract:signatoryCounterparty]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -7447,7 +7447,7 @@
                                     <![CDATA[false]]>
                                 </property>
                                 <property name="lecm-arm:field-name">
-                                    <![CDATA[lecmContractWf:contractorSigner]]>
+                                    <![CDATA[lecm-contract:signatoryCounterparty]]>
                                 </property>
                                 <property name="lecm-arm:field-format-string">
                                     <![CDATA[]]>
@@ -8716,7 +8716,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                            <![CDATA[lecm-contract:signatoryCounterparty]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
