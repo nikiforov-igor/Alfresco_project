@@ -94,136 +94,6 @@
                                     <![CDATA[]]>
                                 </property>
                                 <items>
-                                    <item name="cm:099000bb-f0f6-403d-aaf5-e885363a2c88" type="lecm-arm:field">
-                                        <property name="lecm-arm:field-title">
-                                            <![CDATA[Дата создания]]>
-                                        </property>
-                                        <property name="cm:name">
-                                            <![CDATA[099000bb-f0f6-403d-aaf5-e885363a2c88]]>
-                                        </property>
-                                        <property name="lecm-arm:field-by-default">
-                                            <![CDATA[true]]>
-                                        </property>
-                                        <property name="lecm-arm:field-sortable">
-                                            <![CDATA[true]]>
-                                        </property>
-                                        <property name="lecm-arm:order">
-                                            <![CDATA[0]]>
-                                        </property>
-                                        <property name="lecm-arm:field-is-marker">
-                                            <![CDATA[false]]>
-                                        </property>
-                                        <property name="lecm-arm:field-name">
-                                            <![CDATA[lecm-document:doc-date]]>
-                                        </property>
-                                        <property name="lecm-arm:field-format-string">
-                                            <![CDATA[]]>
-                                        </property>
-                                    </item>
-                                    <item name="cm:3ad8137c-be40-4b04-906d-278b076fa66c" type="lecm-arm:field">
-                                        <property name="lecm-arm:field-title">
-                                            <![CDATA[Тип]]>
-                                        </property>
-                                        <property name="cm:name">
-                                            <![CDATA[3ad8137c-be40-4b04-906d-278b076fa66c]]>
-                                        </property>
-                                        <property name="lecm-arm:field-by-default">
-                                            <![CDATA[true]]>
-                                        </property>
-                                        <property name="lecm-arm:field-sortable">
-                                            <![CDATA[true]]>
-                                        </property>
-                                        <property name="lecm-arm:order">
-                                            <![CDATA[0]]>
-                                        </property>
-                                        <property name="lecm-arm:field-is-marker">
-                                            <![CDATA[false]]>
-                                        </property>
-                                        <property name="lecm-arm:field-name">
-                                            <![CDATA[Тип]]>
-                                        </property>
-                                        <property name="lecm-arm:field-format-string">
-                                            <![CDATA[]]>
-                                        </property>
-                                    </item>
-                                    <item name="cm:606c0d8e-3f13-45ca-bc19-c4dc5d46cccd" type="lecm-arm:field">
-                                        <property name="lecm-arm:field-title">
-                                            <![CDATA[Вид договора]]>
-                                        </property>
-                                        <property name="cm:name">
-                                            <![CDATA[606c0d8e-3f13-45ca-bc19-c4dc5d46cccd]]>
-                                        </property>
-                                        <property name="lecm-arm:field-by-default">
-                                            <![CDATA[false]]>
-                                        </property>
-                                        <property name="lecm-arm:field-sortable">
-                                            <![CDATA[true]]>
-                                        </property>
-                                        <property name="lecm-arm:order">
-                                            <![CDATA[0]]>
-                                        </property>
-                                        <property name="lecm-arm:field-is-marker">
-                                            <![CDATA[false]]>
-                                        </property>
-                                        <property name="lecm-arm:field-name">
-                                            <![CDATA[Вид договора]]>
-                                        </property>
-                                        <property name="lecm-arm:field-format-string">
-                                            <![CDATA[]]>
-                                        </property>
-                                    </item>
-                                    <item name="cm:51dad003-8c1a-4668-b399-67cc9fb9de5e" type="lecm-arm:field">
-                                        <property name="lecm-arm:field-title">
-                                            <![CDATA[Вид документа]]>
-                                        </property>
-                                        <property name="cm:name">
-                                            <![CDATA[51dad003-8c1a-4668-b399-67cc9fb9de5e]]>
-                                        </property>
-                                        <property name="lecm-arm:field-by-default">
-                                            <![CDATA[false]]>
-                                        </property>
-                                        <property name="lecm-arm:field-sortable">
-                                            <![CDATA[true]]>
-                                        </property>
-                                        <property name="lecm-arm:order">
-                                            <![CDATA[0]]>
-                                        </property>
-                                        <property name="lecm-arm:field-is-marker">
-                                            <![CDATA[false]]>
-                                        </property>
-                                        <property name="lecm-arm:field-name">
-                                            <![CDATA[Вид документа]]>
-                                        </property>
-                                        <property name="lecm-arm:field-format-string">
-                                            <![CDATA[]]>
-                                        </property>
-                                    </item>
-                                    <item name="cm:00a36904-b942-4ee0-a1fd-c8b2e1d60ada" type="lecm-arm:field">
-                                        <property name="lecm-arm:field-title">
-                                            <![CDATA[Контрагент]]>
-                                        </property>
-                                        <property name="cm:name">
-                                            <![CDATA[00a36904-b942-4ee0-a1fd-c8b2e1d60ada]]>
-                                        </property>
-                                        <property name="lecm-arm:field-by-default">
-                                            <![CDATA[false]]>
-                                        </property>
-                                        <property name="lecm-arm:field-sortable">
-                                            <![CDATA[true]]>
-                                        </property>
-                                        <property name="lecm-arm:order">
-                                            <![CDATA[0]]>
-                                        </property>
-                                        <property name="lecm-arm:field-is-marker">
-                                            <![CDATA[false]]>
-                                        </property>
-                                        <property name="lecm-arm:field-name">
-                                            <![CDATA[lecm-contract:partner-assoc]]>
-                                        </property>
-                                        <property name="lecm-arm:field-format-string">
-                                            <![CDATA[]]>
-                                        </property>
-                                    </item>
                                     <item name="cm:4388b1f5-de57-403a-9f91-17adb8f116ed" type="lecm-arm:field">
                                         <property name="lecm-arm:field-title">
                                             <![CDATA[Дата создания]]>
@@ -322,7 +192,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecm-eds-document:document-type-assoc]]>
+                                            <![CDATA[lecm-additional-document:additionalDocumentType]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -348,10 +218,10 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecm-arm:field-name]]>
+                                            <![CDATA[lecm-contract:partner-assoc]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
-                                            <![CDATA[lecm-arm:field-format-string]]>
+                                            <![CDATA[{lecm-contractor:shortname}]]>
                                         </property>
                                     </item>
                                     <item name="cm:591a7b88-7d07-4fe5-9ed1-fef8d18d9355" type="lecm-arm:field">
@@ -478,7 +348,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                            <![CDATA[lecm-contract:signatoryCounterparty]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -790,7 +660,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                            <![CDATA[lecm-contract:signatoryCounterparty]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -1155,7 +1025,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                            <![CDATA[lecm-contract:signatoryCounterparty]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -1342,7 +1212,7 @@
                                             <![CDATA[lecm-contract:partner-assoc]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
-                                            <![CDATA[]]>
+                                            <![CDATA[{lecm-contractor:shortname}]]>
                                         </property>
                                     </item>
                                     <item name="cm:754f796a-6d3b-4ce5-a220-f8f4594c4020" type="lecm-arm:field">
@@ -1495,7 +1365,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                            <![CDATA[lecm-contract:signatoryCounterparty]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -1600,10 +1470,10 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecm-reservation-aspects:lastReservationRunDate]]>
+                                            <![CDATA[lecm-signing-route_currentTaskStartDate]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
-                                            <![CDATA[{lecm-reservation-aspects:lastReservationRunDate?dd.MM.yyyy HH:mm}]]>
+                                            <![CDATA[{lecm-signing-route:currentTaskStartDate?dd.MM.yyyy HH:mm}]]>
                                         </property>
                                     </item>
                                     <item name="cm:6edc6866-b24d-41e0-ab57-2b1f7d622a7d" type="lecm-arm:field">
@@ -1860,7 +1730,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                            <![CDATA[lecm-contract:signatoryCounterparty]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -2200,7 +2070,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                            <![CDATA[lecm-contract:signatoryCounterparty]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -2539,7 +2409,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                            <![CDATA[lecm-contract:signatoryCounterparty]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -2878,7 +2748,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                            <![CDATA[lecm-contract:signatoryCounterparty]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -3217,7 +3087,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                            <![CDATA[lecm-contract:signatoryCounterparty]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -3556,7 +3426,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                            <![CDATA[lecm-contract:signatoryCounterparty]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -3921,7 +3791,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                            <![CDATA[lecm-contract:signatoryCounterparty]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -4287,7 +4157,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                            <![CDATA[lecm-contract:signatoryCounterparty]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -5046,10 +4916,10 @@
                                                     <![CDATA[false]]>
                                                 </property>
                                                 <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecm-approval-route:currentTaskStartDate]]>
+                                                    <![CDATA[lecm-signing-route:currentTaskStartDate]]>
                                                 </property>
                                                 <property name="lecm-arm:field-format-string">
-                                                    <![CDATA[{lecm-approval-route:currentTaskStartDate?dd.MM.yyyy HH:mm}]]>
+                                                    <![CDATA[{lecm-signing-route:currentTaskStartDate?dd.MM.yyyy HH:mm}]]>
                                                 </property>
                                             </item>
                                             <item name="cm:9090b61b-2b2f-2d3f-298d-b96dee87941e" type="lecm-arm:field">
@@ -6212,7 +6082,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[[lecm-eds-document:document-type-assoc]]>
+                                            <![CDATA[[lecm-additional-document:additionalDocumentType]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -6420,7 +6290,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                            <![CDATA[lecm-contract:signatoryCounterparty]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -6610,7 +6480,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[[lecm-eds-document:document-type-assoc]]>
+                                            <![CDATA[[lecm-additional-document:additionalDocumentType]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -6998,7 +6868,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                            <![CDATA[lecm-contract:signatoryCounterparty]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -7239,7 +7109,7 @@
                                     <![CDATA[false]]>
                                 </property>
                                 <property name="lecm-arm:field-name">
-                                    <![CDATA[[lecm-eds-document:document-type-assoc]]>
+                                    <![CDATA[[lecm-additional-document:additionalDocumentType]]>
                                 </property>
                                 <property name="lecm-arm:field-format-string">
                                     <![CDATA[]]>
@@ -7447,7 +7317,7 @@
                                     <![CDATA[false]]>
                                 </property>
                                 <property name="lecm-arm:field-name">
-                                    <![CDATA[lecmContractWf:contractorSigner]]>
+                                    <![CDATA[lecm-contract:signatoryCounterparty]]>
                                 </property>
                                 <property name="lecm-arm:field-format-string">
                                     <![CDATA[]]>
@@ -8508,7 +8378,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[[lecm-eds-document:document-type-assoc]]>
+                                            <![CDATA[[lecm-additional-document:additionalDocumentType]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -8716,7 +8586,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecmContractWf:contractorSigner]]>
+                                            <![CDATA[lecm-contract:signatoryCounterparty]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
