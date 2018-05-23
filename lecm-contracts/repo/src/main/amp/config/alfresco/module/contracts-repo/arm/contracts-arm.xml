@@ -3139,7 +3139,7 @@
                                     <![CDATA[false]]>
                                 </property>
                                 <property name="lecm-arm:search-query">
-                                    <![CDATA[@lecm\-statemachine\:status:'Подписан' AND user.currentUser().hasBusinessRole("CONTRACT_RECORDER")]]>
+                                    <![CDATA[@lecm\-statemachine\:status:'Подписан']]>
                                 </property>
                                 <property name="lecm-arm:counter-limitation">
                                     <![CDATA[]]>
@@ -3157,7 +3157,7 @@
                                     <![CDATA[lecm-contract:document]]>
                                 </property>
                                 <property name="lecm-arm:expression">
-                                    <![CDATA[armNode.count() > 0]]>
+                                    <![CDATA[armNode.count() > 0 AND user.currentUser().hasBusinessRole("CONTRACT_RECORDER")]]>
                                 </property>
                                 <property name="lecm-arm:counter-enable">
                                     <![CDATA[true]]>
