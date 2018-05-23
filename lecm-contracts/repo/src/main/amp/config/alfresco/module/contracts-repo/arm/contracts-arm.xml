@@ -1600,10 +1600,10 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecm-reservation-aspects:lastReservationRunDate]]>
+                                            <![CDATA[lecm-signing-route_currentTaskStartDate]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
-                                            <![CDATA[{lecm-reservation-aspects:lastReservationRunDate?dd.MM.yyyy HH:mm}]]>
+                                            <![CDATA[{lecm-signing-route:currentTaskStartDate?dd.MM.yyyy HH:mm}]]>
                                         </property>
                                     </item>
                                     <item name="cm:6edc6866-b24d-41e0-ab57-2b1f7d622a7d" type="lecm-arm:field">
@@ -5046,10 +5046,10 @@
                                                     <![CDATA[false]]>
                                                 </property>
                                                 <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecm-approval-route:currentTaskStartDate]]>
+                                                    <![CDATA[lecm-signing-route:currentTaskStartDate]]>
                                                 </property>
                                                 <property name="lecm-arm:field-format-string">
-                                                    <![CDATA[{lecm-approval-route:currentTaskStartDate?dd.MM.yyyy HH:mm}]]>
+                                                    <![CDATA[{lecm-signing-route:currentTaskStartDate?dd.MM.yyyy HH:mm}]]>
                                                 </property>
                                             </item>
                                             <item name="cm:9090b61b-2b2f-2d3f-298d-b96dee87941e" type="lecm-arm:field">
