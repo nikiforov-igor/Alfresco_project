@@ -6581,7 +6581,7 @@
                                     <![CDATA[false]]>
                                 </property>
                                 <property name="lecm-arm:search-query">
-                                    <![CDATA[(@lecm\-statemachine\:status:'Зарегистрирован' OR @lecm\-statemachine\:status:'Действует' OR @lecm\-statemachine\:status:'Приостановлено') AND @lecm\-document\:author\-assoc\-ref:"#current-user"]]>
+                                    <![CDATA[(@lecm\-statemachine\:status:'Зарегистрирован' OR @lecm\-statemachine\:status:'Действует' OR @lecm\-statemachine\:status:'Приостановлен') AND @lecm\-document\:author\-assoc\-ref:"#current-user"]]>
                                 </property>
                                 <property name="lecm-arm:counter-limitation">
                                     <![CDATA[]]>
