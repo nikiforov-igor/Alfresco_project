@@ -6784,7 +6784,7 @@
                                             <![CDATA[true]]>
                                         </property>
                                         <property name="lecm-arm:order">
-                                            <![CDATA[6]]>
+                                            <![CDATA[7]]>
                                         </property>
                                         <property name="lecm-arm:field-is-marker">
                                             <![CDATA[false]]>
@@ -6810,7 +6810,7 @@
                                             <![CDATA[true]]>
                                         </property>
                                         <property name="lecm-arm:order">
-                                            <![CDATA[7]]>
+                                            <![CDATA[8]]>
                                         </property>
                                         <property name="lecm-arm:field-is-marker">
                                             <![CDATA[false]]>
@@ -6836,7 +6836,7 @@
                                             <![CDATA[true]]>
                                         </property>
                                         <property name="lecm-arm:order">
-                                            <![CDATA[8]]>
+                                            <![CDATA[9]]>
                                         </property>
                                         <property name="lecm-arm:field-is-marker">
                                             <![CDATA[false]]>
@@ -6862,7 +6862,7 @@
                                             <![CDATA[true]]>
                                         </property>
                                         <property name="lecm-arm:order">
-                                            <![CDATA[9]]>
+                                            <![CDATA[10]]>
                                         </property>
                                         <property name="lecm-arm:field-is-marker">
                                             <![CDATA[false]]>
@@ -6888,13 +6888,39 @@
                                             <![CDATA[true]]>
                                         </property>
                                         <property name="lecm-arm:order">
-                                            <![CDATA[10]]>
+                                            <![CDATA[11]]>
                                         </property>
                                         <property name="lecm-arm:field-is-marker">
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-document:author-assoc]]>
+                                        </property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[]]>
+                                        </property>
+                                    </item>
+                                    <item name="cm:3d4577c4-06f1-4b3e-81f1-d319a9df81a0" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title">
+                                            <![CDATA[Статус]]>
+                                        </property>
+                                        <property name="cm:name">
+                                            <![CDATA[3d4577c4-06f1-4b3e-81f1-d319a9df81a0]]>
+                                        </property>
+                                        <property name="lecm-arm:field-by-default">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:field-sortable">
+                                            <![CDATA[true]]>
+                                        </property>
+                                        <property name="lecm-arm:order">
+                                            <![CDATA[6]]>
+                                        </property>
+                                        <property name="lecm-arm:field-is-marker">
+                                            <![CDATA[false]]>
+                                        </property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-statemachine:status]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -6913,6 +6939,7 @@
                                     <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На исполнении/e6c37876-c686-4101-b5f1-db0063a8a169"/>
                                     <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На исполнении/6aac83df-e068-4ceb-bd6f-4e54c3d331b9"/>
                                     <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На исполнении/a9086e94-ac1e-4ea2-a19c-ae077ec70a1e"/>
+                                    <assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На исполнении/3d4577c4-06f1-4b3e-81f1-d319a9df81a0"/>
                                 </assocs>
                             </item>
                         </items>
