@@ -3139,7 +3139,7 @@
                                     <![CDATA[false]]>
                                 </property>
                                 <property name="lecm-arm:search-query">
-                                    <![CDATA[@lecm\-statemachine\:status:'Подписан' AND user.currentUser().hasBusinessRole("CONTRACT_RECORDER")]]>
+                                    <![CDATA[@lecm\-statemachine\:status:'Подписан']]>
                                 </property>
                                 <property name="lecm-arm:counter-limitation">
                                     <![CDATA[]]>
@@ -3157,7 +3157,7 @@
                                     <![CDATA[lecm-contract:document]]>
                                 </property>
                                 <property name="lecm-arm:expression">
-                                    <![CDATA[armNode.count() > 0]]>
+                                    <![CDATA[armNode.count() > 0 AND user.currentUser().hasBusinessRole("CONTRACT_RECORDER")]]>
                                 </property>
                                 <property name="lecm-arm:counter-enable">
                                     <![CDATA[true]]>
@@ -3478,7 +3478,7 @@
                                     <![CDATA[false]]>
                                 </property>
                                 <property name="lecm-arm:search-query">
-                                    <![CDATA[(({{ACTIVE_TASKS_ONLY({tasks:['lecmRegnumRes:reserveTask'],user:'#current-user'})}}) OR ({{ACTIVE_TASKS_ONLY({tasks:['lecmRegnumRes:requestReservationCancelingAfterReserveTask'],user:'#current-user'})}})) AND (@lecm\-statemachine\:status:('Проект' OR 'На согласовании' OR 'На подписании' OR 'На доработке' OR 'Согласован' OR 'Подписан' OR 'На регистрации'))]]>
+                                    <![CDATA[({{ACTIVE_TASKS_ONLY({tasks:['lecmRegnumRes:reserveTask'],user:'#current-user'})}}) AND (@lecm\-statemachine\:status:('Проект' OR 'На согласовании' OR 'На подписании' OR 'На доработке' OR 'Согласован' OR 'Подписан' OR 'На регистрации'))]]>
                                 </property>
                                 <property name="lecm-arm:counter-limitation">
                                     <![CDATA[]]>
@@ -3531,10 +3531,10 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecm-approval-route:currentTaskStartDate]]>
+                                            <![CDATA[lecm-reservation-aspects:lastReservationRunDate]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
-                                            <![CDATA[{lecm-approval-route:currentTaskStartDate?dd.MM.yyyy HH:mm}]]>
+                                            <![CDATA[{lecm-reservation-aspects:lastReservationRunDate?dd.MM.yyyy HH:mm}]]>
                                         </property>
                                     </item>
                                     <item name="cm:deba2eac-fa79-954c-af10-afc196ccca9b" type="lecm-arm:field">
@@ -3844,7 +3844,7 @@
                                     <![CDATA[false]]>
                                 </property>
                                 <property name="lecm-arm:search-query">
-                                    <![CDATA[ASPECT: "lecm-reservation-aspects:isReservationRunningAspect" AND ((({{ACTIVE_TASKS_ONLY({tasks:['lecmRegnumRes:reserveTask'],user:'#current-user'})}}) AND ISNOTNULL: "lecm-reservation-aspects:isReservationRunning" AND  @lecm\-reservation\-aspects\:isReservationRunning: true) OR ( ({{ACTIVE_TASKS_ONLY({tasks:['lecmRegnumRes:requestReservationCancelingAfterReserveTask'],user:'#current-user'})}}) AND ISNOTNULL:"lecm-reservation-aspects:isReservationCanceling" AND @lecm\-reservation\-aspects\:isReservationCanceling:true))]]>
+                                    <![CDATA[ASPECT: "lecm-reservation-aspects:isReservationRunningAspect" AND ((({{ACTIVE_TASKS_ONLY({tasks:['lecmRegnumRes:requestReservationCancelingAfterReserveTask'],user:'#current-user'})}}) AND ISNOTNULL:"lecm-reservation-aspects:isReservationCanceling" AND @lecm\-reservation\-aspects\:isReservationCanceling:true))]]>
                                 </property>
                                 <property name="lecm-arm:counter-limitation">
                                     <![CDATA[]]>
@@ -3897,10 +3897,10 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecm-approval-route:currentTaskStartDate]]>
+                                            <![CDATA[lecm-reservation-aspects:lastReservationCancelDate]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
-                                            <![CDATA[{lecm-approval-route:currentTaskStartDate?dd.MM.yyyy HH:mm}]]>
+                                            <![CDATA[{lecm-reservation-aspects:lastReservationCancelDate?dd.MM.yyyy HH:mm}]]>
                                         </property>
                                     </item>
                                     <item name="cm:9245dc96-8906-03ce-d203-a56d2be2122d" type="lecm-arm:field">
@@ -5292,7 +5292,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:search-query">
-                                            <![CDATA[@lecm\-statemachine\:status:'Подписано' AND @lecm\-document\:author\-assoc\-ref:"#current-user"]]>
+                                            <![CDATA[@lecm\-statemachine\:status:'Подписан' AND @lecm\-document\:author\-assoc\-ref:"#current-user"]]>
                                         </property>
                                         <property name="lecm-arm:is-aggregation-node">
                                             <![CDATA[false]]>
