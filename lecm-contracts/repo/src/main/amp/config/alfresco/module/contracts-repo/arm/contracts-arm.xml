@@ -5955,7 +5955,7 @@
                                     <![CDATA[160]]>
                                 </property>
                                 <property name="lecm-arm:types">
-                                    <![CDATA[lecm-contract:document]]>
+                                    <![CDATA[]]>
                                 </property>
                                 <items>
                                     <item name="cm:5489c1ce-7ac4-9c1a-fcdf-6dc47f0bcde2" type="lecm-arm:field">
