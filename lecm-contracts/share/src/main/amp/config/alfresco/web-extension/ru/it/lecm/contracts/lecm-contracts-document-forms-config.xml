@@ -1679,7 +1679,7 @@
                             <control-param name="hideValue"/>
                         </control>
                     </field>
-                    <field id="lecm-contract:partner-assoc" mandatory="false">
+                    <field id="lecm-contract:partner-assoc" mandatory="false" label-id="lecm-outgoing_model.association.lecm-outgoing_contractor-assoc.title">
                         <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
                             <control-param name="changeItemsFireAction">contractor.selected</control-param>
                             <control-param name="items">contractor,organisation,person</control-param>
