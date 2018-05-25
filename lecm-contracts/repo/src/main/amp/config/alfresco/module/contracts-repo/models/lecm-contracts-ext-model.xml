@@ -31,7 +31,7 @@
                 <!-- Узел «Действующие», путь-->
                 <property name="lecm-contract-ext:current-contracts-path">
                     <type>d:text</type>
-                    <default>Навигатор/По состоянию/Действует</default>
+                    <default>Навигатор/По состоянию/На исполнении/Действует</default>
                 </property>
                 <!-- Узел «Проекты», путь-->
                 <property name="lecm-contract-ext:project-contracts-path">
