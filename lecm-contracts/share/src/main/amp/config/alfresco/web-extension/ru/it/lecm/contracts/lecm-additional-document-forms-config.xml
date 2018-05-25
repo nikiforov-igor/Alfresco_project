@@ -538,9 +538,10 @@
                     <show id="lecm-document:regnum"/>
                     <show id="lecm-additional-document:additionalDocumentType"/>
                     <show id="lecm-document-aspects:reg-project-data-date"/>
+                    <show id="lecm-signing-v2-aspects:signingDate"/>
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-additional-document:number">
+                    <field id="lecm-additional-document:number" label-id="contracts_additional-doc-number.title">
                         <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
                             <control-param name="hideValue"/>
                         </control>
@@ -566,6 +567,9 @@
                         </constraint-handlers>
                     </field>
                     <field id="lecm-document-aspects:reg-project-data-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+                    </field>
+                    <field id="lecm-signing-v2-aspects:signingDate">
                         <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
                     </field>
                 </appearance>
