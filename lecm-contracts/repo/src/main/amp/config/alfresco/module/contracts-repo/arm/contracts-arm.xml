@@ -7679,6 +7679,9 @@
                                         </items>
                                     </item>
                                     <item name="cm:Закрытые" type="lecm-arm:node">
+                                        <property name="lecm-arm:is-not-inherit-parent-query">
+                                            <![CDATA[true]]>
+                                        </property>
                                         <property name="lecm-arm:is-select-by-activeTasks">
                                             <![CDATA[false]]>
                                         </property>
