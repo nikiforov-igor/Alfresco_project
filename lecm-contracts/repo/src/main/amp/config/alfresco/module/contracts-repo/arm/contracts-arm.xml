@@ -6422,7 +6422,7 @@
                                             <![CDATA[true]]>
                                         </property>
                                         <property name="lecm-arm:order">
-                                            <![CDATA[6]]>
+                                            <![CDATA[7]]>
                                         </property>
                                         <property name="lecm-arm:field-is-marker">
                                             <![CDATA[false]]>
@@ -6442,13 +6442,13 @@
                                             <![CDATA[a40c3140-5ed4-bade-7988-effc2f70ee3e]]>
                                         </property>
                                         <property name="lecm-arm:field-by-default">
-                                            <![CDATA[true]]>
+                                            <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-sortable">
                                             <![CDATA[true]]>
                                         </property>
                                         <property name="lecm-arm:order">
-                                            <![CDATA[2]]>
+                                            <![CDATA[5]]>
                                         </property>
                                         <property name="lecm-arm:field-is-marker">
                                             <![CDATA[false]]>
@@ -6474,7 +6474,7 @@
                                             <![CDATA[true]]>
                                         </property>
                                         <property name="lecm-arm:order">
-                                            <![CDATA[3]]>
+                                            <![CDATA[6]]>
                                         </property>
                                         <property name="lecm-arm:field-is-marker">
                                             <![CDATA[false]]>
@@ -6500,7 +6500,7 @@
                                             <![CDATA[true]]>
                                         </property>
                                         <property name="lecm-arm:order">
-                                            <![CDATA[3]]>
+                                            <![CDATA[2]]>
                                         </property>
                                         <property name="lecm-arm:field-is-marker">
                                             <![CDATA[false]]>
@@ -6526,7 +6526,7 @@
                                             <![CDATA[true]]>
                                         </property>
                                         <property name="lecm-arm:order">
-                                            <![CDATA[4]]>
+                                            <![CDATA[3]]>
                                         </property>
                                         <property name="lecm-arm:field-is-marker">
                                             <![CDATA[false]]>
@@ -6552,7 +6552,7 @@
                                             <![CDATA[true]]>
                                         </property>
                                         <property name="lecm-arm:order">
-                                            <![CDATA[5]]>
+                                            <![CDATA[4]]>
                                         </property>
                                         <property name="lecm-arm:field-is-marker">
                                             <![CDATA[false]]>
