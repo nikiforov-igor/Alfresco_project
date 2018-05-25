@@ -7756,32 +7756,6 @@
                                                     <![CDATA[]]>
                                                 </property>
                                             </item>
-                                            <item name="cm:Отменён" type="lecm-arm:node">
-                                                <property name="lecm-arm:is-select-by-activeTasks">
-                                                    <![CDATA[false]]>
-                                                </property>
-                                                <property name="lecm-arm:search-query">
-                                                    <![CDATA[@lecm\-statemachine\:status:'Отменён' AND @lecm\-document\:author\-assoc\-ref:"#current-user"]]>
-                                                </property>
-                                                <property name="lecm-arm:is-aggregation-node">
-                                                    <![CDATA[false]]>
-                                                </property>
-                                                <property name="cm:name">
-                                                    <![CDATA[Отменён]]>
-                                                </property>
-                                                <property name="lecm-arm:search-type">
-                                                    <![CDATA[]]>
-                                                </property>
-                                                <property name="lecm-arm:counter-enable">
-                                                    <![CDATA[false]]>
-                                                </property>
-                                                <property name="lecm-arm:order">
-                                                    <![CDATA[10]]>
-                                                </property>
-                                                <property name="lecm-arm:types">
-                                                    <![CDATA[]]>
-                                                </property>
-                                            </item>
                                             <item name="cm:Аннулирован" type="lecm-arm:node">
                                                 <property name="lecm-arm:is-select-by-activeTasks">
                                                     <![CDATA[false]]>
