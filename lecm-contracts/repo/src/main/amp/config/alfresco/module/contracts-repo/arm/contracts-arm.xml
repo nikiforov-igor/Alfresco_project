@@ -8275,7 +8275,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:search-query">
-                                            <![CDATA[@lecm\-contract\:partner\-assoc\-ref:"#value-with-subtree-refs"]]>
+                                            <![CDATA[@lecm\-contract\:partner\-assoc\-ref:"#value-ref"]]>
                                         </property>
                                         <property name="lecm-arm:is-aggregation-node">
                                             <![CDATA[false]]>
