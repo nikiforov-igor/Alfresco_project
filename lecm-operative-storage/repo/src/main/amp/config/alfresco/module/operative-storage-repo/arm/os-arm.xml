@@ -91,22 +91,6 @@
 										<property name="lecm-arm:order"><![CDATA[0]]></property>
 										<property name="lecm-arm:html-url"><![CDATA[page/nomenclature]]></property>
 										<items>
-											<item name="cm:1234b73a-7573-4b76-a0eb-da861db670c3" type="lecm-arm:xpath-child-rule">
-												<property name="cm:name"><![CDATA[1234b73a-7573-4b76-a0eb-da861db670c3]]></property>
-												<property name="lecm-arm:xpath-child-rule-root-xpath"><![CDATA[/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел/*]]></property>
-												<property name="lecm-arm:xpath-child-rule-types"><![CDATA[lecm-os:nomenclature-year-section, lecm-os:nomenclature-unit-section]]></property>
-											</item>
-											<item name="cm:8f9893a9-5d7c-49eb-a96e-d3d9ebebbbb3" type="lecm-arm:dictionary-child-rule">
-												<property name="cm:name"><![CDATA[8f9893a9-5d7c-49eb-a96e-d3d9ebebbbb3]]></property>
-												<assocs>
-													<assoc type="lecm-arm:child-rule-dictionary-assoc" path="/Business platform/LECM/Сервис Справочники/Номенклатура дел"/>
-												</assocs>
-											</item>
-											<item name="cm:95b938ee-b62b-463f-9108-5442e30e571c" type="lecm-arm:xpath-child-rule">
-												<property name="cm:name"><![CDATA[95b938ee-b62b-463f-9108-5442e30e571c]]></property>
-												<property name="lecm-arm:xpath-child-rule-root-xpath"><![CDATA[/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел/*]]></property>
-												<property name="lecm-arm:xpath-child-rule-types"><![CDATA[]]></property>
-											</item>
 											<item name="cm:1bdeb918-ba25-42c7-af93-2a2eca024985" type="lecm-arm:xpath-child-rule">
 												<property name="cm:name"><![CDATA[1bdeb918-ba25-42c7-af93-2a2eca024985]]></property>
 												<property name="lecm-arm:xpath-child-rule-root-xpath"><![CDATA[/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел/*]]></property>
