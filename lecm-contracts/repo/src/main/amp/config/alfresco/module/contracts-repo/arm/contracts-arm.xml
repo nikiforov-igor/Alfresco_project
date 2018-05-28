@@ -8304,7 +8304,7 @@
                                         <items>
                                             <item name="cm:30aa2819-ca89-4143-916f-66544cb32d3d" type="lecm-arm:query-child-rule">
                                                 <property name="lecm-arm:node-rule-sort-config">
-                                                    <![CDATA[]]>
+                                                    <![CDATA[lecm-contractor:shortname|ASC]]>
                                                 </property>
                                                 <property name="lecm-arm:child-rule-substitute-string">
                                                     <![CDATA[]]>
@@ -8316,7 +8316,7 @@
                                                     <![CDATA[-1]]>
                                                 </property>
                                                 <property name="lecm-arm:node-rule-search-template">
-                                                    <![CDATA[]]>
+                                                    <![CDATA[@lecm-contractor\:shortname:"#searchTerm"]]>
                                                 </property>
                                                 <property name="lecm-arm:list-query-child-rule">
                                                     <![CDATA[TYPE:"lecm-contractor:contractor-type" AND NOT ASPECT:"lecm-orgstr-aspects:is-organization-aspect"]]>
