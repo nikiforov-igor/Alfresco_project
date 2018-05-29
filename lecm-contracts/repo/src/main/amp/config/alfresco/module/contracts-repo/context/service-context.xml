@@ -489,14 +489,14 @@
     </bean>
 
     <bean id="contracts.arm.settings.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
-          depends-on="arm.LogicEcmModelsBootstrap,arm.settings.LogicEcmBootstrap,eds.documents.arm.settings.LogicEcmBootstrap, arm.LogicEcmBootstrap, armService, arm.filters.LogicEcmBootstrap, documents.LogicEcmConnectionTypesBootstrap">
+          depends-on="eds.arm.filters.LogicEcmBootstrap, arm.LogicEcmModelsBootstrap,arm.settings.LogicEcmBootstrap,eds.documents.arm.settings.LogicEcmBootstrap, arm.LogicEcmBootstrap, armService, arm.filters.LogicEcmBootstrap, documents.LogicEcmConnectionTypesBootstrap">
 
         <property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
         <property name="dictionaries">
             <list>
+                <value>alfresco/module/${artifactId}/arm/contracts-arm-filters.xml</value>
                 <value>alfresco/module/${artifactId}/arm/contracts-arm.xml</value>
                 <value>alfresco/module/${artifactId}/arm/contracts-settings-arm.xml</value>
-                <value>alfresco/module/${artifactId}/arm/contracts-arm-filters.xml</value>
             </list>
         </property>
     </bean>
