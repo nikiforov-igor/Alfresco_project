@@ -91,19 +91,25 @@
         lecmPermission.popAuthentication();
     }
 
-    var signerAssoc = document.assocs["lecm-signing-v2-aspects:signerEmployeeAssoc"];
-    if (signerAssoc && signerAssoc.length) {
-        notificationRecipients.push(signerAssoc[0]);
-        members.push(signerAssoc[0]);
+    var signerAssocs = document.assocs["lecm-signing-v2-aspects:signerEmployeeAssoc"];
+    if (signerAssocs && signerAssocs.length) {
+        for each(var assoc in signerAssocs) {
+            notificationRecipients.push(assoc);
+            members.push(assoc);
+        }
     }
-    var registratorAssoc = document.assocs["lecm-document-aspects:registrator-assoc"];
-    if (registratorAssoc && registratorAssoc.length) {
-        notificationRecipients.push(registratorAssoc[0]);
-        members.push(registratorAssoc[0]);
+    var registratorAssocs = document.assocs["lecm-document-aspects:registrator-assoc"];
+    if (registratorAssocs && registratorAssocs.length) {
+        for each(var assoc in registratorAssocs) {
+            notificationRecipients.push(assoc);
+            members.push(assoc);
+        }
     }
-    var executorAssoc = document.assocs["lecm-eds-document:executor-assoc"];
-    if (executorAssoc && executorAssoc.length) {
-        notificationRecipients.push(executorAssoc[0]);
+    var executorAssocs = document.assocs["lecm-eds-document:executor-assoc"];
+    if (executorAssocs && executorAssocs.length) {
+        for each(var assoc in registratorAssocs) {
+            notificationRecipients.push(assoc);
+        }
     }
     for each (var member in members) {
         documentMembers.addMemberWithoutCheckPermission(document, member, "LECM_BASIC_PG_Reader", true);
