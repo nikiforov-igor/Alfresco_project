@@ -1,9 +1,36 @@
+.cancellation-activiti-radiobuttons > .container {
+    padding-top: 6px;
+}
+
+.cancellation-activiti-radiobuttons .fields-by-radiobutton {
+    padding-left: 18px;
+}
+
+.cancellation-activiti-radiobuttons .radiobutton-container input[type=radio] {
+    vertical-align: middle;
+    margin: -2px 0 0 0;
+    padding: 0;
+}
+
+.cancellation-activiti-radiobuttons .radiobutton-container label {
+    display: inline-block;
+    padding-left: 6px;
+}
+
 .cancellation-activiti-radiobuttons .fields-by-radiobutton .checkbox-control .label-div {
     display: none;
 }
 
 .cancellation-activiti-radiobuttons .fields-by-radiobutton .control .label-div {
     width: 100%;
-    padding-left: 18px;
+    padding-left: 2px;
     text-align: left;
+}
+
+.cancellation-activiti-radiobuttons .fields-by-radiobutton .control.checkbox-control {
+    margin-top: -14px;
+}
+
+.cancellation-activiti-radiobuttons .fields-by-radiobutton .control.checkbox-control input[type=checkbox] {
+    padding: 0;
 }

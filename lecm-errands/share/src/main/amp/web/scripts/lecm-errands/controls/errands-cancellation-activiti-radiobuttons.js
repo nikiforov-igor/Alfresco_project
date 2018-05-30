@@ -62,6 +62,20 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
         },
         /**
          * Generates a YUI button for the given transition.
+         * Markup:
+         * <div class="value-div">
+         *     <div class="radiobutton-container">
+         *         <input id="id" name="name" type="type" />
+         *          <label for="name" />
+         *      </div>
+         *      <div class="fields-by-radiobutton">
+         *          <CONTROL_1 />
+         *          <CONTROL_2 />
+         *          ...
+         *      </div>
+         *      </br>
+         *      ...
+         * </div>
          *
          * @method _generateTransitionButton
          * @param transition {object} An object representing the transition
@@ -69,26 +83,34 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
          */
         _generateTransitionButton: function (transition, fields) {
             // create a button and add to the DOM
-            var container, valueDiv, button, label, spaceBr, p, div;
+            var container, valueDiv, button, label, spaceBr, radioButtonContainer, radioButtonControlsContainer, radioButtonName;
 
             this._getHiddenField();
-            div = document.createElement('div');
-            Dom.addClass(div, "fields-by-radiobutton");
-            div.setAttribute('id', this.id + '-fields-by-radiobutton-container-' + transition.id);
-            p = document.createElement('p');
+            radioButtonControlsContainer = document.createElement('div');
+            Dom.addClass(radioButtonControlsContainer, "fields-by-radiobutton");
+            radioButtonControlsContainer.setAttribute('id', this.id + '-fields-by-radiobutton-container-' + transition.id);
+
+            radioButtonContainer = document.createElement('div');
+            radioButtonContainer.className = "radiobutton-container";
+
+            radioButtonName = this.id + '-radio-group';
             button = document.createElement('input');
             button.setAttribute('id', this.id + '-' + transition.id);
             button.setAttribute('type', 'radio');
-            button.setAttribute('name', this.id + '-radio-group');
+            button.setAttribute('name', radioButtonName);
             YAHOO.util.Event.addListener(button, 'click', this.onClick, this, true);
+            radioButtonContainer.appendChild(button);
+
+            label = document.createElement('label');
+            label.setAttribute('for', radioButtonName);
+            label.innerHTML = transition.label;
+            radioButtonContainer.appendChild(label);
+
             container = Dom.get(this.id);
             valueDiv = Selector.query('.value-div', container, true);
-            p.appendChild(button);
-            label = document.createTextNode(' ' + transition.label);
-            p.appendChild(label);
-            valueDiv.appendChild(p);
-            this.appendFieldsByOption(div, fields);
-            valueDiv.appendChild(div);
+            valueDiv.appendChild(radioButtonContainer);
+            this.appendFieldsByOption(radioButtonControlsContainer, fields);
+            valueDiv.appendChild(radioButtonControlsContainer);
             spaceBr = document.createElement('br');
             valueDiv.appendChild(spaceBr);
             if (this.options.selectedValue == transition.id) {
