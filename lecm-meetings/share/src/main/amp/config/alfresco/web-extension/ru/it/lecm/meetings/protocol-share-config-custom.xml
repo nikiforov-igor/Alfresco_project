@@ -100,7 +100,6 @@
 			<form id="json-datagrid-item">
 				<field-visibility>
 					<show id="lecm-document:indexTableRow" force="true"/>
-					<show id="lecm-protocol-ts:point-status-assoc"/>
 					<show id="lecm-protocol-ts:point-formulation"/>
 					<show id="lecm-protocol-ts:reporter-assoc"/>
 					<show id="lecm-protocol-ts:coreporter-assoc"/>
@@ -109,24 +108,14 @@
 					<show id="lecm-protocol-ts:decision"/>
 					<show id="lecm-protocol-ts:executor-assoc"/>
 					<show id="lecm-protocol-ts:execution-date"/>
-					<show id="lecm-protocol-ts:execution-date-real"/>
 					<show id="lecm-protocol-ts:note"/>
-					<show id="lecm-protocol-ts:errand-assoc"/>
 				</field-visibility>
 				<appearance>
 					<set id="common"/>
-					<set id="item0" parent="common" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
 					<set id="item1" parent="common"/>
 
 					<field id="lecm-document:indexTableRow" force="true" >
 						<control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl"/>
-					</field>
-					<field id="lecm-protocol-ts:point-status-assoc" set="item0">
-						<control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
-							<control-param name="formatString">{lecm-protocol-ts:point-status-assoc/cm:name}</control-param>
-							<control-param name="getValueFromArg">nodeRef</control-param>
-							<control-param name="emptyValueKey">form.control.novalue</control-param>
-						</control>
 					</field>
 					<field id="lecm-protocol-ts:point-formulation" set="item1"/>
 					<field id="lecm-protocol-ts:reporter-assoc" set="item1">
@@ -211,19 +200,9 @@
 							<control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-Protocol', false)}</control-param>
 						</control>
 					</field>
-					<field id="lecm-protocol-ts:execution-date-real" read-only="true" set="item1"/>
 					<field id="lecm-protocol-ts:note" set="item1">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
 							<control-param name="rows">4</control-param>
-						</control>
-					</field>
-					<field id="lecm-protocol-ts:errand-assoc" set="item1">
-						<control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
-							<control-param name="formatString">
-								<![CDATA[<a href='/{~SHARE_CONTEXT}/page/document?nodeRef={lecm-protocol-ts:errand-assoc/nodeRef}'>{lecm-protocol-ts:errand-assoc/lecm-document:present-string}</a>]]>
-							</control-param>
-							<control-param name="getValueFromArg">nodeRef</control-param>
-							<control-param name="emptyValueKey">form.control.novalue</control-param>
 						</control>
 					</field>
 				</appearance>
