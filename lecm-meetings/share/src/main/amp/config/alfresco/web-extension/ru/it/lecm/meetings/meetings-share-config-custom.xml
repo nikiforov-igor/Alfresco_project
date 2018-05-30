@@ -66,7 +66,7 @@
 					<show id="lecm-meetings-ts:attachments-assoc"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-document:indexTableRow">
+					<field id="lecm-document:indexTableRow" mandatory="true" force="true">
 						<control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl"/>
 					</field>
 					<field id="lecm-meetings-ts:reporter-assoc">
@@ -148,7 +148,7 @@
 			</form>
 			<form id="datagrid">
 				<field-visibility>
-					<!--<show id="lecm-document:indexTableRow" force="true"/>-->
+					<show id="lecm-document:indexTableRow" force="true"/>
 					<show id="lecm-meetings-ts:reporter-assoc"/>
 					<show id="lecm-meetings-ts:item-name"/>
 				</field-visibility>
@@ -180,7 +180,9 @@
 					<show id="lecm-meetings-ts:site-assoc"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-document:indexTableRow" read-only="true"/>
+					<field id="lecm-document:indexTableRow" mandatory="true" force="true" >
+						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
+					</field>
 					<field id="lecm-meetings-ts:reporter-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">
 							<control-param name="plane">true</control-param>
@@ -283,7 +285,9 @@
 					<show id="lecm-meetings-ts:attachments-assoc"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-document:indexTableRow" read-only="true"/>
+					<field id="lecm-document:indexTableRow" mandatory="true" force="true" >
+						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
+					</field>
 					<field id="lecm-meetings-ts:reporter-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">
 							<control-param name="plane">true</control-param>
@@ -413,7 +417,9 @@
 					<field id="lecm-base-dummy-aspects:script" set="parent">
 						<control template="/ru/it/lecm/meetings/holding/meeting-holding-remove-item-control.ftl"/>
 					</field>
-					<field id="lecm-document:indexTableRow" read-only="true" set="parent" label-id="label.meeting.holding.item.number"/>
+					<field id="lecm-document:indexTableRow" mandatory="true" force="true" set="parent">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
+					</field>
 					<field id="lecm-meetings-ts:holding-reporter-assoc" set="parent">
 						<control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">
 							<control-param name="plane">true</control-param>

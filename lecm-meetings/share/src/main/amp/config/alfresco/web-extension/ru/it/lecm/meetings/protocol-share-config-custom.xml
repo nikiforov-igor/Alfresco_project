@@ -15,7 +15,7 @@
 					<show id="lecm-protocol-ts:note"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-document:indexTableRow" force="true" >
+					<field id="lecm-document:indexTableRow" mandatory="true" force="true" >
 						<control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl"/>
 					</field>
 					<field id="lecm-protocol-ts:point-formulation" />
@@ -114,7 +114,7 @@
 					<set id="common"/>
 					<set id="item1" parent="common"/>
 
-					<field id="lecm-document:indexTableRow" force="true" >
+					<field id="lecm-document:indexTableRow" mandatory="true" force="true" set="common">
 						<control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl"/>
 					</field>
 					<field id="lecm-protocol-ts:point-formulation" set="item1"/>
@@ -209,6 +209,7 @@
 			</form>
 			<form id="datagrid">
 				<field-visibility>
+					<show id="lecm-document:indexTableRow" force="true"/>
 					<show id="lecm-protocol-ts:decision"/>
 					<show id="lecm-protocol-ts:executor-assoc"/>
 					<show id="lecm-protocol-ts:execution-date"/>
@@ -249,7 +250,9 @@
 					<set id="item0" parent="common" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
 					<set id="item1" parent="common" />
 
-					<field id="lecm-document:indexTableRow" read-only="true" help="" force="true" set="item0"/>
+					<field id="lecm-document:indexTableRow" mandatory="true" force="true" >
+						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
+					</field>
 					<field id="lecm-protocol-ts:point-status-assoc" read-only="true" set="item0">
 						<control template="/ru/it/lecm/base-share/components/controls/substitude-text-control.ftl">
 							<control-param name="value">
@@ -349,6 +352,7 @@
 			</form>
 			<form id="protocol-create-view-point">
 				<field-visibility>
+					<show id="lecm-document:indexTableRow" force="true"/>
 					<show id="lecm-protocol-ts:point-formulation"/>
 					<show id="lecm-protocol-ts:reporter-assoc"/>
 					<show id="lecm-protocol-ts:coreporter-assoc"/>
@@ -360,6 +364,9 @@
 					<show id="lecm-protocol-ts:note"/>
 				</field-visibility>
 				<appearance>
+					<field id="lecm-document:indexTableRow" mandatory="true" force="true">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
+					</field>
 					<field id="lecm-protocol-ts:point-formulation"/>
 					<field id="lecm-protocol-ts:reporter-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">

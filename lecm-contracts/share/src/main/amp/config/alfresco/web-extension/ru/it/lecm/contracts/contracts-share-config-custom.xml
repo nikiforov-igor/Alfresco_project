@@ -473,7 +473,9 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-contract-table-structure:stage-amount" help=""/>
-                    <field id="lecm-document:indexTableRow" help-id="label.stage.number.help"/>
+                    <field id="lecm-document:indexTableRow" mandatory="true" force="true" >
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
+                    </field>
                     <field id="lecm-contract-table-structure:stage-status">
                         <control template="/ru/it/lecm/base-share/components/controls/view-text-control.ftl"/>
                     </field>
@@ -520,6 +522,7 @@
         <forms>
             <form>
                 <field-visibility>
+                    <show id="lecm-document:indexTableRow" force="true"/>
                     <show id="lecm-contract-table-structure:name" force="true"/>
                     <show id="lecm-contract-table-structure:start-date" force="true"/>
                     <show id="lecm-contract-table-structure:end-date" force="true"/>
@@ -541,7 +544,9 @@
                         </constraint-handlers>
                     </field>
                     <field id="lecm-contract-table-structure:stage-amount" help=""/>
-                    <field id="lecm-document:indexTableRow" help-id="label.stage.number.help"/>
+                    <field id="lecm-document:indexTableRow" mandatory="true" force="true" >
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl"/>
+                    </field>
                     <field id="lecm-contract-table-structure:stage-comment">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
@@ -549,6 +554,7 @@
             </form>
             <form id="json-datagrid-item">
                 <field-visibility>
+                    <show id="lecm-document:indexTableRow" force="true"/>
                     <show id="lecm-contract-table-structure:name" force="true"/>
                     <show id="lecm-contract-table-structure:start-date" force="true"/>
                     <show id="lecm-contract-table-structure:end-date" force="true"/>
@@ -557,7 +563,9 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-contract-table-structure:stage-amount" help=""/>
-                    <field id="lecm-document:indexTableRow" help-id="label.stage.number.help"/>
+                    <field id="lecm-document:indexTableRow" mandatory="true" force="true" >
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl"/>
+                    </field>
                     <field id="lecm-contract-table-structure:stage-comment">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
@@ -591,7 +599,9 @@
                     <show id="lecm-contract-table-structure:attachments-temp-assoc"/>
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-document:indexTableRow" help-id="label.stage.number.help"/>
+                    <field id="lecm-document:indexTableRow" mandatory="true" force="true">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
+                    </field>
                     <field id="lecm-contract-table-structure:stage-status" read-only="true">
                         <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
                     </field>
