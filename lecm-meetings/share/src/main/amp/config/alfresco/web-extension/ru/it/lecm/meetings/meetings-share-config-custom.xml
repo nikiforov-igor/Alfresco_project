@@ -66,7 +66,7 @@
 					<show id="lecm-meetings-ts:attachments-assoc"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-document:indexTableRow" mandatory="true" force="true">
+					<field id="lecm-document:indexTableRow" mandatory="true">
 						<control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl"/>
 					</field>
 					<field id="lecm-meetings-ts:reporter-assoc">
@@ -180,7 +180,7 @@
 					<show id="lecm-meetings-ts:site-assoc"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-document:indexTableRow" mandatory="true" force="true" >
+					<field id="lecm-document:indexTableRow" mandatory="true">
 						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
 					</field>
 					<field id="lecm-meetings-ts:reporter-assoc">
@@ -285,7 +285,7 @@
 					<show id="lecm-meetings-ts:attachments-assoc"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-document:indexTableRow" mandatory="true" force="true" >
+					<field id="lecm-document:indexTableRow" mandatory="true">
 						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
 					</field>
 					<field id="lecm-meetings-ts:reporter-assoc">
@@ -417,7 +417,7 @@
 					<field id="lecm-base-dummy-aspects:script" set="parent">
 						<control template="/ru/it/lecm/meetings/holding/meeting-holding-remove-item-control.ftl"/>
 					</field>
-					<field id="lecm-document:indexTableRow" mandatory="true" force="true" set="parent">
+					<field id="lecm-document:indexTableRow" mandatory="true" set="parent">
 						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
 					</field>
 					<field id="lecm-meetings-ts:holding-reporter-assoc" set="parent">

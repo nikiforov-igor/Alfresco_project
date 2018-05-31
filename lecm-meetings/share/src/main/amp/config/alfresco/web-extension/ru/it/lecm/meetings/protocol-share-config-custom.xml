@@ -15,7 +15,7 @@
 					<show id="lecm-protocol-ts:note"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-document:indexTableRow" mandatory="true" force="true" >
+					<field id="lecm-document:indexTableRow" mandatory="true">
 						<control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl"/>
 					</field>
 					<field id="lecm-protocol-ts:point-formulation" />
@@ -114,7 +114,7 @@
 					<set id="common"/>
 					<set id="item1" parent="common"/>
 
-					<field id="lecm-document:indexTableRow" mandatory="true" force="true" set="common">
+					<field id="lecm-document:indexTableRow" mandatory="true" set="common">
 						<control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl"/>
 					</field>
 					<field id="lecm-protocol-ts:point-formulation" set="item1"/>
@@ -250,7 +250,7 @@
 					<set id="item0" parent="common" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
 					<set id="item1" parent="common" />
 
-					<field id="lecm-document:indexTableRow" mandatory="true" force="true" >
+					<field id="lecm-document:indexTableRow" mandatory="true">
 						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
 					</field>
 					<field id="lecm-protocol-ts:point-status-assoc" read-only="true" set="item0">
@@ -364,7 +364,7 @@
 					<show id="lecm-protocol-ts:note"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-document:indexTableRow" mandatory="true" force="true">
+					<field id="lecm-document:indexTableRow" mandatory="true">
 						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
 					</field>
 					<field id="lecm-protocol-ts:point-formulation"/>

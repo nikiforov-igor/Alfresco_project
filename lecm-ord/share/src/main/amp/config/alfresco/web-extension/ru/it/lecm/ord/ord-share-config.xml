@@ -49,7 +49,7 @@
                 </field-visibility>
                 <appearance>
                     <set id="buttons" template="/ru/it/lecm/base-share/components/hidden-set.ftl"/>
-                    <field id="lecm-document:indexTableRow" mandatory="true" force="true" >
+                    <field id="lecm-document:indexTableRow" mandatory="true">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
                     </field>
                     <field id="lecm-ord-table-structure:item-content">
@@ -114,7 +114,7 @@
                             <control-param name="rows">4</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document:indexTableRow" mandatory="true" force="true">
+                    <field id="lecm-document:indexTableRow" mandatory="true">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
                     </field>
                     <field id="lecm-ord-table-structure:report-required"  set="bottom">
@@ -257,7 +257,7 @@
                             <control-param name="rows">4</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document:indexTableRow" mandatory="true" force="true" >
+                    <field id="lecm-document:indexTableRow" mandatory="true">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl"/>
                     </field>
                     <field id="lecm-ord-table-structure:report-required" set="bottom">
