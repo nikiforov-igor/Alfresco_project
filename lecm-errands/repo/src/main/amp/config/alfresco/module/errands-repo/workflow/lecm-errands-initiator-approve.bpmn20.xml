@@ -3,7 +3,7 @@
              xmlns:activiti="http://activiti.org/bpmn"
              typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
              targetNamespace="http://www.it.ru/logicECM/errands/workflow/initiatorApprove/1.0">
-    <process id="errandsInitiatorApprove" name="Иниуиатор: Подтвердить исполнение">
+    <process id="errandsInitiatorApprove" name="Инициатор: Подтвердить исполнение">
         <startEvent id="startInitiatorApprove" name="Start" activiti:formKey="lecmErrandWf:initiatorApprove"></startEvent>
         <endEvent id="endInitiatorApprove" name="End"></endEvent>
         <scriptTask id="initiatorApprove" name="Initiator Approve" scriptFormat="javascript">
