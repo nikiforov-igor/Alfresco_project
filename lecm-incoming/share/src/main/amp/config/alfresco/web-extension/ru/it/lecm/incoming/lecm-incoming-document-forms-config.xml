@@ -204,6 +204,7 @@
                             <control-param name="elementsFieldSetLabel">label.set.connected.document-select</control-param>
                             <control-param name="textSearchWithExSearch">true</control-param>
                             <control-param name="lockExSearchIfParamsEmpty">true</control-param>
+                            <control-param name="checkType">false</control-param>
                         </control>
                     </field>
 
@@ -952,6 +953,7 @@
                             <control-param name="elementsFieldSetLabel">label.set.connected.document-select</control-param>
                             <control-param name="textSearchWithExSearch">true</control-param>
                             <control-param name="lockExSearchIfParamsEmpty">true</control-param>
+                            <control-param name="checkType">false</control-param>
                         </control>
                     </field>
 
@@ -1142,6 +1144,7 @@
                             <control-param name="elementsFieldSetLabel">label.set.connected.document-select</control-param>
                             <control-param name="textSearchWithExSearch">true</control-param>
                             <control-param name="lockExSearchIfParamsEmpty">true</control-param>
+                            <control-param name="checkType">false</control-param>
                         </control>
                     </field>
                     <field id="lecm-eds-document:summaryContent">
