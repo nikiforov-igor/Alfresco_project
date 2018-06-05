@@ -89,6 +89,7 @@
                             <control-param name="elementsFieldSetLabel">label.set.connected.document-select</control-param>
                             <control-param name="textSearchWithExSearch">true</control-param>
                             <control-param name="lockExSearchIfParamsEmpty">true</control-param>
+                            <control-param name="checkType">false</control-param>
                         </control>
                     </field>
                     <field id="lecm-ord:accepted-assoc">
@@ -110,6 +111,7 @@
                             <control-param name="elementsFieldSetLabel">label.set.connected.document-select</control-param>
                             <control-param name="textSearchWithExSearch">true</control-param>
                             <control-param name="lockExSearchIfParamsEmpty">true</control-param>
+                            <control-param name="checkType">false</control-param>
                         </control>
                     </field>
 
@@ -345,6 +347,7 @@
                             <control-param name="elementsFieldSetLabel">label.set.connected.document-select</control-param>
                             <control-param name="textSearchWithExSearch">true</control-param>
                             <control-param name="lockExSearchIfParamsEmpty">true</control-param>
+                            <control-param name="checkType">false</control-param>
                         </control>
                     </field>
                     <field id="lecm-ord:accepted-assoc">
@@ -366,6 +369,7 @@
                             <control-param name="elementsFieldSetLabel">label.set.connected.document-select</control-param>
                             <control-param name="textSearchWithExSearch">true</control-param>
                             <control-param name="lockExSearchIfParamsEmpty">true</control-param>
+                            <control-param name="checkType">false</control-param>
                         </control>
                     </field>
                     <field id="lecm-eds-document:sheets-number">
@@ -735,6 +739,7 @@
                             <control-param name="elementsFieldSetLabel">label.set.connected.document-select</control-param>
                             <control-param name="textSearchWithExSearch">true</control-param>
                             <control-param name="lockExSearchIfParamsEmpty">true</control-param>
+                            <control-param name="checkType">false</control-param>
                         </control>
                     </field>
                     <field id="lecm-ord:accepted-assoc">
@@ -756,6 +761,7 @@
                             <control-param name="elementsFieldSetLabel">label.set.connected.document-select</control-param>
                             <control-param name="textSearchWithExSearch">true</control-param>
                             <control-param name="lockExSearchIfParamsEmpty">true</control-param>
+                            <control-param name="checkType">false</control-param>
                         </control>
                     </field>
                     <field id="lecm-document:author-assoc" label-id="label.eds.assoc.compiler" read-only="true"/>
@@ -950,6 +956,7 @@
                             <control-param name="elementsFieldSetLabel">label.set.connected.document-select</control-param>
                             <control-param name="textSearchWithExSearch">true</control-param>
                             <control-param name="lockExSearchIfParamsEmpty">true</control-param>
+                            <control-param name="checkType">false</control-param>
                         </control>
                     </field>
                     <field id="lecm-ord:accepted-assoc" set="ord-document-form-common-set">
@@ -971,6 +978,7 @@
                             <control-param name="elementsFieldSetLabel">label.set.connected.document-select</control-param>
                             <control-param name="textSearchWithExSearch">true</control-param>
                             <control-param name="lockExSearchIfParamsEmpty">true</control-param>
+                            <control-param name="checkType">false</control-param>
                         </control>
                     </field>
 
