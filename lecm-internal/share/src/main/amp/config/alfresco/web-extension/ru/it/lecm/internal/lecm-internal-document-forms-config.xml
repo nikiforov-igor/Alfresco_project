@@ -82,7 +82,7 @@
                     <field id="lecm-document-aspects:response-to-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
-                            <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
+                            <control-param name="nameSubstituteString">{@@documentService.wrapAsDocumentLink(doc.nodeRef, true)}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
                             <control-param name="itemType">lecm-internal:document</control-param>
                             <control-param name="selectedItemsFormArgs">lecm-document-aspects:response-to-assoc</control-param>
@@ -313,7 +313,7 @@
                     <field id="lecm-document-aspects:response-to-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
-                            <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
+                            <control-param name="nameSubstituteString">{@@documentService.wrapAsDocumentLink(doc.nodeRef, true)}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
                             <control-param name="itemType">lecm-internal:document</control-param>
                             <control-param name="showSearch">true</control-param>
@@ -722,7 +722,7 @@
                     <field id="lecm-document-aspects:response-to-assoc" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
-                            <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
+                            <control-param name="nameSubstituteString">{@@documentService.wrapAsDocumentLink(doc.nodeRef, true)}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
                             <control-param name="itemType">lecm-internal:document</control-param>
                             <control-param name="showSearch">true</control-param>
@@ -980,7 +980,7 @@
                     <field id="lecm-document-aspects:response-to-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
-                            <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
+                            <control-param name="nameSubstituteString">{@@documentService.wrapAsDocumentLink(doc.nodeRef, true)}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
                             <control-param name="itemType">lecm-internal:document</control-param>
                             <control-param name="showSearch">true</control-param>
