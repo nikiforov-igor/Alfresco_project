@@ -180,8 +180,8 @@
                     <field id="lecm-document-aspects:response-to-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
-                            <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
-                            <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
+                            <control-param name="nameSubstituteString">{@@documentService.wrapAsDocumentLink(doc.nodeRef, true)}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
+                            <control-param name="selectedItemsNameSubstituteString">{@@documentService.wrapAsDocumentLink(doc.nodeRef, true)}</control-param>
                             <control-param name="itemType">lecm-document:base</control-param>
                             <control-param name="plane">true</control-param>
                             <control-param name="additionalFilter">(TYPE:\"lecm-incoming:document\")</control-param>
@@ -1067,8 +1067,8 @@
                     <field id="lecm-document-aspects:response-to-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
-                            <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
-                            <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
+                            <control-param name="nameSubstituteString">{@@documentService.wrapAsDocumentLink(doc.nodeRef, true)}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
+                            <control-param name="selectedItemsNameSubstituteString">{@@documentService.wrapAsDocumentLink(doc.nodeRef, true)}</control-param>
                             <control-param name="itemType">lecm-document:base</control-param>
                             <control-param name="showSearch">true</control-param>
                             <control-param name="plane">true</control-param>
@@ -1343,8 +1343,8 @@
                     <field id="lecm-document-aspects:response-to-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
-                            <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
-                            <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
+                            <control-param name="nameSubstituteString">{@@documentService.wrapAsDocumentLink(doc.nodeRef, true)}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
+                            <control-param name="selectedItemsNameSubstituteString">{@@documentService.wrapAsDocumentLink(doc.nodeRef, true)}</control-param>
                             <control-param name="itemType">lecm-document:base</control-param>
                             <control-param name="showSearch">true</control-param>
                             <control-param name="plane">true</control-param>
