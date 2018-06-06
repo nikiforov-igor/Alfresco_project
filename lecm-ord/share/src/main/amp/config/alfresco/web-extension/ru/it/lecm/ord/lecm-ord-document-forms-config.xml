@@ -73,8 +73,8 @@
                             <control-param name="rootLocation">/app:company_home</control-param>
                             <control-param name="itemType">lecm-document:base</control-param>
                             <control-param name="checkType">false</control-param>
-                            <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
-                            <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
+                            <control-param name="nameSubstituteString">{@@documentService.wrapAsDocumentLink(doc.nodeRef, true)}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
+                            <control-param name="selectedItemsNameSubstituteString">{@@documentService.wrapAsDocumentLink(doc.nodeRef, true)}</control-param>
                             <control-param name="additionalFilter">((TYPE:\"lecm-ord:document\" AND @lecm\\-statemachine\\:status:\"Исполнен\") OR (TYPE:\"lecm-nd:document\" AND (@lecm\\-statemachine\\:status:\"Действует\" OR @lecm\\-statemachine\\:status:\"Введен в действие\"))) </control-param>
                             <control-param name="showSearch">true</control-param>
                             <control-param name="plane">true</control-param>
@@ -95,8 +95,8 @@
                         <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
                             <control-param name="itemType">lecm-document:base</control-param>
-                            <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
-                            <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
+                            <control-param name="nameSubstituteString">{@@documentService.wrapAsDocumentLink(doc.nodeRef, true)}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
+                            <control-param name="selectedItemsNameSubstituteString">{@@documentService.wrapAsDocumentLink(doc.nodeRef, true)}</control-param>
                             <control-param name="additionalFilter">(TYPE:\"lecm-nd:document\" AND @lecm\\-statemachine\\:status:\"Зарегистрирован\")</control-param>
                             <control-param name="showSearch">true</control-param>
                             <control-param name="plane">true</control-param>
@@ -329,8 +329,8 @@
                             <control-param name="rootLocation">/app:company_home</control-param>
                             <control-param name="itemType">lecm-document:base</control-param>
                             <control-param name="checkType">false</control-param>
-                            <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
-                            <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
+                            <control-param name="nameSubstituteString">{@@documentService.wrapAsDocumentLink(doc.nodeRef, true)}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
+                            <control-param name="selectedItemsNameSubstituteString">{@@documentService.wrapAsDocumentLink(doc.nodeRef, true)}</control-param>
                             <control-param name="additionalFilter">((TYPE:\"lecm-ord:document\" AND @lecm\\-statemachine\\:status:\"Исполнен\") OR (TYPE:\"lecm-nd:document\" AND (@lecm\\-statemachine\\:status:\"Действует\" OR @lecm\\-statemachine\\:status:\"Введен в действие\"))) </control-param>
                             <control-param name="showSearch">true</control-param>
                             <control-param name="plane">true</control-param>
@@ -351,8 +351,8 @@
                         <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
                             <control-param name="itemType">lecm-document:base</control-param>
-                            <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
-                            <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
+                            <control-param name="nameSubstituteString">{@@documentService.wrapAsDocumentLink(doc.nodeRef, true)}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
+                            <control-param name="selectedItemsNameSubstituteString">{@@documentService.wrapAsDocumentLink(doc.nodeRef, true)}</control-param>
                             <control-param name="additionalFilter">(TYPE:\"lecm-nd:document\" AND @lecm\\-statemachine\\:status:\"Зарегистрирован\")</control-param>
                             <control-param name="showSearch">true</control-param>
                             <control-param name="plane">true</control-param>
@@ -719,8 +719,8 @@
                             <control-param name="rootLocation">/app:company_home</control-param>
                             <control-param name="itemType">lecm-document:base</control-param>
                             <control-param name="checkType">false</control-param>
-                            <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
-                            <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
+                            <control-param name="nameSubstituteString">{@@documentService.wrapAsDocumentLink(doc.nodeRef, true)}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
+                            <control-param name="selectedItemsNameSubstituteString">{@@documentService.wrapAsDocumentLink(doc.nodeRef, true)}</control-param>
                             <control-param name="additionalFilter">((TYPE:\"lecm-ord:document\" AND @lecm\\-statemachine\\:status:\"Исполнен\") OR (TYPE:\"lecm-nd:document\" AND (@lecm\\-statemachine\\:status:\"Действует\" OR @lecm\\-statemachine\\:status:\"Введен в действие\"))) </control-param>
                             <control-param name="showSearch">true</control-param>
                             <control-param name="plane">true</control-param>
@@ -741,8 +741,8 @@
                         <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
                             <control-param name="itemType">lecm-document:base</control-param>
-                            <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
-                            <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
+                            <control-param name="nameSubstituteString">{@@documentService.wrapAsDocumentLink(doc.nodeRef, true)}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
+                            <control-param name="selectedItemsNameSubstituteString">{@@documentService.wrapAsDocumentLink(doc.nodeRef, true)}</control-param>
                             <control-param name="additionalFilter">(TYPE:\"lecm-nd:document\" AND @lecm\\-statemachine\\:status:\"Зарегистрирован\")</control-param>
                             <control-param name="showSearch">true</control-param>
                             <control-param name="plane">true</control-param>
@@ -934,8 +934,8 @@
                             <control-param name="rootLocation">/app:company_home</control-param>
                             <control-param name="itemType">lecm-document:base</control-param>
                             <control-param name="checkType">false</control-param>
-                            <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
-                            <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
+                            <control-param name="nameSubstituteString">{@@documentService.wrapAsDocumentLink(doc.nodeRef, true)}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
+                            <control-param name="selectedItemsNameSubstituteString">{@@documentService.wrapAsDocumentLink(doc.nodeRef, true)}</control-param>
                             <control-param name="additionalFilter">((TYPE:\"lecm-ord:document\" AND @lecm\\-statemachine\\:status:\"Исполнен\") OR (TYPE:\"lecm-nd:document\" AND (@lecm\\-statemachine\\:status:\"Действует\" OR @lecm\\-statemachine\\:status:\"Введен в действие\"))) </control-param>
                             <control-param name="showSearch">true</control-param>
                             <control-param name="plane">true</control-param>
@@ -956,8 +956,8 @@
                         <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
                             <control-param name="itemType">lecm-document:base</control-param>
-                            <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
-                            <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
+                            <control-param name="nameSubstituteString">{@@documentService.wrapAsDocumentLink(doc.nodeRef, true)}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
+                            <control-param name="selectedItemsNameSubstituteString">{@@documentService.wrapAsDocumentLink(doc.nodeRef, true)}</control-param>
                             <control-param name="additionalFilter">(TYPE:\"lecm-nd:document\" AND @lecm\\-statemachine\\:status:\"Зарегистрирован\")</control-param>
                             <control-param name="showSearch">true</control-param>
                             <control-param name="plane">true</control-param>
