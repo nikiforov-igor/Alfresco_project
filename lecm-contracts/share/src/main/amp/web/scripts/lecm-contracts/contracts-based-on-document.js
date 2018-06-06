@@ -39,7 +39,7 @@
                     var buttonName = this.id + "-button";
                     var table = document.createElement("table");
                     table.width = "100%";
-                    table.cellPadding = 3;
+                    table.cellPadding = 2;
                     table.cellSpacing = 1;
                     table.border = 0;
 

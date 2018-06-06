@@ -47,12 +47,12 @@
                     var resultMessage = "";
                     var oResults = eval("(" + oResponse.responseText + ")");
                     if (oResults != null && oResults.length > 0) {
-                        resultMessage = "<div><b>${msg('message.contract.stages.not.closed')}</b></div>"
+                        resultMessage = "<div style='margin-bottom: 15px;'><b>${msg('message.contract.stages.not.closed')}</b></div>"
                         for (var rowIndex in oResults) {
                             var row = oResults[rowIndex];
-                            resultMessage += "<div style='padding-left: 10px;'>${msg('label.stage')} № " + row.number + ", <i><a href='#' onclick='return false;' id='preview_" + row.nodeRef + "'>" + row.title + "</a></i></div>"
+                            resultMessage += "<div style='padding-left: 10px; margin-bottom: 5px;'>${msg('label.stage')} № " + row.number + ", <i><a href='#' onclick='return false;' id='preview_" + row.nodeRef + "'>" + row.title + "</a></i></div>"
                         }
-                        resultMessage += "<div><b>${msg('message.contract.execution.close.quest')}</b></div>"
+                        resultMessage += "<div style='margin-top: 15px;'><b>${msg('message.contract.execution.close.quest')}</b></div>"
                         var container = Dom.get('${id}_container');
                         container.innerHTML = resultMessage;
                         for (var rowIndex in oResults) {

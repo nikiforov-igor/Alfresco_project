@@ -45,17 +45,15 @@
 			<td colspan="3" <#if inViewMode>id="propIndexTableRow"</#if>><@formLib.renderField field = form.fields[propIndexTableRow] /></td>
 		</tr>
         <tr <#if inViewMode>class="tableRowData"</#if>>
-			<td></td>
-            <td <#if inViewMode>id="propStartDate"</#if>><@formLib.renderField field = form.fields[propStartDate] /></td>
+            <td colspan="2" <#if inViewMode>id="propStartDate"</#if>><@formLib.renderField field = form.fields[propStartDate] /></td>
             <td <#if inViewMode>id="propEndDate"</#if>><@formLib.renderField field = form.fields[propEndDate] /></td>
         </tr>
-			<#if inEditOrViewMode>
-            <tr class="${form.mode}-stage-dates tableRowData" >
-                <td></td>
-                <td <#if inViewMode>id="propStartDateReal"</#if>><@formLib.renderField field = form.fields[propStartDateReal] /></td>
-                <td <#if inViewMode>id="propEndDateReal"</#if>><@formLib.renderField field = form.fields[propEndDateReal] /></td>
-            </tr>
-			</#if>
+		<#if inEditOrViewMode>
+		<tr class="${form.mode}-stage-dates tableRowData" >
+			<td colspan="2" <#if inViewMode>id="propStartDateReal"</#if>><@formLib.renderField field = form.fields[propStartDateReal] /></td>
+			<td <#if inViewMode>id="propEndDateReal"</#if>><@formLib.renderField field = form.fields[propEndDateReal] /></td>
+		</tr>
+		</#if>
         <tr>
             <td colspan="3" <#if inViewMode>class="view-name"</#if>><@formLib.renderField field = form.fields[propName] /></td>
         </tr>
