@@ -1,9 +1,11 @@
 .yui-skin-lecmTheme .resolution-form .form-container fieldset {
     padding: 10px;
+    margin-bottom: 0;
 }
 
 .yui-skin-lecmTheme .resolution-form .form-container .form-buttons {
-    padding: 0 1em 1em 410px;
+    margin: 0;
+    padding-left: 425px;
 }
 
 .resolution-form .yui-g .yui-u .control .label-div {
