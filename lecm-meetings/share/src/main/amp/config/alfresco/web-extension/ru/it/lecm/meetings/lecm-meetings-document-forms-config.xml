@@ -867,6 +867,7 @@
                             <control-param name="org_field">lecm-events-dic:resources-organization-assoc-ref</control-param>
                             <control-param name="sortSelected">true</control-param>
                             <control-param name="verticalList">true</control-param>
+                            <control-param name="childrenDataSource">lecm/forms/picker</control-param>
                         </control>
                     </field>
                     <field id="lecm-events:initiator-assoc">
