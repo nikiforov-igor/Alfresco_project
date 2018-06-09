@@ -1322,6 +1322,7 @@
                             <control-param name="plane">true</control-param>
                             <control-param name="endpointType">lecm-orgstr:employee</control-param>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+                            <control-param name="showSearch">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-eds-document:execution-date">
