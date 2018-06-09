@@ -34,7 +34,7 @@
 	<@formLib.renderFormsRuntime formId = formId />
 </#if>
 <@formLib.renderFormContainer formId = formId>
-    <table class="${form.mode}-stage">
+    <table class="${form.mode}-stage" style="border-spacing: 0;">
         <tbody>
 			<#if inEditOrViewMode>
             <tr>
