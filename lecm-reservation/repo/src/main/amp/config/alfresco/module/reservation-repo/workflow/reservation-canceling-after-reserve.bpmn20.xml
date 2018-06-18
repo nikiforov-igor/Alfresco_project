@@ -64,9 +64,19 @@
                             } else {
                                 /* Получаем основную должностную позицию */
                                 var primaryPosition = orgstructure.getPrimaryPosition(currentEmployee.nodeRef.toString());
-                                if (primaryPosition) {
+                                 if (primaryPosition) {
                                     var unit = orgstructure.getUnitByStaff(primaryPosition.nodeRef.toString());
-                                    registrars = edsGlobalSettings.getPotentialWorkers('DA_REGISTRARS', unit.nodeRef.toString());
+                                    if (unit) {
+                                        registrars = edsGlobalSettings.getPotentialWorkers('DA_REGISTRARS', unit.nodeRef.toString());
+                                        while (!registrars || !registrars.length) {
+                                            unit = orgstructure.getParentUnit(unit.nodeRef.toString(), false);
+                                            if (unit) {
+                                                registrars = edsGlobalSettings.getPotentialWorkers('DA_REGISTRARS', unit.nodeRef.toString());
+                                            } else {
+                                                break;
+                                            }
+                                        }
+                                    }
                                 }
                             }
                             if (!registrars) {
