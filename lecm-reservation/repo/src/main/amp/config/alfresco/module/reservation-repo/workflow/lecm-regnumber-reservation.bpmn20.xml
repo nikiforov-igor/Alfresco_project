@@ -66,11 +66,11 @@
                                 if (primaryPosition) {
                                     var unit = orgstructure.getUnitByStaff(primaryPosition.nodeRef.toString());
                                     if (unit) {
-                                        registrars = edsGlobalSettings.getPotentialWorkers('DA_REGISTRARS', unit.nodeRef.toString(), true);
+                                        registrars = edsGlobalSettings.getPotentialWorkers('DA_REGISTRARS', unit.nodeRef.toString());
                                         while (!registrars || !registrars.length) {
                                             unit = orgstructure.getParentUnit(unit.nodeRef.toString(), false);
                                             if (unit) {
-                                                registrars = edsGlobalSettings.getPotentialWorkers('DA_REGISTRARS', unit.nodeRef.toString(), true);
+                                                registrars = edsGlobalSettings.getPotentialWorkers('DA_REGISTRARS', unit.nodeRef.toString());
                                             } else {
                                                 break;
                                             }
