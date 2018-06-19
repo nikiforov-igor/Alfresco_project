@@ -662,7 +662,7 @@
                 <!-- Тип поручения -->
                 <association name="lecm-errands:type-assoc">
                     <source>
-                        <mandatory>false</mandatory>
+                        <mandatory>true</mandatory>
                         <many>true</many>
                     </source>
                     <target>
