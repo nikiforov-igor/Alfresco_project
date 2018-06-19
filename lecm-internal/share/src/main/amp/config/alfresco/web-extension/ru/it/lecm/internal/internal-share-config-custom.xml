@@ -40,6 +40,9 @@
                     <show id="lecm-internal-table-structure:employee-assoc" force="true"/>
                     <show id="lecm-internal-table-structure:answer-details" force="true"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-internal-table-structure:answer-details" substituteString="{@(doc.assocClass('lecm-internal-table-structure:answer-document-assoc')!= null ? (@permissionScript.hasReadAccess(doc.assoc('lecm-internal-table-structure:answer-document-assoc')) ? ('!html ' + @documentScript.wrapperAttribute(doc.assoc('lecm-internal-table-structure:answer-document-assoc')&amp;#044;doc.assocAttr('lecm-internal-table-structure:answer-document-assoc'&amp;#044;'lecm-document:title'))) : doc.assocAttr('lecm-internal-table-structure:answer-document-assoc'&amp;#044;'lecm-document:title')) : doc.attr('lecm-internal-table-structure:answer-details'))}"/>
+                </appearance>
             </form>
         </forms>
     </config>
