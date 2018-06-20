@@ -39,7 +39,24 @@
 	YAHOO.Bubbling.on('resolutionErrandTypeChanged', reInit, {reinitLimitationDate: false, editForm: false});
 	YAHOO.Bubbling.on('resolutionEditErrandTypeChanged', reInit, {reinitLimitationDate: false, editForm: true});
     YAHOO.Bubbling.on('createErrandsWFErrandTypeChanged', reInit, {reinitLimitationDate: true, editForm: false});
+    YAHOO.Bubbling.on('errandTitleChanged', titleChangeHandler);
 
+    function titleChangeHandler(layer, args) {
+        var formId = args[1].formId;
+        var textContentField = Dom.get(formId + "_prop_lecm-errands_content");
+        if (!textContentField) {
+            textContentField = Dom.get(formId + "_prop_lecmErrandWf_content");
+        }
+        if (textContentField && !textContentField.value.length) {
+            var selectedItems = args[1].selectedItems;
+            if (selectedItems) {
+                var key = Object.keys(selectedItems)[0];
+                if (key) {
+                    textContentField.value = selectedItems[key].name;
+                }
+            }
+        }
+    }
 	function reInit(layer, args, param) {
 	    if (errandsTypesLoaded) {
             var obj = args[1];
