@@ -115,7 +115,7 @@
                         </control>
                     </field>
                     <field id="lecm-document:author-assoc" set="commonField1" label-id="label.document.creator"/>
-                    <field id="lecm-errands:type-assoc" set="commonField1"/>
+                    <field id="lecm-errands:type-assoc" set="commonField1" mandatory="true"/>
                     <field id="lecm-errands:title" set="commonField1">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
@@ -310,7 +310,7 @@
                             <control-param name="defaultValueDataSource">lecm/errands/getDefaultInitiator</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:type-assoc" set="beforeDateSet">
+                    <field id="lecm-errands:type-assoc" set="beforeDateSet" mandatory="true">
                         <control>
                             <control-param name="changeItemsFireAction">errandTypeChanged</control-param>
                             <control-param name="blockChangeItemOnInit">true</control-param>
@@ -1173,7 +1173,7 @@
                     <field id="lecm-errands:wait-for-execution-date">
                         <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
                     </field>
-                    <field id="lecm-errands:type-assoc">
+                    <field id="lecm-errands:type-assoc" mandatory="true">
                         <control>
                             <control-param name="endpointMany">true</control-param>
                         </control>
