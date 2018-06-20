@@ -62,7 +62,7 @@ function addSimilarFilter(filter, document, prop, startLength, searchMode) {
 		if (prop == "lecm-incoming:outgoing-date") {
             filter += propValue.toISOString() + '"';
 		} else {
-            filter += propValue + '"';
+            filter += escapeString(propValue) + '"';
 		}
 	}
 	return filter;
@@ -70,6 +70,7 @@ function addSimilarFilter(filter, document, prop, startLength, searchMode) {
 
 function addSearchTerm(filter, searchTerm, searchProp) {
     if (searchTerm) {
+        searchTerm = escapeString(searchTerm);
         filter += '@' + searchProp.replace(":", "\\:") + '"*' + searchTerm + '*"';
     }
     return filter;
