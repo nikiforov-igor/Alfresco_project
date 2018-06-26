@@ -1009,7 +1009,7 @@
                         <control template="/ru/it/lecm/documents/controls/workflow/format-packageItems-document.ftl">
                             <control-param name="substituteString">
                                 <![CDATA[
-					                <a href='/{~SHARE_CONTEXT}/page/view-metadata?nodeRef={lecm-errands:controller-assoc/nodeRef}'>
+					                <a href='/{~SHARE_CONTEXT}/page/view-metadata?nodeRef={lecm-errands:controller-assoc/nodeRef}' onclick='var argument = new Object(); argument.itemId = \"{lecm-errands:controller-assoc/nodeRef}\"; LogicECM.module.Base.Util.viewAttributes(argument); return false;'>
 					                    {lecm-errands:controller-assoc/lecm-orgstr:employee-short-name} {lecm-errands:controller-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}
 					                </a>
 				                ]]>
