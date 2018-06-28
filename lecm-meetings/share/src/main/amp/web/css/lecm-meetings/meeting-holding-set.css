@@ -10,17 +10,8 @@
     border-top: none;
 }
 
-.meeting-holding-items .meeting-holding-set .meeting-items-left {
+.meeting-holding-items .meeting-holding-set .meeting-items-top {
     float: left;
     width: 50%;
-    padding-right: 1em;
     box-sizing: border-box;
-}
-.meeting-holding-items .meeting-holding-set .meeting-items-right {
-    float: right;
-    width: 50%;
-}
-.meeting-holding-items .meeting-holding-set .meeting-items-bottom {
-    border-top: 1px solid #ccc;
-    padding: 1em 0 0 0;
 }
