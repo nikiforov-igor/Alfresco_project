@@ -23501,7 +23501,7 @@
                         <property name="lecm-arm:order"><![CDATA[30]]></property>
                         <property name="lecm-arm:is-for-secretaries"><![CDATA[false]]></property>
                         <property name="lecm-arm:types">
-                            <![CDATA[lecm-nd:document,lecm-errands:document,lecm-incoming:document,lecm-internal:document,lecm-outgoing:document,lecm-ord:document,lecm-contract:document]]></property>
+                            <![CDATA[lecm-nd:document,lecm-errands:document,lecm-incoming:document,lecm-internal:document,lecm-outgoing:document,lecm-ord:document]]></property>
                         <items>
                             <item name="cm:Журналы" type="lecm-arm:reports-node">
                                 <property name="lecm-arm:order"><![CDATA[10]]></property>
