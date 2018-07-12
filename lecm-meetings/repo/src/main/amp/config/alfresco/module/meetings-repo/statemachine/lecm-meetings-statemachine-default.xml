@@ -2729,7 +2729,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
 if (document !== null) {
   var members = events.getEventMembers(document);
   for (var i = 0; i<members.length; i++) {
-    documentMembers.addMemberWithoutCheckPermission(document, members[i], "LECM_BASIC_PG_Reader");
+    documentMembers.addMemberWithoutCheckPermission(document, members[i]);
   }
 }]]></value>
                                                             </property>

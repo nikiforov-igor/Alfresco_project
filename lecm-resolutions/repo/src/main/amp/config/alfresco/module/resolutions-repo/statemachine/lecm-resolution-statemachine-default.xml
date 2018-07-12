@@ -1778,7 +1778,7 @@ if (document && currentUser) {
   if (childErrands) {
     childErrands.forEach(function (errand) {
       //alfsed-732 фикс закрытия недоступных контроллеру поручений
-      documentMembers.addMemberWithoutCheckPermission(errand, currentUser, "LECM_BASIC_PG_Reader", true);
+      documentMembers.addMemberWithoutCheckPermission(errand, currentUser, true);
       errands.sendCancelSignal(errand.nodeRef.toString(), annulReason, currentUser.nodeRef.toString());
     });
   }
@@ -2038,7 +2038,7 @@ if (document) {
   if (childErrands) {
     childErrands.forEach(function (errand) {
       //alfsed-732 фикс закрытия недоступных контроллеру поручений
-      documentMembers.addMemberWithoutCheckPermission(errand, signalSender, "LECM_BASIC_PG_Reader", true);
+      documentMembers.addMemberWithoutCheckPermission(errand, signalSender, true);
       edsDocument.sendCompletionSignal(errand, signalReason, signalSender);
     });
   }
@@ -2153,9 +2153,9 @@ if (document) {
         }
     }
     statemachine.grandDynamicRoleForEmployee(stm_document, creatorAssoc[0], "RESOLUTION_AUTHOR_DYN", task);
-    documentMembers.addMemberWithoutCheckPermission(stm_document, creatorAssoc[0], 'LECM_BASIC_PG_Reader', true);
+    documentMembers.addMemberWithoutCheckPermission(stm_document, creatorAssoc[0], true);
     if (baseDoc) {
-      documentMembers.addMemberWithoutCheckPermission(baseDoc, creatorAssoc[0], 'LECM_BASIC_PG_Reader', true);
+      documentMembers.addMemberWithoutCheckPermission(baseDoc, creatorAssoc[0], true);
     }
   }
 
@@ -2163,9 +2163,9 @@ if (document) {
   var authorAssoc = stm_document.assocs["lecm-document:author-assoc"];
   if (authorAssoc && authorAssoc.length) {
     statemachine.grandDynamicRoleForEmployee(stm_document, authorAssoc[0], "RESOLUTION_CREATOR_DYN", task);
-    documentMembers.addMemberWithoutCheckPermission(stm_document, authorAssoc[0], 'LECM_BASIC_PG_Reader', true);
+    documentMembers.addMemberWithoutCheckPermission(stm_document, authorAssoc[0], true);
     if (baseDoc) {
-      documentMembers.addMemberWithoutCheckPermission(baseDoc, authorAssoc[0], 'LECM_BASIC_PG_Reader', true);
+      documentMembers.addMemberWithoutCheckPermission(baseDoc, authorAssoc[0], true);
     }
   }
 
@@ -2173,9 +2173,9 @@ if (document) {
   var controllerAssoc = stm_document.assocs["lecm-resolutions:controller-assoc"];
   if (controllerAssoc && controllerAssoc.length) {
     statemachine.grandDynamicRoleForEmployee(stm_document, controllerAssoc[0], "RESOLUTION_CONTROLLER_DYN", task);
-    documentMembers.addMemberWithoutCheckPermission(stm_document, controllerAssoc[0], 'LECM_BASIC_PG_Reader', true);
+    documentMembers.addMemberWithoutCheckPermission(stm_document, controllerAssoc[0], true);
     if (baseDoc) {
-      documentMembers.addMemberWithoutCheckPermission(baseDoc, controllerAssoc[0], 'LECM_BASIC_PG_Reader', true);
+      documentMembers.addMemberWithoutCheckPermission(baseDoc, controllerAssoc[0], true);
     }
 
     notifications.sendNotificationFromCurrentUser({
@@ -2360,7 +2360,7 @@ var reviewers = document.assocs["lecm-resolutions:reviewers-assoc"];
 }
 
 function addMembersToDocument(document, reviewer){
-	documentMembers.addMemberWithoutCheckPermission(document, reviewer, 'LECM_BASIC_PG_Reader', true);
+	documentMembers.addMemberWithoutCheckPermission(document, reviewer, true);
 }]]></value>
                                                             </property>
                                                         </properties>
@@ -3359,9 +3359,9 @@ if (document) {
   var authorAssoc = stm_document.assocs["lecm-resolutions:author-assoc"];
   if (authorAssoc && authorAssoc.length) {
     statemachine.grandDynamicRoleForEmployee(stm_document, authorAssoc[0], "RESOLUTION_AUTHOR_DYN", task);
-    documentMembers.addMemberWithoutCheckPermission(stm_document, authorAssoc[0], 'LECM_BASIC_PG_Reader', true);
+    documentMembers.addMemberWithoutCheckPermission(stm_document, authorAssoc[0], true);
     if (baseDoc) {
-      documentMembers.addMemberWithoutCheckPermission(baseDoc, authorAssoc[0], 'LECM_BASIC_PG_Reader', true);
+      documentMembers.addMemberWithoutCheckPermission(baseDoc, authorAssoc[0], true);
     }
 
     notifications.sendNotificationFromCurrentUser({
@@ -3379,9 +3379,9 @@ if (document) {
   var creatorAssoc = stm_document.assocs["lecm-document:author-assoc"];
   if (creatorAssoc && creatorAssoc.length) {
     statemachine.grandDynamicRoleForEmployee(stm_document, creatorAssoc[0], "RESOLUTION_CREATOR_DYN", task);
-    documentMembers.addMemberWithoutCheckPermission(stm_document, creatorAssoc[0], 'LECM_BASIC_PG_Reader', true);
+    documentMembers.addMemberWithoutCheckPermission(stm_document, creatorAssoc[0], true);
     if (baseDoc) {
-      documentMembers.addMemberWithoutCheckPermission(baseDoc, creatorAssoc[0], 'LECM_BASIC_PG_Reader', true);
+      documentMembers.addMemberWithoutCheckPermission(baseDoc, creatorAssoc[0], true);
     }
   }
 })();]]></value>

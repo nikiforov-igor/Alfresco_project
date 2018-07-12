@@ -65,7 +65,7 @@
 											statemachine.grandDynamicRoleForEmployee(document, coexecutor, "ERRANDS_COEXECUTOR");
 											documentMembers.addMember(document, coexecutor, "ERRANDS_READER", true);
 											if (baseDocument) {
-											    documentMembers.addMemberWithoutCheckPermission(baseDocument, coexecutor, "LECM_BASIC_PG_Reader", true);
+											    documentMembers.addMemberWithoutCheckPermission(baseDocument, coexecutor, true);
 											}
 										});
 										notifications.sendNotificationFromCurrentUser({

@@ -389,7 +389,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 					NodeRef author = authorAssocs.get(0).getTargetRef();
 					associations.put(ErrandsService.ASSOC_ERRANDS_INITIATOR.toPrefixString(namespaceService), author.toString());
 					if (errandsService.isTransferRightToBaseDocument()) {
-						documentMembersService.addMemberWithoutCheckPermission(ord, author, "LECM_BASIC_PG_Reader", true);
+						documentMembersService.addMemberWithoutCheckPermission(ord, author, true);
 					}
 				}
 				//исполнитель
@@ -398,7 +398,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 					NodeRef executor = pointExecutorAssocs.get(0).getTargetRef();
 					associations.put(ErrandsService.ASSOC_ERRANDS_EXECUTOR.toPrefixString(namespaceService), executor.toString());
 					if (errandsService.isTransferRightToBaseDocument()) {
-						documentMembersService.addMemberWithoutCheckPermission(ord, executor, "LECM_BASIC_PG_Reader", true);
+						documentMembersService.addMemberWithoutCheckPermission(ord, executor, true);
 					}
                 }
 				//контролер
@@ -407,7 +407,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 					NodeRef controller = pointControllerAssocs.get(0).getTargetRef();
 					associations.put(ErrandsService.ASSOC_ERRANDS_CONTROLLER.toPrefixString(namespaceService), controller.toString());
 					if (errandsService.isTransferRightToBaseDocument()) {
-						documentMembersService.addMemberWithoutCheckPermission(ord, controller, "LECM_BASIC_PG_Reader", true);
+						documentMembersService.addMemberWithoutCheckPermission(ord, controller, true);
 					}
                 }
 				//соисполнители
@@ -417,7 +417,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 					for (AssociationRef coexecutors : pointCoExecutorsAssocs) {
 						coexecutorsList.add(coexecutors.getTargetRef());
 						if (errandsService.isTransferRightToBaseDocument()) {
-							documentMembersService.addMemberWithoutCheckPermission(ord, coexecutors.getTargetRef(), "LECM_BASIC_PG_Reader", true);
+							documentMembersService.addMemberWithoutCheckPermission(ord, coexecutors.getTargetRef(), true);
 						}
                     }
 					associations.put(ErrandsService.ASSOC_ERRANDS_CO_EXECUTORS.toPrefixString(namespaceService), StringUtils.join(coexecutorsList, ","));

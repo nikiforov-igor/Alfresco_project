@@ -7142,7 +7142,7 @@ if (document) {
   i;
 
 for (i in approvals) {
-  documentMembers.addMemberWithoutCheckPermission(contract, approvals[i], "LECM_BASIC_PG_Reader", true);
+  documentMembers.addMemberWithoutCheckPermission(contract, approvals[i], true);
 }]]></value>
                                                             </property>
                                                         </properties>

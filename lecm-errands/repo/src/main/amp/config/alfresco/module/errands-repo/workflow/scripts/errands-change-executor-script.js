@@ -9,7 +9,7 @@ function processChangeExecutor(newExecutor, reason) {
     if (errands.isTransferRightToBaseDocument()) {
         var baseDocumentAssoc = document.assocs["lecm-errands:base-assoc"];
         if (baseDocumentAssoc && baseDocumentAssoc.length) {
-            documentMembers.addMemberWithoutCheckPermission(baseDocumentAssoc[0], newExecutor, "LECM_BASIC_PG_Reader", true);
+            documentMembers.addMemberWithoutCheckPermission(baseDocumentAssoc[0], newExecutor, true);
         }
     }
     var periodically = document.properties["lecm-errands:periodically"];

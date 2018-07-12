@@ -184,7 +184,7 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 	public void onChairmanAdded(AssociationRef nodeAssocRef) throws WriteTransactionNeededException {
 		NodeRef event = nodeAssocRef.getSourceRef();
 		NodeRef chairman = nodeAssocRef.getTargetRef();
-		documentMembersService.addMemberWithoutCheckPermission(event, chairman, LecmPermissionService.LecmPermissionGroup.PGROLE_Reader, true);
+		documentMembersService.addMemberWithoutCheckPermission(event, chairman, true);
 		lecmPermissionService.grantDynamicRole("EVENTS_INITIATOR_DYN", event, chairman.getId(), lecmPermissionService.findPermissionGroup("LECM_BASIC_PG_Owner"));
 	}
 
@@ -200,7 +200,7 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 	public void onSecretaryAdded(AssociationRef nodeAssocRef) throws WriteTransactionNeededException {
 		NodeRef event = nodeAssocRef.getSourceRef();
 		NodeRef secretary = nodeAssocRef.getTargetRef();
-		documentMembersService.addMemberWithoutCheckPermission(event, secretary, LecmPermissionService.LecmPermissionGroup.PGROLE_Reader, true);
+		documentMembersService.addMemberWithoutCheckPermission(event, secretary, true);
 		if (!stateMachineService.isFinal(event)) {
 			lecmPermissionService.grantDynamicRole("EVENTS_INITIATOR_DYN", event, secretary.getId(), lecmPermissionService.findPermissionGroup("LECM_BASIC_PG_Owner"));
 		}

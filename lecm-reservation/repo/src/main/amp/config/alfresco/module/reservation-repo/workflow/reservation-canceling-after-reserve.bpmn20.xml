@@ -206,7 +206,7 @@
                                     templateCode: templateCode,
                                     templateConfig: templateConfigObject
                                 });
-                                documentMembers.addMemberWithoutCheckPermission(document, employee, 'LECM_BASIC_PG_Reader', true);
+                                documentMembers.addMemberWithoutCheckPermission(document, employee, true);
                                 execution.setVariable('taskDecision', decision);
                             ]]></activiti:string>
                     </activiti:field>

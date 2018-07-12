@@ -260,7 +260,7 @@
 
                             execution.setVariable('taskDecision', decision);
 
-  							documentMembers.addMemberWithoutCheckPermission(document, employee, 'LECM_BASIC_PG_Reader', true);
+  							documentMembers.addMemberWithoutCheckPermission(document, employee, true);
 						]]></activiti:string>
                     </activiti:field>
                 </activiti:taskListener>
