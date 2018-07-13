@@ -228,7 +228,7 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
                 if (null != errandInitiator) {
                     associations.put("lecm-errands:initiator-assoc", errandInitiator.toString());
                     if (errandsService.isTransferRightToBaseDocument()) {
-                        documentMembersService.addMemberWithoutCheckPermission(protocol, errandInitiator, "LECM_BASIC_PG_Reader", true);
+                        documentMembersService.addMemberWithoutCheckPermission(protocol, errandInitiator, true);
                     }
                 }
                 // Тип поручения
@@ -241,7 +241,7 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
                     NodeRef executor = pointExecutorAssocs.get(0).getTargetRef();
                     associations.put("lecm-errands:executor-assoc", executor.toString());
                     if (errandsService.isTransferRightToBaseDocument()) {
-                        documentMembersService.addMemberWithoutCheckPermission(protocol, executor, "LECM_BASIC_PG_Reader", true);
+                        documentMembersService.addMemberWithoutCheckPermission(protocol, executor, true);
                     }
                 }
                 //тематика поручения

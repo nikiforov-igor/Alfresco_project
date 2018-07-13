@@ -21,7 +21,7 @@ var ErrandsCompletionSignalScript = {
                 childrenErrands.forEach(function (childErrand) {
                     if (!statemachine.isFinal(childErrand.nodeRef.toString()) && !statemachine.isDraft(childErrand)) {
                         //alfsed-732 фикс закрытия недоступных контроллеру поручений
-                        documentMembers.addMemberWithoutCheckPermission(childErrand, signalSender, "LECM_BASIC_PG_Reader", true);
+                        documentMembers.addMemberWithoutCheckPermission(childErrand, signalSender, true);
 
                         edsDocument.sendCompletionSignal(childErrand, signalReason, signalSender);
                     }
@@ -29,7 +29,7 @@ var ErrandsCompletionSignalScript = {
                 childrenResolutions.forEach(function (childResolution) {
                     if (!statemachine.isFinal(childResolution.nodeRef.toString()) && !statemachine.isDraft(childResolution)) {
                         //alfsed-732 фикс закрытия недоступных контроллеру поручений
-                        documentMembers.addMemberWithoutCheckPermission(childResolution, signalSender, "LECM_BASIC_PG_Reader", true);
+                        documentMembers.addMemberWithoutCheckPermission(childResolution, signalSender, true);
 
                         edsDocument.sendCompletionSignal(childResolution, signalReason, signalSender);
                     }

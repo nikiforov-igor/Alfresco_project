@@ -82,7 +82,7 @@ public class ResolutionBaseDocumentPolicy implements NodeServicePolicies.OnCreat
                     parentDoc = null;
                 }
                 if (initiatorRef != null) {
-                    documentMembersService.addMemberWithoutCheckPermission(associationRef.getSourceRef(), initiatorRef, "LECM_BASIC_PG_Reader", true);
+                    documentMembersService.addMemberWithoutCheckPermission(associationRef.getSourceRef(), initiatorRef, true);
                 }
             }
         } finally {

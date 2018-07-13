@@ -117,7 +117,7 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
                 parentDoc = null;
             }
             if (initiatorRef != null) {
-                documentMembersService.addMemberWithoutCheckPermission(errandDoc, initiatorRef, "LECM_BASIC_PG_Reader", true);
+                documentMembersService.addMemberWithoutCheckPermission(errandDoc, initiatorRef, true);
             }
         }
 

@@ -9,7 +9,7 @@
         <property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
         <property name="lecm-group-actions:script"><![CDATA[if (document) {
 	var currentEmployee =  orgstructure.getCurrentEmployee();
-	documentMembers.addMemberWithoutCheckPermission(document, currentEmployee, "LECM_BASIC_PG_Reader", true);
+	documentMembers.addMemberWithoutCheckPermission(document, currentEmployee, true);
 
 	var registrars = lecmPermission.getEmployeesByDynamicRole(document, "DA_REGISTRAR_DYN");
 	if (registrars && registrars.length) {

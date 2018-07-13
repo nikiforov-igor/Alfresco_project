@@ -1472,7 +1472,7 @@ if (document) {
 	if (recipients && recipients.length) {
       	for each (var recipient in recipients) {
           	if (orgstructure.isEmployeeHasBusinessRole(recipient, "DA_RECIPIENT_DYN", true, true)) {
-      			documentMembers.addMemberWithoutCheckPermission(incoming, recipient, "LECM_BASIC_PG_Reader", true);
+      			documentMembers.addMemberWithoutCheckPermission(incoming, recipient, true);
             }
       	}
     }
@@ -6034,7 +6034,7 @@ if (document) {
 	if (recipients && recipients.length) {
       	for each (var recipient in recipients) {
           	if (orgstructure.isEmployeeHasBusinessRole(recipient, "DA_RECIPIENT_DYN", true, true)) {
-      			documentMembers.addMemberWithoutCheckPermission(incoming, recipient, "LECM_BASIC_PG_Reader", true);
+      			documentMembers.addMemberWithoutCheckPermission(incoming, recipient, true);
             }
       	}
     }
@@ -6433,7 +6433,7 @@ if (document) {
 	if (recipients && recipients.length) {
       	for each (var recipient in recipients) {
           	if (orgstructure.isEmployeeHasBusinessRole(recipient, "DA_RECIPIENT_DYN", true, true)) {
-      			documentMembers.addMemberWithoutCheckPermission(incoming, recipient, "LECM_BASIC_PG_Reader", true);
+      			documentMembers.addMemberWithoutCheckPermission(incoming, recipient, true);
             }
       	}
     }

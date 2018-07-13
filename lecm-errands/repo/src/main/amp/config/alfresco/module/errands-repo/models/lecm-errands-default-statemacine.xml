@@ -7676,7 +7676,7 @@ if (document) {
     if (initiatorAssoc && initiatorAssoc.length) {
         var initiator = initiatorAssoc[0];
         statemachine.grandDynamicRoleForEmployee(document, initiator, "BR_INITIATOR", task);
-        documentMembers.addMember(document, initiator, "LECM_BASIC_PG_Reader", true);
+        documentMembers.addMember(document, initiator, true);
     }
 
     var prevStatus = statemachine.getPreviousStatusName(document);
@@ -9700,23 +9700,23 @@ if (document) {
 
         var controllerAssoc = document.assocs["lecm-errands:controller-assoc"];
         if (controllerAssoc && controllerAssoc.length) {
-          documentMembers.addMemberWithoutCheckPermission(baseDocument, controllerAssoc[0], "LECM_BASIC_PG_Reader", true);
+          documentMembers.addMemberWithoutCheckPermission(baseDocument, controllerAssoc[0], true);
         }
 
         var initiatorAssoc = document.assocs["lecm-errands:initiator-assoc"];
         if (initiatorAssoc && initiatorAssoc.length) {
-          documentMembers.addMemberWithoutCheckPermission(baseDocument, initiatorAssoc[0], "LECM_BASIC_PG_Reader", true);
+          documentMembers.addMemberWithoutCheckPermission(baseDocument, initiatorAssoc[0], true);
         }
 
         var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
         if (executorAssoc && executorAssoc.length) {
-          documentMembers.addMemberWithoutCheckPermission(baseDocument, executorAssoc[0], "LECM_BASIC_PG_Reader", true);
+          documentMembers.addMemberWithoutCheckPermission(baseDocument, executorAssoc[0], true);
         }
 
         var soExecutors = document.assocs["lecm-errands:coexecutors-assoc"];
         if (soExecutors) {
           soExecutors.forEach(function (soExecutor) {
-            documentMembers.addMemberWithoutCheckPermission(baseDocument, soExecutor, "LECM_BASIC_PG_Reader", true);
+            documentMembers.addMemberWithoutCheckPermission(baseDocument, soExecutor, true);
           });
         }
       }
