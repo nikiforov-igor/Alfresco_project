@@ -6082,7 +6082,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[[lecm-additional-document:additionalDocumentType]]>
+                                            <![CDATA[lecm-additional-document:additionalDocumentType]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -6480,7 +6480,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[[lecm-additional-document:additionalDocumentType]]>
+                                            <![CDATA[lecm-additional-document:additionalDocumentType]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
@@ -8681,7 +8681,7 @@
                                             <![CDATA[false]]>
                                         </property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[[lecm-additional-document:additionalDocumentType]]>
+                                            <![CDATA[lecm-additional-document:additionalDocumentType]]>
                                         </property>
                                         <property name="lecm-arm:field-format-string">
                                             <![CDATA[]]>
