@@ -15,6 +15,8 @@ import ru.it.lecm.ord.api.ORDModel;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.workflow.review.api.ReviewService;
 
+import static ru.it.lecm.eds.api.EDSDocumentService.getFromMessagesOrDefaultValue;
+
 /**
  *
  * @author dbayandin
@@ -66,7 +68,7 @@ public class ORDDocumentServiceImpl extends BaseBean implements ORDDocumentServi
 	@Override
 	public void changePointStatus(NodeRef point, String statusKey){
 		if (point != null && statusKey != null) {
-			NodeRef newPointStatus = lecmDictionaryService.getDictionaryValueByParam(ORDModel.ORD_POINT_DICTIONARY_NAME, ORDModel.PROP_ORD_DIC_POINT_STATUS_CODE, statusKey);
+			NodeRef newPointStatus = lecmDictionaryService.getDictionaryValueByParam(getFromMessagesOrDefaultValue("ru.it.lecm.dictionaries.ordPoints.name", ORDModel.ORD_POINT_DICTIONARY_NAME), ORDModel.PROP_ORD_DIC_POINT_STATUS_CODE, statusKey);
 			if (newPointStatus != null) {
 				List<NodeRef> targetStatus = Arrays.asList(newPointStatus);
 				nodeService.setAssociations(point, ORDModel.ASSOC_ORD_TABLE_ITEM_STATUS, targetStatus);
@@ -104,7 +106,7 @@ public class ORDDocumentServiceImpl extends BaseBean implements ORDDocumentServi
 		String pointStatus = getPointStatus(point);
 		String statusByCode = null;
 		if (statusCode != null) {
-			NodeRef statusRef = lecmDictionaryService.getDictionaryValueByParam(ORDModel.ORD_POINT_DICTIONARY_NAME, ORDModel.PROP_ORD_DIC_POINT_STATUS_CODE, statusCode);
+			NodeRef statusRef = lecmDictionaryService.getDictionaryValueByParam(getFromMessagesOrDefaultValue("ru.it.lecm.dictionaries.ordPoints.name", ORDModel.ORD_POINT_DICTIONARY_NAME), ORDModel.PROP_ORD_DIC_POINT_STATUS_CODE, statusCode);
 			if (statusRef != null) {
 				statusByCode = (String) nodeService.getProperty(statusRef, ContentModel.PROP_NAME);
 			}
@@ -201,18 +203,18 @@ public class ORDDocumentServiceImpl extends BaseBean implements ORDDocumentServi
 	@Override
 	protected void initServiceImpl() {
 		ordStatusesMap = new EnumMap<ORDModel.ORD_STATUS,String>(ORDModel.ORD_STATUS.class){{
-			put(ORDModel.ORD_STATUS.CANCELED_FAKE, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.ord.statemachine-status.cancelled", "Отменен"));
-			put(ORDModel.ORD_STATUS.DELETED, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.ord.statemachine-status.removed", "Удален"));
-			put(ORDModel.ORD_STATUS.EXECUTION, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.ord.statemachine-status.on-execution", "На исполнении"));
+			put(ORDModel.ORD_STATUS.CANCELED_FAKE, getFromMessagesOrDefaultValue("lecm.ord.statemachine-status.cancelled", "Отменен"));
+			put(ORDModel.ORD_STATUS.DELETED, getFromMessagesOrDefaultValue("lecm.ord.statemachine-status.removed", "Удален"));
+			put(ORDModel.ORD_STATUS.EXECUTION, getFromMessagesOrDefaultValue("lecm.ord.statemachine-status.on-execution", "На исполнении"));
 
 		}};
 
 		attachmentCategoriesMap = new EnumMap<ORDModel.ATTACHMENT_CATEGORIES,String>(ORDModel.ATTACHMENT_CATEGORIES.class){{
-			put(ORDModel.ATTACHMENT_CATEGORIES.DOCUMENT, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.ord.document.attachment.category.DOCUMENT.title", "Документ"));
-			put(ORDModel.ATTACHMENT_CATEGORIES.APPLICATIONS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.ord.document.attachment.category.APPENDIX.title", "Приложения"));
-			put(ORDModel.ATTACHMENT_CATEGORIES.AGREEMENTS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.ord.document.attachment.category.APPROVAL.title", "Согласования"));
-			put(ORDModel.ATTACHMENT_CATEGORIES.ORIGINAL, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.ord.document.attachment.category.ORIGINAL.title", "Подлинник"));
-			put(ORDModel.ATTACHMENT_CATEGORIES.OTHERS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.ord.document.attachment.category.OTHER.title", "Прочее"));
+			put(ORDModel.ATTACHMENT_CATEGORIES.DOCUMENT, getFromMessagesOrDefaultValue("lecm.ord.document.attachment.category.DOCUMENT.title", "Документ"));
+			put(ORDModel.ATTACHMENT_CATEGORIES.APPLICATIONS, getFromMessagesOrDefaultValue("lecm.ord.document.attachment.category.APPENDIX.title", "Приложения"));
+			put(ORDModel.ATTACHMENT_CATEGORIES.AGREEMENTS, getFromMessagesOrDefaultValue("lecm.ord.document.attachment.category.APPROVAL.title", "Согласования"));
+			put(ORDModel.ATTACHMENT_CATEGORIES.ORIGINAL, getFromMessagesOrDefaultValue("lecm.ord.document.attachment.category.ORIGINAL.title", "Подлинник"));
+			put(ORDModel.ATTACHMENT_CATEGORIES.OTHERS, getFromMessagesOrDefaultValue("lecm.ord.document.attachment.category.OTHER.title", "Прочее"));
 		}};
 	}
 
