@@ -85,6 +85,7 @@
                             <control-param name="textSearchWithExSearch">true</control-param>
                             <control-param name="lockExSearchIfParamsEmpty">true</control-param>
                             <control-param name="checkType">false</control-param>
+                            <control-param name="selectedItemsFormArgs">executionConnectedDocs</control-param>
                         </control>
                     </field>
                     <field id="executeErrandButon" label-id="button.errand.execute">
@@ -1483,6 +1484,7 @@
                     </field>
                     <field id="lecmErrandWf:execute_1ConnectedDocument">
                         <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="selectedItemsFormArgs">executionConnectedDocs</control-param>
                             <control-param name="rootLocation">/app:company_home</control-param>
                             <control-param name="nameSubstituteString">{@@documentService.wrapAsDocumentLink(doc.nodeRef, true)}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
@@ -1570,6 +1572,7 @@
                     </field>
                     <field id="lecmErrandWf:coexecutorReport_1ConnectedDocument">
                         <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="selectedItemsFormArgs">executionConnectedDocs</control-param>
                             <control-param name="rootLocation">/app:company_home</control-param>
                             <control-param name="nameSubstituteString">{@@documentService.wrapAsDocumentLink(doc.nodeRef, true)}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
