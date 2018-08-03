@@ -25838,12 +25838,6 @@
                                 <property name="lecm-arm:types">
                                     <![CDATA[lecm-ord:document,lecm-errands:document,lecm-nd:document,lecm-incoming:document,lecm-internal:document,lecm-outgoing:document,lecm-resolutions:document]]></property>
                             </item>
-                            <item name="cm:Договоры" type="lecm-arm:reports-node">
-                                <property name="lecm-arm:order"><![CDATA[0]]></property>
-                                <property name="cm:name"><![CDATA[Договоры]]></property>
-                                <property name="lecm-arm:reportCodes"><![CDATA[]]></property>
-                                <property name="lecm-arm:types"><![CDATA[lecm-contract:document]]></property>
-                            </item>
                         </items>
                     </item>
                     <item name="cm:Работа регистратора" type="lecm-arm:accordion">
