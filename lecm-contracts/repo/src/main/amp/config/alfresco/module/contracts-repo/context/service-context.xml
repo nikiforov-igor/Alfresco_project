@@ -556,6 +556,11 @@
     </bean>
 
     <bean id="additionalDocCopySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings">
+        <property name="propsToCopy">
+            <list>
+                <value>lecm-additional-document:date</value>
+            </list>
+        </property>
         <property name="assocsToCopy">
             <list>
                 <value>lecm-additional-document:additionalDocumentType</value>
