@@ -2927,6 +2927,8 @@
                                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Избранное/9716f936-3143-4d5f-87dc-8700edc2a907"/>
                                     <assoc type="lecm-arm:fields-assoc"
                                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Избранное/7d20b4e1-549e-407c-ba34-37d81a440db9"/>
+                                    <assoc type="lecm-arm:filters-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По меткам"/>
                                 </assocs>
                             </item>
                             <item name="cm:Последние просмотренные" type="lecm-arm:html-node">
