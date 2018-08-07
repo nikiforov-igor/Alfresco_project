@@ -3609,14 +3609,14 @@
                             </item>
                         </items>
                         <assocs>
-                            <assoc type="lecm-arm:filters-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По меткам"/>
                             <assoc type="lecm-arm:fields-assoc"
                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Делегирование/f92591a3-f370-422d-bebc-e706d21189a3"/>
                             <assoc type="lecm-arm:children-structure-source-arm-assoc"
                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность"/>
                             <assoc type="lecm-arm:children-structure-source-node-assoc"
                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа"/>
+                            <assoc type="lecm-arm:filters-assoc"
+                                   path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По меткам"/>
                         </assocs>
                     </item>
                     <item name="cm:Навигатор" type="lecm-arm:accordion">
@@ -4305,6 +4305,8 @@
                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Навигатор/2a455595-9b68-92d8-60f1-4b46ff4432e5"/>
                             <assoc type="lecm-arm:fields-assoc"
                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Навигатор/407dfa74-4028-30b6-3c43-5645c61b8531"/>
+                            <assoc type="lecm-arm:fields-assoc"
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Навигатор/50ad930c-22ec-41c8-bce8-7c4cbecc331b"/>
                             <assoc type="lecm-arm:filters-assoc"
                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По принадлежности"/>
                             <assoc type="lecm-arm:filters-assoc"
@@ -4313,8 +4315,6 @@
                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По сумме договора"/>
                             <assoc type="lecm-arm:filters-assoc"
                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По меткам"/>
-                            <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Навигатор/50ad930c-22ec-41c8-bce8-7c4cbecc331b"/>
                         </assocs>
                     </item>
                     <item name="cm:Мои поисковые запросы" type="lecm-arm:accordion">
@@ -4581,8 +4581,6 @@
                                     </item>
                                 </items>
                                 <assocs>
-                                    <assoc type="lecm-arm:filters-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По меткам"/>
                                     <assoc type="lecm-arm:fields-assoc"
                                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Корзина/Корзина/4570a4da-b0c4-4430-96bd-a5de0bf370b9"/>
                                     <assoc type="lecm-arm:fields-assoc"
@@ -4613,6 +4611,8 @@
                                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Корзина/Корзина/ca506c50-0085-1083-1670-7286c1c91b77"/>
                                     <assoc type="lecm-arm:fields-assoc"
                                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Корзина/Корзина/7b2a70df-cdff-de9d-24ca-8443b84bc83f"/>
+                                    <assoc type="lecm-arm:filters-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По меткам"/>
                                 </assocs>
                             </item>
                         </items>
