@@ -27859,8 +27859,6 @@
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Входящие/7280b715-1e6a-4ebd-9da7-eb5ffcfdc8fe"/>
                                             <assoc type="lecm-arm:fields-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Входящие/b6f17dcc-e4d9-49fa-8ed6-f7acc5d4997d"/>
-                                            <assoc type="lecm-arm:filters-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По меткам"/>
                                         </assocs>
                                     </item>
                                     <item name="cm:Исходящие" type="lecm-arm:node">
@@ -28035,8 +28033,6 @@
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Исходящие/85b559d1-e21c-4c47-b8db-7f2fd7944e12"/>
                                             <assoc type="lecm-arm:fields-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Исходящие/b5d17420-5fa0-48bc-b647-9cc44dbaa22d"/>
-                                            <assoc type="lecm-arm:filters-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По меткам"/>
                                         </assocs>
                                     </item>
                                     <item name="cm:ОРД" type="lecm-arm:node">
@@ -28240,8 +28236,6 @@
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/ОРД/0e48af35-1647-4498-83fc-a1501f7e326b"/>
                                             <assoc type="lecm-arm:fields-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/ОРД/d5cef848-99ed-4f15-a0d7-63d9bad0c756"/>
-                                            <assoc type="lecm-arm:filters-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По меткам"/>
                                         </assocs>
                                     </item>
                                     <item name="cm:НД" type="lecm-arm:node">
@@ -28439,8 +28433,6 @@
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/НД/ab0b9ea6-4ac1-4527-b203-c6ecd99ac6a5"/>
                                             <assoc type="lecm-arm:fields-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/НД/2e7c3f2d-0ce3-47f8-814f-a6babd2d4e16"/>
-                                            <assoc type="lecm-arm:filters-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По меткам"/>
                                         </assocs>
                                     </item>
                                     <item name="cm:Протоколы" type="lecm-arm:node">
@@ -28588,8 +28580,6 @@
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Протоколы/7c577a0c-96a6-4b19-8542-2d203b8cfead"/>
                                             <assoc type="lecm-arm:fields-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Протоколы/72ace289-47e0-4d81-b694-bf1e0ca00ff7"/>
-                                            <assoc type="lecm-arm:filters-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По меткам"/>
                                         </assocs>
                                     </item>
                                     <item name="cm:ff84a0f6-0361-49a4-bd33-4561fbb982c5" type="lecm-arm:field">
