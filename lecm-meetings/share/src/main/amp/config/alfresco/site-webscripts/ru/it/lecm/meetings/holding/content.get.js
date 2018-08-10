@@ -23,6 +23,14 @@ function main() {
         }
     };
     model.widgets = [documentEdit];
+
+    var isEditLockEnabled = "false";
+    var connector = remote.connect("alfresco").get('/lecm/documents/isEditLockEnabled');
+    if(connector.status == 200){
+        var nativeObject = eval("(" + connector + ")");
+        isEditLockEnabled = nativeObject.isEditLockEnabled;
+    }
+    model.isEditLockEnabled = isEditLockEnabled;
 }
 
 main();

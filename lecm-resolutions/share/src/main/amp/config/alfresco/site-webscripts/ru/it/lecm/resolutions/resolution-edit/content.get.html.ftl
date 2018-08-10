@@ -1,5 +1,12 @@
 <#assign el=args.htmlid?html>
-
+<script type="text/javascript">
+    if (typeof LogicECM == "undefined" || !LogicECM) {
+        LogicECM = {};
+    }
+    LogicECM.module = LogicECM.module || {};
+    LogicECM.module.Documents = LogicECM.module.Documents || {};
+    LogicECM.module.Documents.isEditLockEnabled = ${isEditLockEnabled?c};
+</script>
 <@markup id="js">
 	<@script type="text/javascript" src="${url.context}/res/scripts/documents/edit/lecm-document-edit.js" group="document-edit"/>
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-preview.js" group="document-edit"/>
