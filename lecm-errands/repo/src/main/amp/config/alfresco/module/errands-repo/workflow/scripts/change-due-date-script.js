@@ -138,9 +138,9 @@ function processDueDateChanges(params) {
             });
         }
         logObjects.push(dueDateString);
-        logText = "#initiator ";
-        logText += documentScript.wrapperTitle("изменил", changeDateReason);
-        logText += " срок исполнения поручения #mainobject на  #object1";
+        var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+        logText = msg('ru.it.lecm.errands.bjMessages.changeDueDate.message', "#initiator {change} срок исполнения поручения #mainobject на  #object1");
+        logText = logText.replace("{change}", documentScript.wrapperTitle(msg('ru.it.lecm.errands.bjMessages.changeDueDate.changeParamText', "изменил"), changeDateReason));
         businessJournal.log(document.nodeRef.toString(), "EDS_CHANGE_DUE_DATE", logText, logObjects);
     }
 }

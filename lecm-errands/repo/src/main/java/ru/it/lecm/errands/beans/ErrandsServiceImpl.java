@@ -612,7 +612,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
             nodeService.createAssociation(document, childAssoc.getChildRef(), ASSOC_ERRANDS_LINKS);
         }
         if (childAssoc != null) {
-            businessJournalService.log(document, DocumentEventCategory.LINK_ADDED, "#initiator добавил(а) ссылку #object1 к документу \"#mainobject\"", Arrays.asList(childAssoc.getChildRef().toString()));
+            businessJournalService.log(document, DocumentEventCategory.LINK_ADDED, EDSDocumentService.getFromMessagesOrDefaultValue("ru.it.lecm.errands.bjMessages.addLink", "#initiator добавил(а) ссылку #object1 к документу \"#mainobject\""), Arrays.asList(childAssoc.getChildRef().toString()));
         }
 
         return childAssoc.getChildRef();

@@ -28,10 +28,10 @@
 
 	                        documentWorkflowComments.createWorkflowComment(document, lecmErrandWf_requestDueDateChangeReason);
 
-	                        var logText = "#initiator запросил ";
-	                        logText += documentScript.wrapperTitle("изменение срока", lecmErrandWf_requestDueDateChangeReason);
-	                        logText += " поручения: #mainobject.";
-	                        businessJournal.log(document.nodeRef.toString(), "EDS_CHANGE_DUE_DATE", logText, []);
+							var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+							var logText = msg('ru.it.lecm.errands.bjMessages.requestDueDateChange.message', "#initiator запросил {change} поручения: #mainobject.");
+							logText = logText.replace("{change}", documentScript.wrapperTitle(msg('ru.it.lecm.errands.bjMessages.requestDueDateChange.changeParamText', "изменение срока"), lecmErrandWf_requestDueDateChangeReason));
+							businessJournal.log(document.nodeRef.toString(), "EDS_CHANGE_DUE_DATE", logText, []);
 
 	                        var initiator = null;
 	                        var initiatorAssoc = document.assocs["lecm-errands:initiator-assoc"];
@@ -151,15 +151,13 @@
 												eventExecutor: initiator
 											}
 										});
-				                        var logText = "#initiator утвердил ";
 										var comment = task.getVariableLocal("lecmErrandWf_requestDueDateChangeTaskComment");
-										if (comment != null) {
-											logText += documentScript.wrapperTitle("перенос", comment);
-										} else {
-											logText += "перенос";
-										}
-				                        logText += " срока поручения: #mainobject.";
-				                        businessJournal.log(document.nodeRef.toString(), "EDS_CHANGE_DUE_DATE", logText, []);
+										var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+										var logText = msg('ru.it.lecm.errands.bjMessages.acceptChangeDueDate.message', "#initiator утвердил {change} срока поручения: #mainobject.");
+										logText = logText.replace("{change}",
+												comment != null ? documentScript.wrapperTitle(msg('ru.it.lecm.errands.bjMessages.acceptChangeDueDate.changeParamText', "перенос"), comment) :
+																msg('ru.it.lecm.errands.bjMessages.acceptChangeDueDate.changeParamText', "перенос"));
+										businessJournal.log(document.nodeRef.toString(), "EDS_CHANGE_DUE_DATE", logText, []);
 	                                }
 		                        }
 	                        }

@@ -36,10 +36,10 @@
 
                                 var logObjects = [];
 				                logObjects.push("" + recipientAssoc.nodeRef.toString());
-				                var logText = "#initiator направил(а) документ "
-				                + documentScript.wrapperDocumentLink(incoming, "№ {~REGNUM} от {~REGDATE}")
-				                + " на исполнение #object1";
 
+                                var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+							    var logText = msg('ru.it.lecm.incoming.bjMessages.directToExecution.message', "#initiator направил(а) документ {doc} на исполнение #object1");
+							    logText = logText.replace("{doc}", documentScript.wrapperDocumentLink(incoming, msg('ru.it.lecm.incoming.bjMessages.directToExecution.docSubstString', "№ {~REGNUM} от {~REGDATE}")));
 				                businessJournal.log(incoming.nodeRef.toString(), "DIRECT_DOCUMENT", substitude.formatNodeTitle(incoming.nodeRef.toString(), logText), logObjects);
                             }
                         ]]></activiti:string>

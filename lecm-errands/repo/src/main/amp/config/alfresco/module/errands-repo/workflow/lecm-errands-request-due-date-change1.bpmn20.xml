@@ -28,9 +28,9 @@
 
                             documentWorkflowComments.createWorkflowComment(document, lecmErrandWf_requestDueDateChange_1Reason);
 
-                            var logText = "#initiator запросил ";
-                            logText += documentScript.wrapperTitle("изменение срока", lecmErrandWf_requestDueDateChange_1Reason);
-                            logText += " исполнения поручения #mainobject.";
+                            var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+							var logText = msg('ru.it.lecm.errands.bjMessages.requestDueDateChange1.message', "#initiator запросил {change} исполнения поручения #mainobject.");
+							logText = logText.replace("{change}", documentScript.wrapperTitle(msg('ru.it.lecm.errands.bjMessages.requestDueDateChange1.changeParamText', "изменение срока"), lecmErrandWf_requestDueDateChangeReason));
                             businessJournal.log(document.nodeRef.toString(), "EDS_CHANGE_DUE_DATE", logText, []);
 
                             var initiator = null;
@@ -128,9 +128,11 @@
                                                 reason: rejectReason
                                             }
                                         });
-                                        var logText = "#initiator ";
-                                        logText += documentScript.wrapperTitle("отклонил", rejectReason);
-                                        logText += " запрос на изменение срока исполнения поручения #mainobject";
+
+                                        var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+                                        var logText = msg('ru.it.lecm.errands.bjMessages.declineRequestDueDateChange1.message', "#initiator {decline} запрос на изменение срока исполнения поручения #mainobject");
+                                        logText = logText.replace("{decline}", documentScript.wrapperTitle(msg('ru.it.lecm.errands.bjMessages.declineRequestDueDateChange1.declineParamText', "отклонил"), rejectReason));
+
                                         businessJournal.log(document.nodeRef.toString(), "EDS_CHANGE_DUE_DATE", logText, []);
                                     } else if (decision == "APPROVED") {
                                         var dateRadio = task.getVariable("lecmErrandWf_requestDueDateChangeTask_1NewDueDateRadio");

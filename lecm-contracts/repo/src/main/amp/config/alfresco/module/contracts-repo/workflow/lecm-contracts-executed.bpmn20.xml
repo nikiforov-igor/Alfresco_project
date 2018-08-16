@@ -21,8 +21,10 @@
                                     allContractDocuments[i].save();
                                 }
                             }
+                            var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+                            var logText = msg('ru.it.lecm.contracts.bjMessages.executed', "#initiator зафиксировал(а) факт исполнения договора #mainobject.");
 
-                            businessJournal.log(document.nodeRef.toString(), "EXEC_ACTION", "#initiator зафиксировал(а) факт исполнения договора #mainobject.", []);
+                            businessJournal.log(document.nodeRef.toString(), "EXEC_ACTION", logText, []);
                         </activiti:string>
                     </activiti:field>
                 </activiti:executionListener>

@@ -40,10 +40,9 @@
 										reason: lecmErrandWf_initiatorDeclineReason
 									}
 								});
-
-		                        var logText = "#initiator ";
-		                        logText += documentScript.wrapperTitle("отклонил", lecmErrandWf_initiatorDeclineReason);
-		                        logText += " исполнение поручения: #mainobject.";
+								var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+								var logText = msg('ru.it.lecm.errands.bjMessages.initiatorDecline.message', '#initiator {decline} исполнение поручения: #mainobject.');
+								logText = logText.replace("{decline}", documentScript.wrapperTitle(msg('ru.it.lecm.errands.bjMessages.initiatorDecline.declineParamText', "отклонил"), lecmErrandWf_initiatorDeclineReason));
 		                        businessJournal.log(document.nodeRef.toString(), "ERRAND_DECLINE", logText, []);
 	                        }
                         </activiti:string>

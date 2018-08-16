@@ -20,6 +20,7 @@
 		<value>alfresco/module/${artifactId}/messages/lecm-eds-document-model</value>
 		<value>alfresco/module/${artifactId}/messages/lecm-eds-aspects-model</value>
 		<value>alfresco/module/${artifactId}/messages/lecm-eds-global-settings-model</value>
+		<value>alfresco/module/${artifactId}/messages/lecm-eds-bj-messages</value>
 	</util:list>
 	<util:list id="eds.documents.groupOperations">
 		<value>alfresco/module/${artifactId}/actions/decline-registration.xml</value>

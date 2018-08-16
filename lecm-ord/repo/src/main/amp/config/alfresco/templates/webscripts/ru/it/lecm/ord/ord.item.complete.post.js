@@ -70,9 +70,10 @@ notifications.sendNotificationFromCurrentUser({
     },
     dontCheckAccessToObject: true
 });
-var logText = "#initiator перевел ";
-logText += documentScript.wrapperTitle("пункт номер " + number, title + " " + content);
-logText += " ОРД:#mainobject в статус ";
-logText += documentScript.wrapperTitle(status, comment);
+
+var wrapPoint = documentScript.wrapperTitle((msg.get("ru.it.lecm.ord.bjMessages.pointStatusChange.wrapPointParamText") || "пункт номер ") + number, title + " " + content);
+var logText = msg.get("ru.it.lecm.ord.bjMessages.pointStatusChange.message") || "#initiator перевел {wrapPoint} ОРД:#mainobject в статус {status}";
+logText = logText.replace("{wrapPoint}", wrapPoint);
+logText = logText.replace("{status}", documentScript.wrapperTitle(status, comment));
 businessJournal.log(ordDoc.nodeRef.toString(), "POINT_COMPLETED", logText, []);
 model.success = true;

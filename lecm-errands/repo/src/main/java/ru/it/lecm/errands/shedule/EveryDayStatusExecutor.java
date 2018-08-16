@@ -7,6 +7,7 @@ import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.notifications.beans.NotificationsService;
 
@@ -45,7 +46,7 @@ public class EveryDayStatusExecutor extends ActionExecuterAbstractBase {
         // формируем уведомление Исполнителю, Инициатору и Контролеру:
         notificationsService.sendNotificationByTemplate(nodeRef, getEmployeeList(nodeRef), "ERRANDS_EXCEEDED_DEADLINE");
         // формируем запись в журнал
-        String logText = "Истек срок исполнения поручения #mainobject";
+        String logText = EDSDocumentService.getFromMessagesOrDefaultValue("ru.it.lecm.errands.bjMessages.expired", "Истек срок исполнения поручения #mainobject");
         businessJournalService.log(nodeRef, "DOCUMENT_EXPIRED", logText);
     }
 

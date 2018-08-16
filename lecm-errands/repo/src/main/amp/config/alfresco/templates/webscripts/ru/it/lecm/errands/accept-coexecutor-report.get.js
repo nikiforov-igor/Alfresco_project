@@ -26,9 +26,9 @@ if (report != null && report.properties["lecm-errands-ts:coexecutor-report-statu
 		});
 
 		var reportCoexecutor = report.assocs["lecm-errands-ts:coexecutor-assoc"][0];
-		var logText = "#initiator принял отчет соисполнителя ";
-		logText += documentScript.wrapperLink(reportCoexecutor, reportCoexecutor.properties["lecm-orgstr:employee-short-name"]);
-		logText += " по поручению #mainobject";
+        var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+        var logText = msg('ru.it.lecm.errands.bjMessages.acceptCoexecutorReport.message', "#initiator принял отчет соисполнителя  {coexecutor}  по поручению #mainobject");
+        logText = logText.replace("{coexecutor}", documentScript.wrapperLink(reportCoexecutor, reportCoexecutor.properties["lecm-orgstr:employee-short-name"]));
 		businessJournal.log(document.nodeRef.toString(), "ERRAND_СOEXECUTOR_REPORT", logText, []);
 
 		model.success = true;

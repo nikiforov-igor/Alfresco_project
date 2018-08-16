@@ -13,8 +13,10 @@
                         <activiti:string><![CDATA[
                            var document = bpm_package.children[0];
                            if (document) {
-                                var logText = "#initiator завершил";
-                                logText += " работу по ОРД:#mainobject";
+                                var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+                                var logText = msg("ru.it.lecm.ord.bjMessages.completeDoc.message", "#initiator {complete} работу по ОРД:#mainobject");
+                                logText = logText.replace("{complete}", msg("ru.it.lecm.ord.bjMessages.completeDoc.completeParamText", "завершил"));
+
                                 businessJournal.log(document.nodeRef.toString(), "COMPLETE_DOCUMENT", logText, []);
 
                                 var reviewTableAssoc = document.assocs['lecm-review-ts:review-table-assoc'];

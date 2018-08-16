@@ -9,10 +9,10 @@ function main() {
 	
 	//получим протокол
 	var protocol = node.parent.parent.parent;
-	
 	var pointNumber = node.properties["lecm-document:indexTableRow"];
-	var wrapPoint = documentScript.wrapperLink(node, "Пункт №" + pointNumber);
-	var logText = wrapPoint + " документа #mainobject перешел в статус Исполнен";
+	var wrapPoint = documentScript.wrapperLink(node, (msg.get("ru.it.lecm.protocol.bjMessages.pointStatusChange.wrapPointParamText") || "Пункт №") + pointNumber);
+	var logText = msg.get("ru.it.lecm.protocol.bjMessages.pointStatusChange.message") || "{wrapPoint} документа #mainobject перешел в статус Исполнен";
+    logText = logText.replace("{wrapPoint}", wrapPoint);
 	businessJournal.log(protocol.nodeRef.toString(), "PROTOCOL_POINT_STATUS_CHANGE", logText, [node.nodeRef.toString()]);
 	
     var ctx = Packages.org.springframework.web.context.ContextLoader.getCurrentWebApplicationContext();

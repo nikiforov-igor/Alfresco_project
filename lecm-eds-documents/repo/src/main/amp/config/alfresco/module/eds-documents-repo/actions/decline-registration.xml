@@ -29,9 +29,11 @@
 		 declineReason: declineReason
        }
      });
-
-	var logText = "#initiator"+ base.wrapperTitle("отказал", declineReason) + " в регистрации документа " + documentScript.wrapperDocumentLink(document, document.properties["lecm-document:present-string"]);
-	logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
+    var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+    var logText = msg('ru.it.lecm.eds.bjMessages.declineRegistration.message', "#initiator {decline} в регистрации документа {doc}');
+    logText = logText.replace("{decline}", base.wrapperTitle(msg('ru.it.lecm.eds.bjMessages.declineRegistration.declineParamText', "отказал"), declineReason));
+    logText = logText.replace("{doc}", documentScript.wrapperDocumentLink(document, document.properties["lecm-document:present-string"]));
+   	logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
 	businessJournal.log(document.nodeRef.toString(), "REGISTRATION", logText, []);
 
 	 statemachine.executeTransitionAction(document, 'На доработку');

@@ -42,7 +42,8 @@
             var newYearSection = operativeStorage.getYearSection(folder);
             document.move(folder);
             updateYearSection(document, newYearSection);
-            var logText = "Перемещение раздела номенклатуры дел";
+            var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+            var logText = msg("ru.it.lecm.operativestorage.bjMessages.moveUnit", "Перемещение раздела номенклатуры дел");
             businessJournal.log(document.nodeRef.toString(), "OS_MOVE", logText, []);
 })();]]>
         </property>

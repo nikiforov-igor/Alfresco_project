@@ -11,6 +11,7 @@ import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentEventService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
+import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.meetings.beans.ProtocolReportsService;
 import ru.it.lecm.meetings.beans.ProtocolService;
@@ -147,9 +148,9 @@ public class ProtocolWebScriptBean extends BaseWebScript {
 			boolean isExpired = ProtocolService.P_STATUSES.EXPIRED_STATUS.toString().equals(statusKey);
 			String bjMessage = "";
 			if (isExpired) {
-				bjMessage = String.format("Исполнение пункта № %s документа #mainobject просрочено", pointNumber);
+				bjMessage = String.format(EDSDocumentService.getFromMessagesOrDefaultValue("ru.it.lecm.protocol.bjMessages.pointExpired", "Исполнение пункта № %s документа #mainobject просрочено"), pointNumber);
 			} else {
-				bjMessage = String.format("Пункт номер %s документа #mainobject перешел в статус %s", pointNumber, newStatus);
+				bjMessage = String.format(EDSDocumentService.getFromMessagesOrDefaultValue("ru.it.lecm.protocol.bjMessages.pointChangeStatus", "Пункт номер %s документа #mainobject перешел в статус %s"), pointNumber, newStatus);
 				// установим атрибут дату исполнения
 				nodeService.setProperty(point, ProtocolService.PROP_PROTOCOL_POINT_DATE_REAL, new Date());
 			}

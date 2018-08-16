@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.nd.NDDocumentServiceImpl;
 import ru.it.lecm.nd.api.NDModel;
 import ru.it.lecm.statemachine.StatemachineModel;
@@ -49,7 +50,9 @@ public class OutOfDateExecutor extends ActionExecuterAbstractBase {
             nodeService.setProperty(actionedUponNodeRef, StatemachineModel.PROP_STATUS, ndDocumentService.getNDStatusName(NDModel.ND_STATUS.OUT_OF_DATE));
         }
         //логирование
-        String bjMessage = "Документ " + ndDocumentService.wrapperLink(actionedUponNodeRef, "№ {~REGNUM} от {~REGDATE}", documentService.getDocumentUrl(actionedUponNodeRef))+ " завершил срок действия";
+        String bjMessage = EDSDocumentService.getFromMessagesOrDefaultValue("ru.it.lecm.nd.bjMessages.expiration.message", "Документ %s завершил срок действия");
+        String docSubstString = EDSDocumentService.getFromMessagesOrDefaultValue("ru.it.lecm.nd.bjMessages.expiration.docSubstString", "№ {~REGNUM} от {~REGDATE}");
+        bjMessage = String.format(bjMessage, ndDocumentService.wrapperLink(actionedUponNodeRef, docSubstString, documentService.getDocumentUrl(actionedUponNodeRef)));
         bjMessage = substitudeBean.formatNodeTitle(actionedUponNodeRef, bjMessage);
         businessJournalService.log("System", actionedUponNodeRef, "EXPIRATION_DATE", bjMessage, null);
 	}

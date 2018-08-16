@@ -7,6 +7,7 @@ import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.resolutions.api.ResolutionsService;
 
@@ -46,7 +47,8 @@ public class ResolutionsExpiredExecutor extends ActionExecuterAbstractBase {
         } else {
             nodeService.setProperty(nodeRef, ResolutionsService.PROP_IS_EXPIRED, true);
             notificationsService.sendNotificationByTemplate(nodeRef, getEmployeeList(nodeRef), "RESOLUTION_EXPIRED_MESSAGE");
-            businessJournalService.log(nodeRef, "DOCUMENT_EXPIRED", "Истек срок исполнения для #mainobject");
+            String logText =  EDSDocumentService.getFromMessagesOrDefaultValue("ru.it.lecm.resolutions.bjMessages.expired", "Истек срок исполнения для #mainobject");
+            businessJournalService.log(nodeRef, "DOCUMENT_EXPIRED", logText);
         }
     }
 

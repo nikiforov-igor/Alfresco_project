@@ -14,7 +14,10 @@
 
 						document.addAspect("lecm-contract-aspect:deleted");
 						document.createAssociation(lecmContractWf_deleteReason, "lecm-contract-aspect:reasonDelete-assoc");
-						businessJournal.log(document.nodeRef.toString(), 'CANCEL_DOCUMENT', 'Сотрудник #initiator аннулировал документ #mainobject по причине: ' + lecmContractWf_deleteReason.properties['cm:name'], []);
+						var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+						var logText = msg('ru.it.lecm.contracts.bjMessages.annulDocument', "Сотрудник #initiator аннулировал документ #mainobject по причине: {reason}");
+						logText = logText.replace("{reason}", lecmContractWf_deleteReason.properties['cm:name']);
+						businessJournal.log(document.nodeRef.toString(), 'CANCEL_DOCUMENT', logText, []);
 					</activiti:string>
 				</activiti:field>
 			</extensionElements>

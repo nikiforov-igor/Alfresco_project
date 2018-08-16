@@ -16,9 +16,9 @@
                                 if (lecmErrandWf_changeControllerNewController != null) {
 			                        var logObjects = [];
 			                        logObjects.push("" + lecmErrandWf_changeControllerNewController.nodeRef);
-			                        var logText = "#initiator ";
-			                        logText += documentScript.wrapperTitle("изменил", lecmErrandWf_changeControllerReason);
-			                        logText += " контролёра по поручению #mainobject на #object1";
+			                        var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+                                    var logText = msg('ru.it.lecm.errands.bjMessages.changeController.message', '#initiator {change} контролёра по поручению #mainobject на #object1');
+                                    logText = logText.replace("{change}", documentScript.wrapperTitle(msg('ru.it.lecm.errands.bjMessages.changeController.changeParamText', "изменил"), lecmErrandWf_changeControllerReason));
 			                        businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_CONTROLLER", logText, logObjects);
 
 			                        var currentEmployee = orgstructure.getCurrentEmployee();

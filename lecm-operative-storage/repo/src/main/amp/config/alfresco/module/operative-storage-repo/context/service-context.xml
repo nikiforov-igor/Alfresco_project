@@ -34,6 +34,7 @@
 	<util:list id="operative.storage.labels">
 		<value>alfresco/module/${artifactId}/messages/operative-storage-settings-model</value>
 		<value>alfresco/module/${artifactId}/messages/operative-storage-model</value>
+		<value>alfresco/module/${artifactId}/messages/lecm-operative-storage-bj-messages</value>
 		<!--<value>alfresco/module/${artifactId}/messages/fms-os</value>-->
 	</util:list>
 

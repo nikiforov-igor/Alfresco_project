@@ -28,10 +28,10 @@ if (report && report.properties["lecm-errands-ts:coexecutor-report-status"] == "
             dontCheckAccessToObject: true
         });
         var reportCoexecutor = report.assocs["lecm-errands-ts:coexecutor-assoc"][0];
-        var logText = "#initiator ";
-        logText += documentScript.wrapperTitle("отклонил", declineReason) + " отчет Cоисполнителя ";
-        logText += documentScript.wrapperLink(reportCoexecutor, reportCoexecutor.properties["lecm-orgstr:employee-short-name"]);
-        logText += " по поручению #mainobject";
+        var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+        var logText = msg('ru.it.lecm.errands.bjMessages.declineCoexecutorReport.message', "#initiator {decline} отчет Cоисполнителя  {coexecutor}  по поручению #mainobject");
+        logText = logText.replace("{coexecutor}", documentScript.wrapperLink(reportCoexecutor, reportCoexecutor.properties["lecm-orgstr:employee-short-name"]));
+        logText = logText.replace("{decline}", documentScript.wrapperTitle(msg('ru.it.lecm.errands.bjMessages.declineCoexecutorReport.declineParamText', "отклонил"), declineReason));
         businessJournal.log(document.nodeRef.toString(), "ERRAND_СOEXECUTOR_REPORT", logText, []);
 
         model.success = true;

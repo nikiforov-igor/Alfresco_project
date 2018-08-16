@@ -90,7 +90,10 @@
                         execution.setVariableLocal('registrarsList', registrarsListItems);
                         execution.setVariable('reservateInitiator', base.getWorkflowNodeConverter().convertNode(currentEmployee.nodeRef));
                         var cancelReason = execution.getVariableLocal('lecmRegnumRes_cancelReasonAfterReserve');
-                        var logText = "#initiator запросил " + base.wrapperTitle("отмену", cancelReason) + " резерва регистрационных данных #mainobject";
+                        var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+                        var wrapCancel = base.wrapperTitle(msg('ru.it.lecm.reservation.bjMessages.reservationRequestCancelAfterReserve.paramText', "отмену"), cancelReason);
+                        var logText = msg('ru.it.lecm.reservation.bjMessages.reservationRequestCancelAfterReserve.message', '#initiator запросил {cancel} резерва регистрационных данных #mainobject');
+                        logText = logText.replace("{cancel}", wrapCancel);
                         businessJournal.log(document.nodeRef.toString(), 'RESERVATION', logText, []);
                     ]]></activiti:string>
                 </activiti:field>
@@ -183,8 +186,9 @@
                                         });
                                     }
 
-                                    var bjMsg = '#initiator отменил резервирование номера для документа #mainobject. Возвращен номер проекта документа:' + projectNumber;
-                                    businessJournal.log(document.nodeRef.toString(), 'RESERVATION', bjMsg, []);
+                                    var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+                                    var logText = msg('ru.it.lecm.reservation.bjMessages.reservationCancelAfterReserve', '#initiator отменил резервирование номера для документа #mainobject. Возвращен номер проекта документа: ') + projectNumber;
+                                    businessJournal.log(document.nodeRef.toString(), 'RESERVATION', logText, []);
 
                                     /* Подготовка уведомления */
                                     templateCode = 'RESERVATION_REQUEST_CANCEL_FINISHED_APPROVED';
@@ -192,9 +196,11 @@
                                 } else if (decision == 'REJECTED') {
 
                                     /* Запись в бизнес журнал если решение плохое: */
-                                    var rejectReasonLink = base.wrapperTitle("отклонил", rejectReason);
-                                    var bjMsg = '#initiator ' + rejectReasonLink + ' запрос на отмену зарезервированных регистрационных данных документа #mainobject';
-                                    businessJournal.log(document.nodeRef.toString(), 'RESERVATION', bjMsg, []);
+                                    var rejectReasonLink = base.wrapperTitle(msg("ru.it.lecm.reservation.bjMessages.reservationRequestAfterReserveRejected.rejectParamText", "отклонил"), rejectReason);
+                                    var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+                                    var logText = msg('ru.it.lecm.reservation.bjMessages.reservationRequestAfterReserveRejected.message', "#initiator {reject} запрос на отмену зарезервированных регистрационных данных документа #mainobject");
+                                    logText = logText.replace("{reject}", rejectReasonLink);
+                                    businessJournal.log(document.nodeRef.toString(), 'RESERVATION', logText, []);
 
                                     /* Подготовка уведомления */
                                     templateCode = 'RESERVATION_REQUEST_CANCEL_FINISHED_REJECTED';

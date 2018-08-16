@@ -30,9 +30,10 @@ if (item) {
         },
         dontCheckAccessToObject: true
     });
-    var logText = "#initiator исполнил ";
-    logText += documentScript.wrapperTitle("пункт номер " + number, title + " " + content);
-    logText += " ОРД:#mainobject";
+
+    var wrapPoint = documentScript.wrapperTitle((msg.get("ru.it.lecm.ord.bjMessages.pointExecuted.wrapPointParamText") || "пункт номер ") + number, title + " " + content);
+    var logText = msg.get("ru.it.lecm.ord.bjMessages.pointExecuted.message") || "#initiator исполнил {wrapPoint} ОРД:#mainobject";
+    logText = logText.replace("{wrapPoint}", wrapPoint);
     businessJournal.log(ordDoc.nodeRef.toString(), "POINT_EXECUTED", logText, []);
 
     model.success = true;

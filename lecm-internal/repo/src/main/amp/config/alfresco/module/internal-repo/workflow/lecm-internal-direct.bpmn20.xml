@@ -27,13 +27,15 @@
                             withSigning = execution.getVariable('withSigning'),
                             assocs,
                             initiator,
-                            msg;
+                            logText;
                         execution.setVariable("assigneesList", edsDocument.getRecipientLogins(document));
                         if (withSigning && 'true' == ('' + withSigning)) {
                             assocs = document.assocs['lecm-signing-v2-aspects:signerEmployeeAssoc'];
                             initiator = orgstructure.getCurrentEmployee();
-                            msg = "#initiator подписал(а) документ " + documentScript.wrapperDocumentLink(document, "{lecm-document:ext-present-string}");
-                            businessJournal.log(document.nodeRef.toString(), "SIGNING", substitude.formatNodeTitle(document.nodeRef.toString(), msg), []);
+                            var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+                            var logText = msg('ru.it.lecm.internal.bjMessages.signDocument.message', '#initiator подписал(а) документ {doc}');
+                            logText = logText.replace("{doc}", documentScript.wrapperDocumentLink(document, "{lecm-document:ext-present-string}"));
+                            businessJournal.log(document.nodeRef.toString(), "SIGNING", substitude.formatNodeTitle(document.nodeRef.toString(), logText), []);
                             document.properties['lecm-signing-v2-aspects:isSigned'] = true;
                             document.properties['lecm-signing-v2-aspects:signingState'] = 'COMPLETE';
                             document.properties['lecm-signing-v2-aspects:signingDate'] = base.getValueConverter().convertValueForJava(new Date());
@@ -127,10 +129,9 @@
 
                         var logObjects = [];
 				        logObjects.push("" + employee.nodeRef.toString());
-				        var logText = "#initiator направил(а) "
-				        + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}")
-				        + " сотруднику #object1";
-
+                        var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+                        var logText = msg('ru.it.lecm.internal.bjMessages.directDocument.message', '#initiator направил(а) {doc} сотруднику #object1');
+                        logText = logText.replace("{doc}", documentScript.wrapperDocumentLink(document, msg('ru.it.lecm.internal.bjMessages.directDocument.docSubstString', "№ {~REGNUM} от {~REGDATE}")));
 				        businessJournal.log(document.nodeRef.toString(), "DIRECT_DOCUMENT", substitude.formatNodeTitle(document.nodeRef.toString(), logText), logObjects);
                         task.setAssignee(userName);
 						]]></activiti:string>
@@ -174,9 +175,9 @@
                                 /* Добавляем слушателя */
                                 documentEvent.subscribe(newDocument, document);
 
-                                var logText = "#initiator создал(а) внутренний документ в ответ на "
-				                + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}");
-
+                                var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+                                var logText = msg('ru.it.lecm.internal.bjMessages.createAnswerDoc.message', '#initiator создал(а) внутренний документ в ответ на {doc}');
+                                logText = logText.replace("{doc}", documentScript.wrapperDocumentLink(document, msg('ru.it.lecm.internal.bjMessages.createAnswerDoc.docSubstString', "№ {~REGNUM} от {~REGDATE}")));
 				                businessJournal.log(document.nodeRef.toString(), "EXEC_ACTION", substitude.formatNodeTitle(document.nodeRef.toString(), logText), []);
 							} else {
                                 var answer = eval('(' + task.getVariable("internalDirect_answerResult") + ')');
@@ -195,9 +196,9 @@
                                         }
                                     });
 
-				                    var logText = "#initiator принял(а) внутренний документ "
-				                    + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}") + " к сведению";
-
+                                    var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+                                    var logText = msg('ru.it.lecm.internal.bjMessages.acceptDoc.message', '#initiator принял(а) внутренний документ {doc} к сведению');
+                                    logText = logText.replace("{doc}", documentScript.wrapperDocumentLink(document, msg('ru.it.lecm.internal.bjMessages.acceptDoc.docSubstString', "№ {~REGNUM} от {~REGDATE}")));
 				                    businessJournal.log(document.nodeRef.toString(), "EXEC_ACTION", substitude.formatNodeTitle(document.nodeRef.toString(), logText), []);
                                 } else if (answer.type == "answer") {
                                     var answerText = "";
@@ -235,9 +236,9 @@
                                         }
                                     });
 
-                                    var logText = "#initiator создал(а) ответ-комментарий к документу "
-				                    + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}");
-
+                                    var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+                                    var logText = msg('ru.it.lecm.internal.bjMessages.createAnswerComment.message', '#initiator создал(а) ответ-комментарий к документу {doc}');
+                                    logText = logText.replace("{doc}", documentScript.wrapperDocumentLink(document, msg('ru.it.lecm.internal.bjMessages.createAnswerComment.docSubstString', "№ {~REGNUM} от {~REGDATE}")));
 				                    businessJournal.log(document.nodeRef.toString(), "EXEC_ACTION", substitude.formatNodeTitle(document.nodeRef.toString(), logText), []);
                                 }
                             }
