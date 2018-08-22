@@ -7285,6 +7285,13 @@ var registrationRequired = document.assocs["lecm-eds-document:document-type-asso
 						}
 					}
                 }
+                var currentEmployee = orgstructure.getCurrentEmployee();
+                var currentEmployeeOrganization = orgstructure.getEmployeeOrganization(currentEmployee);
+                if (currentEmployeeOrganization) {
+                    registrars = registrars.filter(function (item) {
+                        return currentEmployeeOrganization.equals(orgstructure.getEmployeeOrganization(item));
+                    });
+                }
 				if (registrars && registrars.length) {
 					for each (var registrar in registrars) {
 						statemachine.grandDynamicRoleForEmployee(document, registrar, "DA_REGISTRAR_DYN", task);
