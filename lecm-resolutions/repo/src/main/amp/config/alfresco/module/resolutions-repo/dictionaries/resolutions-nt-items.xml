@@ -97,7 +97,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Резолюция. Изменение срока резолюции]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Срок исполнения резолюции {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} {#wrapTitle("измененён", #reason)}]]></property>
+                    <![CDATA[Срок исполнения резолюции {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} {#wrapTitle("изменён", #reason)}]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
