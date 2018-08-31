@@ -9,3 +9,7 @@
 .yui-panel-container.yui-simple-dialog p.ord-item-execute-action-body-text {
     text-align: center;
 }
+
+.tab-ord-document-items .datagrid .expand-row .graph-tree table th {
+    display: none;
+}
