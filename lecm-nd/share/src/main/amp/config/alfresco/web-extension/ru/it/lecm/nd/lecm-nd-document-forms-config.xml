@@ -4,6 +4,7 @@
         <forms>
             <form>
                 <field-visibility>
+                    <show id="loadChangeSignersListScript" force="true"/>
                     <show id="lecm-document-aspects:attachments-temp-assoc"/>
                     <show id="lecm-document:author-assoc"/>
                     <show id="lecm-eds-document:executor-assoc"/>
@@ -28,12 +29,16 @@
                     <show id="loadAuthorScript" force="true"/>
                     <show id="editExecutorScript" force="true"/>
                     <show id="checkAllowSigningOnPaperScript" force="true"/>
-                    <show id="loadChangeSignersListScript" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="dates" appearance="" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
                     <set id="approvalAndSigning" appearance="" />
 
+                    <field id="loadChangeSignersListScript">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-signing-v2/change-availability-of-signing-fields-script.js</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-document:title"/>
                     <field id="lecm-eds-document:document-type-assoc" mandatory="true">
                         <control>
@@ -193,11 +198,6 @@
                             <control-param name="newListTitleMsgId">title.new.signing.list</control-param>
                             <control-param name="unableCreateListActiveMessageId">message.signing.unable.to.create.list.active</control-param>
                             <control-param name="addEmployeeToStageMsgId">label.signing.routes.stage.addEmployee</control-param>
-                        </control>
-                    </field>
-                    <field id="loadChangeSignersListScript">
-                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                            <control-param name="scripts">scripts/lecm-signing-v2/change-availability-of-signing-fields-script.js</control-param>
                         </control>
                     </field>
                     <field id="checkAllowSigningOnPaperScript">
@@ -503,6 +503,7 @@
             <!-- Форма редактирования-->
             <form id="edit">
                 <field-visibility>
+                    <show id="lecm-base-dummy-aspects:script3" force="true"/>
                     <show id="lecm-document:regnum"/>																	<!-- Рег. номер -->
                     <show id="lecm-document-aspects:reg-data-date" force="true"/>
                     <show id="lecm-document:title"/>
@@ -525,13 +526,17 @@
                     <show id="lecm-document-aspects:reg-project-data-date"/>
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <show id="lecm-base-dummy-aspects:script2" force="true"/>
-                    <show id="lecm-base-dummy-aspects:script3" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="common" appearance=""/>
                     <set id="dates" parent="common" template="/ru/it/lecm/base-share/components/controls/daterange.ftl"/>
                     <set id="afterDates" parent="common"/>
 
+                    <field id="lecm-base-dummy-aspects:script3" set="common">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-signing-v2/change-availability-of-signing-fields-script.js</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-document:regnum" set="common" mandatory="true">
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Documents.regnumUniqueness.validator"
@@ -621,11 +626,6 @@
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-eds-documents/check-allow-signing-on-paper-script.js</control-param>
                             <control-param name="scriptLoadedFireAction">allowSigningOnPaperScript</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-base-dummy-aspects:script3" set="common">
-                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                            <control-param name="scripts">scripts/lecm-signing-v2/change-availability-of-signing-fields-script.js</control-param>
                         </control>
                     </field>
                 </appearance>
