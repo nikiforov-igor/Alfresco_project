@@ -55,6 +55,7 @@
                     <activiti:string><![CDATA[
                         var document = bpm_package.children[0];
                         var currentEmployee = orgstructure.getCurrentEmployee();
+                        var currentEmployeeOrganization = orgstructure.getEmployeeOrganization(currentEmployee);
                         var registrars = [];
                         if (document.typeShort != "lecm-contract:document") {
                             /* Централизованная ли регистрация */
@@ -78,19 +79,25 @@
                                     }
                                 }
                             }
+                            if (currentEmployeeOrganization) {
+                                registrars = registrars.filter(function (item) {
+                                    return currentEmployeeOrganization.equals(orgstructure.getEmployeeOrganization(item));
+                                });
+                            }
+
                             if (!registrars.length) {
                                 registrars.push(edsGlobalSettings.getDutyRegistrar());
                             }
                         } else {
                             registrars = orgstructure.getEmployeesByBusinessRoleId('CONTRACT_RECORDER', true);
+                            if (currentEmployeeOrganization) {
+                                registrars = registrars.filter(function (item) {
+                                    return currentEmployeeOrganization.equals(orgstructure.getEmployeeOrganization(item));
+                                });
+                            }
                         }
 
-                        var currentEmployeeOrganization = orgstructure.getEmployeeOrganization(currentEmployee);
-                        if (currentEmployeeOrganization) {
-                            registrars = registrars.filter(function (item) {
-                                return currentEmployeeOrganization.equals(orgstructure.getEmployeeOrganization(item));
-                            });
-                        }
+
 
                         var registrarsListItems = base.getWorkflowNodeConverter().convertNodes(base.getValueConverter().convertValueForJava(registrars), true);
 						execution.setVariableLocal('registrarsList', registrarsListItems);
