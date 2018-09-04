@@ -18,6 +18,8 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import java.io.Serializable;
 import java.util.*;
 
+import static ru.it.lecm.eds.api.EDSDocumentService.getFromMessagesOrDefaultValue;
+
 /**
  *
  * @author dbayandin
@@ -68,7 +70,7 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 		if (potentialRolesMap == null) {
 			potentialRolesMap = new HashMap<String, Map<String, NodeRef>>();
 				
-			NodeRef potentialRolesDictionary = dictionaryService.getDictionaryByName(POTENTIAL_ROLES_DICTIONARY_NAME);
+			NodeRef potentialRolesDictionary = dictionaryService.getDictionaryByName(getFromMessagesOrDefaultValue("ru.it.lecm.dictionaries.potentialRoles.name",POTENTIAL_ROLES_DICTIONARY_NAME));
 			List<NodeRef> potentialRolesRefs = dictionaryService.getChildren(potentialRolesDictionary);
 			for (NodeRef potentialRoleRef : potentialRolesRefs) {
 				Serializable businessRole = nodeService.getProperty(potentialRoleRef, PROP_POTENTIAL_ROLE_BUSINESS_ROLE_REF);
@@ -219,7 +221,7 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 		
 		initPotentialRolesMap();
 
-		NodeRef potentialRolesDictionary = dictionaryService.getDictionaryByName(POTENTIAL_ROLES_DICTIONARY_NAME);
+		NodeRef potentialRolesDictionary = dictionaryService.getDictionaryByName(getFromMessagesOrDefaultValue("ru.it.lecm.dictionaries.potentialRoles.name",POTENTIAL_ROLES_DICTIONARY_NAME));
 		NodeRef potentialRoleRef = nodeService.createNode(
 			potentialRolesDictionary,
 			ContentModel.ASSOC_CONTAINS,

@@ -17,7 +17,8 @@ function main() {
 }
 
 function getDictionary(defaultValue) {
-    var url = '/lecm/dictionary/api/getDictionary?dicName=' + encodeURI('Договора-НСИ');
+    var dicName = msg.get("ru.it.lecm.dictionaries.contractsNSI.name");
+    var url = '/lecm/dictionary/api/getDictionary?dicName=' + encodeURI(dicName);
     var result = remote.connect("alfresco").get(url);
     if (result.status != 200) {
         if (defaultValue !== undefined) {
