@@ -7,7 +7,7 @@
                 <property name="lecm-busjournal:objectType-code">LECM_ERRAND</property>
                 <property name="lecm-busjournal:objectType-class">lecm-errands:document</property>
                 <property name="lecm-busjournal:objectType-template">{lecm-document:present-string}</property>
-                <property name="lecm-busjournal:objectType-list-template">Статус: {lecm-statemachine:status}, автор: {lecm-errands:initiator-assoc-text-content} </property>
+                <property name="lecm-busjournal:objectType-list-template"><![CDATA[Статус: {lecm-statemachine:status}, Автор: <a href="#" onclick="var reference = new Object(); reference.itemId = '{lecm-errands:initiator-assoc-ref}'; LogicECM.module.Base.Util.viewAttributes(reference); return false;">{lecm-errands:initiator-assoc-text-content}</a>]]></property>
             </item>
             <item name="cm:Отчет соисполнителя" type="lecm-busjournal:objectType">
                 <property name="cm:name">Отчет соисполнителя</property>
