@@ -253,7 +253,7 @@
                         <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
                         <assocs>
                             <assoc type="lecm-rpeditor:columnTypeAssoc"
-                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/Boolean"/>
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/Date"/>
                             <assoc type="lecm-rpeditor:columnParameterTypeAssoc"
                                    path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип параметра/Диапазон"/>
                         </assocs>
@@ -294,7 +294,7 @@
                         </property>
                         <assocs>
                             <assoc type="lecm-rpeditor:columnTypeAssoc"
-                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/Boolean"/>
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
                             <assoc type="lecm-rpeditor:columnParameterTypeAssoc"
                                    path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип параметра/Список"/>
                         </assocs>
@@ -318,7 +318,7 @@
                         </property>
                         <assocs>
                             <assoc type="lecm-rpeditor:columnTypeAssoc"
-                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/Boolean"/>
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
                             <assoc type="lecm-rpeditor:columnParameterTypeAssoc"
                                    path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип параметра/Список"/>
                         </assocs>
@@ -342,7 +342,7 @@
                         </property>
                         <assocs>
                             <assoc type="lecm-rpeditor:columnTypeAssoc"
-                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/Boolean"/>
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
                             <assoc type="lecm-rpeditor:columnParameterTypeAssoc"
                                    path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип параметра/Список"/>
                         </assocs>
@@ -359,7 +359,7 @@
                         <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
                         <assocs>
                             <assoc type="lecm-rpeditor:columnTypeAssoc"
-                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/Boolean"/>
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
                             <assoc type="lecm-rpeditor:columnParameterTypeAssoc"
                                    path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип параметра/Список"/>
                         </assocs>
@@ -379,7 +379,7 @@ true" AND @lecm\-statemachine\:status:"На исполнении" AND NOT @lecm\
                         <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
                         <assocs>
                             <assoc type="lecm-rpeditor:columnTypeAssoc"
-                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/Boolean"/>
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
                             <assoc type="lecm-rpeditor:columnParameterTypeAssoc"
                                    path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип параметра/Значение"/>
                         </assocs>
