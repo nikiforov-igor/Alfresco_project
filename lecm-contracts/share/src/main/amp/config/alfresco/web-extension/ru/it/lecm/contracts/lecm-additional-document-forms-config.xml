@@ -281,7 +281,6 @@
                     <show id="fake:document-tags"/>
                     <show id="fake:document-history"/>
                     <show id="fake:document-forms"/>
-                    <show id="fake:document-signed-docflow"/>
                     <show id="fake:comments"/>
                 </field-visibility>
                 <appearance>
@@ -334,11 +333,6 @@
                     <field id="fake:document-forms">
                         <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
                             <control-param name="uri">/lecm/components/document/forms</control-param>
-                        </control>
-                    </field>
-                    <field id="fake:document-signed-docflow">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/document-signed-docflow</control-param>
                         </control>
                     </field>
                     <field id="fake:comments">
