@@ -24,6 +24,8 @@ import ru.it.lecm.security.LecmPermissionService;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static ru.it.lecm.eds.api.EDSDocumentService.getFromMessagesOrDefaultValue;
+
 /**
  * @author snovikov
  */
@@ -113,7 +115,7 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
     @Override
     public void changePointStatus(NodeRef point, String statusKey) {
        if (point != null && statusKey != null) {
-           NodeRef newPointStatus = lecmDictionaryService.getDictionaryValueByParam(ProtocolService.PROTOCOL_POINT_DICTIONARY_NAME, ProtocolService.PROP_PROTOCOL_DIC_POINT_STATUS_CODE, statusKey);
+           NodeRef newPointStatus = lecmDictionaryService.getDictionaryValueByParam(getFromMessagesOrDefaultValue("ru.it.lecm.dictionaries.protocolPoints.name", ProtocolService.PROTOCOL_POINT_DICTIONARY_NAME), ProtocolService.PROP_PROTOCOL_DIC_POINT_STATUS_CODE, statusKey);
            if (newPointStatus != null) {
                List<NodeRef> targetStatus = Arrays.asList(newPointStatus);
                nodeService.setAssociations(point, ProtocolService.ASSOC_PROTOCOL_POINT_STATUS, targetStatus);
@@ -152,7 +154,7 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
             String pointStatus = getPointStatus(point);
             String statusByCode = null;
             if (statusKey != null) {
-                NodeRef statusRef = lecmDictionaryService.getDictionaryValueByParam(ProtocolService.PROTOCOL_POINT_DICTIONARY_NAME, ProtocolService.PROP_PROTOCOL_DIC_POINT_STATUS_CODE, statusKey);
+                NodeRef statusRef = lecmDictionaryService.getDictionaryValueByParam(getFromMessagesOrDefaultValue("ru.it.lecm.dictionaries.protocolPoints.name", ProtocolService.PROTOCOL_POINT_DICTIONARY_NAME), ProtocolService.PROP_PROTOCOL_DIC_POINT_STATUS_CODE, statusKey);
                 if (statusRef != null) {
                     statusByCode = (String) nodeService.getProperty(statusRef, ContentModel.PROP_NAME);
                 }
@@ -232,8 +234,8 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
                     }
                 }
                 // Тип поручения
-                String errandTypeOnProtocolPointName = EDSDocumentService.getFromMessagesOrDefaultValue("lecm.protocol.point.errand.type.name", ErrandsService.ERRAND_TYPE_ON_POINT_PROTOCOL);
-                NodeRef type = lecmDictionaryService.getRecordByParamValue(ErrandsService.ERRANDS_TYPE_DICTIONARY_NAME, ContentModel.PROP_NAME, errandTypeOnProtocolPointName);
+                String errandTypeOnProtocolPointName = getFromMessagesOrDefaultValue("lecm.protocol.point.errand.type.name", ErrandsService.ERRAND_TYPE_ON_POINT_PROTOCOL);
+                NodeRef type = lecmDictionaryService.getRecordByParamValue(getFromMessagesOrDefaultValue("ru.it.lecm.dictionaries.errandTypes.name", ErrandsService.ERRANDS_TYPE_DICTIONARY_NAME), ContentModel.PROP_NAME, errandTypeOnProtocolPointName);
                 associations.put(ErrandsService.ASSOC_ERRANDS_TYPE.toPrefixString(namespaceService), type.toString());
                 //исполнитель
                 List<AssociationRef> pointExecutorAssocs = nodeService.getTargetAssocs(point, ProtocolService.ASSOC_PROTOCOL_POINT_EXECUTOR);
@@ -291,7 +293,7 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
             List<ChildAssociationRef> pointAssocs = nodeService.getChildAssocs(table, pointType);
 
             String statusKey = P_STATUSES.REMOVED_STATUS.toString();
-            NodeRef newPointStatus = lecmDictionaryService.getDictionaryValueByParam(ProtocolService.PROTOCOL_POINT_DICTIONARY_NAME, PROP_PROTOCOL_DIC_POINT_STATUS_CODE, statusKey);
+            NodeRef newPointStatus = lecmDictionaryService.getDictionaryValueByParam(getFromMessagesOrDefaultValue("ru.it.lecm.dictionaries.protocolPoints.name", ProtocolService.PROTOCOL_POINT_DICTIONARY_NAME), PROP_PROTOCOL_DIC_POINT_STATUS_CODE, statusKey);
             if (newPointStatus != null) {
                 List<NodeRef> targetStatus = Arrays.asList(newPointStatus);
 
@@ -329,7 +331,7 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
     }
 
     public String getPointStatusByCodeFromDictionary(String statusKey){
-        NodeRef statusRef = lecmDictionaryService.getDictionaryValueByParam(ProtocolService.PROTOCOL_POINT_DICTIONARY_NAME, PROP_PROTOCOL_DIC_POINT_STATUS_CODE, statusKey);
+        NodeRef statusRef = lecmDictionaryService.getDictionaryValueByParam(getFromMessagesOrDefaultValue("ru.it.lecm.dictionaries.protocolPoints.name", ProtocolService.PROTOCOL_POINT_DICTIONARY_NAME), PROP_PROTOCOL_DIC_POINT_STATUS_CODE, statusKey);
         if (statusRef != null) {
             return (String) nodeService.getProperty(statusRef, ContentModel.PROP_NAME);
         }
@@ -337,7 +339,7 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
     }
 
     public String getPointStatusCodeByStatusTextFromDictionary(String statusText){
-        NodeRef statusRef = lecmDictionaryService.getDictionaryValueByParam(ProtocolService.PROTOCOL_POINT_DICTIONARY_NAME, ContentModel.PROP_NAME, statusText);
+        NodeRef statusRef = lecmDictionaryService.getDictionaryValueByParam(getFromMessagesOrDefaultValue("ru.it.lecm.dictionaries.protocolPoints.name", ProtocolService.PROTOCOL_POINT_DICTIONARY_NAME), ContentModel.PROP_NAME, statusText);
         if (statusRef != null) {
             return (String) nodeService.getProperty(statusRef, PROP_PROTOCOL_DIC_POINT_STATUS_CODE);
         }
@@ -347,10 +349,10 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
     @Override
     protected void initServiceImpl() {
         attachmentCategoriesMap = new EnumMap<ATTACHMENT_CATEGORIES,String>(ATTACHMENT_CATEGORIES.class){{
-            put(ATTACHMENT_CATEGORIES.DOCUMENT, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.protocol.document.attachment.category.DOCUMENT.title", "Документ"));
-            put(ATTACHMENT_CATEGORIES.APPLICATIONS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.protocol.document.attachment.category.APPENDICES.title", "Приложения"));
-            put(ATTACHMENT_CATEGORIES.ORIGINAL, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.protocol.document.attachment.category.ORIGINAL.title", "Подлинник"));
-            put(ATTACHMENT_CATEGORIES.OTHERS, EDSDocumentService.getFromMessagesOrDefaultValue("lecm.protocol.document.attachment.category.OTHER.title", "Прочее"));
+            put(ATTACHMENT_CATEGORIES.DOCUMENT, getFromMessagesOrDefaultValue("lecm.protocol.document.attachment.category.DOCUMENT.title", "Документ"));
+            put(ATTACHMENT_CATEGORIES.APPLICATIONS, getFromMessagesOrDefaultValue("lecm.protocol.document.attachment.category.APPENDICES.title", "Приложения"));
+            put(ATTACHMENT_CATEGORIES.ORIGINAL, getFromMessagesOrDefaultValue("lecm.protocol.document.attachment.category.ORIGINAL.title", "Подлинник"));
+            put(ATTACHMENT_CATEGORIES.OTHERS, getFromMessagesOrDefaultValue("lecm.protocol.document.attachment.category.OTHER.title", "Прочее"));
         }};
     }
 

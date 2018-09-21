@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentTableService;
+import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.ord.api.ORDModel;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
@@ -75,7 +76,7 @@ public class ORDItemCreatePolicy implements NodeServicePolicies.OnCreateNodePoli
     public void onCreateNode(ChildAssociationRef childAssocRef) {
         NodeRef node = childAssocRef.getChildRef();
         if (nodeService.getTargetAssocs(node, ORDModel.ASSOC_ORD_TABLE_ITEM_STATUS).isEmpty()) {
-            nodeService.createAssociation(node, dictionaryService.getDictionaryValueByParam(ORDModel.ORD_POINT_DICTIONARY_NAME, ORDModel.PROP_ORD_DIC_POINT_STATUS_CODE, ORDModel.P_STATUSES.WAIT_PERFORMANCE_STATUS.toString()), ORDModel.ASSOC_ORD_TABLE_ITEM_STATUS);
+            nodeService.createAssociation(node, dictionaryService.getDictionaryValueByParam(EDSDocumentService.getFromMessagesOrDefaultValue("ru.it.lecm.dictionaries.ordPoints.name", ORDModel.ORD_POINT_DICTIONARY_NAME), ORDModel.PROP_ORD_DIC_POINT_STATUS_CODE, ORDModel.P_STATUSES.WAIT_PERFORMANCE_STATUS.toString()), ORDModel.ASSOC_ORD_TABLE_ITEM_STATUS);
         }
         //заполнение составителя
         NodeRef compiler = orgstructureService.getCurrentEmployee();

@@ -5,8 +5,10 @@ function main() {
 	protocolService.changePointStatus(pointRef,"EXECUTED_STATUS");
     node = search.findNode(pointRef);
 	node.properties["lecm-protocol-ts:execution-date-real"] = new Date();
+    lecmPermission.pushAuthentication();
+    lecmPermission.setRunAsUserSystem();
 	node.save();
-	
+    lecmPermission.popAuthentication();
 	//получим протокол
 	var protocol = node.parent.parent.parent;
 	var pointNumber = node.properties["lecm-document:indexTableRow"];
@@ -18,5 +20,4 @@ function main() {
     var ctx = Packages.org.springframework.web.context.ContextLoader.getCurrentWebApplicationContext();
     model.item = Evaluator.run(node, [], null, ctx);
 }
-
 main();

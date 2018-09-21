@@ -37,6 +37,8 @@ import ru.it.lecm.workflow.api.WorkflowResultModel;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static ru.it.lecm.eds.api.EDSDocumentService.getFromMessagesOrDefaultValue;
+
 /**
  *
  * @author snovikov
@@ -379,8 +381,8 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				//ассоциации поручения
 				Map<String, String> associations = new HashMap<String, String>();
 				//Тип поручения
-				String errandTypeOnORDPointName = EDSDocumentService.getFromMessagesOrDefaultValue("lecm.ord.point.errand.type.name", ErrandsService.ERRAND_TYPE_ON_POINT_ORD);
-				NodeRef type = dictionaryService.getRecordByParamValue(ErrandsService.ERRANDS_TYPE_DICTIONARY_NAME, ContentModel.PROP_NAME, errandTypeOnORDPointName);
+				String errandTypeOnORDPointName = getFromMessagesOrDefaultValue("lecm.ord.point.errand.type.name", ErrandsService.ERRAND_TYPE_ON_POINT_ORD);
+				NodeRef type = dictionaryService.getRecordByParamValue(getFromMessagesOrDefaultValue("ru.it.lecm.dictionaries.errandTypes.name", ErrandsService.ERRANDS_TYPE_DICTIONARY_NAME), ContentModel.PROP_NAME, errandTypeOnORDPointName);
 				associations.put(ErrandsService.ASSOC_ERRANDS_TYPE.toPrefixString(namespaceService), type.toString());
 
 				// автор поручения
@@ -546,7 +548,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	}
 
 	public String getPointStatusTextByCode(String statusCode){
-        NodeRef statusRef = dictionaryService.getDictionaryValueByParam(ORDModel.ORD_POINT_DICTIONARY_NAME, ORDModel.PROP_ORD_DIC_POINT_STATUS_CODE, statusCode);
+        NodeRef statusRef = dictionaryService.getDictionaryValueByParam(getFromMessagesOrDefaultValue("ru.it.lecm.dictionaries.ordPoints.name", ORDModel.ORD_POINT_DICTIONARY_NAME), ORDModel.PROP_ORD_DIC_POINT_STATUS_CODE, statusCode);
         if (statusRef != null) {
             return (String) nodeService.getProperty(statusRef, ContentModel.PROP_NAME);
         }

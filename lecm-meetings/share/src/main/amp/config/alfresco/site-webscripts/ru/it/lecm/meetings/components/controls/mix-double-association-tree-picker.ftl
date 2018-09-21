@@ -212,7 +212,7 @@
 		        pickerButtonLabel: "${params.firstPickerButtonLabel}",
 	        </#if>
             <#if params.firstUseStrictFilterByOrg??>
-                useStrictFilterByOrg: "${params.firstUseStrictFilterByOrg?string}",
+                useStrictFilterByOrg: ${params.firstUseStrictFilterByOrg?string},
             </#if>
             <#if params.firstIgnoreNodesInTreeView??>
                 ignoreNodesInTreeView: ${params.firstIgnoreNodesInTreeView?string},
@@ -301,7 +301,7 @@
 			    pickerButtonLabel: "${params.secondPickerButtonLabel}",
 		    </#if>
             <#if params.secondUseStrictFilterByOrg??>
-                useStrictFilterByOrg: "${params.secondUseStrictFilterByOrg?string}",
+                useStrictFilterByOrg: ${params.secondUseStrictFilterByOrg?string},
             </#if>
             <#if params.secondIgnoreNodesInTreeView??>
                 ignoreNodesInTreeView: ${params.secondIgnoreNodesInTreeView?string},

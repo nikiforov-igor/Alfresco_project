@@ -6,6 +6,7 @@
             <form id="edit">
                 <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
+                    <show id="lecm-base-dummy-aspects:script2" force="true"/>
                     <show id="lecm-document-aspects:reg-project-data-number"/>
                     <show id="lecm-document-aspects:reg-project-data-date"/>
                     <show id="lecm-contract:typeContract-assoc" force="true"/>
@@ -32,7 +33,6 @@
                     <show id="lecm-signing-v2-aspects:signerEmployeeAssoc" force="true"/>
                     <show id="lecm-signing-v2-aspects:signingDate" force="true"/>
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
-                    <show id="lecm-base-dummy-aspects:script2" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="common" appearance="" label-id="label.contracts.main" />
@@ -44,6 +44,11 @@
                     <set id="dates" appearance="" parent="common" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
                     <set id="other" appearance="" parent="common" />
 
+                    <field id="lecm-base-dummy-aspects:script2" set="contract-info">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-signing-v2/change-availability-of-signing-fields-script.js</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-document-aspects:reg-project-data-number" set="contract-info"/>
                     <field id="lecm-document-aspects:reg-project-data-date" set="contract-info"/>
                     <field id="lecm-contract:typeContract-assoc" set="contract-info">
@@ -230,11 +235,6 @@
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-eds-documents/check-allow-signing-on-paper-script.js</control-param>
                             <control-param name="scriptLoadedFireAction">allowSigningOnPaperScript</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-base-dummy-aspects:script2" set="contract-info">
-                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                            <control-param name="scripts">scripts/lecm-signing-v2/change-availability-of-signing-fields-script.js</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -632,6 +632,7 @@
                     <show id="fake:document-actions"/>
                     <show id="fake:document-metadata"/>
                     <show id="fake:document-attachments"/>
+                    <show id="fake:document-signing"/>
                     <show id="fake:document-errands"/>
                     <show id="fake:document-workflows"/>
                     <show id="fake:document-connections"/>
@@ -639,7 +640,6 @@
                     <show id="fake:document-tags"/>
                     <show id="fake:document-history"/>
                     <show id="fake:document-forms"/>
-                    <show id="fake:document-signed-docflow"/>
                     <show id="fake:comments"/>
                 </field-visibility>
                 <appearance>
@@ -656,6 +656,11 @@
                     <field id="fake:document-attachments">
                         <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
                             <control-param name="uri">/lecm/components/document/document-attachments</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-signing">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/signing</control-param>
                         </control>
                     </field>
                     <field id="fake:document-errands">
@@ -694,11 +699,6 @@
                             <control-param name="uri">/lecm/components/document/forms</control-param>
                         </control>
                     </field>
-                    <field id="fake:document-signed-docflow">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/document-signed-docflow</control-param>
-                        </control>
-                    </field>
                     <field id="fake:comments">
                         <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
                             <control-param name="uri">/lecm/components/document/comments</control-param>
@@ -714,6 +714,7 @@
         <forms>
             <form>
                 <field-visibility>
+                    <show id="lecm-base-dummy-aspects:script2" force="true"/>
                     <show id="lecm-document-aspects:attachments-temp-assoc"/>
                     <show id="lecm-contract:typeContract-assoc" force="true"/>
                     <show id="lecm-document:subject-assoc" force="true"/>
@@ -737,7 +738,6 @@
                     <show id="lecm-document-aspects:template-name" force="true"/>
                     <show id="lecm-document-aspects:template-ref" force="true"/>
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
-                    <show id="lecm-base-dummy-aspects:script2" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="price" appearance="" template="/ru/it/lecm/base-share/components/controls/price.ftl" />
@@ -745,6 +745,11 @@
                     <set id="dates" appearance="" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
                     <set id="afterDates" appearance=""/>
 
+                    <field id="lecm-base-dummy-aspects:script2" set="afterPrice">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-signing-v2/change-availability-of-signing-fields-script.js</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-contract:typeContract-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_договора</control-param>
@@ -986,11 +991,6 @@
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-eds-documents/check-allow-signing-on-paper-script.js</control-param>
                             <control-param name="scriptLoadedFireAction">allowSigningOnPaperScript</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-base-dummy-aspects:script2" set="afterPrice">
-                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                            <control-param name="scripts">scripts/lecm-signing-v2/change-availability-of-signing-fields-script.js</control-param>
                         </control>
                     </field>
                 </appearance>

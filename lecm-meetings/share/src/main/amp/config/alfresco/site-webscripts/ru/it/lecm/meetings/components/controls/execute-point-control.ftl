@@ -9,12 +9,17 @@
                 url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
                 dataObj: {
                     nodeRef: "${form.arguments.itemId}",
-                    substituteString: "{lecm-protocol-ts:errand-assoc/sys:node-uuid}"
+                    substituteString: "{lecm-protocol-ts:errand-assoc/sys:node-uuid},{../../../lecm-statemachine:status},{../../../lecm-eds-document:document-type-assoc/lecm-doc-dic-dt:registration-required}"
                 },
                 successCallback: {
                     fn: function (response) {
                         if (response) {
-                            if (!response.json.formatString) {
+                            var results, isDocOk;
+                            if (response.json.formatString) {
+                                results = response.json.formatString.split(",");
+                                isDocOk = !results[0] && !(results[1] == Alfresco.util.message("lecm.protocol.statuses.approved") && results[2] == "true");
+                            }
+                            if (isDocOk) {
                                 Alfresco.util.Ajax.jsonRequest({
                                     method: "GET",
                                     url: Alfresco.constants.PROXY_URI_RELATIVE + '/lecm/protocol/CheckPointExecutedStatus',

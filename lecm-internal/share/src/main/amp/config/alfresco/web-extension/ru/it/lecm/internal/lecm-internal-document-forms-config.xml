@@ -5,6 +5,7 @@
             <!-- Форма создания (по умолчанию) -->
             <form>
                 <field-visibility>
+                    <show id="loadChangeSignersListScript" force="true"/>
                     <show id="lecm-document-aspects:attachments-temp-assoc"/>
                     <show id="lecm-document:author-assoc"/>
                     <show id="lecm-eds-document:executor-assoc"/>
@@ -29,9 +30,13 @@
                     <show id="loadAuthorScript" force="true"/>
                     <show id="editExecutorScript" force="true"/>
                     <show id="checkAllowSigningOnPaperScript" force="true"/>
-                    <show id="loadChangeSignersListScript" force="true"/>
                 </field-visibility>
                 <appearance>
+                    <field id="loadChangeSignersListScript">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-signing-v2/change-availability-of-signing-fields-script.js</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-document:title"/>
                     <field id="lecm-eds-document:document-type-assoc" mandatory="true">
                         <control>
@@ -251,11 +256,6 @@
                             <control-param name="newListTitleMsgId">title.new.signing.list</control-param>
                             <control-param name="unableCreateListActiveMessageId">message.signing.unable.to.create.list.active</control-param>
                             <control-param name="addEmployeeToStageMsgId">label.signing.routes.stage.addEmployee</control-param>
-                        </control>
-                    </field>
-                    <field id="loadChangeSignersListScript">
-                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                            <control-param name="scripts">scripts/lecm-signing-v2/change-availability-of-signing-fields-script.js</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -931,6 +931,7 @@
             <!-- Форма редактирования-->
             <form id="edit">
                 <field-visibility>
+                    <show id="lecm-base-dummy-aspects:script4" force="true"/>
                     <show id="lecm-document:regnum"/>																	<!-- Рег. номер -->
                     <show id="lecm-document-aspects:reg-data-date"/>
                     <show id="lecm-document:author-assoc"/>
@@ -952,10 +953,14 @@
                     <show id="lecm-signing-v2-aspects:signingDate" force="true"/>
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <show id="lecm-base-dummy-aspects:script3" force="true"/>
-                    <show id="lecm-base-dummy-aspects:script4" force="true"/>
                 </field-visibility>
                 <appearance>
 
+                    <field id="lecm-base-dummy-aspects:script4">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-signing-v2/change-availability-of-signing-fields-script.js</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-document:regnum"/>
                     <field id="lecm-document-aspects:reg-data-date"/>
                     <field id="lecm-document:author-assoc" label-id="label.eds.assoc.compiler" read-only="true"/>
@@ -1093,11 +1098,6 @@
                             <control-param name="scriptLoadedFireAction">allowSigningOnPaperScript</control-param>
                         </control>
                     </field>
-                    <field id="lecm-base-dummy-aspects:script4">
-                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                            <control-param name="scripts">scripts/lecm-signing-v2/change-availability-of-signing-fields-script.js</control-param>
-                        </control>
-                    </field>
                 </appearance>
             </form>
             <!-- Форма с набором полей для правой области (Общие сведения) на карточке документа-->
@@ -1147,6 +1147,7 @@
                     <show id="fake:document-actions"/>
                     <show id="fake:document-metadata"/>
                     <show id="fake:document-attachments"/>
+                    <show id="fake:document-signing"/>
                     <show id="fake:document-errands"/>
                     <show id="fake:document-workflows"/>
                     <show id="fake:document-connections"/>
@@ -1170,6 +1171,11 @@
                     <field id="fake:document-attachments">
                         <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
                             <control-param name="uri">/lecm/components/document/document-attachments</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-signing">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/signing</control-param>
                         </control>
                     </field>
                     <field id="fake:document-errands">

@@ -6194,7 +6194,11 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
   var typeAssoc = document.assocs["lecm-contract:typeContract-assoc"];
   if (typeAssoc) {
       var documentTypeDictionary = typeAssoc[0];
-      document.properties["lecm-signing-v2-aspects:isESSigningRequired"] = documentTypeDictionary.properties["lecm-doc-dic-dt:es-sign-required"] === true;
+        var isEsRequired = documentTypeDictionary.properties["lecm-doc-dic-dt:es-sign-required"] === true;
+      document.properties["lecm-signing-v2-aspects:isESSigningRequired"] = isEsRequired;
+      if (isEsRequired) {
+        document.addAspect("lecm-signed-docflow:work-with-es-files-aspect");
+      }
       document.save();
   }
 })();]]></value>

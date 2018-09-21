@@ -2,13 +2,14 @@ if (document.hasAspect("cm:emailed")) {
     /*Создаем входящий*/
     var newIncoming = documentScript.createDocument("lecm-incoming:document", null, null);
     if (newIncoming) {
+        var msg = org.springframework.extensions.surf.util.I18NUtil.getMessage;
         /*заполняем свойства*/
         newIncoming.properties["lecm-incoming:is-by-channel"] = true;
         newIncoming.save();
 
         /*заполняем ассоциации*/
         /*Способ доставки*/
-        var types = dictionary.getRecordByParamValue("Способ доставки", "lecm-doc-dic-dm:deliveryMethod-code", "EMAIL");
+        var types = dictionary.getRecordByParamValue(msg("ru.it.lecm.dictionaries.deliveryMethod.name"), "lecm-doc-dic-dm:deliveryMethod-code", "EMAIL");
         if (types && types.length > 0) {
             newIncoming.createAssociation(types[0], "lecm-incoming:delivery-method-assoc");
         }
@@ -16,7 +17,7 @@ if (document.hasAspect("cm:emailed")) {
         /*Представитель и корреспондент*/
         var orginiator = document.properties["cm:originator"];
         if (orginiator) {
-            var representatives = dictionary.getRecordByParamValue("Адресанты", "lecm-representative:email", orginiator);
+            var representatives = dictionary.getRecordByParamValue(msg("ru.it.lecm.dictionaries.addressees.name"), "lecm-representative:email", orginiator);
             if (representatives && representatives.length > 0) {
                 newIncoming.createAssociation(representatives[0], "lecm-incoming:addressee-assoc");
 
