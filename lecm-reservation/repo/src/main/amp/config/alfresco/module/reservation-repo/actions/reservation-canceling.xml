@@ -8,7 +8,8 @@
         <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
         <property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
         <property name="lecm-group-actions:script"><![CDATA[(function() {
-            var logText = '#initiator отозвал запрос резервирования номера для документа #mainobject';
+            var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+            var logText = msg("ru.it.lecm.reservation.bjMessages.cancelReservationRequest", "#initiator отозвал запрос резервирования номера для документа #mainobject");
             businessJournal.log(document.nodeRef.toString(), 'RESERVATION', logText, []);
             statemachine.terminateWorkflowsByDefinition(document, 'regnumReservationExecution', null, null);
         })();]]>

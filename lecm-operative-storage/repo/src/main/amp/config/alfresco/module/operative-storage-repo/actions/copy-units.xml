@@ -32,7 +32,8 @@
     copy.properties['cm:name'] = 'Copy_' + copy.properties['cm:name'];
     copy.save();
 
-	var logText = "Скопирован раздел номенклатуры";
+	var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+    var logText = msg("ru.it.lecm.operativestorage.bjMessages.copyUnit", "Скопирован раздел номенклатуры");
 	var logObjects = ["" + copy.nodeRef.toString()];
 	businessJournal.log(document.nodeRef.toString(), "OS_COPY", logText, logObjects);
 })();

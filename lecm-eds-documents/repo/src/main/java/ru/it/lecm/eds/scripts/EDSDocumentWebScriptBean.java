@@ -8,6 +8,7 @@ import org.alfresco.util.ISO8601DateFormat;
 import org.alfresco.util.ParameterCheck;
 import org.apache.commons.lang.StringUtils;
 import org.mozilla.javascript.Scriptable;
+import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
@@ -156,7 +157,8 @@ public class EDSDocumentWebScriptBean extends BaseWebScript {
 
         notificationsService.sendNotification(author, null, recipients, templateCode, config, false);
 
-        String logText = "Документ " + wrapperLink(document.getNodeRef().toString(), presentStringWithProjectNumber, documentService.getDocumentUrl(document.getNodeRef())) + " зарегистрирован системой автоматически. Присвоен номер {~REGNUM} на дату {~REGDATE}.";
+        String logText = EDSDocumentService.getFromMessagesOrDefaultValue("ru.it.lecm.eds.bjMessages.autoRegistration", "Документ %s зарегистрирован системой автоматически. Присвоен номер {~REGNUM} на дату {~REGDATE}.");
+        logText = String.format(logText, wrapperLink(document.getNodeRef().toString(), presentStringWithProjectNumber, documentService.getDocumentUrl(document.getNodeRef())));
         logText = substitudeBean.formatNodeTitle(document.getNodeRef(), logText);
         businessJournalService.log(document.getNodeRef(), "EDS_AUTO_REGISTRATION", logText, null);
     }

@@ -25,9 +25,9 @@
 
                                     var logObjects = [];
                                     logObjects.push("" + lecmErrandWf_changeExecutor_1NewExecutor.nodeRef);
-                                    var logText = "#initiator ";
-                                    logText += documentScript.wrapperTitle("изменил", lecmErrandWf_changeExecutor_1Reason);
-                                    logText += " исполнителя поручения #mainobject на #object1";
+                                    var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+                                    var logText = msg('ru.it.lecm.errands.bjMessages.changeExecutor1.message', '#initiator {change} исполнителя поручения #mainobject на #object1');
+                                    logText = logText.replace("{change}", documentScript.wrapperTitle(msg('ru.it.lecm.errands.bjMessages.changeExecutor1.changeParamText', "изменил"), lecmErrandWf_changeExecutor_1Reason));
                                     businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_EXECUTOR", logText, logObjects);
                                 }
                             }

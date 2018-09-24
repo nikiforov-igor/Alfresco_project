@@ -21,11 +21,12 @@
 								var recipients = [];
 								var logObjects = [];
 								var logText = "";
+								var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+
 								if (recipient) {
 								 	if (recipient.typeShort == "lecm-orgstr:employee") {
 										recipients.push(recipient);
-
-										logText = "#initiator направил(а) документ " + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}") + " на рассмотрение  #object1.";
+										logText = msg('ru.it.lecm.incoming.bjMessages.sendToReview.message', "#initiator направил(а) документ {doc} на рассмотрение #object1.");
 									} else if (recipient.typeShort == "lecm-orgstr:organization-unit") {
 										var allEmployeeInUnit = orgstructure.getEmployeesInUnit(recipient);
 								    	if (allEmployeeInUnit != null) {
@@ -43,17 +44,19 @@
                                             }
                                         }
 
-										logText = "#initiator направил(а) документ " + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}") + " на рассмотрение в подразделение #object1.";
+										logText = msg('ru.it.lecm.incoming.bjMessages.sendToOrgUnitReview.message', "#initiator направил(а) документ {doc} на рассмотрение в подразделение #object1.");
 									}
 									logObjects.push("" + recipient.nodeRef);
 									logObjects.push(comment);
-									logText += " " + base.wrapperTitle("Комментарий", "#object2") + ".";
+									logText = logText.replace("{doc}", documentScript.wrapperDocumentLink(document, msg('ru.it.lecm.incoming.bjMessages.sendToReview.docSubstString', "№ {~REGNUM} от {~REGDATE}")));
+									logText += " " + base.wrapperTitle(msg('ru.it.lecm.incoming.bjMessages.sendToReview.commentText', "Комментарий"), "#object2") + ".";
 								}else {
 									recipients = orgstructure.getEmployeesByBusinessRoleId("INCOMING_REVIEWERS", true);
 
 									logObjects.push(comment);
-									logText = "#initiator направил(а) документ " + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}") + " на рассмотрение рассматривающим.";
-									logText += " " + base.wrapperTitle("Комментарий", "#object1") + ".";
+									logText = msg('ru.it.lecm.incoming.bjMessages.sendToReviewers.message', "#initiator направил(а) документ {doc} на рассмотрение рассматривающим.");
+									logText = logText.replace("{doc}", documentScript.wrapperDocumentLink(document, msg('ru.it.lecm.incoming.bjMessages.sendToReview.docSubstString', "№ {~REGNUM} от {~REGDATE}")));
+									logText += " " + base.wrapperTitle(msg('ru.it.lecm.incoming.bjMessages.sendToReview.commentText', "Комментарий"), "#object1") + ".";
 								}
 								if (recipients.length) {
 

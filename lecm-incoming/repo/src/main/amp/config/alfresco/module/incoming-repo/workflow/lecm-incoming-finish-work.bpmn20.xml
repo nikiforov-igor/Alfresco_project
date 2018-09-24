@@ -56,10 +56,11 @@
                                         }
                                     });
                                 }
+                                var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+                                var completeWrap = documentScript.wrapperTitle(msg('ru.it.lecm.incoming.bjMessages.finishWork.completeParamText', "завершил"), reason);
+							    var logText = msg('ru.it.lecm.incoming.bjMessages.finishWork.message', "#initiator {complete} работу по документу #mainobject.");
+							    logText = logText.replace("{complete}", completeWrap);
 
-                                var logText = "#initiator ";
-                                logText += documentScript.wrapperTitle("завершил", reason);
-                                logText += " работу по документу #mainobject.";
                                 businessJournal.log(document.nodeRef.toString(), "EXECUTE_DOCUMENT", logText, []);
 
                                 var recipients = lecmPermission.getEmployeesByDynamicRole(document, "DA_RECIPIENT_DYN");

@@ -15,7 +15,8 @@
 
 							var logObjects = [];
 							logObjects.push(lecmContractWf_contractAdditionalDocumentCancelBaseOnDocument);
-							var logText = "Сотрудник #initiator зафиксировал факт отмены документ #mainobject. Основанием для отмены является #object1.";
+							var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+							var logText = msg('ru.it.lecm.contracts.bjMessages.cancelAdditionalDocument', "Сотрудник #initiator зафиксировал факт отмены документ #mainobject. Основанием для отмены является #object1.");
 							businessJournal.log(document.nodeRef.toString(), "EXEC_ACTION", logText, logObjects);
 						</activiti:string>
 					</activiti:field>

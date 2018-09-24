@@ -11,9 +11,11 @@ import org.alfresco.util.ParameterCheck;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.utils.HtmlUtils;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.eds.api.EDSGlobalSettingsService;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.notifications.beans.NotificationsService;
@@ -176,14 +178,15 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 				}
 				
 				// Запись в бизнес журнал если решение хорошее:
-				String documentReservedNumber = (String) nodeService.getProperty(documentRef, DocumentService.PROP_REG_DATA_DOC_NUMBER);	
-				String regInfo = ". Зарезервирован номер " + documentReservedNumber;
+				String documentReservedNumber = (String) nodeService.getProperty(documentRef, DocumentService.PROP_REG_DATA_DOC_NUMBER);
+				String regInfo = EDSDocumentService.getFromMessagesOrDefaultValue("ru.it.lecm.reservation.bjMessages.reservationCompleted.regInfoString1", "Зарезервирован номер {number}").replace("{number}", documentReservedNumber);
 				if (regDate != null) {
 					SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
 					String documentReservedDate = dateFormat.format(regDate);
-					regInfo += " на дату " + documentReservedDate;
+					regInfo += EDSDocumentService.getFromMessagesOrDefaultValue("ru.it.lecm.reservation.bjMessages.reservationCompleted.regInfoString2", " на дату {date}").replace("{date}", documentReservedDate);
 				}
-				String bjMessage = "#initiator выполнил резервирование регистрационного номера для документа #mainobject " + regInfo;
+				String bjMessage = EDSDocumentService.getFromMessagesOrDefaultValue("ru.it.lecm.reservation.bjMessages.reservationCompleted.message", "#initiator выполнил резервирование регистрационного номера для документа #mainobject. {regInfo}");
+				bjMessage = bjMessage.replace("{regInfo}", regInfo);
 				String registrarLogin = orgstructureService.getEmployeeLogin(orgstructureService.getCurrentEmployee());
 				businessJournalService.log(registrarLogin, documentRef, "RESERVATION", bjMessage, null);
 
@@ -195,8 +198,8 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 		} else if (DecisionResult.REJECTED.name().equals(decision)) {
 			nodeService.setProperty(documentRef, ReservationAspectsModel.PROP_IS_RESERVED, false);
 			// Запись в бизнес журнал если решение плохое:
-			String commentLink = String.format("<a href='#' title='%s'>отклонил</a>", comment);
-			String bjMessage = String.format("#initiator %s запрос в резервировании номера документа #mainobject", commentLink);
+            String commentLink = HtmlUtils.wrapTitle(EDSDocumentService.getFromMessagesOrDefaultValue("ru.it.lecm.reservation.bjMessages.reservationRequestRejected.paramText", "отклонил"), comment);
+            String bjMessage = String.format(EDSDocumentService.getFromMessagesOrDefaultValue("ru.it.lecm.reservation.bjMessages.reservationRequestRejected.message", "#initiator %s запрос в резервировании номера документа #mainobject"), commentLink);
 			String registrarLogin = orgstructureService.getEmployeeLogin(orgstructureService.getCurrentEmployee());
 			businessJournalService.log(registrarLogin, documentRef, "RESERVATION", bjMessage, null);
 		}

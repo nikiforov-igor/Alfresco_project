@@ -97,7 +97,8 @@
 								 	newCoexecutors.forEach(function (coexecutor) {
     									logObjects.push("" + coexecutor.nodeRef);
 									});
-			                        var logText = "#initiator изменил состав соисполнителей на: "
+			                        var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+                                    var logText = msg('ru.it.lecm.errands.bjMessages.changeCoexecutors', "#initiator изменил состав соисполнителей на: ");
 			                        for(var i = 1; i < newCoexecutors.length + 1; i++){
 			                        	logText += "#object" + i;
 			                        	logText += (i < newCoexecutors.length) ? ", " : "";

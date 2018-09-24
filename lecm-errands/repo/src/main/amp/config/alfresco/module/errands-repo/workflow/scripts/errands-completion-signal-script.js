@@ -87,9 +87,9 @@ var ErrandsCompletionSignalScript = {
             });
             var logObjects = [];
             logObjects.push("" + signalSender.nodeRef);
-            var logText = "#object1 ";
-            logText += documentScript.wrapperTitle("завершил", signalReason ? signalReason : "");
-            logText += " исполнение поручения #mainobject.";
+            var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+            var logText = msg('ru.it.lecm.errands.bjMessages.signalExecuteErrand.message', "#object1 {execute}  исполнение поручения #mainobject.");
+            logText = logText.replace("{execute}", documentScript.wrapperTitle(msg('ru.it.lecm.errands.bjMessages.signalExecuteErrand.executeParamText', "завершил"), signalReason ? signalReason : ""));
             businessJournal.log(doc.nodeRef.toString(), "EXECUTE_DOCUMENT", logText, logObjects);
 
             edsDocument.resetCompletionSignal(doc);

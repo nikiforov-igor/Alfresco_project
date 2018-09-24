@@ -16,7 +16,9 @@
                             var comment = (cancelReason && cancelReason != "null") ? cancelReason : "Комментариев нет";
                             var document = bpm_package.children[0];
                             if (document != null) {
-                                var logText = "Сотрудник #initiator " + base.wrapperTitle("отменил", comment) + " поручение: #mainobject.";
+                                var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+                                var logText = msg('ru.it.lecm.errands.bjMessages.cancelErrand.message', "Сотрудник #initiator  {cancel} поручение: #mainobject.");
+                                logText = logText.replace("{cancel}", base.wrapperTitle(msg('ru.it.lecm.errands.bjMessages.cancelErrand.cancelParamText', "отменил"), comment));
                                 businessJournal.log(document.nodeRef.toString(), "CANCEL_ERRAND", logText, []);
 
                                 var initiator = null;

@@ -89,9 +89,10 @@
                                     },
                                     dontCheckAccessToObject: true
                                 });
-                                var logText = "#initiator ";
-                                logText += documentScript.wrapperTitle("завершил", actionComment);
-                                logText += " работу по ОРД:#mainobject";
+
+                                var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+                                var logText = msg("ru.it.lecm.ord.bjMessages.completeDoc.message", "#initiator {complete} работу по ОРД:#mainobject");
+                                logText = logText.replace("{complete}", documentScript.wrapperTitle(msg("ru.it.lecm.ord.bjMessages.completeDoc.completeParamText", "завершил"), actionComment));
                                 businessJournal.log(document.nodeRef.toString(), "COMPLETE_DOCUMENT", logText, []);
                                 document.properties["lecm-ord:transit-to-work-completed"] = true;
                                 document.save();

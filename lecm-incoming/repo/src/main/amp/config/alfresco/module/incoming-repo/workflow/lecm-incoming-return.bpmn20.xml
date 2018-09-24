@@ -26,7 +26,10 @@
                                     }
                                 });
 
-                                var logText = "#initiator " + base.wrapperTitle("вернул", reason) + " на регистрацию документ #mainobject.";
+                                var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+                                var returnWrap = base.wrapperTitle(msg('ru.it.lecm.incoming.bjMessages.returnDocument.returnParamText', "вернул"), reason);
+							    var logText = msg('ru.it.lecm.incoming.bjMessages.returnDocument.message', "#initiator {return} на регистрацию документ #mainobject.");
+							    logText = logText.replace("{return}", returnWrap);
                                 businessJournal.log(document.nodeRef.toString(), "RETURN_DOCUMENT", logText, []);
                           	}
 						]]></activiti:string>

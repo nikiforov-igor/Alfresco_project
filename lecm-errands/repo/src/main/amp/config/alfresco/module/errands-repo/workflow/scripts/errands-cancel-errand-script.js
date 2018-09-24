@@ -43,9 +43,9 @@ var ErrandCancelScript = {
             });
         }
 
-        var logText = "#initiator ";
-        logText += documentScript.wrapperTitle("отменил", reason);
-        logText += " поручение: #mainobject.";
+        var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+        var logText = msg('ru.it.lecm.errands.bjMessages.cancelErrand.message', "#initiator {cancel} поручение: #mainobject.");
+        logText = logText.replace("{cancel}", documentScript.wrapperTitle(msg('ru.it.lecm.errands.bjMessages.cancelErrand.cancelParamText', "отменил"), reason));
         businessJournal.log(document.nodeRef.toString(), "CANCEL_ERRAND", logText, []);
     },
 
@@ -111,9 +111,9 @@ var ErrandCancelScript = {
             });
             var logObjects = [];
             logObjects.push("" + signalSender.nodeRef);
-            var logText = "#object1 ";
-            logText += documentScript.wrapperTitle("отменил", reason);
-            logText += " поручение: #mainobject.";
+            var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+            var logText = msg('ru.it.lecm.errands.bjMessages.signalCancelErrand.message', "#object1 {cancel} поручение: #mainobject.");
+            logText = logText.replace("{cancel}", documentScript.wrapperTitle(msg('ru.it.lecm.errands.bjMessages.signalCancelErrand.cancelParamText', "отменил"), reason));
             businessJournal.log(document.nodeRef.toString(), "CANCEL_ERRAND", logText, logObjects);
         }
     }

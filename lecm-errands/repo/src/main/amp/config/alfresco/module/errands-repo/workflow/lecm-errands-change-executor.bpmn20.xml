@@ -21,9 +21,9 @@
 		                        if (executor != null) {
 			                        var logObjects = [];
 			                        logObjects.push("" + lecmErrandWf_changeExecutorNewExecutor.nodeRef);
-			                        var logText = "Сотрудник #initiator ";
-	                                logText += documentScript.wrapperTitle("сменил", lecmErrandWf_changeExecutorReason);
-	                                logText += " Исполнителя поручения: #mainobject. Новый исполнитель: #object1";
+									var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+									var logText = msg('ru.it.lecm.errands.bjMessages.changeExecutor.message', 'Сотрудник #initiator {change} Исполнителя поручения: #mainobject. Новый исполнитель: #object1');
+									logText = logText.replace("{change}", documentScript.wrapperTitle(msg('ru.it.lecm.errands.bjMessages.changeExecutor.changeParamText', "сменил"), lecmErrandWf_changeExecutorReason));
 			                        businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_EXECUTOR", logText, logObjects);
 
 			                        if (lecmErrandWf_changeExecutorNewExecutor != null) {

@@ -22,9 +22,9 @@
                             }
                             var currentEmployee = orgstructure.getCurrentEmployee();
 
-                            var logText = "#initiator запросил ";
-                            logText += documentScript.wrapperTitle("отмену", lecmErrandWf_requestCancelReason);
-                            logText += " поручения: #mainobject.";
+                            var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+                            var logText = msg('ru.it.lecm.errands.bjMessages.requestCancel1.message', '#initiator запросил {cancel} поручения: #mainobject.');
+                            logText = logText.replace("{cancel}", documentScript.wrapperTitle(msg('ru.it.lecm.errands.bjMessages.requestCancel1.cancelParamText', "отмену"), lecmErrandWf_requestCancelReason));
                             businessJournal.log(document.nodeRef.toString(), "CANCEL_ERRAND", logText, []);
 
                             if (initiator) {
@@ -107,9 +107,9 @@
 											}
 										});
 
-	                                    var logText = "#initiator "
-	                                    logText += documentScript.wrapperTitle("отклонил", task.getVariable("lecmErrandWf_requestCancelTask_1RejectReason"))
-	                                    logText += " запрос на отмену поручения: #mainobject.";
+	                                    var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+                                        var logText = msg('ru.it.lecm.errands.bjMessages.declineRequestCancel1.message', "#initiator {decline} запрос на отмену поручения: #mainobject.");
+                                        logText = logText.replace("{decline}", documentScript.wrapperTitle(msg('ru.it.lecm.errands.bjMessages.declineRequestCancel1.declineParamText', "отклонил"), task.getVariable("lecmErrandWf_requestCancelTask_1RejectReason"));
 									    businessJournal.log(document.nodeRef.toString(), "CANCEL_ERRAND", logText, []);
 								    } else if (decision == "CANCEL_ERRAND") {
 								        execution.setVariable("requestCancelResult", "cancelErrand");
@@ -120,7 +120,8 @@
 						                    processChangeExecutor(newExecutor, "");
 						                    var logObjects = [];
 						                    logObjects.push("" + newExecutor.nodeRef);
-										    var logText = "#initiator изменил исполнителя поручения: #mainobject на #object1";
+										    var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+                                            var logText = msg('ru.it.lecm.errands.bjMessages.changeExecutor2', "#initiator изменил исполнителя поручения: #mainobject на #object1");
 										    businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_EXECUTOR", logText, logObjects);
 						                    execution.setVariable("requestCancelResult", "changeExecutor");
 						                }

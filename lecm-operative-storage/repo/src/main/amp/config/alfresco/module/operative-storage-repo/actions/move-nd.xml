@@ -35,7 +35,8 @@
 	document.removeAssociation(oldYearRef, "lecm-os:nomenclature-case-year-assoc");
 	document.createAssociation(newYearRef, "lecm-os:nomenclature-case-year-assoc");
 
-	var logText = "Номенклатура дел перемещена";
+	var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+    var logText = msg("ru.it.lecm.operativestorage.bjMessages.moveNd", "Номенклатура дел перемещена");
 	businessJournal.log(document.nodeRef.toString(), "OS_MOVE", logText, []);
 
 })();]]>

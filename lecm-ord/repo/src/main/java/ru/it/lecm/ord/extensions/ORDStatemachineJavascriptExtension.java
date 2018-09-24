@@ -491,7 +491,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 						//запись в бизнес журнал о том, что пункт перешел в статус исполнен
 						Integer pointNumber = (Integer) nodeService.getProperty(point, DocumentTableService.PROP_INDEX_TABLE_ROW);
 						String statusName = ordDocumentService.getPointStatus(point);
-						String bjMessage = String.format("Пункт номер %s документа #mainobject перешел в статус %s", pointNumber, statusName);
+						String bjMessage = String.format(EDSDocumentService.getFromMessagesOrDefaultValue("ru.it.lecm.ord.bjMessages.pointChangeStatus", "Пункт номер %s документа #mainobject перешел в статус %s"), pointNumber, statusName);
 						List<String> secondaryObj = Arrays.asList(point.toString());
 						businessJournalService.log("System", ord, "POINT_STATUS_CHANGE", bjMessage, secondaryObj);
 					}
@@ -503,7 +503,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 						//запись в бизнес журнал о том, что пункт перешел в статус не исполнен
 						Integer pointNumber = (Integer) nodeService.getProperty(point, DocumentTableService.PROP_INDEX_TABLE_ROW);
 						String statusName = ordDocumentService.getPointStatus(point);
-						String bjMessage = String.format("Пункт номер %s документа #mainobject перешел в статус %s", pointNumber, statusName);
+						String bjMessage = String.format(EDSDocumentService.getFromMessagesOrDefaultValue("ru.it.lecm.ord.bjMessages.pointChangeStatus", "Пункт номер %s документа #mainobject перешел в статус %s"), pointNumber, statusName);
 						List<String> secondaryObj = Arrays.asList(point.toString());
 						businessJournalService.log("System", ord, "POINT_STATUS_CHANGE", bjMessage, secondaryObj);
 					}
@@ -514,7 +514,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 						ordDocumentService.changePointStatus(point, ORDModel.P_STATUSES.EXPIRED_STATUS.toString());
 						//запись в бизнес журнал о том, что пункт перешел в статус просрочен
 						Integer pointNumber = (Integer) nodeService.getProperty(point, DocumentTableService.PROP_INDEX_TABLE_ROW);
-						String bjMessage = String.format("Исполнение пункта № %s документа #mainobject просрочено", pointNumber);
+						String bjMessage = String.format(EDSDocumentService.getFromMessagesOrDefaultValue("ru.it.lecm.ord.bjMessages.pointExpired", "Исполнение пункта № %s документа #mainobject просрочено"), pointNumber);
 						List<String> secondaryObj = Arrays.asList(point.toString());
 						businessJournalService.log("System", ord, "POINT_STATUS_CHANGE", bjMessage, secondaryObj);
 					}

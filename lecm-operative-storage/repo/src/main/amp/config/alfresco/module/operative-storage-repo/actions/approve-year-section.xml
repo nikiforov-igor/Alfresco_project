@@ -42,7 +42,8 @@
         document.save();
     }
 
-    var logText = "Утверждение номенклатуры дел";
+    var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+    var logText = msg("ru.it.lecm.operativestorage.bjMessages.approveNd", "Утверждение номенклатуры дел");
     businessJournal.log(document.nodeRef.toString(), "OS_APPROVE", logText, []);
 })();]]></property>
         </item>

@@ -18,6 +18,7 @@ import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.resolutions.api.ResolutionsService;
 
@@ -99,8 +100,9 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
             DateFormat dFormat = new SimpleDateFormat("dd.MM.yyyy");
             regDateString = dFormat.format(regDate);
         }
-
-        businessJournalService.log(additionalDoc, "CREATE_ERRAND_BASED_ON_DOC", "#initiator создал(а) поручение по документу " + wrapperLink(additionalDoc, documentService.getDocumentActualNumber(additionalDoc) + " от " + regDateString, documentService.getDocumentUrl(additionalDoc)), null);
+        String logText = EDSDocumentService.getFromMessagesOrDefaultValue("ru.it.lecm.errands.bjMessages.createErrandBasedOnDoc.message", "#initiator создал(а) поручение по документу %s");
+        logText = String.format(logText, wrapperLink(additionalDoc, documentService.getDocumentActualNumber(additionalDoc) + " " + EDSDocumentService.getFromMessagesOrDefaultValue("ru.it.lecm.errands.bjMessages.createErrandBasedOnDoc.docFromParamText", "от") + " " + regDateString, documentService.getDocumentUrl(additionalDoc)));
+        businessJournalService.log(additionalDoc, "CREATE_ERRAND_BASED_ON_DOC", logText, null);
 
         QName additionalDoctype = nodeService.getType(additionalDoc);
         NodeRef parentDoc = additionalDoc;

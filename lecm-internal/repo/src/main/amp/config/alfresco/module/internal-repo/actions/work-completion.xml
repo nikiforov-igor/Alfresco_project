@@ -143,7 +143,10 @@
 
     operativeStorage.moveToNomenclatureCase(document, units);
 
-    var logText = "#initiator " + documentScript.wrapperTitle("завершил", completionReason) + " работу по документу " + documentScript.wrapperDocumentLink(document, "{lecm-document:present-string}");
+    var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+    var logText = msg('ru.it.lecm.internal.bjMessages.workCompletion.message', '#initiator {complete} работу по документу {doc}');
+    logText = logText.replace("{complete}", documentScript.wrapperTitle(msg('ru.it.lecm.internal.bjMessages.workCompletion.completeParamText', "завершил"), completionReason));
+    logText = logText.replace("{doc}", documentScript.wrapperDocumentLink(document, "{lecm-document:present-string}"));
     businessJournal.log(document.nodeRef.toString(), "EXECUTE_DOCUMENT", substitude.formatNodeTitle(document.nodeRef.toString(), logText), []);
 
     document.properties["lecm-eds-aspect:change-status-to"] = "Закрыт"

@@ -103,7 +103,8 @@
 						execution.setVariableLocal('registrarsList', registrarsListItems);
                         execution.setVariable('reservateInitiator', base.getWorkflowNodeConverter().convertNode(currentEmployee.nodeRef));
 
-                        var logText = '#initiator запросил резервирование номера для документа #mainobject';
+                        var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+                        var logText = msg("ru.it.lecm.reservation.bjMessages.sendReservationRequest", "#initiator запросил резервирование номера для документа #mainobject");
                         businessJournal.log(document.nodeRef.toString(), 'RESERVATION', logText, []);
 					]]></activiti:string>
                 </activiti:field>
@@ -221,17 +222,22 @@
 
 							    /* Запись в бизнес журнал если решение хорошее: */
 							    documentReservedNumber = document.properties['lecm-document-aspects:reg-data-number'];
-							    var regInfo = '. Зарезервирован номер ' + documentReservedNumber;
 							    var documentReservedDate;
+
+							    var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+							    var regInfo = msg("ru.it.lecm.reservation.bjMessages.reservationCompleted.regInfoString1", "Зарезервирован номер {number}");
+							    regInfo = regInfo.replace("{number}", documentReservedNumber);
 							    if (regDate) {
 							        /* Формат 'dd.MM.yyyy' */
                                     var month = regDate.getMonth() + 1;
                                     var year = regDate.getYear() + 1900;
                                     documentReservedDate = regDate.getDate() + '.' + (month < 10 ? '0' : '') + month + '.' + year;
-							        regInfo += ' на дату ' + documentReservedDate;
+							        regInfo += msg("ru.it.lecm.reservation.bjMessages.reservationCompleted.regInfoString2", " на дату {date}");
+							        regInfo = regInfo.replace("{date}", documentReservedDate);
 							    }
-							    var bjMsg = '#initiator выполнил резервирование регистрационного номера для документа #mainobject ' + regInfo;
-							    businessJournal.log(document.nodeRef.toString(), 'RESERVATION', bjMsg, []);
+                                var logText = msg("ru.it.lecm.reservation.bjMessages.reservationCompleted.message", "#initiator выполнил резервирование регистрационного номера для документа #mainobject. {regInfo}");
+                                logText = logText.replace("{regInfo}", regInfo);
+							    businessJournal.log(document.nodeRef.toString(), 'RESERVATION', logText, []);
 
                                 /* Подготовка уведомления */
 							    templateConfigObject.regNumber = documentReservedNumber ? documentReservedNumber : 'none';
@@ -245,9 +251,11 @@
 							    document.properties['lecm-reservation-aspects:isReserved'] = false;
 
 							    /* Запись в бизнес журнал если решение плохое: */
-							    var commentLink = base.wrapperTitle("отклонил", comment);
-							    var bjMsg = '#initiator ' + commentLink + ' запрос на резервирование номера документа #mainobject';
-							    businessJournal.log(document.nodeRef.toString(), 'RESERVATION', bjMsg, []);
+							    var commentLink = base.wrapperTitle(msg('ru.it.lecm.reservation.bjMessages.reservationRequestRejected.paramText', "отклонил"), comment);
+							    var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+                                var logText = msg('ru.it.lecm.reservation.bjMessages.reservationRequestRejected.message', '#initiator %s  запрос на резервирование номера документа #mainobject');
+                                logText = logText.replace("%s", commentLink);
+							    businessJournal.log(document.nodeRef.toString(), 'RESERVATION', logText, []);
 
                                 /* Подготовка уведомления */
 							    templateCode = 'RESERVATION_REQUEST_FINISHED_REJECTED';

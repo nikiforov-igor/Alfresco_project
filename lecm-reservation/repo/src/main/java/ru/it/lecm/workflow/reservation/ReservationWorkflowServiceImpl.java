@@ -11,9 +11,11 @@ import org.alfresco.util.ParameterCheck;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.utils.HtmlUtils;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.eds.api.EDSGlobalSettingsService;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -130,8 +132,8 @@ public class ReservationWorkflowServiceImpl extends WorkflowServiceAbstract impl
 			}
 		} else if (DecisionResult.REJECTED.name().equals(decision)) {
 			//запись в бизнес журнал если решение плохое
-			String commentLink = String.format("<a href='#' title='%s'>отклонил</a>", comment);
-			String bjMessage = String.format("#initiator %s запрос в резервировании номера документа #mainobject", commentLink);
+            String commentLink = HtmlUtils.wrapTitle(EDSDocumentService.getFromMessagesOrDefaultValue("ru.it.lecm.reservation.bjMessages.reservationRequestRejected.paramText", "отклонил"), comment);
+			String bjMessage = String.format(EDSDocumentService.getFromMessagesOrDefaultValue("ru.it.lecm.reservation.bjMessages.reservationRequestRejected.message", "#initiator %s запрос в резервировании номера документа #mainobject"), commentLink);
 			String registrarLogin = orgstructureService.getEmployeeLogin(orgstructureService.getCurrentEmployee());
 			businessJournalService.log(registrarLogin, documentRef, "RESERVATION", bjMessage, null);
 		}

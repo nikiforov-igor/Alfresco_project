@@ -30,10 +30,9 @@
 												reason: lecmErrandWf_controllerDeclineReason
 											}
 										});
-
-				                        var logText = "#initiator ";
-				                        logText += documentScript.wrapperTitle("отклонил", lecmErrandWf_controllerDeclineReason);
-				                        logText += " выполнение поручения: #mainobject.";
+										var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+										var logText = msg('ru.it.lecm.errands.bjMessages.controllerDecline.message', '#initiator {decline} выполнение поручения: #mainobject.');
+										logText = logText.replace("{decline}", documentScript.wrapperTitle(msg('ru.it.lecm.errands.bjMessages.controllerDecline.declineParamText', "отклонил"), lecmErrandWf_controllerDeclineReason));
 				                        businessJournal.log(document.nodeRef.toString(), "ERRAND_DECLINE", logText, []);
                                         execution.setVariable("executeResult", "");
 			                        }

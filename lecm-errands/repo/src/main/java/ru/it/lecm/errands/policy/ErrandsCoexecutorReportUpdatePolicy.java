@@ -17,6 +17,7 @@ import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
+import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -141,7 +142,7 @@ public class ErrandsCoexecutorReportUpdatePolicy implements NodeServicePolicies.
             notificationsService.sendNotification(author, initiator, recipients, "ERRANDS_COEXEC_REPORT", templateConfig, true);
 
             //делаем запись в журнал
-            String logText = "Соисполнитель #initiator создал отчет о выполнении поручения #mainobject ";
+            String logText = EDSDocumentService.getFromMessagesOrDefaultValue("ru.it.lecm.errands.bjMessages.createCoexecutorReport", "Соисполнитель #initiator создал отчет о выполнении поручения #mainobject ");
             businessJournalService.log(errandNodeRef, "ERRAND_COEXECUTOR_REPORT", logText);
 
         }
