@@ -30,7 +30,7 @@
        }
      });
     var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
-    var logText = msg('ru.it.lecm.eds.bjMessages.declineRegistration.message', "#initiator {decline} в регистрации документа {doc}');
+    var logText = msg('ru.it.lecm.eds.bjMessages.declineRegistration.message', '#initiator {decline} в регистрации документа {doc}');
     logText = logText.replace("{decline}", base.wrapperTitle(msg('ru.it.lecm.eds.bjMessages.declineRegistration.declineParamText', "отказал"), declineReason));
     logText = logText.replace("{doc}", documentScript.wrapperDocumentLink(document, document.properties["lecm-document:present-string"]));
    	logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
