@@ -164,7 +164,7 @@
                                 var employee = assignee;
                                 var reservateInitiator = execution.getVariable('reservateInitiator');
                                 var documentInitiators = lecmPermission.getEmployeesByDynamicRole(document, "BR_INITIATOR");
-
+                                var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
                                 var rejectReason = task.getVariableLocal('lecmRegnumRes_requestCancelRejectReason');
                                 var decision = task.getVariableLocal('lecmRegnumRes_requestCancelDecision') ? task.getVariableLocal('lecmRegnumRes_requestCancelDecision') + '' : '';
                                 var currentEmployee = orgstructure.getCurrentEmployee();
@@ -196,8 +196,6 @@
                                             document.removeAssociation(empl, 'lecm-document-aspects:registrator-assoc');
                                         });
                                     }
-
-                                    var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
                                     var logText = msg('ru.it.lecm.reservation.bjMessages.reservationCancelAfterReserve', '#initiator отменил резервирование номера для документа #mainobject. Возвращен номер проекта документа: ') + projectNumber;
                                     businessJournal.log(document.nodeRef.toString(), 'RESERVATION', logText, []);
 
@@ -208,7 +206,6 @@
 
                                     /* Запись в бизнес журнал если решение плохое: */
                                     var rejectReasonLink = base.wrapperTitle(msg("ru.it.lecm.reservation.bjMessages.reservationRequestAfterReserveRejected.rejectParamText", "отклонил"), rejectReason);
-                                    var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
                                     var logText = msg('ru.it.lecm.reservation.bjMessages.reservationRequestAfterReserveRejected.message', "#initiator {reject} запрос на отмену зарезервированных регистрационных данных документа #mainobject");
                                     logText = logText.replace("{reject}", rejectReasonLink);
                                     businessJournal.log(document.nodeRef.toString(), 'RESERVATION', logText, []);

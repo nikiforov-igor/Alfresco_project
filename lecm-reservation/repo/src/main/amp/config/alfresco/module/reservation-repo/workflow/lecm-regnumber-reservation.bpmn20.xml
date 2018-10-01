@@ -177,7 +177,7 @@
                             var employee = assignee;
                             var reservateInitiator = execution.getVariable('reservateInitiator');
                             var documentInitiators = lecmPermission.getEmployeesByDynamicRole(document, "BR_INITIATOR");
-
+                            var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
 							var comment = task.getVariableLocal('lecmRegnumRes_rejectReason');
 							var decision = task.getVariableLocal('lecmRegnumRes_decision') ? task.getVariableLocal('lecmRegnumRes_decision') + '' : '';
 							var regDate = task.getVariable('lecmRegnumRes_date');
@@ -223,8 +223,6 @@
 							    /* Запись в бизнес журнал если решение хорошее: */
 							    documentReservedNumber = document.properties['lecm-document-aspects:reg-data-number'];
 							    var documentReservedDate;
-
-							    var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
 							    var regInfo = msg("ru.it.lecm.reservation.bjMessages.reservationCompleted.regInfoString1", "Зарезервирован номер {number}");
 							    regInfo = regInfo.replace("{number}", documentReservedNumber);
 							    if (regDate) {
@@ -252,7 +250,6 @@
 
 							    /* Запись в бизнес журнал если решение плохое: */
 							    var commentLink = base.wrapperTitle(msg('ru.it.lecm.reservation.bjMessages.reservationRequestRejected.paramText', "отклонил"), comment);
-							    var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
                                 var logText = msg('ru.it.lecm.reservation.bjMessages.reservationRequestRejected.message', '#initiator %s  запрос на резервирование номера документа #mainobject');
                                 logText = logText.replace("%s", commentLink);
 							    businessJournal.log(document.nodeRef.toString(), 'RESERVATION', logText, []);
