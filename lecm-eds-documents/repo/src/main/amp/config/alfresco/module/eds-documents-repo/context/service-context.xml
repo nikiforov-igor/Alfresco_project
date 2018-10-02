@@ -67,7 +67,7 @@
 		  p:dictionaries-ref="eds.dictionaries"/>
 
 	<bean id="routes.routesMacrosDicBootstrap_v2"
-		  parent="lecmDictionaryBootstrap" depends-on="routes.model.bootstrap, businessJournalLogEventsPolicy" >
+		  parent="lecmDictionaryBootstrap" depends-on="routes.model.bootstrap, businessJournalLogEventsPolicy, routes.routesMacrosDicBootstrap" >
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/dictionaries/routes-macros-dictionary-items.xml</value>
