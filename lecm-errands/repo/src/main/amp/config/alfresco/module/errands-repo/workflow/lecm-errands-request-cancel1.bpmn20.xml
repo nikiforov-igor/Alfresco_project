@@ -109,7 +109,7 @@
 
 	                                    var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
                                         var logText = msg('ru.it.lecm.errands.bjMessages.declineRequestCancel1.message', "#initiator {decline} запрос на отмену поручения: #mainobject.");
-                                        logText = logText.replace("{decline}", documentScript.wrapperTitle(msg('ru.it.lecm.errands.bjMessages.declineRequestCancel1.declineParamText', "отклонил"), task.getVariable("lecmErrandWf_requestCancelTask_1RejectReason"));
+                                        logText = logText.replace("{decline}", documentScript.wrapperTitle(msg('ru.it.lecm.errands.bjMessages.declineRequestCancel1.declineParamText', "отклонил"), task.getVariable("lecmErrandWf_requestCancelTask_1RejectReason")));
 									    businessJournal.log(document.nodeRef.toString(), "CANCEL_ERRAND", logText, []);
 								    } else if (decision == "CANCEL_ERRAND") {
 								        execution.setVariable("requestCancelResult", "cancelErrand");
