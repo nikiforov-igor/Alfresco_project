@@ -200,11 +200,11 @@
 							       Если при резервировании номера не указан ни один СЭД. Регистратор, то Номер документа = '"НЕТ ДОСТУПНЫХ РЕГИСТРАТОРОВ"'
 							       Перед регистрацие, при одобрении, необходимо вернуть значение для Номера документа (= 'Не присвоено')
 							    */
-							    if (document.properties['lecm-document-aspects:reg-data-number'] == '"НЕТ ДОСТУПНЫХ РЕГИСТРАТОРОВ"') {
-							        document.properties['lecm-document-aspects:reg-data-number'] = 'Не присвоено';
+							    if (document.properties['lecm-document-aspects:reg-data-number'] == msg('ru.it.lecm.reservation.number.noRegistrators','"НЕТ ДОСТУПНЫХ РЕГИСТРАТОРОВ"')) {
+							        document.properties['lecm-document-aspects:reg-data-number'] = msg('ru.it.lecm.documents.default.regNumber', 'Не присвоено');
 							        document.save();
 							    }
-							    if (document.properties['lecm-document-aspects:reg-data-number'] != null && document.properties['lecm-document-aspects:reg-data-number'] != 'Не присвоено') {
+							    if (document.properties['lecm-document-aspects:reg-data-number'] != null && document.properties['lecm-document-aspects:reg-data-number'] != msg('ru.it.lecm.documents.default.regNumber', 'Не присвоено')) {
 							        document.properties['lecm-document-aspects:reg-data-number'] = null;
 							        document.save();
 							    }
@@ -298,7 +298,7 @@
                     <activiti:string><![CDATA[
                         var document = bpm_package.children[0];
 
-						document.properties['lecm-document-aspects:reg-data-number'] = '"НЕТ ДОСТУПНЫХ РЕГИСТРАТОРОВ"';
+						document.properties['lecm-document-aspects:reg-data-number'] = msg('ru.it.lecm.reservation.number.noRegistrators','"НЕТ ДОСТУПНЫХ РЕГИСТРАТОРОВ"');
 						document.save();
 						var documentString = document.properties['lecm-document:present-string'];
 						logger.warn('Нет доступных регистраторов для документа "'+ documentString + '"');

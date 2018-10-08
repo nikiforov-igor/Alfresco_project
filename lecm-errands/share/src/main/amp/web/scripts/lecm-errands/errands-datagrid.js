@@ -50,7 +50,7 @@
                                     break;
                                 case "lecm-errands:number":
                                     var value = data.displayValue;
-                                    if (value == "Не присвоено") {
+                                    if (value == Alfresco.util.message("ru.it.lecm.errands.default.number")) {
                                         value = " - ";
                                         columnContent += '<div style="text-align: center;">';
                                     } else {
@@ -67,7 +67,7 @@
                                 html += "<br />";
                             }
 
-                            if (datalistColumn.name == "lecm-errands:number" && data.displayValue != "Не присвоено") {
+                            if (datalistColumn.name == "lecm-errands:number" && data.displayValue != Alfresco.util.message("ru.it.lecm.errands.default.number")) {
                                 html += "<a href=\'" + window.location.protocol + '//' + window.location.host + Alfresco.constants.URL_PAGECONTEXT + 'document?nodeRef=' + oRecord.getData("nodeRef") + "\'\">" + columnContent + "</a>";
                             } else {
                                 html += columnContent;
