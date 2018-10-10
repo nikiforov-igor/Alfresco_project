@@ -96,7 +96,7 @@
                 <property name="lecm-notification-template:template">
                     <![CDATA[Сегодня запланировано {#isStartPoint ? "начало" : "окончание"} работ по этапу № {#stageNumber} к договору {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}]]></property>
                 <property name="lecm-notification-template:description">
-                    <![CDATA[Договор. Запланированны работы]]></property>
+                    <![CDATA[Договор. Запланированы работы]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
