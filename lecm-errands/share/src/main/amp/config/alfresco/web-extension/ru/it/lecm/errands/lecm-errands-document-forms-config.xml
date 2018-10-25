@@ -276,6 +276,7 @@
                     <show id="lecm-base-dummy-aspects:script8" force="true"/>
                     <show id="lecm-base-dummy-aspects:script9" force="true"/>
                     <show id="lecm-base-dummy-aspects:script10" force="true"/>
+                    <show id="reinitExecutorsScript" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="common" label-id="label.errands.forms.tab.common"/>
@@ -308,6 +309,7 @@
                         </constraint-handlers>
                         <control>
                             <control-param name="defaultValueDataSource">lecm/errands/getDefaultInitiator</control-param>
+                            <control-param name="changeItemsFireAction">initiatorChanged</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:type-assoc" set="beforeDateSet" mandatory="true">
@@ -507,6 +509,11 @@
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-check-other-child-auto-close.js</control-param>
                             <control-param name="scriptLoadedFireAction">errandProcessOtherChildAutoClose</control-param>
+                        </control>
+                    </field>
+                    <field id="reinitExecutorsScript">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-errands/errands-reinit-executors.js</control-param>
                         </control>
                     </field>
                 </appearance>
