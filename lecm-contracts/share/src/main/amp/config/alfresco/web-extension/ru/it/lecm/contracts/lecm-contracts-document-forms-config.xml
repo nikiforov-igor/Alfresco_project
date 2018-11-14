@@ -220,6 +220,7 @@
                             <control-param name="endpointMany">true</control-param>
                             <control-param name="hideByDefault">true</control-param>
                             <control-param name="changeItemsFireAction">mandatoryControlValueUpdated</control-param>
+                            <control-param name="selectedItemsNameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name}</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Signing2.signersValidator" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
@@ -520,6 +521,7 @@
                             <control-param name="endpointMany">true</control-param>
                             <control-param name="hideByDefault">true</control-param>
                             <control-param name="changeItemsFireAction">mandatoryControlValueUpdated</control-param>
+                            <control-param name="selectedItemsNameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name}</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Signing2.signersValidator" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
@@ -970,6 +972,7 @@
                             <control-param name="endpointMany">true</control-param>
                             <control-param name="hideByDefault">true</control-param>
                             <control-param name="changeItemsFireAction">mandatoryControlValueUpdated</control-param>
+                            <control-param name="selectedItemsNameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name}</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Signing2.signersValidator" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
