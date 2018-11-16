@@ -11,8 +11,9 @@
 		<value>alfresco/module/${artifactId}/models/reservation-workflow-model.xml</value>
 	</util:list>
         <util:list id="reservation.labels">
-                <value>alfresco/module/${artifactId}/messages/reservation-workflow-model</value>   
-        </util:list>
+                <value>alfresco/module/${artifactId}/messages/reservation-workflow-model</value>
+				<value>alfresco/module/${artifactId}/messages/lecm-reservation-bj-messages</value>
+		</util:list>
 	<bean id="reservation.model.bootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="statemachine.aspects.LogicEcmModelsBootstrap"
 		  p:models-ref="reservation.models"
