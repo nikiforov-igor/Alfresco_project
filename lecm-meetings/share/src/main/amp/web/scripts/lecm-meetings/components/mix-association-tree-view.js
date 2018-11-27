@@ -1504,8 +1504,13 @@ LogicECM.module = LogicECM.module || {};
 				this.options.parentNodeRef = oResponse.meta.parent ? oResponse.meta.parent.nodeRef : nodeRef;
 				this.widgets.dataTable.set("MSG_EMPTY", this.msg("form.control.object-picker.items-list.empty"));
 
-				this.skipItemsCount += oResponse.results.length;
-				Dom.setStyle(this.options.pickerId + "-picker-items-loading", "visibility", "hidden");
+                if (oResponse.results.length && oResponse.results[0].type == IDENT_CREATE_NEW) {
+                    this.skipItemsCount += oResponse.results.length - 1;
+                } else {
+                    this.skipItemsCount += oResponse.results.length;
+                }
+
+                Dom.setStyle(this.options.pickerId + "-picker-items-loading", "visibility", "hidden");
 
 				if (!clearList || (this.options.showCreateNewLink && this.currentNode != null && this.currentNode.data.isContainer && this.currentNode.data.hasPermAddChildren && (!this.isSearch || this.options.plane) && !this.alreadyShowCreateNewLink))
 				{
