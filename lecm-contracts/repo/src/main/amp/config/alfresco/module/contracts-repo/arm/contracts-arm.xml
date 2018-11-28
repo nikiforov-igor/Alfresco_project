@@ -3758,7 +3758,7 @@
                             <item name="cm:По состоянию" type="lecm-arm:node">
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                 <property name="lecm-arm:search-query">
-                                    <![CDATA[@lecm\-document\:author\-assoc\-ref:"#current-user" AND NOT @lecm\-statemachine\-aspects\:is\-draft:true AND NOT @lecm\-statemachine\:status:'Удален' AND NOT @lecm\-statemachine\:status:'Аннулирован']]></property>
+                                    <![CDATA[NOT @lecm\-statemachine\-aspects\:is\-draft:true AND NOT @lecm\-statemachine\:status:'Удален' AND NOT @lecm\-statemachine\:status:'Аннулирован']]></property>
                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                 <property name="cm:name"><![CDATA[По состоянию]]></property>
                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
@@ -3772,7 +3772,7 @@
                                     <item name="cm:Проекты" type="lecm-arm:node">
                                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                         <property name="lecm-arm:search-query">
-                                            <![CDATA[(@lecm\-statemachine\:status:'Проект зарегистрирован' AND @lecm\-document\:author\-assoc\-ref:"#current-user") OR (@lecm\-statemachine\:status:'На доработке' AND @lecm\-document\:author\-assoc\-ref:"#current-user") OR (@lecm\-statemachine\:status:'На согласовании' AND @lecm\-document\:author\-assoc\-ref:"#current-user") OR (@lecm\-statemachine\:status:'Согласован' AND @lecm\-document\:author\-assoc\-ref:"#current-user") OR (@lecm\-statemachine\:status:'На подписании' AND @lecm\-document\:author\-assoc\-ref:"#current-user") OR (@lecm\-statemachine\:status:'На подписании у контрагента' AND @lecm\-document\:author\-assoc\-ref:"#current-user") OR (@lecm\-statemachine\:status:'Подписан' AND @lecm\-document\:author\-assoc\-ref:"#current-user")]]></property>
+                                            <![CDATA[(@lecm\-statemachine\:status:'Проект зарегистрирован') OR (@lecm\-statemachine\:status:'На доработке') OR (@lecm\-statemachine\:status:'На согласовании') OR (@lecm\-statemachine\:status:'Согласован') OR (@lecm\-statemachine\:status:'На подписании') OR (@lecm\-statemachine\:status:'На подписании у контрагента') OR (@lecm\-statemachine\:status:'Подписан')]]></property>
                                         <property name="lecm-arm:is-aggregation-node"><![CDATA[true]]></property>
                                         <property name="cm:name"><![CDATA[Проекты]]></property>
                                         <property name="lecm-arm:search-type"><![CDATA[]]></property>
@@ -3786,7 +3786,7 @@
                                             <item name="cm:Проект зарегистрирован" type="lecm-arm:node">
                                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:search-query">
-                                                    <![CDATA[@lecm\-statemachine\:status:'Проект зарегистрирован' AND @lecm\-document\:author\-assoc\-ref:"#current-user"]]></property>
+                                                    <![CDATA[@lecm\-statemachine\:status:'Проект зарегистрирован']]></property>
                                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                                 <property name="cm:name"><![CDATA[Проект зарегистрирован]]></property>
                                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
@@ -3799,7 +3799,7 @@
                                             <item name="cm:На доработке" type="lecm-arm:node">
                                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:search-query">
-                                                    <![CDATA[@lecm\-statemachine\:status:'На доработке' AND @lecm\-document\:author\-assoc\-ref:"#current-user"]]></property>
+                                                    <![CDATA[@lecm\-statemachine\:status:'На доработке']]></property>
                                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                                 <property name="cm:name"><![CDATA[На доработке]]></property>
                                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
@@ -3812,7 +3812,7 @@
                                             <item name="cm:На согласовании" type="lecm-arm:node">
                                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:search-query">
-                                                    <![CDATA[@lecm\-statemachine\:status:'На согласовании' AND @lecm\-document\:author\-assoc\-ref:"#current-user"]]></property>
+                                                    <![CDATA[@lecm\-statemachine\:status:'На согласовании']]></property>
                                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                                 <property name="cm:name"><![CDATA[На согласовании]]></property>
                                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
@@ -3825,7 +3825,7 @@
                                             <item name="cm:Согласован" type="lecm-arm:node">
                                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:search-query">
-                                                    <![CDATA[@lecm\-statemachine\:status:'Согласован' AND @lecm\-document\:author\-assoc\-ref:"#current-user"]]></property>
+                                                    <![CDATA[@lecm\-statemachine\:status:'Согласован']]></property>
                                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                                 <property name="cm:name"><![CDATA[Согласован]]></property>
                                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
@@ -3838,7 +3838,7 @@
                                             <item name="cm:На подписании" type="lecm-arm:node">
                                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:search-query">
-                                                    <![CDATA[@lecm\-statemachine\:status:'На подписании' AND @lecm\-document\:author\-assoc\-ref:"#current-user"]]></property>
+                                                    <![CDATA[@lecm\-statemachine\:status:'На подписании']]></property>
                                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                                 <property name="cm:name"><![CDATA[На подписании]]></property>
                                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
@@ -3851,7 +3851,7 @@
                                             <item name="cm:На подписании у контрагента" type="lecm-arm:node">
                                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:search-query">
-                                                    <![CDATA[@lecm\-statemachine\:status:'На подписании у контрагента' AND @lecm\-document\:author\-assoc\-ref:"#current-user"]]></property>
+                                                    <![CDATA[@lecm\-statemachine\:status:'На подписании у контрагента']]></property>
                                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                                 <property name="cm:name"><![CDATA[На подписании у контрагента]]></property>
                                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
@@ -3864,7 +3864,7 @@
                                             <item name="cm:Подписан" type="lecm-arm:node">
                                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:search-query">
-                                                    <![CDATA[@lecm\-statemachine\:status:'Подписан' AND @lecm\-document\:author\-assoc\-ref:"#current-user"]]></property>
+                                                    <![CDATA[@lecm\-statemachine\:status:'Подписан']]></property>
                                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                                 <property name="cm:name"><![CDATA[Подписан]]></property>
                                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
@@ -3879,7 +3879,7 @@
                                     <item name="cm:На исполнении" type="lecm-arm:node">
                                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                         <property name="lecm-arm:search-query">
-                                            <![CDATA[(@lecm\-statemachine\:status:'Зарегистрирован' AND @lecm\-document\:author\-assoc\-ref:"#current-user") OR (@lecm\-statemachine\:status:'Действует' AND @lecm\-document\:author\-assoc\-ref:"#current-user") OR (@lecm\-statemachine\:status:'Приостановлен' AND @lecm\-document\:author\-assoc\-ref:"#current-user")]]></property>
+                                            <![CDATA[(@lecm\-statemachine\:status:'Зарегистрирован') OR (@lecm\-statemachine\:status:'Действует') OR (@lecm\-statemachine\:status:'Приостановлен')]]></property>
                                         <property name="lecm-arm:is-aggregation-node"><![CDATA[true]]></property>
                                         <property name="cm:name"><![CDATA[На исполнении]]></property>
                                         <property name="lecm-arm:search-type"><![CDATA[]]></property>
@@ -3891,7 +3891,7 @@
                                             <item name="cm:Зарегистрирован" type="lecm-arm:node">
                                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:search-query">
-                                                    <![CDATA[@lecm\-statemachine\:status:'Зарегистрирован' AND @lecm\-document\:author\-assoc\-ref:"#current-user"]]></property>
+                                                    <![CDATA[@lecm\-statemachine\:status:'Зарегистрирован']]></property>
                                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                                 <property name="cm:name"><![CDATA[Зарегистрирован]]></property>
                                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
@@ -3904,7 +3904,7 @@
                                             <item name="cm:Действует" type="lecm-arm:node">
                                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:search-query">
-                                                    <![CDATA[@lecm\-statemachine\:status:'Действует' AND @lecm\-document\:author\-assoc\-ref:"#current-user"]]></property>
+                                                    <![CDATA[@lecm\-statemachine\:status:'Действует']]></property>
                                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                                 <property name="cm:name"><![CDATA[Действует]]></property>
                                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
@@ -3917,7 +3917,7 @@
                                             <item name="cm:Приостановлен" type="lecm-arm:node">
                                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:search-query">
-                                                    <![CDATA[@lecm\-statemachine\:status:'Приостановлен' AND @lecm\-document\:author\-assoc\-ref:"#current-user"]]></property>
+                                                    <![CDATA[@lecm\-statemachine\:status:'Приостановлен']]></property>
                                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                                 <property name="cm:name"><![CDATA[Приостановлен]]></property>
                                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
@@ -3932,7 +3932,7 @@
                                     <item name="cm:Закрытые" type="lecm-arm:node">
                                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                         <property name="lecm-arm:search-query">
-                                            <![CDATA[(@lecm\-statemachine\:status:'Исполнен' AND @lecm\-document\:author\-assoc\-ref:"#current-user") OR (@lecm\-statemachine\:status:'Расторгнут' AND @lecm\-document\:author\-assoc\-ref:"#current-user") OR (@lecm\-statemachine\:status:'Аннулирован' AND @lecm\-document\:author\-assoc\-ref:"#current-user")]]></property>
+                                            <![CDATA[(@lecm\-statemachine\:status:'Исполнен') OR (@lecm\-statemachine\:status:'Расторгнут') OR (@lecm\-statemachine\:status:'Аннулирован')]]></property>
                                         <property name="lecm-arm:is-aggregation-node"><![CDATA[true]]></property>
                                         <property name="cm:name"><![CDATA[Закрытые]]></property>
                                         <property name="lecm-arm:search-type"><![CDATA[]]></property>
@@ -3944,7 +3944,7 @@
                                             <item name="cm:Исполнен" type="lecm-arm:node">
                                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:search-query">
-                                                    <![CDATA[@lecm\-statemachine\:status:'Исполнен' AND @lecm\-document\:author\-assoc\-ref:"#current-user"]]></property>
+                                                    <![CDATA[@lecm\-statemachine\:status:'Исполнен']]></property>
                                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                                 <property name="cm:name"><![CDATA[Исполнен]]></property>
                                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
@@ -3957,7 +3957,7 @@
                                             <item name="cm:Расторгнут" type="lecm-arm:node">
                                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:search-query">
-                                                    <![CDATA[@lecm\-statemachine\:status:'Расторгнут' AND @lecm\-document\:author\-assoc\-ref:"#current-user"]]></property>
+                                                    <![CDATA[@lecm\-statemachine\:status:'Расторгнут']]></property>
                                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                                 <property name="cm:name"><![CDATA[Расторгнут]]></property>
                                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
@@ -3970,7 +3970,7 @@
                                             <item name="cm:Аннулирован" type="lecm-arm:node">
                                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:search-query">
-                                                    <![CDATA[@lecm\-statemachine\:status:'Аннулирован' AND @lecm\-document\:author\-assoc\-ref:"#current-user"]]></property>
+                                                    <![CDATA[@lecm\-statemachine\:status:'Аннулирован']]></property>
                                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                                 <property name="cm:name"><![CDATA[Аннулирован]]></property>
                                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
@@ -3987,7 +3987,7 @@
                             <item name="cm:По тематикам" type="lecm-arm:node">
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                 <property name="lecm-arm:search-query">
-                                    <![CDATA[@lecm\-document\:author\-assoc\-ref:"#current-user" AND NOT @lecm\-statemachine\-aspects\:is\-draft:true AND NOT @lecm\-statemachine\:status:'Удален' AND NOT @lecm\-statemachine\:status:'Аннулирован']]></property>
+                                    <![CDATA[NOT @lecm\-statemachine\-aspects\:is\-draft:true AND NOT @lecm\-statemachine\:status:'Удален' AND NOT @lecm\-statemachine\:status:'Аннулирован']]></property>
                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                 <property name="cm:name"><![CDATA[По тематикам]]></property>
                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
@@ -4219,7 +4219,7 @@
                             <item name="cm:По контрагентам" type="lecm-arm:node">
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                 <property name="lecm-arm:search-query">
-                                    <![CDATA[@lecm\-document\:author\-assoc\-ref:"#current-user" AND NOT @lecm\-statemachine\-aspects\:is\-draft:true AND NOT @lecm\-statemachine\:status:'Удален' AND NOT @lecm\-statemachine\:status:'Аннулирован']]></property>
+                                    <![CDATA[NOT @lecm\-statemachine\-aspects\:is\-draft:true AND NOT @lecm\-statemachine\:status:'Удален' AND NOT @lecm\-statemachine\:status:'Аннулирован']]></property>
                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                 <property name="cm:name"><![CDATA[По контрагентам]]></property>
                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
