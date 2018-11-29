@@ -38,6 +38,7 @@ function main() {
     var mayView = hasPermission(nodeRef, PERM_ATTR_LIST);
     var mayAdd = hasPermission(nodeRef, PERM_ATTR_EDIT);
     var docHasStatemachine = hasStatemachine(nodeRef);
+    model.nodeRef = nodeRef;
 
     var documentEdit = {
         name: "LogicECM.module.Documents.Edit",
@@ -58,14 +59,21 @@ function main() {
     };
 
     model.widgets = [documentEdit, documentPreview];
+    model.isEditLockEnabled = false;
+    var reqBody = {nodeRef: nodeRef};
 
-    var isEditLockEnabled = false;
-    var connector = remote.connect("alfresco").get('/lecm/documents/isEditLockEnabled');
-    if(connector.status == 200){
+    var connector = remote.connect("alfresco").post("/lecm/document/api/checkLock", jsonUtils.toJSONString(reqBody), "application/json");
+    if (connector.status == 200) {
         var nativeObject = JSON.parse(connector);
-        isEditLockEnabled = nativeObject.isEditLockEnabled;
+        model.isEditLockEnabled = nativeObject.isEditLockEnabled;
+        model.locked = nativeObject.locked;
+        model.canRelease = nativeObject.canRelease;
     }
-    model.isEditLockEnabled = isEditLockEnabled;
+
+    //если не залочено, вероятно переход в редактирование осуществлен по прямой ссылке, блокируем
+    if(!model.locked){
+        remote.connect("alfresco").post("/lecm/document/api/lockDocument", jsonUtils.toJSONString(reqBody), "application/json");
+    }
 };
 
 main();

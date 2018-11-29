@@ -1,5 +1,9 @@
 <#assign el=args.htmlid?html>
 <script type="text/javascript">
+    if(${locked?c} && !${canRelease?c}){
+        window.location.href = Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=${nodeRef}";
+    }
+
     if (typeof LogicECM == "undefined" || !LogicECM) {
         LogicECM = {};
     }
