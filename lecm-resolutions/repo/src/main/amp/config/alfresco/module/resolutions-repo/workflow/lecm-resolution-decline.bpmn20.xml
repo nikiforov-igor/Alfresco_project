@@ -15,8 +15,8 @@
                             var declineReason = lecmResolutionWf_declineReason;
                             var document = bpm_package.children[0];
                             if (document) {
-                                var reworkWrap = base.wrapperTitle(msg("ru.it.lecm.resolutions.bjMessages.declineResolution.reworkParamText", "на доработку"), declineReason);
                                 var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+                                var reworkWrap = base.wrapperTitle(msg("ru.it.lecm.resolutions.bjMessages.declineResolution.reworkParamText", "на доработку"), declineReason);
                                 var logText = msg("ru.it.lecm.resolutions.bjMessages.declineResolution.message", "#initiator направил {rework} резолюцию: #mainobject.");
                                 logText = logText.replace("{rework}", reworkWrap)
                                 businessJournal.log(document.nodeRef.toString(), "DECLINE_RESOLUTION", logText, []);
