@@ -138,7 +138,6 @@
                         </constraint-handlers>
                     </field>
 					<field id="lecm-contract-dic:contract-type-code" mandatory="false">
-						<control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
 						<constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
 						</constraint-handlers>
@@ -258,7 +257,6 @@
                         </constraint-handlers>
                     </field>
 					<field id="lecm-contract-dic:contract-documents-type-code" mandatory="false">
-						<control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
 						<constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
 						</constraint-handlers>
@@ -331,7 +329,6 @@
                         </constraint-handlers>
                     </field>
 					<field id="lecm-contract-dic:delete-reason-code" mandatory="false">
-						<control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
 						<constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
 						</constraint-handlers>
