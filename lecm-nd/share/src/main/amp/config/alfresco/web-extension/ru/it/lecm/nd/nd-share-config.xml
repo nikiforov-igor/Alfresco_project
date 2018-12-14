@@ -141,6 +141,11 @@
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
                         </constraint-handlers>
                     </field>
+                    <field id="lecm-doc-dic-dt:es-sign-required" mandatory="false">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl">
+                            <control-param name="options">,true|Да,false|Нет</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-doc-dic-dt:categories-of-attachments-to-sign">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
                             <control-param name="webscript">lecm/document/attachments/api/categoriesByType?documentType=lecm-nd:document&amp;jsonObjectName=data</control-param>
