@@ -6269,10 +6269,6 @@ if (document) {
                     }
                 });
             }
-
-            var logText = "#initiator зарегистрировал документ " + documentScript.wrapperDocumentLink(document, presentStringWithProjectNumber) + ". Присвоен номер {~REGNUM} на дату {~REGDATE}.";
-            logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
-            businessJournal.log(document.nodeRef.toString(), "REGISTRATION", logText, []);
         }
 	}
 })();]]></value>
