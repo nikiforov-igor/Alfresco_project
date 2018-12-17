@@ -337,5 +337,23 @@
                     }
                 });
         }
+        processTemplatefields(formId);
+    }
+
+    function processTemplatefields(formId) {
+        if (formId) {
+            var formComponent = Alfresco.util.ComponentManager.find({id: formId}, true)[0];
+            if (formComponent && formComponent.options && formComponent.options.args) {
+                var formArgs = formComponent.options.args;
+
+                var limitationDateRadioField = "lecm-resolutions:limitation-date-radio";
+                var limitationDateRadioReadyEl = LogicECM.module.Base.Util.getComponentReadyElementId(formId, limitationDateRadioField);
+                YAHOO.util.Event.onAvailable(limitationDateRadioReadyEl, function () {
+                    if (formArgs["readonly_prop_lecm-resolutions_limitation-date"]) {
+                        LogicECM.module.Base.Util.readonlyControl(formId, limitationDateRadioField, true);
+                    }
+                });
+            }
+        }
     }
 })();

@@ -1,4 +1,4 @@
-(function(){
+(function () {
     LogicECM.module.Base.Util.loadCSS([
         'css/lecm-errands/errands-create-form.css'
     ]);
@@ -8,7 +8,7 @@
         Selector = YAHOO.util.Selector,
         Bubbling = YAHOO.Bubbling,
         Substitute = YAHOO.lang.substitute;
-    var formId,formButtons;
+    var formId, formButtons;
     var isRouteClick = true;
 
     Bubbling.on('saveDraftButtonClick', saveDraft);
@@ -60,7 +60,7 @@
 
     }
 
-    function saveDraft(layer,args) {
+    function saveDraft(layer, args) {
         var isShort = Dom.getElementBy(function (el) {
             return el.name == "prop_lecm-errands_is-short";
         }, 'input', formId);
@@ -70,11 +70,11 @@
         routeButton.click();
     }
 
-    function init(layer,args){
+    function init(layer, args) {
         formId = args[1].formId;
         formButtons = Dom.get(formId + "-form-buttons");
         Dom.addClass(formButtons, "form-4-buttons");
-        Event.onContentReady(formId + "-form-submit-button", function() {
+        Event.onContentReady(formId + "-form-submit-button", function () {
             var submitButtonElement = Dom.get(formId + "-form-submit-button");
             submitButtonElement.innerHTML = Alfresco.util.message("label.route-errand");
         });
@@ -95,7 +95,7 @@
             failureMessage: Alfresco.util.message("message.failure")
         });
 
-        if(args[1].fieldId == "errands-workflow-form-script") {
+        if (args[1].fieldId == "errands-workflow-form-script") {
             var createFormModule = Alfresco.util.ComponentManager.get(formId);
             var submitElement = createFormModule.runtimeForm.submitElements[0];
             var oldSubmitFunction = submitElement.submitForm;
@@ -132,20 +132,24 @@
             var formComponent = Alfresco.util.ComponentManager.find({id: formId}, true)[0];
             if (formComponent && formComponent.options && formComponent.options.args) {
                 var formArgs = formComponent.options.args;
-                if (formArgs["prop_lecm-errands_limitation-date"]) {
+                if (formArgs["prop_lecm-errands_limitation-date"] || formArgs["readonly_prop_lecm-errands_limitation-date"]) {
                     var limitationDateRadioField = "lecm-errands:limitation-date-radio";
                     var limitationDateRadioReadyEl = LogicECM.module.Base.Util.getComponentReadyElementId(formId, limitationDateRadioField);
-                    YAHOO.util.Event.onAvailable(limitationDateRadioReadyEl, function() {
+                    YAHOO.util.Event.onAvailable(limitationDateRadioReadyEl, function () {
                         var limitationDateRadio = Dom.get(formId + "_prop_" + limitationDateRadioField.replace(":", "_"));
                         var dateRadioButton = YAHOO.util.Selector.query("input[type=radio][value='DATE']", limitationDateRadio.parentElement, true);
                         dateRadioButton.checked = true;
                         limitationDateRadio.value = "DATE";
+                        if (formArgs["readonly_prop_lecm-errands_limitation-date"]) {
+                            LogicECM.module.Base.Util.readonlyControl(formId, limitationDateRadioField, true);
+                        }
                         YAHOO.Bubbling.fire("changeLimitationDateRadio", {
                             value: limitationDateRadio.value,
                             formId: formId,
                             fieldId: limitationDateRadioField
                         });
                     });
+
                 } else if (formArgs["assoc_lecm-errands_type-assoc"]) {
                     var selected = {};
                     selected[formArgs["assoc_lecm-errands_type-assoc"]] = {};

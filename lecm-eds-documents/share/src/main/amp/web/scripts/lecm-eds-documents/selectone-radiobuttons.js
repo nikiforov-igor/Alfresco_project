@@ -14,6 +14,7 @@ LogicECM.module = LogicECM.module || {};
         Bubbling.on("enableControl", this.onEnableControl, this);
         Bubbling.on("reInitializeControl", this.onReInitializeControl, this);
         Bubbling.on("resetControl", this.onResetControl, this);
+        Bubbling.on("readonlyControl", this.onReadonlyControl, this);
         return this;
     };
 
@@ -24,7 +25,35 @@ LogicECM.module = LogicECM.module || {};
             fieldId: null,
             fireChangeEventName: null,
             fieldName: null,
+            readonly: false,
             currentValue: null
+        },
+
+        onReadonlyControl: function (layer, args) {
+            var input, fn;
+            var radios;
+            if (this.options.formId === args[1].formId && this.options.fieldId === args[1].fieldId) {
+                this.readonly = args[1].readonly;
+                input = Dom.get(this.controlId);
+                if (input) {
+                    fn = args[1].readonly ? input.setAttribute : input.removeAttribute;
+                    fn.call(input, "readonly", "");
+                }
+                radios = this._getRadios();
+                if (radios && radios.length) {
+                    if(args[1].readonly){
+                        radios.forEach(function(el) {
+                            if(!el.checked){//радиобаттоны не могут быть в состоянии ридонли, дизейблим все не выбранные
+                                el.setAttribute("disabled", "true");
+                            }
+                        });
+                    } else {
+                        radios.forEach(function(el) {
+                            el.removeAttribute("disabled");
+                        });
+                    }
+                }
+            }
         },
 
         onValueChanged: function (layer) {
