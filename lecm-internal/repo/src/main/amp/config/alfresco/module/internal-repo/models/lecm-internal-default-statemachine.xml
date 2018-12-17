@@ -6270,9 +6270,12 @@ if (document) {
                 });
             }
 
-            var logText = "#initiator зарегистрировал документ " + documentScript.wrapperDocumentLink(document, presentStringWithProjectNumber) + ". Присвоен номер {~REGNUM} на дату {~REGDATE}.";
-            logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
-            businessJournal.log(document.nodeRef.toString(), "REGISTRATION", logText, []);
+            var registrationRequired = document.assocs["lecm-eds-document:document-type-assoc"][0].properties["lecm-doc-dic-dt:registration-required"];
+	        if (registrationRequired) {
+                var logText = "#initiator зарегистрировал документ " + documentScript.wrapperDocumentLink(document, presentStringWithProjectNumber) + ". Присвоен номер {~REGNUM} на дату {~REGDATE}.";
+                logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
+                businessJournal.log(document.nodeRef.toString(), "REGISTRATION", logText, []);
+            }
         }
 	}
 })();]]></value>
