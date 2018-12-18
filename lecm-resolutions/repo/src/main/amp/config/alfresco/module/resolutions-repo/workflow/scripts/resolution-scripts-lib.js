@@ -67,8 +67,8 @@ var LECMResolutionActions = {
             }
         });
 
-        var changeWrap = base.wrapperTitle(msg("ru.it.lecm.resolutions.bjMessages.changeDueDate.changeParamText", "Изменен"), reason);
         var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+        var changeWrap = base.wrapperTitle(msg("ru.it.lecm.resolutions.bjMessages.changeDueDate.changeParamText", "Изменен"), reason);
         var logText = msg("ru.it.lecm.resolutions.bjMessages.changeDueDate.message", "{change} срок исполнения резолюции. Причина изменения: {reason}");
         logText = logText.replace("{change}", changeWrap);
         logText = logText.replace("{reason}", reason)
