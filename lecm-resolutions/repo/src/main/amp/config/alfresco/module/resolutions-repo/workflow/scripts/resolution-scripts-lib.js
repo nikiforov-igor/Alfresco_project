@@ -13,6 +13,7 @@ var LECMResolutionActions = {
             if (oldLimitRadio != "LIMITLESS") {
                 document.properties["lecm-resolutions:limitation-date-radio"] = "LIMITLESS";
                 document.properties["lecm-resolutions:limitation-date"] = null;
+                document.properties["lecm-errands:limitation-date-text"] = "Без срока";
                 if (isExpired) {
                     document.properties["lecm-resolutions:is-expired"] = false;
                 }
@@ -29,6 +30,11 @@ var LECMResolutionActions = {
                 document.properties["lecm-resolutions:limitation-date-radio"] = "DATE";
                 document.properties["lecm-resolutions:limitation-date"] = newDate;
             }
+
+            var day = utils.pad(newDate.getDate(), 2);
+            var month = utils.pad(newDate.getMonth() + 1, 2);
+            var year = utils.pad(newDate.getFullYear(), 4);
+            document.properties["lecm-errands:limitation-date-text"] = day + "." + month + "." + year;
 
             if (isExpired) {
                 var now = new Date();
@@ -67,8 +73,8 @@ var LECMResolutionActions = {
             }
         });
 
-        var changeWrap = base.wrapperTitle(msg("ru.it.lecm.resolutions.bjMessages.changeDueDate.changeParamText", "Изменен"), reason);
         var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
+        var changeWrap = base.wrapperTitle(msg("ru.it.lecm.resolutions.bjMessages.changeDueDate.changeParamText", "Изменен"), reason);
         var logText = msg("ru.it.lecm.resolutions.bjMessages.changeDueDate.message", "{change} срок исполнения резолюции. Причина изменения: {reason}");
         logText = logText.replace("{change}", changeWrap);
         logText = logText.replace("{reason}", reason)
