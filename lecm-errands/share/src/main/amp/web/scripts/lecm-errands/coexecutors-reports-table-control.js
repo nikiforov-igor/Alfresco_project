@@ -351,9 +351,9 @@ LogicECM.errands = LogicECM.errands || {};
                         fn: function (form, simpleDialog) {
                             simpleDialog.dialog.setHeader(this.msg("label.execution.report.form.title"));
                             simpleDialog.dialog.subscribe('destroy', function (event, args, params) {
+                                this.transferActionDoubleClickLock = false;
                                 LogicECM.module.Base.Util.destroyForm(simpleDialog.id);
                                 LogicECM.module.Base.Util.formDestructor(event, args, params);
-                                this.transferActionDoubleClickLock = false;
                             }, {moduleId: simpleDialog.id}, this);
                         },
                         scope: this
