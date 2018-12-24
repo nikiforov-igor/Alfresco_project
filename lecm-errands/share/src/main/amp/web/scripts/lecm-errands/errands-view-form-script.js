@@ -46,6 +46,13 @@
             } else {
                 YAHOO.util.Dom.addClass(periodicallySet, "hidden1");
             }
+
+            var limitationDateControlField = "lecm-errands:limitation-date-cntrl-date";
+            var limitationDateRadioField = "lecm-errands:limitation-date-radio";
+            var limitationDateControl = Dom.get(formId + "_prop_" + limitationDateControlField.replace(":", "_"));
+            if(limitationDateControl.disabled){
+                LogicECM.module.Base.Util.readonlyControl(formId, limitationDateRadioField, true);
+            }
         }
     }
 
