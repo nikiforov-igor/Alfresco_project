@@ -91,7 +91,6 @@ LogicECM.module = LogicECM.module || {};
                                 }
 
                                 if (me.receivedItems[previousDocRef]) {
-                                    el.parentElement.setAttribute("style", "position: relative;");
                                     el.parentElement.appendChild(div);
                                 }
                             }
