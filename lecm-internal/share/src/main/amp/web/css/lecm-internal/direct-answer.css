@@ -24,6 +24,11 @@
 .direct-answer .answer-comment .control.dnd-uploader img.uploader-button {
     margin: 0;
 }
+
+.direct-answer .answer-comment .control.dnd-uploader .uploader-block span.drag-tip {
+    vertical-align: top;
+}
+
 .dnd-uploader .attachments-list a > img,
 .dnd-uploader ul.attachments-list li img.move-icon,
 .dnd-uploader ul.attachments-list li img.remove-icon,
