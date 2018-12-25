@@ -2243,7 +2243,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Заданный в документе типовой маршрут подписания не может быть запущен (не соответствует условиям доступности). Документ будет отправлен по заданному маршруту с пометкой "нетиповой"]]></value>
+                                                                                    <![CDATA[Заданный в документе типовой маршрут подписания не может быть запущен (не соответствует условиям доступности). <br/>Документ будет отправлен по заданному маршруту с пометкой "нетиповой"]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -10705,7 +10705,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Заданный в документе типовой маршрут подписания не может быть запущен (не соответствует условиям доступности). Документ будет отправлен по заданному маршруту с пометкой "нетиповой"]]></value>
+                                                                                    <![CDATA[Заданный в документе типовой маршрут подписания не может быть запущен (не соответствует условиям доступности). <br/>Документ будет отправлен по заданному маршруту с пометкой "нетиповой"]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -13437,7 +13437,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Заданный в документе типовой маршрут подписания не может быть запущен (не соответствует условиям доступности). Документ будет отправлен по заданному маршруту с пометкой "нетиповой"]]></value>
+                                                                                    <![CDATA[Заданный в документе типовой маршрут подписания не может быть запущен (не соответствует условиям доступности). <br/>Документ будет отправлен по заданному маршруту с пометкой "нетиповой"]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
