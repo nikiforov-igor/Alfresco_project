@@ -100,7 +100,8 @@ LogicECM.module.Eds.GlobalSettings = LogicECM.module.Eds.GlobalSettings || {};
 				clearFormsOnStart: true,
 				pickerButtonLabel: null,
 				pickerButtonTitle: null,
-				businessRoleId: ""
+				businessRoleId: "",
+				treeBranchesDatasource: "lecm/components/association-tree"
 			},
 
 			init: function() {
