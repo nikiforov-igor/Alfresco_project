@@ -2138,7 +2138,13 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:executor-assoc" set="left"/>
+                    <field id="lecm-errands:executor-assoc" set="left">
+                        <control>
+                            <control-param name="showSearch">true</control-param>
+                            <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
+                        </control>
+                    </field>
+
                     <field id="lecm-errands:coexecutors-assoc" set="left">
                         <control>
                             <control-param name="showSearch">true</control-param>
@@ -2243,7 +2249,12 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:executor-assoc" set="left"/>
+                    <field id="lecm-errands:executor-assoc" set="left">
+                        <control>
+                            <control-param name="showSearch">true</control-param>
+                            <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-errands:coexecutors-assoc" set="left">
                         <control>
                             <control-param name="showSearch">true</control-param>

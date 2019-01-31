@@ -36,6 +36,7 @@
                     <show id="lecm-base-dummy-aspects:script2" force="true"/>
                     <show id="lecm-base-dummy-aspects:script3" force="true"/>
                     <show id="lecm-base-dummy-aspects:script4" force="true"/>
+                    <show id="reinitExecutorsScript" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="start"/>
@@ -63,6 +64,7 @@
                     <field id="lecm-resolutions:author-assoc" set="start-left">
                         <control>
                             <control-param name="defaultValueDataSource">lecm/errands/getDefaultInitiator</control-param>
+                            <control-param name="changeItemsFireAction">authorChanged</control-param>
                         </control>
                     </field>
                     <field id="lecm-resolutions:controller-assoc" set="start-left">
@@ -245,6 +247,11 @@
                     <field id="lecm-base-dummy-aspects:script4" label-id="label.save-draft" set="end">
                         <control template="/ru/it/lecm/eds/controls/button-control.ftl">
                             <control-param name="clickFireAction">saveDraftResolutionButtonClick</control-param>
+                        </control>
+                    </field>
+                    <field id="reinitExecutorsScript">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-resolution/resolution-change-author.js</control-param>
                         </control>
                     </field>
                 </appearance>
