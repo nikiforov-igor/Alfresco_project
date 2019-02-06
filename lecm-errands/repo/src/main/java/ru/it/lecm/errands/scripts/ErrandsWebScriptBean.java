@@ -943,8 +943,8 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 
                                     NodeRef errand = documentService.createDocument(ErrandsService.TYPE_ERRANDS.toPrefixString(namespaceService), properties, associations);
 
-                                    nodeService.addAspect(errand, ErrandsService.ASPECT_SKIP_TRANSFER_RIGHT_TO_PARENT_ASPECT, null);
                                     if (errandsService.isTransferRightToBaseDocument()) {
+                                        nodeService.addAspect(errand, ErrandsService.ASPECT_SKIP_TRANSFER_RIGHT_TO_PARENT_ASPECT, null);
                                         String baseDocRef = associations.get("lecm-errands:additional-document-assoc");
                                         if (baseDocRef != null && !baseDocRef.isEmpty()) {
                                             NodeRef baseDoc = new NodeRef(baseDocRef);
