@@ -946,7 +946,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                                     nodeService.addAspect(errand, ErrandsService.ASPECT_SKIP_TRANSFER_RIGHT_TO_PARENT_ASPECT, null);
                                     if (errandsService.isTransferRightToBaseDocument()) {
                                         String baseDocRef = associations.get("lecm-errands:additional-document-assoc");
-                                        if(baseDocRef!= null && !baseDocRef.isEmpty()) {
+                                        if (baseDocRef != null && !baseDocRef.isEmpty()) {
                                             NodeRef baseDoc = new NodeRef(baseDocRef);
 
                                             addMemberToDoc(baseDoc, associations.get("lecm-errands:executor-assoc"));
@@ -954,9 +954,9 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                                             addMemberToDoc(baseDoc, associations.get("lecm-errands:controller-assoc"));
 
                                             String coexecutorsRefs = associations.get("lecm-errands:coexecutors-assoc");
-                                            if(coexecutorsRefs != null && !coexecutorsRefs.isEmpty()) {
+                                            if (coexecutorsRefs != null && !coexecutorsRefs.isEmpty()) {
                                                 String[] coexecutors = coexecutorsRefs.split(",");
-                                                for(String coexecutor : coexecutors) {
+                                                for (String coexecutor : coexecutors) {
                                                     addMemberToDoc(baseDoc, coexecutor);
                                                 }
                                             }
@@ -977,7 +977,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
     }
 
     private void addMemberToDoc(NodeRef baseDoc, String memberRef) {
-        if(memberRef != null && !memberRef.isEmpty()){
+        if (memberRef != null && !memberRef.isEmpty()) {
             NodeRef executor = new NodeRef(memberRef);
             documentMembersService.addMemberWithoutCheckPermission(baseDoc, executor, true);
         }
