@@ -27,7 +27,6 @@ import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.*;
 import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.errands.ErrandsService;
-import ru.it.lecm.errands.beans.ErrandsServiceImpl;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.wcalendar.IWorkCalendar;
@@ -64,6 +63,11 @@ public class ErrandsWebScriptBean extends BaseWebScript {
     private CopyService copyService;
     private NamespaceService namespaceService;
     private DocumentAttachmentsService documentAttachmentsService;
+    private DocumentMembersService documentMembersService;
+
+    public void setDocumentMembersService(DocumentMembersService documentMembersService) {
+        this.documentMembersService = documentMembersService;
+    }
 
     public void setLecmTransactionHelper(LecmTransactionHelper lecmTransactionHelper) {
 		this.lecmTransactionHelper = lecmTransactionHelper;
@@ -368,11 +372,11 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         final String PROP_ERRANDS_EXECUTORS =
                 ErrandsService.PROP_ERRANDS_EXECUTORS_REF.toPrefixString(namespaceService).replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
         final String PROP_EXPIRED =
-                ErrandsServiceImpl.PROP_ERRANDS_IS_EXPIRED.toPrefixString(namespaceService).replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
+                ErrandsService.PROP_ERRANDS_IS_EXPIRED.toPrefixString(namespaceService).replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
         final String PROP_IMPORTANT =
-                ErrandsServiceImpl.PROP_ERRANDS_IS_IMPORTANT.toPrefixString(namespaceService).replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
+                ErrandsService.PROP_ERRANDS_IS_IMPORTANT.toPrefixString(namespaceService).replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
         final String PROP_EXEC_DATE =
-                ErrandsServiceImpl.PROP_ERRANDS_LIMITATION_DATE.toPrefixString(namespaceService).replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
+                ErrandsService.PROP_ERRANDS_LIMITATION_DATE.toPrefixString(namespaceService).replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
 
         String currentEmployeeStr = ":\"" + currentEmployee.toString().replace(":", "\\:") + "\"";
         String issuedFilterQuery = "(@" + PROP_ITINITATOR + currentEmployeeStr +
@@ -937,7 +941,28 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                                         }
                                     }
 
-                                    documentService.createDocument(ErrandsService.TYPE_ERRANDS.toPrefixString(namespaceService), properties, associations);
+                                    NodeRef errand = documentService.createDocument(ErrandsService.TYPE_ERRANDS.toPrefixString(namespaceService), properties, associations);
+
+                                    if (errandsService.isTransferRightToBaseDocument()) {
+                                        nodeService.addAspect(errand, ErrandsService.ASPECT_SKIP_TRANSFER_RIGHT_TO_PARENT_ASPECT, null);
+                                        String baseDocRef = associations.get("lecm-errands:additional-document-assoc");
+                                        if (baseDocRef != null && !baseDocRef.isEmpty()) {
+                                            NodeRef baseDoc = new NodeRef(baseDocRef);
+
+                                            addMemberToDoc(baseDoc, associations.get("lecm-errands:executor-assoc"));
+                                            addMemberToDoc(baseDoc, associations.get("lecm-errands:initiator-assoc"));
+                                            addMemberToDoc(baseDoc, associations.get("lecm-errands:controller-assoc"));
+
+                                            String coexecutorsRefs = associations.get("lecm-errands:coexecutors-assoc");
+                                            if (coexecutorsRefs != null && !coexecutorsRefs.isEmpty()) {
+                                                String[] coexecutors = coexecutorsRefs.split(",");
+                                                for (String coexecutor : coexecutors) {
+                                                    addMemberToDoc(baseDoc, coexecutor);
+                                                }
+                                            }
+                                        }
+                                    }
+
                                     return null;
                                 }
                             }, false, true);
@@ -949,6 +974,13 @@ public class ErrandsWebScriptBean extends BaseWebScript {
             }
         };
         threadPoolExecutor.execute(runnable);
+    }
+
+    private void addMemberToDoc(NodeRef baseDoc, String memberRef) {
+        if (memberRef != null && !memberRef.isEmpty()) {
+            NodeRef executor = new NodeRef(memberRef);
+            documentMembersService.addMemberWithoutCheckPermission(baseDoc, executor, true);
+        }
     }
 
     private Object getObjectsArray(Object value) {

@@ -139,6 +139,7 @@
         <property name="repositoryStructureHelper" ref="repositoryStructureHelper"/>
         <property name="copyService" ref="copyService"/>
         <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
+        <property name="documentMembersService" ref="documentMembersService"/>
 	</bean>
 
     <bean id="errandsStatusesFilter" parent="documentStatusesFilter">
