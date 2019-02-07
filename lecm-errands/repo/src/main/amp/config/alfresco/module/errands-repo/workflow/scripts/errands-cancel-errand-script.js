@@ -47,6 +47,9 @@ var ErrandCancelScript = {
         var logText = msg('ru.it.lecm.errands.bjMessages.cancelErrand.message', "#initiator {cancel} поручение: #mainobject.");
         logText = logText.replace("{cancel}", documentScript.wrapperTitle(msg('ru.it.lecm.errands.bjMessages.cancelErrand.cancelParamText', "отменил"), reason));
         businessJournal.log(document.nodeRef.toString(), "CANCEL_ERRAND", logText, []);
+
+        //ALFSED-2812 завершаем возможный начатый воркфлоу на перемещение срока (очистка всех воркфлоу вызывает падение транзакции)
+        statemachine.terminateWorkflowsByDefinition(document, 'errandsRequestDueDateChange_1', null, null);
     },
 
     processCancelSignal: function () {
