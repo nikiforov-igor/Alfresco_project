@@ -653,6 +653,7 @@
                     <show id="lecm-resolutions:base-doc-execution-date-attr-name"/>
                     <show id="lecm-base-dummy-aspects:script2" force="true"/>
                     <show id="lecm-base-dummy-aspects:script3" force="true"/>
+                    <show id="reinitExecutorsScript" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="start"/>
@@ -675,7 +676,11 @@
 
                     <field id="lecm-resolutions:approved-outside-system" set="start"/>
                     <field id="lecm-document:subject-assoc" set="start-left"/>
-                    <field id="lecm-resolutions:author-assoc" set="start-left"/>
+                    <field id="lecm-resolutions:author-assoc" set="start-left">
+                        <control>
+                            <control-param name="changeItemsFireAction">authorChanged</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-resolutions:controller-assoc" set="start-left">
                         <control>
                             <control-param name="changeItemsFireAction">resolutionEditControllerChanged</control-param>
@@ -838,6 +843,11 @@
                     <field id="lecm-base-dummy-aspects:script3" label-id="label.resolution.edit.save" set="end">
                         <control template="/ru/it/lecm/eds/controls/button-control.ftl">
                             <control-param name="clickFireAction">sendResolutionButtonClick</control-param>
+                        </control>
+                    </field>
+                    <field id="reinitExecutorsScript">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-resolution/resolution-change-author.js</control-param>
                         </control>
                     </field>
                 </appearance>
