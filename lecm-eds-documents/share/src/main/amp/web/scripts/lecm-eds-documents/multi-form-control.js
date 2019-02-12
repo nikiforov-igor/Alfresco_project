@@ -51,6 +51,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
             rootSubmitElement: null,
             rootFormSubmitFunction: null,
             forms: [],
+            isClickAddButton: false,
 
             onReady: function () {
                 this.loadCurrentValue();
@@ -207,6 +208,10 @@ LogicECM.module.eds = LogicECM.module.eds || {};
             },
 
             onAdd: function (e, target, args) {
+                if (target) {
+                    this.isClickAddButton = true;
+                }
+
                 this.currentLine++;
                 var num = this.currentLine;
                 var formId = this.id + "-line-" + this.currentLine;
@@ -336,8 +341,13 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                             if (this.forms.hasOwnProperty(i)) {
                                 var formId = this.forms[i].formId;
                                 formId = formId.substring(0, formId.length - "-form".length);
-
-                                LogicECM.module.Base.Util.reInitializeControl(formId, args[1].subFieldId, args[1].options);
+                                if (args[1].refreshFormId) {
+                                    if (this.forms[i].formId === args[1].refreshFormId) {
+                                        LogicECM.module.Base.Util.reInitializeControl(formId, args[1].subFieldId, args[1].options);
+                                    }
+                                } else {
+                                    LogicECM.module.Base.Util.reInitializeControl(formId, args[1].subFieldId, args[1].options);
+                                }
                             }
                         }
                     }
