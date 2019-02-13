@@ -29719,6 +29719,8 @@
                                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Совещания/Совещания/37f560f7-c95d-45a6-8bcc-960ac9f7d134"/>
                                     <assoc type="lecm-arm:filters-assoc"
                                            path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По типу участия"/>
+                                    <assoc type="lecm-arm:sort-field"
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Совещания/Совещания/e93138e9-622e-41e7-9a3f-a9fd87e3c8d9"/>
                                 </assocs>
                             </item>
                             <item name="cm:Протоколы" type="lecm-arm:node">
