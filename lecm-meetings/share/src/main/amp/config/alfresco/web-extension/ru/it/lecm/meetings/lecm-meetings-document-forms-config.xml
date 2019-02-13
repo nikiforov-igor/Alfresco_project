@@ -533,7 +533,7 @@
                             <control-param name="directoryName">Вложения</control-param>
                             <control-param name="suppressRefreshEvent">true</control-param>
                             <control-param name="categoriesName">["Вложения"]</control-param>
-                            <control-param name="dontResize">true</control-param>
+                            <control-param name="suppressLoadedEvent">true</control-param>
                         </control>
                     </field>
 
