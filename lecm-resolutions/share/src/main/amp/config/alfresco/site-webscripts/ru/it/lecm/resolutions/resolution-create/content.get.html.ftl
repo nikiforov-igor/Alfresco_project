@@ -33,7 +33,7 @@
 	<@uniqueIdDiv>
 		<#if hasPermission>
 			<div class="container">
-				<div id="${el}-body" class="document-metadata without-preview resolution-form"></div>
+				<div id="${el}-body" class="document-metadata resolution-form"></div>
 			</div>
 		<#else>
 			<div class="document-header">
