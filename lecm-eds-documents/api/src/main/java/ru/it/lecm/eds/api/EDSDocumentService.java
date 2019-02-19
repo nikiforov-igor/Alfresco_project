@@ -3,6 +3,7 @@ package ru.it.lecm.eds.api;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.springframework.extensions.surf.util.I18NUtil;
+import org.alfresco.service.namespace.NamespaceService;
 
 import java.util.Date;
 import java.util.List;
@@ -61,6 +62,8 @@ public interface EDSDocumentService {
 
     QName ASPECT_SIGNED_ON_PAPER = QName.createQName(EDS_ASPECTS_NAMESPACE_URI,"signed-on-paper-aspect");
     QName PROP_SIGNED_ON_PAPER = QName.createQName(EDS_ASPECTS_NAMESPACE_URI,"signed-on-paper");
+
+    QName BPM_PROP_DUE_DATE = QName.createQName(NamespaceService.BPM_MODEL_1_0_URI, "dueDate");
 
     enum EXECUTION_STATE{
         IN_PROCESS,COMPLETE,NOT_REQUIRED;
@@ -168,4 +171,7 @@ public interface EDSDocumentService {
     static String getFromMessagesOrDefaultValue(String messageId, final String defaultValue) {
         return I18NUtil.getMessage(messageId, I18NUtil.getLocale()) != null ? I18NUtil.getMessage(messageId, I18NUtil.getLocale()) : defaultValue;
     }
+
+    Date getExecutionDate(NodeRef document, NodeRef currentEmployee);
+
 }

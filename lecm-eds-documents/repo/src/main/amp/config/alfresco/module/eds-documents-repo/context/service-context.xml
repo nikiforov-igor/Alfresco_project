@@ -187,6 +187,9 @@
 		<property name="namespaceService" ref="namespaceService"/>
 		<property name="documentGlobalSettingsService" ref="documents.global-settings.service"/>
 		<property name="substitudeBean" ref="substitudeService"/>
+		<property name="stateMachineHelper" ref="lifecycleStateMachineHelper"/>
+		<property name="documentTableService" ref="documentTableService"/>
+		<property name="reviewService" ref="reviewService"/>
     </bean>
 
 	<bean id="edsExecutorPolicy" class="ru.it.lecm.eds.policy.EDSExecutorPolicy"

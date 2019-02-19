@@ -508,6 +508,20 @@
                                         <property name="lecm-arm:field-name"><![CDATA[cm:taggable]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                     </item>
+                                    <item name="cm:23" type="lecm-arm:style-rule">
+                                        <property name="lecm-arm:style-check-expression">
+                                            <![CDATA[(@WorkCalendarService.compareDates(@edsService.getExecutionDate(doc.NodeRef, user.currentUser().getEmployee()), new java.util.Date(), 5) == 0) OR (@WorkCalendarService.compareDates(@edsService.getExecutionDate(doc.NodeRef, user.currentUser().getEmployee()), @WorkCalendarService.getNextWorkingDateByDays(new java.util.Date(), 1), 5) == 0)]]></property>
+                                        <property name="cm:name"><![CDATA[23]]></property>
+                                        <property name="lecm-arm:style-rule-bg"><![CDATA[#FFFF00]]></property>
+                                        <property name="lecm-arm:style-rule-font"><![CDATA[#000000]]></property>
+                                    </item>
+                                    <item name="cm:24" type="lecm-arm:style-rule">
+                                        <property name="lecm-arm:style-check-expression">
+                                            <![CDATA[@WorkCalendarService.compareDates(@edsService.getExecutionDate(doc.NodeRef, user.currentUser().getEmployee()), new java.util.Date(), 5) == -1]]></property>
+                                        <property name="cm:name"><![CDATA[24]]></property>
+                                        <property name="lecm-arm:style-rule-bg"><![CDATA[#FF0000]]></property>
+                                        <property name="lecm-arm:style-rule-font"><![CDATA[#FFFFFF]]></property>
+                                    </item>
                                 </items>
                                 <assocs>
                                     <assoc type="lecm-arm:fields-assoc"
@@ -536,6 +550,8 @@
                                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На согласовании/d9b8310b-3ea3-449a-8929-901bc376a43f"/>
                                     <assoc type="lecm-arm:fields-assoc"
                                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На согласовании/e09ffde8-bec2-4f11-a4ed-9b2d52cc0477"/>
+                                    <assoc type="lecm-arm:row-style-rule" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На согласовании/23"/>
+                                    <assoc type="lecm-arm:row-style-rule" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На согласовании/24"/>
                                 </assocs>
                             </item>
                             <item name="cm:Согласовано" type="lecm-arm:node">
@@ -858,6 +874,20 @@
                                         <property name="lecm-arm:field-name"><![CDATA[cm:taggable]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                     </item>
+                                    <item name="cm:25" type="lecm-arm:style-rule">
+                                        <property name="lecm-arm:style-check-expression">
+                                            <![CDATA[@WorkCalendarService.compareDates(@edsService.getExecutionDate(doc.NodeRef, user.currentUser().getEmployee()), new java.util.Date(), 5) == -1]]></property>
+                                        <property name="cm:name"><![CDATA[25]]></property>
+                                        <property name="lecm-arm:style-rule-bg"><![CDATA[#FF0000]]></property>
+                                        <property name="lecm-arm:style-rule-font"><![CDATA[#FFFFFF]]></property>
+                                    </item>
+                                    <item name="cm:26" type="lecm-arm:style-rule">
+                                        <property name="lecm-arm:style-check-expression">
+                                            <![CDATA[(@WorkCalendarService.compareDates(@edsService.getExecutionDate(doc.NodeRef, user.currentUser().getEmployee()), new java.util.Date(), 5) == 0) OR (@WorkCalendarService.compareDates(@edsService.getExecutionDate(doc.NodeRef, user.currentUser().getEmployee()), @WorkCalendarService.getNextWorkingDateByDays(new java.util.Date(), 1), 5) == 0)]]></property>
+                                        <property name="cm:name"><![CDATA[26]]></property>
+                                        <property name="lecm-arm:style-rule-bg"><![CDATA[#FFFF00]]></property>
+                                        <property name="lecm-arm:style-rule-font"><![CDATA[#000000]]></property>
+                                    </item>
                                 </items>
                                 <assocs>
                                     <assoc type="lecm-arm:fields-assoc"
@@ -886,6 +916,8 @@
                                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании/4f166704-4d3c-43dd-b1c8-3a05eae44246"/>
                                     <assoc type="lecm-arm:fields-assoc"
                                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании/98a911ca-c805-4ff8-9029-824ea38f5929"/>
+                                    <assoc type="lecm-arm:row-style-rule" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании/25"/>
+                                    <assoc type="lecm-arm:row-style-rule" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/На подписании/26"/>
                                 </assocs>
                             </item>
                             <item name="cm:На подписании у контрагента" type="lecm-arm:node">
@@ -2336,6 +2368,20 @@
                                                 <property name="lecm-arm:field-name"><![CDATA[cm:taggable]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                             </item>
+                                            <item name="cm:27" type="lecm-arm:style-rule">
+                                                <property name="lecm-arm:style-check-expression">
+                                                    <![CDATA[(@WorkCalendarService.compareDates(@edsService.getExecutionDate(doc.NodeRef, user.currentUser().getEmployee()), new java.util.Date(), 5) == 0) OR (@WorkCalendarService.compareDates(@edsService.getExecutionDate(doc.NodeRef, user.currentUser().getEmployee()), @WorkCalendarService.getNextWorkingDateByDays(new java.util.Date(), 1), 5) == 0)]]></property>
+                                                <property name="cm:name"><![CDATA[27]]></property>
+                                                <property name="lecm-arm:style-rule-bg"><![CDATA[#FFFF00]]></property>
+                                                <property name="lecm-arm:style-rule-font"><![CDATA[#000000]]></property>
+                                            </item>
+                                            <item name="cm:28" type="lecm-arm:style-rule">
+                                                <property name="lecm-arm:style-check-expression">
+                                                    <![CDATA[@WorkCalendarService.compareDates(@edsService.getExecutionDate(doc.NodeRef, user.currentUser().getEmployee()), new java.util.Date(), 5) == -1]]></property>
+                                                <property name="cm:name"><![CDATA[28]]></property>
+                                                <property name="lecm-arm:style-rule-bg"><![CDATA[#FF0000]]></property>
+                                                <property name="lecm-arm:style-rule-font"><![CDATA[#FFFFFF]]></property>
+                                            </item>
                                         </items>
                                         <assocs>
                                             <assoc type="lecm-arm:fields-assoc"
@@ -2354,6 +2400,8 @@
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/Документы к договорам/На согласовании/8ae19698-c7c1-1b34-09f3-855bab13aee5"/>
                                             <assoc type="lecm-arm:fields-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/Документы к договорам/На согласовании/efe58406-cb81-5653-bd5e-55d000a06aa0"/>
+                                            <assoc type="lecm-arm:row-style-rule" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/Документы к договорам/На согласовании/27"/>
+                                            <assoc type="lecm-arm:row-style-rule" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/Документы к договорам/На согласовании/28"/>
                                         </assocs>
                                     </item>
                                     <item name="cm:Согласовано" type="lecm-arm:node">
@@ -2581,6 +2629,20 @@
                                                 <property name="lecm-arm:field-name"><![CDATA[cm:taggable]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                             </item>
+                                            <item name="cm:29" type="lecm-arm:style-rule">
+                                                <property name="lecm-arm:style-check-expression">
+                                                    <![CDATA[@WorkCalendarService.compareDates(@edsService.getExecutionDate(doc.NodeRef, user.currentUser().getEmployee()), new java.util.Date(), 5) == -1]]></property>
+                                                <property name="cm:name"><![CDATA[29]]></property>
+                                                <property name="lecm-arm:style-rule-bg"><![CDATA[#FF0000]]></property>
+                                                <property name="lecm-arm:style-rule-font"><![CDATA[#FFFFFF]]></property>
+                                            </item>
+                                            <item name="cm:30" type="lecm-arm:style-rule">
+                                                <property name="lecm-arm:style-check-expression">
+                                                    <![CDATA[(@WorkCalendarService.compareDates(@edsService.getExecutionDate(doc.NodeRef, user.currentUser().getEmployee()), new java.util.Date(), 5) == 0) OR (@WorkCalendarService.compareDates(@edsService.getExecutionDate(doc.NodeRef, user.currentUser().getEmployee()), @WorkCalendarService.getNextWorkingDateByDays(new java.util.Date(), 1), 5) == 0)]]></property>
+                                                <property name="cm:name"><![CDATA[30]]></property>
+                                                <property name="lecm-arm:style-rule-bg"><![CDATA[#FFFF00]]></property>
+                                                <property name="lecm-arm:style-rule-font"><![CDATA[#000000]]></property>
+                                            </item>
                                         </items>
                                         <assocs>
                                             <assoc type="lecm-arm:fields-assoc"
@@ -2599,6 +2661,8 @@
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/Документы к договорам/На подписании/2d936986-7bfe-4cb9-ad62-c6ae0e8d8519"/>
                                             <assoc type="lecm-arm:fields-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/Документы к договорам/На подписании/7836d521-f53c-a1f6-5ad3-2f405f208ada"/>
+                                            <assoc type="lecm-arm:row-style-rule" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/Документы к договорам/На подписании/29"/>
+                                            <assoc type="lecm-arm:row-style-rule" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа/Документы к договорам/На подписании/30"/>
                                         </assocs>
                                     </item>
                                     <item name="cm:На подписании у контрагента" type="lecm-arm:node">

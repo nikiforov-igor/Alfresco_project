@@ -1,7 +1,9 @@
 package ru.it.lecm.eds;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.workflow.*;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
@@ -12,11 +14,14 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentGlobalSettingsService;
+import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.signing_v2.api.SigningAspectsModel;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.wcalendar.IWorkCalendar;
+import ru.it.lecm.workflow.review.api.ReviewService;
 
 import java.io.Serializable;
 import java.text.DateFormat;
@@ -39,6 +44,13 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
     private OrgstructureBean orgstructureService;
     private DocumentGlobalSettingsService documentGlobalSettingsService;
     private SubstitudeBean substitudeBean;
+    private StateMachineServiceBean stateMachineHelper;
+    private DocumentTableService documentTableService;
+    private ReviewService reviewService;
+
+    public void setReviewService(ReviewService reviewService) {
+        this.reviewService = reviewService;
+    }
 
     private DocumentAttachmentsService documentAttachmentsService;
 
@@ -82,6 +94,14 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
 
     public void setDocumentGlobalSettingsService(DocumentGlobalSettingsService documentGlobalSettingsService) {
         this.documentGlobalSettingsService = documentGlobalSettingsService;
+    }
+
+    public void setStateMachineHelper(StateMachineServiceBean stateMachineHelper) {
+        this.stateMachineHelper = stateMachineHelper;
+    }
+
+    public void setDocumentTableService(DocumentTableService documentTableService) {
+        this.documentTableService = documentTableService;
     }
 
     @Override
@@ -241,5 +261,69 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
             return substitudeBean.getObjectDescription(employee);
         }
         return I18NUtil.getMessage("label.unit.boss.not.exists", I18NUtil.getLocale());
+    }
+
+    @Override
+    public Date getExecutionDate(NodeRef docNodeRef, NodeRef currentEmployee) {
+        Date dateFormatted = null;
+        String docStatus = (String) nodeService.getProperty(docNodeRef, StatemachineModel.PROP_STATUS);
+
+        if (docStatus.equals("На подписании") || docStatus.equals("На согласование")) {
+            //Получение плановую дату завершение активной задачи "Подписания" || "Согласования" для текущего пользователя
+            dateFormatted = getExecutionDateActiveTask(docNodeRef, currentEmployee);
+
+        } else if (docStatus.equals("Направлен")) {
+            //Получение свойства "Дата отправки документа на ознакомление"
+            NodeRef table = documentTableService.getTable(docNodeRef, ReviewService.TYPE_REVIEW_TS_REVIEW_TABLE);
+            if (table != null) {
+                List<NodeRef> rewiewListDataRows = documentTableService.getTableDataRows(table);
+
+                //Выбираем строку где текущий пользователь ознакамливающийся
+                for (NodeRef rewiewListRow : rewiewListDataRows) {
+                    NodeRef itemEmployee = findNodeByAssociationRef(rewiewListRow, ReviewService.ASSOC_REVIEW_TS_REVIEWER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+                    if (currentEmployee.equals(itemEmployee)) {
+                        //Получаем свойство "Дата отправки документа на ознакомление"
+                        Date reviewStartDate = (Date) nodeService.getProperty(rewiewListRow, ReviewService.PROP_REVIEW_TS_REVIEW_START_DATE);
+                        //Прибавляем количество дней(рабочих), указанных в настройке "Срок ознакомления "по умолчанию"
+                        dateFormatted = calendarBean.getNextWorkingDateByDays(reviewStartDate, reviewService.getReviewTerm());
+                    }
+                }
+            }
+        }
+
+        return dateFormatted;
+    }
+
+    /**
+     * Метод возращает срок исполнения активной задачи
+     * @param docNodeRef
+     * @param currentEmployee
+     * @return Date
+     */
+    private Date getExecutionDateActiveTask(NodeRef docNodeRef, NodeRef currentEmployee) {
+
+        Date dateFormatted = null;
+
+        final List<WorkflowTask> activeTasks = AuthenticationUtil.runAsSystem(() -> stateMachineHelper.getDocumentTasks(docNodeRef, true));
+
+        for (WorkflowTask activeTask : activeTasks) {
+            WorkflowTaskQuery query = new WorkflowTaskQuery();
+
+            query.setTaskState(WorkflowTaskState.IN_PROGRESS);
+            query.setLimit(1);
+            query.setActorId(orgstructureService.getEmployeeLogin(currentEmployee));
+            query.setTaskId(activeTask.getId());
+
+            List<WorkflowTask> userTasks = serviceRegistry.getWorkflowService().queryTasks(query, true);
+
+            if (userTasks.size() > 0) {
+                WorkflowTask userTask = userTasks.get(0);
+
+                Serializable dueDate = userTask.getProperties().get(EDSDocumentService.BPM_PROP_DUE_DATE);
+                dateFormatted = (Date) dueDate;
+            }
+        }
+
+        return dateFormatted;
     }
 }
