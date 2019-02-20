@@ -63,8 +63,6 @@ public interface EDSDocumentService {
     QName ASPECT_SIGNED_ON_PAPER = QName.createQName(EDS_ASPECTS_NAMESPACE_URI,"signed-on-paper-aspect");
     QName PROP_SIGNED_ON_PAPER = QName.createQName(EDS_ASPECTS_NAMESPACE_URI,"signed-on-paper");
 
-    QName BPM_PROP_DUE_DATE = QName.createQName(NamespaceService.BPM_MODEL_1_0_URI, "dueDate");
-
     enum EXECUTION_STATE{
         IN_PROCESS,COMPLETE,NOT_REQUIRED;
 
@@ -172,6 +170,23 @@ public interface EDSDocumentService {
         return I18NUtil.getMessage(messageId, I18NUtil.getLocale()) != null ? I18NUtil.getMessage(messageId, I18NUtil.getLocale()) : defaultValue;
     }
 
-    Date getExecutionDate(NodeRef document, NodeRef currentEmployee);
+    /**
+     * Получить срок ознакомления текущего пользователя
+     *
+     * @param docNodeRef
+     * @param currentEmployee
+     * @return
+     */
+    Date getReviewDateByCurrentUser(NodeRef docNodeRef, NodeRef currentEmployee);
 
+    /**
+     * Получить срок исполнения активной задачи
+     * заданного типа текущим пользователем
+     *
+     * @param docNodeRef
+     * @param currentEmployee
+     * @param taskType
+     * @return
+     */
+    Date getExecutionDateActiveTaskByType(NodeRef docNodeRef, NodeRef currentEmployee, String taskType);
 }

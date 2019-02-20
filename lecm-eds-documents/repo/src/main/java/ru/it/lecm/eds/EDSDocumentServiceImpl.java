@@ -2,6 +2,7 @@ package ru.it.lecm.eds;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.workflow.WorkflowModel;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.workflow.*;
 import org.alfresco.service.namespace.NamespaceService;
@@ -264,29 +265,23 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
     }
 
     @Override
-    public Date getExecutionDate(NodeRef docNodeRef, NodeRef currentEmployee) {
+    public Date getReviewDateByCurrentUser(NodeRef docNodeRef, NodeRef currentEmployee) {
         Date dateFormatted = null;
-        String docStatus = (String) nodeService.getProperty(docNodeRef, StatemachineModel.PROP_STATUS);
 
-        if (docStatus.equals("На подписании") || docStatus.equals("На согласование")) {
-            //Получение плановую дату завершение активной задачи "Подписания" || "Согласования" для текущего пользователя
-            dateFormatted = getExecutionDateActiveTask(docNodeRef, currentEmployee);
+        NodeRef table = documentTableService.getTable(docNodeRef, ReviewService.TYPE_REVIEW_TS_REVIEW_TABLE);
+        if (table != null) {
+            List<NodeRef> reviewListDataRows = documentTableService.getTableDataRows(table);
 
-        } else if (docStatus.equals("Направлен")) {
-            //Получение свойства "Дата отправки документа на ознакомление"
-            NodeRef table = documentTableService.getTable(docNodeRef, ReviewService.TYPE_REVIEW_TS_REVIEW_TABLE);
-            if (table != null) {
-                List<NodeRef> rewiewListDataRows = documentTableService.getTableDataRows(table);
+            //Выбираем строку где текущий пользователь ознакамливающийся
+            for (NodeRef reviewListRow : reviewListDataRows) {
+                NodeRef itemEmployee = findNodeByAssociationRef(reviewListRow, ReviewService.ASSOC_REVIEW_TS_REVIEWER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+                if (currentEmployee.equals(itemEmployee)) {
+                    //Получим дату отправки документа на ознакомление
+                    Date reviewStartDate = (Date) nodeService.getProperty(reviewListRow, ReviewService.PROP_REVIEW_TS_REVIEW_START_DATE);
+                    //Прибавляем количество дней(рабочих), указанных в настройке "Срок ознакомления "по умолчанию"
+                    dateFormatted = calendarBean.getNextWorkingDateByDays(reviewStartDate, reviewService.getReviewTerm());
 
-                //Выбираем строку где текущий пользователь ознакамливающийся
-                for (NodeRef rewiewListRow : rewiewListDataRows) {
-                    NodeRef itemEmployee = findNodeByAssociationRef(rewiewListRow, ReviewService.ASSOC_REVIEW_TS_REVIEWER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
-                    if (currentEmployee.equals(itemEmployee)) {
-                        //Получаем свойство "Дата отправки документа на ознакомление"
-                        Date reviewStartDate = (Date) nodeService.getProperty(rewiewListRow, ReviewService.PROP_REVIEW_TS_REVIEW_START_DATE);
-                        //Прибавляем количество дней(рабочих), указанных в настройке "Срок ознакомления "по умолчанию"
-                        dateFormatted = calendarBean.getNextWorkingDateByDays(reviewStartDate, reviewService.getReviewTerm());
-                    }
+                    return dateFormatted;
                 }
             }
         }
@@ -294,33 +289,33 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
         return dateFormatted;
     }
 
-    /**
-     * Метод возращает срок исполнения активной задачи
-     * @param docNodeRef
-     * @param currentEmployee
-     * @return Date
-     */
-    private Date getExecutionDateActiveTask(NodeRef docNodeRef, NodeRef currentEmployee) {
+    @Override
+    public Date getExecutionDateActiveTaskByType(NodeRef docNodeRef, NodeRef currentEmployee, String taskType) {
 
         Date dateFormatted = null;
 
         final List<WorkflowTask> activeTasks = AuthenticationUtil.runAsSystem(() -> stateMachineHelper.getDocumentTasks(docNodeRef, true));
 
         for (WorkflowTask activeTask : activeTasks) {
-            WorkflowTaskQuery query = new WorkflowTaskQuery();
+            if (taskType != null && taskType.equals(activeTask.getDefinition().getId())) {
 
-            query.setTaskState(WorkflowTaskState.IN_PROGRESS);
-            query.setLimit(1);
-            query.setActorId(orgstructureService.getEmployeeLogin(currentEmployee));
-            query.setTaskId(activeTask.getId());
+                WorkflowTaskQuery query = new WorkflowTaskQuery();
 
-            List<WorkflowTask> userTasks = serviceRegistry.getWorkflowService().queryTasks(query, true);
+                query.setTaskState(WorkflowTaskState.IN_PROGRESS);
+                query.setLimit(1);
+                query.setActorId(orgstructureService.getEmployeeLogin(currentEmployee));
+                query.setTaskId(activeTask.getId());
 
-            if (userTasks.size() > 0) {
-                WorkflowTask userTask = userTasks.get(0);
+                List<WorkflowTask> userTasks = serviceRegistry.getWorkflowService().queryTasks(query, true);
 
-                Serializable dueDate = userTask.getProperties().get(EDSDocumentService.BPM_PROP_DUE_DATE);
-                dateFormatted = (Date) dueDate;
+                if (userTasks.size() > 0) {
+                    WorkflowTask userTask = userTasks.get(0);
+
+                    Serializable dueDate = userTask.getProperties().get(WorkflowModel.PROP_DUE_DATE);
+                    dateFormatted = (Date) dueDate;
+
+                    return dateFormatted;
+                }
             }
         }
 

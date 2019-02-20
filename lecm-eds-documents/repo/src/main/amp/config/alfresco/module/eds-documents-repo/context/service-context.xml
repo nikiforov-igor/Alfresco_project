@@ -187,7 +187,7 @@
 		<property name="namespaceService" ref="namespaceService"/>
 		<property name="documentGlobalSettingsService" ref="documents.global-settings.service"/>
 		<property name="substitudeBean" ref="substitudeService"/>
-		<property name="stateMachineHelper" ref="lifecycleStateMachineHelper"/>
+		<property name="stateMachineHelper" ref="stateMachineHelper"/>
 		<property name="documentTableService" ref="documentTableService"/>
 		<property name="reviewService" ref="reviewService"/>
     </bean>
