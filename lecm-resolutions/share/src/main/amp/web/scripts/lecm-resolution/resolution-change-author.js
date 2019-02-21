@@ -1,6 +1,7 @@
 (function() {
     var Dom = YAHOO.util.Dom;
     var formId;
+    var lastSelectedResolutionAuthor = null;
 
     YAHOO.Bubbling.on('authorChanged', reInit);
     YAHOO.Bubbling.on('afterFormRuntimeInit', onAfterFormRuntimeInit);
@@ -15,10 +16,12 @@
                 break;
             }
         }
-
-        if (nodeRef && formId) {
+        // так же проверим изменился ли автор
+        if (nodeRef && formId && (lastSelectedResolutionAuthor !== null && lastSelectedResolutionAuthor !== nodeRef)) {
             doReInit(formId, nodeRef, true);
         }
+
+        lastSelectedResolutionAuthor = nodeRef;
     }
 
     /**
