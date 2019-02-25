@@ -3,7 +3,6 @@ package ru.it.lecm.eds.api;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.springframework.extensions.surf.util.I18NUtil;
-import org.alfresco.service.namespace.NamespaceService;
 
 import java.util.Date;
 import java.util.List;
