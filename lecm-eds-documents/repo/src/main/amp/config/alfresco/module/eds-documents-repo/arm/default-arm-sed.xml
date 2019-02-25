@@ -1041,14 +1041,14 @@
                                         <items>
                                             <item name="cm:3" type="lecm-arm:style-rule">
                                                 <property name="lecm-arm:style-check-expression">
-                                                    <![CDATA[@baseWebScript.compareDates(@edsService.getReviewDateByCurrentUser(doc.NodeRef, user.currentUser().getEmployee()), new java.util.Date(), 5) == -1]]></property>
+                                                    <![CDATA[@baseWebScript.compareDates(@reviewService.getDocumentEmployeeReviewDate(doc.NodeRef, user.currentUser().getEmployee()), new java.util.Date(), 5) == -1]]></property>
                                                 <property name="cm:name"><![CDATA[3]]></property>
                                                 <property name="lecm-arm:style-rule-bg"><![CDATA[#FF0000]]></property>
                                                 <property name="lecm-arm:style-rule-font"><![CDATA[#FFFFFF]]></property>
                                             </item>
                                             <item name="cm:4" type="lecm-arm:style-rule">
                                                 <property name="lecm-arm:style-check-expression">
-                                                    <![CDATA[(@baseWebScript.compareDates(@edsService.getReviewDateByCurrentUser(doc.NodeRef, user.currentUser().getEmployee()), new java.util.Date(), 5) == 0) OR (@baseWebScript.compareDates(@edsService.getReviewDateByCurrentUser(doc.NodeRef, user.currentUser().getEmployee()), @WorkCalendarService.getNextWorkingDateByDays(new java.util.Date(), 1), 5) == 0)]]></property>
+                                                    <![CDATA[(@baseWebScript.compareDates(@reviewService.getDocumentEmployeeReviewDate(doc.NodeRef, user.currentUser().getEmployee()), new java.util.Date(), 5) == 0) OR (@baseWebScript.compareDates(@reviewService.getDocumentEmployeeReviewDate(doc.NodeRef, user.currentUser().getEmployee()), @WorkCalendarService.getNextWorkingDateByDays(new java.util.Date(), 1), 5) == 0)]]></property>
                                                 <property name="cm:name"><![CDATA[4]]></property>
                                                 <property name="lecm-arm:style-rule-bg"><![CDATA[#FFFF00]]></property>
                                                 <property name="lecm-arm:style-rule-font"><![CDATA[#000000]]></property>
@@ -1222,14 +1222,14 @@
                                             </item>
                                              <item name="cm:5" type="lecm-arm:style-rule">
                                                 <property name="lecm-arm:style-check-expression">
-                                                    <![CDATA[@baseWebScript.compareDates(@edsService.getExecutionDateActiveTaskByType(doc.NodeRef, user.currentUser().getEmployee(), "lecm-approval-v2:approveTask"), new java.util.Date(), 5) == -1]]></property>
+                                                    <![CDATA[@baseWebScript.compareDates(@lifecycleStateMachineHelper.getDocumentActiveTaskDueDate(doc.NodeRef, user.currentUser().getEmployee(), 'lecm-approval-v2:approveTask'), new java.util.Date(), 5) == -1]]></property>
                                                 <property name="cm:name"><![CDATA[5]]></property>
                                                 <property name="lecm-arm:style-rule-bg"><![CDATA[#FF0000]]></property>
                                                 <property name="lecm-arm:style-rule-font"><![CDATA[#FFFFFF]]></property>
                                             </item>
                                             <item name="cm:6" type="lecm-arm:style-rule">
                                                 <property name="lecm-arm:style-check-expression">
-                                                    <![CDATA[(@baseWebScript.compareDates(@edsService.getExecutionDateActiveTaskByType(doc.NodeRef, user.currentUser().getEmployee(), "lecm-approval-v2:approveTask"), new java.util.Date(), 5) == 0) OR (@baseWebScript.compareDates(@edsService.getExecutionDateActiveTaskByType(doc.NodeRef, user.currentUser().getEmployee(), "lecm-approval-v2:approveTask"), @WorkCalendarService.getNextWorkingDateByDays(new java.util.Date(), 1), 5) == 0)]]></property>
+                                                    <![CDATA[(@baseWebScript.compareDates(@lifecycleStateMachineHelper.getDocumentActiveTaskDueDate(doc.NodeRef, user.currentUser().getEmployee(), 'lecm-approval-v2:approveTask'), new java.util.Date(), 5) == 0) OR (@baseWebScript.compareDates(@lifecycleStateMachineHelper.getDocumentActiveTaskDueDate(doc.NodeRef, user.currentUser().getEmployee(), 'lecm-approval-v2:approveTask'), @WorkCalendarService.getNextWorkingDateByDays(new java.util.Date(), 1), 5) == 0)]]></property>
                                                 <property name="cm:name"><![CDATA[6]]></property>
                                                 <property name="lecm-arm:style-rule-bg"><![CDATA[#FFFF00]]></property>
                                                 <property name="lecm-arm:style-rule-font"><![CDATA[#000000]]></property>
@@ -1427,14 +1427,14 @@
                                             </item>
                                             <item name="cm:7" type="lecm-arm:style-rule">
                                                 <property name="lecm-arm:style-check-expression">
-                                                    <![CDATA[@baseWebScript.compareDates(@edsService.getExecutionDateActiveTaskByType(doc.NodeRef, user.currentUser().getEmployee(), "lecm-signing-v2:signTask"), new java.util.Date(), 5) == -1]]></property>
+                                                    <![CDATA[@baseWebScript.compareDates(@lifecycleStateMachineHelper.getDocumentActiveTaskDueDate(doc.NodeRef, user.currentUser().getEmployee(), 'lecm-signing-v2:signTask'), new java.util.Date(), 5) == -1]]></property>
                                                 <property name="cm:name"><![CDATA[7]]></property>
                                                 <property name="lecm-arm:style-rule-bg"><![CDATA[#FF0000]]></property>
                                                 <property name="lecm-arm:style-rule-font"><![CDATA[#FFFFFF]]></property>
                                             </item>
                                             <item name="cm:8" type="lecm-arm:style-rule">
                                                 <property name="lecm-arm:style-check-expression">
-                                                    <![CDATA[(@baseWebScript.compareDates(@edsService.getExecutionDateActiveTaskByType(doc.NodeRef, user.currentUser().getEmployee(), "lecm-signing-v2:signTask"), new java.util.Date(), 5) == 0) OR (@baseWebScript.compareDates(@edsService.getExecutionDateActiveTaskByType(doc.NodeRef, user.currentUser().getEmployee(), "lecm-signing-v2:signTask"), @WorkCalendarService.getNextWorkingDateByDays(new java.util.Date(), 1), 5) == 0)]]></property>
+                                                    <![CDATA[(@baseWebScript.compareDates(@lifecycleStateMachineHelper.getDocumentActiveTaskDueDate(doc.NodeRef, user.currentUser().getEmployee(), 'lecm-signing-v2:signTask'), new java.util.Date(), 5) == 0) OR (@baseWebScript.compareDates(@lifecycleStateMachineHelper.getDocumentActiveTaskDueDate(doc.NodeRef, user.currentUser().getEmployee(), 'lecm-signing-v2:signTask'), @WorkCalendarService.getNextWorkingDateByDays(new java.util.Date(), 1), 5) == 0)]]></property>
                                                 <property name="cm:name"><![CDATA[8]]></property>
                                                 <property name="lecm-arm:style-rule-bg"><![CDATA[#FFFF00]]></property>
                                                 <property name="lecm-arm:style-rule-font"><![CDATA[#000000]]></property>

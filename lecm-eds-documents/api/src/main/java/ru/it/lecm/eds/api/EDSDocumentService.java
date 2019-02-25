@@ -169,24 +169,4 @@ public interface EDSDocumentService {
     static String getFromMessagesOrDefaultValue(String messageId, final String defaultValue) {
         return I18NUtil.getMessage(messageId, I18NUtil.getLocale()) != null ? I18NUtil.getMessage(messageId, I18NUtil.getLocale()) : defaultValue;
     }
-
-    /**
-     * Получить срок ознакомления текущего пользователя
-     *
-     * @param docNodeRef
-     * @param currentEmployee
-     * @return
-     */
-    Date getReviewDateByCurrentUser(NodeRef docNodeRef, NodeRef currentEmployee);
-
-    /**
-     * Получить срок исполнения активной задачи
-     * заданного типа текущим пользователем
-     *
-     * @param docNodeRef
-     * @param currentEmployee
-     * @param taskType
-     * @return
-     */
-    Date getExecutionDateActiveTaskByType(NodeRef docNodeRef, NodeRef currentEmployee, String taskType);
 }
