@@ -14,38 +14,40 @@
 
 <script type="text/javascript">
 (function() {
-	LogicECM.module.Base.Util.loadResources(
-		['scripts/lecm-base/components/lecm-datagrid.js', 'scripts/grids/documents-journal-grid.js'],
-		['css/lecm-contracts/contracts-favorite.css'],
-		function() {
-			var datagrid = new LogicECM.module.DocumentsJournal.DataGrid('${datagridId}');
-			datagrid.setMessages('${messages}');
-			datagrid.setOptions({
-				usePagination: false,
-				// pageSize: 5,
-				showExtendSearchBlock: false,
-				actions: [],
-				allowCreate: false,
-				showActionColumn: false,
-				showCheckboxColumn: false,
-				bubblingLabel: 'favorite-docs-list',
-				attributeForShow: 'lecm-document:present-string',
-				datagridMeta: {
-					// itemType: 'lecm-contract:document,lecm-additional-document:additionalDocument',
-					itemType: 'lecm-contract:document',
-					datagridFormId: 'datagrid_Избранное',
-					nodeRef: null,
-					sort: 'cm:modified|false',
-					searchConfig: {
-						filter: '({{FAVOURITES}})',
-						formData: {
-							datatype: 'lecm-contract:document,lecm-additional-document:additionalDocument'
-						}
-					}
-				}
-			});
-			datagrid.draw();
-		}
-	);
+    YAHOO.util.Event.onDOMReady(function () {
+        LogicECM.module.Base.Util.loadResources(
+                ['scripts/lecm-base/components/lecm-datagrid.js', 'scripts/grids/documents-journal-grid.js'],
+                ['css/lecm-contracts/contracts-favorite.css'],
+                function() {
+                    var datagrid = new LogicECM.module.DocumentsJournal.DataGrid('${datagridId}');
+                    datagrid.setMessages('${messages}');
+                    datagrid.setOptions({
+                        usePagination: false,
+                        // pageSize: 5,
+                        showExtendSearchBlock: false,
+                        actions: [],
+                        allowCreate: false,
+                        showActionColumn: false,
+                        showCheckboxColumn: false,
+                        bubblingLabel: 'favorite-docs-list',
+                        attributeForShow: 'lecm-document:present-string',
+                        datagridMeta: {
+                            // itemType: 'lecm-contract:document,lecm-additional-document:additionalDocument',
+                            itemType: 'lecm-contract:document',
+                            datagridFormId: 'datagrid_Избранное',
+                            nodeRef: null,
+                            sort: 'cm:modified|false',
+                            searchConfig: {
+                                filter: '({{FAVOURITES}})',
+                                formData: {
+                                    datatype: 'lecm-contract:document,lecm-additional-document:additionalDocument'
+                                }
+                            }
+                        }
+                    });
+                    datagrid.draw();
+                }
+        );
+    });
 })();
 </script>

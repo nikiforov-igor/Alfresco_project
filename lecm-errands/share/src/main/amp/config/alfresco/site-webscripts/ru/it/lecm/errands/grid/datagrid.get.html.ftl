@@ -1,11 +1,3 @@
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/advsearch.js"></@script>
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-datagrid.js"></@script>
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/documents-list-datagrid.js"></@script>
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-errands/errands-datagrid.js"></@script>
-<@script type="text/javascript" src="${url.context}/res/components/form/date-range.js"></@script>
-<@script type="text/javascript" src="${url.context}/res/components/form/number-range.js"></@script>
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/utils/search-queries.js"></@script>
-
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
 
 <#assign id = args.htmlid>
@@ -85,7 +77,14 @@
 			}
 
 			function init() {
-				createDatagrid();
+                LogicECM.module.Base.Util.loadResources([
+                            'scripts/lecm-base/components/advsearch.js',
+                            'scripts/lecm-base/components/lecm-datagrid.js',
+                            'scripts/lecm-documents/documents-list-datagrid.js',
+                            'scripts/lecm-errands/errands-datagrid.js',
+                            'scripts/lecm-documents/utils/search-queries.js'
+                        ],
+                        [], createDatagrid);
 			}
 
 			YAHOO.util.Event.onDOMReady(init);

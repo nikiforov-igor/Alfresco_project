@@ -23,14 +23,16 @@
 
 <script type="text/javascript">
 (function() {
-	LogicECM.module.Base.Util.loadResources(
-		['scripts/lecm-contracts/contracts-summary.js'],
-		['css/lecm-contracts/contracts-summary.css'],
-		function() {
-			var info = new LogicECM.module.Contracts.dashlet.Summary("${id}").setOptions({
-				formId: "${formId}"
-			}).setMessages(${messages});
-			LogicECM.module.Contracts.dashlet.Summary.instance=info;
-		});
+    YAHOO.util.Event.onDOMReady(function () {
+        LogicECM.module.Base.Util.loadResources(
+                ['scripts/lecm-contracts/contracts-summary.js'],
+                ['css/lecm-contracts/contracts-summary.css'],
+                function() {
+                    var info = new LogicECM.module.Contracts.dashlet.Summary("${id}").setOptions({
+                        formId: "${formId}"
+                    }).setMessages(${messages});
+                    LogicECM.module.Contracts.dashlet.Summary.instance = info;
+                });
+    });
 })();
 </script>
