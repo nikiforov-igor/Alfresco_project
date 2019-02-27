@@ -46,22 +46,6 @@
                     </node>
                     <node>
                         <type>dynamic-role-item</type>
-                        <name>163d43a0-cfda-4480-ab71-c5ed261f7f2a</name>
-                        <properties/>
-                        <aspects>
-                            <business-role/>
-                        </aspects>
-                        <associations/>
-                        <roleAssociations>
-                            <roleAssociation>
-                                <type>role-assoc</type>
-                                <businessRoleName>BR_MEMBER</businessRoleName>
-                            </roleAssociation>
-                        </roleAssociations>
-                        <subFolders/>
-                    </node>
-                    <node>
-                        <type>dynamic-role-item</type>
                         <name>20cafedd-d0f5-4562-9ac1-8c8e1133592c</name>
                         <properties/>
                         <aspects>
