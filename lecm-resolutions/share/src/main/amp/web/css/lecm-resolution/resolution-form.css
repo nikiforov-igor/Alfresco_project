@@ -37,7 +37,7 @@
     width: calc(50% - 40px);
 }
 .resolution-form fieldset .yui-g .yui-u.first {
-    width: 537px;
+    min-width: calc(49.1% + 15px);
 }
 
 .resolution-form fieldset .errands-limitation-date-set .errands-limitation-date-set-type {
