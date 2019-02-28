@@ -519,8 +519,8 @@
                                         <property name="lecm-arm:style-check-expression">
                                             <![CDATA[@baseWebScript.compareDates(@lifecycleStateMachineHelper.getDocumentActiveTaskDueDate(doc.NodeRef, user.currentUser().getEmployee(), 'lecm-approval-v2:approveTask'), new java.util.Date(), 5) == -1]]></property>
                                         <property name="cm:name"><![CDATA[24]]></property>
-                                        <property name="lecm-arm:style-rule-bg"><![CDATA[#FF0000]]></property>
-                                        <property name="lecm-arm:style-rule-font"><![CDATA[#FFFFFF]]></property>
+                                        <property name="lecm-arm:style-rule-bg"><![CDATA[#FFBABF]]></property>
+                                        <property name="lecm-arm:style-rule-font"><![CDATA[#000000]]></property>
                                     </item>
                                 </items>
                                 <assocs>
@@ -878,8 +878,8 @@
                                         <property name="lecm-arm:style-check-expression">
                                             <![CDATA[@baseWebScript.compareDates(@lifecycleStateMachineHelper.getDocumentActiveTaskDueDate(doc.NodeRef, user.currentUser().getEmployee(), "lecm-signing-v2:signTask"), new java.util.Date(), 5) == -1]]></property>
                                         <property name="cm:name"><![CDATA[25]]></property>
-                                        <property name="lecm-arm:style-rule-bg"><![CDATA[#FF0000]]></property>
-                                        <property name="lecm-arm:style-rule-font"><![CDATA[#FFFFFF]]></property>
+                                        <property name="lecm-arm:style-rule-bg"><![CDATA[#FFBABF]]></property>
+                                        <property name="lecm-arm:style-rule-font"><![CDATA[#000000]]></property>
                                     </item>
                                     <item name="cm:26" type="lecm-arm:style-rule">
                                         <property name="lecm-arm:style-check-expression">
@@ -2379,8 +2379,8 @@
                                                 <property name="lecm-arm:style-check-expression">
                                                     <![CDATA[@baseWebScript.compareDates(@lifecycleStateMachineHelper.getDocumentActiveTaskDueDate(doc.NodeRef, user.currentUser().getEmployee(), 'lecm-approval-v2:approveTask'), new java.util.Date(), 5) == -1]]></property>
                                                 <property name="cm:name"><![CDATA[28]]></property>
-                                                <property name="lecm-arm:style-rule-bg"><![CDATA[#FF0000]]></property>
-                                                <property name="lecm-arm:style-rule-font"><![CDATA[#FFFFFF]]></property>
+                                                <property name="lecm-arm:style-rule-bg"><![CDATA[#FFBABF]]></property>
+                                                <property name="lecm-arm:style-rule-font"><![CDATA[#000000]]></property>
                                             </item>
                                         </items>
                                         <assocs>
@@ -2633,8 +2633,8 @@
                                                 <property name="lecm-arm:style-check-expression">
                                                     <![CDATA[@baseWebScript.compareDates(@lifecycleStateMachineHelper.getDocumentActiveTaskDueDate(doc.NodeRef, user.currentUser().getEmployee(), 'lecm-signing-v2:signTask'), new java.util.Date(), 5) == -1]]></property>
                                                 <property name="cm:name"><![CDATA[29]]></property>
-                                                <property name="lecm-arm:style-rule-bg"><![CDATA[#FF0000]]></property>
-                                                <property name="lecm-arm:style-rule-font"><![CDATA[#FFFFFF]]></property>
+                                                <property name="lecm-arm:style-rule-bg"><![CDATA[#FFBABF]]></property>
+                                                <property name="lecm-arm:style-rule-font"><![CDATA[#000000]]></property>
                                             </item>
                                             <item name="cm:30" type="lecm-arm:style-rule">
                                                 <property name="lecm-arm:style-check-expression">
