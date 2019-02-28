@@ -13735,28 +13735,6 @@ if (document) {
                                     </node>
                                     <node>
                                         <type>dynamic-role</type>
-                                        <name>b1db386b-9012-4a2a-9cfc-5973f42aa0c5</name>
-                                        <properties>
-                                            <property>
-                                                <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects>
-                                            <business-role/>
-                                            <permissionTypeAspect/>
-                                        </aspects>
-                                        <associations/>
-                                        <roleAssociations>
-                                            <roleAssociation>
-                                                <type>role-assoc</type>
-                                                <businessRoleName>BR_MEMBER</businessRoleName>
-                                            </roleAssociation>
-                                        </roleAssociations>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>dynamic-role</type>
                                         <name>d1851c7a-d16d-44a5-944c-0a3895eb6d6d</name>
                                         <properties>
                                             <property>
