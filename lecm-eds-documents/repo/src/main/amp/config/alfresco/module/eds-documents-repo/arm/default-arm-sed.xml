@@ -30851,8 +30851,8 @@
                                            path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По срокам"/>
                                     <assoc type="lecm-arm:filters-assoc"
                                            path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По меткам"/>
-                                    <assoc type="lecm-arm:row-style-rule" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа контролера/Резолюции/21"/>
-                                    <assoc type="lecm-arm:row-style-rule" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа контролера/Резолюции/22"/>
+                                    <assoc type="lecm-arm:row-style-rule" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа контролера/Поручения/21"/>
+                                    <assoc type="lecm-arm:row-style-rule" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа контролера/Поручения/22"/>
                                 </assocs>
                             </item>
                         </items>
