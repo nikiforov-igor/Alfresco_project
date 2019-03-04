@@ -65,6 +65,7 @@
                         <control>
                             <control-param name="defaultValueDataSource">lecm/errands/getDefaultInitiator</control-param>
                             <control-param name="changeItemsFireAction">authorChanged</control-param>
+                            <control-param name="childrenDataSource">lecm/resolution/author/picker</control-param>
                         </control>
                     </field>
                     <field id="lecm-resolutions:controller-assoc" set="start-left">
@@ -679,6 +680,7 @@
                     <field id="lecm-resolutions:author-assoc" set="start-left">
                         <control>
                             <control-param name="changeItemsFireAction">authorChanged</control-param>
+                            <control-param name="childrenDataSource">lecm/resolution/author/picker</control-param>
                         </control>
                     </field>
                     <field id="lecm-resolutions:controller-assoc" set="start-left">

@@ -1,6 +1,7 @@
 package ru.it.lecm.resolutions.beans;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
@@ -15,7 +16,9 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.errands.ErrandsService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.resolutions.api.ResolutionsService;
+import ru.it.lecm.secretary.SecretaryService;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,6 +35,8 @@ public class ResolutionsServiceImpl extends BaseBean implements ResolutionsServi
     private NamespaceService namespaceService;
     private EDSDocumentService edsDocumentService;
     private NodeRef dashletSettingsNode;
+    private OrgstructureBean orgstructureService;
+    private SecretaryService secretaryService;
 
     public void setNamespaceService(NamespaceService namespaceService) {
         this.namespaceService = namespaceService;
@@ -39,6 +44,14 @@ public class ResolutionsServiceImpl extends BaseBean implements ResolutionsServi
 
     public void setEdsDocumentService(EDSDocumentService edsDocumentService) {
         this.edsDocumentService = edsDocumentService;
+    }
+
+    public void setOrgstructureService(OrgstructureBean orgstructureService) {
+        this.orgstructureService = orgstructureService;
+    }
+
+    public void setSecretaryService(SecretaryService secretaryService) {
+        this.secretaryService = secretaryService;
     }
 
     @Override
@@ -161,5 +174,26 @@ public class ResolutionsServiceImpl extends BaseBean implements ResolutionsServi
 
     public NodeRef getResolutionBase(NodeRef resolution) {
         return findNodeByAssociationRef(resolution, ASSOC_BASE, null, BaseBean.ASSOCIATION_TYPE.TARGET);
+    }
+
+    @Override
+    public List<NodeRef> getAvailableAuthor() {
+        List<NodeRef> result = new ArrayList<>();
+        NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
+        //Проверяем на БР "Выбирающий автор поручения и резолюции"
+        if (orgstructureService.isCurrentEmployeeHasBusinessRole(ErrandsService.BUSINESS_ROLE_CHOOSING_INITIATOR)) {
+            result.addAll(orgstructureService.getAllEmployees());
+        } else {
+            if (secretaryService.isSecretary(currentEmployee)) {
+                final List<AssociationRef> chiefsAssoc = nodeService.getTargetAssocs(currentEmployee, SecretaryService.ASSOC_CHIEF_ASSOC);
+                if ((chiefsAssoc != null) && !chiefsAssoc.isEmpty()) {
+                    for (AssociationRef chiefAssoc : chiefsAssoc) {
+                        result.add(chiefAssoc.getTargetRef());
+                    }
+                }
+            }
+            result.add(currentEmployee);
+        }
+        return result;
     }
 }

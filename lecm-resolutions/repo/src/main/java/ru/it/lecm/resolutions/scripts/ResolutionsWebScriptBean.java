@@ -241,4 +241,13 @@ public class ResolutionsWebScriptBean extends BaseWebScript {
         }
         return statuses;
     }
+
+    public Scriptable getAvailableChooseAuthor() {
+        List<NodeRef> results = resolutionsService.getAvailableAuthor();
+        if (results != null) {
+            return createScriptable(results);
+        }
+        return null;
+    }
+
 }
