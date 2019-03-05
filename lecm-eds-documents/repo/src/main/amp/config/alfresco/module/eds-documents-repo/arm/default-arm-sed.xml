@@ -421,7 +421,7 @@
                                     </item>
                                     <item name="cm:2" type="lecm-arm:style-rule">
                                         <property name="lecm-arm:style-check-expression">
-                                            <![CDATA[(@baseWebScript.compareDates(doc.attr("lecm-errands:limitation-date"), new java.util.Date(), 5) == 0) OR (@baseWebScript.compareDates(doc.attr("lecm-errands:limitation-date"), @WorkCalendarService.getNextWorkingDateByDays(new java.util.Date(), 1), 5) == 0) AND doc.attr("lecm-errands:periodically") == false]]></property>
+                                            <![CDATA[((@baseWebScript.compareDates(doc.attr("lecm-errands:limitation-date"), new java.util.Date(), 5) == 0) OR (@baseWebScript.compareDates(doc.attr("lecm-errands:limitation-date"), @WorkCalendarService.getNextWorkingDateByDays(new java.util.Date(), 1), 5) == 0)) AND doc.attr("lecm-errands:periodically") == false]]></property>
                                         <property name="cm:name"><![CDATA[2]]></property>
                                         <property name="lecm-arm:style-rule-bg"><![CDATA[#FFFF00]]></property>
                                         <property name="lecm-arm:style-rule-font"><![CDATA[#000000]]></property>
@@ -2837,7 +2837,7 @@
                                     </item>
                                     <item name="cm:14" type="lecm-arm:style-rule">
                                         <property name="lecm-arm:style-check-expression">
-                                            <![CDATA[(@baseWebScript.compareDates(doc.attr("lecm-errands:limitation-date"), new java.util.Date(), 5) == 0) OR (@baseWebScript.compareDates(doc.attr("lecm-errands:limitation-date"), @WorkCalendarService.getNextWorkingDateByDays(new java.util.Date(), 1), 5) == 0) AND doc.attr("lecm-errands:periodically") == false]]></property>
+                                            <![CDATA[((@baseWebScript.compareDates(doc.attr("lecm-errands:limitation-date"), new java.util.Date(), 5) == 0) OR (@baseWebScript.compareDates(doc.attr("lecm-errands:limitation-date"), @WorkCalendarService.getNextWorkingDateByDays(new java.util.Date(), 1), 5) == 0)) AND doc.attr("lecm-errands:periodically") == false]]></property>
                                         <property name="cm:name"><![CDATA[14]]></property>
                                         <property name="lecm-arm:style-rule-bg"><![CDATA[#FFFF00]]></property>
                                         <property name="lecm-arm:style-rule-font"><![CDATA[#000000]]></property>
@@ -30808,7 +30808,7 @@
                                     </item>
                                     <item name="cm:22" type="lecm-arm:style-rule">
                                         <property name="lecm-arm:style-check-expression">
-                                            <![CDATA[(@baseWebScript.compareDates(doc.attr("lecm-errands:limitation-date"), new java.util.Date(), 5) == 0) OR (@baseWebScript.compareDates(doc.attr("lecm-errands:limitation-date"), @WorkCalendarService.getNextWorkingDateByDays(new java.util.Date(), 1), 5) == 0) AND doc.attr("lecm-errands:periodically") == false]]></property>
+                                            <![CDATA[((@baseWebScript.compareDates(doc.attr("lecm-errands:limitation-date"), new java.util.Date(), 5) == 0) OR (@baseWebScript.compareDates(doc.attr("lecm-errands:limitation-date"), @WorkCalendarService.getNextWorkingDateByDays(new java.util.Date(), 1), 5) == 0)) AND doc.attr("lecm-errands:periodically") == false]]></property>
                                         <property name="cm:name"><![CDATA[22]]></property>
                                         <property name="lecm-arm:style-rule-bg"><![CDATA[#FFFF00]]></property>
                                         <property name="lecm-arm:style-rule-font"><![CDATA[#000000]]></property>
