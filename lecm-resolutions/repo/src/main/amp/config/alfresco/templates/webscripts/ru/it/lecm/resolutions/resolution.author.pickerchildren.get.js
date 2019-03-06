@@ -2,12 +2,12 @@
 
 function main() {
   var data = [],
-  availableChooseAuhor;
+  availableChooseAuthor;
 
-  availableChooseAuhor = resolutionsScript.getAvailableAuthor();
+  availableChooseAuthor = resolutionsScript.getAvailableAuthor();
 
-   if (availableChooseAuhor != null) {
-        var filter = getFilterForAvailableElement(availableChooseAuhor);
+   if (availableChooseAuthor != null) {
+        var filter = getFilterForAvailableElement(availableChooseAuthor);
         data = getPickerChildrenItems(filter);
    } else {
         data = getPickerChildrenItems();
