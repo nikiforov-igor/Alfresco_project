@@ -4,7 +4,7 @@ function main() {
   var data = [],
   availableChooseAuhor;
 
-  availableChooseAuhor = resolutionsScript.getAvailableChooseAuthor();
+  availableChooseAuhor = resolutionsScript.getAvailableAuthor();
 
    if (availableChooseAuhor != null) {
         var filter = getFilterForAvailableElement(availableChooseAuhor);

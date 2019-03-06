@@ -181,9 +181,7 @@ public class ResolutionsServiceImpl extends BaseBean implements ResolutionsServi
         List<NodeRef> result = new ArrayList<>();
         NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
         //Проверяем на БР "Выбирающий автор поручения и резолюции"
-        if (orgstructureService.isCurrentEmployeeHasBusinessRole(ErrandsService.BUSINESS_ROLE_CHOOSING_INITIATOR)) {
-            result.addAll(orgstructureService.getAllEmployees());
-        } else {
+        if (!orgstructureService.isCurrentEmployeeHasBusinessRole(ErrandsService.BUSINESS_ROLE_CHOOSING_INITIATOR)) {
             if (secretaryService.isSecretary(currentEmployee)) {
                 final List<AssociationRef> chiefsAssoc = nodeService.getTargetAssocs(currentEmployee, SecretaryService.ASSOC_CHIEF_ASSOC);
                 if ((chiefsAssoc != null) && !chiefsAssoc.isEmpty()) {
@@ -193,7 +191,8 @@ public class ResolutionsServiceImpl extends BaseBean implements ResolutionsServi
                 }
             }
             result.add(currentEmployee);
+            return result;
         }
-        return result;
+        return null;
     }
 }
