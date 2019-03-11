@@ -1,22 +1,22 @@
 <import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/pickerchildren.lib.js">
 
 function main() {
-  var data = [],
-  availableChooseAuthor;
+    var data = [],
+        authorsForFilter;
 
-  availableChooseAuthor = resolutionsScript.getAvailableAuthor();
+    authorsForFilter = resolutionsScript.getAuthorsForFilter();
 
-   if (availableChooseAuthor != null) {
-        var filter = getFilterForAvailableElement(availableChooseAuthor);
+    if (authorsForFilter != null) {
+        var filter = getFilterForAvailableElement(authorsForFilter);
         data = getPickerChildrenItems(filter);
-   } else {
+    } else {
         data = getPickerChildrenItems();
-   }
+    }
 
-   model.parent = data.parent;
-   model.rootNode = data.rootNode;
-   model.results = data.results;
-   model.additionalProperties = data.additionalProperties;
+    model.parent = data.parent;
+    model.rootNode = data.rootNode;
+    model.results = data.results;
+    model.additionalProperties = data.additionalProperties;
 
 }
 main();

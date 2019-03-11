@@ -84,10 +84,9 @@ public interface ResolutionsService {
     NodeRef getResolutionBase(NodeRef resolution);
 
     /**
-     * Получение списка сотрудников, доступных текущему пользователю для выбора
+     * Получить список сотрудников для выбора
      * автора резолюции
-     *
-     * @return список сотрудников
+     * @return список сотрудников | null - если ограничений нет
      */
-    List<NodeRef> getAvailableAuthor();
+    List<NodeRef> getAuthorsForFilter();
 }

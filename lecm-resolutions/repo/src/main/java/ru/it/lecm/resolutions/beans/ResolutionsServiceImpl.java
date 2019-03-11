@@ -177,15 +177,15 @@ public class ResolutionsServiceImpl extends BaseBean implements ResolutionsServi
     }
 
     @Override
-    public List<NodeRef> getAvailableAuthor() {
+    public List<NodeRef> getAuthorsForFilter() {
         List<NodeRef> result = new ArrayList<>();
         NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
         //Проверяем на БР "Выбирающий автор поручения и резолюции"
         if (!orgstructureService.isCurrentEmployeeHasBusinessRole(ErrandsService.BUSINESS_ROLE_CHOOSING_INITIATOR)) {
             if (secretaryService.isSecretary(currentEmployee)) {
-                final List<AssociationRef> chiefsAssoc = nodeService.getTargetAssocs(currentEmployee, SecretaryService.ASSOC_CHIEF_ASSOC);
-                if ((chiefsAssoc != null) && !chiefsAssoc.isEmpty()) {
-                    for (AssociationRef chiefAssoc : chiefsAssoc) {
+                final List<AssociationRef> chiefAssocs = nodeService.getTargetAssocs(currentEmployee, SecretaryService.ASSOC_CHIEF_ASSOC);
+                if ((chiefAssocs != null) && !chiefAssocs.isEmpty()) {
+                    for (AssociationRef chiefAssoc : chiefAssocs) {
                         result.add(chiefAssoc.getTargetRef());
                     }
                 }
