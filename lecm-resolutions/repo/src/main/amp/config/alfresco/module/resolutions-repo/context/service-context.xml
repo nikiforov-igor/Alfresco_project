@@ -90,6 +90,8 @@
           depends-on="resolutions.LogicEcmBootstrap, WorkCalendarService, namespaceService, resolutionsWorkflowBootstrap">
         <property name="namespaceService" ref="namespaceService"/>
         <property name="edsDocumentService" ref="edsService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="secretaryService" ref="secretaryService"/>
         <property name="folders">
             <map>
                 <entry key="#{RESOLUTIONS_ROOT_ID}" value="#{RESOLUTIONS_ROOT_NAME}"/>

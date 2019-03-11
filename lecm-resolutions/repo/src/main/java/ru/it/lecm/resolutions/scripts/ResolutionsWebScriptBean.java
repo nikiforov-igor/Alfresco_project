@@ -241,4 +241,13 @@ public class ResolutionsWebScriptBean extends BaseWebScript {
         }
         return statuses;
     }
+
+    public Scriptable getAuthorsForFilter() {
+        List<NodeRef> results = resolutionsService.getAuthorsForFilter();
+        if (results != null) {
+            return createScriptable(results);
+        }
+        return null;
+    }
+
 }
