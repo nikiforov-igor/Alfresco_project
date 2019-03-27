@@ -305,6 +305,16 @@
         <property name="documentService" ref="documentService"/>
     </bean>
 
+    <!--Регистрация шедуллеров в "Центр управления запуском регулярных заданий"-->
+    <bean id="ord.reg.jobs" parent="regularJobsRegistrator">
+        <property name="schedulers">
+            <map>
+                <entry key="ord-notification-trigger" value-ref="ord.notification.schedule"/>
+                <entry key="ord-sys-agent-expired-trigger" value-ref="ordEveryDayStatusSchedule"/>
+            </map>
+        </property>
+    </bean>
+
     <bean id="ordReassignAttributesImporter" class="ru.it.lecm.duties.reassign.importers.DocTypeAttrsImporter" parent="baseDocumentAttributesImporter"
           depends-on="ord.document.models.bootstrap">
         <property name="documentType" value="lecm-ord:document"/>

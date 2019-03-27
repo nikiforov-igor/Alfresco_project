@@ -113,6 +113,17 @@
           p:documentService-ref="documentService"
     />
 
+    <!--Регистрация шедуллеров в "Центр управления запуском регулярных заданий"-->
+    <bean id="nd.reg.jobs" parent="regularJobsRegistrator">
+        <property name="schedulers">
+            <map>
+                <entry key="switch-nd-status-trigger" value-ref="nd.start.schedule"/>
+                <entry key="out-of-date-nd-trigger" value-ref="nd.outOfDate.schedule"/>
+            </map>
+        </property>
+    </bean>
+
+
     <bean id="ndCreatePolicy" class="ru.it.lecm.nd.policy.NDCreatePolicy" init-method="init"
           p:nodeService-ref="nodeService"
           p:policyComponent-ref="policyComponent"

@@ -362,6 +362,15 @@
 		<property name="documentService" ref="documentService"/>
 	</bean>
 
+	<!--Регистрация шедуллеров в "Центр управления запуском регулярных заданий"-->
+	<bean id="protocol.reg.jobs" parent="regularJobsRegistrator">
+		<property name="schedulers">
+			<map>
+				<entry key="protocol-sys-agent-expired-trigger" value-ref="protocolEveryDayStatusSchedule"/>
+			</map>
+		</property>
+	</bean>
+
 	<bean id="meetingsReassignAttributesImporter" class="ru.it.lecm.duties.reassign.importers.DocTypeAttrsImporter" parent="baseDocumentAttributesImporter"
 		  depends-on="meetings.dictionaries.modelsBootstrap">
 		<property name="documentType" value="lecm-meetings:document"/>

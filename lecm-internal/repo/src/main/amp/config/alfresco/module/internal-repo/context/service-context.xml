@@ -155,7 +155,16 @@
 		<property name="documentGlobalSettingsService" ref="documents.global-settings.service"/>
         <property name="internalService" ref="internalService"/>
 	</bean>
-	
+
+    <!--Регистрация шедуллеров в "Центр управления запуском регулярных заданий"-->
+    <bean id="internal.reg.jobs" parent="regularJobsRegistrator">
+        <property name="schedulers">
+            <map>
+                <entry key="internal-notification-trigger" value-ref="internalNotificationSchedule"/>
+            </map>
+        </property>
+    </bean>
+
     <bean id="internalCopySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings">
         <property name="propsToCopy">
             <list>
