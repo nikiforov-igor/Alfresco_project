@@ -18,7 +18,9 @@ import java.util.Map;
  *  или (текущий пользователь является руководителем подразделения и onlyBoss=true и includeHigherUnits=false)
  *  или (текущий пользователь является руководителем дочернего подразделения и onlyBoss=true и includeHigherUnits=true)
  *
- * Usage example: {{CURRENT_EMPLOYEE_UNITS({onlyBoss:false,includeHigherUnits:false})}}
+ *  user:'#current-user' - маркер для разделов, которые могут быть представлены в делегировании. В случае делегирования
+ *      клиентский код заменит плейсхолдер актуальным значением.
+ * Usage example: {{CURRENT_EMPLOYEE_UNITS({onlyBoss:false, includeHigherUnits:false, user:'#current-user'})}}
  *
  */
 public class CurrentEmployeeUnitsProcessor extends SearchQueryProcessor {
@@ -34,7 +36,11 @@ public class CurrentEmployeeUnitsProcessor extends SearchQueryProcessor {
         final StringBuilder sbQuery = new StringBuilder();
         final boolean onlyBoss = extractParam("onlyBoss", params, boolean.class, false);
         final boolean includeHigherUnits = extractParam("includeHigherUnits", params, boolean.class, false);
-        final List<NodeRef> units = orgstructureBean.getEmployeeUnits(orgstructureBean.getCurrentEmployee(), onlyBoss);
+
+        String userParam = extractParam("user", params, String.class, "#current-user");
+        NodeRef currentUser = userParam.equals("#current-user") ? orgstructureBean.getCurrentEmployee() : new NodeRef(userParam);
+
+        final List<NodeRef> units = orgstructureBean.getEmployeeUnits(currentUser, onlyBoss);
         final List<NodeRef> resultUnits = new ArrayList<>(units);
 
         if (includeHigherUnits) {
