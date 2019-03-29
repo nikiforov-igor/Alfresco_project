@@ -209,7 +209,7 @@
                     maxSearchResults: '1000',
                     oldValue: "",
                     selectedValueNodeRef: "",
-                    nameSubstituteString: "{cm:name}",
+                    nameSubstituteString: "{cm:title}",
                     showCreateNewButton: false,
                     notSelectedOptionShow: true,
                     notSelectedText: "",

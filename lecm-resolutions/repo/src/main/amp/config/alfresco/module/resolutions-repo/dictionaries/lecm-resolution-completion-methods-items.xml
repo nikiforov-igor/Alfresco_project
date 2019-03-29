@@ -3,13 +3,13 @@
     <item name="lecm-dic:Способы завершения резолюции" type="lecm-dic:dictionary">
         <items updateMode="CreateOrUpdate">
             <item name="cm:Исполнено" type="lecm-resolutions-dic:completion-methods">
-                <property name="cm:name"><![CDATA[Исполнено]]></property>
+                <property name="cm:title"><![CDATA[Исполнено]]></property>
             </item>
             <item name="cm:Исполнено частично" type="lecm-resolutions-dic:completion-methods">
-                <property name="cm:name"><![CDATA[Исполнено частично]]></property>
+                <property name="cm:title"><![CDATA[Исполнено частично]]></property>
             </item>
             <item name="cm:Не исполнено" type="lecm-resolutions-dic:completion-methods">
-                <property name="cm:name"><![CDATA[Не исполнено]]></property>
+                <property name="cm:title"><![CDATA[Не исполнено]]></property>
             </item>
         </items>
     </item>

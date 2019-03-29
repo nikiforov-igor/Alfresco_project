@@ -3,11 +3,17 @@
 	<item name="lecm-dic:Тип объекта" type="lecm-dic:dictionary">
 		<items updateMode="CreateOrUpdate">
 			<item name="cm:НД" type="lecm-busjournal:objectType">
-				<property name="cm:name">Нормативный документ</property>
+				<property name="cm:title">Нормативный документ</property>
 				<property name="lecm-busjournal:objectType-code">LECM_ND</property>
 				<property name="lecm-busjournal:objectType-class">lecm-nd:document</property>
 				<property name="lecm-busjournal:objectType-template">{lecm-document:present-string}</property>
 				<property name="lecm-busjournal:objectType-list-template"><![CDATA[Статус: {lecm-statemachine:status}, Автор: <a href="#" onclick="var reference = new Object(); reference.itemId = '{lecm-document:creator-ref}'; LogicECM.module.Base.Util.viewAttributes(reference); return false;">{~AUTHOR}</a>]]></property>
+			</item>
+			<item name="cm:Вид НД" type="lecm-busjournal:objectType">
+				<property name="cm:title">Вид НД</property>
+				<property name="lecm-busjournal:objectType-code">LECM_ND_DOC_TYPE</property>
+				<property name="lecm-busjournal:objectType-class">lecm-nd-dic:documentType</property>
+				<property name="lecm-busjournal:objectType-template">{cm:title}</property>
 			</item>
 		</items>
 	</item>

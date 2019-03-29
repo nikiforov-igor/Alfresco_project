@@ -8,6 +8,8 @@
                     <control-param name="checkType">false</control-param>
                     <control-param name="treeItemType">lecm-doc-dic-dt:typeDictionary</control-param>
                     <control-param name="additionalFilter">ISNOTNULL:\"sys:node-dbid\"</control-param>
+					<control-param name="nameSubstituteString">{cm:title}</control-param>
+					<control-param name="sortProp">cm:title</control-param>
                 </type>
             </default-controls>
         </forms>
@@ -356,19 +358,26 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="cm:name" force="true"/>
+                    <show id="cm:title" force="true"/>
                 </field-visibility>
+				<appearance>
+					<field id="cm:title" label-id="label.name" mandatory="true" description-id="label.name">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+							<control-param name="isUniqueValue">true</control-param>
+						</control>
+					</field>
+				</appearance>
             </form>
             <form id="search">
                 <field-visibility>
-                    <show id="cm:name" force="true"/>
+                    <show id="cm:title" force="true"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:name" mandatory="false">
-                        <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
-                        </constraint-handlers>
-                    </field>
+					<field id="cm:title" label-id="label.name" description-id="label.name">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+							<control-param name="isUniqueValue">false</control-param>
+						</control>
+					</field>
                 </appearance>
             </form>
         </forms>
@@ -378,8 +387,15 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="cm:name" force="true"/>
+                    <show id="cm:title" force="true"/>
                 </field-visibility>
+				<appearance>
+					<field id="cm:title" label-id="label.name" mandatory="true" description-id="label.name">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+							<control-param name="isUniqueValue">true</control-param>
+						</control>
+					</field>
+				</appearance>
             </form>
         </forms>
     </config>
@@ -388,9 +404,16 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="cm:name" force="true"/>
+                    <show id="cm:title" force="true"/>
                     <show id="lecm-doc-dic-dt:documentType-code" force="true"/>
                 </field-visibility>
+				<appearance>
+					<field id="cm:title" label-id="label.name" mandatory="true" description-id="label.name">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+							<control-param name="isUniqueValue">true</control-param>
+						</control>
+					</field>
+				</appearance>
             </form>
         </forms>
     </config>
@@ -399,21 +422,28 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="cm:name" force="true"/>
+                    <show id="cm:title" force="true"/>
                     <show id="lecm-doc-dic-dt:documentType-code" force="true"/>
                 </field-visibility>
+				<appearance>
+					<field id="cm:title" label-id="label.name" mandatory="true" description-id="label.name">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+							<control-param name="isUniqueValue">true</control-param>
+						</control>
+					</field>
+				</appearance>
             </form>
             <form id="search">
                 <field-visibility>
-                    <show id="cm:name" force="true"/>
+                    <show id="cm:title" force="true"/>
                     <show id="lecm-doc-dic-dt:documentType-code" force="true"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:name" mandatory="false">
-                        <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
-                        </constraint-handlers>
-                    </field>
+					<field id="cm:title" label-id="label.name" description-id="label.name">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+							<control-param name="isUniqueValue">false</control-param>
+						</control>
+					</field>
                     <field id="lecm-doc-dic-dt:documentType-code" mandatory="false">
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />

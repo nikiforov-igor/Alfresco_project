@@ -62,6 +62,8 @@
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_исходящего</control-param>
                             <control-param name="plane">true</control-param>
                             <control-param name="changeItemsFireAction">outgoingDocumentTypeChanged</control-param>
+                            <control-param name="nameSubstituteString">{cm:title}</control-param>
+                            <control-param name="sortProp">cm:title</control-param>
                         </control>
                     </field>
                     <field id="lecm-outgoing:delivery-method-assoc">
@@ -325,6 +327,8 @@
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_исходящего</control-param>
                             <control-param name="plane">true</control-param>
                             <control-param name="changeItemsFireAction">outgoingDocumentTypeChanged</control-param>
+                            <control-param name="nameSubstituteString">{cm:title}</control-param>
+                            <control-param name="sortProp">cm:title</control-param>
                         </control>
                     </field>
                     <field id="lecm-outgoing:delivery-method-assoc" set="common">
@@ -696,6 +700,8 @@
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_исходящего</control-param>
                             <control-param name="plane">true</control-param>
+                            <control-param name="nameSubstituteString">{cm:title}</control-param>
+                            <control-param name="sortProp">cm:title</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -963,6 +969,8 @@
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_исходящего</control-param>
                             <control-param name="plane">true</control-param>
                             <control-param name="changeItemsFireAction">outgoingDocumentTypeChanged</control-param>
+                            <control-param name="nameSubstituteString">{cm:title}</control-param>
+                            <control-param name="sortProp">cm:title</control-param>
                         </control>
                     </field>
                     <field id="lecm-outgoing:delivery-method-assoc">
@@ -1275,6 +1283,8 @@
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_исходящего</control-param>
                             <control-param name="plane">true</control-param>
+                            <control-param name="nameSubstituteString">{cm:title}</control-param>
+                            <control-param name="sortProp">cm:title</control-param>
                         </control>
                     </field>
                     <field id="lecm-outgoing:contractor-assoc">
@@ -1409,6 +1419,8 @@
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_исходящего</control-param>
                             <control-param name="plane">true</control-param>
                             <control-param name="endpointMany">true</control-param>
+                            <control-param name="nameSubstituteString">{cm:title}</control-param>
+                            <control-param name="sortProp">cm:title</control-param>
                         </control>
                     </field>
                     <field id="lecm-statemachine:status">
@@ -1609,6 +1621,8 @@
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_исходящего</control-param>
                             <control-param name="plane">true</control-param>
+                            <control-param name="nameSubstituteString">{cm:title}</control-param>
+                            <control-param name="sortProp">cm:title</control-param>
                         </control>
                     </field>
                     <field id="lecm-document:present-string" label="Название"/>

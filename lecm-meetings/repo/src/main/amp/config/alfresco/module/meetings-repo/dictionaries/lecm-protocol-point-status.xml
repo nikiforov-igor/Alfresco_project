@@ -4,28 +4,28 @@
         <property name="cm:name">Статусы пунктов протокола</property>
         <property name="lecm-dic:description">Справочник статусов пунктов протокола</property>
         <property name="lecm-dic:type">lecm-protocol-dic:protocol-point-status</property>
-        <property name="lecm-dic:attributeForShow">cm:name</property>
+        <property name="lecm-dic:attributeForShow">cm:title</property>
         <property name="lecm-dic:plane">true</property>
         <property name="lecm-dic:active">true</property>
 		<items>
 			<item name="cm:На исполнении" type="lecm-protocol-dic:protocol-point-status">
-				<property name="cm:name">На исполнении</property>
+				<property name="cm:title">На исполнении</property>
 				<property name="lecm-protocol-dic:protocol-point-status-code">PERFORMANCE_STATUS</property>
 			</item>
 			<item name="cm:Исполнен" type="lecm-protocol-dic:protocol-point-status">
-				<property name="cm:name">Исполнен</property>
+				<property name="cm:title">Исполнен</property>
                 <property name="lecm-protocol-dic:protocol-point-status-code">EXECUTED_STATUS</property>
             </item>
 			<item name="cm:Не исполнен" type="lecm-protocol-dic:protocol-point-status">
-				<property name="cm:name">Не исполнен</property>
+				<property name="cm:title">Не исполнен</property>
                 <property name="lecm-protocol-dic:protocol-point-status-code">NOT_EXECUTED_STATUS</property>
             </item>
 			<item name="cm:Просрочен" type="lecm-protocol-dic:protocol-point-status">
-				<property name="cm:name">Просрочен</property>
+				<property name="cm:title">Просрочен</property>
                 <property name="lecm-protocol-dic:protocol-point-status-code">EXPIRED_STATUS</property>
             </item>
 			<item name="cm:Удален" type="lecm-protocol-dic:protocol-point-status">
-				<property name="cm:name">Удален</property>
+				<property name="cm:title">Удален</property>
                 <property name="lecm-protocol-dic:protocol-point-status-code">REMOVED_STATUS</property>
             </item>
 		</items>

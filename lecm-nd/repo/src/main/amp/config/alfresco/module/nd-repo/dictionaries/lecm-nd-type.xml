@@ -3,23 +3,23 @@
     <item name="lecm-dic:Вид документа" type="lecm-dic:dictionary">
         <items updateMode="CreateOrUpdate">
             <item name="cm:Вид НД" type="lecm-doc-dic-dt:typeDictionary">
-                <property name="cm:name">Вид НД</property>
+                <property name="cm:title">Вид НД</property>
                 <property name="lecm-dic:valueContainsType">lecm-nd-dic:documentType</property>
                 <items>
                     <item name="cm:Инструкция" type="lecm-nd-dic:documentType">
-                        <property name="cm:name">Инструкция</property>
+                        <property name="cm:title">Инструкция</property>
                         <property name="lecm-doc-dic-dt:documentType-code">01</property>
                     </item>
                     <item name="cm:Положение" type="lecm-nd-dic:documentType">
-                        <property name="cm:name">Положение</property>
+                        <property name="cm:title">Положение</property>
                         <property name="lecm-doc-dic-dt:documentType-code">02</property>
                     </item>
                     <item name="cm:Регламент" type="lecm-nd-dic:documentType">
-                        <property name="cm:name">Регламент</property>
+                        <property name="cm:title">Регламент</property>
                         <property name="lecm-doc-dic-dt:documentType-code">03</property>
                     </item>
                     <item name="cm:Правило" type="lecm-nd-dic:documentType">
-                        <property name="cm:name">Правило</property>
+                        <property name="cm:title">Правило</property>
                         <property name="lecm-doc-dic-dt:documentType-code">04</property>
                     </item>
                 </items>

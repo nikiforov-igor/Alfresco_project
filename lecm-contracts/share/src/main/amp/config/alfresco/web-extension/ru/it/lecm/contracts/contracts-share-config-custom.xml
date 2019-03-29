@@ -13,7 +13,8 @@
                     <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_договора</control-param>
                     <control-param name="showCreateNewLink">false</control-param>
                     <control-param name="showCreateNewButton">false</control-param>
-                    <control-param name="nameSubstituteString">{cm:name}</control-param>
+                    <control-param name="nameSubstituteString">{cm:title}</control-param>
+                    <control-param name="sortProp">cm:title</control-param>
                     <control-param name="itemType">lecm-contract-dic:contract-type</control-param>
                     <control-param name="plane">true</control-param>
                     <control-param name="showAssocViewForm">false</control-param>
@@ -22,7 +23,8 @@
                     <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа_x0020_к_x0020_договору</control-param>
                     <control-param name="showCreateNewLink">false</control-param>
                     <control-param name="showCreateNewButton">false</control-param>
-                    <control-param name="nameSubstituteString">{cm:name}</control-param>
+                    <control-param name="nameSubstituteString">{cm:title}</control-param>
+                    <control-param name="sortProp">cm:title</control-param>
                     <control-param name="itemType">lecm-contract-dic:contract-documents-type</control-param>
                     <control-param name="plane">true</control-param>
                     <control-param name="showAssocViewForm">false</control-param>
@@ -31,13 +33,15 @@
                     <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Валюты</control-param>
                     <control-param name="showCreateNewLink">false</control-param>
                     <control-param name="showCreateNewButton">false</control-param>
-                    <control-param name="nameSubstituteString">{cm:name}</control-param>
+                    <control-param name="nameSubstituteString">{cm:title}</control-param>
+                    <control-param name="sortProp">cm:title</control-param>
                     <control-param name="itemType">lecm-currency:currency</control-param>
                     <control-param name="plane">true</control-param>
                 </type>
                 <type name="association:lecm-contract-dic:delete-reason" template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                     <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Причины_x0020_удаления</control-param>
-                    <control-param name="nameSubstituteString">{cm:name}</control-param>
+                    <control-param name="nameSubstituteString">{cm:title}</control-param>
+                    <control-param name="sortProp">cm:title</control-param>
                     <control-param name="notSelectedOptionShow">true</control-param>
                     <control-param name="notSelectedOptionLabel"> </control-param>
                     <control-param name="showCreateNewButton">false</control-param>
@@ -50,7 +54,7 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="cm:name" force="true"/>
+					<show id="cm:title" force="true"/>
 					<show id="lecm-contract-dic:contract-type-code" force="true"/>
 					<show id="lecm-contract-dic:contract-type-description" force="true"/>
                     <show id="lecm-doc-dic-dt:es-sign-required" force="true"/>
@@ -59,7 +63,11 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-contract-dic:contract-type-code" read-only="true"/>
-
+                    <field id="cm:title" label-id="label.name" mandatory="true" description-id="label.name">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">true</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-doc-dic-dt:categories-of-attachments-to-sign">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
                             <control-param name="webscript">lecm/document/attachments/api/categoriesByType?documentType=lecm-contract:document&amp;jsonObjectName=data</control-param>
@@ -88,7 +96,7 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="cm:name" force="true"/>
+					<show id="cm:title" force="true"/>
 					<show id="lecm-contract-dic:contract-type-code" force="true"/>
 					<show id="lecm-contract-dic:contract-type-description" force="true"/>
                     <show id="lecm-doc-dic-dt:es-sign-required"/>
@@ -96,6 +104,11 @@
                     <show id="load-set-default-categories-to-sign-script" force="true"/>
 				</field-visibility>
 				<appearance>
+                    <field id="cm:title" label-id="label.name" mandatory="true" description-id="label.name">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">true</control-param>
+                        </control>
+                    </field>
 					<field id="lecm-contract-dic:contract-type-code">
 						<control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
 						<constraint-handlers>
@@ -125,17 +138,17 @@
 			</form>
 			<form id="search">
 				<field-visibility>
-					<show id="cm:name" force="true"/>
+					<show id="cm:title" force="true"/>
 					<show id="lecm-contract-dic:contract-type-code" force="true"/>
 					<show id="lecm-contract-dic:contract-type-description" force="true"/>
                     <show id="lecm-doc-dic-dt:es-sign-required"/>
                     <show id="lecm-doc-dic-dt:categories-of-attachments-to-sign"/>
 				</field-visibility>
 				<appearance>
-                    <field id="cm:name" mandatory="false">
-                        <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
-                        </constraint-handlers>
+                    <field id="cm:title" label-id="label.name" description-id="label.name">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">false</control-param>
+                        </control>
                     </field>
 					<field id="lecm-contract-dic:contract-type-code" mandatory="false">
 						<constraint-handlers>
@@ -160,7 +173,7 @@
 			</form>
 			<form id="datagrid">
 				<field-visibility>
-					<show id="cm:name" force="true"/>
+					<show id="cm:title" force="true"/>
 					<show id="lecm-contract-dic:contract-type-code" force="true"/>
 					<show id="lecm-contract-dic:contract-type-description" force="true"/>
                     <show id="lecm-doc-dic-dt:es-sign-required"/>
@@ -169,6 +182,7 @@
                 <appearance>
                     <field id="lecm-doc-dic-dt:es-sign-required" label-id="label.eds.document_type_dictionary.datagrid.signing_setting.es_required"/>
                     <field id="categories-of-attachments-to-sign" substituteString="{lecm-doc-dic-dt:categories-of-attachments-to-sign}" label-id="label.eds.document_type_dictionary.datagrid.signing_setting.categories"/>
+                    <field id="cm:title" label-id="label.name"/>
                 </appearance>
 			</form>
 		</forms>
@@ -178,13 +192,18 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="cm:name" force="true"/>
+					<show id="cm:title" force="true"/>
 					<show id="lecm-contract-dic:contract-documents-type-code" force="true"/>
                     <show id="lecm-doc-dic-dt:es-sign-required" force="true"/>
                     <show id="lecm-doc-dic-dt:categories-of-attachments-to-sign" force="true"/>
                     <show id="load-set-default-categories-to-sign-script" force="true"/>
 				</field-visibility>
 				<appearance>
+                    <field id="cm:title" label-id="label.name" mandatory="true" description-id="label.name">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">true</control-param>
+                        </control>
+                    </field>
 					<field id="lecm-contract-dic:contract-documents-type-code" read-only="true"/>
                     <field id="lecm-doc-dic-dt:categories-of-attachments-to-sign">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
@@ -214,13 +233,18 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="cm:name" force="true"/>
+					<show id="cm:title" force="true"/>
 					<show id="lecm-contract-dic:contract-documents-type-code" force="true"/>
                     <show id="lecm-doc-dic-dt:es-sign-required"/>
                     <show id="lecm-doc-dic-dt:categories-of-attachments-to-sign"/>
                     <show id="load-set-default-categories-to-sign-script" force="true"/>
 				</field-visibility>
 				<appearance>
+                    <field id="cm:title" label-id="label.name" mandatory="true" description-id="label.name">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">true</control-param>
+                        </control>
+                    </field>
 					<field id="lecm-contract-dic:contract-documents-type-code">
 						<control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
 						<constraint-handlers>
@@ -250,16 +274,16 @@
 			</form>
 			<form id="search">
 				<field-visibility>
-					<show id="cm:name" force="true"/>
+					<show id="cm:title" force="true"/>
 					<show id="lecm-contract-dic:contract-documents-type-code" force="true"/>
                     <show id="lecm-doc-dic-dt:es-sign-required"/>
                     <show id="lecm-doc-dic-dt:categories-of-attachments-to-sign"/>
 				</field-visibility>
 				<appearance>
-                    <field id="cm:name" mandatory="false">
-                        <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
-                        </constraint-handlers>
+                    <field id="cm:title" label-id="label.name" description-id="label.name">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">false</control-param>
+                        </control>
                     </field>
 					<field id="lecm-contract-dic:contract-documents-type-code" mandatory="false">
 						<constraint-handlers>
@@ -284,7 +308,7 @@
 			</form>
 			<form id="datagrid">
 				<field-visibility>
-					<show id="cm:name" force="true"/>
+					<show id="cm:title" force="true"/>
 					<show id="lecm-contract-dic:contract-documents-type-code" force="true"/>
                     <show id="lecm-doc-dic-dt:es-sign-required"/>
                     <show id="categories-of-attachments-to-sign"/>
@@ -292,6 +316,7 @@
                 <appearance>
                     <field id="lecm-doc-dic-dt:es-sign-required" label-id="label.eds.document_type_dictionary.datagrid.signing_setting.es_required"/>
                     <field id="categories-of-attachments-to-sign" substituteString="{lecm-doc-dic-dt:categories-of-attachments-to-sign}" label-id="label.eds.document_type_dictionary.datagrid.signing_setting.categories"/>
+                    <field id="cm:title" label-id="label.name"/>
                 </appearance>
 			</form>
 		</forms>
@@ -301,10 +326,15 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="cm:name" force="true"/>
+					<show id="cm:title" force="true"/>
 					<show id="lecm-contract-dic:delete-reason-code" force="true"/>
 				</field-visibility>
 				<appearance>
+                    <field id="cm:title" label-id="label.name" mandatory="true" description-id="label.name">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">true</control-param>
+                        </control>
+                    </field>
 					<field id="lecm-contract-dic:delete-reason-code" read-only="true"/>
 				</appearance>
 			</form>
@@ -315,10 +345,15 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="cm:name" force="true"/>
+					<show id="cm:title" force="true"/>
 					<show id="lecm-contract-dic:delete-reason-code" force="true"/>
 				</field-visibility>
 				<appearance>
+                    <field id="cm:title" label-id="label.name" mandatory="true" description-id="label.name">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">true</control-param>
+                        </control>
+                    </field>
 					<field id="lecm-contract-dic:delete-reason-code">
 						<control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
 						<constraint-handlers>
@@ -329,14 +364,14 @@
 			</form>
 			<form id="search">
 				<field-visibility>
-					<show id="cm:name" force="true"/>
+					<show id="cm:title" force="true"/>
 					<show id="lecm-contract-dic:delete-reason-code" force="true"/>
 				</field-visibility>
 				<appearance>
-                    <field id="cm:name" mandatory="false">
-                        <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
-                        </constraint-handlers>
+                    <field id="cm:title" label-id="label.name" description-id="label.name">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">false</control-param>
+                        </control>
                     </field>
 					<field id="lecm-contract-dic:delete-reason-code" mandatory="false">
 						<constraint-handlers>
@@ -347,9 +382,12 @@
 			</form>
 			<form id="datagrid">
 				<field-visibility>
-					<show id="cm:name" force="true"/>
+					<show id="cm:title" force="true"/>
 					<show id="lecm-contract-dic:delete-reason-code" force="true"/>
 				</field-visibility>
+                <appearance>
+                    <field id="cm:title" label-id="label.name"/>
+                </appearance>
 			</form>
 		</forms>
 	</config>
@@ -358,9 +396,16 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="cm:name" force="true"/>
+					<show id="cm:title" force="true"/>
 					<show id="lecm-contract-dic:reference-data-link" force="true"/>
 				</field-visibility>
+                <appearance>
+                    <field id="cm:title" label-id="label.name" mandatory="true" description-id="label.name">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">true</control-param>
+                        </control>
+                    </field>
+                </appearance>
 			</form>
 		</forms>
 	</config>
@@ -369,20 +414,27 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="cm:name" force="true"/>
-					<show id="lecm-contract-dic:reference-data-link" force="true"/>
-				</field-visibility>
-			</form>
-			<form id="search">
-				<field-visibility>
-					<show id="cm:name" force="true"/>
+					<show id="cm:title" force="true"/>
 					<show id="lecm-contract-dic:reference-data-link" force="true"/>
 				</field-visibility>
                 <appearance>
-                    <field id="cm:name" mandatory="false">
-                        <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
-                        </constraint-handlers>
+                    <field id="cm:title" label-id="label.name" mandatory="true" description-id="label.name">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">true</control-param>
+                        </control>
+                    </field>
+                </appearance>
+			</form>
+			<form id="search">
+				<field-visibility>
+					<show id="cm:title" force="true"/>
+					<show id="lecm-contract-dic:reference-data-link" force="true"/>
+				</field-visibility>
+                <appearance>
+                    <field id="cm:title" label-id="label.name" description-id="label.name">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">false</control-param>
+                        </control>
                     </field>
                     <field id="lecm-contract-dic:reference-data-link" mandatory="false">
                         <constraint-handlers>
@@ -393,9 +445,12 @@
 			</form>
 			<form id="datagrid">
 				<field-visibility>
-					<show id="cm:name" force="true"/>
+					<show id="cm:title" force="true"/>
 					<show id="lecm-contract-dic:reference-data-link" force="true"/>
 				</field-visibility>
+                <appearance>
+                    <field id="cm:title" label-id="label.name"/>
+                </appearance>
 			</form>
 		</forms>
 	</config>
@@ -423,9 +478,16 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="cm:name" force="true"/>
+                    <show id="cm:title" force="true"/>
                     <show id="cm:description" force="true"/>
                 </field-visibility>
+                <appearance>
+                    <field id="cm:title" label-id="label.name">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">true</control-param>
+                        </control>
+                    </field>
+                </appearance>
             </form>
         </forms>
     </config>
@@ -434,28 +496,38 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="cm:name" force="true"/>
-                    <show id="cm:description" force="true"/>
-                </field-visibility>
-            </form>
-            <form id="search">
-                <field-visibility>
-                    <show id="cm:name" force="true"/>
+                    <show id="cm:title" force="true"/>
                     <show id="cm:description" force="true"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:name" mandatory="false">
-                        <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
-                        </constraint-handlers>
+                    <field id="cm:title" label-id="label.name" mandatory="true" description-id="label.name">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">true</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+            <form id="search">
+                <field-visibility>
+                    <show id="cm:title" force="true"/>
+                    <show id="cm:description" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:title" label-id="label.name" description-id="label.name">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">false</control-param>
+                        </control>
                     </field>
                 </appearance>
             </form>
             <form id="datagrid">
                 <field-visibility>
-                    <show id="cm:name" force="true"/>
+                    <show id="cm:title" force="true"/>
                     <show id="cm:description" force="true"/>
                 </field-visibility>
+                <appearance>
+                    <field id="cm:title" label-id="label.name"/>
+                </appearance>
             </form>
         </forms>
     </config>
@@ -697,7 +769,8 @@
 					<field id="lecmContractWf:documentType" label-id="contract.additionalDocumentType">
 						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
 							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа_x0020_к_x0020_договору</control-param>
-							<control-param name="nameSubstituteString">{cm:name}</control-param>
+							<control-param name="nameSubstituteString">{cm:title}</control-param>
+                            <control-param name="sortProp">cm:title</control-param>
 							<control-param name="notSelectedOptionShow">true</control-param>
 							<control-param name="notSelectedOptionLabel"> </control-param>
 							<control-param name="showCreateNewButton">false</control-param>
