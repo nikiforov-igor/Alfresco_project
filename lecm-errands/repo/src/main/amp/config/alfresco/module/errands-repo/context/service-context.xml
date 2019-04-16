@@ -946,4 +946,13 @@
             </map>
         </property>
     </bean>
+
+    <bean id="errandCancelReasonUniquenessValidator" parent="dictionaryUniquenessValidator">
+        <property name="type" value="lecm-errands-dic:errand-cancel-reason"/>
+        <property name="uniqueFields">
+            <list>
+                <!--Пустой список - отключаем валидацию-->
+            </list>
+        </property>
+    </bean>
 </beans>

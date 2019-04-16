@@ -34,8 +34,8 @@
                 <property name="cm:title">Причины отмены поручений</property>
                 <property name="lecm-busjournal:objectType-code">LECM_ERRAND_CANCEL_REASON</property>
                 <property name="lecm-busjournal:objectType-class">lecm-errands-dic:errand-cancel-reason</property>
-                <property name="lecm-busjournal:objectType-template">{cm:title}</property>
-                <property name="lecm-busjournal:objectType-list-template">{cm:title}</property>
+                <property name="lecm-busjournal:objectType-template">{lecm-errands-dic:errand-cancel-reason-name}</property>
+                <property name="lecm-busjournal:objectType-list-template">{lecm-errands-dic:errand-cancel-reason-name}</property>
             </item>
         </items>
     </item>
