@@ -324,4 +324,15 @@
         <property name="namespaceService" ref="namespaceService"/>
         <property name="documentService" ref="documentService"/>
     </bean>
+
+    <!--Регистрация шедуллеров в "Центр управления запуском регулярных заданий"-->
+    <bean id="incoming.reg.jobs" parent="regularJobsRegistrator">
+        <property name="schedulers">
+            <map>
+                <entry key="incoming-sys-agent-status-trigger" value-ref="incoming.executionNotificationSchedule"/>
+                <entry key="incoming-sys-agent-expired-trigger" value-ref="incomingEveryDayStatusSchedule"/>
+            </map>
+        </property>
+    </bean>
+
 </beans>
