@@ -2,7 +2,7 @@
 <items>
 	<item name="lecm-dic:Тип объекта" type="lecm-dic:dictionary">
 		<items updateMode="CreateOrUpdate">
-			<item name="cm:НД" type="lecm-busjournal:objectType">
+			<item name="cm:Нормативный документ" type="lecm-busjournal:objectType">
 				<property name="cm:title">Нормативный документ</property>
 				<property name="lecm-busjournal:objectType-code">LECM_ND</property>
 				<property name="lecm-busjournal:objectType-class">lecm-nd:document</property>
