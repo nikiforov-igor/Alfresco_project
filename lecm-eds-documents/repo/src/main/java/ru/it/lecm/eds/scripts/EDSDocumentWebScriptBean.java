@@ -16,6 +16,7 @@ import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.security.LecmPermissionService;
 
 import java.util.*;
 
@@ -33,6 +34,7 @@ public class EDSDocumentWebScriptBean extends BaseWebScript {
     private DocumentService documentService;
     private BusinessJournalService businessJournalService;
     private SubstitudeBean substitudeBean;
+    private LecmPermissionService lecmPermissionService;
 
     public void setSubstitudeBean(SubstitudeBean substitudeBean) {
         this.substitudeBean = substitudeBean;
@@ -56,6 +58,10 @@ public class EDSDocumentWebScriptBean extends BaseWebScript {
 
     public void setEdsService(EDSDocumentService edsService) {
         this.edsService = edsService;
+    }
+
+    public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+        this.lecmPermissionService = lecmPermissionService;
     }
 
     /**
@@ -150,6 +156,10 @@ public class EDSDocumentWebScriptBean extends BaseWebScript {
 
         List<NodeRef> recipients = new ArrayList<>();
         recipients.add(documentService.getDocumentAuthor(document.getNodeRef()));
+        List<NodeRef> initiators = lecmPermissionService.getEmployeesByDynamicRole(document.getNodeRef(),EDSDocumentService.DYNAMIC_ROLE_CODE_INITIATOR);
+        if (initiators != null && initiators.size() > 0) {
+            recipients.addAll(initiators);
+        }
 
         Map<String, Object> config = new HashMap<>();
         config.put("mainObject", document.getNodeRef());

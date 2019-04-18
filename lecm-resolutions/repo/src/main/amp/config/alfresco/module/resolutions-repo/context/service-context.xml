@@ -90,6 +90,8 @@
           depends-on="resolutions.LogicEcmBootstrap, WorkCalendarService, namespaceService, resolutionsWorkflowBootstrap">
         <property name="namespaceService" ref="namespaceService"/>
         <property name="edsDocumentService" ref="edsService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="secretaryService" ref="secretaryService"/>
         <property name="folders">
             <map>
                 <entry key="#{RESOLUTIONS_ROOT_ID}" value="#{RESOLUTIONS_ROOT_NAME}"/>
@@ -178,6 +180,15 @@
         <property name="businessJournalService" ref="businessJournalService"/>
         <property name="nodeService" ref="nodeService"/>
         <property name="publicAction" value="false" />
+    </bean>
+
+    <!--Регистрация шедуллеров в "Центр управления запуском регулярных заданий"-->
+    <bean id="resolutions.reg.jobs" parent="regularJobsRegistrator">
+        <property name="schedulers">
+            <map>
+                <entry key="resolutios-sys-agent-status-trigger" value-ref="resolutionsExpiredSchedule"/>
+            </map>
+        </property>
     </bean>
 
     <bean id="resolutionErrandsPolicy" class="ru.it.lecm.resolutions.policy.ResolutionErrandsPolicy"

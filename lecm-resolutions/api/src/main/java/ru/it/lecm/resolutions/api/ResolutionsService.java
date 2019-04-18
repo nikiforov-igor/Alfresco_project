@@ -82,4 +82,11 @@ public interface ResolutionsService {
     void resetAnnulSignal(NodeRef resolution);
 
     NodeRef getResolutionBase(NodeRef resolution);
+
+    /**
+     * Получить список сотрудников для выбора
+     * автора резолюции
+     * @return список сотрудников | null - если ограничений нет
+     */
+    List<NodeRef> getAuthorsForFilter();
 }

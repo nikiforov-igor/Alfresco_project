@@ -21,6 +21,7 @@
 		  p:businessJournalService-ref="businessJournalService"
 		  p:notificationsService-ref="notificationsService"
 	  	  p:documentService-ref="documentService"
-		  p:substitudeBean-ref="substitudeService"/>
+		  p:substitudeBean-ref="substitudeService"
+		  p:lecmPermissionService-ref="lecmPermissionServiceBean"/>
 
 </beans>

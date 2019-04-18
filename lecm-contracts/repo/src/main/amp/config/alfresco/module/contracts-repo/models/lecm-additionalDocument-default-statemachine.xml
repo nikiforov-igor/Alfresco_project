@@ -162,22 +162,6 @@
                     </node>
                     <node>
                         <type>dynamic-role-item</type>
-                        <name>9f96e376-1e58-4304-8a44-b2bce63f482a</name>
-                        <properties/>
-                        <aspects>
-                            <business-role/>
-                        </aspects>
-                        <associations/>
-                        <roleAssociations>
-                            <roleAssociation>
-                                <type>role-assoc</type>
-                                <businessRoleName>BR_MEMBER</businessRoleName>
-                            </roleAssociation>
-                        </roleAssociations>
-                        <subFolders/>
-                    </node>
-                    <node>
-                        <type>dynamic-role-item</type>
                         <name>a84696a4-c84e-4299-8656-77133e88e4e6</name>
                         <properties/>
                         <aspects>
@@ -1182,28 +1166,6 @@
                             <subFolder>
                                 <name>dynamicRoles</name>
                                 <nodes>
-                                    <node>
-                                        <type>dynamic-role</type>
-                                        <name>205ad5e2-5812-4224-9409-dfb85029f1ba</name>
-                                        <properties>
-                                            <property>
-                                                <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects>
-                                            <business-role/>
-                                            <permissionTypeAspect/>
-                                        </aspects>
-                                        <associations/>
-                                        <roleAssociations>
-                                            <roleAssociation>
-                                                <type>role-assoc</type>
-                                                <businessRoleName>BR_MEMBER</businessRoleName>
-                                            </roleAssociation>
-                                        </roleAssociations>
-                                        <subFolders/>
-                                    </node>
                                     <node>
                                         <type>dynamic-role</type>
                                         <name>cbe05094-b050-4afc-8981-67fe66e50053</name>
@@ -3939,28 +3901,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>dynamic-role</type>
-                                        <name>84e103d5-5963-4dd1-ace4-a01477169158</name>
-                                        <properties>
-                                            <property>
-                                                <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects>
-                                            <business-role/>
-                                            <permissionTypeAspect/>
-                                        </aspects>
-                                        <associations/>
-                                        <roleAssociations>
-                                            <roleAssociation>
-                                                <type>role-assoc</type>
-                                                <businessRoleName>BR_MEMBER</businessRoleName>
-                                            </roleAssociation>
-                                        </roleAssociations>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>dynamic-role</type>
                                         <name>8bee33af-6d6f-429c-90ce-d39b8c566944</name>
                                         <properties>
                                             <property>
@@ -5059,28 +4999,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         </roleAssociations>
                                         <subFolders/>
                                     </node>
-                                    <node>
-                                        <type>dynamic-role</type>
-                                        <name>86bb023c-7413-4ce9-92ea-24fdea51a95b</name>
-                                        <properties>
-                                            <property>
-                                                <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects>
-                                            <business-role/>
-                                            <permissionTypeAspect/>
-                                        </aspects>
-                                        <associations/>
-                                        <roleAssociations>
-                                            <roleAssociation>
-                                                <type>role-assoc</type>
-                                                <businessRoleName>BR_MEMBER</businessRoleName>
-                                            </roleAssociation>
-                                        </roleAssociations>
-                                        <subFolders/>
-                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -6091,28 +6009,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                             <roleAssociation>
                                                 <type>role-assoc</type>
                                                 <businessRoleName>BR_INITIATOR</businessRoleName>
-                                            </roleAssociation>
-                                        </roleAssociations>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>dynamic-role</type>
-                                        <name>39e97457-29e0-4f0e-82d4-2461192970c9</name>
-                                        <properties>
-                                            <property>
-                                                <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects>
-                                            <business-role/>
-                                            <permissionTypeAspect/>
-                                        </aspects>
-                                        <associations/>
-                                        <roleAssociations>
-                                            <roleAssociation>
-                                                <type>role-assoc</type>
-                                                <businessRoleName>BR_MEMBER</businessRoleName>
                                             </roleAssociation>
                                         </roleAssociations>
                                         <subFolders/>
@@ -7287,28 +7183,6 @@ for (i in approvals) {
                                             <roleAssociation>
                                                 <type>role-assoc</type>
                                                 <businessRoleName>BR_INITIATOR</businessRoleName>
-                                            </roleAssociation>
-                                        </roleAssociations>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>dynamic-role</type>
-                                        <name>5cd66cbe-6700-458d-9847-9e90fed7176c</name>
-                                        <properties>
-                                            <property>
-                                                <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects>
-                                            <business-role/>
-                                            <permissionTypeAspect/>
-                                        </aspects>
-                                        <associations/>
-                                        <roleAssociations>
-                                            <roleAssociation>
-                                                <type>role-assoc</type>
-                                                <businessRoleName>BR_MEMBER</businessRoleName>
                                             </roleAssociation>
                                         </roleAssociations>
                                         <subFolders/>
@@ -8617,28 +8491,6 @@ for (i in approvals) {
                                             <roleAssociation>
                                                 <type>role-assoc</type>
                                                 <businessRoleName>BR_INITIATOR</businessRoleName>
-                                            </roleAssociation>
-                                        </roleAssociations>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>dynamic-role</type>
-                                        <name>f7e7b061-23eb-479d-9d10-2c7418eab92b</name>
-                                        <properties>
-                                            <property>
-                                                <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects>
-                                            <business-role/>
-                                            <permissionTypeAspect/>
-                                        </aspects>
-                                        <associations/>
-                                        <roleAssociations>
-                                            <roleAssociation>
-                                                <type>role-assoc</type>
-                                                <businessRoleName>BR_MEMBER</businessRoleName>
                                             </roleAssociation>
                                         </roleAssociations>
                                         <subFolders/>
@@ -10126,28 +9978,6 @@ if (contractAssocs != null && contractAssocs.length == 1) {
                                             <roleAssociation>
                                                 <type>role-assoc</type>
                                                 <businessRoleName>LECM_APPROVER_DYN</businessRoleName>
-                                            </roleAssociation>
-                                        </roleAssociations>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>dynamic-role</type>
-                                        <name>9f41108d-38c3-4b78-84e1-cd138805c1a7</name>
-                                        <properties>
-                                            <property>
-                                                <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects>
-                                            <business-role/>
-                                            <permissionTypeAspect/>
-                                        </aspects>
-                                        <associations/>
-                                        <roleAssociations>
-                                            <roleAssociation>
-                                                <type>role-assoc</type>
-                                                <businessRoleName>BR_MEMBER</businessRoleName>
                                             </roleAssociation>
                                         </roleAssociations>
                                         <subFolders/>
@@ -11898,28 +11728,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                 <nodes>
                                     <node>
                                         <type>dynamic-role</type>
-                                        <name>0aa373e8-5987-43ac-b2dc-5dbbfd7397fb</name>
-                                        <properties>
-                                            <property>
-                                                <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects>
-                                            <business-role/>
-                                            <permissionTypeAspect/>
-                                        </aspects>
-                                        <associations/>
-                                        <roleAssociations>
-                                            <roleAssociation>
-                                                <type>role-assoc</type>
-                                                <businessRoleName>BR_MEMBER</businessRoleName>
-                                            </roleAssociation>
-                                        </roleAssociations>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>dynamic-role</type>
                                         <name>be79ca85-7839-47b3-ad16-b868e0e89bd3</name>
                                         <properties>
                                             <property>
@@ -13441,28 +13249,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                             <roleAssociation>
                                                 <type>role-assoc</type>
                                                 <businessRoleName>BR_INITIATOR</businessRoleName>
-                                            </roleAssociation>
-                                        </roleAssociations>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>dynamic-role</type>
-                                        <name>c72785f8-51f2-4681-9b98-7a4f8aeef730</name>
-                                        <properties>
-                                            <property>
-                                                <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects>
-                                            <business-role/>
-                                            <permissionTypeAspect/>
-                                        </aspects>
-                                        <associations/>
-                                        <roleAssociations>
-                                            <roleAssociation>
-                                                <type>role-assoc</type>
-                                                <businessRoleName>BR_MEMBER</businessRoleName>
                                             </roleAssociation>
                                         </roleAssociations>
                                         <subFolders/>

@@ -22,7 +22,7 @@
 			<item name="cm:RESERVATION_REQUEST_STARTED" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[RESERVATION_REQUEST_STARTED]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#employee.wrapAsLink(#employee.attribute("lecm-orgstr:employee-short-name"))} запросил резервирование номера для документа {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:ext-present-string"))}]]></property>
+                    <![CDATA[{#employee.wrapAsLink(#employee.attribute("lecm-orgstr:employee-short-name"))} запросил резервирование номера для документа {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Резервирование номера. Запуск запроса резервирования рег.номера]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
@@ -34,7 +34,7 @@
             <item name="cm:RESERVATION_REQUEST_CANCEL_STARTED" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[RESERVATION_REQUEST_CANCEL_STARTED]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} запросил отмену резерва регистрационных данных для документа {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:ext-present-string"))}]]></property>
+                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} запросил отмену резерва регистрационных данных для документа {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Резервирование номера. Запуск запроса отмены номера(после регистрации)]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>

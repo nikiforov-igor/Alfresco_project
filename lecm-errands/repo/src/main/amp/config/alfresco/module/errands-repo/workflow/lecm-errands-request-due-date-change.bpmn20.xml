@@ -88,7 +88,7 @@
                             document = bpm_package.children[0];
                             employee = orgstructure.getEmployeeByLogin(assignee);
                             /*добавляем актуального исполнителя в динамические бизнес роли*/
-                            statemachine.grandDynamicRoleForEmployee(document, employee, "ERRANDS_EXECUTOR");
+                            statemachine.grandDynamicRoleForEmployee(document, employee, "BR_INITIATOR");
                           }
                         })();]]></activiti:string>
 					</activiti:field>
