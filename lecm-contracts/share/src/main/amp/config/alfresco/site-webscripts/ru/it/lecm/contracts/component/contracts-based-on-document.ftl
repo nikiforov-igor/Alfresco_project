@@ -23,27 +23,28 @@
 <div class="clear"></div>
 
 <@formLib.renderFieldHelp field=field />
-    <script type="text/javascript">//<![CDATA[
-    (function () {
-	    var nodeRef;
+<script type="text/javascript">//<![CDATA[
+(function () {
+	var nodeRef;
 
-	    function init() {
-	    LogicECM.module.Base.Util.loadScripts([
-	            'scripts/lecm-contracts/contracts-based-on-document.js'
-			], createControls);
-		}
-		function createControls(){
-			new LogicECM.module.Contracts.BasedOnDocumentSelection("${fieldHtmlId}").setOptions({
-	            controlId: "${controlId}",
-				nodeRef: nodeRef
-	    }).setMessages(${messages});
-		}
-		
-	    function loadControl(layer, args) {
-		    nodeRef = args[1].items;
-		    init();
-	    }
+	function init() {
+		LogicECM.module.Base.Util.loadScripts([
+			'scripts/lecm-contracts/contracts-based-on-document.js'
+		], createControls);
+	}
 
-	    YAHOO.Bubbling.on("afterSetItems", loadControl);
-    })();
-    //]]></script>
+	function createControls() {
+		new LogicECM.module.Contracts.BasedOnDocumentSelection("${fieldHtmlId}").setOptions({
+			controlId: "${controlId}",
+			nodeRef: nodeRef
+		}).setMessages(${messages});
+	}
+
+	function loadControl(layer, args) {
+		nodeRef = args[1].items;
+		YAHOO.util.Event.onContentReady("${fieldHtmlId}", init);
+	}
+
+	YAHOO.Bubbling.on("afterSetItems", loadControl);
+})();
+//]]></script>

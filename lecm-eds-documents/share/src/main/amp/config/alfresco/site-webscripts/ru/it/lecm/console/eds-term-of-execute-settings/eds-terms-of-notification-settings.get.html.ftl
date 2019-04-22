@@ -17,14 +17,15 @@
             new LogicECM.module.EdsTermsOfNotificationSettings("${el}-body").setMessages(${messages});
         }
 
-        LogicECM.module.Base.Util.loadResources([
-            'components/console/consoletool.js',
-            'scripts/lecm-eds-documents/eds-terms-of-notification-settings.js',
-            'components/form/form.js'
-        ], [
-            'css/lecm-eds-documents/eds-terms-of-notification-settings.css'
-        ], createPage);
-
+        YAHOO.util.Event.onContentReady("${el}-body", function () {
+            LogicECM.module.Base.Util.loadResources([
+                'components/console/consoletool.js',
+                'scripts/lecm-eds-documents/eds-terms-of-notification-settings.js',
+                'components/form/form.js'
+            ], [
+                'css/lecm-eds-documents/eds-terms-of-notification-settings.css'
+            ], createPage);
+        });
     })();
     //]]></script>
 

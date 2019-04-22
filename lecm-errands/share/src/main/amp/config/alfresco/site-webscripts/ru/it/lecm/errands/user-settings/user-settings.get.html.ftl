@@ -4,7 +4,7 @@
 (function () {
 	function init() {
 		LogicECM.module.Base.Util.loadResources([
-					'/scripts/lecm-errands/errands-user-settings.js'
+					'scripts/lecm-errands/errands-user-settings.js'
 				],
 				[
 					'css/lecm-errands/errands-user-settings.css'

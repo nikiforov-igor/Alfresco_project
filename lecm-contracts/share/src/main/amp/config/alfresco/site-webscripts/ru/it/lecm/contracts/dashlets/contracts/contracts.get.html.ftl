@@ -6,10 +6,6 @@
 </@>
 <@markup id="js">
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-contracts/contracts-dashlet.js"></@script>
-    <@script type="text/javascript" src="${url.context}/res/modules/simple-dialog.js" group="armFiltersGrid"/>
-	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/advsearch.js"></@script>
-	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-datagrid.js"></@script>
-	<@script type="text/javascript" src="${url.context}/res/scripts/grids/documents-journal-grid.js"></@script>
 </@>
 <@markup id="html">
 	<#assign id = args.htmlid>

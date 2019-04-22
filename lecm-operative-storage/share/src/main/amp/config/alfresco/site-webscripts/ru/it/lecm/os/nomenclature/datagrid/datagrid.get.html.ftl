@@ -2,26 +2,23 @@
 <#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
 
 <#include "/org/alfresco/components/component.head.inc">
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/advsearch.js"></@script>
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/object-finder/lecm-object-finder.js"/>
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-datagrid.js"/>
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-association-search.js"/>
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-arm/arm-documents-datagrid.js"></@script>
-<@script type="text/javascript" src="${url.context}/res/components/form/date-range.js"></@script>
-<@script type="text/javascript" src="${url.context}/res/components/form/number-range.js"></@script>
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/utils/search-queries.js"></@script>
 
 <#assign id = args.htmlid>
 <#assign datagridId = "nomenclature">
 <#assign additionalDatagridId = id + "-list-datagrid-additional">
 <#assign bubblingId = datagridId>
 
-
-
 <@grid.datagrid datagridId false>
 	<script type="text/javascript">//<![CDATA[
 		YAHOO.util.Event.onContentReady ('${id}', function () {
-			var js = ['scripts/lecm-os/nomenclature/nomenclature-datagrid.js'];
+            var js = [
+                'scripts/lecm-base/components/advsearch.js',
+                'scripts/lecm-base/components/object-finder/lecm-object-finder.js',
+                'scripts/lecm-base/components/lecm-datagrid.js',
+                'scripts/lecm-base/components/lecm-association-search.js',
+                'scripts/lecm-arm/arm-documents-datagrid.js',
+                'scripts/lecm-documents/utils/search-queries.js',
+                'scripts/lecm-os/nomenclature/nomenclature-datagrid.js'];
 			var css = ['css/lecm-os/nomenclature-datagrid.css'];
 			LogicECM.module.Base.Util.loadResources(js, css, process);
 

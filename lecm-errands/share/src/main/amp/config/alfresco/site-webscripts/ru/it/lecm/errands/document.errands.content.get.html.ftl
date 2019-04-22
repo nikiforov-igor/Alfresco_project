@@ -70,10 +70,13 @@
         </#if>
 		}).setMessages(${messages});
     }
-	LogicECM.module.Base.Util.loadResources([
-		'scripts/lecm-errands/lecm-errands-dashlet.js',
-		'/scripts/lecm-errands/document-errands.js'
-	],[], initComponent);
+
+    YAHOO.util.Event.onDOMReady(function () {
+        LogicECM.module.Base.Util.loadResources([
+            'scripts/lecm-errands/lecm-errands-dashlet.js',
+            'scripts/lecm-errands/document-errands.js'
+        ],[], initComponent);
+    });
 })();
 //]]>
 </script>

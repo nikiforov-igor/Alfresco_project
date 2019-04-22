@@ -71,7 +71,8 @@
     function onBeforeFormRuntimeInit(layer, args) {
         if (args[1].runtime.formId == "${args.htmlid?html}-form") {
             runtimeForm = args[1].runtime;
-            init();
+
+            YAHOO.util.Event.onDOMReady(init);
         }
     }
 
