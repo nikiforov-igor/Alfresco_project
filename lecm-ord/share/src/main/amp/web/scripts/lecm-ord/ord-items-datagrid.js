@@ -157,7 +157,7 @@ LogicECM.ORD = LogicECM.ORD || {};
                         useChildQuery: false,
                         searchConfig: {}
                     },
-                    showCheckboxColumn: false,
+                    showCheckboxColumn: this.options.showCheckboxColumn,
                     bubblingLabel: this.options.bubblingLabel,
                     showActionColumn: true,
                     attributeForShow: this.options.attributeForShow,
