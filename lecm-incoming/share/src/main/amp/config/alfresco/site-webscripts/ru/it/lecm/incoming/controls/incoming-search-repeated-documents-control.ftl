@@ -1,40 +1,8 @@
 <#include "/org/alfresco/components/component.head.inc">
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-association-search.js"></@script>
 
 <#assign controlId = fieldHtmlId + "-cntrl">
 
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
-
-<#--<div class="form-field">-->
-<#--<#if disabled>-->
-	<#--<div id="${controlId}" class="viewmode-field">-->
-		<#--<#if (field.endpointMandatory!false || field.mandatory!false) && field.value == "">-->
-		<#--<span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png" title="${msg("form.field.incomplete")}" /><span>-->
-		<#--</#if>-->
-		<#--<span class="viewmode-label">${field.label?html}:</span>-->
-		<#--<span id="${controlId}-currentValueDisplay" class="viewmode-value"></span>-->
-	<#--</div>-->
-<#--<#else>-->
-	<#--<label for="${controlId}">${field.label?html}:<#if field.endpointMandatory!false || field.mandatory!false><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>-->
-	<#--<div id="${controlId}" class="object-finder">-->
-
-		<#--<#if field.disabled == false>-->
-			<#--<input type="hidden" id="${controlId}-added" name="${field.name}_added"/>-->
-			<#--<input type="hidden" id="${controlId}-removed" name="${field.name}_removed"/>-->
-			<#--<input type="hidden" id="${controlId}-selectedItems"/>-->
-
-			<#--<input type="checkbox" id="${controlId}-search-similar">-->
-			<#--<label for="${controlId}-search-similar" class="checkbox">${msg("label.search.similar")}</label>-->
-			<#--<@renderSearchPickerHTML controlId/>-->
-		<#--</#if>-->
-
-		<#--<div id="${controlId}-currentValueDisplay" class="current-values"></div>-->
-
-		<#--<div class="clear"></div>-->
-	<#--</div>-->
-<#--</#if>-->
-	<#--<input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}" />-->
-<#--</div>-->
 
 <#macro renderSearchPickerHTML controlId>
 	<#assign pickerId = controlId + "-picker">

@@ -182,6 +182,15 @@
         <property name="publicAction" value="false" />
     </bean>
 
+    <!--Регистрация шедуллеров в "Центр управления запуском регулярных заданий"-->
+    <bean id="resolutions.reg.jobs" parent="regularJobsRegistrator">
+        <property name="schedulers">
+            <map>
+                <entry key="resolutios-sys-agent-status-trigger" value-ref="resolutionsExpiredSchedule"/>
+            </map>
+        </property>
+    </bean>
+
     <bean id="resolutionErrandsPolicy" class="ru.it.lecm.resolutions.policy.ResolutionErrandsPolicy"
            init-method="init" depends-on="resolutions.LogicEcmBootstrap, errandsService">
         <property name="policyComponent" ref="policyComponent"/>

@@ -60,7 +60,8 @@
                     linkedOnAssocs: "lecm-errands:additional-document-assoc",
                     onlyDirect: true,
                     linkedDocTypes: "lecm-errands:document",
-                    containerId: "${id}"
+                    containerId: "${id}",
+                    msgEmpty: "${msg("errands.tree.no_errands")}"
                 },
                 target: "${id}-connections-list"
             });

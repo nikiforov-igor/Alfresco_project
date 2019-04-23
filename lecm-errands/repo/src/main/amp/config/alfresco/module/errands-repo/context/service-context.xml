@@ -913,6 +913,18 @@
         <property name="errandsService" ref="errandsService"/>
     </bean>
 
+    <!--Регистрация шедуллеров в "Центр управления запуском регулярных заданий"-->
+    <bean id="errand.reg.jobs" parent="regularJobsRegistrator">
+        <property name="schedulers">
+            <map>
+                <entry key="periodical-errands-sys-agent-trigger" value-ref="periodicalErrandsSchedule"/>
+                <entry key="periodical-errands-to-executed-sys-agent-trigger" value-ref="periodicalErrandsToExecutedSchedule"/>
+                <entry key="errands-sys-agent-notifier-trigger" value-ref="errandsEveryDayNotificationSchedule"/>
+                <entry key="errands-sys-agent-status-trigger" value-ref="errandsEveryDayStatusSchedule"/>
+            </map>
+        </property>
+    </bean>
+
     <bean id="errandsPeriodEndDatePolicy" class="ru.it.lecm.errands.policy.ErrandsPeriodEndDatePolicy"
           init-method="init" depends-on="errands.LogicEcmModelsBootstrap">
         <property name="policyComponent" ref="policyComponent"/>

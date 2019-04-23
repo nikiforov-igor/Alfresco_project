@@ -138,7 +138,6 @@
 	function init() {
         LogicECM.module.Base.Util.loadResources([
 	        'scripts/lecm-base/components/advsearch.js',
-            'modules/simple-dialog.js',
 	        'scripts/lecm-base/components/lecm-datagrid.js',
             'scripts/lecm-base/components/lecm-toolbar.js',
             'scripts/documents/tables/lecm-document-table.js',

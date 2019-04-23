@@ -17,14 +17,15 @@
             new LogicECM.module.ResolutionsDashletSettings("${el}").setMessages(${messages});
         }
 
-        LogicECM.module.Base.Util.loadResources([
-            'components/console/consoletool.js',
-            'scripts/lecm-resolution/resolutions-dashlet-settings.js',
-            'components/form/form.js'
-        ], [
-            'css/lecm-resolution/resolutions-dashlet-settings.css'
-        ], createPage);
-
+        YAHOO.util.Event.onDOMReady(function () {
+            LogicECM.module.Base.Util.loadResources([
+                'components/console/consoletool.js',
+                'scripts/lecm-resolution/resolutions-dashlet-settings.js',
+                'components/form/form.js'
+            ], [
+                'css/lecm-resolution/resolutions-dashlet-settings.css'
+            ], createPage);
+        });
     })();
     //]]></script>
 

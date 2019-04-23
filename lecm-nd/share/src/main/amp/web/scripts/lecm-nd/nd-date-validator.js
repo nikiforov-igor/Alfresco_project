@@ -5,10 +5,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 LogicECM.module = LogicECM.module || {};
 LogicECM.module.ND = LogicECM.module.ND || {};
 
-(function () {
-    LogicECM.module.Base.Util.loadCSS(['/css/lecm-nd/error-tooltip.css'], null, ['container']);
-})();
-
 var YUITooltip = null;
 
 LogicECM.module.ND.dateIntervalValidation =

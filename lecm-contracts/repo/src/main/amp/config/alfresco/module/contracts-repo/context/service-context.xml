@@ -561,6 +561,18 @@
         <property name="documentGlobalSettings" ref="documents.global-settings.service"/>
     </bean>
 
+    <!--Регистрация шедуллеров в "Центр управления запуском регулярных заданий"-->
+    <bean id="contract.reg.jobs" parent="regularJobsRegistrator">
+        <property name="schedulers">
+            <map>
+                <entry key="contracts-notifications-trigger" value-ref="contractsInitiatorNotificationSchedule"/>
+                <entry key="contracts-stage-notifications-trigger" value-ref="contractsStageDateNotificationSchedule"/>
+                <entry key="lecm-contracts-stage-end-notifications-trigger" value-ref="contractStageEndDateNotificationSchedule"/>
+            </map>
+        </property>
+    </bean>
+
+
     <bean id="additionalDocCopySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings">
         <property name="propsToCopy">
             <list>
