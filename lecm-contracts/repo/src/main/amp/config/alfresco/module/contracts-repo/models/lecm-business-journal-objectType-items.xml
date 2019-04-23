@@ -29,8 +29,8 @@
                 <property name="lecm-busjournal:objectType-class">lecm-contract-dic:stage-status</property>
                 <property name="lecm-busjournal:objectType-template">{cm:title}</property>
             </item>
-            <item name="cm:Прочины удаления" type="lecm-busjournal:objectType">
-                <property name="cm:title">Прочины удаления</property>
+            <item name="cm:Причины удаления" type="lecm-busjournal:objectType">
+                <property name="cm:title">Причины удаления</property>
                 <property name="lecm-busjournal:objectType-code">LECM_CONTRACT_DELETE_REASON</property>
                 <property name="lecm-busjournal:objectType-class">lecm-contract-dic:delete-reason</property>
                 <property name="lecm-busjournal:objectType-template">{cm:title}</property>
