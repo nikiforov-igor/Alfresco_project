@@ -120,7 +120,8 @@
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
                             <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="nameSubstituteString">{cm:title}</control-param>
+                            <control-param name="sortProp">cm:title</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel"> </control-param>
                             <control-param name="showCreateNewLink">false</control-param>
@@ -322,7 +323,8 @@
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
                             <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="nameSubstituteString">{cm:title}</control-param>
+                            <control-param name="sortProp">cm:title</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel"> </control-param>
                             <control-param name="showCreateNewLink">false</control-param>
@@ -809,7 +811,8 @@
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
                             <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="nameSubstituteString">{cm:title}</control-param>
+                            <control-param name="sortProp">cm:title</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel"> </control-param>
                             <control-param name="showCreateNewLink">false</control-param>
@@ -1078,7 +1081,8 @@
                                 /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений
                             </control-param>
                             <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="nameSubstituteString">{cm:title}</control-param>
+                            <control-param name="sortProp">cm:title</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel"></control-param>
                             <control-param name="showCreateNewLink">false</control-param>
@@ -1359,7 +1363,8 @@
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
                             <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="nameSubstituteString">{cm:title}</control-param>
+                            <control-param name="sortProp">cm:title</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel"> </control-param>
                             <control-param name="showCreateNewLink">false</control-param>
@@ -1697,7 +1702,8 @@
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
                             <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="nameSubstituteString">{cm:title}</control-param>
+                            <control-param name="sortProp">cm:title</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel"> </control-param>
                             <control-param name="showCreateNewLink">false</control-param>
@@ -1979,7 +1985,8 @@
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
                             <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="nameSubstituteString">{cm:title}</control-param>
+                            <control-param name="sortProp">cm:title</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel"> </control-param>
                             <control-param name="showCreateNewLink">false</control-param>
@@ -2054,7 +2061,8 @@
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
                             <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="nameSubstituteString">{cm:title}</control-param>
+                            <control-param name="sortProp">cm:title</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel"> </control-param>
                             <control-param name="showCreateNewLink">false</control-param>
@@ -2131,7 +2139,8 @@
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
                             <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="nameSubstituteString">{cm:title}</control-param>
+                            <control-param name="sortProp">cm:title</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel"> </control-param>
                             <control-param name="showCreateNewLink">false</control-param>
@@ -2242,7 +2251,8 @@
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
                             <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="nameSubstituteString">{cm:title}</control-param>
+                            <control-param name="sortProp">cm:title</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel"> </control-param>
                             <control-param name="showCreateNewLink">false</control-param>

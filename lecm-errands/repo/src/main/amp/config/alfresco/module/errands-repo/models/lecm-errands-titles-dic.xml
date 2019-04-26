@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items updateMode="CreateOrUpdate">
-    <item name="lecm-dic:Типы поручений" type="lecm-dic:dictionary">
-        <property name="cm:name">Типы поручений</property>
+    <item name="lecm-dic:Заголовки поручений" type="lecm-dic:dictionary">
+        <property name="cm:name">Заголовки поручений</property>
         <property name="lecm-dic:attributeForShow">cm:title</property>
-        <property name="lecm-dic:type">lecm-errands-dic:errand-type</property>
+        <property name="lecm-dic:type">lecm-errands-dic:errand-titles</property>
         <property name="lecm-dic:active">true</property>
         <property name="lecm-dic:plane">true</property>
         <property name="lecm-dic:multi-organizational">true</property>
-        <property name="lecm-dic:description">Типы поручений</property>
+        <property name="lecm-dic:description">Заголовки поручений</property>
     </item>
 </items>

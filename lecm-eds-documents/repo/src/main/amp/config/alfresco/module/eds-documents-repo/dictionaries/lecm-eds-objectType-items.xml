@@ -3,16 +3,30 @@
     <item name="lecm-dic:Тип объекта" type="lecm-dic:dictionary">
         <items updateMode="CreateOrUpdate">
             <item name="cm:Потенциальная роль" type="lecm-busjournal:objectType">
-                <property name="cm:name">Потенциальная роль</property>
+                <property name="cm:title">Потенциальная роль</property>
                 <property name="lecm-busjournal:objectType-code">LECM_POTENTIAL_ROLE</property>
                 <property name="lecm-busjournal:objectType-class">lecm-eds-globset:potential-role</property>
                 <property name="lecm-busjournal:objectType-template">Роль: {lecm-eds-globset:potential-role-business-role-assoc-text-content} {lecm-eds-globset:potential-role-employee-assoc-text-content} {lecm-eds-globset:potential-role-organization-element-assoc-text-content}</property>
             </item>
             <item name="cm:Глобальные настройки СЭД" type="lecm-busjournal:objectType">
-                <property name="cm:name">Глобальные настройки СЭД</property>
+                <property name="cm:title">Глобальные настройки СЭД</property>
                 <property name="lecm-busjournal:objectType-code">EDS_GLOBAL_SETTINGS</property>
                 <property name="lecm-busjournal:objectType-class">lecm-eds-globset:settings</property>
                 <property name="lecm-busjournal:objectType-template">Глобальные настройки СЭД</property>
+            </item>
+            <item name="cm:Вид документа" type="lecm-busjournal:objectType">
+                <property name="cm:title">Вид документа</property>
+                <property name="lecm-busjournal:objectType-code">LECM_EDS_DOC_TYPE</property>
+                <property name="lecm-busjournal:objectType-class">lecm-doc-dic-dt:documentType</property>
+                <property name="lecm-busjournal:objectType-template">{cm:title}</property>
+                <property name="lecm-busjournal:objectType-list-template">{cm:title}</property>
+            </item>
+            <item name="cm:Справочник видов документов<" type="lecm-busjournal:objectType">
+                <property name="cm:title">Справочник видов документов</property>
+                <property name="lecm-busjournal:objectType-code">LECM_EDS_DOC_TYPE_DIC</property>
+                <property name="lecm-busjournal:objectType-class">lecm-doc-dic-dt:typeDictionary</property>
+                <property name="lecm-busjournal:objectType-template">{cm:title}</property>
+                <property name="lecm-busjournal:objectType-list-template">{cm:title}</property>
             </item>
         </items>
     </item>

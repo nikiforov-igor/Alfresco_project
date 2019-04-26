@@ -78,10 +78,10 @@ LogicECM.module.Eds.GlobalSettings = LogicECM.module.Eds.GlobalSettings || {};
 				itemType: "cm:content",
 				treeItemType: null,
 				maxSearchResults: 1000,
-				treeRoteNodeTitleProperty: "cm:name",
-				treeNodeSubstituteString: "{cm:name}",
+				treeRoteNodeTitleProperty: "cm:title",
+				treeNodeSubstituteString: "{cm:title}",
 				treeNodeTitleSubstituteString: "",
-				nameSubstituteString: "{cm:name}",
+				nameSubstituteString: "{cm:title}",
 				selectedItemsNameSubstituteString: null,
 				employeeAbsenceMarker: false,
 				fireAction:

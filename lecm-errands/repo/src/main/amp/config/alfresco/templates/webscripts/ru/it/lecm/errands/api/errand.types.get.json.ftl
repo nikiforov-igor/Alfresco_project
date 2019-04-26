@@ -4,7 +4,7 @@
         <#list types as type>
             {
                 "nodeRef": "${type.nodeRef}",
-                "name": "${type.name}",
+                "name": "${type.properties["cm:title"]}",
                 "defaultTitle": "${type.properties["lecm-errands-dic:errand-type-default-title"]}",
                 "manual-selection": ${type.properties["lecm-errands-dic:errand-type-manual-selection"]?string},
                 "report-required": ${type.properties["lecm-errands-dic:errand-type-report-required"]?string},

@@ -6,6 +6,8 @@
                 <type name="association:lecm-internal-doc-type:dictionary" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                     <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_внутреннего_x0020_документа</control-param>
                     <control-param name="plane">true</control-param>
+                    <control-param name="nameSubstituteString">{cm:title}</control-param>
+                    <control-param name="sortProp">cm:title</control-param>
                 </type>
             </default-controls>
         </forms>
@@ -71,7 +73,7 @@
             <form>
                 <field-visibility>
                     <show id="lecm-doc-dic-dt:documentType-code" force="true"/>
-                    <show id="cm:name" force="true"/>
+                    <show id="cm:title" force="true"/>
                     <show id="lecm-doc-dic-dt:registration-required"/>
                     <show id="lecm-doc-dic-dt:auto-registration"/>
                     <show id="lecm-doc-dic-dt:es-sign-required"/>
@@ -80,6 +82,11 @@
                     <show id="load-clear-auto-registration-script" force="true"/>
                 </field-visibility>
                 <appearance>
+                    <field id="cm:title" label-id="label.name" mandatory="true" description-id="label.name">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">true</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-doc-dic-dt:registration-required">
                         <control>
                             <control-param name="changeFireAction">registrationRequiredChange</control-param>
@@ -114,7 +121,7 @@
             <form id="datagrid">
                 <field-visibility>
                     <show id="lecm-doc-dic-dt:documentType-code"/>
-                    <show id="cm:name"/>
+                    <show id="cm:title"/>
                     <show id="lecm-doc-dic-dt:registration-required"/>
                     <show id="lecm-doc-dic-dt:auto-registration"/>
                     <show id="lecm-doc-dic-dt:es-sign-required"/>
@@ -125,12 +132,13 @@
                     <field id="lecm-doc-dic-dt:auto-registration" label-id="label.eds.document_type_dictionary.datagrid.registration_setting.automatically"/>
                     <field id="lecm-doc-dic-dt:es-sign-required" label-id="label.eds.document_type_dictionary.datagrid.signing_setting.es_required"/>
                     <field id="categories-of-attachments-to-sign" substituteString="{lecm-doc-dic-dt:categories-of-attachments-to-sign}" label-id="label.eds.document_type_dictionary.datagrid.signing_setting.categories"/>
+                    <field id="cm:title" label-id="label.name"/>
                 </appearance>
             </form>
             <form id="search">
                 <field-visibility>
                     <show id="lecm-doc-dic-dt:documentType-code"/>
-                    <show id="cm:name"/>
+                    <show id="cm:title"/>
                     <show id="lecm-doc-dic-dt:es-sign-required"/>
                     <show id="lecm-doc-dic-dt:categories-of-attachments-to-sign"/>
                 </field-visibility>
@@ -140,10 +148,10 @@
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
                         </constraint-handlers>
                     </field>
-                    <field id="cm:name" mandatory="false">
-                        <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
-                        </constraint-handlers>
+                    <field id="cm:title" label-id="label.name" description-id="label.name">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">false</control-param>
+                        </control>
                     </field>
                     <field id="lecm-doc-dic-dt:es-sign-required" mandatory="false">
                         <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl">
@@ -169,7 +177,7 @@
             <form>
                 <field-visibility>
                     <show id="lecm-doc-dic-dt:documentType-code" force="true"/>
-                    <show id="cm:name" force="true"/>
+                    <show id="cm:title" force="true"/>
                     <show id="lecm-doc-dic-dt:registration-required" force="true"/>
                     <show id="lecm-doc-dic-dt:auto-registration" force="true"/>
                     <show id="lecm-doc-dic-dt:es-sign-required" force="true"/>
@@ -178,6 +186,11 @@
                     <show id="load-clear-auto-registration-script" force="true"/>
                 </field-visibility>
                 <appearance>
+                    <field id="cm:title" label-id="label.name" mandatory="true" description-id="label.name">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">true</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-doc-dic-dt:registration-required">
                         <control>
                             <control-param name="changeFireAction">registrationRequiredChange</control-param>
@@ -217,13 +230,20 @@
             <form>
                 <field-visibility>
                     <show id="lecm-internal-typical-answer:code"/>
-                    <show id="cm:name"/>
+                    <show id="cm:title"/>
                 </field-visibility>
+                <appearance>
+                    <field id="cm:title" label-id="label.name" mandatory="true" description-id="label.name">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">true</control-param>
+                        </control>
+                    </field>
+                </appearance>
             </form>
             <form id="search">
                 <field-visibility>
                     <show id="lecm-internal-typical-answer:code"/>
-                    <show id="cm:name"/>
+                    <show id="cm:title"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-internal-typical-answer:code" mandatory="false">
@@ -231,10 +251,10 @@
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
                         </constraint-handlers>
                     </field>
-                    <field id="cm:name" mandatory="false">
-                        <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
-                        </constraint-handlers>
+                    <field id="cm:title" label-id="label.name" description-id="label.name">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">false</control-param>
+                        </control>
                     </field>
                 </appearance>
             </form>
@@ -246,8 +266,15 @@
             <form>
                 <field-visibility>
                     <show id="lecm-internal-typical-answer:code"/>
-                    <show id="cm:name"/>
+                    <show id="cm:title"/>
                 </field-visibility>
+                <appearance>
+                    <field id="cm:title" label-id="label.name" mandatory="true" description-id="label.name">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">true</control-param>
+                        </control>
+                    </field>
+                </appearance>
             </form>
         </forms>
     </config>
@@ -270,7 +297,8 @@
                     <field id="lecm-internal-answers:typical-answer-assoc" set="answerAndAuthor">
                         <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Типовые_x0020_ответы</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="nameSubstituteString">{cm:title}</control-param>
+                            <control-param name="sortProp">cm:title</control-param>
                             <control-param name="showCreateNewLink">true</control-param>
                             <control-param name="showCreateNewButton">true</control-param>
                             <control-param name="endpointType">lecm-internal-typical-answer:dictionary</control-param>

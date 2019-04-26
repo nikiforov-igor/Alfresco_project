@@ -64,16 +64,22 @@
                       errands.dictionaries.LogicEcmModelsBootstrap">
 		<property name="dictionaries">
 			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-errands-titles-dic.xml</value>
 				<value>alfresco/module/${artifactId}/models/lecm-errands-titles.xml</value>
+
 				<value>alfresco/module/${artifactId}/models/lecm-errands-business-journal-objectType-items.xml</value>
 				<value>alfresco/module/${artifactId}/models/lecm-errands-roles-items.xml</value>
 				<value>alfresco/module/${artifactId}/models/lecm-errands-regnumbers.xml</value>
                 <value>alfresco/module/${artifactId}/dictionaries/errands-nt-items.xml</value>
+
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-errands-types.xml</value>
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-errands-types-items.xml</value>
+
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-errands-connection-types-items.xml</value>
+
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-errands-cancel-reasons.xml</value>
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-errands-cancel-reasons-items.xml</value>
+
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-errands-objectTypes-items.xml</value>
             </list>
 		</property>
@@ -192,7 +198,7 @@
 			<map>
 				<entry key="lecm-errands-dic:errand-titles">
 					<list>
-						<value>cm:name</value>
+						<value>cm:title</value>
 						<value>lecm-errands-dic:errand-title-code</value>
 					</list>
 				</entry>
@@ -950,6 +956,15 @@
                     </list>
                 </entry>
             </map>
+        </property>
+    </bean>
+
+    <bean id="errandCancelReasonUniquenessValidator" parent="dictionaryUniquenessValidator">
+        <property name="type" value="lecm-errands-dic:errand-cancel-reason"/>
+        <property name="uniqueFields">
+            <list>
+                <!--Пустой список - отключаем валидацию-->
+            </list>
         </property>
     </bean>
 </beans>

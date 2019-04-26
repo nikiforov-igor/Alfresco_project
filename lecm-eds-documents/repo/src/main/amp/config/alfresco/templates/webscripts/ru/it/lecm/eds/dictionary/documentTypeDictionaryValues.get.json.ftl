@@ -5,7 +5,7 @@
         "dictionaryNodeRef": "${dictionary.nodeRef}",
         "attributes":
         {
-            "name": "${dictionary.properties["cm:name"]}",
+            "name": "${dictionary.properties["cm:title"]}",
             <#if dictionary.properties["lecm-doc-dic-dt:registration-required"]??>
             "isRegistrationRequired": ${dictionary.properties["lecm-doc-dic-dt:registration-required"]?string},
             </#if>

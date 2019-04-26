@@ -3,11 +3,17 @@
     <item name="lecm-dic:Тип объекта" type="lecm-dic:dictionary">
         <items updateMode="CreateOrUpdate">
             <item name="cm:Резолюция" type="lecm-busjournal:objectType">
-                <property name="cm:name">Резолюция</property>
+                <property name="cm:title">Резолюция</property>
                 <property name="lecm-busjournal:objectType-code">LECM_RESOLUTION</property>
                 <property name="lecm-busjournal:objectType-class">lecm-resolutions:document</property>
                 <property name="lecm-busjournal:objectType-template">{lecm-document:present-string}</property>
                 <property name="lecm-busjournal:objectType-list-template"><![CDATA[Статус: {lecm-statemachine:status}, Автор: <a href="#" onclick="var reference = new Object(); reference.itemId = '{lecm-resolutions:author-assoc-ref}'; LogicECM.module.Base.Util.viewAttributes(reference); return false;">{lecm-resolutions:author-assoc-text-content}</a>]]></property>
+            </item>
+            <item name="cm:Способы завершения резолюций" type="lecm-busjournal:objectType">
+                <property name="cm:title">Способы завершения резолюций</property>
+                <property name="lecm-busjournal:objectType-code">LECM_RESOLUTION_COMPLETION_METHOD</property>
+                <property name="lecm-busjournal:objectType-class">lecm-resolutions-dic:completion-methods</property>
+                <property name="lecm-busjournal:objectType-template">{cm:title}</property>
             </item>
         </items>
     </item>

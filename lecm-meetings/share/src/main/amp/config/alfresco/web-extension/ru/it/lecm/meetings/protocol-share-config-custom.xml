@@ -462,12 +462,17 @@
             <form>
                 <field-visibility>
 					<show id="lecm-doc-dic-dt:documentType-code" force="true"/>
-					<show id="cm:name" force="true"/>
+					<show id="cm:title" force="true"/>
 					<show id="lecm-doc-dic-dt:registration-required" force="true"/>
 					<show id="lecm-doc-dic-dt:auto-registration" force="true"/>
 					<show id="load-clear-auto-registration-script" force="true"/>
                 </field-visibility>
 				<appearance>
+					<field id="cm:title" label-id="label.name" mandatory="true" description-id="label.name">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+							<control-param name="isUniqueValue">true</control-param>
+						</control>
+					</field>
 					<field id="lecm-doc-dic-dt:registration-required">
 						<control>
 							<control-param name="changeFireAction">registrationRequiredChange</control-param>
@@ -488,12 +493,17 @@
             <form>
                 <field-visibility>
 					<show id="lecm-doc-dic-dt:documentType-code" force="true"/>
-					<show id="cm:name" force="true"/>
+					<show id="cm:title" force="true"/>
 					<show id="lecm-doc-dic-dt:registration-required"/>
 					<show id="lecm-doc-dic-dt:auto-registration"/>
 					<show id="load-clear-auto-registration-script" force="true"/>
                 </field-visibility>
 				<appearance>
+					<field id="cm:title" label-id="label.name" mandatory="true" description-id="label.name">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+							<control-param name="isUniqueValue">true</control-param>
+						</control>
+					</field>
 					<field id="lecm-doc-dic-dt:registration-required">
 						<control>
 							<control-param name="changeFireAction">registrationRequiredChange</control-param>
@@ -509,26 +519,27 @@
 			<form id="datagrid">
 				<field-visibility>
 					<show id="lecm-doc-dic-dt:documentType-code"/>
-					<show id="cm:name"/>
+					<show id="cm:title"/>
 					<show id="lecm-doc-dic-dt:registration-required"/>
 					<show id="lecm-doc-dic-dt:auto-registration"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-doc-dic-dt:registration-required" label-id="label.eds.document_type_dictionary.datagrid.registration_setting.registered"/>
 					<field id="lecm-doc-dic-dt:auto-registration" label-id="label.eds.document_type_dictionary.datagrid.registration_setting.automatically"/>
+					<field id="cm:title" label-id="label.name"/>
 				</appearance>
 			</form>
             <form id="search">
                 <field-visibility>
-                    <show id="cm:name" force="true"/>
+                    <show id="cm:title" force="true"/>
                     <show id="lecm-doc-dic-dt:documentType-code" force="true"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:name" mandatory="false">
-                        <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
-                        </constraint-handlers>
-                    </field>
+					<field id="cm:title" label-id="label.name" description-id="label.name">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+							<control-param name="isUniqueValue">false</control-param>
+						</control>
+					</field>
                     <field id="lecm-doc-dic-dt:documentType-code" mandatory="false">
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
@@ -556,8 +567,15 @@
 			<form>
 				<field-visibility>
 					<show id="lecm-protocol-dic:protocol-point-status-code"/>
-					<show id="cm:name"/>
+					<show id="cm:title"/>
 				</field-visibility>
+				<appearance>
+					<field id="cm:title" label-id="label.name" mandatory="true" description-id="label.name">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+							<control-param name="isUniqueValue">true</control-param>
+						</control>
+					</field>
+				</appearance>
 			</form>
 		</forms>
 	</config>
@@ -566,8 +584,15 @@
 			<form>
 				<field-visibility>
 					<show id="lecm-protocol-dic:protocol-point-status-code"/>
-					<show id="cm:name"/>
+					<show id="cm:title"/>
 				</field-visibility>
+				<appearance>
+					<field id="cm:title" label-id="label.name" mandatory="true" description-id="label.name">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+							<control-param name="isUniqueValue">true</control-param>
+						</control>
+					</field>
+				</appearance>
 			</form>
 		</forms>
 	</config>

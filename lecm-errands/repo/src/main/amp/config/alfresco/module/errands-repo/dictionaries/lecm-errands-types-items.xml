@@ -3,7 +3,7 @@
     <item name="lecm-dic:Типы поручений" type="lecm-dic:dictionary">
         <items updateMode="CreateOrUpdate">
             <item name="cm:На рассмотрение" type="lecm-errands-dic:errand-type">
-                <property name="cm:name"><![CDATA[На рассмотрение]]></property>
+                <property name="cm:title"><![CDATA[На рассмотрение]]></property>
                 <property name="lecm-errands-dic:errand-type-default-title"><![CDATA[Рассмотреть документ]]></property>
                 <property name="lecm-errands-dic:errand-type-manual-selection">true</property>
                 <property name="lecm-errands-dic:errand-type-report-required">false</property>
@@ -11,7 +11,7 @@
                 <property name="lecm-errands-dic:errand-type-launch-review">true</property>
             </item>
             <item name="cm:На исполнение (неконтрольное)" type="lecm-errands-dic:errand-type">
-                <property name="cm:name"><![CDATA[На исполнение (неконтрольное)]]></property>
+                <property name="cm:title"><![CDATA[На исполнение (неконтрольное)]]></property>
                 <property name="lecm-errands-dic:errand-type-default-title"><![CDATA[Исполнить документ]]></property>
                 <property name="lecm-errands-dic:errand-type-manual-selection">true</property>
                 <property name="lecm-errands-dic:errand-type-report-required">false</property>
@@ -19,7 +19,7 @@
                 <property name="lecm-errands-dic:errand-type-launch-review">false</property>
             </item>
             <item name="cm:На исполнение (контрольное)" type="lecm-errands-dic:errand-type">
-                <property name="cm:name"><![CDATA[На исполнение (контрольное)]]></property>
+                <property name="cm:title"><![CDATA[На исполнение (контрольное)]]></property>
                 <property name="lecm-errands-dic:errand-type-default-title"><![CDATA[Исполнить документ]]></property>
                 <property name="lecm-errands-dic:errand-type-manual-selection">true</property>
                 <property name="lecm-errands-dic:errand-type-report-required">true</property>
@@ -27,7 +27,7 @@
                 <property name="lecm-errands-dic:errand-type-launch-review">false</property>
             </item>
             <item name="cm:Для информации" type="lecm-errands-dic:errand-type">
-                <property name="cm:name"><![CDATA[Для информации]]></property>
+                <property name="cm:title"><![CDATA[Для информации]]></property>
                 <property name="lecm-errands-dic:errand-type-default-title"><![CDATA[Принять к сведению]]></property>
                 <property name="lecm-errands-dic:errand-type-manual-selection">true</property>
                 <property name="lecm-errands-dic:errand-type-report-required">false</property>
@@ -35,7 +35,7 @@
                 <property name="lecm-errands-dic:errand-type-launch-review">false</property>
             </item>
             <item name="cm:Поручение по пункту ОРД" type="lecm-errands-dic:errand-type">
-                <property name="cm:name"><![CDATA[Поручение по пункту ОРД]]></property>
+                <property name="cm:title"><![CDATA[Поручение по пункту ОРД]]></property>
                 <property name="lecm-errands-dic:errand-type-default-title"><![CDATA[]]></property>
                 <property name="lecm-errands-dic:errand-type-manual-selection">false</property>
                 <property name="lecm-errands-dic:errand-type-report-required">false</property>
@@ -43,7 +43,7 @@
                 <property name="lecm-errands-dic:errand-type-launch-review">false</property>
             </item>
             <item name="cm:Поручение по пункту протокола" type="lecm-errands-dic:errand-type">
-                <property name="cm:name"><![CDATA[Поручение по пункту протокола]]></property>
+                <property name="cm:title"><![CDATA[Поручение по пункту протокола]]></property>
                 <property name="lecm-errands-dic:errand-type-default-title"><![CDATA[]]></property>
                 <property name="lecm-errands-dic:errand-type-manual-selection">false</property>
                 <property name="lecm-errands-dic:errand-type-report-required">false</property>

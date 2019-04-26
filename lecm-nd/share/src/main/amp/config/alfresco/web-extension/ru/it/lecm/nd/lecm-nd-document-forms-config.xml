@@ -44,6 +44,8 @@
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_НД</control-param>
                             <control-param name="plane">true</control-param>
+                            <control-param name="nameSubstituteString">{cm:title}</control-param>
+                            <control-param name="sortProp">cm:title</control-param>
                         </control>
                     </field>
                     <field id="lecm-document-aspects:additional-organization-unit-assoc" mandatory="true">
@@ -227,6 +229,8 @@
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_НД</control-param>
                             <control-param name="plane">true</control-param>
+                            <control-param name="nameSubstituteString">{cm:title}</control-param>
+                            <control-param name="sortProp">cm:title</control-param>
                         </control>
                     </field>
                     <field id="lecm-document-aspects:additional-organization-unit-assoc" mandatory="true">
@@ -339,6 +343,8 @@
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_НД</control-param>
                             <control-param name="plane">true</control-param>
                             <control-param name="endpointMany">true</control-param>
+                            <control-param name="nameSubstituteString">{cm:title}</control-param>
+                            <control-param name="sortProp">cm:title</control-param>
                         </control>
                     </field>
                     <field id="lecm-statemachine:status" set="nd-document-search-common-set">
@@ -454,6 +460,8 @@
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_НД</control-param>
                             <control-param name="plane">true</control-param>
+                            <control-param name="nameSubstituteString">{cm:title}</control-param>
+                            <control-param name="sortProp">cm:title</control-param>
                         </control>
                     </field>
                     <field id="lecm-document:author-assoc">
@@ -551,6 +559,8 @@
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_НД</control-param>
                             <control-param name="plane">true</control-param>
+                            <control-param name="nameSubstituteString">{cm:title}</control-param>
+                            <control-param name="sortProp">cm:title</control-param>
                         </control>
                     </field>
                     <field id="lecm-document-aspects:additional-organization-unit-assoc" set="common" mandatory="true">
@@ -687,6 +697,8 @@
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_НД</control-param>
                             <control-param name="plane">true</control-param>
+                            <control-param name="nameSubstituteString">{cm:title}</control-param>
+                            <control-param name="sortProp">cm:title</control-param>
                         </control>
                     </field>
                     <field id="lecm-document-aspects:additional-organization-unit-assoc" set="common" mandatory="true">
@@ -874,6 +886,8 @@
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_НД</control-param>
                             <control-param name="plane">true</control-param>
+                            <control-param name="nameSubstituteString">{cm:title}</control-param>
+                            <control-param name="sortProp">cm:title</control-param>
                         </control>
                     </field>
                 </appearance>

@@ -25,8 +25,15 @@
 			<form>
 				<field-visibility>
 					<show id="lecm-meetings-dic:agenda-point-state-code"/>
-					<show id="cm:name"/>
+					<show id="cm:title"/>
 				</field-visibility>
+				<appearance>
+					<field id="cm:title" label-id="label.name" mandatory="true" description-id="label.name">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+							<control-param name="isUniqueValue">true</control-param>
+						</control>
+					</field>
+				</appearance>
 			</form>
 		</forms>
 	</config>
@@ -35,8 +42,15 @@
 			<form>
 				<field-visibility>
 					<show id="lecm-meetings-dic:agenda-point-state-code"/>
-					<show id="cm:name"/>
+					<show id="cm:title"/>
 				</field-visibility>
+				<appearance>
+					<field id="cm:title" label-id="label.name" mandatory="true" description-id="label.name">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+							<control-param name="isUniqueValue">true</control-param>
+						</control>
+					</field>
+				</appearance>
 			</form>
 		</forms>
 	</config>
@@ -123,6 +137,8 @@
 						<control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
 							<control-param name="pickerClasses">hierarchical-tree</control-param>
+							<control-param name="nameSubstituteString">{cm:title}</control-param>
+							<control-param name="sortProp">cm:title</control-param>
 						</control>
 					</field>
 					<field id="lecm-meetings-ts:documents-assoc">
@@ -246,6 +262,8 @@
 						<control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
 							<control-param name="pickerClasses">hierarchical-tree</control-param>
+							<control-param name="nameSubstituteString">{cm:title}</control-param>
+							<control-param name="sortProp">cm:title</control-param>
 						</control>
 					</field>
 					<field id="lecm-meetings-ts:documents-assoc">
@@ -357,6 +375,8 @@
 						<control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
 							<control-param name="pickerClasses">hierarchical-tree</control-param>
+							<control-param name="nameSubstituteString">{cm:title}</control-param>
+							<control-param name="sortProp">cm:title</control-param>
 						</control>
 					</field>
 

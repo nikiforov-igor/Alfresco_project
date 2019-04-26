@@ -562,7 +562,8 @@
                             <control-param name="startLocation">
                                 /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа_x0020_к_x0020_договору
                             </control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="nameSubstituteString">{cm:title}</control-param>
+                            <control-param name="sortProp">cm:title</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabelCode"> </control-param>
                             <control-param name="showCreateNewButton">false</control-param>

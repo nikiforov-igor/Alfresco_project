@@ -12,7 +12,8 @@
                 <type name="association:lecm-errands-dic:errand-titles" template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                     <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
                     <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
-                    <control-param name="nameSubstituteString">{cm:name}</control-param>
+                    <control-param name="nameSubstituteString">{cm:title}</control-param>
+                    <control-param name="sortProp">cm:title</control-param>
                     <control-param name="notSelectedOptionShow">true</control-param>
                     <control-param name="notSelectedOptionLabel"> </control-param>
                     <control-param name="showCreateNewLink">false</control-param>
@@ -22,6 +23,8 @@
                    <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Типы_x0020_поручений</control-param>
                    <control-param name="plane">true</control-param>
                    <control-param name="additionalFilter">@lecm\-errands\-dic\:errand\-type\-manual\-selection:true</control-param>
+                   <control-param name="nameSubstituteString">{cm:title}</control-param>
+                   <control-param name="sortProp">cm:title</control-param>
                </type>
             </default-controls>
         </forms>
@@ -294,10 +297,15 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="cm:name" force="true"/>
+					<show id="cm:title" force="true"/>
 					<show id="lecm-errands-dic:errand-title-code" force="true"/>
 				</field-visibility>
 				<appearance>
+                    <field id="cm:title" label-id="label.name" mandatory="true" description-id="label.name">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">true</control-param>
+                        </control>
+                    </field>
 					<field id="lecm-errands-dic:errand-title-code" read-only="true"/>
 				</appearance>
 			</form>
@@ -308,10 +316,15 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="cm:name" force="true"/>
+					<show id="cm:title" force="true"/>
 					<show id="lecm-errands-dic:errand-title-code" force="true"/>
 				</field-visibility>
 				<appearance>
+                    <field id="cm:title" label-id="label.name" mandatory="true" description-id="label.name">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">true</control-param>
+                        </control>
+                    </field>
 					<field id="lecm-errands-dic:errand-title-code">
 						<control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
 						<constraint-handlers>
@@ -322,14 +335,14 @@
 			</form>
 			<form id="search">
 				<field-visibility>
-					<show id="cm:name" force="true"/>
+					<show id="cm:title" force="true"/>
 					<show id="lecm-errands-dic:errand-title-code" force="true"/>
 				</field-visibility>
 				<appearance>
-                    <field id="cm:name" mandatory="false">
-                        <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup"/>
-                        </constraint-handlers>
+                    <field id="cm:title" label-id="label.name" description-id="label.name">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">false</control-param>
+                        </control>
                     </field>
 					<field id="lecm-errands-dic:errand-title-code" mandatory="false">
 						<constraint-handlers>
@@ -340,9 +353,12 @@
 			</form>
 			<form id="datagrid">
 				<field-visibility>
-					<show id="cm:name" force="true"/>
+					<show id="cm:title" force="true"/>
 					<show id="lecm-errands-dic:errand-title-code" force="true"/>
 				</field-visibility>
+                <appearance>
+                    <field id="cm:title" label-id="label.name"/>
+                </appearance>
 			</form>
 		</forms>
 	</config>
@@ -386,7 +402,7 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="cm:name" force="true"/>
+                    <show id="cm:title" force="true"/>
                     <show id="lecm-errands-dic:errand-type-default-title"/>
                     <show id="lecm-errands-dic:errand-type-manual-selection"/>
                     <show id="lecm-errands-dic:errand-type-report-required"/>
@@ -394,12 +410,17 @@
                     <show id="lecm-errands-dic:errand-type-launch-review"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:name" label-id="label.errands.type.name"/>
+                    <field id="cm:title" label-id="label.name" mandatory="true" description-id="label.name">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">true</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-errands-dic:errand-type-default-title">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
                             <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="nameSubstituteString">{cm:title}</control-param>
+                            <control-param name="sortProp">cm:title</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel"> </control-param>
                             <control-param name="showCreateNewLink">false</control-param>
@@ -415,7 +436,7 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="cm:name" force="true"/>
+                    <show id="cm:title" force="true"/>
                     <show id="lecm-errands-dic:errand-type-default-title"/>
                     <show id="lecm-errands-dic:errand-type-manual-selection"/>
                     <show id="lecm-errands-dic:errand-type-report-required"/>
@@ -423,12 +444,17 @@
                     <show id="lecm-errands-dic:errand-type-launch-review"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:name" label-id="label.errands.type.name"/>
+                    <field id="cm:title" label-id="label.name" mandatory="true" description-id="label.name">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">true</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-errands-dic:errand-type-default-title">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
                             <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="nameSubstituteString">{cm:title}</control-param>
+                            <control-param name="sortProp">cm:title</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel"> </control-param>
                             <control-param name="showCreateNewLink">false</control-param>
@@ -439,20 +465,21 @@
             </form>
             <form id="search">
                 <field-visibility>
-                    <show id="cm:name" force="true"/>
+                    <show id="cm:title" force="true"/>
                     <show id="lecm-errands-dic:errand-type-default-title"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:name" label-id="label.errands.type.name" mandatory="false">
-                        <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup"/>
-                        </constraint-handlers>
+                    <field id="cm:title" label-id="label.name" description-id="label.name">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">false</control-param>
+                        </control>
                     </field>
                     <field id="lecm-errands-dic:errand-type-default-title" mandatory="false">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
                             <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="nameSubstituteString">{cm:title}</control-param>
+                            <control-param name="sortProp">cm:title</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel"> </control-param>
                             <control-param name="showCreateNewLink">false</control-param>
@@ -466,11 +493,11 @@
             </form>
             <form id="datagrid">
                 <field-visibility>
-                    <show id="cm:name" force="true"/>
+                    <show id="cm:title" force="true"/>
                     <show id="lecm-errands-dic:errand-type-default-title"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:name" label-id="label.errands.type.name"/>
+                    <field id="cm:title" label-id="label.errands.type.name"/>
                 </appearance>
             </form>
         </forms>
@@ -1686,7 +1713,8 @@
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
                             <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="nameSubstituteString">{cm:title}</control-param>
+                            <control-param name="sortProp">cm:title</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel"> </control-param>
                             <control-param name="showCreateNewLink">false</control-param>

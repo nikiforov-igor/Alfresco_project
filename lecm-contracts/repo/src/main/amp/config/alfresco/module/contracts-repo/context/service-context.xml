@@ -121,9 +121,15 @@
 					  regNumbers.regNumbersTemplatesDicBootstrap">
         <property name="dictionaries">
             <list>
+                <value>alfresco/module/${artifactId}/models/lecm-contracts-types-dic.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-contracts-types.xml</value>
+
+                <value>alfresco/module/${artifactId}/models/lecm-contract-documents-types-dic.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-contract-documents-types.xml</value>
+
+                <value>alfresco/module/${artifactId}/models/lecm-contract-delete-reasons-dic.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-contract-delete-reasons.xml</value>
+
                 <value>alfresco/module/${artifactId}/models/lecm-contracts-reference-data.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-contracts-status-types.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-business-journal-objectType-items.xml</value>
@@ -394,25 +400,25 @@
             <map>
                 <entry key="lecm-contract-dic:contract-type">
                     <list>
-                        <value>cm:name</value>
+                        <value>cm:title</value>
                         <value>lecm-contract-dic:contract-type-code</value>
                     </list>
                 </entry>
                 <entry key="lecm-contract-dic:contract-documents-type">
                     <list>
-                        <value>cm:name</value>
+                        <value>cm:title</value>
                         <value>lecm-contract-dic:contract-documents-type-code</value>
                     </list>
                 </entry>
                 <entry key="lecm-contract-dic:reference-data">
                     <list>
-                        <value>cm:name</value>
+                        <value>cm:title</value>
                         <value>lecm-contract-dic:reference-data-link</value>
                     </list>
                 </entry>
                 <entry key="lecm-contract-dic:delete-reason">
                     <list>
-                        <value>cm:name</value>
+                        <value>cm:title</value>
                         <value>lecm-contract-dic:delete-reason-code</value>
                     </list>
                 </entry>
