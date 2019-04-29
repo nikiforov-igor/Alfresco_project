@@ -5,6 +5,7 @@ import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -19,6 +20,7 @@ import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -36,6 +38,7 @@ public class ErrandsReportAttachmentAssociationPolicy implements NodeServicePoli
     private ErrandsService errandsService;
     private QName reportTypeQname;
     private QName associationQname;
+    private DictionaryService dictionaryService;
 
     public void setErrandsService(ErrandsService errandsService) {
         this.errandsService = errandsService;
@@ -97,6 +100,10 @@ public class ErrandsReportAttachmentAssociationPolicy implements NodeServicePoli
         this.orgstructureService = orgstructureService;
     }
 
+    public void setDictionaryService(DictionaryService dictionaryService) {
+        this.dictionaryService = dictionaryService;
+    }
+
     final public void init() {
         PropertyCheck.mandatory(this, "policyComponent", policyComponent);
         PropertyCheck.mandatory(this, "documentTableService", documentTableService);
@@ -116,7 +123,8 @@ public class ErrandsReportAttachmentAssociationPolicy implements NodeServicePoli
     public void onCreateAssociation(AssociationRef associationRef) {
         NodeRef attachment = associationRef.getTargetRef();
         NodeRef errandDoc = null;
-        if (nodeService.getType(associationRef.getSourceRef()).equals(ErrandsService.TYPE_ERRANDS)){
+        Collection<QName> subTypes = dictionaryService.getSubTypes(ErrandsService.TYPE_ERRANDS, true);
+        if (nodeService.getType(associationRef.getSourceRef()).equals(ErrandsService.TYPE_ERRANDS) || subTypes.contains(nodeService.getType(associationRef.getSourceRef()))) {
             errandDoc = associationRef.getSourceRef();
         } else {
             errandDoc = documentTableService.getDocumentByTableDataRow(associationRef.getSourceRef());
@@ -158,7 +166,8 @@ public class ErrandsReportAttachmentAssociationPolicy implements NodeServicePoli
         NodeRef attachment = associationRef.getTargetRef();
         NodeRef reportNodeRef = associationRef.getSourceRef();
         NodeRef errandDoc = null;
-        if (nodeService.getType(reportNodeRef).equals(ErrandsService.TYPE_ERRANDS)) {
+        Collection<QName> subTypes = dictionaryService.getSubTypes(ErrandsService.TYPE_ERRANDS, true);
+        if (nodeService.getType(reportNodeRef).equals(ErrandsService.TYPE_ERRANDS) || subTypes.contains(nodeService.getType(reportNodeRef))) {
             errandDoc = reportNodeRef;
         } else {
             errandDoc = documentTableService.getDocumentByTableDataRow(reportNodeRef);
