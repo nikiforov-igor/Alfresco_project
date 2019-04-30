@@ -20,7 +20,6 @@ import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -123,8 +122,7 @@ public class ErrandsReportAttachmentAssociationPolicy implements NodeServicePoli
     public void onCreateAssociation(AssociationRef associationRef) {
         NodeRef attachment = associationRef.getTargetRef();
         NodeRef errandDoc = null;
-        Collection<QName> subTypes = dictionaryService.getSubTypes(ErrandsService.TYPE_ERRANDS, true);
-        if (nodeService.getType(associationRef.getSourceRef()).equals(ErrandsService.TYPE_ERRANDS) || subTypes.contains(nodeService.getType(associationRef.getSourceRef()))) {
+        if (nodeService.getType(associationRef.getSourceRef()).equals(ErrandsService.TYPE_ERRANDS) || dictionaryService.isSubClass(nodeService.getType(associationRef.getSourceRef()), ErrandsService.TYPE_ERRANDS)) {
             errandDoc = associationRef.getSourceRef();
         } else {
             errandDoc = documentTableService.getDocumentByTableDataRow(associationRef.getSourceRef());
@@ -166,8 +164,7 @@ public class ErrandsReportAttachmentAssociationPolicy implements NodeServicePoli
         NodeRef attachment = associationRef.getTargetRef();
         NodeRef reportNodeRef = associationRef.getSourceRef();
         NodeRef errandDoc = null;
-        Collection<QName> subTypes = dictionaryService.getSubTypes(ErrandsService.TYPE_ERRANDS, true);
-        if (nodeService.getType(reportNodeRef).equals(ErrandsService.TYPE_ERRANDS) || subTypes.contains(nodeService.getType(reportNodeRef))) {
+        if (nodeService.getType(associationRef.getSourceRef()).equals(ErrandsService.TYPE_ERRANDS) || dictionaryService.isSubClass(nodeService.getType(associationRef.getSourceRef()), ErrandsService.TYPE_ERRANDS)) {
             errandDoc = reportNodeRef;
         } else {
             errandDoc = documentTableService.getDocumentByTableDataRow(reportNodeRef);

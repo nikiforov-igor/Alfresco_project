@@ -17,7 +17,6 @@ import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.errands.ErrandsService;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -106,8 +105,7 @@ public class ErrandsReportConnectedDocumentAssociationPolicy implements NodeServ
         NodeRef reportNodeRef = associationRef.getSourceRef();
         NodeRef connectedDoc = associationRef.getTargetRef();
         NodeRef errandNodeRef = null;
-        Collection<QName> subTypes = dictionaryService.getSubTypes(ErrandsService.TYPE_ERRANDS, true);
-        if (nodeService.getType(reportNodeRef).equals(ErrandsService.TYPE_ERRANDS) || subTypes.contains(nodeService.getType(reportNodeRef))) {
+        if (nodeService.getType(reportNodeRef).equals(ErrandsService.TYPE_ERRANDS) || dictionaryService.isSubClass(nodeService.getType(reportNodeRef), ErrandsService.TYPE_ERRANDS)) {
             errandNodeRef = reportNodeRef;
         } else {
             errandNodeRef = documentTableService.getDocumentByTableDataRow(reportNodeRef);
@@ -143,8 +141,7 @@ public class ErrandsReportConnectedDocumentAssociationPolicy implements NodeServ
         NodeRef connectedDoc = associationRef.getTargetRef();
         NodeRef errandNodeRef = null;
 
-        Collection<QName> subTypes = dictionaryService.getSubTypes(ErrandsService.TYPE_ERRANDS, true);
-        if (nodeService.getType(reportNodeRef).equals(ErrandsService.TYPE_ERRANDS) || subTypes.contains(nodeService.getType(reportNodeRef))) {
+        if (nodeService.getType(reportNodeRef).equals(ErrandsService.TYPE_ERRANDS) || dictionaryService.isSubClass(nodeService.getType(reportNodeRef), ErrandsService.TYPE_ERRANDS)) {
             errandNodeRef = reportNodeRef;
         } else {
             errandNodeRef = documentTableService.getDocumentByTableDataRow(reportNodeRef);
