@@ -105,7 +105,7 @@ public class ErrandsReportConnectedDocumentAssociationPolicy implements NodeServ
         NodeRef reportNodeRef = associationRef.getSourceRef();
         NodeRef connectedDoc = associationRef.getTargetRef();
         NodeRef errandNodeRef = null;
-        if (nodeService.getType(reportNodeRef).equals(ErrandsService.TYPE_ERRANDS) || dictionaryService.isSubClass(nodeService.getType(reportNodeRef), ErrandsService.TYPE_ERRANDS)) {
+        if (dictionaryService.isSubClass(nodeService.getType(reportNodeRef), ErrandsService.TYPE_ERRANDS)) {
             errandNodeRef = reportNodeRef;
         } else {
             errandNodeRef = documentTableService.getDocumentByTableDataRow(reportNodeRef);
@@ -141,7 +141,7 @@ public class ErrandsReportConnectedDocumentAssociationPolicy implements NodeServ
         NodeRef connectedDoc = associationRef.getTargetRef();
         NodeRef errandNodeRef = null;
 
-        if (nodeService.getType(reportNodeRef).equals(ErrandsService.TYPE_ERRANDS) || dictionaryService.isSubClass(nodeService.getType(reportNodeRef), ErrandsService.TYPE_ERRANDS)) {
+        if (dictionaryService.isSubClass(nodeService.getType(reportNodeRef), ErrandsService.TYPE_ERRANDS)) {
             errandNodeRef = reportNodeRef;
         } else {
             errandNodeRef = documentTableService.getDocumentByTableDataRow(reportNodeRef);
