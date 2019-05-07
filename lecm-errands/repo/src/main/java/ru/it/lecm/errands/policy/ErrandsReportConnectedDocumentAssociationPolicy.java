@@ -5,6 +5,7 @@ import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -31,6 +32,7 @@ public class ErrandsReportConnectedDocumentAssociationPolicy implements NodeServ
     private DocumentTableService documentTableService;
     private QName reportTypeQname;
     private QName associationQname;
+    private DictionaryService dictionaryService;
 
     public QName getAssociationQname() {
         return associationQname;
@@ -80,6 +82,10 @@ public class ErrandsReportConnectedDocumentAssociationPolicy implements NodeServ
         this.policyComponent = policyComponent;
     }
 
+    public void setDictionaryService(DictionaryService dictionaryService) {
+        this.dictionaryService = dictionaryService;
+    }
+
     final public void init() {
         PropertyCheck.mandatory(this, "policyComponent", policyComponent);
         PropertyCheck.mandatory(this, "documentTableService", documentTableService);
@@ -99,7 +105,7 @@ public class ErrandsReportConnectedDocumentAssociationPolicy implements NodeServ
         NodeRef reportNodeRef = associationRef.getSourceRef();
         NodeRef connectedDoc = associationRef.getTargetRef();
         NodeRef errandNodeRef = null;
-        if (nodeService.getType(reportNodeRef).equals(ErrandsService.TYPE_ERRANDS)){
+        if (dictionaryService.isSubClass(nodeService.getType(reportNodeRef), ErrandsService.TYPE_ERRANDS)) {
             errandNodeRef = reportNodeRef;
         } else {
             errandNodeRef = documentTableService.getDocumentByTableDataRow(reportNodeRef);
@@ -135,7 +141,7 @@ public class ErrandsReportConnectedDocumentAssociationPolicy implements NodeServ
         NodeRef connectedDoc = associationRef.getTargetRef();
         NodeRef errandNodeRef = null;
 
-        if (nodeService.getType(reportNodeRef).equals(ErrandsService.TYPE_ERRANDS)) {
+        if (dictionaryService.isSubClass(nodeService.getType(reportNodeRef), ErrandsService.TYPE_ERRANDS)) {
             errandNodeRef = reportNodeRef;
         } else {
             errandNodeRef = documentTableService.getDocumentByTableDataRow(reportNodeRef);
