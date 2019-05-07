@@ -21,7 +21,7 @@
                 <property name="lecm-busjournal:objectType-template">{cm:title}</property>
                 <property name="lecm-busjournal:objectType-list-template">{cm:title}</property>
             </item>
-            <item name="cm:Справочник видов документов<" type="lecm-busjournal:objectType">
+            <item name="cm:Справочник видов документов" type="lecm-busjournal:objectType">
                 <property name="cm:title">Справочник видов документов</property>
                 <property name="lecm-busjournal:objectType-code">LECM_EDS_DOC_TYPE_DIC</property>
                 <property name="lecm-busjournal:objectType-class">lecm-doc-dic-dt:typeDictionary</property>
