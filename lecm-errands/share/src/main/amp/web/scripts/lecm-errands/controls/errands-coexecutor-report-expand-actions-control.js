@@ -29,10 +29,10 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                 status: null,
                 coexecutor: null,
                 permissions: [],
+                actions: [],
                 type: "lecm-errands-ts:coexecutor-report"
             }
         },
-        actions: [],
         errandNodeRef: null,
         currentUser: {
             nodeRef: null,
@@ -47,6 +47,7 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
             this.loadAdditionalData();
         },
         loadAdditionalData: function () {
+            this.options.expandedReport.actions = [];
             Alfresco.util.Ajax.jsonPost(
                 {
                     url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
@@ -68,19 +69,19 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                                                 if (roles) {
                                                     if (roles.isExecutor) {
                                                         this.currentUser.isExecutor = true;
-                                                        this.actions.push({
+                                                        this.options.expandedReport.actions.push({
                                                             handler: "onActionAcceptCoexecutorReport",
                                                             permission: "Write",
                                                             label: this.msg("actions.coexecutor.report.accept"),
                                                             evaluator: this.firstActionsEvaluator
                                                         });
-                                                        this.actions.push({
+                                                        this.options.expandedReport.actions.push({
                                                             handler: "onActionDeclineCoexecutorReport",
                                                             permission: "Write",
                                                             label: this.msg("actions.coexecutor.report.decline"),
                                                             evaluator: this.firstActionsEvaluator
                                                         });
-                                                        this.actions.push({
+                                                        this.options.expandedReport.actions.push({
                                                             handler: "onActionTransferCoexecutorReport",
                                                             permission: "Write",
                                                             label: this.msg("actions.coexecutor.report.transfer"),
@@ -89,7 +90,7 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                                                     }
                                                     if (roles.isCoexecutor) {
                                                         this.currentUser.isCoexecutor = true;
-                                                        this.actions.push({
+                                                        this.options.expandedReport.actions.push({
                                                             handler: "onActionEdit",
                                                             permission: "Write",
                                                             label: this.msg("actions.edit"),
@@ -164,7 +165,7 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
             var me = this;
             var actionsContainer = Dom.get(me.options.formId + "-coexecutor-report-expand-actions");
             var fieldsContainer = Selector.query(".yui-u.first", Dom.get(me.options.formId + "-form-fields"), true);
-            var visibleActionBlocks = this.actions.filter(function (action) {
+            var visibleActionBlocks = this.options.expandedReport.actions.filter(function (action) {
                 return me.options.expandedReport.permissions[action.permission] && action.evaluator.call(me, me.options.expandedReport);
             });
             visibleActionBlocks.forEach(function (action) {
