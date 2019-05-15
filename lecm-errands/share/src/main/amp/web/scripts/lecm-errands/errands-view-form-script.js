@@ -27,7 +27,9 @@
                             if (!items || !items.length) {
                                 var formTabs = Dom.get(formId + "-form-tabs");
                                 var executionTab = Selector.query("ul li", formTabs)[2];
-                                Dom.setStyle(executionTab, "display", "none");
+                                var executionTabContents = Selector.query('.yui-content .tab', formTabs)[2];
+                                executionTab.parentNode.removeChild(executionTab);
+                                executionTabContents.parentNode.removeChild(executionTabContents);
                             }
                         }
                     },
