@@ -12762,7 +12762,7 @@ document.save();]]></value>
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "LECM_ES_SIGNERS")]]></value>
+                                                                                    <![CDATA[user.currentUser().hasBusinessRole("LECM_ES_SIGNERS")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
