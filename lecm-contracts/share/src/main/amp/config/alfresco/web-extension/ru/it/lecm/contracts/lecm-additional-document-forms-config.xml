@@ -517,7 +517,7 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-additional-document:counterparty" substituteString="{lecm-additional-document:document-assoc/lecm-contract:partner-assoc/lecm-contractor:shortname}"/>
-                    <field id="lecm-additional-document:contractType" substituteString="{lecm-additional-document:document-assoc/lecm-contract:typeContract-assoc/cm:name}"/>
+                    <field id="lecm-additional-document:contractType" substituteString="{lecm-additional-document:document-assoc/lecm-contract:typeContract-assoc/cm:title}"/>
                     <field id="lecm-statemachine:status" label-id="contract.status"/>
                 </appearance>
             </form>
@@ -627,7 +627,7 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-additional-document:counterparty" substituteString="{lecm-additional-document:document-assoc/lecm-contract:partner-assoc/lecm-contractor:shortname}"/>
-                    <field id="lecm-additional-document:contractType" substituteString="{lecm-additional-document:document-assoc/lecm-contract:typeContract-assoc/cm:name}"/>
+                    <field id="lecm-additional-document:contractType" substituteString="{lecm-additional-document:document-assoc/lecm-contract:typeContract-assoc/cm:title}"/>
                 </appearance>
             </form>
         </forms>

@@ -10,7 +10,7 @@
             <item name="cm:INCOMING_REGISTRATION_REQUEST" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[INCOMING_REGISTRATION_REQUEST]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-incoming:recipient-assoc/lecm-orgstr:employee-short-name}"))}  просит зарегистрировать  {#mainObject.wrapAsLink(#mainObject.getFormatted("входящий документ {lecm-incoming:document-type-assoc/cm:name} от {lecm-incoming:sender-assoc/lecm-contractor:fullname}"))}.]]></property>
+                    <![CDATA[{#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-incoming:recipient-assoc/lecm-orgstr:employee-short-name}"))}  просит зарегистрировать  {#mainObject.wrapAsLink(#mainObject.getFormatted("входящий документ {lecm-incoming:document-type-assoc/cm:title} от {lecm-incoming:sender-assoc/lecm-contractor:fullname}"))}.]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Входящий. Запрос регистрации]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
@@ -33,7 +33,7 @@
             <item name="cm:INCOMING_RECEIVED" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[INCOMING_RECEIVED]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Вам поступил документ: {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-eds-document:document-type-assoc/cm:name} от {lecm-incoming:sender-assoc/lecm-contractor:shortname}"))}.]]></property>
+                    <![CDATA[Вам поступил документ: {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-eds-document:document-type-assoc/cm:title} от {lecm-incoming:sender-assoc/lecm-contractor:shortname}"))}.]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Входящий. Направить на исполнение]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
@@ -45,7 +45,7 @@
             <item name="cm:INCOMING_REVIEW" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[INCOMING_REVIEW]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#sender.wrapAsLink(#sender.getFormatted("{lecm-orgstr:employee-short-name}"))} направил Вам документ {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-eds-document:document-type-assoc/cm:name} от {lecm-incoming:sender-assoc/lecm-contractor:shortname}"))} на рассмотрение. Комментарий: {#comment}]]></property>
+                    <![CDATA[{#sender.wrapAsLink(#sender.getFormatted("{lecm-orgstr:employee-short-name}"))} направил Вам документ {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-eds-document:document-type-assoc/cm:title} от {lecm-incoming:sender-assoc/lecm-contractor:shortname}"))} на рассмотрение. Комментарий: {#comment}]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Входящий. Направить на рассмотрение]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>

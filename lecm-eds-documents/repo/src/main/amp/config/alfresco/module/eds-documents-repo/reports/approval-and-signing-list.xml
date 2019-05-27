@@ -97,7 +97,7 @@
                         <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression">
-                            <![CDATA[{lecm-eds-document:document-type-assoc/cm:name}]]></property>
+                            <![CDATA[{lecm-eds-document:document-type-assoc/cm:title}]]></property>
                         <property name="cm:name"><![CDATA[Вид документа]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[docKind]]></property>
@@ -234,7 +234,7 @@
                         <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression">
-                            <![CDATA[Исполнитель: {lecm-eds-document:executor-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {lecm-eds-document:executor-assoc/lecm-orgstr:employee-short-name}]]></property>
+                            <![CDATA[Исполнитель: {lecm-eds-document:executor-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:title} {lecm-eds-document:executor-assoc/lecm-orgstr:employee-short-name}]]></property>
                         <property name="cm:name"><![CDATA[Информация о исполнителе]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[docExecutorInfo]]></property>
@@ -248,7 +248,7 @@
                         <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression">
-                            <![CDATA[Исполнитель: {lecm-document:author-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {lecm-document:author-assoc/lecm-orgstr:employee-short-name}]]></property>
+                            <![CDATA[Исполнитель: {lecm-document:author-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:title} {lecm-document:author-assoc/lecm-orgstr:employee-short-name}]]></property>
                         <property name="cm:name"><![CDATA[Информация об авторе]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[docAuthorInfo]]></property>

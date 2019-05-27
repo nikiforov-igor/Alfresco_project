@@ -180,7 +180,7 @@
                     <field id="lecm-ord-table-structure:item-status-assoc" read-only="true" set="bottom">
                         <control template="/ru/it/lecm/base-share/components/controls/substitude-text-control.ftl">
                             <control-param name="value">
-                                #{@substitudeService.formatNodeTitle(doc.nodeRef,"{lecm-ord-table-structure:item-status-assoc/cm:name}")}
+                                #{@substitudeService.formatNodeTitle(doc.nodeRef,"{lecm-ord-table-structure:item-status-assoc-text-content}")}
                             </control-param>
                         </control>
                     </field>
