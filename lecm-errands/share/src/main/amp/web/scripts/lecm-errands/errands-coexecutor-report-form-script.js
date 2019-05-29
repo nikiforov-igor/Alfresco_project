@@ -19,16 +19,18 @@
     }
 
     function setUpForm(layer, args) {
-        if(formId == args[1].formId &&  Dom.get(formId + "-form")) {
-            //меняет текст кнопки
-            var form = Dom.get(formId + "-form");
-            Dom.addClass(form, "errands-coexecutor-report-form");
-            formButtons = Dom.get(formId + "-form-buttons");
-            Event.onAvailable(formId + "-form-submit-button", function() {
-                var saveReportElement = Dom.get(formId + "-form-submit-button");
-                saveReportElement.innerHTML = Alfresco.util.message("button.save-report")
-            });
-        }
+        Event.onAvailable(formId + "-form", function() {
+            if(formId == args[1].formId) {
+                //меняет текст кнопки
+                var form = Dom.get(formId + "-form");
+                Dom.addClass(form, "errands-coexecutor-report-form");
+                formButtons = Dom.get(formId + "-form-buttons");
+                Event.onAvailable(formId + "-form-submit-button", function() {
+                    var saveReportElement = Dom.get(formId + "-form-submit-button");
+                    saveReportElement.innerHTML = Alfresco.util.message("button.save-report")
+                });
+            }
+        });
     }
 
     function submitForm(layer, args) {
