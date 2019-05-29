@@ -7,6 +7,7 @@
         Selector = YAHOO.util.Selector,
         Bubbling = YAHOO.Bubbling,
         Util = LogicECM.module.Base.Util;
+
     var formId;
     var formButtons;
     var scriptLayer;
@@ -17,37 +18,33 @@
     Bubbling.on("executeErrandButtonClick", executeErrand);
 
     function processForm(layer, args) {
-        if (!form) {
-            scriptLayer = layer;
-            formId = args[1].formId;
-            if (!errandRef) {
-                if (scriptLayer == "errandsExecuteWFValueSet") {
-                    Event.onContentReady(formId + "_assoc_packageItems", function () {
-                        errandRef = Dom.get(formId + "_assoc_packageItems").value;
-                        if (errandRef) {
-                            processCloseChildCheckbox(errandRef, "lecmErrandWf_execute_1CloseChild");
-                            processReportTextField(errandRef, "lecmErrandWf_execute_1ReportText");
-                        }
-                    });
-                } else {
-                    var form = Alfresco.util.ComponentManager.get(formId);
-                    if (form) {
-                        errandRef = form.options.nodeRef;
-                        if (errandRef) {
-                            processCloseChildCheckbox(errandRef, "lecm-errands-ts_execution-close-child");
-                            processReportTextField(errandRef, "lecm-errands-ts_execution-report-text");
-                        }
-                    }
+        scriptLayer = layer;
+        formId = args[1].formId;
+        if (scriptLayer == "errandsExecuteWFValueSet") {
+            Event.onContentReady(formId + "_assoc_packageItems", function () {
+                errandRef = Dom.get(formId + "_assoc_packageItems").value;
+                if (errandRef) {
+                    processCloseChildCheckbox(errandRef, "lecmErrandWf_execute_1CloseChild");
+                    processReportTextField(errandRef, "lecmErrandWf_execute_1ReportText");
+                }
+            });
+        } else {
+            var form = Alfresco.util.ComponentManager.get(formId);
+            if (form) {
+                errandRef = form.options.nodeRef;
+                if (errandRef) {
+                    processCloseChildCheckbox(errandRef, "lecm-errands-ts_execution-close-child");
+                    processReportTextField(errandRef, "lecm-errands-ts_execution-report-text");
                 }
             }
-            var formEl = Dom.get(formId + "-form");
-            Dom.addClass(formEl, "errands-execute-form");
-            formButtons = Dom.get(formId + "-form-buttons");
-            Event.onAvailable(formId + "-form-submit-button", function () {
-                var saveReportElement = Dom.get(formId + "-form-submit-button");
-                saveReportElement.innerHTML = Alfresco.util.message("button.save-report")
-            });
         }
+        var formEl = Dom.get(formId + "-form");
+        Dom.addClass(formEl, "errands-execute-form");
+        formButtons = Dom.get(formId + "-form-buttons");
+        Event.onAvailable(formId + "-form-submit-button", function () {
+            var saveReportElement = Dom.get(formId + "-form-submit-button");
+            saveReportElement.innerHTML = Alfresco.util.message("button.save-report")
+        });
     }
     function executeErrand(layer, args) {
         if (formId == args[1].formId && Dom.get(formId + "-form")) {
@@ -63,7 +60,6 @@
     }
 
     function processReportTextField(errandRef, field) {
-
         Alfresco.util.Ajax.jsonPost({
             url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
             dataObj: {
