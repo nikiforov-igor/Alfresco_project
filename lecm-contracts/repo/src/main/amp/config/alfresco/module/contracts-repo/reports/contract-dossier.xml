@@ -104,7 +104,7 @@
                     <item name="cm:Вид договора" type="lecm-rpeditor:reportDataColumn">
                         <property name="cm:name"><![CDATA[Вид договора]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression">
-                            <![CDATA[{lecm-contract:typeContract-assoc/cm:name}]]></property>
+                            <![CDATA[{lecm-contract:typeContract-assoc/cm:title}]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_DocKind]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                         <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
@@ -357,7 +357,7 @@
                     <item name="cm:Тематика.Название" type="lecm-rpeditor:reportDataColumn">
                         <property name="cm:name"><![CDATA[Тематика.Название]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression">
-                            <![CDATA[{lecm-document:subject-assoc/cm:name}]]></property>
+                            <![CDATA[{lecm-document:subject-assoc/cm:title}]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_Theme.tname]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                         <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
@@ -381,7 +381,7 @@
                     <item name="cm:Должность" type="lecm-rpeditor:reportDataColumn">
                         <property name="cm:name"><![CDATA[Инициатор.Должность]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression">
-                            <![CDATA[{lecm-document:author-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}]]></property>
+                            <![CDATA[{lecm-document:author-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:title}]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_Initiator.Post]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                         <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>

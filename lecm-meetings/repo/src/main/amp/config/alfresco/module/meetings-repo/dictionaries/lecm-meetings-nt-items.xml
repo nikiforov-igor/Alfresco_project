@@ -21,7 +21,7 @@
             </item>
             <item name="cm:PROTOCOL_REWORK" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Проект документа {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-eds-document:document-type-assoc/cm:name} №{~REGNUM}"))} направлен Вам на доработку]]></property>
+                    <![CDATA[Проект документа {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-eds-document:document-type-assoc/cm:title} №{~REGNUM}"))} направлен Вам на доработку]]></property>
                 <property name="cm:name"><![CDATA[PROTOCOL_REWORK]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Протокол. Отправлен на доработку]]></property>

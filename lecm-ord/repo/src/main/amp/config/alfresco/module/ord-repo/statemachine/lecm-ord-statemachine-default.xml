@@ -639,8 +639,8 @@ if (doc) {
 
       documentConnection.createConnection(ord, cancelDoc, "cancel", true, true);
 
-      var mainDocDesc = substitude.formatNodeTitle(ord, documentScript.wrapperDocumentLink(ord, "{lecm-eds-document:document-type-assoc/cm:name}, № {~REGNUM} от {~REGDATE}"));
-      var canceledDocDesc = substitude.formatNodeTitle(cancelDoc, documentScript.wrapperDocumentLink(cancelDoc, "{lecm-eds-document:document-type-assoc/cm:name}, № {~REGNUM} от {~REGDATE}"));
+      var mainDocDesc = substitude.formatNodeTitle(ord, documentScript.wrapperDocumentLink(ord, "{lecm-eds-document:document-type-assoc/cm:title}, № {~REGNUM} от {~REGDATE}"));
+      var canceledDocDesc = substitude.formatNodeTitle(cancelDoc, documentScript.wrapperDocumentLink(cancelDoc, "{lecm-eds-document:document-type-assoc/cm:title}, № {~REGNUM} от {~REGDATE}"));
 
 	  businessJournal.log(ord.nodeRef.toString(), "CANCEL_DOCUMENT", "Документ " + mainDocDesc + " отменил документ " + canceledDocDesc, []);
 	  businessJournal.log(cancelDoc.nodeRef.toString(), "CANCEL_DOCUMENT",  "Документ " + canceledDocDesc + " отменен документом " + mainDocDesc, []);
