@@ -224,12 +224,12 @@
             </form>
             <form>
                 <field-visibility>
+                    <show id="coexecutor-report-form-script" force="true"/>
                     <show id="lecm-errands-ts:coexecutor-report-text"/>
                     <show id="lecm-errands-ts:coexecutor-report-attachment-assoc"/>
                     <show id="lecm-errands-ts:coexecutor-report-connected-document-assoc"/>
                     <show id="route-report-button" force="true"/>
                     <show id="lecm-errands-ts:coexecutor-report-is-route"/>
-                    <show id="coexecutor-report-form-script" force="true"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-errands-ts:coexecutor-report-text" mandatory="true">
@@ -1574,11 +1574,11 @@
         <forms>
             <form>
                 <field-visibility>
+                    <show id="coexecutorReport_WFScript" force="true"/>
                     <show id="packageItems"/>
                     <show id="lecmErrandWf:coexecutorReport_1Text"/>
                     <show id="lecmErrandWf:coexecutorReport_1Attachment"/>
                     <show id="lecmErrandWf:coexecutorReport_1ConnectedDocument"/>
-                    <show id="coexecutorReport_WFScript" force="true"/>
                     <show id="lecmErrandWf:coexecutorReport_1RouteReport"/>
                     <show id="route-report-button" force="true"/>
                 </field-visibility>
