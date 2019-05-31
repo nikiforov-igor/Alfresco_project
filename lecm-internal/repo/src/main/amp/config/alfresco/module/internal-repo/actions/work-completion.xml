@@ -111,6 +111,14 @@
             notificationRecipients.push(assoc);
         }
     }
+
+    var authorAssocs = document.assocs["lecm-document:author-assoc"];
+    if (authorAssocs && authorAssocs.length) {
+        for each(var assoc in authorAssocs) {
+            notificationRecipients.push(assoc);
+        }
+    }
+
     for each (var member in members) {
         documentMembers.addMemberWithoutCheckPermission(document, member, true);
     }
