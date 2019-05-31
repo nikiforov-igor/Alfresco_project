@@ -107,7 +107,7 @@
     }
     var executorAssocs = document.assocs["lecm-eds-document:executor-assoc"];
     if (executorAssocs && executorAssocs.length) {
-        for each(var assoc in registratorAssocs) {
+        for each(var assoc in executorAssocs) {
             notificationRecipients.push(assoc);
         }
     }
