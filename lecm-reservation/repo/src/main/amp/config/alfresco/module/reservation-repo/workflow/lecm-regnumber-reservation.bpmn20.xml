@@ -230,7 +230,7 @@
                                     var month = regDate.getMonth() + 1;
                                     var year = regDate.getYear() + 1900;
                                     documentReservedDate = regDate.getDate() + '.' + (month < 10 ? '0' : '') + month + '.' + year;
-							        regInfo += msg("ru.it.lecm.reservation.bjMessages.reservationCompleted.regInfoString2", " на дату {date}");
+							        regInfo += (" " + msg("ru.it.lecm.reservation.bjMessages.reservationCompleted.regInfoString2", "на дату {date}"));
 							        regInfo = regInfo.replace("{date}", documentReservedDate);
 							    }
                                 var logText = msg("ru.it.lecm.reservation.bjMessages.reservationCompleted.message", "#initiator выполнил резервирование регистрационного номера для документа #mainobject. {regInfo}");

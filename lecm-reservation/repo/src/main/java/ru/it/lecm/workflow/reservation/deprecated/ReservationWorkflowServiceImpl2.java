@@ -183,7 +183,7 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 				if (regDate != null) {
 					SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
 					String documentReservedDate = dateFormat.format(regDate);
-					regInfo += EDSDocumentService.getFromMessagesOrDefaultValue("ru.it.lecm.reservation.bjMessages.reservationCompleted.regInfoString2", " на дату {date}").replace("{date}", documentReservedDate);
+					regInfo += (" " + EDSDocumentService.getFromMessagesOrDefaultValue("ru.it.lecm.reservation.bjMessages.reservationCompleted.regInfoString2", "на дату {date}").replace("{date}", documentReservedDate));
 				}
 				String bjMessage = EDSDocumentService.getFromMessagesOrDefaultValue("ru.it.lecm.reservation.bjMessages.reservationCompleted.message", "#initiator выполнил резервирование регистрационного номера для документа #mainobject. {regInfo}");
 				bjMessage = bjMessage.replace("{regInfo}", regInfo);
