@@ -190,7 +190,7 @@
                 <nodes>
                     <node>
                         <type>taskStatus</type>
-                        <name>Cогласование повестки</name>
+                        <name>Согласование повестки</name>
                         <properties>
                             <property>
                                 <name>do-not-ask-for-confirmation</name>
@@ -1995,7 +1995,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                         <associations>
                                                             <association>
                                                                 <type>transitionStatus</type>
-                                                                <reference>Cогласование повестки</reference>
+                                                                <reference>Согласование повестки</reference>
                                                             </association>
                                                         </associations>
                                                         <roleAssociations/>
