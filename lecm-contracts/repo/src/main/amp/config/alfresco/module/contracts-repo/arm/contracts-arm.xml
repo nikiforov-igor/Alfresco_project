@@ -4319,7 +4319,7 @@
                                                 <property name="lecm-arm:node-rule-show-node-view-form">
                                                     <![CDATA[false]]></property>
                                                 <property name="lecm-arm:node-rule-search-template">
-                                                    <![CDATA[@lecm-contractor\:shortname:"#searchTerm"]]></property>
+                                                    <![CDATA[@lecm\-contractor\:shortname:"#searchTerm"]]></property>
                                                 <property name="lecm-arm:list-query-child-rule">
                                                     <![CDATA[TYPE:"lecm-contractor:contractor-type" AND NOT ASPECT:"lecm-orgstr-aspects:is-organization-aspect"]]></property>
                                             </item>
