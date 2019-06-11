@@ -52,7 +52,8 @@
             if (selectedItems) {
                 var key = Object.keys(selectedItems)[0];
                 if (key) {
-                    textContentField.value = selectedItems[key].name;
+                    /*Автокомплит передает данные в несколько ином формате - поэтому вытаскиваем еще и из selectedName*/
+                    textContentField.value = (selectedItems[key].name ? selectedItems[key].name : selectedItems[key].selectedName);
                 }
             }
         }
