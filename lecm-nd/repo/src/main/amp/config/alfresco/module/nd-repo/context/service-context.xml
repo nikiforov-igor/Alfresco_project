@@ -223,7 +223,6 @@
             <map>
                 <entry key="lecm-eds-document:executor-assoc">
                     <list>
-                        <value>Черновик</value>
                         <value>Проект</value>
                         <value>На согласовании</value>
                         <value>На подписании</value>

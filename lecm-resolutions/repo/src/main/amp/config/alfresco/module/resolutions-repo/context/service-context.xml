@@ -287,13 +287,11 @@
             <map>
                 <entry key="lecm-resolutions:author-assoc">
                     <list>
-                        <value>Черновик</value>
                         <value>На доработке</value>
                     </list>
                 </entry>
                 <entry key="lecm-resolutions:controller-assoc">
                     <list>
-                        <value>Черновик</value>
                         <value>На утверждении</value>
                         <value>На доработке</value>
                         <value>На исполнении</value>
