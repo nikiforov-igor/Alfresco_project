@@ -56,6 +56,18 @@
                     <field id="cm:title" label-id="label.name"/>
                 </appearance>
             </form>
+            <form id="search">
+                <field-visibility>
+                    <show id="cm:title"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:title" label-id="label.name" description-id="label.name">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">false</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
         </forms>
     </config>
 
