@@ -921,6 +921,30 @@
                     </field>
                 </appearance>
             </form>
+            <!-- Форма для левой панели навигации -->
+            <form id="navigation-pane">
+                <view-form template="/ru/it/lecm/base-share/components/fields-list.ftl" />
+                <field-visibility>
+                    <show id="fake:doc-navi-attributes"/>
+                    <show id="fake:doc-navi-attachments"/>
+                </field-visibility>
+                <appearance>
+                    <field id="fake:doc-navi-attributes">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="uri">/lecm/components/dashlets/document-main</control-param>
+                            <control-param name="iconSrc">/share/res/images/lecm-arm/folder-40.png</control-param>
+                            <control-param name="nodeLabel">Атрибуты</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:doc-navi-attachments">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="uri">/lecm/components/dashlets/document-attachments</control-param>
+                            <control-param name="iconSrc">/share/res/images/lecm-arm/folder-40.png</control-param>
+                            <control-param name="nodeLabel">Вложения</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
         </forms>
     </config>
 
