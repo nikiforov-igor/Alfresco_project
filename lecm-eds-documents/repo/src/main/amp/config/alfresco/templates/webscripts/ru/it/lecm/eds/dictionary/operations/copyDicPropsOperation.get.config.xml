@@ -1,0 +1,22 @@
+<dictionariesToUpdate>
+    <dictionaries>
+        <dictionary name="Вид внутреннего документа"/>
+        <dictionary name="Вид договора"/>
+        <dictionary name="Вид документа"/>
+        <dictionary name="Вид документа к договору"/>
+        <dictionary name="Вид НД"/>
+        <dictionary name="Вид ОРД"/>
+        <dictionary name="Вид исходящего"/>
+        <dictionary name="Вид протокола"/>
+        <dictionary name="Договора-НСИ"/>
+        <dictionary name="Заголовки поручений"/>
+        <dictionary name="Причины удаления"/>
+        <dictionary name="Способы завершения резолюции"/>
+        <dictionary name="Статусы пункта повестки"/>
+        <dictionary name="Статусы пунктов ОРД"/>
+        <dictionary name="Статусы пунктов протокола"/>
+        <dictionary name="Статусы этапов"/>
+        <dictionary name="Типовые ответы"/>
+        <dictionary name="Типы поручений"/>
+    </dictionaries>
+</dictionariesToUpdate>

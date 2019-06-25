@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Перенос значения атрибутов записей справочников СЭД</shortname>
+    <description>Перенос значения атрибутов записей справочников СЭД</description>
+    <url>/lecm/eds/dictionary/copyPropValueToAnother</url>
+    <authentication>admin</authentication>
+    <transaction allowed="readwrite">required</transaction>
+    <format default="json">extension</format>
+</webscript>
