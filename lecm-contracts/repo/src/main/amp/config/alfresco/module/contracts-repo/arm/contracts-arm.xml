@@ -4321,7 +4321,7 @@
                                                 <property name="lecm-arm:node-rule-search-template">
                                                     <![CDATA[@lecm\-contractor\:shortname:"#searchTerm"]]></property>
                                                 <property name="lecm-arm:list-query-child-rule">
-                                                    <![CDATA[TYPE:"lecm-contractor:contractor-type" AND NOT ASPECT:"lecm-orgstr-aspects:is-organization-aspect"]]></property>
+                                                    <![CDATA[TYPE:"lecm-contractor:contractor-type" AND NOT ASPECT:"lecm-orgstr-aspects:is-organization-aspect" AND {{IN_SAME_ORGANIZATION({strict:false, disableGlobal:true})}}]]></property>
                                             </item>
                                         </items>
                                         <assocs>
