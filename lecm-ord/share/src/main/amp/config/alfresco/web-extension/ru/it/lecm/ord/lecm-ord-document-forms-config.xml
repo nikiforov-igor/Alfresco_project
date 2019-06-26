@@ -5,6 +5,7 @@
             <form>
                 <field-visibility>
                     <show id="loadChangeSignersListScript" force="true"/>
+                    <show id="confirmCompletionHandler" force="true"/>
                     <show id="lecm-document-aspects:attachments-temp-assoc"/>
                     <show id="lecm-document:author-assoc"/>
                     <show id="lecm-eds-document:executor-assoc"/>
@@ -30,7 +31,6 @@
                     <show id="lecm-ord:temp-items-assoc"/>
                     <show id="lecm-approval-route:approvalFolder" force="true"/>
                     <show id="lecm-signing-route:signingFolder" force="true"/>
-                    <show id="confirmCompletionHandler" force="true"/>
                     <show id="checkAllowSigningOnPaperScript" force="true"/>
                 </field-visibility>
                 <appearance>
@@ -652,6 +652,7 @@
             <form id="edit">
                 <field-visibility>
                     <show id="lecm-base-dummy-aspects:script5" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script3" force="true"/>
                     <show id="lecm-document:regnum"/>																	<!-- Рег. номер -->
                     <show id="lecm-document-aspects:reg-data-date"/>
                     <show id="lecm-eds-document:document-type-assoc"/>
@@ -675,7 +676,6 @@
                     <show id="lecm-signing-v2-aspects:signingDate" force="true"/>
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <show id="lecm-base-dummy-aspects:script2" force="true"/>
-                    <show id="lecm-base-dummy-aspects:script3" force="true"/>
                     <show id="lecm-base-dummy-aspects:script4" force="true"/>
                 </field-visibility>
                 <appearance>
@@ -846,6 +846,7 @@
             <form>
                 <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
+                    <show id="lecm-base-dummy-aspects:script3" force="true"/>
                     <show id="lecm-eds-aspect:execution-state" force="true"/>
                     <show id="lecm-review-ts:doc-review-state" force="true"/>
                     <show id="lecm-document:regnum"/>																	<!-- Рег. номер -->
@@ -877,7 +878,6 @@
                     <show id="lecm-review-ts:review-table-assoc"/>
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <show id="lecm-base-dummy-aspects:script2" force="true"/>
-                    <show id="lecm-base-dummy-aspects:script3" force="true"/>
                     <show id="lecm-base-dummy-aspects:script4" force="true"/>
                     <show id="lecm-base-dummy-aspects:script5" force="true"/>
                 </field-visibility>
