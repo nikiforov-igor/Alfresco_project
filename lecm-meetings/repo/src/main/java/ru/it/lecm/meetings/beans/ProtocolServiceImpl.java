@@ -195,7 +195,7 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
                 String protocolDocType = "";
                 if (protocolDocTypeAssocs.size() > 0) {
                     NodeRef protocolDocTypeRef = protocolDocTypeAssocs.get(0).getTargetRef();
-                    protocolDocType = (String) nodeService.getProperty(protocolDocTypeRef, ContentModel.PROP_NAME);
+                    protocolDocType = (String) nodeService.getProperty(protocolDocTypeRef, ContentModel.PROP_TITLE);
                 }
                 String protocolNumber = (String) nodeService.getProperty(protocol, DocumentService.PROP_REG_DATA_DOC_NUMBER);
                 Date protocolRegDate = (Date) nodeService.getProperty(protocol, DocumentService.PROP_REG_DATA_DOC_DATE);
