@@ -5,6 +5,7 @@
             <item name="cm:По автору" type="lecm-arm:filter">
                 <property name="cm:name">По принадлежности</property>
                 <property name="lecm-arm:filter-code">AUTHOR_FILTER</property>
+                <property name="lecm-arm:order">150</property>
                 <property name="lecm-arm:filter-class">authorArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
                 <property name="lecm-arm:filter-values">MY|Мои,DEPARTMENT|Мое подразделение</property>
@@ -13,6 +14,7 @@
             <item name="cm:По сроку действия" type="lecm-arm:filter">
                 <property name="cm:name">По сроку действия</property>
                 <property name="lecm-arm:filter-code">LIMITATION_FILTER</property>
+                <property name="lecm-arm:order">120</property>
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
                 <property name="lecm-arm:filter-values">@lecm\\-contract:endDate:[NOW TO NOW+30DAY]|Осталось менее 30 дней;@lecm\\-contract:endDate:[MIN TO NOW/DAY]|Срок действия истек</property>
@@ -21,6 +23,7 @@
             <item name="cm:По сумме договора" type="lecm-arm:filter">
                 <property name="cm:name">По сумме договора</property>
                 <property name="lecm-arm:filter-code">CONTRACT_SUM_FILTER</property>
+                <property name="lecm-arm:order">130</property>
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
                 <property name="lecm-arm:filter-values">@lecm\\-contract:totalAmount:[0 TO 999999]|Менее 1 млн;@lecm\\-contract:totalAmount:[1000000 TO 999999999]|От 1 млн до 1 млрд;@lecm\\-contract:totalAmount:[1000000000 TO MAX]|1 млрд и более</property>
@@ -29,6 +32,7 @@
             <item name="cm:По срокам" type="lecm-arm:filter">
                 <property name="cm:name">По срокам</property>
                 <property name="lecm-arm:filter-code">DATE_FILTER</property>
+                <property name="lecm-arm:order">110</property>
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
                 <property name="lecm-arm:filter-values">@lecm\\-errands:is\\-expired:true OR @lecm\\-resolutions:is\\-expired:true OR @lecm\\-eds\\-document:is\\-expired:true|С нарушением срока;NOT @lecm\\-errands\:is\\-expired:true AND NOT @lecm\\-resolutions:is\\-expired:true AND NOT @lecm\\-eds\\-document:is\\-expired:true|Без нарушения;@lecm\\-eds\\-document:execution\\-date:[NOW TO NOW+4DAY] OR @lecm\\-errands\\:limitation\\-date:[NOW TO NOW+4DAY] OR @lecm\\-resolutions\\:limitation\\-date:[NOW TO NOW+4DAY]|Осталось менее 5-ти дней</property>
@@ -37,6 +41,7 @@
                 <item name="cm:Вид документа" type="lecm-arm:filter">
                 <property name="cm:name">Вид документа</property>
                 <property name="lecm-arm:filter-code">DOCUMENT_TYPE</property>
+                <property name="lecm-arm:order">20</property>
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
                 <property name="lecm-arm:filter-values">lecm-incoming:document|Входящие,lecm-outgoing:document|Исходящие,lecm-internal:document|Внутренние,lecm-ord:document|ОРД,lecm-errands:document|Поручения</property>
@@ -45,6 +50,7 @@
             <item name="cm:По типу" type="lecm-arm:filter">
                 <property name="cm:name">По типу</property>
                 <property name="lecm-arm:filter-code">BY_TYPE</property>
+                <property name="lecm-arm:order">10</property>
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
                 <property name="lecm-arm:filter-values">lecm-incoming:document|Входящие,lecm-outgoing:document|Исходящие,lecm-internal:document|Внутренние,lecm-ord:document|ОРД,lecm-nd:document|Нормативные документы,lecm-protocol:document|Протоколы,lecm-resolutions:document|Резолюции,lecm-errands:document|Поручения</property>
@@ -53,6 +59,7 @@
             <item name="cm:Мои документы" type="lecm-arm:filter">
                 <property name="cm:name">Мои документы</property>
                 <property name="lecm-arm:filter-code">MY_DOCUMENTS</property>
+                <property name="lecm-arm:order">170</property>
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
                 <property name="lecm-arm:filter-values">@lecm\\-document:author\\-assoc\\-ref:'#current-user' OR @lecm\\-eds\\-document:executor\\-assoc\\-ref:'#current-user' OR @lecm\\-resolutions:author\\-assoc\\-ref:'#current-user' OR @lecm\\-errands:initiator\\-assoc\\-ref:'#current-user'|Мои документы</property>
@@ -61,6 +68,7 @@
             <item name="cm:По контролю" type="lecm-arm:filter">
                 <property name="cm:name">По контролю</property>
                 <property name="lecm-arm:filter-code">BY_CONTROL</property>
+                <property name="lecm-arm:order">50</property>
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
                 <property name="lecm-arm:filter-values">ISNOTNULL:'lecm-document-aspects:is-on-control' AND @lecm\\-document\\-aspects:is\\-on\\-control:true|Контрольные,ISNULL:'lecm-document-aspects:is-on-control' OR @lecm\\-document\\-aspects:is\\-on\\-control:false|Не контрольные</property>
@@ -69,6 +77,7 @@
             <item name="cm:По типу участия" type="lecm-arm:filter">
                 <property name="cm:name">По типу участия</property>
                 <property name="lecm-arm:filter-code">BY_TYPE_OF_PARTICIPATION</property>
+                <property name="lecm-arm:order">160</property>
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
                 <property name="lecm-arm:filter-values">@lecm\\-events:initiator\\-assoc\\-ref:'#current-user'|Я - Инициатор,@lecm\\-meetings:chairman\\-assoc\\-ref:'#current-user'|Я - Председатель,@lecm\\-meetings:secretary\\-assoc\\-ref:'#current-user'|Я - Секретарь,@lecm\\-events:temp\\-members\\-assoc\\-ref:'*#current-user*'|Я - Участник,@lecm\\-events:invited\\-members\\-assoc\\-ref:'*#current-user*'|Я - Приглашенный</property>
@@ -77,6 +86,7 @@
             <item name="cm:По роли" type="lecm-arm:filter">
                 <property name="cm:name">По роли</property>
                 <property name="lecm-arm:filter-code">BY_ROLE</property>
+                <property name="lecm-arm:order">140</property>
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
                 <property name="lecm-arm:filter-values">@lecm\\-eds\\-document:executor\\-assoc\\-ref:'#current-user' OR @lecm\\-resolutions:author\\-assoc\\-ref:'#current-user' OR @lecm\\-errands:initiator\\-assoc\\-ref:'#current-user'|Я - Автор,@lecm\\-document:author\\-assoc\\-ref:'#current-user'|Я - Составитель</property>
@@ -85,6 +95,7 @@
             <item name="cm:По важности" type="lecm-arm:filter">
                 <property name="cm:name">По важности</property>
                 <property name="lecm-arm:filter-code">BY_IMPORTANCE</property>
+                <property name="lecm-arm:order">40</property>
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
                 <property name="lecm-arm:filter-values">@lecm\\-errands:is\\-important:true|Важные;NOT @lecm\\-errands:is\\-important:true OR @lecm\\-errands:is\\-important:false|Простые</property>
@@ -93,6 +104,7 @@
             <item name="cm:По документу-основанию" type="lecm-arm:filter">
                 <property name="cm:name">По документу-основанию</property>
                 <property name="lecm-arm:filter-code">BY_BASE_DOCUMENT_TYPE</property>
+                <property name="lecm-arm:order">30</property>
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
                 <property name="lecm-arm:filter-values">@lecm\\-eds\\-aspect:base\\-document\\-type:'Входящий документ'|Входящие,@lecm\\-eds\\-aspect:base\\-document\\-type:'Внутренний документ'|Внутренние,@lecm\\-eds\\-aspect:base\\-document\\-type:'Исходящий документ'|Исходящие,@lecm\\-eds\\-aspect:base\\-document\\-type:'ОРД'|ОРД,@lecm\\-eds\\-aspect:base\\-document\\-type:'НД'|НД,@lecm\\-eds\\-aspect:base\\-document\\-type:'Протокол'|Протоколы,@lecm\\-eds\\-aspect:base\\-document\\-type:'Поручение'|Поручения,NOT ASPECT:'lecm-eds-aspect:base-document-type-aspect'|Без документа-основания</property>
@@ -101,6 +113,7 @@
             <item name="cm:По состоянию исполнения" type="lecm-arm:filter">
                 <property name="cm:name">По состоянию исполнения</property>
                 <property name="lecm-arm:filter-code">BY_EXECUTION_STATE</property>
+                <property name="lecm-arm:order">90</property>
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
                 <property name="lecm-arm:filter-values">IN_PROCESS|В процессе,COMPLETE|Завершено,NOT_REQUIRED|Не требуется</property>
@@ -109,6 +122,7 @@
             <item name="cm:По состоянию ознакомления" type="lecm-arm:filter">
                 <property name="cm:name">По состоянию ознакомления</property>
                 <property name="lecm-arm:filter-code">BY_REVIEW_STATE</property>
+                <property name="lecm-arm:order">100</property>
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
                 <property name="lecm-arm:filter-values">IN_PROCESS|В процессе,COMPLETE|Завершено,NOT_REQUIRED|Не требуется</property>
@@ -117,6 +131,7 @@
             <item name="cm:Тип контроля" type="lecm-arm:filter">
                 <property name="cm:name">Тип контроля</property>
                 <property name="lecm-arm:filter-code">BY_TYPE_OF_CONTROL</property>
+                <property name="lecm-arm:order">70</property>
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
                 <property name="lecm-arm:filter-values">@lecm\\-ord\\:controller\\-assoc\\-ref:'#current-user'|Контролер документа,@lecm\\-ord\\:items\\-assoc\\-controller\\-assoc\\-ref:'*#current-user*'|Контролер пункта</property>
@@ -125,6 +140,7 @@
             <item name="cm:По типу исполнения" type="lecm-arm:filter">
                 <property name="cm:name">По типу исполнения</property>
                 <property name="lecm-arm:filter-code">BY_EXECUTION_TYPE</property>
+                <property name="lecm-arm:order">80</property>
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
                 <property name="lecm-arm:filter-values">@lecm\\-errands:type\\-assoc\\-ref:{{FILTER_BY_DICTIONARY_ATTRIBUTE_VALUE({dictionary:'Типы поручений', attribute:'lecm-errands-dic:errand-type-launch-review', value:true})}}|Рассмотрение;NOT @lecm\\-errands:type\\-assoc\\-ref:{{FILTER_BY_DICTIONARY_ATTRIBUTE_VALUE({dictionary:'Типы поручений', attribute:'lecm-errands-dic:errand-type-launch-review', value:true})}}|Исполнение</property>
@@ -133,6 +149,7 @@
             <item name="cm:Я - регистратор" type="lecm-arm:filter">
                 <property name="cm:name">Я - регистратор</property>
                 <property name="lecm-arm:filter-code">BY_REGISTRATOR</property>
+                <property name="lecm-arm:order">180</property>
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">true</property>
                 <property name="lecm-arm:filter-values">@lecm\\-document\\-aspects:registrator\\-assoc\\-ref:'#current-user'|Я - регистратор</property>
