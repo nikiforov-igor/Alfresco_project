@@ -205,7 +205,7 @@
                                     /* Обрабатываем типовой ответ */
                                     if (answer.typical != null && answer.typical != "") {
                                         var typical = search.findNode(answer.typical);
-                                        answerText = typical.properties["cm:name"];
+                                        answerText = typical.properties["cm:title"];
                                         answerObject.createAssociation(typical, "lecm-internal-table-structure:answer-typical-assoc");
                                     }
                                     /* Обрабатываем комметарий */
