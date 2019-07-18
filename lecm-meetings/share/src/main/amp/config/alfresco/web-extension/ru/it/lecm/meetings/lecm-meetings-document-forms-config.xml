@@ -198,10 +198,8 @@
                             <control-param name="expandable">false</control-param>
                             <control-param name="usePagination">false</control-param>
                             <control-param name="showLabel">false</control-param>
-                            <!--<control-param name="expandDataSource">components/form?formId=table-structure-info</control-param>-->
                             <control-param name="isTableSortable">false</control-param>
                             <control-param name="refreshAfterCreate">true</control-param>
-                            <!--<control-param name="deleteMessageFunction"></control-param>-->
                             <control-param name="editFormTitleMsg">meeting.item.edit.form.title</control-param>
                             <control-param name="createFormTitleMsg">meeting.item.create.form.title</control-param>
                             <control-param name="viewFormTitleMsg">meeting.item.view.form.title</control-param>
@@ -445,8 +443,12 @@
                             <control-param name="iconSrc">/folder-40.png</control-param>
                             <control-param name="uri">/lecm/components/document/metadata</control-param>
                             <control-param name="uri_formId">agenda</control-param>
+                            <control-param name="uri_formMode">edit</control-param>
+                            <control-param name="uri_cssClasses">agenda-list-container</control-param>
                             <control-param name="nodeLabel">Повестка</control-param>
                             <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_AttrList")</control-param>
+                            <control-param name="counterUri">/lecm/meetings/getAgendaInfo</control-param>
+                            <control-param name="counterProp">size</control-param>
                         </control>
                     </field>
                     <field id="attachments">
