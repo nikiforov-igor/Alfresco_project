@@ -265,9 +265,9 @@
                     </field>
                 </appearance>
             </form>
+
             <!-- Форма просмотра -->
             <form>
-                <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
                     <show id="lecm-document:regnum"/>																	<!-- Рег. номер -->
                     <show id="lecm-document-aspects:reg-data-date"/>													<!-- Дата регистрации -->
@@ -285,8 +285,6 @@
                     <show id="lecm-eds-document:executor-assoc"/>															<!-- Исполнитель -->
                     <show id="lecm-document-aspects:reg-project-data-number"/>
                     <show id="lecm-document-aspects:reg-project-data-date"/>
-                    <show id="lecm-approval-route:approvalFolder" force="true"/>
-                    <show id="lecm-signing-route:signingFolder" force="true"/>
                     <show id="lecm-signing-v2-aspects:signed-on-paper"/>
                     <show id="lecm-signing-v2-aspects:signerEmployeeAssoc" force="true"/>
                     <show id="lecm-signing-v2-aspects:isSigned" force="true"/>
@@ -299,8 +297,6 @@
                 </field-visibility>
                 <appearance>
                     <set id="common" appearance="" label="Сведения" /> <!-- tab1 -->
-                    <set id="approvalAndSigning" appearance="" label="Согласование и подписание"/>
-
                     <field id="lecm-document:regnum" set="common" mandatory="true">
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Documents.regnumUniqueness.validator"
@@ -471,71 +467,6 @@
                     </field>
                     <field id="lecm-document-aspects:reg-project-data-number" set="common"/>
                     <field id="lecm-document-aspects:reg-project-data-date" set="common"/>
-                    <field id="lecm-approval-route:approvalFolder" set="approvalAndSigning" label-id="label.forms.approval">                
-                        <control template="/ru/it/lecm/routes-v2/controls/routes-datagrid-control.ftl">
-                            <control-param name="noRoutesLabel">label.approval.routes.no-route</control-param>
-                            <control-param name="routeDataScript">lecm/routes-v2/approvalRoutes/getRouteData</control-param>
-                            <control-param name="createStageItemScript">lecm/routes-v2/approvalRoutes/CreateStageItemInQueue</control-param>
-                            <control-param name="createEmptyIterationScript">lecm/routes-v2/approvalRoutes/createEmptyIteration</control-param>
-                            <control-param name="createIterationFromPrevious">lecm/routes-v2/createIterationFromPreviousApproval</control-param>
-                            <control-param name="convertRouteToIterationScript">lecm/routes-v2/approvalRoutes/convertRouteToIteration</control-param>
-                            <control-param name="removeWorkFolderScript">lecm/routes-v2/approvalRoutes/removeWorkFolder</control-param>
-                            <control-param name="createListFromRouteFormId">selectRouteForm</control-param>
-                            <control-param name="createIterationFormId">createIteration</control-param>
-                            <control-param name="createStageInlineFormId">editStageParametersInlineForm</control-param>
-                            <control-param name="expandDataSource">ru/it/lecm/routes-v2/stages/stageExpanded</control-param>
-                            <control-param name="expandedDataSource">lecm/components/form?formId=viewApprovalResult</control-param>
-                            <control-param name="newListTitleMsgId">title.new.approval.list</control-param>
-                            <control-param name="repeatRouteDialogFormId">repeatPreviousApprovalRouteDialog</control-param>
-                            <control-param name="newListConfirmationMsgId">message.new.approval.list.confirmation</control-param>
-                            <control-param name="newListFromRoutTitleMsgId">title.new.approval.list.from.route</control-param>
-                            <control-param name="clearListTitleId">title.approval.list.clear</control-param>
-                            <control-param name="clearListMsgId">message.clear.approval.list</control-param>
-                            <control-param name="viewIterationResultFormTitleId">label.view.approval.details</control-param>
-                            <control-param name="showIterationsHistoryFormId">showApprovalHistoryForm</control-param>
-                            <control-param name="viewIterationResultFormId">viewApprovalResult</control-param>
-                            <control-param name="fieldsForFilterRoutes">lecm-eds-document:executor-assoc,lecm-document:author-assoc</control-param>
-                            <control-param name="editIterationFormId">editIterationProperties</control-param>
-                            <control-param name="addEmployeeToStageMsgId">label.approval.routes.stage.addEmployee</control-param>
-                            <control-param name="scripts">scripts/lecm-approval-v2/approval-stage-items-control.js</control-param>
-                            <control-param name="stageItemsJsObjectName">LogicECM.module.Approval2.ApprovalStageItemsControlDatagrid</control-param>
-                            <control-param name="showPrintButton">true</control-param>
-                        </control>                 
-                    </field>
-
-                    <field id="lecm-signing-route:signingFolder" set="approvalAndSigning" label-id="label.forms.signing">
-                        <control template="/ru/it/lecm/routes-v2/controls/routes-datagrid-control.ftl">
-                            <control-param name="noRoutesLabel">label.signing.routes.no-route</control-param>
-                            <control-param name="removeWorkFolderScript">lecm/routes-v2/signingRoutes/removeWorkFolder</control-param>
-                            <control-param name="routeDataScript">lecm/routes-v2/signingRoutes/getRouteData</control-param>
-                            <control-param name="createStageItemScript">lecm/routes-v2/signingRoutes/CreateStageItemInQueue</control-param>
-                            <control-param name="createEmptyIterationScript">lecm/routes-v2/signingRoutes/createEmptyIteration</control-param>
-                            <control-param name="createIterationFromPrevious">lecm/routes-v2/createIterationFromPreviousSigning</control-param>
-                            <control-param name="convertRouteToIterationScript">lecm/routes-v2/signingRoutes/convertRouteToIteration</control-param>
-                            <control-param name="createListFromRouteFormId">selectRouteForm</control-param>
-                            <control-param name="editIterationFormId">editIterationProperties</control-param>
-                            <control-param name="createIterationFormId">createIteration</control-param>
-                            <control-param name="createStageInlineFormId">editStageParametersInlineForm</control-param>
-                            <control-param name="expandDataSource">ru/it/lecm/routes-v2/stages/stageExpanded</control-param>
-                            <control-param name="editStageItemsFormTitleMessage">title.signing.routes.stage.item.form.edit</control-param>
-                            <control-param name="expandedDataSource">lecm/components/form?formId=viewSigningResult</control-param>
-                            <control-param name="repeatRouteDialogFormId">repeatPreviousApprovalRouteDialog</control-param>
-                            <control-param name="clearListTitleId">title.signing.list.clear</control-param>
-                            <control-param name="clearListMsgId">message.clear.signing.list</control-param>
-                            <control-param name="showIterationsHistoryFormId">showApprovalHistoryForm</control-param>
-                            <control-param name="viewIterationResultFormId">viewSigningResult</control-param>
-                            <control-param name="cssFiles">css/lecm-signing-v2/lecm-signing-v2-routes-datagrid-control.css,css/lecm-signing-v2/signing-stage-items-control-styles.css</control-param>
-                            <control-param name="determinantClass">signing-control</control-param>
-                            <control-param name="scripts">scripts/lecm-signing-v2/evaluators-v2.js,scripts/lecm-signing-v2/signing-stage-items-control.js</control-param>
-                            <control-param name="jsObjectName">LogicECM.module.Signing.Evaluators</control-param>
-                            <control-param name="stageItemsJsObjectName">LogicECM.module.Signing2.SigningStageItemsControlDatagrid</control-param>
-                            <control-param name="newListConfirmationMsgId">message.new.signing.list.confirmation</control-param>
-                            <control-param name="newListFromRoutTitleMsgId">title.new.signing.list.from.route</control-param>
-                            <control-param name="newListTitleMsgId">title.new.signing.list</control-param>
-                            <control-param name="unableCreateListActiveMessageId">message.signing.unable.to.create.list.active</control-param>
-                            <control-param name="addEmployeeToStageMsgId">label.signing.routes.stage.addEmployee</control-param>
-                        </control>
-                    </field>
 
                     <field id="lecm-signing-v2-aspects:signerEmployeeAssoc" set="common">
                         <control>
@@ -707,240 +638,114 @@
                 </appearance>
             </form>
 
-            <!-- Форма с набором полей для "Общие сведения" на карточке документа -->
-            <form id="document-dashlet">
+            <!-- Область навигации -->
+            <form id="navigation-pane">
                 <field-visibility>
-                    <show id="lecm-outgoing:contractor-assoc"/>															<!-- Организация-получатель -->
-                    <show id="lecm-outgoing:recipient-assoc"/>															<!-- Получатель -->
-                    <show id="lecm-document:title"/>																	<!-- Заголовок -->
-                    <show id="lecm-statemachine:status"/>																<!-- Статус -->
-                    <show id="lecm-eds-document:file-register-assoc"/>													<!-- Номенклатура дел -->
-                    <show id="lecm-document:author-assoc"/>
-                    <show id="lecm-eds-document:executor-assoc"/>
+                    <show id="attributes"/>
+                    <show id="approvalAndSigning"/>
+                    <show id="attachments"/>
+                    <show id="errands"/>
+                    <show id="workflows"/>
+                    <show id="connections"/>
+                    <show id="members"/>
+                    <show id="tags"/>
+                    <show id="history"/>
+                    <show id="reports"/>
+                    <show id="comments"/>
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-statemachine:status">
-                        <control template="/ru/it/lecm/documents/controls/history/status-history.ftl"/>
-                    </field>
-                    <field id="lecm-outgoing:recipient-assoc">
-                        <control template="/ru/it/lecm/contractors/contractors-double-select-representative.ftl">
-                            <control-param name="showAssocViewForm">true</control-param>
-                            <control-param name="plane">true</control-param>
-                            <control-param name="updateOnContractorSelect">contractor.selected</control-param>
-                            <control-param name="updateOnOrganizationSelect">organization.selected</control-param>
-                            <control-param name="defaultValueUseOnce">true</control-param>
-                            <!-- autocomplete options-->
-                            <control-param name="controlJsName">select-representative-associationControl</control-param>
-                            <control-param name="showCreateNewLink">false</control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="employeeAbsenceMarker">true</control-param>
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM</control-param>
-                            <control-param name="lazyLoading">true</control-param>
-                            <control-param name="checkType">false</control-param>
-                            <!--customization options-->
-                            <control-param name="employeesByOrgDS">lecm/forms/picker</control-param>
-                            <control-param name="representativesByContrDS">lecm/representatives/{contractor}/picker</control-param>
-
-                            <!--<control-param name="employeesType">lecm-orgstr:employee</control-param>
-                            <control-param name="representativesType">lecm-representative:representative-type</control-param>-->
-
-                            <control-param name="employeesNameSubstitute">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:title} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
-                            <control-param name="representativesSubstitute">{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:middlename}</control-param>
-                            <control-param name="nameSubstituteString">{lecm-representative:surname}{lecm-orgstr:employee-last-name} {lecm-representative:firstname}{lecm-orgstr:employee-first-name} {lecm-representative:middlename}{lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:title} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
-                            <control-param name="selectedItemsNameSubstituteString">{lecm-representative:surname}{lecm-orgstr:employee-last-name} {lecm-representative:firstname}{lecm-orgstr:employee-first-name} {lecm-representative:middlename}{lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:title} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
-
-                            <control-param name="employeesLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
-                            <control-param name="representativesLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
-
-                            <control-param name="employeesDefaultValueDS"></control-param>
-                            <control-param name="representativesDefaultValueDS">lecm/contractors/getMainRepresentative?contractor={contractor}</control-param>
-                            <control-param name="doNotCheckAccess">true</control-param>
+                    <field id="attributes">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/metadata</control-param>
+                            <control-param name="nodeLabel">Атрибуты</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_AttrList")</control-param>
                         </control>
                     </field>
-                    <field id="lecm-outgoing:contractor-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
-                            <control-param name="changeItemsFireAction">contractor.selected</control-param>
-                            <control-param name="items">contractor,organisation,person</control-param>
-                            <control-param name="showAutocomplete">true</control-param>
-                            <control-param name="autocompleteDataSourceMethodPost">true</control-param>
-                            <control-param name="cssClasses">with-ex-search</control-param>
-                            <control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
-                            <!-- lecm-contractor:contractor-type -->
-                            <control-param name="contractor_label">label.control.outer-contractor</control-param>
-                            <control-param name="contractor_endpointType">lecm-contractor:contractor-type</control-param>
-                            <control-param name="contractor_endpointMany">true</control-param>
-                            <control-param name="contractor_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
-                            <control-param name="contractor_nameSubstituteString">{lecm-contractor:shortname}</control-param>
-                            <control-param name="contractor_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
-                            <control-param name="contractor_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
-                            <control-param name="contractor_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}, {lecm-contractor:phone}&lt;/div&gt;</control-param>
-                            <control-param name="contractor_plane">true</control-param>
-                            <control-param name="contractor_showSearch">false</control-param>
-                            <control-param name="contractor_showExSearch">true</control-param>
-                            <control-param name="contractor_showCreateNewLink">true</control-param>
-                            <control-param name="contractor_showEditButton">true</control-param>
-                            <control-param name="contractor_fillFormFromSearch">true</control-param>
-                            <control-param name="contractor_pickerItemsScript">lecm/contractors/common/picker/items</control-param>
-                            <control-param name="contractor_additionalFilter">NOT ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
-                            <control-param name="contractor_showAssocViewForm">true</control-param>
-                            <control-param name="contractor_sortProp">lecm-contractor:shortname</control-param>
-                            <control-param name="contractor_hasNoAspects">lecm-orgstr-aspects:is-organization-aspect</control-param>
-                            <control-param name="contractor_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
-                            <control-param name="contractor_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
-                            <!-- lecm-contractor:contractor-type -->
-                            <control-param name="organisation_label">label.control.inner-contractor</control-param>
-                            <control-param name="organisation_endpointType">lecm-contractor:contractor-type</control-param>
-                            <control-param name="organisation_endpointMany">true</control-param>
-                            <control-param name="organisation_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
-                            <control-param name="organisation_nameSubstituteString">{lecm-contractor:shortname}</control-param>
-                            <control-param name="organisation_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
-                            <control-param name="organisation_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
-                            <control-param name="organisation_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}, {lecm-contractor:phone}&lt;/div&gt;</control-param>
-                            <control-param name="organisation_plane">true</control-param>
-                            <control-param name="organisation_showSearch">false</control-param>
-                            <control-param name="organisation_showExSearch">true</control-param>
-                            <control-param name="organisation_showCreateNewLink">false</control-param>
-                            <control-param name="organisation_pickerItemsScript">lecm/contractors/organization/picker/items</control-param>
-                            <control-param name="organisation_additionalFilter">ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
-                            <control-param name="organisation_showAssocViewForm">true</control-param>
-                            <control-param name="organisation_sortProp">lecm-contractor:shortname</control-param>
-                            <control-param name="organisation_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
-                            <control-param name="organisation_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
-                            <!-- lecm-contractor:physical-person-type -->
-                            <control-param name="person_label">label.control.person</control-param>
-                            <control-param name="person_endpointType">lecm-contractor:physical-person-type</control-param>
-                            <control-param name="person_endpointMany">true</control-param>
-                            <control-param name="person_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
-                            <control-param name="person_nameSubstituteString">{lecm-contractor:lastName} {lecm-contractor:firstName} {lecm-contractor:middleName}</control-param>
-                            <control-param name="person_selectedItemsNameSubstituteString">{lecm-contractor:fullname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
-                            <control-param name="person_plane">true</control-param>
-                            <control-param name="person_showCreateNewLink">true</control-param>
-                            <control-param name="person_showEditButton">true</control-param>
-                            <control-param name="person_fillFormFromSearch">true</control-param>
-                            <control-param name="person_showSearch">false</control-param>
-                            <control-param name="person_showExSearch">true</control-param>
-                            <control-param name="person_showAssocViewForm">true</control-param>
-                            <control-param name="person_sortProp">lecm-contractor:shortname</control-param>
-                            <control-param name="person_getExtSearchQuery">LogicECM.getExtQueryForPerson</control-param>
-                            <control-param name="person_getArgumentsFromForm">LogicECM.getExtArgsForPerson</control-param>
+                    <field id="approvalAndSigning">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/metadata</control-param>
+                            <control-param name="uri_formId">approvalAndSigning~or-parent-form</control-param>
+                            <control-param name="nodeLabel">Согласование и подписание</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_AttrList")</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document:author-assoc" label-id="label.eds.assoc.compiler"/>
-                    <field id="lecm-eds-document:executor-assoc"/>
-                </appearance>
-            </form>
-
-            <!-- Форма с набором дашлетов на главной странице -->
-            <form id="main-page-dashlets">
-                <field-visibility>
-                    <show id="viewMetadata"/>
-                </field-visibility>
-                <appearance>
-                    <field id="viewMetadata">
-                        <control template="/ru/it/lecm/documents/controls/document-view-metadata-control.ftl"/>
-                    </field>
-                </appearance>
-            </form>
-            <form id="doc-right-parts">
-                <field-visibility>
-                    <show id="fake:document-actions"/>
-                    <show id="fake:document-metadata"/>
-                    <show id="fake:document-attachments"/>
-                    <show id="fake:document-signing"/>
-                    <show id="fake:document-errands"/>
-                    <show id="fake:document-workflows"/>
-                    <show id="fake:document-connections"/>
-                    <show id="fake:document-members"/>
-                    <show id="fake:document-tags"/>
-                    <show id="fake:document-history"/>
-                    <show id="fake:document-forms"/>
-                    <show id="fake:comments"/>
-                </field-visibility>
-                <appearance>
-                    <field id="fake:document-actions">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/dashlets/document-actions</control-param>
+                    <field id="attachments">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/attachments</control-param>
+                            <control-param name="nodeLabel">Вложения</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_ContentList")</control-param>
                         </control>
                     </field>
-                    <field id="fake:document-metadata">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/document-meta</control-param>
+                    <field id="errands">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/errands</control-param>
+                            <control-param name="nodeLabel">Поручения</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_LinksView")</control-param>
                         </control>
                     </field>
-                    <field id="fake:document-attachments">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/document-attachments</control-param>
+                    <field id="workflows">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/workflows</control-param>
+                            <control-param name="nodeLabel">Бизнес-процессы</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_WFEnumBP")</control-param>
                         </control>
                     </field>
-                    <field id="fake:document-signing">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/signing</control-param>
+                    <field id="connections">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/connections-list</control-param>
+                            <control-param name="nodeLabel">Связи</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_LinksView")</control-param>
+                            <control-param name="uri_excludeType">lecm-errands:document</control-param>
                         </control>
                     </field>
-                    <field id="fake:document-errands">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/document-errands</control-param>
+                    <field id="members">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/members-list</control-param>
+                            <control-param name="nodeLabel">Участники документа</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_MemberList")</control-param>
                         </control>
                     </field>
-                    <field id="fake:document-workflows">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/document-workflows</control-param>
+                    <field id="tags">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/tags-list</control-param>
+                            <control-param name="nodeLabel">Метки</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_TagView")</control-param>
                         </control>
                     </field>
-                    <field id="fake:document-connections">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/connections</control-param>
-                            <control-param name="excludeType">lecm-errands:document</control-param>
+                    <field id="history">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/history-datagrid</control-param>
+                            <control-param name="nodeLabel">История</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_HistoryView")</control-param>
+                            <control-param name="uri_showSecondaryCheckBox">true</control-param>
+                            <control-param name="uri_hideCollapseButton">false</control-param>
+                            <control-param name="uri_dataSource">lecm/business-journal/ds/history</control-param>
                         </control>
                     </field>
-                    <field id="fake:document-members">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/document-members</control-param>
-                        </control>
-                    </field>
-                    <field id="fake:document-tags">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/document-tags</control-param>
-                        </control>
-                    </field>
-                    <field id="fake:document-history">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/document-history</control-param>
-                        </control>
-                    </field>
-                    <field id="fake:document-forms">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                    <field id="reports">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="nodeLabel">Печатные формы</control-param>
                             <control-param name="uri">/lecm/components/document/forms</control-param>
                         </control>
                     </field>
-                    <field id="fake:comments">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/comments</control-param>
-                            <control-param name="activityType">document</control-param>
-                        </control>
-                    </field>
-                </appearance>
-            </form>
-            <!-- Форма для левой панели навигации -->
-            <form id="navigation-pane">
-                <view-form template="/ru/it/lecm/base-share/components/fields-list.ftl" />
-                <field-visibility>
-                    <show id="fake:doc-navi-attributes"/>
-                    <show id="fake:doc-navi-attachments"/>
-                </field-visibility>
-                <appearance>
-                    <field id="fake:doc-navi-attributes">
+                    <field id="comments">
                         <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
-                            <control-param name="uri">/lecm/components/dashlets/document-main</control-param>
-                            <control-param name="iconSrc">/share/res/images/lecm-arm/folder-40.png</control-param>
-                            <control-param name="nodeLabel">Атрибуты</control-param>
-                        </control>
-                    </field>
-                    <field id="fake:doc-navi-attachments">
-                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
-                            <control-param name="uri">/lecm/components/dashlets/document-attachments</control-param>
-                            <control-param name="iconSrc">/share/res/images/lecm-arm/folder-40.png</control-param>
-                            <control-param name="nodeLabel">Вложения</control-param>
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/comments/list</control-param>
+                            <control-param name="nodeLabel">Комментарии</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_CommentView")</control-param>
+                            <control-param name="counterUri">/lecm/document/api/getCommentsCount</control-param>
+                            <control-param name="uri_activityType">document</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -1289,6 +1094,7 @@
                     </field>
                 </appearance>
             </form>
+
             <form id="document-template-fields">
                 <field-visibility>
                     <show id="lecm-document:title"/>																	<!-- Заголовок -->
@@ -1615,6 +1421,7 @@
                     <show id="lecm-statemachine:status" force="true"/>
                 </field-visibility>
             </form>
+
             <form id="search-editor-fields">
                 <field-visibility>
                     <show id="lecm-document-aspects:reg-data-number"/>																	<!-- Рег. номер -->
