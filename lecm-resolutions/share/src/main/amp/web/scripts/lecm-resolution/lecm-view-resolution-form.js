@@ -10,20 +10,21 @@
         var formId = args[1].formId;
         var nodeRef = args[1].nodeRef;
 
-        var baseDocument = Dom.get(formId + "_assoc_lecm-resolutions_base-document-assoc");
-        var value = (baseDocument && baseDocument.value);
-        if (value && nodeRef) {
-            Alfresco.util.Ajax.jsonPost(
-                {
-                    url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
-                    dataObj: {
-                        nodeRef: value,
-                        substituteString: "{@doc.hasAspect('lecm-review-ts:review-aspect')}"
-                    },
-                    successCallback: {
-                        fn: function (response) {
-                            if (response.json && response.json.formatString && response.json.formatString == "true") {
-                                showSet(formId, "reviewers-hidden");
+        YAHOO.util.Event.onContentReady(formId + "_assoc_lecm-resolutions_base-document-assoc", function () {
+            var baseDocument = Dom.get(formId + "_assoc_lecm-resolutions_base-document-assoc");
+            var value = (baseDocument && baseDocument.value);
+            if (value && nodeRef) {
+                Alfresco.util.Ajax.jsonPost(
+                    {
+                        url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
+                        dataObj: {
+                            nodeRef: value,
+                            substituteString: "{@doc.hasAspect('lecm-review-ts:review-aspect')}"
+                        },
+                        successCallback: {
+                            fn: function (response) {
+                                if (response.json && response.json.formatString && response.json.formatString == "true") {
+                                    showSet(formId, "reviewers-hidden");
                                     Alfresco.util.Ajax.jsonPost({
                                         url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
                                         dataObj: {
@@ -51,12 +52,13 @@
                                         failureMessage: Alfresco.util.message("message.details.failure"),
                                         scope: this
                                     });
-                            }
-                        },
-                        scope: this
-                    }
-                });
-        }
+                                }
+                            },
+                            scope: this
+                        }
+                    });
+            }
+        });
     }
 
     function showSet(formId, setId) {

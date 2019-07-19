@@ -533,7 +533,7 @@
                     <field id="attributes">
                         <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
                             <control-param name="iconSrc">/folder-40.png</control-param>
-                            <control-param name="uri">/lecm/components/document/metadata</control-param>
+                            <control-param name="uri">/lecm/components/document/form</control-param>
                             <control-param name="nodeLabel">Атрибуты</control-param>
                             <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_AttrList")</control-param>
                         </control>
@@ -541,7 +541,7 @@
                     <field id="execution">
                         <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
                             <control-param name="iconSrc">/folder-40.png</control-param>
-                            <control-param name="uri">/lecm/components/document/metadata</control-param>
+                            <control-param name="uri">/lecm/components/document/form</control-param>
                             <control-param name="uri_formId">execution</control-param>
                             <control-param name="nodeLabel">Исполнение</control-param>
                             <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_AttrList")</control-param>

@@ -4,19 +4,16 @@
     ]);
 
     var Dom = YAHOO.util.Dom,
-        Event = YAHOO.util.Event,
         Selector = YAHOO.util.Selector,
-        Bubbling = YAHOO.Bubbling,
-        Substitute = YAHOO.lang.substitute;
-
-    var formId, reportStatus, isExecutor = false, declinedReportsCount = 0, realFormElId;
+        Bubbling = YAHOO.Bubbling;
 
     Bubbling.on("errandsReportsTabViewFormScriptLoaded", init);
     Bubbling.on("errandsReportsTabEditFormScriptLoaded", init);
 
     function init(layer, args) {
-        if (!formId) {
-            formId = args[1].formId;
+        if (args.formId) {
+            var formId = args[1].formId;
+            var realFormElId = formId;
             var documentNodeRef = args[1].nodeRef;
             if (layer == "errandsReportsTabViewFormScriptLoaded") {
                 realFormElId = formId + "_metadata";
@@ -32,7 +29,7 @@
                             fn: function (response) {
                                 var roles = response.json;
                                 if (roles) {
-                                    isExecutor = roles.isExecutor;
+                                    var isExecutor = roles.isExecutor;
                                     Alfresco.util.Ajax.jsonPost({
                                         url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
                                         dataObj: {
@@ -43,9 +40,7 @@
                                             fn: function (response) {
                                                 if (response && response.json.formatString) {
                                                     var resp = response.json.formatString.split(",");
-                                                    reportStatus = resp[0];
-                                                    declinedReportsCount = resp[1];
-                                                    processForm();
+                                                    processForm(realFormElId, isExecutor, resp[0], resp[1]);
                                                 }
                                             },
                                             scope: this
@@ -65,7 +60,7 @@
         }
     }
 
-    function processForm() {
+    function processForm(realFormElId, isExecutor, reportStatus, declinedReportsCount) {
         var form = Dom.get(realFormElId);
         var executionReportsSet = Selector.query(".errands-execution-report-set", form, true);
         var reportFieldsDiv = Selector.query(".errands-execution-report-fields", executionReportsSet, true);
