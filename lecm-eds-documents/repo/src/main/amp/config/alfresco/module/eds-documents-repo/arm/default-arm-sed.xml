@@ -5261,6 +5261,10 @@
                                 </assocs>
                             </item>
                         </items>
+                        <assocs>
+                            <assoc type="lecm-arm:icon-assoc"
+                                   path="/Business platform/LECM/Сервис АРМ/Icons/White/my work.png"/>
+                        </assocs>
                     </item>
                     <item name="cm:Навигатор" type="lecm-arm:accordion">
                         <property name="lecm-arm:search-query"><![CDATA[]]></property>
@@ -25978,6 +25982,10 @@
                                 </assocs>
                             </item>
                         </items>
+                        <assocs>
+                            <assoc type="lecm-arm:icon-assoc"
+                               path="/Business platform/LECM/Сервис АРМ/Icons/White/icon-alldocs.png"/>
+                        </assocs>
                     </item>
                     <item name="cm:Отчеты" type="lecm-arm:accordion">
                         <property name="lecm-arm:search-query"><![CDATA[]]></property>
@@ -26014,6 +26022,9 @@
                                     <![CDATA[lecm-ord:document,lecm-errands:document,lecm-nd:document,lecm-incoming:document,lecm-internal:document,lecm-outgoing:document,lecm-resolutions:document]]></property>
                             </item>
                         </items>
+                        <assocs>
+                            <assoc type="lecm-arm:icon-assoc" path="/Business platform/LECM/Сервис АРМ/Icons/White/otchet.png"/>
+                        </assocs>
                     </item>
                     <item name="cm:Работа регистратора" type="lecm-arm:accordion">
                         <property name="lecm-arm:search-query"><![CDATA[]]></property>
@@ -29588,6 +29599,8 @@
                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/a20cf365-7222-43e0-9984-81d89125fe40"/>
                             <assoc type="lecm-arm:filters-assoc"
                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По меткам"/>
+                    <assoc type="lecm-arm:icon-assoc"
+                           path="/Business platform/LECM/Сервис АРМ/Icons/White/icon-svyazi.png"/>
                         </assocs>
                     </item>
                     <item name="cm:Ресурсы" type="lecm-arm:accordion">
@@ -29999,6 +30012,10 @@
                                 </assocs>
                             </item>
                         </items>
+                        <assocs>
+                            <assoc type="lecm-arm:icon-assoc"
+                                   path="/Business platform/LECM/Сервис АРМ/Icons/White/delegirovnie.png"/>
+                        </assocs>
                     </item>
                     <item name="cm:Мои поисковые запросы" type="lecm-arm:accordion">
                         <property name="lecm-arm:search-query"><![CDATA[]]></property>
@@ -30049,6 +30066,9 @@
                                 </items>
                             </item>
                         </items>
+                        <assocs>
+                            <assoc type="lecm-arm:icon-assoc" path="/Business platform/LECM/Сервис АРМ/Icons/White/search.png"/>
+                        </assocs>
                     </item>
                     <item name="cm:Делегирование" type="lecm-arm:accordion">
                         <property name="lecm-arm:search-query"><![CDATA[]]></property>
@@ -30869,6 +30889,10 @@
                                 </assocs>
                             </item>
                         </items>
+                        <assocs>
+                            <assoc type="lecm-arm:icon-assoc"
+                                   path="/Business platform/LECM/Сервис АРМ/Icons/White/control.png"/>
+                        </assocs>
                     </item>
                     <item name="cm:Корзина" type="lecm-arm:accordion">
                         <property name="lecm-arm:search-query"><![CDATA[]]></property>
