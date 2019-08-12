@@ -1220,17 +1220,23 @@
                             <control-param name="nameSuffix">-multiText</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document-aspects:reg-data-number" label-id="label.incoming.lecm-document-aspects_reg-data-number" />
+                    <field id="lecm-document-aspects:reg-data-number" label-id="label.incoming.lecm-document-aspects_reg-data-number">
+                        <control template="/ru/it/lecm/base-share/search/textfield-with-search-options.ftl"/>
+                    </field>
                     <field id="lecm-document-aspects:reg-data-date" label-id="label.incoming.lecm-document-aspects_reg-data-date">
-                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+                        <control template="/ru/it/lecm/base-share/search/date-with-search-options.ftl"/>
                     </field>
                     <field id="lecm-document:title">
+                        <control template="/ru/it/lecm/base-share/search/textfield-with-search-options.ftl"/>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
                         </constraint-handlers>
                     </field>
+                    <field id="lecm-incoming:outgoing-number">
+                        <control template="/ru/it/lecm/base-share/search/textfield-with-search-options.ftl"/>
+                    </field>
                     <field id="lecm-incoming:outgoing-date" label-id="label.incoming.outgoing-date">
-                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+                        <control template="/ru/it/lecm/base-share/search/date-with-search-options.ftl"/>
                     </field>
                     <field id="lecm-incoming:sender-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
@@ -1315,7 +1321,7 @@
                         </control>
                     </field>
                     <field id="lecm-eds-document:execution-date">
-                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+                        <control template="/ru/it/lecm/base-share/search/date-with-search-options.ftl"/>
                     </field>
                     <field id="lecm-document:subject-assoc">
                         <control>
