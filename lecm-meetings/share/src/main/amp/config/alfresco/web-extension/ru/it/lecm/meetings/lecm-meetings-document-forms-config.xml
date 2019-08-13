@@ -1119,12 +1119,13 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-events:title">
+                        <control template="/ru/it/lecm/base-share/search/textfield-with-search-options.ftl"/>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="change"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-events:from-date" label-id="label.meetings.start.date">
-                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+                        <control template="/ru/it/lecm/base-share/search/date-with-search-options.ftl"/>
                     </field>
                     <field id="lecm-meetings:chairman-assoc">
                         <control>
@@ -1173,7 +1174,9 @@
                             <control-param name="plane">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-meetings:items-assoc-item-name" label-id="label.meeting.item.name"/>
+                    <field id="lecm-meetings:items-assoc-item-name" label-id="label.meeting.item.name">
+                        <control template="/ru/it/lecm/base-share/search/textfield-with-search-options.ftl"/>
+                    </field>
                 </appearance>
             </form>
         </forms>

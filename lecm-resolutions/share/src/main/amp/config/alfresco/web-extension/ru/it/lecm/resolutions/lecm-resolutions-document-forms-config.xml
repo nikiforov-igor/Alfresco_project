@@ -321,12 +321,10 @@
 
                 <appearance>
                     <field id="lecm-resolutions:number" label-id="label.resolution.number">
-                        <control>
-                            <control-param name="hideValue"/>
-                        </control>
+                        <control template="/ru/it/lecm/base-share/search/textfield-with-search-options.ftl"/>
                     </field>
                     <field id="lecm-resolutions:transition-to-execution-date">
-                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+                        <control template="/ru/it/lecm/base-share/search/date-with-search-options.ftl"/>
                     </field>
                     <field id="lecm-resolutions:author-assoc">
                         <control>
@@ -367,7 +365,7 @@
                         </control>
                     </field>
                     <field id="lecm-resolutions:limitation-date">
-                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+                        <control template="/ru/it/lecm/base-share/search/date-with-search-options.ftl"/>
                     </field>
                     <field id="lecm-resolutions:limitation-date-radio" label-id="label.resolution.limitless">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl">

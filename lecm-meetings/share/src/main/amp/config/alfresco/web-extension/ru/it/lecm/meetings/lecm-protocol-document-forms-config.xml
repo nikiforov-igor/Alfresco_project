@@ -808,15 +808,20 @@
                             <control-param name="nameSuffix">-multiText</control-param>
                         </control>
                     </field>
+                    <field id="lecm-document:regnum">
+                        <control template="/ru/it/lecm/base-share/search/textfield-with-search-options.ftl"/>
+                    </field>
                     <field id="lecm-document:doc-date">
-                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+                        <control template="/ru/it/lecm/base-share/search/date-with-search-options.ftl"/>
                     </field>
                     <field id="lecm-document:title">
+                        <control template="/ru/it/lecm/base-share/search/textfield-with-search-options.ftl"/>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="change"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-eds-document:execution-date">
+                        <control template="/ru/it/lecm/base-share/search/date-with-search-options.ftl"/>
                         <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
                     </field>
                     <field id="lecm-document:author-assoc" label-id="label.eds.assoc.compiler">
