@@ -1178,12 +1178,10 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-errands:number">
-                        <control>
-                            <control-param name="hideValue"/>
-                        </control>
+                        <control template="/ru/it/lecm/base-share/search/textfield-with-search-options.ftl"/>
                     </field>
                     <field id="lecm-errands:wait-for-execution-date">
-                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+                        <control template="/ru/it/lecm/base-share/search/date-with-search-options.ftl"/>
                     </field>
                     <field id="lecm-errands:type-assoc" mandatory="true">
                         <control>
@@ -1215,6 +1213,7 @@
                         </constraint-handlers>
                     </field>
                     <field id="lecm-errands:title">
+                        <control template="/ru/it/lecm/base-share/search/textfield-with-search-options.ftl"/>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
                         </constraint-handlers>
@@ -1232,7 +1231,7 @@
                         </constraint-handlers>
                     </field>
                     <field id="lecm-errands:limitation-date">
-                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+                        <control template="/ru/it/lecm/base-share/search/date-with-search-options.ftl"/>
                     </field>
                     <field id="lecm-errands:limitation-date-radio" label-id="label.errand.limitless">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl">
@@ -1262,6 +1261,9 @@
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl">
                             <control-param name="options">true|Да,false|Нет</control-param>
                         </control>
+                    </field>
+                    <field id="lecm-errands:base-doc-number">
+                        <control template="/ru/it/lecm/base-share/search/textfield-with-search-options.ftl"/>
                     </field>
                     <field id="lecm-document:subject-assoc">
                         <control>
