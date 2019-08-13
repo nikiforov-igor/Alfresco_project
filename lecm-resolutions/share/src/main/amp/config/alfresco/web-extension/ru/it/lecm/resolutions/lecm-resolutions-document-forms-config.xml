@@ -877,10 +877,16 @@
 
             <form id="doc-right-parts">
                 <field-visibility>
+                    <show id="fake:document-admin-actions"/>
                     <show id="fake:document-actions"/>
                     <show id="fake:base-doc-actions"/>
                 </field-visibility>
                 <appearance>
+                    <field id="fake:document-admin-actions">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/administration</control-param>
+                        </control>
+                    </field>
                     <field id="fake:document-actions">
                         <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
                             <control-param name="uri">/lecm/components/dashlets/document-actions</control-param>
