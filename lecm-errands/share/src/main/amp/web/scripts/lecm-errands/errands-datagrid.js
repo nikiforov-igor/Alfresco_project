@@ -89,12 +89,13 @@
             // YUI DataTable column definitions
             var columnDefinitions = [];
             if (this.options.showCheckboxColumn) {
+                var chId = this.id + "-select-all-records";
                 columnDefinitions.push({
                     key: "nodeRef",
-                    label: "<input type='checkbox' id='" + this.id + "-select-all-records'>",
+                    label: "<input type='checkbox' id='" + chId + "' class='lecm-checkbox'><label for='" + chId + "'></label>",
                     sortable: false,
                     formatter: this.fnRenderCellSelected (),
-                    width: 16
+                    width: 48
                 });
             }
 

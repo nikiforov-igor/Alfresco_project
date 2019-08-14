@@ -202,7 +202,6 @@
                             <control-param name="allowExpand">false</control-param>
                             <control-param name="showActions">true</control-param>
                             <control-param name="fullDelete">true</control-param>
-                            <control-param name="height">100</control-param>
                             <control-param name="rootNode">{usertemp}</control-param>
                             <control-param name="showCreateButton">true</control-param>
                             <control-param name="showSearch">false</control-param>
