@@ -150,6 +150,7 @@
 		],
 		[
             'css/components/document-table-control.css',
+            'css/lecm-base/components/controls/datagrid-control.css',
 			'css/lecm-meetings/meeting-datagrid.css'
         ], drawForm);
     }
