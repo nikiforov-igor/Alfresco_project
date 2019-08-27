@@ -22,7 +22,7 @@
 		<div class="clear"></div>
 	</div>
 	<div class="value-div">
-		<input type="checkbox" name="${attributeName}" id="${optionsControlId}-attributes-match-${attributeName}"/>
+		<input type="checkbox" name="${attributeName}" id="${optionsControlId}-attributes-match-${attributeName}" class="lecm-checkbox"/>
 		<label class="checkbox-label" for="${optionsControlId}-attributes-match-${attributeName}">${msg("label.incoming.search_repeats_options.attributes_match." + attributeName)}:</label>
 		<div class="match-value-div">
 			<#if formArgument?? && formArgument != "">
@@ -82,7 +82,7 @@
 									<label for="${optionsControlId}-attributes-match">${msg("label.incoming.search_repeats_options.attributes_match")}:</label>
 								</div>
 								<div class="value-div">
-									<input type="checkbox" name="select-all" id="${optionsControlId}-attributes-match-select-all"/>
+									<input type="checkbox" name="select-all" id="${optionsControlId}-attributes-match-select-all" class="lecm-checkbox"/>
 									<label class="checkbox-label" for="${optionsControlId}-attributes-match-select-all">${msg("label.incoming.search_repeats_options.attributes_match.select_all")}</label>
 								</div>
                                 <div class="clear"></div>
