@@ -182,7 +182,7 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
             openDialog: function openDialog_function(e) {
                 if (!this.panel) {
                     this.panel = new YAHOO.widget.SimpleDialog(this.id + '-dialog-panel', {
-                        width: "150px",
+                        width: "256px",
                         visible: false,
                         draggable: true,
                         modal: true,
@@ -228,7 +228,6 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                     this.panel.setBody(html);
                     this.panel.render(document.body);
                     var picker = Dom.get(this.id + '-dialog-panel');
-                    Dom.setStyle(picker, "width", "256px");
                     Dom.setStyle(picker, "min-width", "256px");
                     var select = this.widgets.select;
                     Dom.get(this.id + '-switch-type-container').appendChild(select);
