@@ -31,6 +31,12 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 		};
 
 		LogicECM.module.Nomenclature.Datagrid.superclass.constructor.call(this, containerId);
+
+        // Recalculate the vertical size on a browser window resize event
+        YAHOO.util.Event.on(window, "resize", function(e) {
+            this.setAvailableGridHeight();
+        }, this, true);
+
 		return this;
 
 	};
@@ -691,8 +697,12 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 
 		caseOnlyEvaluator: function(rowData) {
 			return rowData.type == "lecm-os:nomenclature-case"
-		}
+		},
 
+        onRenderEvent: function (layer, args) {
+            LogicECM.module.Nomenclature.Datagrid.superclass.onRenderEvent.call(this, layer, args);
+            this.setAvailableGridHeight();
+        }
 	}, true);
 
 })();
