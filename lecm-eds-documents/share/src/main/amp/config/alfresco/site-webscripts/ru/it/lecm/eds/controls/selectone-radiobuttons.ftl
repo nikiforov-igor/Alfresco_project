@@ -41,16 +41,16 @@
                     <input id="${fieldHtmlId}" type="hidden" name="-" value="${fieldValue?html}"/>
                     <#list field.control.params.options?split(optionSeparator) as nameValue>
                         <#if nameValue?index_of(labelSeparator) == -1>
-                                <input disabled="disabled" type="radio" name="${field.name}" value="${nameValue?html}"
+                                <input disabled="disabled" type="radio" id="${field.id}_${nameValue?html}" class="lecm-radio" name="${field.name}" value="${nameValue?html}"
                             <#if nameValue == fieldValue?string || (fieldValue?is_number && fieldValue?c == nameValue)> checked="checked"</#if>"
                             <#if disabled>disabled="disabled"</#if>"/>
-                            <label class="checkbox">${nameValue?html}</label>
+                            <label class="checkbox" for="${field.id}_${nameValue?html}">${nameValue?html}</label>
                         <#else>
                             <#assign choice=nameValue?split(labelSeparator)>
-                                <input disabled="disabled" type="radio" name="${field.name}" value="${choice[0]?html}"
+                                <input disabled="disabled" type="radio" id="${field.id}_${choice[0]?html}" class="lecm-radio" name="${field.name}" value="${choice[0]?html}"
                             <#if choice[0] == fieldValue?string || (fieldValue?is_number && fieldValue?c == choice[0])> checked="checked"</#if>
                                        <#if disabled>disabled="disabled"</#if>"/>
-                            <label class="checkbox">${msgValue(choice[1])?html}</label>
+                            <label class="checkbox" for="${field.id}_${choice[0]?html}">${msgValue(choice[1])?html}</label>
                         </#if>
                     </#list>
                 <#else>
@@ -77,16 +77,16 @@
 					<input id="${fieldHtmlId}" type="hidden" name="-" value="${fieldValue?html}"/>
 					<#list field.control.params.options?split(optionSeparator) as nameValue>
 						<#if nameValue?index_of(labelSeparator) == -1>
-							<input type="radio" name="${field.name}" value="${nameValue?html}"
+							<input type="radio" id="${field.id}_${nameValue?html}" class="lecm-radio" name="${field.name}" value="${nameValue?html}"
 								<#if nameValue == fieldValue?string || (fieldValue?is_number && fieldValue?c == nameValue)> checked="checked"</#if>"
                                     <#if disabled>disabled="disabled"</#if>"/>
-							<label class="checkbox">${nameValue?html}</label>
+							<label class="checkbox" for="${field.id}_${nameValue?html}">${nameValue?html}</label>
 						<#else>
 							<#assign choice=nameValue?split(labelSeparator)>
-							<input type="radio" name="${field.name}" value="${choice[0]?html}"
+							<input type="radio" id="${field.id}_${choice[0]?html}" class="lecm-radio" name="${field.name}" value="${choice[0]?html}"
                                 <#if choice[0] == fieldValue?string || (fieldValue?is_number && fieldValue?c == choice[0])> checked="checked"</#if>
                                    <#if disabled>disabled="disabled"</#if>"/>
-							<label class="checkbox">${msgValue(choice[1])?html}</label>
+							<label class="checkbox" for="${field.id}_${choice[0]?html}">${msgValue(choice[1])?html}</label>
 						</#if>
 					</#list>
 				<#else>
