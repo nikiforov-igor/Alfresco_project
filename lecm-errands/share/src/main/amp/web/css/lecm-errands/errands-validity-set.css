@@ -12,11 +12,13 @@
 }
 
 .errands-validity-set .errands-validity-set-radio .control .label-div {
-    width: 160px;
+    width: 216px;
 }
 
 .errands-validity-set .errands-validity-set-radio .control .value-div {
-    width: 16px;
+    width: 24px;
+    padding: 0;
+    margin-right: 8px;
 }
 
 .errands-validity-set .errands-validity-set-radio .control .buttons-div {
@@ -25,7 +27,15 @@
 }
 
 .errands-validity-set .errands-validity-set-radio .control label.checkbox {
-    display: none;
+    width: 32px;
+    height: 36px;
+    margin: 0 0 4px;
+    display: inline-block;
+    box-sizing: border-box;
+}
+
+.errands-validity-set .errands-validity-set-radio .control label.checkbox:before {
+    top: 6px;
 }
 
 .errands-validity-set .errands-validity-set-radio .control input {
@@ -41,7 +51,7 @@
 
 .errands-validity-set .errands-validity-set-end-date {
     float: left;
-    width: calc(100% - 190px);
+    width: calc(100% - 248px);
     margin-bottom: 0;
 }
 
@@ -70,7 +80,7 @@
 
 .errands-validity-set .errands-validity-set-during {
     float: left;
-    width: calc(100% - 190px);
+    width: calc(100% - 248px);
 }
 
 .errands-validity-set .errands-validity-set-during .set > div > div.first .label-div {
@@ -104,7 +114,7 @@
 
 .errands-validity-set .errands-validity-set-reiteration-count {
     float: left;
-    width: calc(100% - 190px);
+    width: calc(100% - 248px);
 }
 
 .errands-validity-set .errands-validity-set-reiteration-count .count-label-div {
@@ -123,7 +133,7 @@
 }
 .errands-validity-set .errands-validity-set-period-endless {
     float: left;
-    width: calc(100% - 190px);
+    width: calc(100% - 248px);
 }
 
 .errands-validity-set .errands-validity-set-period-endless .label-div {
