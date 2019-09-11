@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Шаблоны информационных сообщений" type="lecm-dic:dictionary">
+        <items updateMode="CreateOrUpdate">
+            <item name="cm:Резервирование номера. Требуется ответ" type="lecm-doc-info-message-dic:template">
+                <property name="cm:title">Резервирование номера. Требуется ответ</property>
+                <property name="lecm-doc-info-message-dic:doc-type">
+                    <![CDATA[[lecm-outgoing:document, lecm-nd:document, lecm-contract:document, lecm-protocol:document, lecm-ord:document, lecm-additional-document:additionalDocument, lecm-internal:document]]]></property>
+                <property name="lecm-doc-info-message-dic:code"><![CDATA[RESERVATION_NEED_ANSWER]]></property>
+                <property name="lecm-doc-info-message-dic:templateString">
+                    <![CDATA[Для документа требуется резерв рег.номера]]></property>
+                <property name="lecm-doc-info-message-dic:expression">
+                    <![CDATA[doc.attr('lecm-reservation-aspects:isReservationRunning') and user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "RESERVATION_PERFORMER_DYN")]]></property>
+                <property name="lecm-doc-info-message-dic:is-warning-message"><![CDATA[false]]></property>
+            </item>
+            <item name="cm:Резервирование номера. Запрос" type="lecm-doc-info-message-dic:template">
+                <property name="cm:title">Резервирование номера. Запрос</property>
+                <property name="lecm-doc-info-message-dic:doc-type">
+                    <![CDATA[[lecm-outgoing:document, lecm-nd:document, lecm-contract:document, lecm-protocol:document, lecm-ord:document, lecm-additional-document:additionalDocument, lecm-internal:document]]]></property>
+                <property name="lecm-doc-info-message-dic:code"><![CDATA[RESERVATION_STARTED]]></property>
+                <property name="lecm-doc-info-message-dic:templateString">
+                    <![CDATA[Запрошен резерв рег.номера]]></property>
+                <property name="lecm-doc-info-message-dic:expression">
+                    <![CDATA[doc.attr('lecm-reservation-aspects:isReservationRunning') and (user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") or user.currentUser().getPerson().equals(@lifecycleStateMachineHelper.getDocumentWorkflowInitiator(doc.nodeRef, 'regnumReservationExecution')))]]></property>
+                <property name="lecm-doc-info-message-dic:is-warning-message"><![CDATA[false]]></property>
+            </item>
+        </items>
+    </item>
+</items>

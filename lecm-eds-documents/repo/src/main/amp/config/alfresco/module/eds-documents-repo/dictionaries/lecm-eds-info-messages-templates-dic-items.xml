@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items updateMode="CreateOrUpdate">
+    <item name="lecm-dic:Шаблоны информационных сообщений" type="lecm-dic:dictionary">
+        <items updateMode="CreateOrUpdate">
+            <item name="cm:Статус документа" type="lecm-doc-info-message-dic:template">
+                <property name="cm:title">Статус документа</property>
+                <property name="lecm-doc-info-message-dic:code">VIEW_STATUS</property>
+                <property name="lecm-doc-info-message-dic:expression"/>
+                <property name="lecm-doc-info-message-dic:doc-type"><![CDATA[[lecm-outgoing:document,lecm-nd:document,lecm-contract:document,lecm-protocol:document,lecm-ord:document,lecm-errands:document,lecm-additional-document:additionalDocument,lecm-internal:document,lecm-resolutions:document,lecm-incoming:document,lecm-meetings:document]]]></property>
+                <property name="lecm-doc-info-message-dic:is-warning-message">false</property>
+                <property name="lecm-doc-info-message-dic:templateString">
+                    <![CDATA[<div style="font-weight:bold;float:left;">Статус:&nbsp;</div>#{doc.attr('lecm-statemachine:status')}]]>
+                </property>
+            </item>
+        </items>
+    </item>
+</items>

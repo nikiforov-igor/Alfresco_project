@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Шаблоны информационных сообщений" type="lecm-dic:dictionary">
+        <items updateMode="CreateOrUpdate">
+            <item name="cm:Резолюция. Истекает срок исполнения" type="lecm-doc-info-message-dic:template">
+                <property name="cm:title">Резолюция. Истекает срок исполнения</property>
+                <property name="lecm-doc-info-message-dic:doc-type">
+                    <![CDATA[[lecm-resolutions:document]]]></property>
+                <property name="lecm-doc-info-message-dic:code"><![CDATA[RESOLUTIONS_EXPIRING]]></property>
+                <property name="lecm-doc-info-message-dic:templateString">
+                    <![CDATA[Истекает срок исполнения]]></property>
+                <property name="lecm-doc-info-message-dic:expression">
+                    <![CDATA['На исполнении'.equals(doc.attr('lecm-statemachine:status')) AND (user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "RESOLUTION_AUTHOR_DYN") OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "RESOLUTION_CREATOR_DYN") OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "RESOLUTION_CONTROLLER_DYN") OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "RESOLUTION_CHILD_ERRANDS_CO_EXECUTOR") OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "RESOLUTION_CHILD_ERRANDS_EXECUTOR")) AND ((@baseWebScript.compareDates(doc.attr("lecm-resolutions:limitation-date"), new java.util.Date(), 5) == 0) OR (@baseWebScript.compareDates(doc.attr("lecm-resolutions:limitation-date"), @WorkCalendarService.getNextWorkingDateByDays(new java.util.Date(), 1), 5) == 0))]]></property>
+                <property name="lecm-doc-info-message-dic:is-warning-message"><![CDATA[false]]></property>
+            </item>
+            <item name="cm:Резолюция. Истек срок исполнения" type="lecm-doc-info-message-dic:template">
+                <property name="cm:title">Резолюция. Истек срок исполнения</property>
+                <property name="lecm-doc-info-message-dic:doc-type">
+                    <![CDATA[[lecm-resolutions:document]]]></property>
+                <property name="lecm-doc-info-message-dic:code"><![CDATA[RESOLUTIONS_EXPIRED]]></property>
+                <property name="lecm-doc-info-message-dic:templateString">
+                    <![CDATA[Срок исполнения истек!]]></property>
+                <property name="lecm-doc-info-message-dic:expression">
+                    <![CDATA['На исполнении'.equals(doc.attr('lecm-statemachine:status')) AND (user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "RESOLUTION_AUTHOR_DYN") OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "RESOLUTION_CREATOR_DYN") OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "RESOLUTION_CONTROLLER_DYN") OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "RESOLUTION_CHILD_ERRANDS_CO_EXECUTOR") OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "RESOLUTION_CHILD_ERRANDS_EXECUTOR")) AND doc.booleanAttr('lecm-resolutions:is-expired')]]></property>
+                <property name="lecm-doc-info-message-dic:is-warning-message"><![CDATA[true]]></property>
+            </item>
+            <item name="cm:Резолюция. Принятие решения" type="lecm-doc-info-message-dic:template">
+                <property name="cm:title">Резолюция. Принятие решения</property>
+                <property name="lecm-doc-info-message-dic:doc-type">
+                    <![CDATA[[lecm-resolutions:document]]]></property>
+                <property name="lecm-doc-info-message-dic:code"><![CDATA[RESOLUTIONS_ACCEPT_DECISION]]></property>
+                <property name="lecm-doc-info-message-dic:templateString">
+                    <![CDATA[Требуется принять решение о статусе завершения работ]]></property>
+                <property name="lecm-doc-info-message-dic:expression">
+                    <![CDATA['На исполнении'.equals(doc.attr('lecm-statemachine:status')) AND user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "RESOLUTION_CLOSER_DYN") AND doc.booleanAttr('lecm-resolutions:require-closers-decision')]]></property>
+                <property name="lecm-doc-info-message-dic:is-warning-message"><![CDATA[true]]></property>
+            </item>
+        </items>
+    </item>
+</items>
