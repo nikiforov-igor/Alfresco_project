@@ -44,12 +44,12 @@
 
 .errands-limitation-date-set .errands-limitation-date-set-type {
     float: left;
-    width: calc(100% - 222px);
+    width: calc(100% - 302px);
 }
 
 .errands-limitation-date-set .errands-limitation-date-set-date {
     float: left;
-    width: calc(100% - 168px);
+    width: calc(100% - 248px);
 }
 
 .errands-limitation-date-set .errands-limitation-date-set-limitless {
