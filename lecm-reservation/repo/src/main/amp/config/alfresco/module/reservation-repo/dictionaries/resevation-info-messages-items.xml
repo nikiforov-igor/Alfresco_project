@@ -10,7 +10,7 @@
                 <property name="lecm-doc-info-message-dic:templateString">
                     <![CDATA[Для документа требуется резерв рег.номера]]></property>
                 <property name="lecm-doc-info-message-dic:expression">
-                    <![CDATA[doc.attr('lecm-reservation-aspects:isReservationRunning') and user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "RESERVATION_PERFORMER_DYN")]]></property>
+                    <![CDATA[doc.booleanAttr('lecm-reservation-aspects:isReservationRunning') and user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "RESERVATION_PERFORMER_DYN")]]></property>
                 <property name="lecm-doc-info-message-dic:is-warning-message"><![CDATA[false]]></property>
             </item>
             <item name="cm:Резервирование номера. Запрос" type="lecm-doc-info-message-dic:template">
@@ -21,7 +21,7 @@
                 <property name="lecm-doc-info-message-dic:templateString">
                     <![CDATA[Запрошен резерв рег.номера]]></property>
                 <property name="lecm-doc-info-message-dic:expression">
-                    <![CDATA[doc.attr('lecm-reservation-aspects:isReservationRunning') and (user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") or user.currentUser().getPerson().equals(@lifecycleStateMachineHelper.getDocumentWorkflowInitiator(doc.nodeRef, 'regnumReservationExecution')))]]></property>
+                    <![CDATA[doc.booleanAttr('lecm-reservation-aspects:isReservationRunning') and (user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") or user.currentUser().getPerson().equals(@lifecycleStateMachineHelper.getDocumentWorkflowInitiator(doc.nodeRef, 'regnumReservationExecution')))]]></property>
                 <property name="lecm-doc-info-message-dic:is-warning-message"><![CDATA[false]]></property>
             </item>
         </items>
