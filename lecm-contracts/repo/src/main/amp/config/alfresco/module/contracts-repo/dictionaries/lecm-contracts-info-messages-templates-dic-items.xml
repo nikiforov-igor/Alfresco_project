@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Шаблоны информационных сообщений" type="lecm-dic:dictionary">
+        <items updateMode="CreateOrUpdate">
+            <item name="cm:Договор. Истекает срок действия" type="lecm-doc-info-message-dic:template">
+                <property name="cm:title">Договор. Истекает срок действия</property>
+                <property name="lecm-doc-info-message-dic:code">CONTRACT_EXPIRING</property>
+                <property name="lecm-doc-info-message-dic:expression"><![CDATA['Действует'.equals(doc.attr('lecm-statemachine:status')) AND (@baseWebScript.compareDates(doc.attr("lecm-contract:endDate"), new java.util.Date(), 5) == 0 OR (@baseWebScript.compareDates(doc.attr("lecm-contract:endDate"), new java.util.Date(), 5) == 1 AND @baseWebScript.compareDates(doc.attr("lecm-contract:endDate"), @baseWebScript.getNextCalendarDay(new java.util.Date(), 15), 5) == -1))]]></property>
+                <property name="lecm-doc-info-message-dic:doc-type"><![CDATA[[lecm-contract:document]]]></property>
+                <property name="lecm-doc-info-message-dic:is-warning-message">false</property>
+                <property name="lecm-doc-info-message-dic:templateString"><![CDATA[Истекает срок действия]]></property>
+            </item>
+            <item name="cm:Договор. Срок действия истек" type="lecm-doc-info-message-dic:template">
+                <property name="cm:title">Договор. Срок действия истек</property>
+                <property name="lecm-doc-info-message-dic:code">CONTRACT_EXPIRED</property>
+                <property name="lecm-doc-info-message-dic:expression"><![CDATA['Действует'.equals(doc.attr('lecm-statemachine:status')) AND @baseWebScript.compareDates(doc.attr("lecm-contract:endDate"), new java.util.Date(), 5) == -1]]></property>
+                <property name="lecm-doc-info-message-dic:doc-type"><![CDATA[[lecm-contract:document]]]></property>
+                <property name="lecm-doc-info-message-dic:is-warning-message">true</property>
+                <property name="lecm-doc-info-message-dic:templateString"><![CDATA[Срок действия истек!]]></property>
+            </item>
+        </items>
+    </item>
+</items>
