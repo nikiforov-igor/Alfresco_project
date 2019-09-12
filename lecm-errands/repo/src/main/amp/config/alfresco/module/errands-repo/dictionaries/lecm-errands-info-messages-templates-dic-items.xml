@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Шаблоны информационных сообщений" type="lecm-dic:dictionary">
+        <items updateMode="CreateOrUpdate">
+            <item name="cm:Поручение. Истекает срок исполнения" type="lecm-doc-info-message-dic:template">
+                <property name="cm:title">Поручение. Истекает срок исполнения</property>
+                <property name="lecm-doc-info-message-dic:doc-type">
+                    <![CDATA[[lecm-errands:document]]]></property>
+                <property name="lecm-doc-info-message-dic:code"><![CDATA[ERRANDS_EXPIRING]]></property>
+                <property name="lecm-doc-info-message-dic:templateString">
+                    <![CDATA[Истекает срок исполнения]]></property>
+                <property name="lecm-doc-info-message-dic:expression">
+                    <![CDATA['Ожидает исполнения,На доработке,На исполнении,На контроле'.contains(doc.attr('lecm-statemachine:status')) AND (user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_EXECUTOR") OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_CONTROLLER")) AND ((@baseWebScript.compareDates(doc.attr("lecm-errands:limitation-date"), new java.util.Date(), 5) == 0) OR (@baseWebScript.compareDates(doc.attr("lecm-errands:limitation-date"), @WorkCalendarService.getNextWorkingDateByDays(new java.util.Date(), 1), 5) == 0))]]></property>
+                <property name="lecm-doc-info-message-dic:is-warning-message"><![CDATA[false]]></property>
+            </item>
+            <item name="cm:Поручение. Просрочено" type="lecm-doc-info-message-dic:template">
+                <property name="cm:title">Поручение. Просрочено</property>
+                <property name="lecm-doc-info-message-dic:doc-type">
+                    <![CDATA[[lecm-errands:document]]]></property>
+                <property name="lecm-doc-info-message-dic:code"><![CDATA[ERRANDS_EXPIRED]]></property>
+                <property name="lecm-doc-info-message-dic:templateString">
+                    <![CDATA[Срок исполнения истек!]]></property>
+                <property name="lecm-doc-info-message-dic:expression">
+                    <![CDATA['Ожидает исполнения,На доработке,На исполнении,На контроле'.contains(doc.attr('lecm-statemachine:status')) AND (user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_EXECUTOR") OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_COEXECUTOR") OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_CONTROLLER")) AND doc.booleanAttr('lecm-errands:is-expired')]]></property>
+                <property name="lecm-doc-info-message-dic:is-warning-message"><![CDATA[true]]></property>
+            </item>
+            <item name="cm:Поручение. Важное" type="lecm-doc-info-message-dic:template">
+                <property name="cm:title">Поручение. Важное</property>
+                <property name="lecm-doc-info-message-dic:doc-type">
+                    <![CDATA[[lecm-errands:document]]]></property>
+                <property name="lecm-doc-info-message-dic:code"><![CDATA[ERRANDS_IS_IMPORTANT]]></property>
+                <property name="lecm-doc-info-message-dic:templateString">
+                    <![CDATA[Это важное поручение!]]></property>
+                <property name="lecm-doc-info-message-dic:expression">
+                    <![CDATA[doc.booleanAttr('lecm-errands:is-important')]]></property>
+                <property name="lecm-doc-info-message-dic:is-warning-message"><![CDATA[true]]></property>
+            </item>
+            <item name="cm:Поручение. Запрос отмены" type="lecm-doc-info-message-dic:template">
+                <property name="cm:title">Поручение. Запрос отмены</property>
+                <property name="lecm-doc-info-message-dic:doc-type">
+                    <![CDATA[[lecm-errands:document]]]></property>
+                <property name="lecm-doc-info-message-dic:code"><![CDATA[ERRAND_CANCEL_REQUEST]]></property>
+                <property name="lecm-doc-info-message-dic:templateString">
+                    <![CDATA[Исполнитель запросил отмену этого поручения]]></property>
+                <property name="lecm-doc-info-message-dic:expression">
+                    <![CDATA[doc.booleanAttr('lecm-errands-aspect:isCancelRequested') AND user.currentUser().getEmployee().equals(doc.assoc('lecm-errands:initiator-assoc'))]]></property>
+                <property name="lecm-doc-info-message-dic:is-warning-message"><![CDATA[true]]></property>
+            </item>
+            <item name="cm:Поручение. Запрошена отмена" type="lecm-doc-info-message-dic:template">
+                <property name="cm:title">Поручение. Запрошена отмена</property>
+                <property name="lecm-doc-info-message-dic:doc-type"><![CDATA[[lecm-errands:document]]]></property>
+                <property name="lecm-doc-info-message-dic:code"><![CDATA[ERRAND_CANCEL_REQUESTED]]></property>
+                <property name="lecm-doc-info-message-dic:templateString">
+                    <![CDATA[Вы запросили отмену поручения]]></property>
+                <property name="lecm-doc-info-message-dic:expression">
+                    <![CDATA[doc.booleanAttr('lecm-errands-aspect:isCancelRequested') AND user.currentUser().getPerson().equals(@lifecycleStateMachineHelper.getDocumentWorkflowInitiator(doc.nodeRef, 'errandsRequestCancel_1'))]]></property>
+                <property name="lecm-doc-info-message-dic:is-warning-message"><![CDATA[false]]></property>
+            </item>
+            <item name="cm:Поручение. Изменение срока" type="lecm-doc-info-message-dic:template">
+                <property name="cm:title">Поручение. Изменение срока</property>
+                <property name="lecm-doc-info-message-dic:doc-type">
+                    <![CDATA[[lecm-errands:document]]]></property>
+                <property name="lecm-doc-info-message-dic:code"><![CDATA[ERRAND_CHANGE_REQUEST]]></property>
+                <property name="lecm-doc-info-message-dic:templateString">
+                    <![CDATA[Исполнитель запросил изменение срока исполнения]]></property>
+                <property name="lecm-doc-info-message-dic:expression">
+                    <![CDATA[doc.booleanAttr('lecm-errands-aspect:isDueDateChangeRequested') AND user.currentUser().getEmployee().equals(doc.assoc('lecm-errands:initiator-assoc'))]]></property>
+                <property name="lecm-doc-info-message-dic:is-warning-message"><![CDATA[true]]></property>
+            </item>
+            <item name="cm:Поручение. Запрошено изменение срока" type="lecm-doc-info-message-dic:template">
+                <property name="cm:title">Поручение. Запрошено изменение срока</property>
+                <property name="lecm-doc-info-message-dic:doc-type"><![CDATA[[lecm-errands:document]]]></property>
+                <property name="lecm-doc-info-message-dic:code"><![CDATA[ERRAND_CHANGE_REQUESTED]]></property>
+                <property name="lecm-doc-info-message-dic:templateString">
+                    <![CDATA[Вы запросили изменение срока исполнения]]></property>
+                <property name="lecm-doc-info-message-dic:expression">
+                    <![CDATA[doc.booleanAttr('lecm-errands-aspect:isDueDateChangeRequested') AND user.currentUser().getPerson().equals(@lifecycleStateMachineHelper.getDocumentWorkflowInitiator(doc.nodeRef, 'errandsRequestDueDateChange_1'))]]></property>
+                <property name="lecm-doc-info-message-dic:is-warning-message"><![CDATA[false]]></property>
+            </item>
+        </items>
+    </item>
+</items>

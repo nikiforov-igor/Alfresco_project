@@ -118,7 +118,7 @@
                       ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
                       ru.it.lecm.notifications.notifications-repo.notificationsTemplatesBootstrap,
                       businessJournalLogEventsPolicy, documents.LogicEcmConnectionTypesBootstrap,
-					  regNumbers.regNumbersTemplatesDicBootstrap">
+					  regNumbers.regNumbersTemplatesDicBootstrap,documents.dictionaries.LogicEcmModelsBootstrap">
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-contracts-types-dic.xml</value>
@@ -136,6 +136,7 @@
                 <value>alfresco/module/${artifactId}/models/lecm-contracts-roles-items.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-contracts-regnumbers.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-contracts-nt-items.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-contracts-info-messages-templates-dic-items.xml</value>
             </list>
         </property>
     </bean>
