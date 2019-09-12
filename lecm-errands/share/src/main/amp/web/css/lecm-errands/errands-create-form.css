@@ -11,11 +11,3 @@
 .errands-limitation-date-set {
     width: 100%;
 }
-.errands-limitation-date-set .errands-limitation-date-set-type {
-    float: left;
-    width: calc(100% - 222px);
-}
-.errands-limitation-date-set .errands-limitation-date-set-date {
-    float: left;
-    width: calc(100% - 168px);
-}

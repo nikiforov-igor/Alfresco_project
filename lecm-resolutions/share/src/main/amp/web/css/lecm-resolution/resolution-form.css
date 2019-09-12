@@ -41,11 +41,11 @@
 }
 
 .resolution-form fieldset .errands-limitation-date-set .errands-limitation-date-set-type {
-    width: calc(100% - 225px);
+    width: calc(100% - 236px);
 }
 
 .resolution-form fieldset .errands-limitation-date-set .errands-limitation-date-set-date {
-    width: calc(100% - 180px);
+    width: calc(100% - 182px);
 }
 
 .resolution-form .control.resolution-base-doc-control {
