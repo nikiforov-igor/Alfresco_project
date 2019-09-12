@@ -114,7 +114,7 @@
 							<div class="label-div">
 								<label for="${optionsControlId}-search-mode">${msg("label.incoming.search_repeats_options.search_mode")}:</label>
 							</div>
-							<div class="value-div">
+							<div class="value-div search-mode-div">
 								<select id="${optionsControlId}-search-mode">
 									<option selected value="at_least_one">${msg("label.incoming.search_repeats_options.search_mode.at_least_one_attribute_matches")}</option>
 									<option value="all">${msg("label.incoming.search_repeats_options.search_mode.all_attributes_match")}</option>
