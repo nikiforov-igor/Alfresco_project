@@ -1926,6 +1926,7 @@
                             <control-param name="documentType">lecm-errands:document</control-param>
                             <control-param name="documentFromId">primary-routing</control-param>
                             <control-param name="fixSimpleDialogId">workflow-form</control-param>
+                            <control-param name="hideLegend">true</control-param>
                         </control>
                     </field>
                     <field id="change-errand-type-script">
@@ -1963,13 +1964,14 @@
                     </field>
                     <field id="lecmErrandWf:primaryRoutingErrandsList" label-id="field.primaryRouting.errands.title">
                         <control template="/ru/it/lecm/eds/controls/multi-form-control.ftl">
+                            <control-param name="hideLegend">true</control-param>
                             <control-param name="availableRemoveDefault">false</control-param>
                             <control-param name="documentType">lecm-errands:document</control-param>
                             <control-param name="documentFromId">primary-routing</control-param>
                             <control-param name="fixSimpleDialogId">workflow-form</control-param>
                             <control-param name="defaultValueFromId">incoming-default-primary-routing</control-param>
                             <control-param name="defaultValueDataSource">lecm/incoming/primaryRouting/defaultErrands/datasource</control-param>
-                            <control-param name="additionalCss">css/lecm-errands/errands-limitation-date-set.css</control-param>
+                            <control-param name="additionalCss">css/lecm-errands/errands-limitation-date-set.css,css/lecm-errands/primary-routing-form-template.css</control-param>
                         </control>
                     </field>
                     <field id="change-errand-type-script">

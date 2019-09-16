@@ -44,7 +44,7 @@
 .control.multi-form li div.actions a.remove-item {
     background: url(../../../images/lecm-events/alf_remove_grey_16.png) no-repeat center center;
     padding-left: 4px;
-    margin-right: -10px;
+    margin-right: 0px;
 }
 
 .create-documents-form .control .label-div {
