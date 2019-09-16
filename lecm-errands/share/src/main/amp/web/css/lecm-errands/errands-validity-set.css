@@ -92,6 +92,10 @@
 
 }
 
+.errands-validity-set .set .control .label-div label {
+    font-weight: normal;
+}
+
 .errands-validity-set .errands-validity-set-reiteration-count .alf-g .alf-u.first .container,
 .errands-validity-set .errands-validity-set-during .set > div > div.first .container {
     width: 50px;
