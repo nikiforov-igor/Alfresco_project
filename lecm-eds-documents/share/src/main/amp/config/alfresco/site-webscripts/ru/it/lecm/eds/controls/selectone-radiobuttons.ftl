@@ -33,9 +33,6 @@
         	</label>
 		</div>
         <div class="container">
-            <div class="buttons-div">
-                <@formLib.renderFieldHelp field=field />
-            </div>
             <div class="value-div">
                 <#if field.control.params.options?? && field.control.params.options != "">
                     <input id="${fieldHtmlId}" type="hidden" name="-" value="${fieldValue?html}"/>
@@ -69,9 +66,6 @@
             </label>
 		</div>
 		<div class="container">
-            <div class="buttons-div">
-                <@formLib.renderFieldHelp field=field />
-            </div>
             <div class="value-div">
 				<#if field.control.params.options?? && field.control.params.options != "">
 					<input id="${fieldHtmlId}" type="hidden" name="-" value="${fieldValue?html}"/>
