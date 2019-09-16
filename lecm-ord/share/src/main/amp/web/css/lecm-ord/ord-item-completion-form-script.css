@@ -25,3 +25,18 @@
 .ord-item-completion-option-set .control .container .value-div label:nth-of-type(1) {
     margin-top: 10px;
 }
+
+.yui-skin-lecmTheme .form-fields .control.selectone-radiobuttons  input,
+.yui-skin-lecmTheme .form-fields .control.selectone-radiobuttons  label {
+    vertical-align: middle;
+    line-height: 24px;
+    font-family: Roboto, sans-serif;
+    font-style: normal;
+    font-size: 12px;
+    color: #000000;
+    outline: none;
+}
+
+.yui-skin-lecmTheme .form-fields .control.selectone-radiobuttons  .container label {
+    display: block;
+}
