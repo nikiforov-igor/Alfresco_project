@@ -2,6 +2,16 @@
 <#assign hiddenFieldId = fieldHtmlId>
 <#assign hiddenFieldName = field.name>
 
+<#assign hiddenOnLoad = "">
+<#if field.control.params.hiddenOnLoad?? && field.control.params.hiddenOnLoad == "true">
+	<#assign  hiddenOnLoad="hidden">
+</#if>
+
+<#assign showLabelBlock = false>
+<#if field.control.params.showLabelBlock?? && field.control.params.showLabelBlock == "true">
+	<#assign  showLabelBlock = true>
+</#if>
+
 <script type='text/javascript'>//<![CDATA[
 (function() {
 function init() {
@@ -22,8 +32,14 @@ function init() {
 })();
 //]]></script>
 
-<div class='form-field'>
-	<div id='${containerId}'>
-		<input id='${hiddenFieldId}' type='hidden' name='${hiddenFieldName}'>
-	</div>
+<div class='control form-field activiti-transitions-radiobuttons ${hiddenOnLoad}'>
+<#if showLabelBlock>
+    <div class="label-div"></div>
+</#if>
+    <div class="container">
+        <div id='${containerId}'>
+            <input id='${hiddenFieldId}' type='hidden' name='${hiddenFieldName}'>
+        </div>
+    </div>
 </div>
+<div class="clear"></div>
