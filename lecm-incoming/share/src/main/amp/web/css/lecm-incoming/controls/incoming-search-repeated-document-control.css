@@ -33,9 +33,8 @@
     line-height: 24px;
 }
 .incoming-search-repeated .search-repeats-options .buttons-div {
-    left: 368px;
-    position: relative;
     margin-top: 15px;
+    text-align: right;
     margin-bottom: 20px;
 }
 .incoming-search-repeated .search-repeats-options .buttons-div .search-button {
