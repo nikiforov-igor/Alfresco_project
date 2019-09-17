@@ -194,7 +194,7 @@
                 ]
             });
             routeDialog.setHeader(Alfresco.util.message("ru.it.errands.route.dialog.title"));
-            routeDialog.setBody("<p>" + Alfresco.util.message("ru.it.errand.route.message") + "</p>");
+            routeDialog.setBody("<div class='form-fields'>" + Alfresco.util.message("ru.it.errand.route.message") + "</div>");
             routeDialog.render(document.body);
             routeDialog.show();
 
