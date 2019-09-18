@@ -200,15 +200,13 @@
                     <show id="ord-item-completion-form-script" force="true"/>
                 </field-visibility>
                 <appearance>
-                    <set id="ord-item-completion-option-set" template="/ru/it/lecm/ord/components/class-set.ftl"/>
-                    <set id="common"/>
-                    <field id="lecm-ord-table-structure:completion-option" mandatory="true" set="ord-item-completion-option-set">
+                    <field id="lecm-ord-table-structure:completion-option" mandatory="true">
                         <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
                             <control-param name="defaultValue">CANCEL</control-param>
                             <control-param name="fireChangeEventName">changeCompletionOption</control-param>
                         </control>
                     </field>
-                    <field id="lecm-ord-table-structure:item-comment" mandatory="true" set="common">
+                    <field id="lecm-ord-table-structure:item-comment" mandatory="true">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
                         </control>
