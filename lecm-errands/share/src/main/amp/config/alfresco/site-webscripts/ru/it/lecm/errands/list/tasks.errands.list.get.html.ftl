@@ -1,9 +1,6 @@
 <#assign id = args.htmlid?js_string>
 <div class="panel-header">
     <div class="panel-title">${msg("label.title")}</div>
-    <div class="lecm-dashlet-actions">
-        <a id="${id}-action-collapse" class="collapse" title="${msg("btn.collapse")}"></a>
-    </div>
 </div>
 <div class="list-container">
     <div id="${id}_myErrandsList-view-mode-button-group" class="yui-buttongroup errands-view-mode-button-group">
@@ -36,13 +33,6 @@
 <script>
     (function() {
         var Dom = YAHOO.util.Dom;
-
-        function hideButton() {
-            if(!location.hash) {
-                YAHOO.util.Dom.setStyle(this, 'display', 'none');
-            }
-        }
-        YAHOO.util.Event.onAvailable("${id}-action-collapse", hideButton);
 
         function init() {
             var viewButtonGroup = new YAHOO.widget.ButtonGroup("${id}_myErrandsList-view-mode-button-group");

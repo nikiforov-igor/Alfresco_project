@@ -1,15 +1,13 @@
 .errands-list-filter {
 	display: inline-block;
-	vertical-align: top;
+	float: left
 }
 
 .create-errand-action {
-	display: inline-block;
-	vertical-align: top;
-	padding-top: 5px;
+	line-height: 32px;
 }
 .create-errand-action.lecm-dashlet-actions .add {
-	margin-left: 13px;
+	margin-left: 16px;
 }
 
 .errands-list-filter > select {
@@ -34,4 +32,8 @@
 
 .errands-panel .short-view span.first-child {
 	background: url('../../images/lecm-documents/components/errands.png') no-repeat 5px 5px;
+}
+
+.lecm-dashlet-actions.create-errand-action .add {
+	display: initial;
 }
