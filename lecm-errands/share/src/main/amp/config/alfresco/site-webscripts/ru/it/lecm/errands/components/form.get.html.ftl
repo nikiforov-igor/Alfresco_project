@@ -524,9 +524,9 @@
             //]]></script>
 
             <div class="form-field with-grid coexecutors-report" id="${controlId}">
-                <div class="reports-filter-block">
-                    <input type="checkbox" id="${controlId}-change-filter">
-                    <label id="${controlId}-change-filter-label" for="${controlId}-change-filter"></label>
+                <div class="control checkbox-control  reports-filter-block">
+                    <input type="checkbox" id="${controlId}-change-filter" class="lecm-checkbox">
+                    <label id="${controlId}-change-filter-label" for="${controlId}-change-filter" class="checkbox"></label>
                 </div>
                 <@grid.datagrid containerId false/>
                 <div id="${controlId}-container">

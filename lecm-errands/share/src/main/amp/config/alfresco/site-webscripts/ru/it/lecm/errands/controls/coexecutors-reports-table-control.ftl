@@ -74,10 +74,10 @@
 //]]></script>
 
 <div class="form-field with-grid coexecutors-report" id="${controlId}">
-	<div class="coexecutors-reports-additional-block">
+	<div class="control checkbox-control coexecutors-reports-additional-block">
 		<div class="reports-filter-block">
-			<input type="checkbox" id="${controlId}-change-filter">
-			<label id="${controlId}-change-filter-label" for="${controlId}-change-filter"></label>
+			<input type="checkbox" id="${controlId}-change-filter" class="lecm-checkbox">
+			<label id="${controlId}-change-filter-label" for="${controlId}-change-filter" class="checkbox"></label>
 		</div>
 		<div class="reports-transfer-block hidden">
 			 <span id="${controlId}-exec-report-transfer-coexecutors-reports" class="yui-button yui-push-button disabled-button">
