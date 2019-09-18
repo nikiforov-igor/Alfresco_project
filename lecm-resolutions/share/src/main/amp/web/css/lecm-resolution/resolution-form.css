@@ -29,8 +29,8 @@
 }
 
 .resolution-form fieldset > span.yui-button {
-    float: right;
-    margin-right: calc(100% - 170px);
+    float: left;
+    margin-left: 15px;
 }
 
 .resolution-form fieldset .yui-g .yui-u {
