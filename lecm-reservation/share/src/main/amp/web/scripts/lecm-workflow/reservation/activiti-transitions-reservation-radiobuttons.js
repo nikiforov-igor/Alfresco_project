@@ -108,9 +108,6 @@ LogicECM.module = LogicECM.module || {};
             label.setAttribute('for', this.id + '-' + transition.id);
             label.innerHTML = ' ' + transition.label;
             container.appendChild(label);
-
-			spaceBr = document.createElement('br');
-			container.appendChild(spaceBr);
 		},
 		/**
 		 * Event handler called when a transition button is clicked.
