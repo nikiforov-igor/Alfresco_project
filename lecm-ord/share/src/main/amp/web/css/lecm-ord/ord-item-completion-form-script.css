@@ -40,3 +40,7 @@
 .yui-skin-lecmTheme .form-fields .control.selectone-radiobuttons  .container label {
     display: block;
 }
+
+.yui-skin-lecmTheme .form-fields .control.selectone-radiobuttons .value-div {
+    padding: 10px 0 0 0;
+}
