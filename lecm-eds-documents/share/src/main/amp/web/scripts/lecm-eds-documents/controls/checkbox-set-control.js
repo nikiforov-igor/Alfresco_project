@@ -62,7 +62,7 @@ LogicECM.module.EDS = LogicECM.module.EDS || {};
                     },
                     {
                         key: "value",
-                        label: "<div class='centered'><input name='-' type='checkbox' id='" + this.id + "-select-all-records'></div>",
+                        label: "<div class='yui-dt-label'><input class='lecm-checkbox formsCheckbox' name='-' type='checkbox' id='" + this.id + "-select-all-records'><label for='" + this.id  + "-select-all-records'></label></div>",
                         sortable: false,
                         formatter: this.fnRenderCellSelected.bind(this),
                         maxAutoWidth: 100,
@@ -102,7 +102,7 @@ LogicECM.module.EDS = LogicECM.module.EDS || {};
                 var hiddenHtml =
                     "<input id='" + oRecord.getId() + "-hidden' type='hidden' name='" + this.options.fieldId + "-" + oRecord.getData("key") + "' value='" + oRecord.getData("value") + "'/>";
                 var checkboxHtml =
-                    "<input id='" + oRecord.getId() + "' type='checkbox' name='-' " + (oRecord.getData("value") == "true" ? " checked='checked'>" : ">");
+                    "<input id='" + oRecord.getId() + "' type='checkbox' class='lecm-checkbox formsCheckbox' name='-' " + (oRecord.getData("value") == "true" ? " checked='checked'>" : ">") + "<label for='" + oRecord.getId() + "'></label>";
 
                 elCell.innerHTML = "<div class='centered'>" + (hiddenHtml + checkboxHtml) + "</div>";
             },
