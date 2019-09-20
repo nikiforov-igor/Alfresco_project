@@ -293,7 +293,7 @@
                     <set id="afterDateSet2" parent="common"/>
 
                     <field id="lecm-errands:is-important" set="statuses">
-                        <control template="/ru/it/lecm/base-share/components/controls/important.ftl" />
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl" />
                     </field>
                     <field id="lecm-statemachine:status" set="statuses">
                         <control template="/ru/it/lecm/base-share/components/controls/status.ftl" />
