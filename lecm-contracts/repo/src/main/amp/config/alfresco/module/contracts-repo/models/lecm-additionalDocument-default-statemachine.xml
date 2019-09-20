@@ -2805,7 +2805,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                             <property>
                                                                 <name>redirectAfterBlock</name>
                                                                 <value>
-                                                                    <![CDATA[document?nodeRef={nodeRef}#approvalAndSigning]]></value>
+                                                                    <![CDATA[document?nodeRef={nodeRef}#Согласование%20и%20подписание]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
@@ -3030,7 +3030,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                             <property>
                                                                 <name>redirectAfterBlock</name>
                                                                 <value>
-                                                                    <![CDATA[document?nodeRef={nodeRef}#approvalAndSigning]]></value>
+                                                                    <![CDATA[document?nodeRef={nodeRef}#Согласование%20и%20подписание]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
@@ -9377,7 +9377,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                             <property>
                                                                 <name>redirectAfterBlock</name>
                                                                 <value>
-                                                                    <![CDATA[document?nodeRef={nodeRef}#approvalAndSigning]]></value>
+                                                                    <![CDATA[document?nodeRef={nodeRef}#Согласование%20и%20подписание]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
@@ -9642,7 +9642,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                             <property>
                                                                 <name>redirectAfterBlock</name>
                                                                 <value>
-                                                                    <![CDATA[document?nodeRef={nodeRef}#approvalAndSigning]]></value>
+                                                                    <![CDATA[document?nodeRef={nodeRef}#Согласование%20и%20подписание]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
@@ -11322,7 +11322,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                             <property>
                                                                 <name>redirectAfterBlock</name>
                                                                 <value>
-                                                                    <![CDATA[document?nodeRef={nodeRef}#approvalAndSigning]]></value>
+                                                                    <![CDATA[document?nodeRef={nodeRef}#Согласование%20и%20подписание]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
