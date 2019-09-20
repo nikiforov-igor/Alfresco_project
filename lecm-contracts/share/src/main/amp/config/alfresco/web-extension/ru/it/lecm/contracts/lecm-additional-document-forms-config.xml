@@ -69,6 +69,7 @@
             <!-- Форма просмотра-->
             <form>
                 <field-visibility>
+                    <show id="lecm-additional-document:document-assoc"/>
                     <show id="lecm-additional-document:additionalDocumentType"/>
                     <show id="lecm-document:regnum"/>
                     <show id="lecm-additional-document:date"/>
@@ -83,7 +84,11 @@
                 </field-visibility>
                 <appearance>
                     <set id="common" appearance="" label-id="label.contracts.main" />
-
+                    <field id="lecm-additional-document:document-assoc" set="common">
+                        <control template="/ru/it/lecm/contracts/controls/associationItem.ftl">
+                            <control-param name="nameSubstituteString">{lecm-document:regnum}</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-additional-document:additionalDocumentType" set="common"/>
                     <field id="lecm-document:regnum" set="common"/>
                     <field id="lecm-additional-document:date" set="common"/>
