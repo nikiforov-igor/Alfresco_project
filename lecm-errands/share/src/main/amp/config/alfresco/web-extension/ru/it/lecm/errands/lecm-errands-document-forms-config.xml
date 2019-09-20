@@ -225,8 +225,6 @@
                 <field-visibility>
                     <!-- Важное -->
                     <show id="lecm-errands:is-important"/>
-                    <!-- Статус -->
-                    <show id="lecm-statemachine:status" force="true"/>
                     <!-- Документ-основание -->
                     <show id="lecm-errands:base-assoc"/>
                     <!-- Основание -->
@@ -294,9 +292,6 @@
 
                     <field id="lecm-errands:is-important" set="statuses">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl" />
-                    </field>
-                    <field id="lecm-statemachine:status" set="statuses">
-                        <control template="/ru/it/lecm/base-share/components/controls/status.ftl" />
                     </field>
                     <field id="lecm-errands:base-assoc" set="beforeDateSet">
                         <control template="/ru/it/lecm/base-share/components/controls/association-search-control.ftl"/>
