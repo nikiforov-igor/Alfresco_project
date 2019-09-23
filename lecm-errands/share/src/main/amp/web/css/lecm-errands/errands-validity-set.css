@@ -145,6 +145,7 @@
 }
 
 .errands-validity-set .errands-validity-set-period-endless .value-div {
+    line-height: 32px;
     padding-left: 0;
 }
 
