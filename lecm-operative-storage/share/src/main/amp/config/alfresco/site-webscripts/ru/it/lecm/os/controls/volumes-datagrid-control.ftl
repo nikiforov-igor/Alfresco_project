@@ -176,6 +176,7 @@
 
 				var datagrid = new LogicECM.module.Base.DataGridControl_${objectId}('${containerId}').setOptions({
 					usePagination: ${usePagination?string},
+                    paginationTemplate: "${field.control.params.paginationTemplate!'lecm.pagination.template.short'}",
 					<#if field.control.params.overrideSortingWith??>
 						overrideSortingWith: ${field.control.params.overrideSortingWith?string},
 					</#if>

@@ -121,6 +121,7 @@ LogicECM.errands = LogicECM.errands || {};
 
                 var datagrid = new LogicECM.errands.CoexecutorsReportsDatagrid(this.options.containerId).setOptions({
                     usePagination: true,
+                    paginationTemplate: "lecm.pagination.template.short",
                     showExtendSearchBlock: false,
                     formMode: this.options.mode,
                     actions: actions,

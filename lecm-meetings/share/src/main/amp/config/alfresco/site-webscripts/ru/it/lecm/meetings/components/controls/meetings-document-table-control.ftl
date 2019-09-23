@@ -101,6 +101,7 @@
 			{
 				currentValue: "${field.value!""}",
                 usePagination: ${usePagination?string},
+                paginationTemplate: "${field.control.params.paginationTemplate!'lecm.pagination.template.short'}",
 				messages: ${messages},
 				bubblingLabel: "${bubblingId}",
                 <#if toolbar == "true">

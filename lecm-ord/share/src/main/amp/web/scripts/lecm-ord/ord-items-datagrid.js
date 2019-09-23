@@ -136,6 +136,7 @@ LogicECM.ORD = LogicECM.ORD || {};
             if (this.tableData != null && this.tableData.rowType != null) {
                 var datagrid = new LogicECM.ORD.PointsDatagrid(this.options.containerId).setOptions({
                     usePagination: true,
+                    paginationTemplate: "lecm.pagination.template.short",
                     showExtendSearchBlock: false,
                     formMode: this.options.mode,
                     actions: actions,
