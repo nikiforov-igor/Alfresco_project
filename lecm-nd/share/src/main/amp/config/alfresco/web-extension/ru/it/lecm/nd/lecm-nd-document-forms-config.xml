@@ -670,9 +670,8 @@
                     <show id="lecm-eds-document:note"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-document-aspects:additional-organization-unit-assoc" mandatory="true"/>
+                    <show id="lecm-nd:unlimited"/>
                     <show id="lecm-nd:begin-date"/>
-                    <show id="lecm-nd:end-date"/>
-                    <show id="lecm-nd:unlimited" mandatory="true"/>
                     <show id="lecm-document:author-assoc"/>
                     <show id="lecm-eds-document:executor-assoc"/>
                     <show id="lecm-document-aspects:reg-project-data-number"/>
@@ -684,7 +683,6 @@
                 </field-visibility>
                 <appearance>
                     <set id="common" appearance="" label="Атрибуты"/>
-                    <set id="dates" parent="common" template="/ru/it/lecm/base-share/components/controls/daterange.ftl"/>
                     <set id="afterDates" parent="common"/>
 
                     <!-- Вкладка Атрибуты -->
@@ -730,9 +728,13 @@
                     </field>
                     <field id="lecm-document:subject-assoc" set="common"/>
                     <field id="lecm-eds-document:file-register-assoc" set="common"/>
-                    <field id="lecm-nd:begin-date"  label-id="label.nd.period" set="dates"/>
-                    <field id="lecm-nd:end-date" label="" set="dates"/>
-                    <field id="lecm-nd:unlimited" set="dates"/>
+                    <field id="lecm-nd:begin-date"  label-id="label.nd.period" set="common">
+                        <control template="/ru/it/lecm/base-share/components/controls/substitude-text-control.ftl">
+                            <control-param name="value">#{doc.attr('lecm-nd:begin-date') != null ? #formatDate('dd.MM.yyyy', doc.attr('lecm-nd:begin-date')) : '(Нет)'}-#{doc.attr('lecm-nd:end-date') != null ? #formatDate('dd.MM.yyyy', doc.attr('lecm-nd:end-date')): '(Нет)'}</control-param>
+                            <control-param name="isMultiLineMode">false</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-nd:unlimited" set="common"/>
                     <field id="lecm-document:author-assoc" set="afterDates" label-id="label.eds.assoc.compiler" read-only="true"/>
                     <field id="lecm-eds-document:executor-assoc" set="afterDates">
                         <control>

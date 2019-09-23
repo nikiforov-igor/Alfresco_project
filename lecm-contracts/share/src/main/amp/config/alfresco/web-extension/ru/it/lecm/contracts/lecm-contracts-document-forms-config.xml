@@ -258,9 +258,8 @@
                     <show id="lecm-contract:signedCounterparty"/>
                     <show id="lecm-contract:signatoryCounterparty"/>
                     <show id="lecm-contract:regNumContractor"/>
-                    <show id="lecm-contract:startDate"/>
-                    <show id="lecm-contract:endDate"/>
                     <show id="lecm-contract:unlimited"/>
+                    <show id="lecm-contract:startDate"/>
                     <show id="lecm-contract:summaryContent"/>
                     <show id="lecm-document:regnum"/>
                     <show id="lecm-document:doc-date"/>
@@ -281,7 +280,6 @@
                     <set id="price" parent="contract-info" appearance="" template="/ru/it/lecm/base-share/components/controls/price.ftl" />
                     <set id="date-conclusion" parent="contract-info" appearance="" />
                     <set id="counterparty-info" parent="common" appearance=""/>
-                    <set id="dates" appearance="" parent="common" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
                     <set id="other" appearance="" parent="common" />
 
                     <field id="lecm-document-aspects:reg-project-data-number" set="contract-info"/>
@@ -415,9 +413,13 @@
                     <field id="lecm-contract:signedCounterparty" set="counterparty-info"/>
                     <field id="lecm-contract:signatoryCounterparty" set="counterparty-info"/>
                     <field id="lecm-contract:regNumContractor" set="counterparty-info"/>
-                    <field id="lecm-contract:startDate" set="dates" label-id="contract.daterange"/>
-                    <field id="lecm-contract:endDate" set="dates" label=""/>
-                    <field id="lecm-contract:unlimited" set="dates"/>
+                    <field id="lecm-contract:startDate" label-id="contract.daterange" set="other">
+                        <control template="/ru/it/lecm/base-share/components/controls/substitude-text-control.ftl">
+                            <control-param name="value">#{doc.attr('lecm-contract:startDate') != null ? #formatDate('dd.MM.yyyy', doc.attr('lecm-contract:startDate')) : '(Нет)'}-#{doc.attr('lecm-contract:endDate') != null ? #formatDate('dd.MM.yyyy', doc.attr('lecm-contract:endDate')): '(Нет)'}</control-param>
+                            <control-param name="isMultiLineMode">false</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-contract:unlimited" set="other"/>
                     <field id="lecm-contract:summaryContent" set="other">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
