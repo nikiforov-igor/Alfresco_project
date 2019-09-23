@@ -46,13 +46,19 @@
                     var tr = document.createElement("tr");
                     tr.style.cursor = "pointer";
                     var td = document.createElement("td");
+                    td.style.width="100%";
 
                     var button1 = document.createElement("input");
                     button1.type = "radio";
-                    button1.name = buttonName
+                    button1.name = buttonName;
                     button1.checked = true;
+                    button1.id = this.htmlId + "-link-" + buttonName;
+                    button1.className = "lecm-radio";
                     td.appendChild(button1);
-
+                    var label1 = document.createElement("label");
+                    label1.innerHTML = this.msg("contract.contractTime.link");
+                    label1.setAttribute("for", this.htmlId + "-link-" + buttonName);
+                    td.appendChild(label1);
                     tr.appendChild(td);
 
                     YAHOO.util.Event.addListener(tr, "click", function() {
@@ -62,31 +68,31 @@
 
                     this._drawData(data.links);
 
-                    td = document.createElement("td");
-                    td.innerHTML = this.msg("contract.contractTime.link");
-                    td.width = "100%";
-                    tr.appendChild(td);
-
                     table.appendChild(tr);
 
-                    var tr = document.createElement("tr");
+                    tr = document.createElement("tr");
                     tr.style.cursor = "pointer";
-                    var td = document.createElement("td");
+                    td = document.createElement("td");
+                    td.style.width="100%";
+
                     var button2 = document.createElement("input");
                     button2.type = "radio";
-                    button2.name = buttonName
+                    button2.name = buttonName;
+                    button2.checked = true;
+                    button2.id = this.htmlId + "-attachment-" + buttonName;
+                    button2.className = "lecm-radio";
                     td.appendChild(button2);
+                    var label2 = document.createElement("label");
+                    label2.innerHTML = this.msg("contract.contractTime.attachment");
+                    label2.setAttribute("for", this.htmlId + "-attachment-" + buttonName);
+                    td.appendChild(label2);
+                    tr.appendChild(td);
 
                     YAHOO.util.Event.addListener(tr, "click", function() {
                         button2.checked = true;
                         this._drawAttachments(data.attachments);
                     }.bind(this));
 
-                    tr.appendChild(td);
-
-                    td = document.createElement("td");
-                    td.innerHTML = this.msg("contract.contractTime.attachment");
-                    td.width = "100%";
                     tr.appendChild(td);
 
                     table.appendChild(tr);
