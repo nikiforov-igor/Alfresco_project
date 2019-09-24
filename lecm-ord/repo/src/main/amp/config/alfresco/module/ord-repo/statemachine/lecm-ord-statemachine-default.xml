@@ -12333,7 +12333,7 @@ if (doc) {
                                                             <property>
                                                                 <name>scriptLabel</name>
                                                                 <value>
-                                                                    <![CDATA[Включение контролёра в участники]]></value>
+                                                                    <![CDATA[Включение контролера в участники]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>actionScript</name>
@@ -15317,7 +15317,7 @@ document.save();]]></value>
                                                             <property>
                                                                 <name>scriptLabel</name>
                                                                 <value>
-                                                                    <![CDATA[Включение контролёра в участники]]></value>
+                                                                    <![CDATA[Включение контролера в участники]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>actionScript</name>

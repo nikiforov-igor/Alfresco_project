@@ -6982,7 +6982,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[10]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-ord:controller-assoc]]></property>
-                                                <property name="lecm-arm:field-title"><![CDATA[Контролёр]]></property>
+                                                <property name="lecm-arm:field-title"><![CDATA[Контролер]]></property>
                                                 <property name="cm:name">
                                                     <![CDATA[633d34a5-d2ca-45be-8c79-20dc1b258541]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -27168,7 +27168,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[13]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-ord:controller-assoc]]></property>
-                                                <property name="lecm-arm:field-title"><![CDATA[Контролёр]]></property>
+                                                <property name="lecm-arm:field-title"><![CDATA[Контролер]]></property>
                                                 <property name="cm:name">
                                                     <![CDATA[552b1d7e-42f8-45aa-a996-3813e3df8b22]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -28228,7 +28228,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[13]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-ord:controller-assoc]]></property>
-                                                <property name="lecm-arm:field-title"><![CDATA[Контролёр]]></property>
+                                                <property name="lecm-arm:field-title"><![CDATA[Контролер]]></property>
                                                 <property name="cm:name">
                                                     <![CDATA[42144616-da53-4366-aea5-922cc5612037]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
