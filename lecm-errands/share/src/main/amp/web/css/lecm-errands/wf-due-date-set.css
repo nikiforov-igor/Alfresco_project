@@ -32,10 +32,8 @@
 .errands-wf-duedate-set .errands-wf-duedate-set-radio .control label.checkbox:last-of-type {
     margin-bottom: 0;
 }
-.errands-wf-duedate-set .errands-wf-duedate-set-date {
+.errands-wf-duedate-set .errands-wf-duedate-set-date,
+.errands-wf-duedate-set .errands-wf-duedate-set-limitless{
     float: left;
-    width: calc(100% - 200px);
-}
-.errands-wf-duedate-set .errands-wf-duedate-set-limitless {
-    float: left ;
+    width: calc(100% - 290px);
 }
