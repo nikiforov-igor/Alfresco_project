@@ -34,18 +34,55 @@
 
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
 
-<script type="text/javascript">//<![CDATA[
-(function()
-{
-	function init() {
-        LogicECM.module.Base.Util.loadScripts(['scripts/lecm-meetings/components/agenda-checkbox.js'],
-                createControl);
-	}
+<#if form.mode == "view">
+	<div class="control checkbox-control viewmode">
+		<div class="label-div">
+			<label>${field.label?html}:</label>
+		</div>
+		<div class="container">
+			<div class="value-div">
+				<#if isTrue>
+					${msg("form.control.checkbox.yes")}
+				<#else>
+					${msg("form.control.checkbox.no")}
+				</#if>
+				<input id="${fieldHtmlId}" type="hidden" name="${field.name}" value="<#if isTrue>true<#else>false</#if>" />
+			</div>
+		</div>
+	</div>
+<#else>
+	<div class="control checkbox-control editmode">
+		<div class="container">
+            <div class="buttons-div">
+                <@formLib.renderFieldHelp field=field />
+            </div>
+			<div class="value-div">
+				<input id="${fieldHtmlId}" type="hidden" name="${field.name}" value="<#if isTrue>true<#else>false</#if>" />
+				<input class="formsCheckBox lecm-checkbox" id="${fieldHtmlId}-entry" type="checkbox" tabindex="0" name="-" <#if field.description??>title="${field.description}"</#if>
+					<#if isTrue> value="true" checked="checked"</#if>
+					   <#if field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true")>disabled="true"</#if>
+					   <#if field.control.params.styleClass??>class="${field.control.params.styleClass}"</#if>
+					   <#if field.control.params.style??>style="${field.control.params.style}"</#if> />
+				<label for="${fieldHtmlId}-entry" class="checkbox">${field.label?html}</label>
+				<div id="${fieldHtmlId}-attention" class="error"></div>
+			</div>
+		</div>
+	</div>
+</#if>
+<div class="clear"></div>
 
-	function createControl() {
-	var control = new LogicECM.module.AgendaCheckbox("${fieldHtmlId}").setMessages(${messages});
-	control.setOptions(
-			{
+<script type="text/javascript">//<![CDATA[
+(function () {
+    function init() {
+        LogicECM.module.Base.Util.loadScripts([
+            'scripts/lecm-base/components/lecm-checkbox.js',
+			'scripts/lecm-meetings/components/agenda-checkbox.js'
+		], createControl);
+    }
+
+    function createControl() {
+        var control = new LogicECM.module.AgendaCheckbox("${fieldHtmlId}").setMessages(${messages});
+        control.setOptions({
 			<#if disabled>
 				disabled: true,
 			</#if>
@@ -70,55 +107,15 @@
 			<#if field.control.params.hideFieldsIfNotSelect??>
 				hideFieldsIfNotSelect: "${field.control.params.hideFieldsIfNotSelect}".split(","),
 			</#if>
-				fireMandatoryByChange: "${fireMandatoryByChange?string}",
-				mode: "${form.mode}",
-				fieldId: "${field.configName}",
-				formId: "${args.htmlid}",
-				itemId: "${args.itemId}"
+                    fireMandatoryByChange: "${fireMandatoryByChange?string}",
+                    mode: "${form.mode}",
+                    fieldId: "${field.configName}",
+                    formId: "${args.htmlid}",
+                    itemId: "${args.itemId}"
 
-			});
-	}
-	YAHOO.util.Event.onDOMReady(init);
+                });
+    }
+
+    YAHOO.util.Event.onContentReady("${fieldHtmlId}", init);
 })();
 //]]></script>
-
-<#if form.mode == "view">
-	<div class="control checkbox-control viewmode">
-		<div class="label-div">
-			<label>${field.label?html}:</label>
-		</div>
-		<div class="container">
-			<div class="value-div">
-				<#if isTrue>
-					${msg("form.control.checkbox.yes")}
-				<#else>
-					${msg("form.control.checkbox.no")}
-				</#if>
-				<input id="${fieldHtmlId}" type="hidden" name="${field.name}" value="<#if isTrue>true<#else>false</#if>" />
-			</div>
-		</div>
-	</div>
-<#else>
-	<div class="control checkbox-control editmode">
-<!--		<div class="label-div">
-			<label>&nbsp;</label>
-		</div>
--->
-		<div class="container">
-            <div class="buttons-div">
-                <@formLib.renderFieldHelp field=field />
-            </div>
-			<div class="value-div">
-				<input id="${fieldHtmlId}" type="hidden" name="${field.name}" value="<#if isTrue>true<#else>false</#if>" />
-				<input class="formsCheckBox" id="${fieldHtmlId}-entry" type="checkbox" tabindex="0" name="-" <#if field.description??>title="${field.description}"</#if>
-					<#if isTrue> value="true" checked="checked"</#if>
-					   <#if field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true")>disabled="true"</#if>
-					   <#if field.control.params.styleClass??>class="${field.control.params.styleClass}"</#if>
-					   <#if field.control.params.style??>style="${field.control.params.style}"</#if> />
-				<label for="${fieldHtmlId}-entry" class="checkbox">${field.label?html}</label>
-				<div id="${fieldHtmlId}-attention" class="error"></div>
-			</div>
-		</div>
-	</div>
-</#if>
-<div class="clear"></div>

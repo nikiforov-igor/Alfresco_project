@@ -1,15 +1,12 @@
 <#assign id = args.htmlid?js_string>
 <div class="panel-header">
     <div class="panel-title">${msg("label.title")}</div>
-    <div class="lecm-dashlet-actions">
-        <a id="${id}-action-collapse" class="collapse" title="${msg("btn.collapse")}"></a>
-    </div>
 </div>
-
-<div id="${id}_myErrandsList-view-mode-button-group" class="yui-buttongroup errands-view-mode-button-group">
-    <input id="${id}-view-mode-radiofield-links" type="radio" name="view-mode-radiofield" value="${msg("errands.list")}" checked />
-    <input id="${id}-view-mode-radiofield-tree" type="radio" name="view-mode-radiofield" value="${msg("errands.tree")}" />
-    <span class="errands-list-filter">
+<div class="list-container">
+    <div id="${id}_myErrandsList-view-mode-button-group" class="yui-buttongroup errands-view-mode-button-group">
+        <input id="${id}-view-mode-radiofield-links" type="radio" name="view-mode-radiofield" value="${msg("errands.list")}" checked />
+        <input id="${id}-view-mode-radiofield-tree" type="radio" name="view-mode-radiofield" value="${msg("errands.tree")}" />
+        <span class="errands-list-filter">
 		<select id="${id}-errands-filter">
 			<option value="all">${msg("errandslist.option.all")}</option>
 			<option selected value="active">${msg("errandslist.option.active")}</option>
@@ -21,27 +18,21 @@
             <a id="${id}-action-add" href="#" onclick="errandsComponent.createChildErrand(); return false;" class="add" title="${msg("errandslist.add.errand.tooltip")}">${msg("errandslist.add.errand")}</a>
         </span>
 </#if>
-</div>
-
-<div class="list-container" id="${id}-listContainer">
-    <div class="body scrollableList" id="${id}_results">
-        <div id="${id}_errandsList"></div>
     </div>
-</div>
 
-<div class="connections-list" id="${id}-connections-list">
+    <div class="list-container" id="${id}-listContainer">
+        <div class="body scrollableList" id="${id}_results">
+            <div id="${id}_errandsList"></div>
+        </div>
+    </div>
 
+    <div class="connections-list" id="${id}-connections-list">
+
+    </div>
 </div>
 <script>
     (function() {
         var Dom = YAHOO.util.Dom;
-
-        function hideButton() {
-            if(!location.hash) {
-                YAHOO.util.Dom.setStyle(this, 'display', 'none');
-            }
-        }
-        YAHOO.util.Event.onAvailable("${id}-action-collapse", hideButton);
 
         function init() {
             var viewButtonGroup = new YAHOO.widget.ButtonGroup("${id}_myErrandsList-view-mode-button-group");

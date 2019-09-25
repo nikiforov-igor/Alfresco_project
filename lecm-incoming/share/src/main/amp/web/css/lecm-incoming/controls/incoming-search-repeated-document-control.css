@@ -15,6 +15,9 @@
 .form-container .bd .form-fields .control.incoming-search-repeated .object-finder .bd .picker-items {
     margin: 2px;
 }
+.incoming-search-repeated.control .container .search-mode-div {
+    width: calc(100% - 216px);
+}
 .incoming-search-repeated .attributes-match .value-div label {
     display: inline-block;
     vertical-align: top;
@@ -26,13 +29,12 @@
 }
 .incoming-search-repeated .attributes-match .match-value-div {
     display: inline-block;
-    vertical-align:top;
     width: calc(100% - 190px);
+    line-height: 24px;
 }
 .incoming-search-repeated .search-repeats-options .buttons-div {
-    left: 368px;
-    position: relative;
     margin-top: 15px;
+    text-align: right;
     margin-bottom: 20px;
 }
 .incoming-search-repeated .search-repeats-options .buttons-div .search-button {

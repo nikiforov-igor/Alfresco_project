@@ -242,9 +242,9 @@
                     </field>
                 </appearance>
             </form>
+
             <!-- Форма просмотра-->
             <form>
-                <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
                     <show id="lecm-document-aspects:reg-project-data-number"/>
                     <show id="lecm-document-aspects:reg-project-data-date"/>
@@ -258,9 +258,8 @@
                     <show id="lecm-contract:signedCounterparty"/>
                     <show id="lecm-contract:signatoryCounterparty"/>
                     <show id="lecm-contract:regNumContractor"/>
-                    <show id="lecm-contract:startDate"/>
-                    <show id="lecm-contract:endDate"/>
                     <show id="lecm-contract:unlimited"/>
+                    <show id="lecm-contract:startDate"/>
                     <show id="lecm-contract:summaryContent"/>
                     <show id="lecm-document:regnum"/>
                     <show id="lecm-document:doc-date"/>
@@ -268,9 +267,6 @@
                     <show id="lecm-contract:locationRegistration"/>
                     <show id="lecm-contract:locationContract"/>
                     <show id="lecm-contract-aspect:reasonDelete-assoc"/>
-                    <show id="lecm-contract-table-structure:stages-assoc"/>
-                    <show id="lecm-approval-route:approvalFolder" force="true"/>
-                    <show id="lecm-signing-route:signingFolder" force="true" for-mode="view"/>
                     <show id="lecm-signing-v2-aspects:signed-on-paper"/>
                     <show id="lecm-signing-v2-aspects:signerEmployeeAssoc" force="true"/>
                     <show id="lecm-signing-v2-aspects:isSigned" force="true" for-mode="view"/>
@@ -280,13 +276,10 @@
                 </field-visibility>
                 <appearance>
                     <set id="common" appearance="" label-id="label.contracts.main" />
-                    <set id="contract-stages" appearance="" label-id="label.contracts.stage" /><!-- tab2 -->
-                    <set id="approvalAndSigning" appearance="" label="Согласование и подписание"/>
                     <set id="contract-info" appearance="" parent="common" />
                     <set id="price" parent="contract-info" appearance="" template="/ru/it/lecm/base-share/components/controls/price.ftl" />
                     <set id="date-conclusion" parent="contract-info" appearance="" />
                     <set id="counterparty-info" parent="common" appearance=""/>
-                    <set id="dates" appearance="" parent="common" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
                     <set id="other" appearance="" parent="common" />
 
                     <field id="lecm-document-aspects:reg-project-data-number" set="contract-info"/>
@@ -420,9 +413,13 @@
                     <field id="lecm-contract:signedCounterparty" set="counterparty-info"/>
                     <field id="lecm-contract:signatoryCounterparty" set="counterparty-info"/>
                     <field id="lecm-contract:regNumContractor" set="counterparty-info"/>
-                    <field id="lecm-contract:startDate" set="dates" label-id="contract.daterange"/>
-                    <field id="lecm-contract:endDate" set="dates" label=""/>
-                    <field id="lecm-contract:unlimited" set="dates"/>
+                    <field id="lecm-contract:startDate" label-id="contract.daterange" set="other">
+                        <control template="/ru/it/lecm/base-share/components/controls/substitude-text-control.ftl">
+                            <control-param name="value">#{doc.attr('lecm-contract:startDate') != null ? #formatDate('dd.MM.yyyy', doc.attr('lecm-contract:startDate')) : '(Нет)'}-#{doc.attr('lecm-contract:endDate') != null ? #formatDate('dd.MM.yyyy', doc.attr('lecm-contract:endDate')): '(Нет)'}</control-param>
+                            <control-param name="isMultiLineMode">false</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-contract:unlimited" set="other"/>
                     <field id="lecm-contract:summaryContent" set="other">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
@@ -432,83 +429,6 @@
                     <field id="lecm-contract:locationRegistration" set="other"/>
                     <field id="lecm-contract:locationContract" set="other"/>
                     <field id="lecm-contract-aspect:reasonDelete-assoc" set="common"/>
-                    <field id="lecm-contract-table-structure:stages-assoc" set="contract-stages">
-                        <control template="/ru/it/lecm/documents/controls/document-table-jsonData-control.ftl">
-                            <control-param name="attributeForShow">lecm-contract-table-structure:name</control-param>
-                            <control-param name="datagridFormId">datagrid</control-param>
-                            <control-param name="isTableSortable">false</control-param>
-                            <control-param name="deleteMessageFunction">LogicECM.module.Contracts.getStageDeleteMessage</control-param>
-                            <control-param name="editFormTitleMsg">stage.edit.form.title</control-param>
-                            <control-param name="createFormTitleMsg">stage.create.form.title</control-param>
-                            <control-param name="viewFormTitleMsg">stage.view.form.title</control-param>
-                            <control-param name="allowMove">true</control-param>
-                            <control-param name="jsDependencies">scripts/lecm-contracts/get-stage-delete-message.js</control-param>
-                            <control-param name="useSequentialCreation">true</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-approval-route:approvalFolder" set="approvalAndSigning" label-id="label.forms.approval">                
-                        <control template="/ru/it/lecm/routes-v2/controls/routes-datagrid-control.ftl">
-                            <control-param name="noRoutesLabel">label.approval.routes.no-route</control-param>
-                            <control-param name="routeDataScript">lecm/routes-v2/approvalRoutes/getRouteData</control-param>
-                            <control-param name="createStageItemScript">lecm/routes-v2/approvalRoutes/CreateStageItemInQueue</control-param>
-                            <control-param name="createEmptyIterationScript">lecm/routes-v2/approvalRoutes/createEmptyIteration</control-param>
-                            <control-param name="createIterationFromPrevious">lecm/routes-v2/createIterationFromPreviousApproval</control-param>
-                            <control-param name="convertRouteToIterationScript">lecm/routes-v2/approvalRoutes/convertRouteToIteration</control-param>
-                            <control-param name="removeWorkFolderScript">lecm/routes-v2/approvalRoutes/removeWorkFolder</control-param>
-                            <control-param name="createListFromRouteFormId">selectRouteForm</control-param>
-                            <control-param name="createIterationFormId">createIteration</control-param>
-                            <control-param name="createStageInlineFormId">editStageParametersInlineForm</control-param>
-                            <control-param name="expandDataSource">ru/it/lecm/routes-v2/stages/stageExpanded</control-param>
-                            <control-param name="expandedDataSource">lecm/components/form?formId=viewApprovalResult</control-param>
-                            <control-param name="newListTitleMsgId">title.new.approval.list</control-param>
-                            <control-param name="repeatRouteDialogFormId">repeatPreviousApprovalRouteDialog</control-param>
-                            <control-param name="newListConfirmationMsgId">message.new.approval.list.confirmation</control-param>
-                            <control-param name="newListFromRoutTitleMsgId">title.new.approval.list.from.route</control-param>
-                            <control-param name="clearListTitleId">title.approval.list.clear</control-param>
-                            <control-param name="clearListMsgId">message.clear.approval.list</control-param>
-                            <control-param name="viewIterationResultFormTitleId">label.view.approval.details</control-param>
-                            <control-param name="showIterationsHistoryFormId">showApprovalHistoryForm</control-param>
-                            <control-param name="viewIterationResultFormId">viewApprovalResult</control-param>
-                            <control-param name="editIterationFormId">editIterationProperties</control-param>
-                            <control-param name="fieldsForFilterRoutes">lecm-eds-document:executor-assoc,lecm-document:author-assoc</control-param>
-                            <control-param name="scripts">scripts/lecm-routes-v2/validators/route-complete-create-validator.js</control-param>
-                            <control-param name="addEmployeeToStageMsgId">label.approval.routes.stage.addEmployee</control-param>
-                            <control-param name="showPrintButton">true</control-param>
-                        </control>                 
-                    </field>
-                    <field id="lecm-signing-route:signingFolder" set="approvalAndSigning" label-id="label.forms.signing">
-                        <control template="/ru/it/lecm/routes-v2/controls/routes-datagrid-control.ftl">
-                            <control-param name="noRoutesLabel">label.signing.routes.no-route</control-param>
-                            <control-param name="removeWorkFolderScript">lecm/routes-v2/signingRoutes/removeWorkFolder</control-param>
-                            <control-param name="routeDataScript">lecm/routes-v2/signingRoutes/getRouteData</control-param>
-                            <control-param name="createStageItemScript">lecm/routes-v2/signingRoutes/CreateStageItemInQueue</control-param>
-                            <control-param name="createEmptyIterationScript">lecm/routes-v2/signingRoutes/createEmptyIteration</control-param>
-                            <control-param name="createIterationFromPrevious">lecm/routes-v2/createIterationFromPreviousSigning</control-param>
-                            <control-param name="convertRouteToIterationScript">lecm/routes-v2/signingRoutes/convertRouteToIteration</control-param>
-                            <control-param name="createListFromRouteFormId">selectRouteForm</control-param>
-                            <control-param name="editIterationFormId">editIterationProperties</control-param>
-                            <control-param name="createIterationFormId">createIteration</control-param>
-                            <control-param name="createStageInlineFormId">editStageParametersInlineForm</control-param>
-                            <control-param name="expandDataSource">ru/it/lecm/routes-v2/stages/stageExpanded</control-param>
-                            <control-param name="editStageItemsFormTitleMessage">title.signing.routes.stage.item.form.edit</control-param>
-                            <control-param name="expandedDataSource">lecm/components/form?formId=viewSigningResult</control-param>
-                            <control-param name="repeatRouteDialogFormId">repeatPreviousApprovalRouteDialog</control-param>
-                            <control-param name="clearListTitleId">title.signing.list.clear</control-param>
-                            <control-param name="clearListMsgId">message.clear.signing.list</control-param>
-                            <control-param name="showIterationsHistoryFormId">showApprovalHistoryForm</control-param>
-                            <control-param name="viewIterationResultFormId">viewSigningResult</control-param>
-                            <control-param name="cssFiles">css/lecm-signing-v2/lecm-signing-v2-routes-datagrid-control.css,css/lecm-signing-v2/signing-stage-items-control-styles.css</control-param>
-                            <control-param name="determinantClass">signing-control</control-param>
-                            <control-param name="scripts">scripts/lecm-signing-v2/evaluators-v2.js,scripts/lecm-signing-v2/signing-stage-items-control.js</control-param>
-                            <control-param name="jsObjectName">LogicECM.module.Signing.Evaluators</control-param>
-                            <control-param name="stageItemsJsObjectName">LogicECM.module.Signing2.SigningStageItemsControlDatagrid</control-param>
-                            <control-param name="newListConfirmationMsgId">message.new.signing.list.confirmation</control-param>
-                            <control-param name="newListFromRoutTitleMsgId">title.new.signing.list.from.route</control-param>
-                            <control-param name="newListTitleMsgId">title.new.signing.list</control-param>
-                            <control-param name="unableCreateListActiveMessageId">message.signing.unable.to.create.list.active</control-param>
-                            <control-param name="addEmployeeToStageMsgId">label.signing.routes.stage.addEmployee</control-param>
-                        </control>
-                    </field>
                     <field id="lecm-signing-v2-aspects:signed-on-paper" set="contract-info">
                         <control>
                             <control-param name="changeFireAction">actionsVisibilityChange</control-param>
@@ -551,6 +471,29 @@
                     </field>
                 </appearance>
             </form>
+
+            <form id="stages">
+                <field-visibility>
+                    <show id="lecm-contract-table-structure:stages-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-contract-table-structure:stages-assoc">
+                        <control template="/ru/it/lecm/documents/controls/document-table-jsonData-control.ftl">
+                            <control-param name="attributeForShow">lecm-contract-table-structure:name</control-param>
+                            <control-param name="datagridFormId">datagrid</control-param>
+                            <control-param name="isTableSortable">false</control-param>
+                            <control-param name="deleteMessageFunction">LogicECM.module.Contracts.getStageDeleteMessage</control-param>
+                            <control-param name="editFormTitleMsg">stage.edit.form.title</control-param>
+                            <control-param name="createFormTitleMsg">stage.create.form.title</control-param>
+                            <control-param name="viewFormTitleMsg">stage.view.form.title</control-param>
+                            <control-param name="allowMove">true</control-param>
+                            <control-param name="jsDependencies">scripts/lecm-contracts/get-stage-delete-message.js</control-param>
+                            <control-param name="useSequentialCreation">true</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+
             <form id="document">
                 <field-visibility>
                     <show id="lecm-statemachine:status"/>
@@ -565,57 +508,7 @@
                     </field>
                 </appearance>
             </form>
-            <form id="document-dashlet">
-                <field-visibility>
-                    <show id="lecm-statemachine:status"/>
-                    <show id="lecm-document:subject-assoc"/>
-                    <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-document:creator"/>
-                    <show id="lecm-contract:totalAmount"/>
-                </field-visibility>
-                <appearance>
-                    <field id="lecm-contract:totalAmount">
-                        <control template="/ru/it/lecm/contracts/controls/currency.ftl"/>
-                    </field>
-                    <field id="lecm-statemachine:status">
-                        <control template="/ru/it/lecm/documents/controls/history/status-history.ftl"/>
-                    </field>
-                </appearance>
-            </form>
-            <form id="transfer-right">
-                <field-visibility>
-                    <show id="lecm-document:employee-ref"/>
-                    <show id="lecm-document:istransmit" />
-                    <show id="lecm-document:deprive-right" />
-                </field-visibility>
-                <appearance>
 
-                    <field id="lecm-document:employee-ref" label-id="contract.creator-ref" mandatory="true">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
-                            <control-param name="showCreateNewLink">false</control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="itemType">lecm-orgstr:employee</control-param>
-                            <control-param name="employeeAbsenceMarker">true</control-param>
-                            <control-param name="useStrictFilterByOrg">true</control-param>
-                            <control-param name="plane">true</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-document:istransmit" label-id="contract.istransmit" />
-                    <field id="lecm-document:deprive-right" label-id="contract.deprive.right" />
-                </appearance>
-            </form>
-            <form id="main-page-dashlets">
-                <field-visibility>
-                    <show id="viewMetadata"/>
-                </field-visibility>
-                <appearance>
-                    <field id="viewMetadata">
-                        <control template="/ru/it/lecm/documents/controls/document-view-metadata-control.ftl"/>
-                    </field>
-                </appearance>
-            </form>
             <form id="contract-stages">
                 <field-visibility>
                     <show id="lecm-contract-table-structure:stages-assoc"/>
@@ -633,82 +526,124 @@
                     </field>
                 </appearance>
             </form>
-            <form id="doc-right-parts">
+
+            <!-- Область навигации -->
+            <form id="navigation-pane">
                 <field-visibility>
-                    <show id="fake:document-actions"/>
-                    <show id="fake:document-metadata"/>
-                    <show id="fake:document-attachments"/>
-                    <show id="fake:document-signing"/>
-                    <show id="fake:document-errands"/>
-                    <show id="fake:document-workflows"/>
-                    <show id="fake:document-connections"/>
-                    <show id="fake:document-members"/>
-                    <show id="fake:document-tags"/>
-                    <show id="fake:document-history"/>
-                    <show id="fake:document-forms"/>
-                    <show id="fake:comments"/>
+                    <show id="attributes"/>
+                    <show id="stages"/>
+                    <show id="approvalAndSigning"/>
+                    <show id="attachments"/>
+                    <show id="errands"/>
+                    <show id="workflows"/>
+                    <show id="connections"/>
+                    <show id="members"/>
+                    <show id="tags"/>
+                    <show id="history"/>
+                    <show id="reports"/>
+                    <show id="comments"/>
                 </field-visibility>
                 <appearance>
-                    <field id="fake:document-actions">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/dashlets/document-actions</control-param>
+                    <field id="attributes">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/form</control-param>
+                            <control-param name="nodeLabel">Атрибуты</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_AttrList")</control-param>
                         </control>
                     </field>
-                    <field id="fake:document-metadata">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/document-meta</control-param>
+                    <field id="stages">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/form</control-param>
+                            <control-param name="uri_formId">stages</control-param>
+                            <control-param name="nodeLabel">Этапы договора</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_AttrList")</control-param>
                         </control>
                     </field>
-                    <field id="fake:document-attachments">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/document-attachments</control-param>
+                    <field id="approvalAndSigning">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/approval-and-signing</control-param>
+                            <control-param name="nodeLabel">Согласование и подписание</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_AttrList")</control-param>
                         </control>
                     </field>
-                    <field id="fake:document-signing">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/signing</control-param>
+                    <field id="attachments">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/attachments</control-param>
+                            <control-param name="nodeLabel">Вложения</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_ContentList")</control-param>
                         </control>
                     </field>
-                    <field id="fake:document-errands">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/document-errands</control-param>
+                    <field id="errands">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/errands</control-param>
+                            <control-param name="nodeLabel">Поручения</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_LinksView")</control-param>
                         </control>
                     </field>
-                    <field id="fake:document-workflows">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/document-workflows</control-param>
+                    <field id="workflows">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/workflows</control-param>
+                            <control-param name="nodeLabel">Бизнес-процессы</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_WFEnumBP")</control-param>
                         </control>
                     </field>
-                    <field id="fake:document-connections">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/connections</control-param>
-                            <control-param name="excludeType">lecm-errands:document</control-param>
+                    <field id="connections">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/connections-list</control-param>
+                            <control-param name="nodeLabel">Связи</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_LinksView")</control-param>
+                            <control-param name="uri_excludeType">lecm-errands:document</control-param>
                         </control>
                     </field>
-                    <field id="fake:document-members">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/document-members</control-param>
+                    <field id="members">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/members-list</control-param>
+                            <control-param name="nodeLabel">Участники документа</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_MemberList")</control-param>
                         </control>
                     </field>
-                    <field id="fake:document-tags">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/document-tags</control-param>
+                    <field id="tags">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/tags-list</control-param>
+                            <control-param name="nodeLabel">Метки</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_TagView")</control-param>
                         </control>
                     </field>
-                    <field id="fake:document-history">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/document-history</control-param>
+                    <field id="history">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/history-datagrid</control-param>
+                            <control-param name="nodeLabel">История</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_HistoryView")</control-param>
+                            <control-param name="uri_showSecondaryCheckBox">true</control-param>
+                            <control-param name="uri_hideCollapseButton">false</control-param>
+                            <control-param name="uri_dataSource">lecm/business-journal/ds/history</control-param>
                         </control>
                     </field>
-                    <field id="fake:document-forms">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                    <field id="reports">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="nodeLabel">Печатные формы</control-param>
                             <control-param name="uri">/lecm/components/document/forms</control-param>
                         </control>
                     </field>
-                    <field id="fake:comments">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/comments</control-param>
-                            <control-param name="activityType">document</control-param>
+                    <field id="comments">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/comments/list</control-param>
+                            <control-param name="nodeLabel">Комментарии</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_CommentView")</control-param>
+                            <control-param name="counterUri">/lecm/document/api/getCommentsCount</control-param>
+                            <control-param name="uri_activityType">document</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -1004,6 +939,7 @@
                     </field>
                 </appearance>
             </form>
+
             <form id="document-template-fields">
                 <field-visibility>
                     <show id="lecm-contract:typeContract-assoc" force="true"/>
@@ -1129,6 +1065,7 @@
                     </field>
                 </appearance>
             </form>
+
             <form id="searchQueryGrid">
                 <field-visibility>
                     <show id="lecm-contract:typeContract-assoc"/>
@@ -1140,6 +1077,7 @@
                     <show id="lecm-statemachine:status" force="true"/>
                 </field-visibility>
             </form>
+
             <form id="search-editor-fields">
                 <field-visibility>
                     <show id="lecm-document:regnum"/>
@@ -1244,6 +1182,7 @@
                     </field>
                 </appearance>
             </form>
+
             <form id="datagrid">
                 <field-visibility>
                     <show id="lecm-document-aspects:reg-project-data-number"/>
@@ -1266,406 +1205,7 @@
                     <field id="lecm-document:creator" label-id="contract.creator"/>
                 </appearance>
             </form>
-            <form id="datagrid_Все">
-                <field-visibility>
-                    <show id="lecm-document-aspects:reg-project-data-number"/>
-                    <show id="lecm-document:regnum"/>
-                    <show id="lecm-contract:partner-assoc"/>
-                    <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-document:subject-assoc"/>
-                    <show id="lecm-statemachine:status" force="true"/>
-                    <show id="lecm-document:creator"/>
-                    <show id="lecm-document:creator-ref"/>
-                    <show id="lecm-contract:totalAmountWithCurrency"/>
-                    <show id="lecm-contract-table-structure:stages-assoc"/>
-                </field-visibility>
-                <appearance>
-                    <field id="lecm-document-aspects:reg-project-data-number" label-id="contract.regProjectNumber"/>
-                    <field id="lecm-document:regnum" label-id="contract.regNumber"/>
-                    <field id="lecm-contract:partner-assoc" label-id="contract.parther" substituteString="{lecm-contract:partner-assoc/lecm-contractor:shortname}"/>
-                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
-                    <field id="lecm-statemachine:status" label-id="contract.status"/>
-                    <field id="lecm-document:creator" label-id="contract.creator"/>
-                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
-                </appearance>
-            </form>
-            <form id="datagrid_Черновик">
-                <field-visibility>
-                    <show id="lecm-contract:partner-assoc"/>
-                    <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-document:subject-assoc"/>
-                    <show id="lecm-document:creator"/>
-                    <show id="lecm-document:creator-ref"/>
-                    <show id="lecm-contract-table-structure:stages-assoc"/>
-                </field-visibility>
-                <appearance>
-                    <field id="lecm-contract:partner-assoc" label-id="contract.parther" substituteString="{lecm-contractor:shortname}"/>
-                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
-                    <field id="lecm-document:creator" label-id="contract.creator"/>
-                </appearance>
-            </form>
-            <form id="datagrid_Проект_зарегистрирован">
-                <field-visibility>
-                    <show id="lecm-document-aspects:reg-project-data-number"/>
-                    <show id="lecm-document-aspects:reg-project-data-date"/>
-                    <show id="lecm-contract:partner-assoc"/>
-                    <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-document:subject-assoc"/>
-                    <show id="lecm-document:creator"/>
-                    <show id="lecm-document:creator-ref"/>
-                    <show id="lecm-contract:totalAmountWithCurrency"/>
-                    <show id="lecm-contract-table-structure:stages-assoc"/>
-                </field-visibility>
-                <appearance>
-                    <field id="lecm-document-aspects:reg-project-data-number" label-id="contract.regProjectNumber"/>
-                    <field id="lecm-document-aspects:reg-project-data-date" label-id="contract.dateRegProject"/>
-                    <field id="lecm-contract:partner-assoc" label-id="contract.parther" substituteString="{lecm-contractor:shortname}"/>
-                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
-                    <field id="lecm-document:creator" label-id="contract.creator"/>
-                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
-                </appearance>
-            </form>
-            <form id="datagrid_На_согласовании">
-                <field-visibility>
-                    <show id="lecm-document-aspects:reg-project-data-number"/>
-                    <show id="lecm-document-aspects:reg-project-data-date"/>
-                    <show id="lecm-contract:partner-assoc"/>
-                    <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-document:subject-assoc"/>
-                    <show id="lecm-document:creator"/>
-                    <show id="lecm-document:creator-ref"/>
-                    <show id="lecm-contract:totalAmountWithCurrency"/>
-                    <show id="lecm-contract-table-structure:stages-assoc"/>
-                </field-visibility>
-                <appearance>
-                    <field id="lecm-document-aspects:reg-project-data-number" label-id="contract.regProjectNumber"/>
-                    <field id="lecm-document-aspects:reg-project-data-date" label-id="contract.dateRegProject"/>
-                    <field id="lecm-contract:partner-assoc" label-id="contract.parther" substituteString="{lecm-contractor:shortname}"/>
-                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
-                    <field id="lecm-document:creator" label-id="contract.creator"/>
-                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
-                </appearance>
-            </form>
-            <form id="datagrid_Согласован">
-                <field-visibility>
-                    <show id="lecm-document-aspects:reg-project-data-number"/>
-                    <show id="lecm-document-aspects:reg-project-data-date"/>
-                    <show id="lecm-contract:partner-assoc"/>
-                    <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-document:subject-assoc"/>
-                    <show id="lecm-contract:totalAmountWithCurrency"/>
-                    <show id="lecm-contract-table-structure:stages-assoc"/>
-                </field-visibility>
-                <appearance>
-                    <field id="lecm-document-aspects:reg-project-data-number" label-id="contract.regProjectNumber"/>
-                    <field id="lecm-document-aspects:reg-project-data-date" label-id="contract.dateRegProject"/>
-                    <field id="lecm-contract:partner-assoc" label-id="contract.parther" substituteString="{lecm-contractor:shortname}"/>
-                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
-                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
-                </appearance>
-            </form>
-            <form id="datagrid_На_доработке">
-                <field-visibility>
-                    <show id="lecm-document-aspects:reg-project-data-number"/>
-                    <show id="lecm-document-aspects:reg-project-data-date"/>
-                    <show id="lecm-contract:partner-assoc"/>
-                    <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-document:subject-assoc"/>
-                    <show id="lecm-document:creator"/>
-                    <show id="lecm-document:creator-ref"/>
-                    <show id="lecm-contract:totalAmountWithCurrency"/>
-                    <show id="lecm-contract-table-structure:stages-assoc"/>
-                </field-visibility>
-                <appearance>
-                    <field id="lecm-document-aspects:reg-project-data-number" label-id="contract.regProjectNumber"/>
-                    <field id="lecm-document-aspects:reg-project-data-date" label-id="contract.dateRegProject"/>
-                    <field id="lecm-contract:partner-assoc" label-id="contract.parther" substituteString="{lecm-contractor:shortname}"/>
-                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
-                    <field id="lecm-document:creator" label-id="contract.creator"/>
-                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
-                </appearance>
-            </form>
-            <form id="datagrid_На_подписании">
-                <field-visibility>
-                    <show id="lecm-document-aspects:reg-project-data-number"/>
-                    <show id="lecm-document-aspects:reg-project-data-date"/>
-                    <show id="lecm-contract:partner-assoc"/>
-                    <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-document:subject-assoc"/>
-                    <show id="lecm-document:creator"/>
-                    <show id="lecm-document:creator-ref"/>
-                    <show id="lecm-contract:totalAmountWithCurrency"/>
-                    <show id="lecm-contract-table-structure:stages-assoc"/>
-                </field-visibility>
-                <appearance>
-                    <field id="lecm-document-aspects:reg-project-data-number" label-id="contract.regProjectNumber"/>
-                    <field id="lecm-document-aspects:reg-project-data-date" label-id="contract.dateRegProject"/>
-                    <field id="lecm-contract:partner-assoc" label-id="contract.parther" substituteString="{lecm-contractor:shortname}"/>
-                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
-                    <field id="lecm-document:creator" label-id="contract.creator"/>
-                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
-                </appearance>
-            </form>
-            <form id="datagrid_На_подписании_у_контрагента">
-                <field-visibility>
-                    <show id="lecm-document-aspects:reg-project-data-number"/>
-                    <show id="lecm-contract:dateConclusionContracts"/>
-                    <show id="lecm-contract:partner-assoc"/>
-                    <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-document:subject-assoc"/>
-                    <show id="lecm-contract:signatoryCounterparty"/>
-                    <show id="lecm-document:creator"/>
-                    <show id="lecm-document:creator-ref"/>
-                    <show id="lecm-contract:totalAmountWithCurrency"/>
-                    <show id="lecm-contract-table-structure:stages-assoc"/>
-                </field-visibility>
-                <appearance>
-                    <field id="lecm-document-aspects:reg-project-data-number" label-id="contract.regProjectNumber"/>
-                    <field id="lecm-contract:partner-assoc" label-id="contract.parther" substituteString="{lecm-contractor:shortname}"/>
-                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
-                    <field id="lecm-document:creator" label-id="contract.creator"/>
-                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
-                </appearance>
-            </form>
-            <form id="datagrid_Зарегистрирован">
-                <field-visibility>
-                    <show id="lecm-document:regnum"/>
-                    <show id="lecm-contract:dateConclusionContracts"/>
-                    <show id="lecm-contract:partner-assoc"/>
-                    <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-document:subject-assoc"/>
-                    <show id="lecm-contract:signatoryCounterparty"/>
-                    <show id="lecm-document:creator"/>
-                    <show id="lecm-document:creator-ref"/>
-                    <show id="lecm-contract-table-structure:stages-assoc"/>
-                    <show id="lecm-contract:totalAmountWithCurrency"/>
-                </field-visibility>
-                <appearance>
-                    <field id="lecm-document:regnum" label-id="contract.regNumber"/>
-                    <field id="lecm-contract:dateConclusionContracts" label-id="contract.conclusionDate"/>
-                    <field id="lecm-contract:partner-assoc" label-id="contract.parther" substituteString="{lecm-contractor:shortname}"/>
-                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
-                    <field id="lecm-document:creator" label-id="contract.creator"/>
-                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
-                </appearance>
-            </form>
-            <form id="datagrid_Действует">
-                <field-visibility>
-                    <show id="lecm-document:regnum"/>
-                    <show id="lecm-contract:dateConclusionContracts"/>
-                    <show id="lecm-contract:partner-assoc"/>
-                    <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-document:subject-assoc"/>
-                    <show id="lecm-contract:startDate"/>
-                    <show id="lecm-contract:endDate"/>
-                    <show id="lecm-document:creator"/>
-                    <show id="lecm-document:creator-ref"/>
-                    <show id="lecm-contract:totalAmountWithCurrency"/>
-                    <show id="lecm-contract-table-structure:stages-assoc"/>
-                </field-visibility>
-                <appearance>
-                    <field id="lecm-document:regnum" label-id="contract.regNumber"/>
-                    <field id="lecm-contract:dateConclusionContracts" label-id="contract.conclusionDate"/>
-                    <field id="lecm-contract:partner-assoc" label-id="contract.parther" substituteString="{lecm-contractor:shortname}"/>
-                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
-                    <field id="lecm-document:creator" label-id="contract.creator"/>
-                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
-                </appearance>
-            </form>
-            <form id="datagrid_Исполнен">
-                <field-visibility>
-                    <show id="lecm-document:regnum"/>
-                    <show id="lecm-contract:dateConclusionContracts"/>
-                    <show id="lecm-contract:partner-assoc"/>
-                    <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-document:subject-assoc"/>
-                    <show id="lecm-contract:startDate"/>
-                    <show id="lecm-document:creator"/>
-                    <show id="lecm-document:creator-ref"/>
-                    <show id="lecm-contract:totalAmountWithCurrency"/>
-                    <show id="lecm-contract-table-structure:stages-assoc"/>
-                </field-visibility>
-                <appearance>
-                    <field id="lecm-document:regnum" label-id="contract.regNumber"/>
-                    <field id="lecm-contract:dateConclusionContracts" label-id="contract.conclusionDate"/>
-                    <field id="lecm-contract:partner-assoc" label-id="contract.parther" substituteString="{lecm-contractor:shortname}"/>
-                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
-                    <field id="lecm-document:creator" label-id="contract.creator"/>
-                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
-                </appearance>
-            </form>
-            <form id="datagrid_Приостановлен">
-                <field-visibility>
-                    <show id="lecm-document:regnum"/>
-                    <show id="lecm-contract:dateConclusionContracts"/>
-                    <show id="lecm-contract:partner-assoc"/>
-                    <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-document:subject-assoc"/>
-                    <show id="lecm-document:creator"/>
-                    <show id="lecm-document:creator-ref"/>
-                    <show id="lecm-contract:totalAmountWithCurrency"/>
-                    <show id="lecm-contract-table-structure:stages-assoc"/>
-                </field-visibility>
-                <appearance>
-                    <field id="lecm-document:regnum" label-id="contract.regNumber"/>
-                    <field id="lecm-contract:dateConclusionContracts" label-id="contract.conclusionDate"/>
-                    <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
-                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
-                    <field id="lecm-document:creator" label-id="contract.creator"/>
-                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
-                </appearance>
-            </form>
-            <form id="datagrid_Расторгнут">
-                <field-visibility>
-                    <show id="lecm-document:regnum"/>
-                    <show id="lecm-contract:dateConclusionContracts"/>
-                    <show id="lecm-contract:partner-assoc"/>
-                    <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-document:subject-assoc"/>
-                    <show id="lecm-contract:startDate"/>
-                    <show id="lecm-document:creator"/>
-                    <show id="lecm-document:creator-ref"/>
-                    <show id="lecm-contract:totalAmountWithCurrency"/>
-                    <show id="lecm-contract-table-structure:stages-assoc"/>
-                </field-visibility>
-                <appearance>
-                    <field id="lecm-document:regnum" label-id="contract.regNumber"/>
-                    <field id="lecm-contract:dateConclusionContracts" label-id="contract.conclusionDate"/>
-                    <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
-                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
-                    <field id="lecm-document:creator" label-id="contract.creator"/>
-                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
-                </appearance>
-            </form>
-            <form id="datagrid_Проекты">
-                <field-visibility>
-                    <show id="lecm-document-aspects:reg-project-data-number"/>
-                    <show id="lecm-document-aspects:reg-project-data-date"/>
-                    <show id="lecm-contract:partner-assoc"/>
-                    <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-document:subject-assoc"/>
-                    <show id="lecm-document:creator"/>
-                    <show id="lecm-document:creator-ref"/>
-                    <show id="lecm-statemachine:status" force="true"/>
-                    <show id="lecm-contract:totalAmountWithCurrency"/>
-                    <show id="lecm-contract-table-structure:stages-assoc"/>
-                </field-visibility>
-                <appearance>
-                    <field id="lecm-document-aspects:reg-project-data-number" label-id="contract.regProjectNumber"/>
-                    <field id="lecm-document-aspects:reg-project-data-date" label-id="contract.dateRegProject"/>
-                    <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
-                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
-                    <field id="lecm-document:creator" label-id="contract.creator"/>
-                    <field id="lecm-statemachine:status" label-id="contract.status"/>
-                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
-                </appearance>
-            </form>
-            <form id="datagrid_Подписанные">
-                <field-visibility>
-                    <show id="lecm-document-aspects:reg-project-data-number"/>
-                    <show id="lecm-contract:dateConclusionContracts"/>
-                    <show id="lecm-contract:partner-assoc"/>
-                    <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-document:subject-assoc"/>
-                    <show id="lecm-contract:signatoryCounterparty"/>
-                    <show id="lecm-document:creator"/>
-                    <show id="lecm-document:creator-ref"/>
-                    <show id="lecm-statemachine:status" force="true"/>
-                    <show id="lecm-contract:totalAmountWithCurrency"/>
-                    <show id="lecm-contract-table-structure:stages-assoc"/>
-                </field-visibility>
-                <appearance>
-                    <field id="lecm-document-aspects:reg-project-data-number" label-id="contract.regProjectNumber"/>
-                    <field id="lecm-contract:dateConclusionContracts" label-id="contract.conclusionDate"/>
-                    <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
-                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
-                    <field id="lecm-document:creator" label-id="contract.creator"/>
-                    <field id="lecm-statemachine:status" label-id="contract.status"/>
-                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
-                </appearance>
-            </form>
-            <form id="datagrid_Завершенные">
-                <field-visibility>
-                    <show id="lecm-document-aspects:reg-project-data-number"/>
-                    <show id="lecm-contract:dateConclusionContracts"/>
-                    <show id="lecm-contract:partner-assoc"/>
-                    <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-document:subject-assoc"/>
-                    <show id="lecm-contract:startDate"/>
-                    <show id="lecm-document:creator"/>
-                    <show id="lecm-document:creator-ref"/>
-                    <show id="lecm-statemachine:status" force="true"/>
-                    <show id="lecm-contract:totalAmountWithCurrency"/>
-                    <show id="lecm-contract-table-structure:stages-assoc"/>
-                </field-visibility>
-                <appearance>
-                    <field id="lecm-document-aspects:reg-project-data-number" label-id="contract.regProjectNumber"/>
-                    <field id="lecm-contract:dateConclusionContracts" label-id="contract.conclusionDate"/>
-                    <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
-                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
-                    <field id="lecm-document:creator" label-id="contract.creator"/>
-                    <field id="lecm-statemachine:status" label-id="contract.status"/>
-                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
-                </appearance>
-            </form>
-            <form id="datagrid_Корзина">
-                <field-visibility>
-                    <show id="lecm-document-aspects:reg-project-data-number"/>
-                    <show id="lecm-contract:partner-assoc"/>
-                    <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-document:subject-assoc"/>
-                    <show id="lecm-document:creator"/>
-                    <show id="lecm-document:creator-ref"/>
-                    <show id="lecm-contract:totalAmountWithCurrency"/>
-                    <show id="lecm-contract-table-structure:stages-assoc"/>
-                </field-visibility>
-                <appearance>
-                    <field id="lecm-document-aspects:reg-project-data-number" label-id="contract.regProjectNumber"/>
-                    <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
-                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
-                    <field id="lecm-document:creator" label-id="contract.creator"/>
-                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
-                </appearance>
-            </form>
-            <form id="datagrid_Избранное">
-                <field-visibility>
-                    <show id="cm:name"/>
-                    <show id="cm:image"/>
-                    <show id="lecm-document:present-string"/>
-                    <show id="lecm-document:ext-present-string"/>
-                    <show id="lecm-document:list-present-string"/>
-                </field-visibility>
-            </form>
-            <form id="document-journal">
-                <field-visibility>
-                    <show id="cm:name"/>
-                    <show id="cm:image"/>
-                    <show id="lecm-document:present-string"/>
-                    <show id="lecm-document:list-present-string"/>
-                </field-visibility>
-                <appearance>
-                    <field id="cm:image" label=" "/>
-                    <field id="cm:name" label=" "/>
-                    <field id="lecm-document:present-string" label=" "/>
-                </appearance>
-            </form>
+
             <form id="search">
                 <field-visibility>
                     <show id="lecm-document:regnum"/>
@@ -1802,6 +1342,7 @@
                     </field>
                 </appearance>
             </form>
+
             <form id="statemachine-editable-fields">
                 <field-visibility>
                     <show id="lecm-document-aspects:reg-project-data-number"/>

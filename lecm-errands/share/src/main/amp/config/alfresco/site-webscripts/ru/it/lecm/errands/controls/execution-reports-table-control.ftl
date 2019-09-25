@@ -90,10 +90,10 @@
 //]]></script>
 
 <div class="form-field with-grid execution-reports" id="${controlId}">
-    <div class="execution-reports-additional-block">
+    <div class="control checkbox-control  execution-reports-additional-block">
         <div class="show-previous-reports-block">
-            <input type="checkbox" id="${controlId}-show-previous-reports">
-            <label id="${controlId}-change-filter-label" for="${controlId}-show-previous-reports">${msg("label.errands.execution-reports.show-previous-reports")}</label>
+            <input type="checkbox" id="${controlId}-show-previous-reports" class="lecm-checkbox">
+            <label id="${controlId}-show-previous-reports" for="${controlId}-show-previous-reports" class="checkbox">${msg("label.errands.execution-reports.show-previous-reports")}</label>
         </div>
     </div>
     <div id="${containerId}-grid-block" class="grid-block hidden1">

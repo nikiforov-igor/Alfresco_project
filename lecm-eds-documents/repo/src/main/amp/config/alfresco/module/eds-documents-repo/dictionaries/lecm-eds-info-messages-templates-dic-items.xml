@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Шаблоны информационных сообщений" type="lecm-dic:dictionary">
+        <items updateMode="CreateOrUpdate">
+            <item name="cm:Статус документа" type="lecm-doc-info-message-dic:template">
+                <property name="cm:title">Статус документа</property>
+                <property name="lecm-doc-info-message-dic:code">VIEW_STATUS</property>
+                <property name="lecm-doc-info-message-dic:expression"/>
+                <property name="lecm-doc-info-message-dic:doc-type"><![CDATA[[lecm-outgoing:document,lecm-nd:document,lecm-contract:document,lecm-protocol:document,lecm-ord:document,lecm-errands:document,lecm-additional-document:additionalDocument,lecm-internal:document,lecm-resolutions:document,lecm-incoming:document,lecm-meetings:document]]]></property>
+                <property name="lecm-doc-info-message-dic:is-warning-message">false</property>
+                <property name="lecm-doc-info-message-dic:templateString">
+                    <![CDATA[<div style="font-weight:bold;float:left;">Статус:&nbsp;</div>#{doc.attr('lecm-statemachine:status')}]]>
+                </property>
+            </item>
+            <item name="cm:Истекает срок исполнения документа" type="lecm-doc-info-message-dic:template">
+                <property name="cm:title">Истекает срок исполнения документа</property>
+                <property name="lecm-doc-info-message-dic:code">EXECUTION_DATE_EXPIRING</property>
+                <property name="lecm-doc-info-message-dic:expression"><![CDATA[('Зарегистрирован'.equals(doc.attr('lecm-statemachine:status')) OR 'На исполнении'.equals(doc.attr('lecm-statemachine:status'))) AND (@baseWebScript.compareDates(doc.attr("lecm-eds-document:execution-date"), new java.util.Date(), 5) == 0 OR @baseWebScript.compareDates(doc.attr("lecm-eds-document:execution-date"), @WorkCalendarService.getNextWorkingDateByDays(new java.util.Date(), 1), 5) == 0)]]></property>
+                <property name="lecm-doc-info-message-dic:doc-type"><![CDATA[[lecm-protocol:document,lecm-ord:document,lecm-incoming:document]]]></property>
+                <property name="lecm-doc-info-message-dic:is-warning-message">false</property>
+                <property name="lecm-doc-info-message-dic:templateString"><![CDATA[Истекает срок исполнения]]></property>
+            </item>
+            <item name="cm:Истек срок исполнения документа" type="lecm-doc-info-message-dic:template">
+                <property name="cm:title">Истек срок исполнения документа</property>
+                <property name="lecm-doc-info-message-dic:code">EXECUTION_DATE_EXPIRED</property>
+                <property name="lecm-doc-info-message-dic:expression"><![CDATA[('Зарегистрирован'.equals(doc.attr('lecm-statemachine:status')) OR 'На исполнении'.equals(doc.attr('lecm-statemachine:status'))) AND @baseWebScript.compareDates(doc.attr("lecm-eds-document:execution-date"), new java.util.Date(), 5) == -1]]></property>
+                <property name="lecm-doc-info-message-dic:doc-type"><![CDATA[[lecm-protocol:document,lecm-ord:document,lecm-incoming:document]]]></property>
+                <property name="lecm-doc-info-message-dic:is-warning-message">true</property>
+                <property name="lecm-doc-info-message-dic:templateString"><![CDATA[Срок исполнения истек!]]></property>
+            </item>
+        </items>
+    </item>
+</items>

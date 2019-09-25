@@ -117,6 +117,7 @@ LogicECM.module = LogicECM.module || {};
 			button.setAttribute('id', this.id + '-' + transition.id);
 			button.setAttribute('type', 'radio');
 			button.setAttribute('name', this.id + '-radio-group');
+            button.setAttribute('class', 'lecm-radio');
 
 			if (transition.id == 'REG_DATE') {
 				button.setAttribute('checked', true);
@@ -137,8 +138,10 @@ LogicECM.module = LogicECM.module || {};
 			container = Dom.get(this.id);
 			container.appendChild(button);
 
-			var label = document.createTextNode(' ' + transition.label);
-			container.appendChild(label);
+            label = document.createElement('label');
+            label.setAttribute('for', this.id + '-' + transition.id);
+            label.innerHTML = ' ' + transition.label;
+            container.appendChild(label);
 
 			spaceBr = document.createElement('br');
 			container.appendChild(spaceBr);
@@ -184,22 +187,28 @@ LogicECM.module = LogicECM.module || {};
 			YAHOO.Bubbling.fire('mandatoryControlValueUpdated', this);
 		},
 
-		setCommentVisibility: function(show) {
-			var currentElement = Dom.get(this.id);
-			var setDiv=currentElement.parentNode.parentNode;
-			var elements = setDiv.children;
-			for (var i=0; i<elements.length; ++i) {
-				if (this.hasClass(elements[i], 'textarea')) {
-					if (show) {
-						Dom.removeClass(elements[i], 'hidden');
-					}
-					else {
-						Dom.addClass(elements[i], 'hidden');
-					}
-					break;
-				}
-			}
-		},
+        setCommentVisibility: function (show) {
+            var setDiv = Dom.get(this.id);
+            while (!!setDiv.parentNode) {
+                setDiv = setDiv.parentNode;
+                if (Dom.hasClass(setDiv, 'set')) {
+                    break;
+                }
+            }
+
+            var elements = setDiv.children;
+            for (var i = 0; i < elements.length; ++i) {
+                if (this.hasClass(elements[i], 'textarea')) {
+                    if (show) {
+                        Dom.removeClass(elements[i], 'hidden');
+                    }
+                    else {
+                        Dom.addClass(elements[i], 'hidden');
+                    }
+                    break;
+                }
+            }
+        },
 		
 		hasClass: function hasClass(element, cls) {
 		    return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;

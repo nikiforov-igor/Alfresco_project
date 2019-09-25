@@ -5,40 +5,35 @@
 .errands-wf-duedate-set .errands-wf-duedate-set-radio {
     float: left;
 }
-.errands-wf-duedate-set .errands-wf-duedate-set-radio .control .value-div {
-    width: 20px;
+.errands-wf-duedate-set .errands-wf-duedate-set-radio .container  {
+    min-width: 32px;
 }
-.errands-wf-duedate-set .errands-wf-duedate-set-radio .control label.checkbox {
-    display: none;
-}
-.errands-wf-duedate-set .errands-wf-duedate-set-radio .control input {
-    margin-top: 8px;
-    margin-bottom: 10px;
-    padding: 0;
+.errands-wf-duedate-set .errands-wf-duedate-set-radio .label-div {
+    display: block;
 }
 .errands-wf-duedate-set .errands-wf-duedate-set-radio .control .buttons-div {
     padding: 0;
 }
-.errands-wf-duedate-set .errands-wf-duedate-set-limitless .control .container {
-    margin-top: 2px;
+.errands-wf-duedate-set .errands-wf-duedate-set-radio .control .value-div {
+    width: 24px;
+    padding: 0;
+    margin-right: 8px;
 }
-.errands-wf-duedate-set .errands-wf-duedate-set-radio .control input:last-of-type {
-     margin-top: 8px;
- }
-.errands-wf-duedate-set .errands-wf-duedate-set-radio .label-div{
-    display:block;
+.errands-wf-duedate-set .errands-wf-duedate-set-radio .control label.checkbox {
+    width: 32px;
+    height: 36px;
+    margin: 0 0 4px;
+    display: inline-block;
+    box-sizing: border-box;
 }
-.errands-wf-duedate-set .errands-wf-duedate-set-radio .container  {
-    min-width: 10px;
-    float:left;
+.errands-wf-duedate-set .errands-wf-duedate-set-radio .control label.checkbox:before {
+    top: 6px;
 }
-.errands-wf-duedate-set .errands-wf-duedate-set-date{
-    float: left;
-    width: calc(100% - 220px);
-}
-.errands-wf-duedate-set .errands-wf-duedate-set-date .control{
+.errands-wf-duedate-set .errands-wf-duedate-set-radio .control label.checkbox:last-of-type {
     margin-bottom: 0;
 }
-.errands-wf-duedate-set .errands-wf-duedate-set-limitless {
-    float: left ;
+.errands-wf-duedate-set .errands-wf-duedate-set-date,
+.errands-wf-duedate-set .errands-wf-duedate-set-limitless{
+    float: left;
+    width: calc(100% - 290px);
 }

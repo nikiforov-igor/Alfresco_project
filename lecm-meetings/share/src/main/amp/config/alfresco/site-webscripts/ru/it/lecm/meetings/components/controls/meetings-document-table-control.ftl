@@ -101,6 +101,7 @@
 			{
 				currentValue: "${field.value!""}",
                 usePagination: ${usePagination?string},
+                paginationTemplate: "${field.control.params.paginationTemplate!'lecm.pagination.template.short'}",
 				messages: ${messages},
 				bubblingLabel: "${bubblingId}",
                 <#if toolbar == "true">
@@ -150,6 +151,7 @@
 		],
 		[
             'css/components/document-table-control.css',
+            'css/lecm-base/components/controls/datagrid-control.css',
 			'css/lecm-meetings/meeting-datagrid.css'
         ], drawForm);
     }

@@ -710,6 +710,15 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         return null;
     }
 
+    public boolean isHasChildErrandsOrResolutions(String documentRef) {
+        ParameterCheck.mandatory("documentRef", documentRef);
+        NodeRef document = new NodeRef(documentRef);
+        if (nodeService.exists(document)) {
+            return !errandsService.getChildErrands(document).isEmpty() || !errandsService.getChildResolutions(document).isEmpty();
+        }
+        return false;
+    }
+
     public ScriptNode getDashletSettings() {
         NodeRef settings = errandsService.getDashletSettingsNode();
         if(settings == null){

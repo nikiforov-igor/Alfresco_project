@@ -1,5 +1,9 @@
 <#assign params = field.control.params>
 <#assign disabled = form.mode == "view" || (field.disabled && !(params.forceEditable?? && params.forceEditable == "true"))>
+<#assign hideLegend = false/>
+<#if params.hideLegend??>
+    <#assign hideLegend = params.hideLegend == "true"/>
+</#if>
 
 <script type="text/javascript">//<![CDATA[
 (function () {
@@ -83,8 +87,10 @@
 <div class="control multi-form">
     <input type="hidden" name="${field.name}" id="${fieldHtmlId}" value=""/>
     <input type="hidden" name="${field.name}-count" id="${fieldHtmlId}-count" value=""/>
+    <#if !hideLegend>
     <fieldset class="fieldset">
         <legend>${field.label?html}</legend>
+        </#if>
         <ul id="${fieldHtmlId}-multi-form-documents-list" class="multi-form-documents-list"></ul>
 
         <#if !disabled>
@@ -94,5 +100,7 @@
                 </span>
             </span>
         </#if>
+        <#if !hideLegend>
     </fieldset>
+    </#if>
 </div>

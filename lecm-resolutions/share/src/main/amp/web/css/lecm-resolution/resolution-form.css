@@ -16,11 +16,11 @@
 }
 
 .resolution-form .errands-limitation-date-set .errands-limitation-date-set-type {
-    width: calc(100% - 240px);
+    width: calc(100% - 252px);
 }
 
 .resolution-form .errands-limitation-date-set .errands-limitation-date-set-date {
-    width: calc(100% - 195px);
+    width: calc(100% - 198px);
 }
 
 .resolution-form fieldset .yui-g .yui-u .control .label-div,
@@ -29,8 +29,8 @@
 }
 
 .resolution-form fieldset > span.yui-button {
-    float: right;
-    margin-right: calc(100% - 170px);
+    float: left;
+    margin-left: 15px;
 }
 
 .resolution-form fieldset .yui-g .yui-u {
@@ -41,11 +41,11 @@
 }
 
 .resolution-form fieldset .errands-limitation-date-set .errands-limitation-date-set-type {
-    width: calc(100% - 225px);
+    width: calc(100% - 236px);
 }
 
 .resolution-form fieldset .errands-limitation-date-set .errands-limitation-date-set-date {
-    width: calc(100% - 180px);
+    width: calc(100% - 182px);
 }
 
 .resolution-form .control.resolution-base-doc-control {

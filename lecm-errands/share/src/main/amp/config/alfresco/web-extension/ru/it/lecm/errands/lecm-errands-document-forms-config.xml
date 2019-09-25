@@ -4,14 +4,7 @@
         <forms>
             <!-- Форма просмотра-->
             <form>
-                <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl"/>
                 <field-visibility>
-                    <!-- Статус -->
-                    <show id="lecm-statemachine:status" force="true"/>
-                    <!-- Важное -->
-                    <show id="lecm-errands:is-important"/>
-                    <!-- ПРОСРОЧЕНО -->
-                    <show id="lecm-errands:is-expired"/>
                     <!-- Документ-основание -->
                     <show id="lecm-errands:base-assoc"/>
                     <!-- Основание -->
@@ -49,49 +42,13 @@
                     <!-- Тематика -->
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-base-dummy-aspects:script2" force="true"/>
-
-
-                    <!-- Отчет об исполнении -->
-                    <!-- Статус отчета -->
-                    <show id="lecm-errands:execution-report-status" force="true"/>
-                    <!-- Причина отмены -->
-                    <show id="lecm-errands:execution-report-decline-reason" force="true"/>
-                    <!-- Текст отчета -->
-                    <show id="lecm-errands:execution-report"/>
-                    <!-- Связи -->
-                    <show id="lecm-errands:execution-connected-document-assoc"/>
-                    <!-- Вложения -->
-                    <show id="lecm-errands:execution-report-attachment-assoc"/>
-                    <!-- Предидущие отчеты -->
-                    <show id="lecm-errands-ts:execution-reports-assoc" force="true"/>
-                    <!-- Разделительная линия -->
-                    <show id="lecm-base-dummy-aspects:script4" force="true"/>
-                    <show id="lecm-base-dummy-aspects:script5" force="true"/>
-                    <!-- Отчеты соисполнителей -->
-                    <show id="lecm-errands-ts:coexecutor-reports-assoc"/>
-                    <show id="lecm-base-dummy-aspects:script6" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="common" label-id="label.errands.forms.tab.common"/>
-                    <set id="reports" label-id="label.errands.forms.tab.reports"/>
-                    <set id="execution" label-id="label.errands.forms.tab.execution"/>
-                    <set id="statuses" parent="common"/>
                     <set id="commonField1" parent="common"/>
                     <set id="periodicallySet" parent="common" template="/ru/it/lecm/base-share/components/hidden-set.ftl"/>
                     <set id="commonField2" parent="common"/>
-                    <set id="execution-report" parent="reports" appearance="title" template="/ru/it/lecm/errands/controls/errands-execution-report-set.ftl" label-id="title.errands.execution-reports"/>
-                    <set id="lineReports" parent="reports"/>
-                    <set id="coexecutors-reports" parent="reports" appearance="title" label-id="title.errands.coexecutors-reports"/>
 
-                    <field id="lecm-statemachine:status" set="statuses">
-                        <control template="/ru/it/lecm/base-share/components/controls/status.ftl" />
-                    </field>
-                    <field id="lecm-errands:is-important" set="statuses">
-                        <control template="/ru/it/lecm/base-share/components/controls/important.ftl" />
-                    </field>
-                    <field id="lecm-errands:is-expired" set="statuses">
-                        <control template="/ru/it/lecm/errands/controls/expired.ftl"/>
-                    </field>
                     <field id="lecm-errands:base-assoc" set="commonField1">
                         <control template="/ru/it/lecm/base-share/components/controls/association-search-control.ftl">
                             <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
@@ -175,6 +132,40 @@
                             <control-param name="scriptLoadedFireAction">errandsTabsFormScriptLoaded</control-param>
                         </control>
                     </field>
+
+                    <field id="lecm-base-dummy-aspects:script6" set="execution">
+                        <control template="/ru/it/lecm/eds/controls/execution-tree-control.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+
+            <form id="exec_reports">
+                <field-visibility>
+                    <!-- Отчет об исполнении -->
+                    <!-- Статус отчета -->
+                    <show id="lecm-errands:execution-report-status" force="true"/>
+                    <!-- Причина отмены -->
+                    <show id="lecm-errands:execution-report-decline-reason" force="true"/>
+                    <!-- Текст отчета -->
+                    <show id="lecm-errands:execution-report"/>
+                    <!-- Связи -->
+                    <show id="lecm-errands:execution-connected-document-assoc"/>
+                    <!-- Вложения -->
+                    <show id="lecm-errands:execution-report-attachment-assoc"/>
+                    <!-- Предидущие отчеты -->
+                    <show id="lecm-errands-ts:execution-reports-assoc" force="true"/>
+                    <!-- Разделительная линия -->
+                    <show id="lecm-base-dummy-aspects:script" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script2" force="true"/>
+                    <!-- Отчеты соисполнителей -->
+                    <show id="lecm-errands-ts:coexecutor-reports-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <set id="reports" label-id="label.errands.forms.tab.reports"/>
+                    <set id="execution-report" parent="reports" appearance="title" template="/ru/it/lecm/errands/controls/errands-execution-report-set.ftl" label-id="title.errands.execution-reports"/>
+                    <set id="lineReports" parent="reports"/>
+                    <set id="coexecutors-reports" parent="reports" appearance="title" label-id="title.errands.coexecutors-reports"/>
+
                     <field id="lecm-errands:execution-report-status" set="execution-report"/>
                     <field id="lecm-errands:execution-report-decline-reason" set="execution-report"/>
                     <field id="lecm-errands:execution-report" set="execution-report">
@@ -201,13 +192,13 @@
                             <control-param name="expandDataSource">lecm/components/form?formId=table-structure-expand</control-param>
                         </control>
                     </field>
-                    <field id="lecm-base-dummy-aspects:script4" set="reports">
+                    <field id="lecm-base-dummy-aspects:script2" set="reports">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-reports-tab-form-script.js</control-param>
                             <control-param name="scriptLoadedFireAction">errandsReportsTabViewFormScriptLoaded</control-param>
                         </control>
                     </field>
-                    <field id="lecm-base-dummy-aspects:script5" set="lineReports">
+                    <field id="lecm-base-dummy-aspects:script" set="lineReports">
                         <control template="/ru/it/lecm/base-share/components/controls/line.ftl"/>
                     </field>
                     <field id="lecm-errands-ts:coexecutor-reports-assoc" set="coexecutors-reports">
@@ -215,18 +206,25 @@
                             <control-param name="datagridFormId">coexecutors-reports-datagrid</control-param>
                         </control>
                     </field>
-                    <field id="lecm-base-dummy-aspects:script6" set="execution">
+                </appearance>
+            </form>
+
+            <form id="execution">
+                <field-visibility>
+                    <show id="lecm-base-dummy-aspects:script" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-base-dummy-aspects:script">
                         <control template="/ru/it/lecm/eds/controls/execution-tree-control.ftl"/>
                     </field>
                 </appearance>
             </form>
+
             <!-- Форма редактирования-->
             <form id="edit">
                 <field-visibility>
                     <!-- Важное -->
                     <show id="lecm-errands:is-important"/>
-                    <!-- Статус -->
-                    <show id="lecm-statemachine:status" force="true"/>
                     <!-- Документ-основание -->
                     <show id="lecm-errands:base-assoc"/>
                     <!-- Основание -->
@@ -293,10 +291,7 @@
                     <set id="afterDateSet2" parent="common"/>
 
                     <field id="lecm-errands:is-important" set="statuses">
-                        <control template="/ru/it/lecm/base-share/components/controls/important.ftl" />
-                    </field>
-                    <field id="lecm-statemachine:status" set="statuses">
-                        <control template="/ru/it/lecm/base-share/components/controls/status.ftl" />
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl" />
                     </field>
                     <field id="lecm-errands:base-assoc" set="beforeDateSet">
                         <control template="/ru/it/lecm/base-share/components/controls/association-search-control.ftl"/>
@@ -521,30 +516,6 @@
                 </appearance>
             </form>
 
-            <!-- Форма просмотра на главной странице-->
-            <form id="main-page-dashlets">
-                <field-visibility>
-                    <show id="viewMetadata"/>
-                </field-visibility>
-                <appearance>
-                    <field id="viewMetadata">
-                        <control template="/ru/it/lecm/documents/controls/document-view-metadata-control.ftl"/>
-                    </field>
-                </appearance>
-            </form>
-
-            <form id="document-dashlet">
-                <field-visibility>
-                    <!--  Заголовок поручения -->
-                    <show id="lecm-errands:title"/>
-                    <!-- Инициатор -->
-                    <show id="lecm-errands:initiator-assoc"/>
-                    <!-- Срок исполнения -->
-                    <show id="lecm-errands:limitation-date"/>
-                    <!-- Важное -->
-                    <show id="lecm-errands:is-important"/>
-                </field-visibility>
-            </form>
             <form id="document">
                 <field-visibility>
                     <!--  Заголовок поручения -->
@@ -573,29 +544,7 @@
                     </field>
                 </appearance>
             </form>
-            <form id="transfer-right">
-                <field-visibility>
-                    <show id="lecm-document:employee-ref"/>
-                    <show id="lecm-document:istransmit" />
-                    <show id="lecm-document:deprive-right" />
-                </field-visibility>
-                <appearance>
-                    <field id="lecm-document:employee-ref" label-id="contract.creator-ref" mandatory="true">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
-                            <control-param name="showCreateNewLink">false</control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="itemType">lecm-orgstr:employee</control-param>
-                            <control-param name="employeeAbsenceMarker">true</control-param>
-	                        <control-param name="useStrictFilterByOrg">true</control-param>
-                            <control-param name="plane">true</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-document:istransmit" label-id="contract.istransmit" />
-                    <field id="lecm-document:deprive-right" label-id="contract.deprive.right" />
-                </appearance>
-            </form>
+            
             <form id="errands-dnd">
                 <field-visibility>
                     <show id="lecm-document-aspects:attachments-temp-assoc"/>
@@ -612,6 +561,7 @@
                     </field>
                 </appearance>
             </form>
+
             <form id="resolution-execution-datagrid-expand">
                 <field-visibility>
                     <show id="lecm-base-dummy-aspects:script2"/>
@@ -622,6 +572,7 @@
                     </field>
                 </appearance>
             </form>
+
             <form id="ord-table-structure-info">
                 <field-visibility>
                     <show id="ord-item-execution-tree" force="true"/>
@@ -634,22 +585,19 @@
                     </field>
                 </appearance>
             </form>
+
             <form id="doc-right-parts">
                 <field-visibility>
+                    <show id="fake:document-admin-actions"/>
                     <show id="fake:document-actions"/>
                     <show id="fake:base-doc-actions"/>
-                    <show id="fake:document-metadata"/>
-                    <show id="fake:document-attachments"/>
-                    <show id="fake:document-errands"/>
-                    <show id="fake:document-workflows"/>
-                    <show id="fake:document-connections"/>
-                    <show id="fake:document-members"/>
-                    <show id="fake:document-tags"/>
-                    <show id="fake:document-history"/>
-                    <show id="fake:document-forms"/>
-                    <show id="fake:comments"/>
                 </field-visibility>
                 <appearance>
+                    <field id="fake:document-admin-actions">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/administration</control-param>
+                        </control>
+                    </field>
                     <field id="fake:document-actions">
                         <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
                             <control-param name="uri">/lecm/components/dashlets/document-actions</control-param>
@@ -661,57 +609,127 @@
                             <control-param name="baseDocAssocName">lecm-errands:base-assoc</control-param>
                         </control>
                     </field>
-                    <field id="fake:document-metadata">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/document-meta</control-param>
+                </appearance>
+            </form>
+
+            <form id="navigation-pane">
+                <field-visibility>
+                    <show id="attributes"/>
+                    <show id="exec_reports"/>
+                    <show id="execution"/>
+                    <show id="attachments"/>
+                    <show id="errands"/>
+                    <show id="workflows"/>
+                    <show id="connections"/>
+                    <show id="members"/>
+                    <show id="tags"/>
+                    <show id="history"/>
+                    <show id="reports"/>
+                    <show id="comments"/>
+                </field-visibility>
+                <appearance>
+                    <field id="attributes">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/form</control-param>
+                            <control-param name="nodeLabel">Атрибуты</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_AttrList")</control-param>
                         </control>
                     </field>
-                    <field id="fake:document-attachments">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/document-attachments</control-param>
-                            <control-param name="baseDocAssocName">lecm-errands:base-assoc</control-param>
+                    <field id="exec_reports">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/form</control-param>
+                            <control-param name="uri_formId">exec_reports</control-param>
+                            <control-param name="nodeLabel">Отчеты</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_AttrList")</control-param>
                         </control>
                     </field>
-                    <field id="fake:document-errands">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/document-errands</control-param>
+                    <field id="execution">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/form</control-param>
+                            <control-param name="uri_formId">execution</control-param>
+                            <control-param name="nodeLabel">Исполнение</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_AttrList") AND @errandsScript.isHasChildErrandsOrResolutions(doc.getNodeRef().toString())</control-param>
                         </control>
                     </field>
-                    <field id="fake:document-workflows">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/document-workflows</control-param>
+                    <field id="attachments">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/attachments</control-param>
+                            <control-param name="uri_baseDocAssocName">lecm-errands:base-assoc</control-param>
+                            <control-param name="nodeLabel">Вложения</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_ContentList")</control-param>
                         </control>
                     </field>
-                    <field id="fake:document-connections">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/connections</control-param>
-                            <control-param name="excludeType">lecm-errands:document</control-param>
+                    <field id="errands">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/errands</control-param>
+                            <control-param name="nodeLabel">Поручения</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_LinksView")</control-param>
                         </control>
                     </field>
-                    <field id="fake:document-members">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/document-members</control-param>
+                    <field id="workflows">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/workflows</control-param>
+                            <control-param name="nodeLabel">Бизнес-процессы</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_WFEnumBP")</control-param>
                         </control>
                     </field>
-                    <field id="fake:document-tags">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/document-tags</control-param>
+                    <field id="connections">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/connections-list</control-param>
+                            <control-param name="nodeLabel">Связи</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_LinksView")</control-param>
+                            <control-param name="uri_excludeType">lecm-errands:document</control-param>
                         </control>
                     </field>
-                    <field id="fake:document-history">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/document-history</control-param>
+                    <field id="members">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/members-list</control-param>
+                            <control-param name="nodeLabel">Участники документа</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_MemberList")</control-param>
                         </control>
                     </field>
-                    <field id="fake:document-forms">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                    <field id="tags">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/tags-list</control-param>
+                            <control-param name="nodeLabel">Метки</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_TagView")</control-param>
+                        </control>
+                    </field>
+                    <field id="history">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/history-datagrid</control-param>
+                            <control-param name="nodeLabel">История</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_HistoryView")</control-param>
+                            <control-param name="uri_showSecondaryCheckBox">true</control-param>
+                            <control-param name="uri_hideCollapseButton">false</control-param>
+                            <control-param name="uri_dataSource">lecm/business-journal/ds/history</control-param>
+                        </control>
+                    </field>
+                    <field id="reports">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="nodeLabel">Печатные формы</control-param>
                             <control-param name="uri">/lecm/components/document/forms</control-param>
                         </control>
                     </field>
-                    <field id="fake:comments">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/comments</control-param>
-                            <control-param name="activityType">document</control-param>
+                    <field id="comments">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/comments/list</control-param>
+                            <control-param name="nodeLabel">Комментарии</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_CommentView")</control-param>
+                            <control-param name="counterUri">/lecm/document/api/getCommentsCount</control-param>
+                            <control-param name="uri_activityType">document</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -1042,6 +1060,7 @@
                     </field>
                 </appearance>
             </form>
+
             <form id="document-template-fields">
                 <field-visibility>
                     <!-- Тип Поручения -->
@@ -1134,6 +1153,7 @@
                     <field id="lecm-document:subject-assoc"/>
                 </appearance>
             </form>
+
             <form id="datagrid">
                 <field-visibility>
                     <show id="lecm-errands:is-important"/>
@@ -1157,6 +1177,7 @@
                     <field id="lecm-errands:number" label-id="errands.number"/>
                 </appearance>
             </form>
+
             <form id="search">
                 <field-visibility>
                     <show id="lecm-errands:number"/>
@@ -1272,6 +1293,7 @@
                     </field>
                 </appearance>
             </form>
+
             <form id="workflow-form">
                 <field-visibility>
                     <!-- Тип Поручения -->
@@ -1608,6 +1630,7 @@
                     </field>
                 </appearance>
             </form>
+
             <form id="child-errand">
                 <field-visibility>
                     <!-- Тип Поручения -->
@@ -1950,6 +1973,7 @@
                     </field>
                 </appearance>
             </form>
+
             <form id="primary-routing">
                 <create-form template="/ru/it/lecm/errands/components/primary-routing-form-template.ftl"/>
                 <edit-form template="/ru/it/lecm/errands/components/primary-routing-form-template.ftl"/>
@@ -2026,6 +2050,7 @@
                     </field>
                 </appearance>
             </form>
+
             <form id="incoming-default-primary-routing">
                 <create-form template="/ru/it/lecm/errands/components/primary-routing-form-template.ftl"/>
                 <edit-form template="/ru/it/lecm/errands/components/primary-routing-form-template.ftl"/>
@@ -2102,6 +2127,7 @@
                     </field>
                 </appearance>
             </form>
+
             <form id="from-resolution">
                 <field-visibility>
                     <!--  Типы поручений -->
@@ -2214,6 +2240,7 @@
                     </field>
                 </appearance>
             </form>
+
             <form id="from-edit-resolution">
                 <field-visibility>
                     <!--  Типы поручений -->
@@ -2325,6 +2352,7 @@
                     </field>
                 </appearance>
             </form>
+
             <form id="resolution-execution-datagrid">
                 <field-visibility>
                     <show id="lecm-errands:child-index-counter"/>
@@ -2339,6 +2367,7 @@
                     <field id="lecm-errands:limitation-date-text" label-id="label.execution.date"/>
                 </appearance>
             </form>
+
             <form id="statemachine-editable-fields">
                 <field-visibility>
                     <!--  Тип поручения -->
@@ -2381,6 +2410,7 @@
                     <show id="lecm-document:subject-assoc"/>
                 </field-visibility>
             </form>
+
             <form id="searchQueryGrid">
                 <field-visibility>
                     <show id="lecm-errands:title"/>
@@ -2391,6 +2421,7 @@
                     <show id="lecm-errands:initiator-assoc"/>
                 </field-visibility>
             </form>
+
             <form id="search-editor-fields">
                 <field-visibility>
                     <!-- Важное -->

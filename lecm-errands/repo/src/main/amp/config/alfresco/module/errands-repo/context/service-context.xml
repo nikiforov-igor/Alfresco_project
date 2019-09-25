@@ -61,7 +61,7 @@
 	                  ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
                       businessJournalLogEventsPolicy, regNumbers.regNumbersTemplatesDicBootstrap,
                       ru.it.lecm.notifications.notifications-repo.notificationsTemplatesBootstrap,
-                      errands.dictionaries.LogicEcmModelsBootstrap">
+                      errands.dictionaries.LogicEcmModelsBootstrap,documents.dictionaries.LogicEcmModelsBootstrap">
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-errands-titles-dic.xml</value>
@@ -81,6 +81,7 @@
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-errands-cancel-reasons-items.xml</value>
 
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-errands-objectTypes-items.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-errands-info-messages-templates-dic-items.xml</value>
             </list>
 		</property>
 	</bean>

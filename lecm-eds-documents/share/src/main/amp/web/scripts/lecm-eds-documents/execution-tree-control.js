@@ -40,6 +40,8 @@ LogicECM.module = LogicECM.module || {};
 
     LogicECM.module.ExecutionTreeControl = function (htmlId) {
         LogicECM.module.ExecutionTreeControl.superclass.constructor.call(this, "LogicECM.module.ExecutionTreeControl", htmlId, ["button", "container"]);
+
+        this.receivedItems = {};
         return this;
     };
 
@@ -163,9 +165,9 @@ LogicECM.module = LogicECM.module || {};
                         rowExpansionTemplate: function (oData) {
                             var nodeRef = oData.data._oData.nodeRef;
                             var linerEl = oData.liner_element;
-                            var tabId = 'tab-' + nodeRef;
+                            var tabId = me.id + '-tab-' + nodeRef;
                             linerEl.innerHTML = '<div class="yui-inner-div" id="' + tabId + '"></div>';
-                            var pagId = 'pag-' + nodeRef;
+                            var pagId = me.id + '-pag-' + nodeRef;
 
                             YAHOO.util.Event.onContentReady(tabId, function () {
                                 me.layerByLayer(YAHOO.lang.substitute(me.folerUrl, {

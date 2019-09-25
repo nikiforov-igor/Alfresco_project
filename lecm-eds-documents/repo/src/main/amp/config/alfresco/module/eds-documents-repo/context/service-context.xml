@@ -59,11 +59,12 @@
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-eds-objectType-items.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-business-journal-eventCategory-items.xml</value>
         <value>alfresco/module/${artifactId}/dictionaries/lecm-document-type.xml</value>
+        <value>alfresco/module/${artifactId}/dictionaries/lecm-eds-info-messages-templates-dic-items.xml</value>
 	</util:list>
 	<bean id="eds.dictionary.bootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
 					  ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
-					  businessJournalLogEventsPolicy, eds.models.bootstrap, eds.other.models.bootstrap"
+					  businessJournalLogEventsPolicy, eds.models.bootstrap, eds.other.models.bootstrap,documents.dictionaries.LogicEcmModelsBootstrap"
 		  p:dictionaries-ref="eds.dictionaries"/>
 
 	<bean id="routes.routesMacrosDicBootstrap_v2"
@@ -160,7 +161,7 @@
     </bean>
 
 	<bean id="eds.arm.settings.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
-		  depends-on="arm.LogicEcmBootstrap, armService, arm.filters.LogicEcmBootstrap, eds.arm.filters.LogicEcmBootstrap, documents.LogicEcmConnectionTypesBootstrap">
+		  depends-on="arm.LogicEcmBootstrap, armService, arm.filters.LogicEcmBootstrap, eds.arm.filters.LogicEcmBootstrap, documents.LogicEcmConnectionTypesBootstrap, armServiceIconsBootstrap">
 		<property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
 		<property name="dictionaries">
 			<list>

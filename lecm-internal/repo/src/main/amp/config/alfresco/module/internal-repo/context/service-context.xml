@@ -65,7 +65,7 @@
     <bean id="${groupId}.${artifactId}.internalDictionaryBootstrap"
           parent="lecmDictionaryBootstrap"
           depends-on="ru.it.lecm.notifications.notifications-repo.notificationsTemplatesBootstrap,
-                    internal.LogicEcmInternalBootstrap, regNumbers.regNumbersBootstrap, eds.dictionary.bootstrap">
+                    internal.LogicEcmInternalBootstrap, regNumbers.regNumbersBootstrap, eds.dictionary.bootstrap,documents.dictionaries.LogicEcmModelsBootstrap">
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-internal-doc-type-dic.xml</value>
@@ -74,6 +74,7 @@
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-internal-rn-items.xml</value>
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-internal-bj-objectType-items.xml</value>
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-internal-nt-items.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-internal-info-messages-templates-dic-items.xml</value>
             </list>
         </property>
     </bean>

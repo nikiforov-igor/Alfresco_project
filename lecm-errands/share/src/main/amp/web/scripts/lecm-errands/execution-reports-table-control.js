@@ -62,6 +62,7 @@ LogicECM.errands = LogicECM.errands || {};
                 var searchFilter = this.filter;
                 var datagrid = new LogicECM.module.DocumentTableDataGrid(this.options.containerId).setOptions({
                     usePagination: true,
+                    paginationTemplate: "lecm.pagination.template.short",
                     showExtendSearchBlock: false,
                     formMode: this.options.mode,
                     actions: actions,

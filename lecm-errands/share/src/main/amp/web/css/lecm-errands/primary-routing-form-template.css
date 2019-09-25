@@ -4,7 +4,7 @@
     padding: 0;
 }
 .yui-g.primary-routing-form .label-div {
-    width: 120px;
+    width: 100px;
 }
 .yui-g.primary-routing-form .yui-u.first .label-div {
     width: 100px;
@@ -18,22 +18,22 @@
     text-align: right;
 }
 .yui-g.primary-routing-form .yui-u.first {
-    width: 53%;
+    width: 49%;
 }
 .yui-g.primary-routing-form .yui-u {
-    width: 47%;
+    width: 49%;
 }
 
 .yui-skin-lecmTheme.alfresco-share .yui-g.primary-routing-form div.yui-u {
-    padding: 0;
+    padding: 0px;
 }
 
 .primary-routing-form  .errands-limitation-date-set .errands-limitation-date-set-type {
-    width: calc(100% - 210px);
+    width: calc(100% - 186px);
 }
 
 .primary-routing-form  .errands-limitation-date-set .errands-limitation-date-set-date {
-    width: calc(100% - 160px);
+    width: calc(100% - 132px);
 }
 
 .primary-routing-form .errands-limitation-date-set .errands-limitation-date-set-radio .container {

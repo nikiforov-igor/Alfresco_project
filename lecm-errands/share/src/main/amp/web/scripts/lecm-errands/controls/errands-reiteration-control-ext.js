@@ -182,7 +182,7 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
             openDialog: function openDialog_function(e) {
                 if (!this.panel) {
                     this.panel = new YAHOO.widget.SimpleDialog(this.id + '-dialog-panel', {
-                        width: "150px",
+                        width: "256px",
                         visible: false,
                         draggable: true,
                         modal: true,
@@ -205,15 +205,14 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
 
                     var html = '<div id="' + this.id + '-dialog-panel-container" class="reiteration">'
                     html += '<div id="' + this.id + '-switch-type-container" style="text-align: center"></div>';
-                    html += '<div class="delim">&nbsp;</div>';
-                    html += '<div id="' + this.typeContainerPrefix + 'week-days" class="container hidden1">';
+                    html += '<div id="' + this.typeContainerPrefix + 'week-days" class="container hidden1 week-days">';
                     html += '<div class="container-aligment">';
                     for (var i = 1; i <= 7; i++) {
                         html += '<div class="item" id="' + this.typeContainerPrefix + 'week-days' + i + '">' + this.days[i - 1] + '</div>';
                     }
                     html += '</div>';
                     html += '</div>';
-                    html += '<div id="' + this.typeContainerPrefix + 'month-days" class="container hidden1">';
+                    html += '<div id="' + this.typeContainerPrefix + 'month-days" class="container hidden1 month-days">';
                     html += '<div class="container-aligment">';
                     for (var i = 1; i <= 31; i++) {
                         html += '<div class="item" id="' + this.typeContainerPrefix + 'month-days' + i + '">' + i + '</div>';
@@ -224,13 +223,12 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                     html += '</div>';
                     html += '</div>';
                     html += '<div class="summary"><label for="' + this.id + '-summary">Сводка: </label><span id="' + this.id + '-summary"></span></div>';
-                    html += '</div>'
+                    html += '</div>';
 
                     this.panel.setBody(html);
                     this.panel.render(document.body);
                     var picker = Dom.get(this.id + '-dialog-panel');
-                    Dom.setStyle(picker, "width", "auto");
-                    Dom.setStyle(picker, "min-width", "15em");
+                    Dom.setStyle(picker, "min-width", "256px");
                     var select = this.widgets.select;
                     Dom.get(this.id + '-switch-type-container').appendChild(select);
                     Dom.setStyle(select, "display", "block");

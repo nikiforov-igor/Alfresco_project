@@ -69,6 +69,7 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
 
                 var datagrid = new LogicECM.module.Meetings.protocolPointsTableDataGrid(this.options.containerId).setOptions({
                     usePagination: true,
+                    paginationTemplate: "lecm.pagination.template.short",
                     showExtendSearchBlock: false,
                     formMode: this.options.mode,
                     actions: actions,

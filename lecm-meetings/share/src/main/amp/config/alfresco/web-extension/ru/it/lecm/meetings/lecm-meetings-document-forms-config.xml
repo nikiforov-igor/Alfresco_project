@@ -3,8 +3,6 @@
     <config evaluator="node-type" condition="lecm-meetings:document">
         <forms>
             <form>
-                <!--				<view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
-                <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />-->
                 <field-visibility>
                     <!-- Заголовок -->
                     <show id="lecm-events:title"/>
@@ -130,8 +128,6 @@
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
                             <control-param name="nameSubstituteString">{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename}</control-param>
                             <control-param name="itemType">lecm-representative:representative-type</control-param>
-                            <control-param name="verticalList">true</control-param>
-                            <control-param name="sortSelected">true</control-param>
                         </control>
                     </field>
                     <!-- Место проведения -->
@@ -181,6 +177,7 @@
 
                 </appearance>
             </form>
+
             <form id="agenda">
                 <field-visibility>
                     <!--Повестка-->
@@ -199,10 +196,8 @@
                             <control-param name="expandable">false</control-param>
                             <control-param name="usePagination">false</control-param>
                             <control-param name="showLabel">false</control-param>
-                            <!--<control-param name="expandDataSource">components/form?formId=table-structure-info</control-param>-->
                             <control-param name="isTableSortable">false</control-param>
                             <control-param name="refreshAfterCreate">true</control-param>
-                            <!--<control-param name="deleteMessageFunction"></control-param>-->
                             <control-param name="editFormTitleMsg">meeting.item.edit.form.title</control-param>
                             <control-param name="createFormTitleMsg">meeting.item.create.form.title</control-param>
                             <control-param name="viewFormTitleMsg">meeting.item.view.form.title</control-param>
@@ -293,17 +288,7 @@
                     </field>
                 </appearance>
             </form>
-            <!-- Форма просмотра на главной странице-->
-            <form id="main-page-dashlets">
-                <field-visibility>
-                    <show id="viewMetadata"/>
-                </field-visibility>
-                <appearance>
-                    <field id="viewMetadata">
-                        <control template="/ru/it/lecm/events/controls/event-view-metadata-control.ftl"/>
-                    </field>
-                </appearance>
-            </form>
+
             <!-- Форма с набором полей для правой области (Общие сведения) на карточке документа-->
             <form id="document">
                 <field-visibility>
@@ -381,8 +366,6 @@
                             <control-param name="nameSubstituteString">{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename}</control-param>
                             <control-param name="itemType">lecm-representative:representative-type</control-param>
                             <control-param name="changeItemsFireAction">meetingHoldingChangeTechnicalMembers</control-param>
-                            <control-param name="sortSelected">true</control-param>
-                            <control-param name="verticalList">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-meetings:finished">
@@ -396,6 +379,7 @@
                     </field>
                 </appearance>
             </form>
+
             <form id="holding-accept">
                 <field-visibility>
                     <show id="lecm-meetings:actual-from-date"/>
@@ -431,46 +415,75 @@
                     </field>
                 </appearance>
             </form>
-            <form id="doc-right-parts">
+
+            <form id="navigation-pane">
                 <field-visibility>
-                    <show id="fake:document-actions"/>
-                    <show id="fake:meetings-agenda"/>
-                    <show id="fake:document-attachments"/>
-                    <show id="fake:document-connections"/>
-                    <show id="fake:document-history"/>
-                    <show id="fake:comments"/>
+                    <show id="attributes"/>
+                    <show id="agenda"/>
+                    <show id="attachments"/>
+                    <show id="connections"/>
+                    <show id="history"/>
+                    <show id="comments"/>
                 </field-visibility>
                 <appearance>
-                    <field id="fake:document-actions">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/dashlets/document-actions</control-param>
+                    <field id="attributes">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/form</control-param>
+                            <control-param name="nodeLabel">Атрибуты</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_AttrList")</control-param>
                         </control>
                     </field>
-                    <field id="fake:meetings-agenda">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/meetings/meeting-agenda</control-param>
+                    <field id="agenda">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/form</control-param>
+                            <control-param name="uri_formId">agenda</control-param>
+                            <control-param name="uri_formMode">edit</control-param>
+                            <control-param name="uri_cssClasses">agenda-list-container</control-param>
+                            <control-param name="nodeLabel">Повестка</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_AttrList")</control-param>
+                            <control-param name="counterUri">/lecm/meetings/getAgendaInfo</control-param>
+                            <control-param name="counterProp">size</control-param>
                         </control>
                     </field>
-                    <field id="fake:document-attachments">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/document-attachments</control-param>
+                    <field id="attachments">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/attachments</control-param>
+                            <control-param name="uri_baseDocAssocName">lecm-errands:base-assoc</control-param>
+                            <control-param name="nodeLabel">Вложения</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_ContentList")</control-param>
                         </control>
                     </field>
-                    <field id="fake:document-connections">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/connections</control-param>
-                            <control-param name="excludeType">lecm-errands:document</control-param>
+                    <field id="connections">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/connections-list</control-param>
+                            <control-param name="nodeLabel">Связи</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_LinksView")</control-param>
+                            <control-param name="uri_excludeType">lecm-errands:document</control-param>
                         </control>
                     </field>
-                    <field id="fake:document-history">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/document-history</control-param>
+                    <field id="history">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/document/history-datagrid</control-param>
+                            <control-param name="nodeLabel">История</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_HistoryView")</control-param>
+                            <control-param name="uri_showSecondaryCheckBox">true</control-param>
+                            <control-param name="uri_hideCollapseButton">false</control-param>
+                            <control-param name="uri_dataSource">lecm/business-journal/ds/history</control-param>
                         </control>
                     </field>
-                    <field id="fake:comments">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/document/comments</control-param>
-                            <control-param name="activityType">document</control-param>
+                    <field id="comments">
+                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="uri">/lecm/components/comments/list</control-param>
+                            <control-param name="nodeLabel">Комментарии</control-param>
+                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_CommentView")</control-param>
+                            <control-param name="counterUri">/lecm/document/api/getCommentsCount</control-param>
+                            <control-param name="uri_activityType">document</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -641,8 +654,6 @@
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
                             <control-param name="nameSubstituteString">{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename}</control-param>
                             <control-param name="itemType">lecm-representative:representative-type</control-param>
-                            <control-param name="sortSelected">true</control-param>
-                            <control-param name="verticalList">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-events:not-send-invitation" set="createEventSet"/>
@@ -699,7 +710,6 @@
                             <control-param name="showActions">true</control-param>
                             <control-param name="fullDelete">true</control-param>
                             <control-param name="isTableSortable">false</control-param>
-                            <control-param name="height">100</control-param>
                             <control-param name="rootNode">{usertemp}</control-param>
                             <control-param name="showCreateButton">true</control-param>
                             <control-param name="showSearch">false</control-param>
@@ -747,6 +757,7 @@
                     </field>
                 </appearance>
             </form>
+
             <form id="document-template-fields">
                 <field-visibility>
                     <!-- Заголовок -->
@@ -861,8 +872,6 @@
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
                             <control-param name="nameSubstituteString">{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename}</control-param>
                             <control-param name="itemType">lecm-representative:representative-type</control-param>
-                            <control-param name="sortSelected">true</control-param>
-                            <control-param name="verticalList">true</control-param>
                         </control>
                     </field>
 
@@ -904,6 +913,7 @@
                     </field>
                 </appearance>
             </form>
+
             <form id="statemachine-editable-fields">
                 <field-visibility>
                     <!-- Заголовок -->
@@ -962,6 +972,7 @@
                     <field id="lecm-approval-route:approvalFolder" label="Согласование (версия 2)"/>
                 </appearance>
             </form>
+
             <form id="search-editor-fields">
                 <field-visibility>
                     <!-- Заголовок -->
@@ -1040,8 +1051,6 @@
                     <field id="lecm-events:invited-members-assoc">
                         <control>
                             <control-param name="itemType">lecm-representative:representative-type</control-param>
-                            <control-param name="sortSelected">true</control-param>
-                            <control-param name="verticalList">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-meetings:chairman-assoc">
@@ -1062,6 +1071,7 @@
                     </field>
                 </appearance>
             </form>
+
             <form id="searchQueryGrid">
                 <field-visibility>
                     <!-- Заголовок -->
@@ -1078,6 +1088,7 @@
                     <show id="lecm-events:subject-assoc"/>
                 </field-visibility>
             </form>
+
             <form id="search">
                 <field-visibility>
                     <!-- Заголовок -->

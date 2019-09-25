@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Шаблоны информационных сообщений" type="lecm-dic:dictionary">
+        <items updateMode="CreateOrUpdate">
+            <item name="cm:Внутренний. Истекает срок ответа" type="lecm-doc-info-message-dic:template">
+                <property name="cm:title">Внутренний. Истекает срок ответа</property>
+                <property name="lecm-doc-info-message-dic:doc-type">
+                    <![CDATA[[lecm-internal:document]]]></property>
+                <property name="lecm-doc-info-message-dic:code"><![CDATA[INTERNAL_EXPIRING]]></property>
+                <property name="lecm-doc-info-message-dic:templateString">
+                    <![CDATA[Истекает срок ответа]]></property>
+                <property name="lecm-doc-info-message-dic:expression">
+                    <![CDATA['Направлен'.equals(doc.attr('lecm-statemachine:status')) AND user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "DA_RECIPIENT_DYN") AND @lifecycleStateMachineHelper.isCurrentUserHasActiveTask(doc.nodeRef, 'internalDirect:answerTask') AND ((@baseWebScript.compareDates(doc.attr("lecm-internal:response-date"), new java.util.Date(), 5) == 0) OR (@baseWebScript.compareDates(doc.attr("lecm-internal:response-date"), @WorkCalendarService.getNextWorkingDateByDays(new java.util.Date(), 1), 5) == 0))]]></property>
+                <property name="lecm-doc-info-message-dic:is-warning-message"><![CDATA[false]]></property>
+            </item>
+            <item name="cm:Внутренний. Истек срок ответа" type="lecm-doc-info-message-dic:template">
+                <property name="cm:title">Внутренний. Истек срок ответа</property>
+                <property name="lecm-doc-info-message-dic:doc-type">
+                    <![CDATA[[lecm-internal:document]]]></property>
+                <property name="lecm-doc-info-message-dic:code"><![CDATA[INTERNAL_EXPIRED]]></property>
+                <property name="lecm-doc-info-message-dic:templateString">
+                    <![CDATA[Срок ответа истек!]]></property>
+                <property name="lecm-doc-info-message-dic:expression">
+                    <![CDATA['Направлен'.equals(doc.attr('lecm-statemachine:status')) AND (user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") OR @lifecycleStateMachineHelper.isCurrentUserHasActiveTask(doc.nodeRef, 'internalDirect:answerTask')) AND @baseWebScript.compareDates(doc.attr("lecm-internal:response-date"), new java.util.Date(),5) == -1]]></property>
+                <property name="lecm-doc-info-message-dic:is-warning-message"><![CDATA[true]]></property>
+            </item>
+        </items>
+    </item>
+</items>

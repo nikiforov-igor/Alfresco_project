@@ -1,9 +1,9 @@
 .datagrid .action-set .onActionExecutePoint a {
-    background-image: url(../../components/images/complete-16.png);
+    background: url(../../images/lecm-base/icons.svg) no-repeat -796px -268px;
 }
 
 .datagrid .action-set .onActionCompletePoint a {
-    background-image: url(../../components/images/complete-16.png);
+    background: url(../../images/lecm-base/icons.svg) no-repeat -796px -268px;
 }
 
 .yui-panel-container.yui-simple-dialog p.ord-item-execute-action-body-text {

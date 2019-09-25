@@ -53,7 +53,7 @@
             <item name="cm:ADDITIONAL_DOCUMENT_PROJECT_REGISTER" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ADDITIONAL_DOCUMENT_PROJECT_REGISTER]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Зарегистрирован проект документ вида {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-additional-document:additionalDocumentType/cm:title}"))} к договору номер {#contract.wrapAsLink(#contract.attribute("lecm-document:regnum"))}, вид договора {#contract.getFormatted("{lecm-contract:typeContract-assoc/cm:title}, тематика {lecm-document:subject-assoc/cm:title}")}, исполнитель {#executor.wrapAsLink(#executor.attribute("lecm-orgstr:employee-short-name"))}]]></property>
+                    <![CDATA[Зарегистрирован проект документа вида {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-additional-document:additionalDocumentType/cm:title}"))} к договору номер {#contract.wrapAsLink(#contract.attribute("lecm-document:regnum"))}, вид договора {#contract.getFormatted("{lecm-contract:typeContract-assoc/cm:title}, тематика {lecm-document:subject-assoc/cm:title}")}, исполнитель {#executor.wrapAsLink(#executor.attribute("lecm-orgstr:employee-short-name"))}]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Документ к договору. Зарегистрирован проект]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>

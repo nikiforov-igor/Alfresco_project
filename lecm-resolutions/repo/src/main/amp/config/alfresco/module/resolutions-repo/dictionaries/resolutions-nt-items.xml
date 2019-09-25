@@ -39,7 +39,7 @@
                 <property name="cm:name"><![CDATA[RESOLUTION_ASSIGN_CONTROLLER]]></property>
                 <property name="lecm-notification-template:template">
                     <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} назначил Вас контролером исполнения резолюции {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}]]></property>
-                <property name="lecm-notification-template:description"><![CDATA[Резолюция. Назначение контролёра]]></property>
+                <property name="lecm-notification-template:description"><![CDATA[Резолюция. Назначение контролера]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"

@@ -14,6 +14,8 @@ LogicECM.module = LogicECM.module || {};
 
 	YAHOO.lang.augmentObject(LogicECM.module.ActivitiTransitionReservationRadiobuttons.prototype, {
 
+		lastSelectedDate: null,
+
 		/**
 		 * Fired by YUI when parent element is available for scripting.
 		 * Component initialisation, including instantiation of YUI widgets and event listener binding.
@@ -81,6 +83,7 @@ LogicECM.module = LogicECM.module || {};
 			button.setAttribute('id', this.id + '-' + transition.id);
 			button.setAttribute('type', 'radio');
 			button.setAttribute('name', this.id + '-radio-group');
+            button.setAttribute('class', 'lecm-radio');
 
 			if (transition.id == 'REG_DATE') {
 				button.setAttribute('checked', true);
@@ -101,11 +104,10 @@ LogicECM.module = LogicECM.module || {};
 			container = Dom.get(this.id);
 			container.appendChild(button);
 
-			var label = document.createTextNode(' ' + transition.label);
-			container.appendChild(label);
-
-			spaceBr = document.createElement('br');
-			container.appendChild(spaceBr);
+			label = document.createElement('label');
+            label.setAttribute('for', this.id + '-' + transition.id);
+            label.innerHTML = ' ' + transition.label;
+            container.appendChild(label);
 		},
 		/**
 		 * Event handler called when a transition button is clicked.
@@ -143,28 +145,23 @@ LogicECM.module = LogicECM.module || {};
 			YAHOO.Bubbling.fire('mandatoryControlValueUpdated', this);
 		},
 
-		setDateVisibility: function(show) {
-			var currentElement = Dom.get(this.id);
-			var setDiv=currentElement.parentNode.parentNode;
-			var elements = setDiv.children;
-			var dateInput = Dom.get('workflow-form_prop_lecmRegnumRes_date');
-			var dateValue = dateInput.value;
-			for (var i=0; i<elements.length; ++i) {
-				if (elements[i].id == 'workflow-form_prop_lecmRegnumRes_date-cntrl-parent') {
-					if (show) {
-						Dom.removeClass(elements[i], 'hidden');
-						// set date:
-						dateInput.value = dateValue;
-					}
-					else {
-						Dom.addClass(elements[i], 'hidden');
-						// clear date:
-						dateInput.value = '';
-					}
-					break;
-				}
-			}
-		}
+        setDateVisibility: function (show) {
+            var dateInputHidden = Dom.get('workflow-form_prop_lecmRegnumRes_date');
+            var dateControl = Dom.get('workflow-form_prop_lecmRegnumRes_date-cntrl-parent');
+
+            if (show) {
+                Dom.removeClass(dateControl, 'hidden');
+                // set date:
+                dateInputHidden.value = this.lastSelectedDate;
+            } else {
+                Dom.addClass(dateControl, 'hidden');
+
+                this.lastSelectedDate = dateInputHidden.value;
+
+                // clear date:
+                dateInputHidden.value = '';
+            }
+        }
 
 	}, true);
 

@@ -3,7 +3,7 @@
              xmlns:activiti="http://activiti.org/bpmn"
              typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
              targetNamespace="http://www.it.ru/logicECM/errands/workflow/changeController/1.0">
-	<process id="errandsChangeController" name="Сменить контролёра">
+	<process id="errandsChangeController" name="Сменить контролера">
         <startEvent id="startChangeController" name="Start" activiti:formKey="lecmErrandWf:changeController"></startEvent>
         <endEvent id="endChangeController" name="End"></endEvent>
         <scriptTask id="changeController" name="Change Controller" scriptFormat="javascript">
@@ -17,7 +17,7 @@
 			                        var logObjects = [];
 			                        logObjects.push("" + lecmErrandWf_changeControllerNewController.nodeRef);
 			                        var msg = Packages.ru.it.lecm.base.beans.BaseBean.getMessage;
-                                    var logText = msg('ru.it.lecm.errands.bjMessages.changeController.message', '#initiator {change} контролёра по поручению #mainobject на #object1');
+                                    var logText = msg('ru.it.lecm.errands.bjMessages.changeController.message', '#initiator {change} контролера по поручению #mainobject на #object1');
                                     logText = logText.replace("{change}", documentScript.wrapperTitle(msg('ru.it.lecm.errands.bjMessages.changeController.changeParamText', "изменил"), lecmErrandWf_changeControllerReason));
 			                        businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_CONTROLLER", logText, logObjects);
 
