@@ -128,8 +128,6 @@
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
                             <control-param name="nameSubstituteString">{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename}</control-param>
                             <control-param name="itemType">lecm-representative:representative-type</control-param>
-                            <control-param name="verticalList">true</control-param>
-                            <control-param name="sortSelected">true</control-param>
                         </control>
                     </field>
                     <!-- Место проведения -->
@@ -368,8 +366,6 @@
                             <control-param name="nameSubstituteString">{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename}</control-param>
                             <control-param name="itemType">lecm-representative:representative-type</control-param>
                             <control-param name="changeItemsFireAction">meetingHoldingChangeTechnicalMembers</control-param>
-                            <control-param name="sortSelected">true</control-param>
-                            <control-param name="verticalList">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-meetings:finished">
@@ -658,8 +654,6 @@
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
                             <control-param name="nameSubstituteString">{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename}</control-param>
                             <control-param name="itemType">lecm-representative:representative-type</control-param>
-                            <control-param name="sortSelected">true</control-param>
-                            <control-param name="verticalList">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-events:not-send-invitation" set="createEventSet"/>
@@ -879,8 +873,6 @@
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
                             <control-param name="nameSubstituteString">{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename}</control-param>
                             <control-param name="itemType">lecm-representative:representative-type</control-param>
-                            <control-param name="sortSelected">true</control-param>
-                            <control-param name="verticalList">true</control-param>
                         </control>
                     </field>
 
@@ -1060,8 +1052,6 @@
                     <field id="lecm-events:invited-members-assoc">
                         <control>
                             <control-param name="itemType">lecm-representative:representative-type</control-param>
-                            <control-param name="sortSelected">true</control-param>
-                            <control-param name="verticalList">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-meetings:chairman-assoc">
