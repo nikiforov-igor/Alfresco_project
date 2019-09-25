@@ -68,6 +68,7 @@ LogicECM.module.Contracts = LogicECM.module.Contracts || {};
 
                 var datagrid = new LogicECM.module.Contracts.contractStagesTableDataGrid(this.options.containerId).setOptions({
                     usePagination: true,
+                    paginationTemplate: "lecm.pagination.template.short",
                     showExtendSearchBlock: false,
                     formMode: this.options.mode,
                     actions: actions,
