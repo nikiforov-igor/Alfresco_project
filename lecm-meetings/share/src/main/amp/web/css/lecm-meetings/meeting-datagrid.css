@@ -6,4 +6,5 @@
 .datagrid a.site-link {
 	background-image: url("../../components/images/site-16.png");
 	width: 16px;
+	height: 16px;
 }
