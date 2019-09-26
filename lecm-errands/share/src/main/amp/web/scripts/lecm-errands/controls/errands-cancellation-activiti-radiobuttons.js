@@ -83,7 +83,7 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
          */
         _generateTransitionButton: function (transition, fields) {
             // create a button and add to the DOM
-            var container, valueDiv, button, label, spaceBr, radioButtonContainer, radioButtonControlsContainer, radioButtonName;
+            var container, valueDiv, button, label, spaceBr, radioButtonContainer, radioButtonControlsContainer, radioButtonId;
 
             this._getHiddenField();
             radioButtonControlsContainer = document.createElement('div');
@@ -93,16 +93,17 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
             radioButtonContainer = document.createElement('div');
             radioButtonContainer.className = "radiobutton-container";
 
-            radioButtonName = this.id + '-radio-group';
+            radioButtonId = this.id + '-' + transition.id;
             button = document.createElement('input');
-            button.setAttribute('id', this.id + '-' + transition.id);
+            button.setAttribute('id', radioButtonId);
             button.setAttribute('type', 'radio');
-            button.setAttribute('name', radioButtonName);
+            button.setAttribute('name', this.id + '-radio-group');
+            button.setAttribute('class', 'lecm-radio');
             YAHOO.util.Event.addListener(button, 'click', this.onClick, this, true);
             radioButtonContainer.appendChild(button);
 
             label = document.createElement('label');
-            label.setAttribute('for', radioButtonName);
+            label.setAttribute('for', radioButtonId);
             label.innerHTML = transition.label;
             radioButtonContainer.appendChild(label);
 
