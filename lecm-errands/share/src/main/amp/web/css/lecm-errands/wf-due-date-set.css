@@ -2,6 +2,9 @@
 .errands-wf-duedate-set .control span.help-icon {
     display: none;
 }
+.errands-wf-duedate-set > div:not(.errands-wf-duedate-set-radio) .label-div  ~ .container {
+    margin-left: 0;
+}
 .errands-wf-duedate-set .errands-wf-duedate-set-radio {
     float: left;
 }
