@@ -2,6 +2,9 @@
 .errands-limitation-date-set .control span.help-icon {
     display: none;
 }
+.errands-limitation-date-set > div:not(.errands-limitation-date-set-radio) .label-div  ~ .container {
+    margin-left: 0;
+}
 .errands-limitation-date-set .errands-limitation-date-set-radio {
     float: left;
 }

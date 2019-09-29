@@ -11,8 +11,14 @@
 .resolution-form .yui-g .yui-u .control .label-div {
     width: 165px;
 }
+.resolution-form .yui-u .label-div  ~ .container {
+    margin-left: 165px;
+}
 .resolution-form .yui-g .yui-u.first .control .label-div {
     width: 180px;
+}
+.resolution-form .yui-u.first .label-div  ~ .container {
+    margin-left: 180px;
 }
 
 .resolution-form .errands-limitation-date-set .errands-limitation-date-set-type {
@@ -41,11 +47,11 @@
 }
 
 .resolution-form fieldset .errands-limitation-date-set .errands-limitation-date-set-type {
-    width: calc(100% - 236px);
+    width: calc(100% - 256px);
 }
 
 .resolution-form fieldset .errands-limitation-date-set .errands-limitation-date-set-date {
-    width: calc(100% - 182px);
+    width: calc(100% - 202px);
 }
 
 .resolution-form .control.resolution-base-doc-control {

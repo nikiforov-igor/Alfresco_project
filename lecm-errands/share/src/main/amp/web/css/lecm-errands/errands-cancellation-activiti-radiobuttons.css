@@ -1,40 +1,26 @@
-.cancellation-activiti-radiobuttons > .container {
+.control.cancellation-activiti-radiobuttons > .container {
+    overflow: visible;
+    margin-left: 216px;
     padding-top: 6px;
+}
+.control.cancellation-activiti-radiobuttons > .container > .value-div {
+    overflow: visible;
 }
 
 .cancellation-activiti-radiobuttons .fields-by-radiobutton {
-    padding-left: 18px;
+    padding-left: 24px;
 }
 
-.cancellation-activiti-radiobuttons .radiobutton-container input[type=radio] {
-    vertical-align: middle;
-    margin: -2px 0 0 0;
-    padding: 0;
-}
-
-.cancellation-activiti-radiobuttons .radiobutton-container:nth-child(3n+2) label {
+.cancellation-activiti-radiobuttons .radiobutton-container label {
     display: inline-block;
-    padding-left: 6px;
-}
-
-.cancellation-activiti-radiobuttons .radiobutton-container:nth-child(3n+5) label {
-    padding-top: 10px;
-}
-
-.cancellation-activiti-radiobuttons .fields-by-radiobutton .checkbox-control .label-div {
-    display: none;
+    padding-left: 28px;
+    line-height: 24px;
 }
 
 .cancellation-activiti-radiobuttons .fields-by-radiobutton .control .label-div {
     width: 100%;
-    padding-left: 2px;
     text-align: left;
 }
-
-.cancellation-activiti-radiobuttons .fields-by-radiobutton .control.checkbox-control {
-    margin-top: -8px;
-}
-
-.cancellation-activiti-radiobuttons .fields-by-radiobutton .control.checkbox-control input[type=checkbox] {
-    padding: 0;
+.cancellation-activiti-radiobuttons .fields-by-radiobutton .checkbox-control .label-div {
+    display: none;
 }
