@@ -5,7 +5,6 @@ function processChangeExecutor(newExecutor, reason) {
     lecmPermission.revokeDynamicRole(document, executor, "ERRANDS_EXECUTOR");
     documentMembers.addMember(document, executor, "ERRANDS_READER", true);
     documentMembers.addMember(document, newExecutor, "ERRANDS_READER", true);
-    document.properties["lecm-errands-aspect:isCancelRequested"] = false;
 
     if (errands.isTransferRightToBaseDocument()) {
         var baseDocumentAssoc = document.assocs["lecm-errands:base-assoc"];
@@ -53,5 +52,7 @@ function processChangeExecutor(newExecutor, reason) {
                 reason: reason
             }
         });
+        document.properties["lecm-errands-aspect:isCancelRequested"] = false;
+        document.save();
     }
 }
