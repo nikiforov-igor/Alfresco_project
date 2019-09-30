@@ -1223,7 +1223,7 @@
                         <control template="/ru/it/lecm/errands/controls/errands-cancellation-activiti-radiobuttons-control.ftl">
                             <control-param name="selectedValue">CANCEL_ERRAND</control-param>
                             <control-param name="changeValueFireAction">errandsRequestCancelResultChanged</control-param>
-                            <control-param name="fieldsByOption">lecmErrandWf:requestCancelTask_1CancelReason|lecmErrandWf:requestCancelTask_1CancelChildren#alf#lecmErrandWf:requestCancelTask_1RejectReason#alf#lecmErrandWf:requestCancelTask_1NewExecutor</control-param>
+                            <control-param name="fieldsByOption">lecmErrandWf:requestCancelTask_1CancelReason|lecmErrandWf:requestCancelTask_1CancelChildren#alf#lecmErrandWf:requestCancelTask_1NewExecutor#alf#lecmErrandWf:requestCancelTask_1RejectReason</control-param>
                         </control>
                     </field>
                     <field id="lecmErrandWf:requestCancelTask_1CancelReason">

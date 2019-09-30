@@ -308,8 +308,8 @@
 							<parameter name="allowedValues">
 								<list>
 									<value>REJECTED</value> <!-- отклонен -->
-									<value>CANCEL_ERRAND</value> <!-- отменить поручение -->
 									<value>CHANGE_EXECUTOR</value> <!-- изменить исполнителя -->
+									<value>CANCEL_ERRAND</value> <!-- отменить поручение -->
 								</list>
 							</parameter>
 						</constraint>
@@ -348,8 +348,8 @@
 							<parameter name="allowedValues">
 								<list>
 									<value>CANCEL_ERRAND</value> <!-- отменить поручение -->
-									<value>REJECTED</value> <!-- отклонен -->
 									<value>CHANGE_EXECUTOR</value> <!-- изменить исполнителя -->
+									<value>REJECTED</value> <!-- отклонен -->
 								</list>
 							</parameter>
 						</constraint>

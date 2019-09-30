@@ -504,7 +504,7 @@
                     <show id="lecm-review-aspects:related-review-records-assoc" force="true"/>
                 </field-visibility>
                 <appearance>
-                    <set id="common" template="/ru/it/lecm/eds/controls/bordered-set.ftl"/>
+                    <set id="common"/>
 
                     <set id="limitation-date" parent="common" label-id="label.limitation-date" template="/ru/it/lecm/errands/controls/errands-view-limitation-date-set.ftl"/>
 
