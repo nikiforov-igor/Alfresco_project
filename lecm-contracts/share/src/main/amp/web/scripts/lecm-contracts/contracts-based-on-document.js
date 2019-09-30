@@ -78,7 +78,7 @@
                     var button2 = document.createElement("input");
                     button2.type = "radio";
                     button2.name = buttonName;
-                    button2.checked = true;
+                    button2.checked = false;
                     button2.id = this.htmlId + "-attachment-" + buttonName;
                     button2.className = "lecm-radio";
                     td.appendChild(button2);

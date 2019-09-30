@@ -1,22 +1,12 @@
 .errands-list-filter {
-	display: inline-block;
-	float: left
+    float: left;
+    width: 160px;
+    margin-left: 8px;
 }
 
 .create-errand-action {
-	line-height: 32px;
-}
-.create-errand-action.lecm-dashlet-actions .add {
-	margin-left: 16px;
-}
-
-.errands-list-filter > select {
-	margin-left: 13px;
-	height: 28px;
-}
-
-.workflow-task-item .workflow-task-title {
-	font-size: 16px;
+    margin-left: 8px;
+    float: left;
 }
 
 .right-errand {
@@ -31,9 +21,101 @@
 }
 
 .errands-panel .short-view span.first-child {
-	background: url('../../images/lecm-documents/components/errands.png') no-repeat 5px 5px;
+    background: url('../../images/lecm-documents/components/errands.png') no-repeat 5px 5px;
 }
 
-.lecm-dashlet-actions.create-errand-action .add {
-	display: initial;
+.yui-skin-lecmTheme .errands-button-group.yui-navset .yui-content {
+    display: none;
+}
+
+.errands-button-actions {
+    margin-top: 16px;
+}
+
+.errands-container {
+    padding: 0 8px;
+    margin-top: 16px;
+}
+
+.errands-container .workflow-task-list-label {
+    color: #666666;
+    width: 100px;
+    margin-right: 4px;
+}
+
+.errands-container .workflow-task-item {
+    border: none;
+    margin-left: -8px;
+    padding-top: 4px;
+}
+
+.errands-container .workflow-task-item .workflow-task-title {
+    font-weight: bold;
+    color: #046399;
+    padding-bottom: 2px;
+}
+
+.errands-container .workflow-task-list-body {
+    margin-left: 8px;
+}
+
+.errands-container .workflow-task-description {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.errands-container .workflow-task-list-picture {
+    width: 8px;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-top: 0;
+    background: url(../../images/lecm-base/icons.svg) no-repeat -1328px -16px;
+}
+
+.errands-container .workflow-task-list-body {
+    font-size: 13px;
+    font-style: normal;
+    font-family: Roboto, sans-serif;
+    font-weight: normal;
+    line-height: 132%;
+    color: #000000;
+}
+
+.errand-add.create-errand-action > span {
+    margin: 0;
+}
+
+.errands-button-group.yui-navset {
+    margin-top: 12px
+}
+
+.errands-container .list-category .errands-list-category-title {
+    height: 34px;
+    font-family: Roboto, sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    line-height: 19px;
+    color: #000000;
+    font-size: 16px;
+    display: table-cell;
+    vertical-align: bottom;
+    padding-bottom: 8px;
+}
+
+.errands-container .workflow-task-list-left-column,
+.errands-container .workflow-task-list-right-column {
+    line-height: 20px;
+    height: 18px;
+    float: left;
+    width: 45%;
+    margin-bottom: 4px;
+    margin-right: 16px;
+}
+.errands-container .workflow-task-list-left-column > div,
+.errands-container .workflow-task-list-right-column > div {
+    float: left;
+}
+
+.workflow-task-list-label ~ div {
+    width: calc(100% - 104px);
 }

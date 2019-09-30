@@ -1,11 +1,5 @@
 <#assign id = args.htmlid>
-
-<div class="errands-form" id="${id}_errands">
-    <div class="panel-header">
-        <div class="panel-title">${title!msg("label.title")}</div>
-    </div>
-    <div id="${id}_errands_container"></div>
-</div>
+<div id="${id}_errands_container"></div>
 
 <script type="text/javascript">
     var errandsComponent = null;
@@ -32,7 +26,7 @@
 
         }
 
-        Event.onContentReady("${id}_errands", function () {
+        Event.onContentReady("${id}_errands_container", function () {
             LogicECM.module.Base.Util.loadResources([
                 'scripts/lecm-errands/lecm-document-errands.js',
                 'scripts/lecm-errands/lecm-errands-dashlet.js',

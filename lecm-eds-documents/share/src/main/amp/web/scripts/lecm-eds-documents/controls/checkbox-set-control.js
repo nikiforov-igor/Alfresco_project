@@ -96,13 +96,14 @@ LogicECM.module.EDS = LogicECM.module.EDS || {};
             },
 
             fnRenderCellSelected: function (elCell, oRecord, oColumn, oData) {
+                var chId = 'checkbox-' + oRecord.getId();
                 Dom.setStyle(elCell, "width", oColumn.width + "px");
                 Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
 
                 var hiddenHtml =
-                    "<input id='" + oRecord.getId() + "-hidden' type='hidden' name='" + this.options.fieldId + "-" + oRecord.getData("key") + "' value='" + oRecord.getData("value") + "'/>";
+                    "<input id='" + chId + "-hidden' type='hidden' name='" + this.options.fieldId + "-" + oRecord.getData("key") + "' value='" + oRecord.getData("value") + "'/>";
                 var checkboxHtml =
-                    "<input id='" + oRecord.getId() + "' type='checkbox' class='lecm-checkbox formsCheckbox' name='-' " + (oRecord.getData("value") == "true" ? " checked='checked'>" : ">") + "<label for='" + oRecord.getId() + "'></label>";
+                    "<input id='" + chId + "' type='checkbox' class='lecm-checkbox' name='-' " + (oRecord.getData("value") == "true" ? " checked>" : ">") + "<label for='" + chId + "'></label>";
 
                 elCell.innerHTML = "<div class='centered'>" + (hiddenHtml + checkboxHtml) + "</div>";
             },

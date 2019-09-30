@@ -128,25 +128,17 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                         detail +=       "<div class=\"workflow-task-description\">" + errand.description + "</div>";
                         detail +=       "<div>";
                         detail +=           "<div class=\"workflow-task-list-left-column\">";
-                        detail +=               "<span class=\"workflow-task-list-label\">" + this.msg("errandslist.label.duedate") + ": </span>" + errand.limitationDateText;
+                        detail +=               "<div class=\"workflow-task-list-label\">" + this.msg("errandslist.label.duedate") + ": </div><div>" + errand.limitationDateText + "</div>";
+                        detail +=               "<div class=\"workflow-task-list-label\">" + this.msg("errandslist.label.executor") + ": </div><div>" + '<a href="' + url + '">' + errand.executorName + '</a></div>';
                         detail +=           "</div>";
-                        detail +=           "<span class=\"workflow-task-list-label\">" + this.msg("errandslist.label.status") + ": </span>" + errand.statusMessage;
-
-                        detail +=           "<span class=\"workflow-task-status "+ statusClass +"\">" + status + "</span>"+"<br/>";
-
-                            url = YAHOO.lang.substitute(Alfresco.constants.URL_PAGECONTEXT + template,
-                                    {
-                                        nodeRef: errand.executor
-                                    });
-                        detail +=           "<div class=\"workflow-task-list-left-column\">";
-                        detail +=               "<span class=\"workflow-task-list-label\">" + this.msg("errandslist.label.executor") + ": </span>" + '<a href="' + url + '">' + errand.executorName + '</a>';
+                        url = YAHOO.lang.substitute(Alfresco.constants.URL_PAGECONTEXT + template,
+                            {
+                                nodeRef: errand.initiator
+                            });
+                        detail +=           "<div class=\"workflow-task-list-right-column\">";
+                        detail +=               "<div class=\"workflow-task-list-label\">" + this.msg("errandslist.label.status") + ": </div><div>" + errand.statusMessage + "</div>";
+                        detail +=               "<div class=\"workflow-task-list-label\">" + this.msg("errandslist.label.initiator") + ": </div><div>" +  '<a href="' + url + '">' + errand.initiatorName + '</a></div>';
                         detail +=           "</div>";
-                            url = YAHOO.lang.substitute(Alfresco.constants.URL_PAGECONTEXT + template,
-                                    {
-                                        nodeRef: errand.initiator
-                                    });
-                        detail +=           "<span class=\"workflow-task-list-label\">" + this.msg("errandslist.label.initiator") + ": </span>" +  '<a href="' + url + '">' + errand.initiatorName + '</a>';
-
                         detail +=       "</div>";
                         detail +=   "</div>";
                         detail +=   "<div class=\"clear\"></div>";
