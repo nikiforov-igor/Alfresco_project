@@ -111,7 +111,7 @@ LogicECM.module = LogicECM.module || {};
                                     '<div class="item-description">' +
                                     '   <img class="document-type" src=' + Alfresco.constants.URL_RESCONTEXT + '"images/lecm-documents/type-icons/{docTypeIcon}.png" ' +
                                     '       onerror="this.src = \'' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-documents/type-icons/default_document.png\';"/>' +
-                                    '   <span class="link-span{classNotHaveAccess}">' +
+                                    '   <div class="link-span{classNotHaveAccess}">' +
                                     '       <a target="_blank" href="{documentUrl}">{documentName}</a>' +
                                     '       <div>' +
                                     '           <span class="connectionType">{documentStatus}</span>' +
@@ -119,7 +119,7 @@ LogicECM.module = LogicECM.module || {};
                                     '           <a id="{expandHideId}" href="#" onclick="return false;" class="hidden1">{expandHideMessage}</a>' +
                                     '       </div>' +
                                     '       <div id="{expandedDivId}" class="hidden1"></div>' +
-                                    '   </span>' +
+                                    '   </div>' +
                                     '</div>';
 
                                 var expandShowId = "expand-show-" + nodeRef.replace('workspace://SpacesStore/', '');
