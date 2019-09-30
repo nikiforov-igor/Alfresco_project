@@ -1,46 +1,70 @@
 <#assign id = args.htmlid?js_string>
-<div class="panel-header">
-    <div class="panel-title">${msg("label.title")}</div>
+<div class="errands-form" id="${id}_errands">
+    <div class="panel-header" id="${id}_errands">
+        <div class="panel-title">${msg("label.title")}</div>
+    </div>
 </div>
 <div class="list-container">
-    <div id="${id}_myErrandsList-view-mode-button-group" class="yui-buttongroup errands-view-mode-button-group">
-        <input id="${id}-view-mode-radiofield-links" type="radio" name="view-mode-radiofield" value="${msg("errands.list")}" checked />
-        <input id="${id}-view-mode-radiofield-tree" type="radio" name="view-mode-radiofield" value="${msg("errands.tree")}" />
-        <span class="errands-list-filter">
-		<select id="${id}-errands-filter">
-			<option value="all">${msg("errandslist.option.all")}</option>
-			<option selected value="active">${msg("errandslist.option.active")}</option>
-			<option value="complete">${msg("errandslist.option.completed")}</option>
-		</select>
-	</span>
-<#if isErrandsStarter && hasStatemachine && isRegistered>
-    <span class="lecm-dashlet-actions create-errand-action">
-            <a id="${id}-action-add" href="#" onclick="errandsComponent.createChildErrand(); return false;" class="add" title="${msg("errandslist.add.errand.tooltip")}">${msg("errandslist.add.errand")}</a>
-        </span>
-</#if>
+    <div id="${id}_myErrandsList-view-mode-button-group" class="errands-button-group yui-navset form-tabs yui-navset-top">
+        <ul class="yui-nav">
+            <li class="selected" title="${msg("errands.list")}">
+                <a href="#links" id="${id}-view-mode-radiofield-links" tabindex="801">
+                    <em>${msg("errands.list")}</em>
+                </a>
+            </li>
+            <li title="${msg("errands.tree")}">
+                <a href="#tree" id="${id}-view-mode-radiofield-tree" tabindex="901">
+                    <em>${msg("errands.tree")}</em>
+                </a>
+            </li>
+        </ul>
     </div>
-
-    <div class="list-container" id="${id}-listContainer">
+    <div id="${id}_myErrandsList-actions-button-group" class="yui-buttongroup errands-button-actions">
+<#if isErrandsStarter && hasStatemachine && isRegistered>
+        <div class="errand-add create-errand-action">
+           <span id="${id}-errand-add" class="yui-button yui-push-button">
+              <span class="first-child">
+                 <button type="button" title="${msg("errandslist.add.errand.tooltip")}">${msg("errandslist.add.errand")}</button>
+              </span>
+           </span>
+        </div>
+</#if>
+        <div class="errands-list-filter">
+            <select id="${id}-errands-filter">
+                <option value="all">${msg("errandslist.option.all")}</option>
+                <option selected value="active">${msg("errandslist.option.active")}</option>
+                <option value="complete">${msg("errandslist.option.completed")}</option>
+            </select>
+        </div>
+    </div>
+    <div class="errands-container" id="${id}-listContainer">
         <div class="body scrollableList" id="${id}_results">
             <div id="${id}_errandsList"></div>
         </div>
     </div>
 
     <div class="connections-list" id="${id}-connections-list">
-
     </div>
 </div>
 <script>
     (function() {
         var Dom = YAHOO.util.Dom;
 
-        function init() {
-            var viewButtonGroup = new YAHOO.widget.ButtonGroup("${id}_myErrandsList-view-mode-button-group");
-            var buttons = viewButtonGroup.getButtons();
-            for (var i = 0; i < buttons.length; i++) {
-                buttons[i].addListener("click", viewChanged, this, true);
-            }
+        function initLoad() {
+            LogicECM.module.Base.Util.loadScripts(['scripts/lecm-base/components/lecm-form-tabs.js'], init, ['tabview']);
         }
+
+        function init() {
+            new LogicECM.BaseFormTabs("${id}_myErrandsList-view-mode-button-group").setMessages(${messages});
+
+            YAHOO.util.Event.addListener("${id}-view-mode-radiofield-links", "click", viewChanged, this, true);
+            YAHOO.util.Event.addListener("${id}-view-mode-radiofield-tree", "click", viewChanged, this, true);
+
+        <#if isErrandsStarter && hasStatemachine && isRegistered>
+            Alfresco.util.createYUIButton(this, "${id}-errand-add", errandsComponent.createChildErrand.bind(errandsComponent), {}, Dom.get("${id}-errand-add"));
+        </#if>
+        }
+
         function loadConnectionTree() {
             Alfresco.util.loadWebscript({
                 url: Alfresco.constants.URL_SERVICECONTEXT + "/lecm/components/document/connections-tree",
@@ -73,8 +97,9 @@
                 errandsFilter.style.display = "none";
             }
         }
-        loadConnectionTree();
-        YAHOO.util.Event.onAvailable("${id}_myErrandsList-view-mode-button-group", init);
 
+        loadConnectionTree();
+
+        YAHOO.util.Event.onAvailable("${id}_myErrandsList-view-mode-button-group", initLoad);
     })();
 </script>
