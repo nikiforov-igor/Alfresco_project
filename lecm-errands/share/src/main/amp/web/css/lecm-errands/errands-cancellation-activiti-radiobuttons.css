@@ -21,6 +21,10 @@
     width: 100%;
     text-align: left;
 }
+.cancellation-activiti-radiobuttons .fields-by-radiobutton .control .label-div ~ .container {
+    margin-left: 0;
+    clear: both;
+}
 .cancellation-activiti-radiobuttons .fields-by-radiobutton .checkbox-control .label-div {
     display: none;
 }
