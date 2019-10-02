@@ -432,7 +432,7 @@
                                         <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
                                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[]]></property>
                                         <property name="lecm-rpeditor:dataColumnExpression">
-                                            <![CDATA[{@doc.attr('lecm-routes-v2:stageItemEmployeePosition') != null ? doc.attr('lecm-routes-v2:stageItemEmployeePosition') : doc.assoc('lecm-routes-v2:stageItemMemberAssoc') != null ? (@orgstructureScript.getPrimaryPosition(doc.assoc('lecm-routes-v2:stageItemMemberAssoc')) != null ? @orgstructureScript.getPrimaryPosition(doc.assoc('lecm-routes-v2:stageItemMemberAssoc')).assocs['lecm-orgstr:element-member-position-assoc'][0].properties['cm:title'] : '') : ''}]]></property>
+                                            <![CDATA[{@doc.attr('lecm-routes-v2:stageItemEmployeePosition') != null ? doc.attr('lecm-routes-v2:stageItemEmployeePosition') : (doc.assoc('lecm-routes-v2:stageItemMemberAssoc') != null ? @orgstructureScript.getPrimaryPositionTitle(doc.assoc('lecm-routes-v2:stageItemMemberAssoc')): '')}]]></property>
                                         <property name="cm:name"><![CDATA[Должность]]></property>
                                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                                         <property name="lecm-rpeditor:dataColumnCode">
@@ -808,7 +808,7 @@
                                         <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
                                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[]]></property>
                                         <property name="lecm-rpeditor:dataColumnExpression">
-                                            <![CDATA[{@doc.attr('lecm-routes-v2:stageItemEmployeePosition') != null ? doc.attr('lecm-routes-v2:stageItemEmployeePosition') : doc.assoc('lecm-routes-v2:stageItemMemberAssoc') != null ? (@orgstructureScript.getPrimaryPosition(doc.assoc('lecm-routes-v2:stageItemMemberAssoc')) != null ? @orgstructureScript.getPrimaryPosition(doc.assoc('lecm-routes-v2:stageItemMemberAssoc')).assocs['lecm-orgstr:element-member-position-assoc'][0].properties['cm:title'] : '') : ''}]]></property>
+                                            <![CDATA[{@doc.attr('lecm-routes-v2:stageItemEmployeePosition') != null ? doc.attr('lecm-routes-v2:stageItemEmployeePosition') : (doc.assoc('lecm-routes-v2:stageItemMemberAssoc') != null ? @orgstructureScript.getPrimaryPositionTitle(doc.assoc('lecm-routes-v2:stageItemMemberAssoc')): '')}]]></property>
                                         <property name="cm:name"><![CDATA[Должность]]></property>
                                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                                         <property name="lecm-rpeditor:dataColumnCode">
@@ -1087,7 +1087,7 @@
                                 <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
                                 <property name="lecm-rpeditor:dataColumnClass"><![CDATA[]]></property>
                                 <property name="lecm-rpeditor:dataColumnExpression">
-                                    <![CDATA[{@doc.attr('lecm-routes-v2:stageItemEmployeePosition') != null ? doc.attr('lecm-routes-v2:stageItemEmployeePosition') : doc.assoc('lecm-routes-v2:stageItemMemberAssoc') != null ? (@orgstructureScript.getPrimaryPosition(doc.assoc('lecm-routes-v2:stageItemMemberAssoc')) != null ? @orgstructureScript.getPrimaryPosition(doc.assoc('lecm-routes-v2:stageItemMemberAssoc')).assocs['lecm-orgstr:element-member-position-assoc'][0].properties['cm:title'] : '') : ''}]]></property>
+                                    <![CDATA[{@doc.attr('lecm-routes-v2:stageItemEmployeePosition') != null ? doc.attr('lecm-routes-v2:stageItemEmployeePosition') : (doc.assoc('lecm-routes-v2:stageItemMemberAssoc') != null ? @orgstructureScript.getPrimaryPositionTitle(doc.assoc('lecm-routes-v2:stageItemMemberAssoc')): '')}]]></property>
                                 <property name="cm:name"><![CDATA[Должность]]></property>
                                 <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                                 <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_position]]></property>
