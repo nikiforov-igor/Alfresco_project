@@ -40,7 +40,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="event-create-center">
+					<div class="event-create-center document-metadata">
 						<div id="${el}-body" class="meeting-holding-main"></div>
 						<div class="title">${msg("label.meeting.holding.protocol")}</div>
 						<div id="${el}-items" class="meeting-holding-items"></div>
