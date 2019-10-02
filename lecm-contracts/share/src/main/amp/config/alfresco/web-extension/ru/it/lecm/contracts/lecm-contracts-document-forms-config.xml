@@ -1205,7 +1205,15 @@
                     <field id="lecm-document:creator" label-id="contract.creator"/>
                 </appearance>
             </form>
-
+            <form id="datagrid_Избранное">
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="cm:image"/>
+                    <show id="lecm-document:present-string"/>
+                    <show id="lecm-document:ext-present-string"/>
+                    <show id="lecm-document:list-present-string"/>
+                </field-visibility>
+            </form>
             <form id="search">
                 <field-visibility>
                     <show id="lecm-document:regnum"/>

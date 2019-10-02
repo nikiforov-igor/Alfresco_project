@@ -46,6 +46,9 @@
 			<parameter name="createUrl">
 				<value>event-create</value>
 			</parameter>
+			<parameter name="editUrl">
+				<value>event-edit</value>
+			</parameter>
 			<parameter name="viewUrl">
 				<value>event</value>
 			</parameter>
