@@ -178,9 +178,7 @@
                     </field>
 
                     <field id="lecm-eds-document:summaryContent">
-                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl">
-                            <control-param name="rows">4</control-param>
-                        </control>
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
 
                     <field id="lecm-document-aspects:response-to-assoc">
@@ -439,9 +437,7 @@
                     </field>
 
                     <field id="lecm-eds-document:summaryContent" set="common">
-                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl">
-                            <control-param name="rows">4</control-param>
-                        </control>
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
 
                     <field id="lecm-eds-document:sheets-number" set="common">
@@ -936,9 +932,7 @@
                     </field>
 
                     <field id="lecm-eds-document:summaryContent">
-                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl">
-                            <control-param name="rows">4</control-param>
-                        </control>
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
 
                     <field id="lecm-document:subject-assoc"/>
@@ -1186,9 +1180,7 @@
                         </control>
                     </field>
                     <field id="lecm-eds-document:summaryContent">
-                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl">
-                            <control-param name="rows">4</control-param>
-                        </control>
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
 
                     <field id="lecm-eds-document:note">

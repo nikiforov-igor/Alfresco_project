@@ -58,9 +58,7 @@
                         </control>
                     </field>
                     <field id="lecm-eds-document:summaryContent">
-                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl">
-                            <control-param name="rows">4</control-param>
-                        </control>
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
                     <field id="lecm-nd:unlimited" set="dates"/>
                     <field id="lecm-nd:begin-date" label-id="label.nd.period" set="dates"/>
@@ -241,9 +239,7 @@
                         </control>
                     </field>
                     <field id="lecm-eds-document:summaryContent" >
-                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl">
-                            <control-param name="rows">4</control-param>
-                        </control>
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
                     <field id="lecm-eds-document:note" >
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
@@ -582,9 +578,7 @@
                         </control>
                     </field>
                     <field id="lecm-eds-document:summaryContent"  set="common">
-                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl">
-                            <control-param name="rows">4</control-param>
-                        </control>
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
                     <field id="lecm-eds-document:note" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
@@ -712,9 +706,7 @@
                         </control>
                     </field>
                     <field id="lecm-eds-document:summaryContent"  set="common">
-                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl">
-                            <control-param name="rows">4</control-param>
-                        </control>
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
                     <field id="lecm-eds-document:note" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">

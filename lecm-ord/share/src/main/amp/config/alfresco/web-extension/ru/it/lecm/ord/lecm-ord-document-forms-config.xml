@@ -54,9 +54,7 @@
                         </control>
                     </field>
                     <field id="lecm-eds-document:summaryContent">
-                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl">
-                            <control-param name="rows">4</control-param>
-                        </control>
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
                     <field id="lecm-ord:controller-assoc">
                         <control>
@@ -322,9 +320,7 @@
                         </control>
                     </field>
                     <field id="lecm-eds-document:summaryContent">
-                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl">
-                            <control-param name="rows">4</control-param>
-                        </control>
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
                     <field id="lecm-eds-document:note">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
@@ -714,9 +710,7 @@
                         </control>
                     </field>
                     <field id="lecm-eds-document:summaryContent">
-                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl">
-                            <control-param name="rows">4</control-param>
-                        </control>
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
                     <field id="lecm-ord:controller-assoc">
                         <control>
@@ -919,9 +913,7 @@
                         </control>
                     </field>
                     <field id="lecm-eds-document:summaryContent" set="ord-document-form-common-set">
-                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl">
-                            <control-param name="rows">4</control-param>
-                        </control>
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
                     <field id="lecm-ord:controller-assoc" set="ord-document-form-common-set">
                         <control>
