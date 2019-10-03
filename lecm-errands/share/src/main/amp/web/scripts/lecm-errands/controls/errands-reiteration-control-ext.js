@@ -83,7 +83,7 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                 if (!this.getControlValue()) {
                     this.loadDefaultValue();
                 } else {
-                    this.updateValue(this.getControlValue())
+                    this.updateValue(this.getControlValue());
                 }
                 var el = Dom.get(this.id + '-displayValue');
                 //если поле не disabled - отображается как ссылка,
@@ -93,60 +93,18 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                         this.openDialog(e);
                     }.bind(this));
                 }
-                var select = Dom.get(this.id + "-type");
-                this.widgets.select = select;
+                this.widgets.select = Dom.get(this.id + "-type");
 
                 LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
             },
-            loadDefaultValue: function loadDefaultValue_function() {
-                var value = {};
-                if (this.options.defaultType) {
-                    this.currentType = this.options.defaultType;
-                    value.type = this.currentType;
-                    if (this.options.defaultDays) {
-                        value.date = this.options.defaultDays;
-                    }
-                } else {
-                    value = null;
-                }
-
-                this.updateValue(value);
-            },
             getValue: function getValue_function() {
-                if (this.currentType != "DAILY") {
-                    var nodes = YAHOO.util.Selector.query('.item.checked', this.typeContainerPrefix + this.currentPickerType);
-                    var data = [];
-                    for (var i in nodes) {
-                        var node = nodes[i];
-                        var id = node.id.replace(this.typeContainerPrefix + this.currentPickerType, '');
-                        data.push(id);
-                    }
-                    if (data.length) {
-                        return {
-                            type: this.currentType,
-                            data: data
-                        }
-                    } else {
-                        return null;
-                    }
+                if (this.currentType !== "DAILY") {
+                    return LogicECM.module.Errands.ReiterationExt.superclass.getValue.call(this);
                 } else {
                     return {
                         type: this.currentType,
                         data: []
                     }
-                }
-            },
-
-            setValue: function setValue_function(value) {
-                var type = this.currentType;
-                if (!value) {
-                    this._switchType(type, "WEEKLY");
-                    return;
-                }
-                this._switchType(type, value.type);
-                for (var i in value.data) {
-                    var node = value.data[i];
-                    Dom.addClass(this.typeContainerPrefix + this.currentPickerType + node, 'checked');
                 }
             },
 
@@ -162,7 +120,7 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                     summary += this.msg("label.reiteration-control.options." + value.type.toLowerCase()) + ", ";
                     for (var i in value.data) {
                         var index = parseInt(value.data[i] - 1);
-                        if (i != 0) {
+                        if (i > 0) {
                             summary += ', ';
                         }
                         summary += this.daysFull[index];
@@ -170,7 +128,7 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                 } else {
                     summary += this.msg("label.reiteration-control.options." + value.type.toLowerCase()) + ", " + Alfresco.util.message("date-unit.plural.day") + ": ";
                     for (var i in value.data) {
-                        if (i != 0) {
+                        if (i > 0) {
                             summary += ', ';
                         }
                         summary += value.data[i];
@@ -203,7 +161,7 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
 
                     this.panel.setHeader(Alfresco.util.message("label.reiteration.repeat"));
 
-                    var html = '<div id="' + this.id + '-dialog-panel-container" class="reiteration">'
+                    var html = '<div id="' + this.id + '-dialog-panel-container" class="reiteration">';
                     html += '<div id="' + this.id + '-switch-type-container" style="text-align: center"></div>';
                     html += '<div id="' + this.typeContainerPrefix + 'week-days" class="container hidden1 week-days">';
                     html += '<div class="container-aligment">';
@@ -222,7 +180,7 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                     }
                     html += '</div>';
                     html += '</div>';
-                    html += '<div class="summary"><label for="' + this.id + '-summary">Сводка: </label><span id="' + this.id + '-summary"></span></div>';
+                    html += '<div class="summary"><label for="' + this.id + '-summary">' + this.msg("label.reiteration-control.summary") + ': </label><span id="' + this.id + '-summary"></span></div>';
                     html += '</div>';
 
                     this.panel.setBody(html);
@@ -236,6 +194,7 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                     Event.addListener(select, 'change', this.onChangeType, this, true);
                     var items = YAHOO.util.Selector.query('.item', this.id + '-dialog-panel-container');
                     Event.addListener(items, 'click', this.onItemClick, {}, this);
+
                     this.balloon = Alfresco.util.createBalloon(select, {
                         effectType: null,
                         effectDuration: 0
@@ -262,32 +221,8 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                 }
             },
 
-            onOk: function onOk_function() {
-                var value = this.getValue();
-                if (!value) {
-                    if (this.currentPickerType == "week-days") {
-                        this.balloon.html(Alfresco.util.message("message.error.schedule.reiteration-rules-validation.week-days"));
-                    } else if (this.currentPickerType == "month-days") {
-                        this.balloon.html(Alfresco.util.message("message.error.schedule.reiteration-rules-validation.month-days"));
-                    }
-                    this.balloon.show();
-                } else {
-                    this.updateValue(value);
-                    this.panel.hide();
-                }
-            },
-
             onItemClick: function onItemClick_function(ev){
-                this.balloon.hide();
                 LogicECM.module.Errands.ReiterationExt.superclass.onItemClick.call(this, ev);
-            },
-
-            onChangeType: function onChangeType_function(ev, args) {
-                this.balloon.hide();
-                var to = ev.target.value;
-                if (to && this.currentType != to) {
-                    this._switchType(this.currentType, to);
-                }
             },
 
             _switchType: function _switchType(from, to) {
