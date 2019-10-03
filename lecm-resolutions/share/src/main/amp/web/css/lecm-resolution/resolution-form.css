@@ -11,9 +11,6 @@
 .resolution-form .yui-g .yui-u .control .label-div {
     width: 165px;
 }
-.resolution-form .yui-u .label-div  ~ .container {
-    margin-left: 165px;
-}
 .resolution-form .yui-g .yui-u.first .control .label-div {
     width: 180px;
 }
