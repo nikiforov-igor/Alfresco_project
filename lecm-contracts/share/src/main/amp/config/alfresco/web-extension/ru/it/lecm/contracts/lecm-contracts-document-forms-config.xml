@@ -489,6 +489,7 @@
                             <control-param name="allowMove">true</control-param>
                             <control-param name="jsDependencies">scripts/lecm-contracts/get-stage-delete-message.js</control-param>
                             <control-param name="useSequentialCreation">true</control-param>
+                            <control-param name="nowrapColumns">lecm-contract-table-structure:stage-amount</control-param>
                         </control>
                     </field>
                 </appearance>
