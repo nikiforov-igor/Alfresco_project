@@ -10,6 +10,29 @@
     text-align: center;
 }
 
-.tab-ord-document-items .datagrid .expand-row .graph-tree table th {
+.datagrid .expand-row .graph-tree table th,
+.datagrid .expand-row .graph-tree thead {
     display: none;
+}
+
+.document-table-control .expand-row .graph-tree tr td:first-of-type:after,
+.document-table-control .expand-row .graph-tree tr td:first-of-type:after {
+    display: none;
+}
+
+.datagrid .expand-row .graph-tree tr.yui-dt-highlighted:not(.expand-row) td {
+    background-color: #ffffff;
+}
+.datagrid .expand-row .form-container .form-fields {
+    padding: 0;
+}
+
+.datagrid .expand-row .form-container .form-fields .execution-tree-control {
+    margin: 0;
+}
+
+.datagrid .expand-row .form-container .form-fields .execution-tree-control {
+    padding-bottom: 6px;
+    padding-top: 2px;
+    background-color: #ffffff;
 }

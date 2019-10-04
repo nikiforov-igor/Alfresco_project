@@ -85,11 +85,6 @@
 .errand-add.create-errand-action > span {
     margin: 0;
 }
-
-.errands-button-group.yui-navset {
-    margin-top: 12px
-}
-
 .errands-container .list-category .errands-list-category-title {
     height: 34px;
     font-family: Roboto, sans-serif;
