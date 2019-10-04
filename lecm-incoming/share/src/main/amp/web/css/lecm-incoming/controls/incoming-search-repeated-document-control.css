@@ -12,9 +12,6 @@
 .form-container .bd .form-fields .control.incoming-search-repeated .object-finder .bd {
     padding: 0;
 }
-.form-container .bd .form-fields .control.incoming-search-repeated .object-finder .bd .picker-items {
-    margin: 2px;
-}
 .incoming-search-repeated.control .container .search-mode-div {
     width: calc(100% - 216px);
 }
