@@ -109,14 +109,14 @@ LogicECM.module = LogicECM.module || {};
 
                                 var template =
                                     '<div class="item-description">' +
-                                    '   <img class="document-type" src=' + Alfresco.constants.URL_RESCONTEXT + '"images/lecm-documents/type-icons/{docTypeIcon}.png" ' +
+                                    '   <img class="document-type" src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-documents/type-icons/{docTypeIcon}.png" ' +
                                     '       onerror="this.src = \'' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-documents/type-icons/default_document.png\';"/>' +
                                     '   <div class="link-span{classNotHaveAccess}">' +
                                     '       <a target="_blank" href="{documentUrl}">{documentName}</a>' +
                                     '       <div>' +
-                                    '           <span class="connectionType">{documentStatus}</span>' +
-                                    '           <a id="{expandShowId}" href="#" onclick="return false;" class="{showExpandClass}">{expandShowMessage}</a>' +
-                                    '           <a id="{expandHideId}" href="#" onclick="return false;" class="hidden1">{expandHideMessage}</a>' +
+                                    '           <div class="status"><div class="label">' + Alfresco.util.message('msg.status') + ':</div><div class="value">{documentStatus}</div><br/></div>' +
+                                    '           <div class="report"><a id="{expandShowId}" href="#" onclick="return false;" class="{showExpandClass}">{expandShowMessage}</a>' +
+                                    '           <a id="{expandHideId}" href="#" onclick="return false;" class="hidden1">{expandHideMessage}</a> </div>' +
                                     '       </div>' +
                                     '       <div id="{expandedDivId}" class="hidden1"></div>' +
                                     '   </div>' +
@@ -135,7 +135,7 @@ LogicECM.module = LogicECM.module || {};
                                     classNotHaveAccess: !oRecord._oData.hasAccess ? ' dont-have-access' : '',
                                     documentUrl: Alfresco.constants.URL_PAGECONTEXT + 'document?nodeRef=' + nodeRef,
                                     documentName: oData,
-                                    documentStatus: Alfresco.util.message('msg.status') + ': ' + oRecord._oData.status,
+                                    documentStatus: oRecord._oData.status,
                                     expandShowId: expandShowId,
                                     expandHideId: expandHideId,
                                     expandShowMessage: Alfresco.util.message(oRecord._oData.docType == 'lecm-errands:document' ? 'msg.errand.report.show' : 'msg.resolution.statistic.show'),
@@ -318,11 +318,11 @@ LogicECM.module = LogicECM.module || {};
                                     content += "<table class='execution-expanded-content type-resolution'>";
                                     content += "    <tr>";
                                     content += "        <td class='label-column'>{errandsStatisticLabel}</td>";
-                                    content += "        <td>{errandsStatisticList}";
+                                    content += "        <td class='content-column'>{errandsStatisticList}";
                                     content += "    </tr>";
                                     content += "    <tr>";
                                     content += "        <td class='label-column'>{reviewStatisticLabel}</td>";
-                                    content += "        <td>{reviewStatisticList}";
+                                    content += "        <td class='content-column'>{reviewStatisticList}";
                                     content += "        </td>";
                                     content += "    </tr>";
                                     content += "</table>";

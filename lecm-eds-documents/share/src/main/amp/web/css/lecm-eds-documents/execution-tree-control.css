@@ -3,34 +3,36 @@
 }
 
 .yui-skin-lecmTheme .yui-dt table.execution-expanded-content {
-    color: #999999;
-    margin-left: 70px;
-    padding-right: 70px;
-}
-
-.execution-tree-control .graph-tree .yui-dt-data td {
-    vertical-align: top;
-    top: 10px;
+    padding-top: 2px;
 }
 
 .execution-expanded-content .label-column {
     vertical-align: top;
 }
 
-.execution-expanded-content.type-errand .label-column {
-    width: 150px;
-}
-
+.execution-expanded-content.type-errand .label-column,
 .execution-expanded-content.type-resolution .label-column {
-    width: 220px;
+    width: 100px;
+    color: #666666;
+    padding-right: 4px;
 }
 
-.execution-expanded-content ul li {
-    margin-bottom: 5px;
-}
-.graph-tree .yui-dt-expandablerow-trigger {
-    background-color: transparent;
-}
-.execution-expanded-content.type-errand .content-column {
+.execution-expanded-content.type-errand .content-column,
+.execution-expanded-content.type-resolution .content-column {
+    color: #000000;
+    line-height: 20px;
     white-space: pre-wrap;
+    vertical-align: top;
+}
+.execution-expanded-content ul li{
+    line-height: 20px;
+}
+
+.execution-tree-control .connections-list .graph-tree .yui-dt-data td.yui-dt-col-title,
+.execution-tree-control .connections-list .graph-tree .yui-dt-data td.yui-dt-expandablerow-trigger {
+    padding-top: 14px;
+}
+
+.execution-tree-control  .graph-tree .yui-dt-data td.yui-dt-expandablerow-trigger {
+    vertical-align: top;
 }
