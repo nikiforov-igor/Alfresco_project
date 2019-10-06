@@ -47,6 +47,7 @@
     border: none;
     margin-left: -8px;
     padding-top: 4px;
+    padding-bottom: 38px;
 }
 
 .errands-container .workflow-task-item .workflow-task-title {
@@ -84,11 +85,6 @@
 .errand-add.create-errand-action > span {
     margin: 0;
 }
-
-.errands-button-group.yui-navset {
-    margin-top: 12px
-}
-
 .errands-container .list-category .errands-list-category-title {
     height: 34px;
     font-family: Roboto, sans-serif;
@@ -118,4 +114,11 @@
 
 .workflow-task-list-label ~ div {
     width: calc(100% - 104px);
+}
+
+.list-container .connections-list {
+    padding: 52px 8px 0;
+}
+.list-container .connections-list table {
+    width: 100%;
 }

@@ -722,6 +722,12 @@
                     <show id="lecm-contract-table-structure:stage-status" />
                     <show id="lecm-contract-table-structure:attachments-temp-assoc" />
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-document:indexTableRow" label-id="number.column.label"/>
+                    <field id="lecm-contract-table-structure:stage-amount" label-id="sum.column.label"/>
+                    <field id="lecm-contract-table-structure:start-date" label-id="start-date.column.label"/>
+                    <field id="lecm-contract-table-structure:end-date" label-id="end-date.column.label"/>
+                </appearance>
             </form>
             <form id="stages-dashlet">
                 <field-visibility>
