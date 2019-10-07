@@ -70,6 +70,10 @@
 								</assocs>
 							</item>
 						</items>
+						<assocs>
+							<assoc type="lecm-arm:icon-assoc"
+								   path="/Business platform/LECM/Сервис АРМ/Icons/White/os-cases.png"/>
+						</assocs>
 					</item>
 					<item name="cm:Управление номенклатурой дел" type="lecm-arm:accordion">
 						<property name="cm:name"><![CDATA[Управление номенклатурой дел]]></property>
@@ -105,6 +109,10 @@
 								</items>
 							</item>
 						</items>
+						<assocs>
+							<assoc type="lecm-arm:icon-assoc"
+								   path="/Business platform/LECM/Сервис АРМ/Icons/White/os-cases-manage.png"/>
+						</assocs>
 					</item>
 					<item name="cm:На указание дела" type="lecm-arm:accordion">
 						<property name="cm:name"><![CDATA[На указание дела]]></property>
@@ -205,6 +213,8 @@
 							<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/На указание дела/de662da4-308e-4968-91e0-54c0bf7dc1d6"/>
 							<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/На указание дела/1c3624d8-5c8b-41bb-a3cd-45a2984133ac"/>
 							<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/На указание дела/d2dbb653-2a5e-4613-9b7d-3d9c43e509bb"/>
+							<assoc type="lecm-arm:icon-assoc"
+								   path="/Business platform/LECM/Сервис АРМ/Icons/White/on-the-case.png"/>
 						</assocs>
 					</item>
 					<item name="cm:Отчёты" type="lecm-arm:accordion">
@@ -224,6 +234,10 @@
 								<property name="lecm-arm:types"><![CDATA[]]></property>
 							</item>
 						</items>
+						<assocs>
+							<assoc type="lecm-arm:icon-assoc"
+								   path="/Business platform/LECM/Сервис АРМ/Icons/White/reports.png"/>
+						</assocs>
 					</item>
 				</items>
 			</item>

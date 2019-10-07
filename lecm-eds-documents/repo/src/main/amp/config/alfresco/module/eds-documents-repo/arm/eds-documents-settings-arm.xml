@@ -28,6 +28,10 @@
 								</property>
 							</item>
 						</items>
+						<assocs>
+							<assoc type="lecm-arm:icon-assoc"
+								   path="/Business platform/LECM/Сервис АРМ/Icons/White/settings.png"/>
+						</assocs>
 					</item>
 				</items>
 			</item>

@@ -133,7 +133,7 @@
           p:reportsForDeploy-ref="operative.storage.deployer.reportsForDeploy"/>
 
 	<bean id="operative.storage.arm.bootstrap.main" parent="lecmDictionaryBootstrap"
-		  depends-on="eds.documents.arm.settings.LogicEcmBootstrap,operative.storage.dictionary.bootstrap"
+		  depends-on="eds.documents.arm.settings.LogicEcmBootstrap,operative.storage.dictionary.bootstrap,armServiceIconsBootstrap,armServiceOSCasesIconsBootstrap"
 		  p:rootPath="/Business platform/LECM/Сервис АРМ"
 		  p:dictionaries-ref="operative.storage.arm.os"/>
 
@@ -280,6 +280,19 @@
 		<property name="labels">
 			<list>
 				<value>alfresco/module/${artifactId}/messages/deprecated/lecm-file-register-dictionary-model</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="armServiceOSCasesIconsBootstrap" parent="spacesStoreImporter" depends-on="armService">
+		<property name="useExistingStore" value="true"/>
+		<property name="bootstrapViews">
+			<list>
+				<props>
+					<prop key="uuidBinding">UPDATE_EXISTING</prop>
+					<prop key="path">/${spaces.company_home.childname}/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_АРМ</prop>
+					<prop key="location">alfresco/module/operative-storage-repo/bootstrap/icons/arm-icons-bootstrap.xml</prop>
+				</props>
 			</list>
 		</property>
 	</bean>
