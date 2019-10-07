@@ -3649,6 +3649,8 @@
                         <assocs>
                             <assoc type="lecm-arm:filters-assoc"
                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По меткам"/>
+                            <assoc type="lecm-arm:icon-assoc"
+                                   path="/Business platform/LECM/Сервис АРМ/Icons/White/my-work.png"/>
                         </assocs>
                     </item>
                     <item name="cm:Делегирование" type="lecm-arm:accordion">
@@ -3685,6 +3687,8 @@
                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа"/>
                             <assoc type="lecm-arm:filters-assoc"
                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По меткам"/>
+                            <assoc type="lecm-arm:icon-assoc"
+                                   path="/Business platform/LECM/Сервис АРМ/Icons/White/delegate.png"/>
                         </assocs>
                     </item>
                     <item name="cm:Навигатор" type="lecm-arm:accordion">
@@ -4377,6 +4381,8 @@
                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По сумме договора"/>
                             <assoc type="lecm-arm:filters-assoc"
                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По меткам"/>
+                            <assoc type="lecm-arm:icon-assoc"
+                                   path="/Business platform/LECM/Сервис АРМ/Icons/White/navigator.png"/>
                         </assocs>
                     </item>
                     <item name="cm:Мои поисковые запросы" type="lecm-arm:accordion">
@@ -4434,6 +4440,10 @@
                                 <property name="lecm-arm:html-url"><![CDATA[page/search-query-create]]></property>
                             </item>
                         </items>
+                        <assocs>
+                            <assoc type="lecm-arm:icon-assoc"
+                                   path="/Business platform/LECM/Сервис АРМ/Icons/White/my-search-queries.png"/>
+                        </assocs>
                     </item>
                     <item name="cm:Отчеты" type="lecm-arm:accordion">
                         <property name="lecm-arm:search-query"><![CDATA[]]></property>
@@ -4456,6 +4466,10 @@
                                 <property name="lecm-arm:types"><![CDATA[]]></property>
                             </item>
                         </items>
+                        <assocs>
+                            <assoc type="lecm-arm:icon-assoc"
+                                   path="/Business platform/LECM/Сервис АРМ/Icons/White/reports.png"/>
+                        </assocs>
                     </item>
                     <item name="cm:Корзина" type="lecm-arm:accordion">
                         <property name="lecm-arm:search-query"><![CDATA[]]></property>
@@ -4678,6 +4692,9 @@
                                 </assocs>
                             </item>
                         </items>
+                        <assocs>
+                            <assoc type="lecm-arm:icon-assoc" path="/Business platform/LECM/Сервис АРМ/Icons/White/trash.png"/>
+                        </assocs>
                     </item>
                 </items>
             </item>

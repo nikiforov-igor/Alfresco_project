@@ -87,7 +87,7 @@
 	</bean>
 
 	<bean id="errands.arm.myProfile.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
-	      depends-on="userProfile.arm.LogicEcmBootstrap">
+	      depends-on="userProfile.arm.LogicEcmBootstrap,armServiceIconsBootstrap">
 		<property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
 		<property name="dictionaries">
 			<list>

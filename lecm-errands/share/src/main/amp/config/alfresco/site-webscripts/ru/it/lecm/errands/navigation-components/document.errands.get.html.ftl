@@ -13,16 +13,16 @@
         LogicECM.module.Documents.ERRANDS_SETTINGS = LogicECM.module.Documents.ERRANDS_SETTINGS || <#if errandsSettings?? >${errandsSettings?string}<#else>{}</#if>;
 
         function initComponent() {
-            new LogicECM.DocumentErrandsList("${id}_errands_container").setOptions({
-				nodeRef: '${nodeRef}',
-				componentHtmlId: "${componentHtmlId}"
-            });
-
             errandsComponent = new LogicECM.module.Errands.dashlet.Errands("${id}").setOptions({
                 itemType: "lecm-errands:document",
                 destination: LogicECM.module.Documents.ERRANDS_SETTINGS.nodeRef,
                 parentDoc: "${nodeRef}"
             }).setMessages(${messages});
+
+            new LogicECM.DocumentErrandsList("${id}_errands_container").setOptions({
+				nodeRef: '${nodeRef}',
+				componentHtmlId: "${componentHtmlId}"
+            });
 
         }
 

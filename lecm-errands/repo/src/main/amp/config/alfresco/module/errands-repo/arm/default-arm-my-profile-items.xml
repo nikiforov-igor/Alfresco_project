@@ -18,6 +18,9 @@
                                 <property name="lecm-arm:html-url"><![CDATA[page/my-errands-settings]]></property>
                             </item>
 						</items>
+						<assocs>
+							<assoc type="lecm-arm:icon-assoc" path="/Business platform/LECM/Сервис АРМ/Icons/White/sed.png"/>
+						</assocs>
 					</item>
 				</items>
 			</item>

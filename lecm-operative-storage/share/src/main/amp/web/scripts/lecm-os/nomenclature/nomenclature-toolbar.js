@@ -409,7 +409,7 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 				noEscape: true,
 				buttons:[
 					{
-						text:'Ок',
+						text:'ОК',
 						handler: {
 							obj: {
 								context: this,

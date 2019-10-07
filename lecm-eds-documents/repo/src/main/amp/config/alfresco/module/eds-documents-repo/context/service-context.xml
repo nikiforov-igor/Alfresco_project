@@ -142,7 +142,7 @@
     </bean>
 
     <bean id="eds.documents.arm.settings.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
-          depends-on="arm.settings.LogicEcmBootstrap">
+          depends-on="arm.settings.LogicEcmBootstrap,armServiceIconsBootstrap">
         <property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
         <property name="dictionaries">
             <list>

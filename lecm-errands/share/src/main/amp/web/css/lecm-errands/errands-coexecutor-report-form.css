@@ -7,3 +7,6 @@
     border-color: #bdbdbd;
 }
 
+.yui-panel-container .errands-coexecutor-report-form .control.has-autocomplete .label-div ~ .container {
+    margin-left: 100px;
+}

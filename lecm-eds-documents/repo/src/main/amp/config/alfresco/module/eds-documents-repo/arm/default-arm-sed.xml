@@ -5263,7 +5263,7 @@
                         </items>
                         <assocs>
                             <assoc type="lecm-arm:icon-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Icons/White/my work.png"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Icons/White/my-work.png"/>
                         </assocs>
                     </item>
                     <item name="cm:Навигатор" type="lecm-arm:accordion">
@@ -25984,7 +25984,7 @@
                         </items>
                         <assocs>
                             <assoc type="lecm-arm:icon-assoc"
-                               path="/Business platform/LECM/Сервис АРМ/Icons/White/icon-alldocs.png"/>
+                            path="/Business platform/LECM/Сервис АРМ/Icons/White/navigator.png"/>
                         </assocs>
                     </item>
                     <item name="cm:Отчеты" type="lecm-arm:accordion">
@@ -26023,7 +26023,8 @@
                             </item>
                         </items>
                         <assocs>
-                            <assoc type="lecm-arm:icon-assoc" path="/Business platform/LECM/Сервис АРМ/Icons/White/otchet.png"/>
+                            <assoc type="lecm-arm:icon-assoc"
+                                path="/Business platform/LECM/Сервис АРМ/Icons/White/reports.png"/>
                         </assocs>
                     </item>
                     <item name="cm:Работа регистратора" type="lecm-arm:accordion">
@@ -29599,8 +29600,8 @@
                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/a20cf365-7222-43e0-9984-81d89125fe40"/>
                             <assoc type="lecm-arm:filters-assoc"
                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По меткам"/>
-                    <assoc type="lecm-arm:icon-assoc"
-                           path="/Business platform/LECM/Сервис АРМ/Icons/White/icon-svyazi.png"/>
+                            <assoc type="lecm-arm:icon-assoc"
+                                    path="/Business platform/LECM/Сервис АРМ/Icons/White/registrator-work.png"/>
                         </assocs>
                     </item>
                     <item name="cm:Ресурсы" type="lecm-arm:accordion">
@@ -29644,6 +29645,8 @@
                             </item>
                         </items>
                         <assocs>
+                            <assoc type="lecm-arm:icon-assoc"
+                                    path="/Business platform/LECM/Сервис АРМ/Icons/White/resources.png"/>
                             <assoc type="lecm-arm:fields-assoc"
                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Ресурсы/f9b42412-5c9a-4911-841e-686ee89bb52d"/>
                         </assocs>
@@ -30013,8 +30016,7 @@
                             </item>
                         </items>
                         <assocs>
-                            <assoc type="lecm-arm:icon-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Icons/White/delegirovnie.png"/>
+                            <assoc type="lecm-arm:icon-assoc" path="/Business platform/LECM/Сервис АРМ/Icons/White/events.png"/>
                         </assocs>
                     </item>
                     <item name="cm:Мои поисковые запросы" type="lecm-arm:accordion">
@@ -30067,7 +30069,7 @@
                             </item>
                         </items>
                         <assocs>
-                            <assoc type="lecm-arm:icon-assoc" path="/Business platform/LECM/Сервис АРМ/Icons/White/search.png"/>
+                            <assoc type="lecm-arm:icon-assoc" path="/Business platform/LECM/Сервис АРМ/Icons/White/my-search-queries.png"/>
                         </assocs>
                     </item>
                     <item name="cm:Делегирование" type="lecm-arm:accordion">
@@ -30103,6 +30105,8 @@
                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа"/>
                             <assoc type="lecm-arm:filters-assoc"
                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По меткам"/>
+                            <assoc type="lecm-arm:icon-assoc"
+                                    path="/Business platform/LECM/Сервис АРМ/Icons/White/delegate.png"/>
                         </assocs>
                     </item>
                     <item name="cm:Работа контролера" type="lecm-arm:accordion">
@@ -31014,6 +31018,7 @@
                             </item>
                         </items>
                         <assocs>
+                            <assoc type="lecm-arm:icon-assoc" path="/Business platform/LECM/Сервис АРМ/Icons/White/trash.png"/>
                             <assoc type="lecm-arm:fields-assoc"
                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Корзина/967d775c-ba37-4127-ad53-05368208351d"/>
                             <assoc type="lecm-arm:fields-assoc"
