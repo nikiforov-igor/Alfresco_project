@@ -303,7 +303,7 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 				title: Alfresco.util.message('lecm.os.lbl.nomen.doc.destr'),
 				text: Alfresco.util.message('lecm.os.ttl.confirm.action'),
 				buttons:[{
-					text: 'Ок',
+					text: 'ОК',
 					handler: {
 						obj: {
 							context: this,
