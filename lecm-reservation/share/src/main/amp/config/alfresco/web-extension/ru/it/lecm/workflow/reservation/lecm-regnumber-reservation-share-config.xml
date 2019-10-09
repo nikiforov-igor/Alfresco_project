@@ -49,11 +49,11 @@
 		<forms>
 			<form>
 				<field-visibility>
+					<show id="transitions" force="true" />
 					<show id="reservationWf:presentString" force="true" />
 					<show id="lecmRegnumRes:decision" />
 					<show id="lecmRegnumRes:rejectReason" />
 					<show id="style" />
-					<show id="transitions" force="true" />
 				</field-visibility>
 				<appearance>
 					<field id="reservationWf:presentString">
@@ -71,6 +71,7 @@
 					<field id="lecmRegnumRes:rejectReason" label-id="ru.it.reservation.title.rejectReason" help-id="lecm.reservation.reject-reason.help-id">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
 							<control-param name="rows">4</control-param>
+							<control-param name="hiddenOnLoad">true</control-param>
 						</control>
 					</field>
 					<field id="style">
@@ -117,11 +118,11 @@
 		<forms>
 			<form>
 				<field-visibility>
+					<show id="transitions" force="true" />
 					<show id="reservationWf:presentString" force="true" />
 					<show id="lecmRegnumRes:requestCancelDecision" />
 					<show id="lecmRegnumRes:requestCancelRejectReason" />
 					<show id="style" />
-					<show id="transitions" force="true" />
 				</field-visibility>
 				<appearance>
 					<field id="reservationWf:presentString">
@@ -142,6 +143,7 @@
 					<field id="lecmRegnumRes:requestCancelRejectReason" label-id="ru.it.reservation.title.rejectReason" help-id="lecm.reservation.reject-reason.help-id">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
 							<control-param name="rows">4</control-param>
+							<control-param name="hiddenOnLoad">true</control-param>
 						</control>
 					</field>
 					<field id="style">

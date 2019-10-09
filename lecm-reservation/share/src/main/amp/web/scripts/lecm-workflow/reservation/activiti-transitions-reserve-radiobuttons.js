@@ -200,10 +200,10 @@ LogicECM.module = LogicECM.module || {};
             for (var i = 0; i < elements.length; ++i) {
                 if (this.hasClass(elements[i], 'textarea')) {
                     if (show) {
-                        Dom.removeClass(elements[i], 'hidden');
+                        Dom.removeClass(elements[i], 'hidden1');
                     }
                     else {
-                        Dom.addClass(elements[i], 'hidden');
+                        Dom.addClass(elements[i], 'hidden1');
                     }
                     break;
                 }
