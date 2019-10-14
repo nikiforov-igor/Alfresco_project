@@ -43,9 +43,20 @@
 }
 
 .control.multi-form li div.actions a.remove-item {
-    background: url(../../../images/lecm-events/alf_remove_grey_16.png) no-repeat center center;
-    padding-left: 4px;
-    margin-right: 0px;
+    position: relative;
+    background: none;
+}
+
+.control.multi-form li div.actions a.remove-item:after {
+    width: 16px;
+    height: 16px;
+    color: transparent;
+    background: url(../../images/lecm-base/icons.svg) no-repeat -336px -240px; /*серый крестик*/
+    left: 8px;
+    top: 45%;
+    margin-left: 0;
+    content: "";
+    position: absolute;
 }
 
 .create-documents-form .control .label-div {
