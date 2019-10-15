@@ -106,7 +106,7 @@
     -->
     <dependencyManagement>
         <dependencies>
-            <dependency>
+            <!--dependency>
                 <groupId>org.alfresco</groupId>
                 <artifactId>alfresco-platform-distribution</artifactId>
                 <version>5.1.g</version>
@@ -164,9 +164,9 @@
                 <version>${alfresco.version}</version>
                 <classifier>classes</classifier>
                 <scope>provided</scope>
-            </dependency><!--
+            </dependency--><!--
 -->
-            <dependency>
+            <!--dependency>
                 <groupId>org.alfresco.surf</groupId>
                 <artifactId>spring-surf-core</artifactId>
                 <version>${spring.surf.version}</version>
@@ -177,19 +177,19 @@
                         <groupId>aopalliance</groupId>
                     </exclusion>
                 </exclusions>
-            </dependency>
+            </dependency-->
             <!--
             -->
-            <dependency>
+            <!--dependency>
                 <groupId>org.alfresco.surf</groupId>
                 <artifactId>spring-webscripts</artifactId>
                 <version>${spring.surf.version}</version>
                 <scope>provided</scope>
-            </dependency>
+            </dependency-->
 			<!--https://github.com/Alfresco/alfresco-sdk/issues/375
 				Alfresco забыли про версию для surf'а, поэтому определим сами
 			-->
-			<dependency>
+			<!--dependency>
                 <groupId>org.alfresco.surf</groupId>
                 <artifactId>spring-surf</artifactId>
                 <version>${spring.surf.version}</version>
@@ -223,10 +223,10 @@
                 <artifactId>spring-beans</artifactId>
                 <version>${spring.version}</version>
                 <scope>provided</scope>
-            </dependency>
+            </dependency-->
             <!--
             -->
-            <dependency>
+            <!--dependency>
                 <groupId>net.sf.jasperreports</groupId>
                 <artifactId>jasperreports</artifactId>
                 <version>${jasperreports.version}</version>
@@ -341,7 +341,7 @@
                 <groupId>net.sf.jasperreports</groupId>
                 <artifactId>jasperreports-fonts</artifactId>
                 <version>${jasperreports.fonts.version}</version>
-            </dependency>
+            </dependency-->
             <!--
 
                Example Jar dependency: will be properly packed into the AMP /lib
@@ -358,7 +358,7 @@
 
              Don't add here amp dependencies as it will break amp packaging
 -->
-			<dependency>
+			<!--dependency>
 				<groupId>org.bouncycastle</groupId>
 				<artifactId>bcpkix-jdk15on</artifactId>
 				<version>1.50</version>
@@ -368,7 +368,7 @@
                 <artifactId>commons-io</artifactId>
                 <version>2.4</version>
                 <scope>provided</scope>
-            </dependency><!--
+            </dependency--><!--
             <dependency>
                 <groupId>commons-httpclient</groupId>
                 <artifactId>commons-httpclient</artifactId>
@@ -376,42 +376,42 @@
                 <scope>provided</scope>
             </dependency>
 -->
-            <dependency>
+            <!--dependency>
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
                 <version>1.10</version>
                 <scope>provided</scope>
-            </dependency><!--
+            </dependency--><!--
 -->
-            <dependency>
+            <!--dependency>
                 <groupId>commons-lang</groupId>
                 <artifactId>commons-lang</artifactId>
                 <version>2.6</version>
                 <scope>provided</scope>
-            </dependency><!--
+            </dependency--><!--
 -->
-            <dependency>
+            <!--dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-compress</artifactId>
                 <version>1.9</version>
                 <scope>provided</scope>
-            </dependency><!--
+            </dependency--><!--
 -->
-            <dependency>
+            <!--dependency>
                 <groupId>xerces</groupId>
                 <artifactId>xercesImpl</artifactId>
                 <version>2.10.0-alfresco-patched</version>
                 <scope>provided</scope>
-            </dependency><!--
+            </dependency--><!--
 -->
-            <dependency>
+            <!--dependency>
                 <groupId>org.json</groupId>
                 <artifactId>json</artifactId>
                 <version>20090211</version>
                 <scope>provided</scope>
-            </dependency><!--
+            </dependency--><!--
 -->
-            <dependency>
+            <!--dependency>
                 <groupId>org.activiti</groupId>
                 <artifactId>activiti-engine</artifactId>
                 <version>${activiti.version}</version>
@@ -476,9 +476,9 @@
                     </exclusion>
                 </exclusions>
 
-            </dependency><!--
+            </dependency--><!--
 -->
-            <dependency>
+            <!--dependency>
                 <groupId>xstream</groupId>
                 <artifactId>xstream</artifactId>
                 <version>1.2.2</version>
@@ -488,9 +488,9 @@
                 <groupId>net.sourceforge.javacsv</groupId>
                 <artifactId>javacsv</artifactId>
                 <version>2.0</version>
-            </dependency><!--
+            </dependency--><!--
 -->
-            <dependency>
+            <!--dependency>
                 <groupId>javax.transaction</groupId>
                 <artifactId>jta</artifactId>
                 <version>1.0.1b</version>
@@ -501,7 +501,7 @@
                 <artifactId>slf4j-api</artifactId>
                 <version>${slf4j.version}</version>
                 <scope>provided</scope>
-            </dependency>
+            </dependency-->
             <!--
                         <dependency>
                             <groupId>org.springframework.security</groupId>
@@ -510,7 +510,7 @@
                             <scope>provided</scope>
                         </dependency>
             -->
-            <dependency>
+            <!--dependency>
                 <groupId>org.acegisecurity</groupId>
                 <artifactId>acegi-security</artifactId>
                 <version>${acegisecurity.version}</version>
@@ -520,16 +520,16 @@
                 <groupId>org.tinyjee.jgraphx</groupId>
                 <artifactId>jgraphx</artifactId>
                 <version>2.0.0.1</version>
-            </dependency><!--
+            </dependency--><!--
 -->
-            <dependency>
+            <!--dependency>
                 <groupId>org.quartz-scheduler</groupId>
                 <artifactId>quartz</artifactId>
                 <version>1.8.3-alfresco-patched</version>
                 <scope>provided</scope>
-            </dependency><!--
+            </dependency--><!--
 -->
-            <dependency>
+            <!--dependency>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-frontend-jaxws</artifactId>
                 <version>${apache.cxf.version}</version>
@@ -569,13 +569,13 @@
 				<groupId>org.apache.activemq</groupId>
 				<artifactId>activemq-jms-pool</artifactId>
 				<version>5.10.0</version>
-			</dependency>
+			</dependency-->
             <!--<dependency>
                 <groupId>org.apache.activemq</groupId>
                 <artifactId>activemq-all</artifactId>
                 <version>5.10.0</version>
             </dependency>-->
-            <dependency>
+            <!--dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-jms</artifactId>
                 <version>3.2.8.RELEASE</version>
@@ -604,14 +604,14 @@
                         <artifactId>ant</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>
+            </dependency-->
         </dependencies>
     </dependencyManagement>
 
     <build>
         <pluginManagement>
             <plugins>
-                <plugin>
+                <!--plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-antrun-plugin</artifactId>
                     <version>1.8</version>
@@ -672,9 +672,9 @@
                     -Xlint:deprecation
                 	</compilerArgument>
                 </configuration>
-                </plugin>
+                </plugin-->
                 <!--Java Script minification with YUI Compressor-->
-                <plugin>
+                <!--plugin>
                     <groupId>net.alchim31.maven</groupId>
                     <artifactId>yuicompressor-maven-plugin</artifactId>
                     <version>1.5.1</version>
@@ -694,9 +694,9 @@
                                     <exclude>**/*.css</exclude>
                                 </excludes>
                                 <sourceDirectory>src/main/amp/web</sourceDirectory>
-                                <outputDirectory>${project.build.directory}/amp/web</outputDirectory>
+                                <outputDirectory>${project.build.directory}/amp/web</outputDirectory-->
                                 <!-- Exclude resources so we don't get an extra dir structure with -min.js files -->
-                                <excludeResources>true</excludeResources>
+                                <!--excludeResources>true</excludeResources>
                                 <jswarn>false</jswarn>
                             </configuration>
                         </execution>
@@ -719,9 +719,9 @@
 						</execution>
 					</executions>
 
-					<dependencies>
+					<dependencies-->
 						<!--note this must be repeated here to pick up correct xml validation -->
-						<dependency>
+						<!--dependency>
 							<groupId>net.sf.jasperreports</groupId>
 							<artifactId>jasperreports</artifactId>
 							<version>${jasperreports.version}</version>
@@ -736,7 +736,7 @@
                     <configuration>
                         <attachClasses>true</attachClasses>
                     </configuration>
-                </plugin>
+                </plugin-->
             </plugins>
         </pluginManagement>
         <!--<plugins>

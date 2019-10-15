@@ -3650,7 +3650,7 @@
                             <assoc type="lecm-arm:filters-assoc"
                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По меткам"/>
                             <assoc type="lecm-arm:icon-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Icons/White/my-work.png"/>
+                                   path="/Словарь данных/Icons/White/my-work.png"/>
                         </assocs>
                     </item>
                     <item name="cm:Делегирование" type="lecm-arm:accordion">
@@ -3688,7 +3688,7 @@
                             <assoc type="lecm-arm:filters-assoc"
                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По меткам"/>
                             <assoc type="lecm-arm:icon-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Icons/White/delegate.png"/>
+                                   path="/Словарь данных/Icons/White/delegate.png"/>
                         </assocs>
                     </item>
                     <item name="cm:Навигатор" type="lecm-arm:accordion">
@@ -4382,7 +4382,7 @@
                             <assoc type="lecm-arm:filters-assoc"
                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По меткам"/>
                             <assoc type="lecm-arm:icon-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Icons/White/navigator.png"/>
+                                   path="/Словарь данных/Icons/White/navigator.png"/>
                         </assocs>
                     </item>
                     <item name="cm:Мои поисковые запросы" type="lecm-arm:accordion">
@@ -4442,7 +4442,7 @@
                         </items>
                         <assocs>
                             <assoc type="lecm-arm:icon-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Icons/White/my-search-queries.png"/>
+                                   path="/Словарь данных/Icons/White/my-search-queries.png"/>
                         </assocs>
                     </item>
                     <item name="cm:Отчеты" type="lecm-arm:accordion">
@@ -4468,7 +4468,7 @@
                         </items>
                         <assocs>
                             <assoc type="lecm-arm:icon-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Icons/White/reports.png"/>
+                                   path="/Словарь данных/Icons/White/reports.png"/>
                         </assocs>
                     </item>
                     <item name="cm:Корзина" type="lecm-arm:accordion">
@@ -4693,7 +4693,7 @@
                             </item>
                         </items>
                         <assocs>
-                            <assoc type="lecm-arm:icon-assoc" path="/Business platform/LECM/Сервис АРМ/Icons/White/trash.png"/>
+                            <assoc type="lecm-arm:icon-assoc" path="/Словарь данных/Icons/White/trash.png"/>
                         </assocs>
                     </item>
                 </items>

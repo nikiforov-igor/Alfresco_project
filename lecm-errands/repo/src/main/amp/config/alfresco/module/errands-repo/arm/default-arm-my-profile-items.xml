@@ -19,7 +19,7 @@
                             </item>
 						</items>
 						<assocs>
-							<assoc type="lecm-arm:icon-assoc" path="/Business platform/LECM/Сервис АРМ/Icons/White/sed.png"/>
+							<assoc type="lecm-arm:icon-assoc" path="/Словарь данных/Icons/White/sed.png"/>
 						</assocs>
 					</item>
 				</items>
