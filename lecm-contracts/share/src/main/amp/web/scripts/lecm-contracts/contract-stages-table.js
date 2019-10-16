@@ -100,7 +100,10 @@ LogicECM.module.Contracts = LogicECM.module.Contracts || {};
                     dataSource: this.options.dataSource,
                     expandable: this.options.expandable,
                     expandDataSource: this.options.expandDataSource,
-                    createItemBtnMsg: this.options.createItemBtnMsg
+                    createItemBtnMsg: this.options.createItemBtnMsg,
+                    useSequentialCreation: this.options.useSequentialCreation,
+                    excludeColumns: this.options.excludeColumns,
+                    nowrapColumns: this.options.nowrapColumns
                 }).setMessages(this.options.messages);
             }
 
