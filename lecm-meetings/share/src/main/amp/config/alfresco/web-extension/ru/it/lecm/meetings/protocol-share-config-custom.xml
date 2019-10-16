@@ -246,22 +246,18 @@
 					<show id="lecm-base-dummy-aspects:script" force="true"/>
 				</field-visibility>
 				<appearance>
-					<set id="common"/>
-					<set id="item0" parent="common" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
-					<set id="item1" parent="common" />
-
 					<field id="lecm-document:indexTableRow" mandatory="true">
 						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
 					</field>
-					<field id="lecm-protocol-ts:point-status-assoc" read-only="true" set="item0">
+					<field id="lecm-protocol-ts:point-status-assoc" read-only="true">
 						<control template="/ru/it/lecm/base-share/components/controls/substitude-text-control.ftl">
 							<control-param name="value">
 								#{doc.assocAttr("lecm-protocol-ts:point-status-assoc","cm:name")}
 							</control-param>
 						</control>
 					</field>
-					<field id="lecm-protocol-ts:point-formulation" set="item1"/>
-					<field id="lecm-protocol-ts:reporter-assoc" set="item1">
+					<field id="lecm-protocol-ts:point-formulation"/>
+					<field id="lecm-protocol-ts:reporter-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
 							<control-param name="items">employee,representative</control-param>
 							<control-param name="showAutocomplete">true</control-param>
@@ -287,7 +283,7 @@
 							<control-param name="representative_showSearch">true</control-param>
 						</control>
 					</field>
-					<field id="lecm-protocol-ts:coreporter-assoc" set="item1">
+					<field id="lecm-protocol-ts:coreporter-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
 							<control-param name="items">employee,representative</control-param>
 							<control-param name="showAutocomplete">true</control-param>
@@ -313,39 +309,39 @@
 							<control-param name="representative_showSearch">true</control-param>
 						</control>
 					</field>
-					<field id="lecm-protocol-ts:point-desc" set="item1">
+					<field id="lecm-protocol-ts:point-desc">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
 					</field>
-					<field id="lecm-protocol-ts:men-spoke" set="item1">
+					<field id="lecm-protocol-ts:men-spoke">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
 							<control-param name="rows">4</control-param>
 						</control>
 					</field>
-					<field id="lecm-protocol-ts:decision" set="item1">
+					<field id="lecm-protocol-ts:decision">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
 					</field>
-					<field id="lecm-protocol-ts:executor-assoc" mandatory="true" set="item1"/>
-					<field id="lecm-protocol-ts:execution-date" set="item1">
+					<field id="lecm-protocol-ts:executor-assoc" mandatory="true"/>
+					<field id="lecm-protocol-ts:execution-date" >
 						<control template="/ru/it/lecm/base-share/components/controls/date.ftl">
 							<control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-Protocol', false)}</control-param>
 						</control>
 					</field>
-					<field id="lecm-protocol-ts:execution-date-real" read-only="true"  set="item1">
+					<field id="lecm-protocol-ts:execution-date-real" read-only="true" >
 						<control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
 					</field>
-					<field id="lecm-protocol-ts:note" set="item1">
+					<field id="lecm-protocol-ts:note" >
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
 							<control-param name="rows">4</control-param>
 						</control>
 					</field>
-					<field id="lecm-protocol-ts:errand-assoc" set="item1">
+					<field id="lecm-protocol-ts:errand-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/substitude-text-control.ftl">
 							<control-param name="value">
 								<![CDATA[#{@substitudeService.formatNodeTitle(doc.nodeRef,"<a href='/{~SHARE_CONTEXT}/page/document?nodeRef={lecm-protocol-ts:errand-assoc/nodeRef}'>{lecm-protocol-ts:errand-assoc/lecm-document:present-string}</a>")}]]>
 							</control-param>
 						</control>
 					</field>
-					<field id="lecm-base-dummy-aspects:script" set="item1">
+					<field id="lecm-base-dummy-aspects:script">
 						<control template="/ru/it/lecm/meetings/components/controls/execute-point-control.ftl"/>
 					</field>
 				</appearance>

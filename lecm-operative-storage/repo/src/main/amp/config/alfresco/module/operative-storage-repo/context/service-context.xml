@@ -290,7 +290,7 @@
 			<list>
 				<props>
 					<prop key="uuidBinding">UPDATE_EXISTING</prop>
-					<prop key="path">/${spaces.company_home.childname}/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_АРМ</prop>
+					<prop key="path">/${spaces.company_home.childname}/${spaces.dictionary.childname}</prop>
 					<prop key="location">alfresco/module/operative-storage-repo/bootstrap/icons/arm-icons-bootstrap.xml</prop>
 				</props>
 			</list>
