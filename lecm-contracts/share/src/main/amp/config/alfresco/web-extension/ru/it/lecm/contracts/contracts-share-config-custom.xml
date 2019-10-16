@@ -535,8 +535,6 @@
     <config evaluator="node-type" condition="lecm-contract-table-structure:stage">
         <forms>
             <form>
-                <edit-form template="/ru/it/lecm/contracts/forms/stage-create-edit-form.ftl" />
-                <view-form template="/ru/it/lecm/contracts/forms/stage-create-edit-form.ftl" />
                 <field-visibility>
                     <show id="lecm-contract-table-structure:stage-status"/>
                     <show id="lecm-document:indexTableRow" force="true"/>
@@ -556,7 +554,11 @@
                         <control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
                     </field>
                     <field id="lecm-contract-table-structure:stage-status">
-                        <control template="/ru/it/lecm/base-share/components/controls/view-text-control.ftl"/>
+                        <control template="/ru/it/lecm/base-share/components/controls/substitude-text-control.ftl">
+                            <control-param name="value">
+                                #{@substitudeService.formatNodeTitle(doc.nodeRef,"{lecm-contract-table-structure:stage-status}")}
+                            </control-param>
+                        </control>
                     </field>
                     <field id="lecm-contract-table-structure:start-date">
                         <constraint-handlers>
