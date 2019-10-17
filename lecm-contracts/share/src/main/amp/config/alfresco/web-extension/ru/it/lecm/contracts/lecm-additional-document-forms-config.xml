@@ -180,7 +180,7 @@
                 <appearance>
                     <field id="attributes">
                         <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
-                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="iconSrc">/document-page/attributes-40.png</control-param>
                             <control-param name="uri">/lecm/components/document/form</control-param>
                             <control-param name="nodeLabel">Атрибуты</control-param>
                             <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_AttrList")</control-param>
@@ -188,7 +188,7 @@
                     </field>
                     <field id="approvalAndSigning">
                         <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
-                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="iconSrc">/document-page/signing-40.png</control-param>
                             <control-param name="uri">/lecm/components/document/approval-and-signing</control-param>
                             <control-param name="nodeLabel">Согласование и подписание</control-param>
                             <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_AttrList")</control-param>
@@ -196,7 +196,7 @@
                     </field>
                     <field id="attachments">
                         <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
-                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="iconSrc">/document-page/attachments-40.png</control-param>
                             <control-param name="uri">/lecm/components/document/attachments</control-param>
                             <control-param name="nodeLabel">Вложения</control-param>
                             <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_ContentList")</control-param>
@@ -204,7 +204,7 @@
                     </field>
                     <field id="errands">
                         <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
-                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="iconSrc">/document-page/errands-40.png</control-param>
                             <control-param name="uri">/lecm/components/document/errands</control-param>
                             <control-param name="nodeLabel">Поручения</control-param>
                             <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_LinksView")</control-param>
@@ -212,7 +212,7 @@
                     </field>
                     <field id="workflows">
                         <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
-                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="iconSrc">/document-page/workflows-40.png</control-param>
                             <control-param name="uri">/lecm/components/document/workflows</control-param>
                             <control-param name="nodeLabel">Бизнес-процессы</control-param>
                             <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_WFEnumBP")</control-param>
@@ -220,7 +220,7 @@
                     </field>
                     <field id="connections">
                         <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
-                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="iconSrc">/document-page/connections-40.png</control-param>
                             <control-param name="uri">/lecm/components/document/connections-list</control-param>
                             <control-param name="nodeLabel">Связи</control-param>
                             <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_LinksView")</control-param>
@@ -229,7 +229,7 @@
                     </field>
                     <field id="members">
                         <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
-                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="iconSrc">/document-page/members-40.png</control-param>
                             <control-param name="uri">/lecm/components/document/members-list</control-param>
                             <control-param name="nodeLabel">Участники документа</control-param>
                             <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_MemberList")</control-param>
@@ -237,7 +237,7 @@
                     </field>
                     <field id="tags">
                         <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
-                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="iconSrc">/document-page/tags-40.png</control-param>
                             <control-param name="uri">/lecm/components/document/tags-list</control-param>
                             <control-param name="nodeLabel">Метки</control-param>
                             <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_TagView")</control-param>
@@ -245,7 +245,7 @@
                     </field>
                     <field id="history">
                         <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
-                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="iconSrc">/document-page/history-40.png</control-param>
                             <control-param name="uri">/lecm/components/document/history-datagrid</control-param>
                             <control-param name="nodeLabel">История</control-param>
                             <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_HistoryView")</control-param>
@@ -256,14 +256,14 @@
                     </field>
                     <field id="reports">
                         <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
-                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="iconSrc">/document-page/print-forms-40.png</control-param>
                             <control-param name="nodeLabel">Печатные формы</control-param>
                             <control-param name="uri">/lecm/components/document/forms</control-param>
                         </control>
                     </field>
                     <field id="comments">
                         <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
-                            <control-param name="iconSrc">/folder-40.png</control-param>
+                            <control-param name="iconSrc">/document-page/comments-40.png</control-param>
                             <control-param name="uri">/lecm/components/comments/list</control-param>
                             <control-param name="nodeLabel">Комментарии</control-param>
                             <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_CommentView")</control-param>
