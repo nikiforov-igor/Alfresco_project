@@ -8,25 +8,29 @@
 
         var stageViewDialog = null;
 
+        function hideStageDialog() {
+            stageViewDialog.hide();
+        }
+
         function openPreview(nodeRef) {
             Alfresco.util.Ajax.request(
                     {
-                        url:Alfresco.constants.URL_SERVICECONTEXT + "components/form",
-                        dataObj:{
-                            htmlid:nodeRef.replace("workspace://SpacesStore/","").replace("-",""),
-                            itemKind:"node",
-                            itemId:nodeRef,
-                            formId:"${formId}",
-                            mode:"view",
+                        url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
+                        dataObj: {
+                            htmlid: nodeRef.replace("workspace://SpacesStore/", "").replace("-", ""),
+                            itemKind: "node",
+                            itemId: nodeRef,
+                            formId: "${formId}",
+                            mode: "view",
                             setId: "common"
                         },
-                        successCallback:{
-                            fn:function(response) {
+                        successCallback: {
+                            fn: function (response) {
                                 var formEl = Dom.get("${formId}-content");
                                 formEl.innerHTML = response.serverResponse.responseText;
                                 if (stageViewDialog != null) {
                                     Dom.setStyle("${formId}", "display", "block");
-                                    var message ="${msg("logicecm.view")}";
+                                    var message = "${msg("logicecm.view")}";
                                     var titleElement = Dom.get("${formId}-head");
                                     if (titleElement) {
                                         titleElement.innerHTML = message;
@@ -35,14 +39,14 @@
                                 }
                             }
                         },
-                        failureMessage:"message.failure",
-                        execScripts:true
+                        failureMessage: "message.failure",
+                        execScripts: true
                     });
         }
 
         function drawStages(nodeRef){
             var url = Alfresco.constants.PROXY_URI + "/lecm/contracts/stages?nodeRef=" + nodeRef;
-            callback = {
+            var callback = {
                 success:function (oResponse) {
                     var resultMessage = "";
                     var oResults = eval("(" + oResponse.responseText + ")");
@@ -74,11 +78,6 @@
                 timeout: 60000
             };
             YAHOO.util.Connect.asyncRequest('GET', url, callback);
-
-        }
-
-        function hideStageDialog() {
-            stageViewDialog.hide();
         }
 
         function init() {
@@ -87,7 +86,7 @@
                         width: "50em"
                     });
             YAHOO.Bubbling.on("hidePanel", hideStageDialog);
-            Alfresco.util.createYUIButton(null, "", hideStageDialog, { label: "${msg("button.close")}", title: "${msg("button.close")}" }, "${formId}-cancel");
+            Alfresco.util.createYUIButton(null, "", hideStageDialog, { label: "${msg("button.close")}", title: "${msg("button.close")}" }, "${formId}-close");
             drawStages("${args.nodeRef}");
         }
         Event.onContentReady("${id}_container", init, true);
@@ -100,11 +99,11 @@
     <div id="${formId}-body" class="bd">
         <div id="${formId}-content"></div>
         <div class="bdft">
-	            <span id="${formId}-cancel" class="yui-button yui-push-button">
-	                <span class="first-child">
-	                    <button type="button" tabindex="0" onclick="hideStageDialog();">${msg("button.close")}</button>
-	                </span>
-	            </span>
+            <span id="${formId}-close" class="yui-button yui-push-button">
+                <span class="first-child">
+                    <button type="button" tabindex="0">${msg("button.close")}</button>
+                </span>
+            </span>
         </div>
     </div>
 </div>

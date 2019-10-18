@@ -27,7 +27,7 @@
         var startButtonClick = function() {
             var hidden = Dom.getElementBy(function(el) {
                 return el.name == "prop_lecm-contract-table-structure_stage-status";
-            }, 'select', panelId);
+            }, 'input', panelId);
             hidden.value = "IN_WORK";
             var okButton = Dom.get("${id}-form-submit");
             okButton.click();
@@ -39,7 +39,7 @@
         var endButtonClick = function() {
             var hidden = Dom.getElementBy(function(el) {
                 return el.name == "prop_lecm-contract-table-structure_stage-status";
-            }, 'select', panelId);
+            }, 'input', panelId);
             hidden.value = "CLOSED";
             var okButton = Dom.get("${id}-form-submit");
             okButton.click();
