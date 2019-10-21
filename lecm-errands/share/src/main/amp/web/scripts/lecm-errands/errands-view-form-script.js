@@ -12,7 +12,7 @@
         if (formId) {
             var periodicallyFieldId = "lecm-errands:periodically";
             var field = YAHOO.util.Dom.get(formId + "_prop_" + periodicallyFieldId.replace(":", "_"));
-            var periodicallySet = YAHOO.util.Selector.query(".set > .periodicallySet", YAHOO.util.Dom.get(formId), true);
+            var periodicallySet = YAHOO.util.Selector.query(".set > .periodicallySet", YAHOO.util.Dom.get(formId + '-form-container'), true);
             if (field && field.value == "true" && periodicallySet) {
                     YAHOO.util.Dom.removeClass(periodicallySet, "hidden1");
             } else {

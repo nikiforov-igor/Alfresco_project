@@ -103,7 +103,10 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
                     expandDataSource: this.options.expandDataSource,
                     createItemBtnMsg: this.options.createItemBtnMsg,
                     itemId: this.options.itemId,
-                    reportersFilterEnabled: true
+                    reportersFilterEnabled: true,
+                    useSequentialCreation: this.options.useSequentialCreation,
+                    excludeColumns: this.options.excludeColumns,
+                    nowrapColumns: this.options.nowrapColumns
                 }).setMessages(this.options.messages);
 
                 if (this.tableData != null) {
