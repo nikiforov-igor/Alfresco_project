@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
     <item name="lecm-dic:Вид договора" type="lecm-dic:dictionary">
-        <items>
+        <items updateMode="CreateOrUpdate">
             <item name="cm:Купли-продажи" type="lecm-contract-dic:contract-type">
                 <property name="cm:title">Купли-продажи</property>
                 <property name="lecm-contract-dic:contract-type-code">sale</property>
