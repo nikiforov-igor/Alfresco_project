@@ -130,6 +130,7 @@
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-view-form-script.js</control-param>
                             <control-param name="scriptLoadedFireAction">errandsTabsFormScriptLoaded</control-param>
+                            <control-param name="requireField">lecm-errands:periodically</control-param>
                         </control>
                     </field>
 
@@ -500,6 +501,7 @@
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-view-form-script.js</control-param>
                             <control-param name="scriptLoadedFireAction">errandsTabsFormScriptLoaded</control-param>
+                            <control-param name="requireField">lecm-errands:periodically</control-param>
                         </control>
                     </field>
                     <field id="lecm-base-dummy-aspects:script9" set="afterDateSet2">
