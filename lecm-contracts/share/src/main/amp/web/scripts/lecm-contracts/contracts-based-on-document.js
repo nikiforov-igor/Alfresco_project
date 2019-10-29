@@ -132,6 +132,7 @@
                         var option = document.createElement("option");
                         option.value = category.items[i].nodeRef;
                         option.innerHTML = category.items[i].label;
+                        option.title = category.items[i].label;
                         optGroup.appendChild(option);
                     }
                     select.appendChild(optGroup);
