@@ -1,6 +1,6 @@
-.datagrid .onEditWorkspace a,
-.datagrid .onEditWorkspace a.datagrid-action-link:before {
-	background-position: -700px -300px;
+.datagrid div.action-set .onEditWorkspace a,
+.datagrid div.action-set .more-actions .onEditWorkspace a.datagrid-action-link:before {
+	background: url("../../images/lecm-meetings/components/world-edit-ico.png") no-repeat 2px 4px;
 }
 
 .datagrid a.site-link {

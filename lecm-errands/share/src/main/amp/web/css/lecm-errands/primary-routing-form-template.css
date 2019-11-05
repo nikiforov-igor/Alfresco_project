@@ -1,13 +1,18 @@
-
+.yui-skin-lecmTheme.alfresco-share .yui-g.primary-routing-form div.yui-u {
+    width: 49%;
+    padding: 0;
+}
+.yui-g.primary-routing-form .label-div,
+.yui-g.primary-routing-form .yui-u.first .label-div {
+    width: 100px;
+}
+.yui-g.primary-routing-form .has-autocomplete .label-div ~ .container,
+.yui-g.primary-routing-form .has-autocomplete .yui-u.first .label-div  ~ .container {
+    margin-left: 100px;
+}
 .yui-g.primary-routing-form fieldset {
     border: none;
     padding: 0;
-}
-.yui-g.primary-routing-form .label-div {
-    width: 100px;
-}
-.yui-g.primary-routing-form .yui-u.first .label-div {
-    width: 100px;
 }
 .yui-g.primary-routing-form legend {
     width: 120px;
@@ -17,25 +22,13 @@
     font-size: 100%;
     text-align: right;
 }
-.yui-g.primary-routing-form .yui-u.first {
-    width: 49%;
-}
-.yui-g.primary-routing-form .yui-u {
-    width: 49%;
-}
-
-.yui-skin-lecmTheme.alfresco-share .yui-g.primary-routing-form div.yui-u {
-    padding: 0px;
-}
 
 .primary-routing-form  .errands-limitation-date-set .errands-limitation-date-set-type {
     width: calc(100% - 186px);
 }
-
 .primary-routing-form  .errands-limitation-date-set .errands-limitation-date-set-date {
     width: calc(100% - 132px);
 }
-
 .primary-routing-form .errands-limitation-date-set .errands-limitation-date-set-radio .container {
     min-width: 10px;
     float:left;

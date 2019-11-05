@@ -1,19 +1,22 @@
 .control.meeting-remove-item {
-    height: 36px;
-    width: 16px;
+    height: 24px;
+    width: 24px;
     float: right;
 }
 .control.meeting-remove-item span.yui-button {
     border: none;
     margin: 0;
 }
+.control.meeting-remove-item span.yui-button:not(:hover):not(:active) {
+    background-color: transparent;
+}
 .control.meeting-remove-item span.yui-button span.first-child {
-    background: url("../../images/lecm-events/alf_remove_grey_16.png") no-repeat 0 0;
+    background: url("../../images/lecm-base/icons-system.svg") no-repeat -12px -108px;
     border: none;
 }
 .control.meeting-remove-item span.yui-button span.first-child button {
-    width: 16px;
-    height: 16px;
+    width: 24px;
+    height: 24px;
     min-height: 0;
     padding: 0;
 }
