@@ -240,6 +240,7 @@
 
 					YAHOO.Bubbling.on("nodeCreated", datagrid.onCreated, datagrid);
 					YAHOO.Bubbling.on("dataItemsDeleted", datagrid.onDeleted, datagrid);
+					YAHOO.Bubbling.on("itemsListChanged", datagrid.toggleScrollBar, datagrid);
 
 				datagrid.draw();
 			}
