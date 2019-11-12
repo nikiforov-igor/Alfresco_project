@@ -7,23 +7,26 @@
 .dashlet.contracts-activity .body .row {
     line-height: 16px;
     margin: 0;
-    padding: 5px 1em;
+    padding: 4px 8px;
     border-bottom: 1px solid #d7d7d7;
 }
 .dashlet.contracts-activity .body .row:first-of-type {
-    padding-top: 10px;
+    padding-top: 8px;
+}
+.dashlet.contracts-activity .body .row:last-of-type {
+    padding-bottom: 8px;
 }
 .dashlet.contracts-activity .body .row div.avatar {
     width: 32px;
     margin: 0;
     text-align: center;
+    float: left;
 }
 .dashlet.contracts-activity .body .row div.avatar img {
     max-width: 32px;
     max-height: 50px;
 }
 .dashlet.contracts-activity .body .row div.content {
-    float: none;
     margin: 0 0 0 40px;
 }
 
