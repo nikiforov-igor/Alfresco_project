@@ -9,6 +9,7 @@
     margin: 0;
     padding: 4px 8px;
     border-bottom: 1px solid #d7d7d7;
+    overflow: hidden;
 }
 .dashlet.contracts-activity .body .row:first-of-type {
     padding-top: 8px;
