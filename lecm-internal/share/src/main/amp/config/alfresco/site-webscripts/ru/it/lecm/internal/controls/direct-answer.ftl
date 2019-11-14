@@ -242,11 +242,11 @@
     <input type="hidden" id="${fieldHtmlId}" name="${field.name}" tabindex="0"/>
 
     <div>
-        <input type="radio" name="direct-type" id="${fieldHtmlId}-first-selector"/>
+        <input type="radio" name="direct-type" id="${fieldHtmlId}-first-selector" class="lecm-radio"/>
         <label for="${fieldHtmlId}-first-selector">Принять к сведению</label>
     </div>
-    <div>
-        <input type="radio" name="direct-type" id="${fieldHtmlId}-second-selector"/>
+    <div class="with-button">
+        <input type="radio" name="direct-type" id="${fieldHtmlId}-second-selector" class="lecm-radio"/>
         <label for="${fieldHtmlId}-second-selector">Создать ответный документ</label>
         <span id="${fieldHtmlId}-addDocument" class="yui-button yui-push-button">
             <span class="first-child">
@@ -255,7 +255,7 @@
         </span>
     </div>
     <div>
-        <input type="radio" name="direct-type" id="${fieldHtmlId}-third-selector"/>
+        <input type="radio" name="direct-type" id="${fieldHtmlId}-third-selector" class="lecm-radio"/>
         <label for="${fieldHtmlId}-third-selector">Создать ответ-комментарий</label>
 
         <input type="hidden" id="${typicalId}-removed" name="${field.name}_typical_removed"/>
@@ -275,17 +275,25 @@
                 <input type="hidden" id="${uploaderId}-added" name="${field.name}_added"/>
 
                 <div class="container">
-                    <div class="buttons-div">
-                        <div id="${uploaderId}-uploader-block" class="uploader-block">
-                            <fieldset>
-                                <legend>${msg("label.add-file")}</legend>
-                                <img id="${uploaderId}-uploader-button" src="${url.context}/res/images/lecm-base/components/plus.png" alt="" class="uploader-button">
-                                <span class="drag-tip">${msg("label.drag-file")}</span>
-                            </fieldset>
-                        </div>
-                    </div>
-                    <div class="value-div">
-                        <ul id="${uploaderId}-attachments" class="attachments-list"></ul>
+                    <div id="${uploaderId}-uploader-block" class="uploader-block">
+                        <fieldset>
+                            <legend align="center">${msg("label.add-file")}</legend>
+                            <div class="uploader-container">
+                                <div class="uploader-button-block">
+                                    <div id="${uploaderId}-uploader-button" class="uploader-button"></div>
+                                </div>
+                                <div class="uploader-content middle-centring">
+                                    <div id="${uploaderId}-drag-file">
+                                        <span class="drag-tip">${msg("label.drag-file")}</span>
+                                    </div>
+                                    <div class="load-attachments">
+                                        <div class="value-div">
+                                            <ul id="${uploaderId}-attachments" class="attachments-list" tabindex="1"></ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
                     </div>
                 </div>
             </div>
