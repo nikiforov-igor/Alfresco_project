@@ -190,6 +190,7 @@
                             <control-param name="jsObjectName">LogicECM.module.Meetings.protocolPointsTable</control-param>
                             <control-param name="useSequentialCreation">true</control-param>
                             <control-param name="forceEditable">true</control-param>
+                            <control-param name="disableIfDocIsFinal">true</control-param>
                         </control>
                     </field>
                 </appearance>

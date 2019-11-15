@@ -86,7 +86,7 @@
     <#assign isFieldMandatory = field.endpointMandatory>
 </#if>
 
-<#assign editable = ((params.editable!"true") == "true") && !(field.disabled) && (form.mode?string=="edit") >
+<#assign editable = ((params.editable!"true") == "true") && !(field.disabled) && (form.mode?string=="edit") && !((params.docIsFinal!"false") == "true") >
 
 <#assign useSequentialCreation = false/>
 <#if field.control.params.useSequentialCreation??>
