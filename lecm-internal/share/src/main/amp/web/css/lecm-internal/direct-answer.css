@@ -1,47 +1,57 @@
+.direct-answer {
+    padding-top: 2px;
+}
 .direct-answer > div {
-    line-height: 28px;
+    margin: 4px 0;
 }
-.direct-answer > div input[type=radio],
+.direct-answer > div:first-of-type {
+    margin-top: 0;
+}
+.direct-answer > div:last-of-type {
+    margin-bottom: 0;
+}
 .direct-answer > div label {
-    display: inline;
-    vertical-align: middle;
+    display: inline-block;
 }
-.direct-answer > div span.yui-button {
-    vertical-align: middle;
+.direct-answer > div.with-button {
+    height: 32px;
+    line-height: 32px;
+    margin: 0;
+}
+.direct-answer > div.with-button label {
+    float: left;
+    line-height: 32px;
+}
+.direct-answer > div.with-button label:before {
+    top: 4px;
+}
+.direct-answer > div.with-button .yui-button {
+    margin-left: 12px;
 }
 .direct-answer .answer-comment {
-    margin-left: 18px;
+    margin-top: 8px;
+    display: none;
+}
+.direct-answer input[type=radio]:checked ~ .answer-comment {
+    display: block;
 }
 .direct-answer .answer-comment textarea {
     width: 100%;
+    min-width: 100%;
+    height: 68px;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 4px;
     resize: vertical;
     box-sizing: border-box;
-    border: 0;
-    outline: 1px solid #ccc;
-    outline-offset: 0;
+    display: block;
+    margin: 8px 0;
+    padding: 8px 12px;
+    line-height: 16px;
 }
-.direct-answer .answer-comment .control.dnd-uploader,
-.direct-answer .answer-comment .control.dnd-uploader img.uploader-button {
+.direct-answer .answer-comment .control.dnd-uploader {
     margin: 0;
 }
-
-.direct-answer .answer-comment .control.dnd-uploader .uploader-block span.drag-tip {
-    vertical-align: top;
-}
-
-.dnd-uploader .attachments-list a > img,
-.dnd-uploader ul.attachments-list li img.move-icon,
-.dnd-uploader ul.attachments-list li img.remove-icon,
-.dnd-uploader ul.attachments-list li img.newVersion-icon{
-    vertical-align: text-bottom;
-}
-.direct-answer .answer-comment .control.dnd-uploader fieldset {
-    padding: 1.2em 1.5em 0.5em 1.5em;
-}
-.control.dnd-uploader .attachments-list li.selected{
-    background-color: white;
-}
-.direct-answer .answer-comment .attachments-list .ci-value-div > span {
-    height: 1.5em;
-    line-height: 1.5em;
+.direct-answer .answer-comment .control.dnd-uploader .attachments-list {
+    margin: 0 8px;
 }

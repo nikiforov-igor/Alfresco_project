@@ -3,13 +3,12 @@
 }
 .errands-limitation-date-set.view .errands-limitation-date-set-radio .control label.checkbox {
     height: 24px;
-    margin: 0 0 8px;
+    margin: 0 0 4px;
 }
 .errands-limitation-date-set.view .errands-limitation-date-set-radio .control label.checkbox:before {
     top: 0;
 }
-.errands-limitation-date-set.view .errands-limitation-date-set-date .control,
-.errands-limitation-date-set.view .errands-limitation-date-set-limitless .control {
+.errands-limitation-date-set.view .errands-limitation-date-set-date .control {
     margin-top: 4px;
 }
 .errands-limitation-date-set.view .errands-limitation-date-set-date .value-div,
