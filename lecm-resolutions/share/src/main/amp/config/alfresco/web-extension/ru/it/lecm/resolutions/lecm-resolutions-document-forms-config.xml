@@ -277,6 +277,25 @@
                 </appearance>
             </form>
 
+            <form id="docset-condition-fields">
+                <field-visibility>
+                    <show id="lecm-resolutions:number"/>
+                    <show id="lecm-document-aspects:is-on-control"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-resolutions:author-assoc"/>
+                    <show id="lecm-resolutions:controller-assoc"/>
+                    <show id="lecm-resolutions:limitation-date"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-document-aspects:is-on-control" label-id="label.resolution.control"/>
+                    <field id="lecm-resolutions:controller-assoc">
+                        <control>
+                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+
             <!-- Форма с набором полей, редактируемых в машине состояний -->
             <form id="statemachine-editable-fields">
                 <field-visibility>

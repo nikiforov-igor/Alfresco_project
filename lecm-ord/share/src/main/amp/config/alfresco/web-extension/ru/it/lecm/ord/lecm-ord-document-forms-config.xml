@@ -389,6 +389,105 @@
                 </appearance>
             </form>
 
+            <form id="docset-condition-fields">
+                <field-visibility>
+                    <show id="lecm-document:title"/>
+                    <show id="lecm-eds-document:document-type-assoc"/>
+                    <show id="lecm-eds-document:execution-date"/>
+                    <show id="lecm-eds-document:summaryContent"/>
+                    <show id="lecm-ord:controller-assoc"/>
+                    <show id="lecm-eds-document:note"/>
+                    <show id="lecm-eds-document:sheets-number"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-eds-document:file-register-assoc"/>
+                    <show id="lecm-ord:canceled-assoc"/>
+                    <show id="lecm-ord:accepted-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-eds-document:document-type-assoc" mandatory="true">
+                        <control>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_ОРД</control-param>
+                            <control-param name="plane">true</control-param>
+                            <control-param name="nameSubstituteString">{cm:title}</control-param>
+                            <control-param name="sortProp">cm:title</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-eds-document:execution-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="showTime">false</control-param>
+                            <control-param name="hideDateFormat">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-eds-document:summaryContent">
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+                    </field>
+                    <field id="lecm-eds-document:note">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">4</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-ord:canceled-assoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="rootLocation">/app:company_home</control-param>
+                            <control-param name="itemType">lecm-document:base</control-param>
+                            <control-param name="checkType">false</control-param>
+                            <control-param name="nameSubstituteString">{@@documentService.wrapAsDocumentLink(doc.nodeRef, true)}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
+                            <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
+                            <control-param name="additionalFilter">((TYPE:\"lecm-ord:document\" AND @lecm\\-statemachine\\:status:\"Исполнен\") OR (TYPE:\"lecm-nd:document\" AND (@lecm\\-statemachine\\:status:\"Действует\" OR @lecm\\-statemachine\\:status:\"Введен в действие\"))) </control-param>
+                            <control-param name="showSearch">true</control-param>
+                            <control-param name="plane">true</control-param>
+                            <control-param name="showPath">false</control-param>
+                            <control-param name="endpointMany">true</control-param>
+                            <control-param name="showExSearch">true</control-param>
+                            <control-param name="pickerClasses">picker-control-mode</control-param>
+                            <control-param name="pickerDialogTitle">label.connection.add.title</control-param>
+                            <control-param name="elementsForSelectLabel">label.connected.connect-with</control-param>
+                            <control-param name="exSearchButtonLabel">label.connected.search-button</control-param>
+                            <control-param name="exSearchFieldSetLabel">label.set.connected.document-search-params</control-param>
+                            <control-param name="elementsFieldSetLabel">label.set.connected.document-select</control-param>
+                            <control-param name="textSearchWithExSearch">true</control-param>
+                            <control-param name="lockExSearchIfParamsEmpty">true</control-param>
+                            <control-param name="checkType">false</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-ord:accepted-assoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
+                            <control-param name="itemType">lecm-document:base</control-param>
+                            <control-param name="nameSubstituteString">{@@documentService.wrapAsDocumentLink(doc.nodeRef, true)}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
+                            <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
+                            <control-param name="additionalFilter">(TYPE:\"lecm-nd:document\" AND @lecm\\-statemachine\\:status:\"Зарегистрирован\")</control-param>
+                            <control-param name="showSearch">true</control-param>
+                            <control-param name="plane">true</control-param>
+                            <control-param name="endpointMany">true</control-param>
+                            <control-param name="showExSearch">true</control-param>
+                            <control-param name="pickerClasses">picker-control-mode</control-param>
+                            <control-param name="pickerDialogTitle">label.connection.add.title</control-param>
+                            <control-param name="elementsForSelectLabel">label.connected.connect-with</control-param>
+                            <control-param name="exSearchButtonLabel">label.connected.search-button</control-param>
+                            <control-param name="exSearchFieldSetLabel">label.set.connected.document-search-params</control-param>
+                            <control-param name="elementsFieldSetLabel">label.set.connected.document-select</control-param>
+                            <control-param name="textSearchWithExSearch">true</control-param>
+                            <control-param name="lockExSearchIfParamsEmpty">true</control-param>
+                            <control-param name="checkType">false</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-eds-document:sheets-number">
+                        <control template="/ru/it/lecm/base-share/components/controls/number.ftl">
+                            <control-param name="maxLength">9</control-param>
+                        </control>
+                    </field>
+
+                    <field id="lecm-ord:controller-assoc">
+                        <control>
+                            <control-param name="useStrictFilterByOrg">true</control-param>
+                            <control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
+                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+
             <!-- Форма для табличного представления (набор столбцов) -->
             <form id="datagrid">
                 <field-visibility>

@@ -410,6 +410,18 @@
                 </appearance>
             </form>
 
+            <form id="docset-condition-fields">
+                <field-visibility>
+                    <show id="lecm-additional-document:additionalDocumentType"/>
+                    <show id="lecm-document:regnum"/>
+                    <show id="lecm-additional-document:date"/>
+                    <show id="lecm-additional-document:signedCounterparty"/>
+                    <show id="lecm-additional-document:summaryContent"/>
+                </field-visibility>
+                <appearance>
+                </appearance>
+            </form>
+
             <form id="datagrid">
                 <field-visibility>
                     <show id="lecm-document:regnum"/>
