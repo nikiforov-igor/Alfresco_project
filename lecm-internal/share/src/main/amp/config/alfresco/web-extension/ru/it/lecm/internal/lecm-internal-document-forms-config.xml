@@ -1032,21 +1032,6 @@
                 </appearance>
             </form>
 
-            <!-- Форма с набором полей для правой области (Общие сведения) на карточке документа-->
-            <form id="document">
-                <field-visibility>
-                    <show id="lecm-document:author-assoc"/>
-                    <show id="lecm-eds-document:executor-assoc"/>
-                    <show id="lecm-internal:recipients-assoc"/>
-                    <show id="lecm-document:subject-assoc"/>
-                    <show id="lecm-internal:response-date"/>
-                    <show id="lecm-statemachine:status"/>
-                </field-visibility>
-                <appearance>
-                    <field id="lecm-document:author-assoc" label-id="label.eds.assoc.compiler" read-only="true"/>
-                </appearance>
-            </form>
-
             <form id="approvalAndSigning">
                 <field-visibility>
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
@@ -1150,7 +1135,6 @@
                     <show id="execution"/>
                     <show id="attachments"/>
                     <show id="errands"/>
-                    <show id="workflows"/>
                     <show id="connections"/>
                     <show id="members"/>
                     <show id="tags"/>
@@ -1207,14 +1191,6 @@
                             <control-param name="uri">/lecm/components/document/errands</control-param>
                             <control-param name="nodeLabel">Поручения</control-param>
                             <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_LinksView")</control-param>
-                        </control>
-                    </field>
-                    <field id="workflows">
-                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
-                            <control-param name="iconSrc">/document-page/workflows-40.png</control-param>
-                            <control-param name="uri">/lecm/components/document/workflows</control-param>
-                            <control-param name="nodeLabel">Бизнес-процессы</control-param>
-                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_WFEnumBP")</control-param>
                         </control>
                     </field>
                     <field id="connections">

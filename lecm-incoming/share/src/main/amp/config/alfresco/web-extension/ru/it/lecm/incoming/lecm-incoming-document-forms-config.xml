@@ -478,28 +478,6 @@
                 </appearance>
             </form>
 
-            <!-- Форма с набором полей для правой области (Общие сведения) на карточке документа-->
-            <form id="document">
-                <field-visibility>
-                    <show id="lecm-eds-document:document-type-assoc"/>
-                    <show id="lecm-incoming:outgoing-number"/>
-                    <show id="lecm-incoming:outgoing-date"/>
-                    <show id="lecm-document:subject-assoc"/>
-                    <show id="lecm-incoming:delivery-method-assoc"/>
-                    <show id="lecm-statemachine:status"/>
-                </field-visibility>
-                <appearance>
-                    <field id="lecm-eds-document:document-type-assoc">
-                        <control>
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_входящего</control-param>
-                            <control-param name="plane">true</control-param>
-                            <control-param name="nameSubstituteString">{cm:title}</control-param>
-                            <control-param name="sortProp">cm:title</control-param>
-                        </control>
-                    </field>
-                </appearance>
-            </form>
-
             <!-- Форма для участников документа-->
             <form id="document-members">
                 <field-visibility>
@@ -521,7 +499,6 @@
                     <show id="execution"/>
                     <show id="attachments"/>
                     <show id="errands"/>
-                    <show id="workflows"/>
                     <show id="connections"/>
                     <show id="members"/>
                     <show id="tags"/>
@@ -561,14 +538,6 @@
                             <control-param name="uri">/lecm/components/document/errands</control-param>
                             <control-param name="nodeLabel">Поручения</control-param>
                             <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_LinksView")</control-param>
-                        </control>
-                    </field>
-                    <field id="workflows">
-                        <control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
-                            <control-param name="iconSrc">/document-page/workflows-40.png</control-param>
-                            <control-param name="uri">/lecm/components/document/workflows</control-param>
-                            <control-param name="nodeLabel">Бизнес-процессы</control-param>
-                            <control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_WFEnumBP")</control-param>
                         </control>
                     </field>
                     <field id="connections">

@@ -289,20 +289,6 @@
                 </appearance>
             </form>
 
-            <!-- Форма с набором полей для правой области (Общие сведения) на карточке документа-->
-            <form id="document">
-                <field-visibility>
-                    <!--Заголовок-->
-                    <show id="lecm-events:title"/>
-                    <!--Председатель-->
-                    <show id="lecm-meetings:chairman-assoc"/>
-                    <!--Секретарь-->
-                    <show id="lecm-meetings:secretary-assoc"/>
-                    <!--Статус-->
-                    <show id="lecm-statemachine:status"/>
-                </field-visibility>
-            </form>
-
             <form id="holding">
                 <field-visibility>
                     <!-- Заголовок -->
