@@ -40,7 +40,7 @@
                     var table = document.createElement("table");
                     table.width = "100%";
                     table.cellPadding = 2;
-                    table.cellSpacing = 1;
+                    table.cellSpacing = 0;
                     table.border = 0;
 
                     var tr = document.createElement("tr");
