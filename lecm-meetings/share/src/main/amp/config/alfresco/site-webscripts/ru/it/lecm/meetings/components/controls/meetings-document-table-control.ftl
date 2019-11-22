@@ -86,7 +86,17 @@
     <#assign isFieldMandatory = field.endpointMandatory>
 </#if>
 
-<#assign editable = ((params.editable!"true") == "true") && !(field.disabled) && (form.mode?string=="edit") && !((params.docIsFinal!"false") == "true") >
+<#assign controlMode = form.mode?string >
+
+<#if ((params.forceEditable!"false")=="true" && !(field.disabled)) >
+    <#assign controlMode = "edit" >
+</#if>
+
+<#if ((params.docIsFinal!"false")=="true" && (params.disableIfDocIsFinal!"false")=="true") >
+    <#assign controlMode = "view" >
+</#if>
+
+<#assign editable = ((params.editable!"true") == "true") && (controlMode?string=="edit") >
 
 <#assign useSequentialCreation = false/>
 <#if field.control.params.useSequentialCreation??>
@@ -110,7 +120,7 @@
 				containerId: "${containerId}",
 				datagridFormId: "${params.datagridFormId!"datagrid"}",
 				attributeForShow: "${attributeForShow}",
-				mode: "${form.mode?string}",
+				mode: "${controlMode?string}",
 				disabled: ${field.disabled?string},
 				isTableSortable: ${isTableSortable?string},
                 sort: "${sort?string}",
@@ -170,7 +180,7 @@
 	</div>
     <div class="container document-table-width">
         <div class="value-div">
-        <#if toolbar == "true" && form.mode?string=="edit">
+        <#if toolbar == "true" && controlMode?string=="edit">
             <div id="${toolbarId}">
                 <@comp.baseToolbar toolbarId true showSearch false>
                     <#if showCreateButton>
