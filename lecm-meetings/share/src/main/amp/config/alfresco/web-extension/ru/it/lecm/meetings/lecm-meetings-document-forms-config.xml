@@ -202,6 +202,7 @@
                             <control-param name="createFormTitleMsg">meeting.item.create.form.title</control-param>
                             <control-param name="viewFormTitleMsg">meeting.item.view.form.title</control-param>
                             <control-param name="useSequentialCreation">true</control-param>
+                            <control-param name="disableIfDocIsFinal">true</control-param>
                         </control>
                     </field>
                     <field id="approve-agenda-label">
