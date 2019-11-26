@@ -414,7 +414,6 @@
                 <field-visibility>
                     <show id="lecm-additional-document:additionalDocumentType"/>
                     <show id="lecm-document:regnum"/>
-                    <show id="lecm-additional-document:date"/>
                     <show id="lecm-additional-document:signedCounterparty"/>
                     <show id="lecm-additional-document:summaryContent"/>
                 </field-visibility>

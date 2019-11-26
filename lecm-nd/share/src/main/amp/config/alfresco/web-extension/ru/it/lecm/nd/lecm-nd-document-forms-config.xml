@@ -275,8 +275,6 @@
                     <show id="lecm-eds-document:sheets-number"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-document-aspects:additional-organization-unit-assoc"/>
-                    <show id="lecm-nd:begin-date"/>
-                    <show id="lecm-nd:end-date"/>
                     <show id="lecm-nd:unlimited"/>
                 </field-visibility>
                 <appearance>
@@ -305,18 +303,6 @@
                     <field id="lecm-eds-document:sheets-number">
                         <control template="/ru/it/lecm/base-share/components/controls/number.ftl">
                             <control-param name="maxLength">9</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-nd:begin-date">
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="showTime">false</control-param>
-                            <control-param name="hideDateFormat">true</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-nd:end-date">
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="showTime">false</control-param>
-                            <control-param name="hideDateFormat">true</control-param>
                         </control>
                     </field>
                 </appearance>

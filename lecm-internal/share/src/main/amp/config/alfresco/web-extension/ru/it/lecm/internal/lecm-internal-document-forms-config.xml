@@ -345,7 +345,6 @@
                 <field-visibility>
                     <show id="lecm-document:title"/>
                     <show id="lecm-eds-document:document-type-assoc"/>
-                    <show id="lecm-internal:response-date"/>
                     <show id="lecm-internal:recipients-assoc"/>
                     <show id="lecm-eds-document:summaryContent"/>
                     <show id="lecm-eds-document:sheets-number"/>
@@ -353,12 +352,6 @@
                     <show id="lecm-eds-document:file-register-assoc"/>
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-internal:response-date">
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="showTime">false</control-param>
-                            <control-param name="hideDateFormat">true</control-param>
-                        </control>
-                    </field>
                     <field id="lecm-eds-document:document-type-assoc" mandatory="true">
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_внутреннего_x0020_документа</control-param>

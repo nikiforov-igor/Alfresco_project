@@ -996,13 +996,11 @@
                     <show id="lecm-incoming:sender-assoc" force="true"/>
                     <show id="lecm-incoming:recipient-assoc"/>
                     <show id="lecm-incoming:outgoing-number"/>
-                    <show id="lecm-incoming:outgoing-date"/>
                     <show id="lecm-eds-document:summaryContent"/>
                     <show id="lecm-eds-document:sheets-number"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-eds-document:file-register-assoc"/>
                     <show id="lecm-eds-document:note"/>
-                    <show id="lecm-eds-document:execution-date"/>
                     <show id="lecm-document-aspects:is-on-control"/>
                     <show id="lecm-incoming:is-not-registered"/>
                 </field-visibility>
@@ -1120,18 +1118,6 @@
                     </field>
                     <field id="lecm-eds-document:note">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
-                    </field>
-                    <field id="lecm-eds-document:execution-date">
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="showTime">false</control-param>
-                            <control-param name="hideDateFormat">true</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-incoming:outgoing-date">
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="showTime">false</control-param>
-                            <control-param name="hideDateFormat">true</control-param>
-                        </control>
                     </field>
                     <field id="lecm-eds-document:sheets-number">
                         <control template="/ru/it/lecm/base-share/components/controls/number.ftl">
