@@ -1132,8 +1132,6 @@
                     <show id="lecm-errands:coexecutors-assoc"/>
                     <!-- Автор -->
                     <show id="lecm-errands:initiator-assoc"/>
-                    <!-- Срок исполнения -->
-                    <show id="lecm-errands:limitation-date"/>
                     <!-- Контролер-->
                     <show id="lecm-errands:controller-assoc"/>
                     <!-- Требуется отчет -->
@@ -1188,12 +1186,6 @@
                             <control-param name="defaultValueDataSource">lecm/errands/getDefaultInitiator
                             </control-param>
                             <control-param name="changeItemsFireAction">initiatorChanged</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-errands:limitation-date" mandatory="true">
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="showTime">false</control-param>
-                            <control-param name="hideDateFormat">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:controller-assoc">

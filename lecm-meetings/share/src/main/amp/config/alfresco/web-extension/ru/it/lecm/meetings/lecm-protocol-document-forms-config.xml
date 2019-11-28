@@ -592,8 +592,6 @@
                     <show id="lecm-document:title"/>
                     <!--Вид документа-->
                     <show id="lecm-eds-document:document-type-assoc"/>
-                    <!--Срок исполнения-->
-                    <show id="lecm-eds-document:execution-date"/>
                     <!--Содержание-->
                     <show id="lecm-eds-document:summaryContent"/>
                     <!--Подписанты-->
@@ -622,12 +620,6 @@
                             <control-param name="plane">true</control-param>
                             <control-param name="nameSubstituteString">{cm:title}</control-param>
                             <control-param name="sortProp">cm:title</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-eds-document:execution-date">
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="showTime">false</control-param>
-                            <control-param name="hideDateFormat">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-eds-document:summaryContent">

@@ -284,7 +284,6 @@
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-resolutions:author-assoc"/>
                     <show id="lecm-resolutions:controller-assoc"/>
-                    <show id="lecm-resolutions:limitation-date"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-document-aspects:is-on-control" label-id="label.resolution.control"/>

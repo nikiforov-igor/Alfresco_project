@@ -202,6 +202,7 @@
                             <control-param name="createFormTitleMsg">meeting.item.create.form.title</control-param>
                             <control-param name="viewFormTitleMsg">meeting.item.view.form.title</control-param>
                             <control-param name="useSequentialCreation">true</control-param>
+                            <control-param name="disableIfDocIsFinal">true</control-param>
                         </control>
                     </field>
                     <field id="approve-agenda-label">
@@ -906,16 +907,8 @@
                     <show id="lecm-events:title"/>
                     <!-- Весь день -->
                     <show id="lecm-events:all-day"/>
-                    <!-- Дата начала мероприятия -->
-                    <show id="lecm-events:from-date"/>
-                    <!-- Дата окончания мероприятия -->
-                    <show id="lecm-events:to-date"/>
                     <!-- Повторное -->
                     <show id="lecm-events:repeatable"/>
-                    <!-- Дата начала периода -->
-                    <show id="lecm-events:repeatable-start-period"/>
-                    <!-- Дата окончания периода -->
-                    <show id="lecm-events:repeatable-end-period"/>
                     <!-- Правила -->
                     <show id="lecm-events:repeatable-rule"/>
                     <!--Председатель-->
@@ -946,34 +939,10 @@
                             <constraint type="INVALID" validation-handler="LogicECM.module.Events.changeAllDayValidation" event="change"/>
                         </constraint-handlers>
                     </field>
-                    <field id="lecm-events:from-date">
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="showTime">false</control-param>
-                            <control-param name="hideDateFormat">true</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-events:to-date">
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="showTime">false</control-param>
-                            <control-param name="hideDateFormat">true</control-param>
-                        </control>
-                    </field>
                     <field id="lecm-events:repeatable">
                         <constraint-handlers>
                             <constraint type="INVALID" validation-handler="LogicECM.module.Events.changeRepeatableValidation" event="change"/>
                         </constraint-handlers>
-                    </field>
-                    <field id="lecm-events:repeatable-start-period" mandatory="true">
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="showTime">false</control-param>
-                            <control-param name="hideDateFormat">true</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-events:repeatable-end-period" mandatory="true">
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="showTime">false</control-param>
-                            <control-param name="hideDateFormat">true</control-param>
-                        </control>
                     </field>
                     <field id="lecm-events:repeatable-rule" mandatory="true">
                         <control template="/ru/it/lecm/base-share/components/controls/reiteration-control-ext.ftl" />
