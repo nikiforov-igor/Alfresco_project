@@ -12,7 +12,7 @@
     text-align: center;
 }
 .nomenclature-view-set .actions-panel .set-bordered-panel-body {
-    padding: 10px;
+    padding: 4px;
 }
 .nomenclature-view-set .actions-panel .set-bordered-panel-body .control {
     margin-bottom: 0;
@@ -21,6 +21,10 @@
 .nomenclature-view-set .actions-panel .case-status-buttons span.yui-button button {
     width: 100%;
     margin: 0;
+    box-sizing: border-box;
+}
+.nomenclature-view-set .actions-panel .case-status-buttons span.yui-button + span.yui-button {
+    margin-top: 4px;
 }
 .nomenclature-view-set .control {
     float: none;
