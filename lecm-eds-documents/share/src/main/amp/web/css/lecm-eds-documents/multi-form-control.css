@@ -36,8 +36,7 @@
 
 .control.multi-form ul.multi-form-documents-list li.multi-form-documents-item {
     margin-bottom: 6px;
-    margin-right: 4px;
-    padding-bottom: 3px;
+    padding-bottom: 2px;
     border-bottom: 1px solid #ccc;
     clear: both;
 }
