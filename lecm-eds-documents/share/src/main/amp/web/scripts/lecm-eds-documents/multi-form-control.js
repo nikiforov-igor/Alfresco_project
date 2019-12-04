@@ -19,7 +19,8 @@ LogicECM.module = LogicECM.module || {};
 LogicECM.module.eds = LogicECM.module.eds || {};
 
 (function () {
-    var Dom = YAHOO.util.Dom;
+    var Dom = YAHOO.util.Dom,
+        Selector = YAHOO.util.Selector;
 
     LogicECM.module.eds.MultiFormControl = function (htmlId) {
         LogicECM.module.eds.MultiFormControl.superclass.constructor.call(this, "LogicECM.module.eds.MultiFormControl", htmlId, ["container", "json"]);
@@ -315,7 +316,25 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 var li = Dom.get(this.id + "_" + num + "_item");
                 if (li) {
                     var me = this;
-                    var blockHeight = (li.offsetHeight - 10) + "px";
+                    var blockHeight = li.offsetHeight - parseInt(Dom.getStyle(li, 'padding-bottom')) - parseInt(Dom.getStyle(li, 'border-bottom-width')),
+                        controls = Selector.query(".control", li),
+                        firstControl = controls[0],
+                        lastControl = controls[controls.length - 1],
+                        valueDiv;
+
+                    if (firstControl) {
+                        valueDiv = Selector.query(".value-div", firstControl, true);
+
+                        blockHeight -= valueDiv ? parseInt(Dom.getStyle(valueDiv, 'padding-top')) : 0;
+                    }
+                    if (lastControl) {
+                        valueDiv = Selector.query(".value-div", firstControl, true);
+
+                        blockHeight -= valueDiv ? parseInt(Dom.getStyle(valueDiv, 'padding-bottom')) : 0;
+                        blockHeight -= parseInt(Dom.getStyle(lastControl, 'margin-bottom'));
+                    }
+
+                    blockHeight += "px";
 
                     var removeItem = Dom.get(me.id + "_" + num + "_remove");
                     if (removeItem) {
