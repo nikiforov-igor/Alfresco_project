@@ -515,6 +515,8 @@
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <show id="lecm-resolutions:limitation-date"/>
 
+                    <show id="lecm-resolutions:completion-method-assoc"/>
+
                     <show id="lecm-resolutions:errands-json" force="true"/>
 
                     <show id="lecm-base-dummy-aspects:script2" force="true"/>
@@ -525,6 +527,8 @@
                     <set id="common"/>
 
                     <set id="limitation-date" parent="common" label-id="label.limitation-date" template="/ru/it/lecm/errands/controls/errands-view-limitation-date-set.ftl"/>
+
+                    <set id="common-inner" parent="common"/>
 
                     <set id="execution" parent="common" appearance="title" label-id="label.execution"/>
                     <set id="reviewers-hidden" parent="common" template="/ru/it/lecm/base-share/components/hidden-set.ftl"/>
@@ -573,6 +577,8 @@
                             <control-param name="minLimitCurrentDate">#{!appSettings.get('lecm.eds.controls.allowPastDate-Errand', false)}</control-param>
                         </control>
                     </field>
+
+                    <field id="lecm-resolutions:completion-method-assoc" set="common-inner"/>
 
                     <field id="lecm-resolutions:errands-json" set="execution">
                         <control template="/ru/it/lecm/resolutions/controls/resolution-execution-datagrid-control.ftl">
