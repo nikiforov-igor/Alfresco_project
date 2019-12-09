@@ -183,6 +183,7 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                         }
                 });
 
+                /* На данный момент кнопки не проинициализированы, нужно дождаться добавления последней для корректного расчета отступов.*/
                 if (index == visibleActionBlocks.length - 1) {
                     actionBtn.addListener("appendTo", me.setPadding, null, me);
                 }
