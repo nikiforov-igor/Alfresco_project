@@ -1,39 +1,27 @@
-.expand-row .form-fields .coexecutor-report-expand-actions div > span {
-    min-width: 150px;
-}
-
-.expand-row .form-fields .coexecutor-report-expand-actions div {
-    margin: 5px;
-    min-width: 150px;
-
-}
-
-.expand-row .form-fields .coexecutor-report-expand-actions {
-    margin-top: 2px;
-    margin-bottom: 2px
-}
-
-.expand-row .form-fields .coexecutor-report-expand-actions span span button {
-    width: 100%;
-
-}
-
-.expand-row .form-fields .coexecutor-report-expand-actions {
-    float: right;
-    padding-left: 5px;
-    border-left: 1px solid #ccc;
-    text-align: center;
-}
-
 .expand-row .form-fields .yui-u {
     width: 180px;
     margin-left: 0;
 }
-
 .expand-row .form-fields .yui-u.first {
     float: left;
-    width: calc(100% - 190px);
-    padding-right: 5px;
+    width: calc(100% - 180px);
+    padding-right: 8px;
+    box-sizing: border-box;
+}
+.expand-row .form-fields .coexecutor-report-expand-actions {
+    padding-left: 8px;
+    border-left: 1px solid #ccc;
+    text-align: center;
+    margin: 4px 0;
+}
+.expand-row .form-fields .coexecutor-report-expand-actions div + div {
+    margin-top: 4px;
+}
+.expand-row .form-fields .coexecutor-report-expand-actions div > span {
+    min-width: 150px;
+}
+.expand-row .form-fields .coexecutor-report-expand-actions span span button {
+    width: 100%;
 }
 
 .expand-row .form-fields .yui-u.first.full-width {
