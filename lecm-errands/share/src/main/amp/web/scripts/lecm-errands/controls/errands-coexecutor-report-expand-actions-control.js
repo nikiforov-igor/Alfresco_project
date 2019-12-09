@@ -168,15 +168,26 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
             var visibleActionBlocks = this.options.expandedReport.actions.filter(function (action) {
                 return me.options.expandedReport.permissions[action.permission] && action.evaluator.call(me, me.options.expandedReport);
             });
-            visibleActionBlocks.forEach(function (action) {
+            visibleActionBlocks.forEach(function (action, index) {
                 var actionBlock = document.createElement("div");
                 actionBlock.id = me.options.formId + action.handler;
-                actionBlock.innerHTML = Substitute(me.getActionHtml(), {
-                    label: action.label
+
+                var actionBtn = new YAHOO.widget.Button({
+                    container: actionBlock.id,
+                    label: action.label,
+                    onclick:
+                        {
+                            fn: me[action.handler],
+                            obj: me.options.expandedReport,
+                            scope: me
+                        }
                 });
-                Event.addListener(actionBlock, 'click', function () {
-                    me[action.handler].call(me, me.options.expandedReport);
-                });
+
+                /* На данный момент кнопки не проинициализированы, нужно дождаться добавления последней для корректного расчета отступов.*/
+                if (index == visibleActionBlocks.length - 1) {
+                    actionBtn.addListener("appendTo", me.setPadding, null, me);
+                }
+
                 actionsContainer.appendChild(actionBlock);
             });
 
@@ -184,10 +195,16 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                 actionsContainer.parentElement.parentElement.classList.add("hidden");
                 fieldsContainer.classList.add("full-width");
             }
-            var padding = (fieldsContainer.offsetHeight - actionsContainer.offsetHeight) / 2;
+        },
+        setPadding: function() {
+            var me = this,
+                actionsContainer = Dom.get(me.options.formId + "-coexecutor-report-expand-actions"),
+                fieldsContainer = Selector.query(".yui-u.first", Dom.get(me.options.formId + "-form-fields"), true),
+                padding = (fieldsContainer.offsetHeight - actionsContainer.offsetHeight
+                    - parseInt(Dom.getStyle(actionsContainer, "margin-top")) - parseInt(Dom.getStyle(actionsContainer, "margin-bottom"))) / 2;
+
             Dom.setStyle(actionsContainer, "padding-top", padding + "px");
             Dom.setStyle(actionsContainer, "padding-bottom", padding + "px");
-
         },
         firstActionsEvaluator: function (report) {
             return report.status && report.status == "ONCONTROL";
@@ -200,14 +217,7 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
         editActionEvaluator: function (report) {
             return report.status && report.status == "PROJECT" && report.coexecutor == this.currentUser.nodeRef;
         },
-        getActionHtml: function () {
-            html = '<span class="yui-button yui-push-button">';
-            html += '<span class="first-child">';
-            html += '<button type="button">{label}</button>';
-            html += '</span></span>';
-            return html;
-        },
-        onActionAcceptCoexecutorReport: function (report) {
+        onActionAcceptCoexecutorReport: function (evt, report) {
             var nodeRef = report.nodeRef;
             if (nodeRef != null && !this.doubleClickLock) {
                 this.doubleClickLock = true;
@@ -245,7 +255,7 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
             }
         },
 
-        onActionDeclineCoexecutorReport: function (report) {
+        onActionDeclineCoexecutorReport: function (evt, report) {
             var nodeRef = report.nodeRef;
             if (nodeRef && !this.doubleClickLock) {
                 this.doubleClickLock = true;
@@ -305,12 +315,12 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                 declineReportDialog.show();
             }
         },
-        onActionEdit: function (report) {
+        onActionEdit: function (evt, report) {
             Bubbling.fire("onActionEditCoexecutorReport", {
                 report: report
             });
         },
-        onActionTransferCoexecutorReport: function (report) {
+        onActionTransferCoexecutorReport: function (evt, report) {
             Bubbling.fire("onActionTransferCoexecutorReport", {
                 nodeRef: report.nodeRef
             });
