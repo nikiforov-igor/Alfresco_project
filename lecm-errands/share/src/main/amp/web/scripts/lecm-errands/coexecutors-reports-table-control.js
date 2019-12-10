@@ -181,11 +181,36 @@ LogicECM.errands = LogicECM.errands || {};
                 }
             });
             //получаем кнопку переноса отчетов
-            var transferSelectedReportsButton = Dom.get(this.id + "-cntrl-exec-report-transfer-coexecutors-reports");
+            var transferSelectedReportsButtonEl = Dom.get(this.id + "-cntrl-exec-report-transfer-coexecutors-reports");
             if (currentUser.isExecutor) {
-                Dom.removeClass(transferSelectedReportsButton.parentElement, "hidden");
+                Dom.removeClass(transferSelectedReportsButtonEl.parentElement, "hidden");
             }
-            var buttonEl = YAHOO.util.Selector.query("span button", transferSelectedReportsButton, true);
+
+            var transferSelectedReportsButton = new YAHOO.widget.Button(transferSelectedReportsButtonEl, {
+                label: Alfresco.util.message("button.errands.executionReport.transferCoexecutorsReports"),
+                disabled: true,
+                onclick: {
+                    fn: function() {
+                        if (!this.transferActionDoubleClickLock) {
+                            this.transferActionDoubleClickLock = true;
+                            var selectedRows = this.getSelectedItems();
+                            if (selectedRows && selectedRows.length) {
+                                var reportsRefs = selectedRows.map(function (row) {
+                                    return row.nodeRef;
+                                });
+                                this.doReportsTransfer(reportsRefs);
+                            } else {
+                                Alfresco.util.PopupManager.displayMessage({
+                                    text: Alfresco.util.message("lecm.errands.coexecutors.reports.msg.not.selected")
+                                });
+                                this.transferActionDoubleClickLock = false;
+                            }
+                        }
+                    },
+                    scope: datagrid
+                }
+            });
+
             var isStatusOK = "На исполнении" == datagrid.options.currentDocumentStatus || "На доработке" == datagrid.options.currentDocumentStatus;
             isStatusOK = isStatusOK || Alfresco.util.message("lecm.errands.statemachine-status.on-execution") == datagrid.options.currentDocumentStatus || Alfresco.util.message("lecm.errands.statemachine-status.on-rework") == datagrid.options.currentDocumentStatus;
 
@@ -198,33 +223,8 @@ LogicECM.errands = LogicECM.errands || {};
                             return row.itemData["prop_lecm-errands-ts_coexecutor-report-status"].value == "ACCEPT";
                         });
                     }
-                    if (allItemsOk && isStatusOK && datagrid.options.currentUser.isExecutor) {
-                        YAHOO.util.Dom.removeClass(transferSelectedReportsButton, "disabled-button");
-                        buttonEl.disabled = false;
-                    } else {
-                        YAHOO.util.Dom.addClass(transferSelectedReportsButton, "disabled-button");
-                        buttonEl.disabled = true;
-                    }
+                    transferSelectedReportsButton.set("disabled", !(allItemsOk && isStatusOK && datagrid.options.currentUser.isExecutor));
                 }
-            }, datagrid, true);
-
-            YAHOO.util.Event.on(buttonEl, "click", function () {
-                if (!this.transferActionDoubleClickLock) {
-                    this.transferActionDoubleClickLock = true;
-                    var selectedRows = this.getSelectedItems();
-                    if (selectedRows && selectedRows.length) {
-                        var reportsRefs = selectedRows.map(function (row) {
-                            return row.nodeRef;
-                        });
-                        this.doReportsTransfer(reportsRefs);
-                    } else {
-                        Alfresco.util.PopupManager.displayMessage({
-                            text: Alfresco.util.message("lecm.errands.coexecutors.reports.msg.not.selected")
-                        });
-                        this.transferActionDoubleClickLock = false;
-                    }
-                }
-
             }, datagrid, true);
 
             this.datagrid = datagrid;

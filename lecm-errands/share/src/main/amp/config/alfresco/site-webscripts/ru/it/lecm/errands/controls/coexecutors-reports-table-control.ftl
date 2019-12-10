@@ -80,9 +80,9 @@
 			<label id="${controlId}-change-filter-label" for="${controlId}-change-filter" class="checkbox"></label>
 		</div>
 		<div class="reports-transfer-block hidden">
-			 <span id="${controlId}-exec-report-transfer-coexecutors-reports" class="yui-button yui-push-button disabled-button">
+			 <span id="${controlId}-exec-report-transfer-coexecutors-reports">
 				<span class="first-child">
-					<button disabled>${msg("button.errands.executionReport.transferCoexecutorsReports")}</button>
+					<button>${msg("button.errands.executionReport.transferCoexecutorsReports")}</button>
 				</span>
 			</span>
 		</div>

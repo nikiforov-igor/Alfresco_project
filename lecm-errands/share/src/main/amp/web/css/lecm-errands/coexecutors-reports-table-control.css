@@ -50,11 +50,3 @@
 .datagrid .grid table tbody tr.declined {
     background-color: #ffe1e1;
 }
-
-.form-field.with-grid.coexecutors-report .coexecutors-reports-additional-block .reports-transfer-block > span.disabled-button {
-    background: rgba(255, 255, 255, 0.1);
-}
-.form-field.with-grid.coexecutors-report .coexecutors-reports-additional-block .reports-transfer-block > span.disabled-button > span > button {
-    cursor: default;
-    color: #ccc;
-}
