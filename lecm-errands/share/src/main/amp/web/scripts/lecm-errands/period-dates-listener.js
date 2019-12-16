@@ -1,4 +1,7 @@
 (function () {
+    var Dom = YAHOO.util.Dom,
+        Selector = YAHOO.util.Selector;
+
     if (YAHOO.Bubbling.addLayer("periodDatesScriptLoaded")) {
         YAHOO.Bubbling.on("periodDatesScriptLoaded", init);
     }
@@ -12,11 +15,13 @@
             var startDateFieldReadyEl = LogicECM.module.Base.Util.getComponentReadyElementId(params.formId, params.startDateField);
             YAHOO.util.Event.onContentReady(startDateFieldReadyEl, function () {
                 var startDateControl = Dom.get(params.formId + "_prop_" + params.startDateField.replace(":","_") + "-cntrl-parent");
-                var mandatoryEl = document.createElement('span');
-                mandatoryEl.className = "mandatory-indicator";
-                mandatoryEl.innerHTML = "*";
                 var startDateLabelDiv = Selector.query(".label-div label", startDateControl, true);
-                startDateLabelDiv.appendChild(mandatoryEl);
+                if (!Selector.query(".mandatory-indicator", startDateLabelDiv, true)) {
+                    var mandatoryEl = document.createElement('span');
+                    mandatoryEl.className = "mandatory-indicator";
+                    mandatoryEl.innerHTML = "*";
+                    startDateLabelDiv.appendChild(mandatoryEl);
+                }
             });
         }
     }
