@@ -60,11 +60,13 @@
             Event.onContentReady(formId + "_prop_lecmErrandWf_requestDueDateChangeTask_1RejectReason", function () {
                 var rejectReasonElement = Dom.get(formId + "_prop_lecmErrandWf_requestDueDateChangeTask_1RejectReason");
                 var rejectReasonControl = rejectReasonElement.parentElement.parentElement.parentElement;
-                var mandatoryEl = document.createElement('span');
-                mandatoryEl.className = "mandatory-indicator";
-                mandatoryEl.innerHTML = "*";
                 var rejectReasonLabelDiv = Selector.query(".label-div label", rejectReasonControl, true);
-                rejectReasonLabelDiv.appendChild(mandatoryEl);
+                if (!Selector.query(".mandatory-indicator", rejectReasonLabelDiv, true)) {
+                    var mandatoryEl = document.createElement('span');
+                    mandatoryEl.className = "mandatory-indicator";
+                    mandatoryEl.innerHTML = "*";
+                    rejectReasonLabelDiv.appendChild(mandatoryEl);
+                }
                 Event.onContentReady(formId + "_prop_lecmErrandWf_requestDueDateChangeTask_1Result-container-APPROVED", function () {
                     Event.onContentReady(formId + "_prop_lecmErrandWf_requestDueDateChangeTask_1Result-container-REJECTED", function () {
                         var defaultResultValueEl = Dom.get(formId + "_prop_lecmErrandWf_requestDueDateChangeTask_1Result-container-APPROVED");
