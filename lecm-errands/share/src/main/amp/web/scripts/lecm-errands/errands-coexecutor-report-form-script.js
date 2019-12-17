@@ -1,7 +1,4 @@
 (function () {
-    LogicECM.module.Base.Util.loadCSS([
-        'css/lecm-errands/errands-coexecutor-report-form.css'
-    ]);
     var Dom = YAHOO.util.Dom,
         Event = YAHOO.util.Event,
         Selector = YAHOO.util.Selector,
