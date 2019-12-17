@@ -1,5 +1,6 @@
 .yui-skin-lecmTheme .resolution-form .form-container fieldset {
-    padding: 10px;
+    min-width: 0; /*set min-width: 0; on the fieldset to override the default value of min-content.*/
+    padding: 8px;
     margin-bottom: 0;
 }
 
