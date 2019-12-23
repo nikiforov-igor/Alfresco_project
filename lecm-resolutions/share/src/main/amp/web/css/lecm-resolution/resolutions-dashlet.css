@@ -30,6 +30,10 @@
 }
 .dashlet.issued-resolutions .body .row .column.first {
     width: auto;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    float: none;
 }
 .dashlet.issued-resolutions .body .row .column.first.bold {
     font-weight: bold;
