@@ -308,7 +308,7 @@ LogicECM.ORD = LogicECM.ORD || {};
                                 });
                             }
                         } else {
-                            this.addExpandedRow(record, Alfresco.util.message("ord.item.execution.tree.empty"));
+                            this.addExpandedRow(record, "<div class='yui-dt-liner'>" + Alfresco.util.message("ord.item.execution.tree.empty") + "</div>", "yui-dt-empty");
                         }
                     },
                     scope: this

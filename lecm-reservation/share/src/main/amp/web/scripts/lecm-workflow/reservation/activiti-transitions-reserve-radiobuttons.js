@@ -109,7 +109,7 @@ LogicECM.module = LogicECM.module || {};
 		 */
 		_generateTransitionButton: function(transition) {
 			// create a button and add to the DOM
-			var container, button, label, spaceBr;
+			var container, button, label;
 
 			this._getHiddenField();
 
@@ -142,9 +142,6 @@ LogicECM.module = LogicECM.module || {};
             label.setAttribute('for', this.id + '-' + transition.id);
             label.innerHTML = ' ' + transition.label;
             container.appendChild(label);
-
-			spaceBr = document.createElement('br');
-			container.appendChild(spaceBr);
 		},
 		/**
 		 * Event handler called when a transition button is clicked.

@@ -13,7 +13,7 @@
         var formId = args[1].formId;
         Event.onContentReady(formId + "-form-submit-button", function () {
             var submitButtonElement = Dom.get(formId + "-form-submit-button");
-            submitButtonElement.innerHTML = Alfresco.util.message("ord.register.dialog.button.continue");
+            submitButtonElement.innerHTML = Alfresco.util.message("ord.register.dialog.button.complete");
         });
     }
 
