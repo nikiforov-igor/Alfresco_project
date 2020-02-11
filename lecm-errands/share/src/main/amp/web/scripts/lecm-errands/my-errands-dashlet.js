@@ -172,8 +172,7 @@ LogicECM.dashlet = LogicECM.dashlet || {};
 
                 if (this.dataTable == null) {
                     var columnDefs = [
-                        { key: "isImportant", label: "", sortable: false, formatter: this.bind(this.renderCellIcons), width: "16", className: "image"},
-                        { key: "baseDocString", label: "", sortable: false, formatter: this.bind(this.renderCellIcons), width: "16", className: "image"},
+                        { key: "icons", label: "", sortable: false, formatter: this.bind(this.renderCellIcons), className: "icons"},
                         { key: "linkString", label: "", sortable: false, formatter: this.bind(this.renderCellIcons)}
                     ];
                     var initialSource = new YAHOO.util.DataSource(response.json.data);
@@ -200,19 +199,15 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                 var data = oRecord.getData(),
                     desc = "";
 
-                if (oColumn.key =="isImportant" && data.isImportant == "true") {
+                if (oColumn.key == "icons") {
                     elCell.className += " " + oColumn.className;
                     oColumn.getThEl().className += "" + oColumn.className;
-                    desc = '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-documents/exclamation_16.png'
-                        + '" width="16" alt="' + this.msg("label.important") + '" title="' + this.msg("label.important")
-                        + '" />';
-                }
-
-                if (oColumn.key =="baseDocString" && data.baseDocString != undefined) {
-                    elCell.className += " " + oColumn.className;
-                    oColumn.getThEl().className += "" + oColumn.className;
-                    desc = '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-documents/base_doc_16.png'
-                        + '" width="16" alt="' + data.baseDocString + '" title="' + data.baseDocString + '" />';
+                    if (data.isImportant == "true") {
+                        desc = '<div title="' + this.msg("label.important") + '" class="errand-is-important"></div>';
+                    }
+                    if (data.baseDocString != undefined) {
+                        desc = '<div title="' + data.baseDocString + '" class="errand-base-doc"></div>';
+                    }
                 }
 
                 if (oColumn.key =="linkString") {
@@ -220,11 +215,11 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                         + "document?nodeRef="+ data.nodeRef + "'>"+data.number +": \""+ data.title + "\"</a> ";
                     desc += "<div class='info'>" + this.msg("label.from") + " <a href='" + window.location.protocol + "//" + window.location.host +
                         Alfresco.constants.URL_PAGECONTEXT + "view-metadata?nodeRef="+ data.initiator + "'>"
-                        + data.initiator_name + ",</a> ";
+                        + data.initiator_name + "</a>";
                     if (data.date) {
-                        desc += this.msg("label.up.to") + " " + YAHOO.util.Date.format(new Date(data.date), {format: "%d %b %Y"}, this.msg("locale"));
+                        desc += ", " + this.msg("label.up.to") + " " + YAHOO.util.Date.format(new Date(data.date), {format: "%d %b %Y"}, this.msg("locale"));
                     } else {
-                        desc += "без срока";
+                        desc += ", " + this.msg("label.no-date");
                     }
                     desc += "</div> ";
                     if (data.isExpired == "true") {

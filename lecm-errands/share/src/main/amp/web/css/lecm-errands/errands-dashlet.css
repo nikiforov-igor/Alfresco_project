@@ -1,72 +1,77 @@
-.dashlet.errands .body .row {
-    line-height: 16px;
-    margin: 10px;
+/* Дашлет Мои поручения */
+.body.scrollableList .my-errands {
+    width: 100%;
+}
+.body.scrollableList .my-errands td {
+    padding: 0;
+    border-bottom: 1px solid #E5E5E5;
+}
+.body.scrollableList .my-errands td .yui-dt-liner {
+    padding: 8px;
+}
+.body.scrollableList .my-errands td .info a {
+    font-weight: bold;
+}
+.body.scrollableList .my-errands td .expired {
+    color: #EB5757;
+}
+.body.scrollableList .my-errands td.icons {
+    width: 32px;
+    vertical-align: top;
+}
+.body.scrollableList .my-errands td.icons .yui-dt-liner {
+    padding: 8px 0 0 16px;
+}
+.body.scrollableList .my-errands td.icons .errand-is-important,
+.body.scrollableList .my-errands td.icons .errand-base-doc {
+    width: 16px;
+    height: 16px;
+    background-image: url(../../images/lecm-base/icons.svg);
+    background-repeat: no-repeat;
+    margin-bottom: 4px;
+}
+.body.scrollableList .my-errands td.icons .errand-is-important {
+    background-position: -1328px -48px;
+}
+.body.scrollableList .my-errands td.icons .errand-base-doc {
+    background-position: -608px -240px;
 }
 
-.yui-u .dashlet.issued-errands .body.dashlet-body {
-    padding: 0;
-}
+/* Дашлет Выданные мной поручения */
 .dashlet.issued-errands .body .row.summary {
-    line-height: 16px;
+    height: 32px;
     margin: 0;
-    padding: 10px 1em;
-    border-bottom: 1px solid #d7d7d7;
+    padding: 8px 16px;
+    border-bottom: 1px solid #E5E5E5;
+    box-sizing: border-box;
     overflow: hidden;
 }
 .dashlet.issued-errands .body .row .column {
+    font-family: Roboto, sans-serif;
+    font-size: 13px;
+    line-height: 16px;
     margin: 0;
+}
+.dashlet.issued-errands .body .row .column.second,
+.dashlet.issued-errands .body .row .column.third {
+    width: 40px;
+    float: right;
+    text-align: right;
+}
+.dashlet.issued-errands .body .row .column.second a {
+    color: #046399;
+    font-weight: bold;
+}
+.dashlet.issued-errands .body .row .column.third a {
+    color: #EB5757;
 }
 .dashlet.issued-errands .body .row .column.first {
     width: auto;
-    margin-left: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    float: none;
 }
 .dashlet.issued-errands .body .row .column.first.bold {
     font-weight: bold;
-    margin-left: 0;
-}
-.dashlet.issued-errands .body .row .column.second {
-    margin: 0 0 0 10px;
-    float: left;
-}
-.dashlet.issued-errands .body .row .column.third {
-    margin: 0 0 0 5px;
-    color: red;
-    float:left;
-}
-
-.grid .dashlet.issued-errands .body .row .column.second a {
-    font-weight: bold;
-}
-
-.dashlet .titleBarActions .arm {
-    background-image: url('../../images/lecm-errands/arm.png');
-}
-
-.expired {
-    color: #cd853f;
-    display: inline;
-}
-
-.body.scrollableList .my-errands .yui-dt-liner.image {
-    padding: 4px 0;
-}
-
-.body.scrollableList .my-errands tr.yui-dt-rec.yui-dt-odd {
-    background-color: #FFFFFF;
-}
-
-.body.scrollableList .my-errands td.image {
-    width: 16px;
-}
-
-.body.scrollableList .my-errands td {
-    border-bottom: 1px dashed #D9D9D9;
-}
-
-.body.scrollableList .my-errands td .info a{
-    font-weight:bolder;
-}
-
-.body.scrollableList .my-errands {
-    width: 100%;
 }
