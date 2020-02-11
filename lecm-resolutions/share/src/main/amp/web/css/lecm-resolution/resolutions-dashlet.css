@@ -1,6 +1,3 @@
-.dashlet.issued-resolutions .scrollableList {
-    padding: 0;
-}
 .dashlet.issued-resolutions .body .row.summary {
     height: 32px;
     margin: 0;
@@ -37,7 +34,4 @@
 }
 .dashlet.issued-resolutions .body .row .column.first.bold {
     font-weight: bold;
-}
-.dashlet.issued-resolutions .titleBarActions .arm {
-    background: url(../../images/lecm-base/icons.svg) no-repeat -492px -76px;
 }
