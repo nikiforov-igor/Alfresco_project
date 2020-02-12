@@ -197,12 +197,15 @@ LogicECM.module.ARM.dashlet = LogicECM.module.ARM.dashlet || {};
 
                     this.dataTable = new YAHOO.widget.DataTable(this.id + "-documents", columnDefs, initialSource, {});
                     this.dataTable.getTheadEl().hidden = true;
-                    this.dataTable.getTableEl().className += "eds-documents";
+                    this.dataTable.getTableEl().className += "eds-documents alfresco-datatable";
 
                     this.dataTable.set("MSG_EMPTY", Alfresco.util.message('lecm.edsdocs.msg.no.docs'));
                     this.dataTable.set("MSG_ERROR", Alfresco.util.message('lecm.edsdocs.msg.request.error'));
 
                     YAHOO.util.Event.addListener(this.id + "-main", "scroll", this.onContainerScroll, this);
+
+                    this.dataTable.subscribe("rowMouseoverEvent", this.dataTable.onEventHighlightRow, null, this.dataTable);
+                    this.dataTable.subscribe("rowMouseoutEvent", this.dataTable.onEventUnhighlightRow, null, this.dataTable);
 
                     this.dataTable.render();
                 }
