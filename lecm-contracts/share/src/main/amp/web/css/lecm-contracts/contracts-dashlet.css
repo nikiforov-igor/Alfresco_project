@@ -1,21 +1,6 @@
 .dashlet.contracts .toolbar {
     overflow: hidden;
 }
-.dashlet.contracts .createContract .yui-button {
-    margin: 0;
-    box-sizing: border-box;
-}
-.dashlet.contracts .createContract .yui-button-hover,
-.dashlet.contracts .createContract .yui-button-focus {
-    background-color: #CDE0EB;
-}
-.dashlet.contracts .createContract .yui-button-active {
-    background-color: #9BC1D6;
-}
-.dashlet.contracts .createContract .yui-button button {
-    width: 30px;
-    background: url(../../images/lecm-base/icons.svg) no-repeat -521px -41px;
-}
 
 .contract-filters {
     max-width: calc(100% - 32px);

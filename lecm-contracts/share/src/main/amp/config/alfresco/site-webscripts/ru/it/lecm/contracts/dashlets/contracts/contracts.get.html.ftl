@@ -46,7 +46,7 @@
 	<div class="title">${msg("header")}</div>
 	<div class="toolbar">
 		<#if isStarter?? && isStarter>
-			<div class="createContract align-right">
+			<div class="createContract createNew align-right">
 				<input id="${id}-action-add" type="button"/>
 			</div>
 		</#if>
