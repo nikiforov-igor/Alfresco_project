@@ -80,7 +80,12 @@ LogicECM.module.Contracts.dashlet = LogicECM.module.Contracts.dashlet || {};
                 this.widgets.range.value = "7";
                 this.widgets.user.set("label", this.msg("filter.my"));
                 this.widgets.user.value = "my";
-                
+
+                // Кнопка "Создать договор"
+                var createContractBtn = Alfresco.util.createYUIButton(this, "action-add", this.onAddContractClick, {
+                    title: this.msg("dashlet.add.tooltip")
+                });
+
                 this.services.preferences.request(this.buildPreferences(),
                     {
                         successCallback:
@@ -125,7 +130,7 @@ LogicECM.module.Contracts.dashlet = LogicECM.module.Contracts.dashlet || {};
                                     }
                                 }
                                 // Display the toolbar now that we have selected the filter
-                                Dom.removeClass(Selector.query(".toolbar div", this.id, true), "hidden");
+                                Dom.removeClass(Selector.query(".toolbar .contract-filters", this.id, true), "hidden");
                                 // Populate the activity list
                                 this.populateContractsList(this.widgets.range.value, this.widgets.user.value);
                             },
@@ -136,7 +141,7 @@ LogicECM.module.Contracts.dashlet = LogicECM.module.Contracts.dashlet || {};
                             fn: function()
                             {
                                 // Display the toolbar now that we have selected the filter
-                                Dom.removeClass(Selector.query(".toolbar div", this.id, true), "hidden");
+                                Dom.removeClass(Selector.query(".toolbar .contract-filters", this.id, true), "hidden");
                                 // Populate the activity list
                                 this.populateContractsList(this.widgets.range.value, this.widgets.user.value);
                             },

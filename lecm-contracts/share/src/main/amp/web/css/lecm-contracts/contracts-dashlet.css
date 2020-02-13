@@ -1,38 +1,45 @@
-.dashlet.contracts .title {
-    padding: 5px 9px;
+.dashlet.contracts .toolbar {
     overflow: hidden;
 }
-.dashlet.contracts .lecm-dashlet-actions {
-    margin-left: 1em;
+.dashlet.contracts .createContract .yui-button {
+    margin: 0;
+    box-sizing: border-box;
 }
-.dashlet.contracts .lecm-dashlet-actions a {
-    background-position: 0 center;
-    background-repeat: no-repeat;
-    padding: 1.5em;
-    text-decoration: none;
+.dashlet.contracts .createContract .yui-button-hover,
+.dashlet.contracts .createContract .yui-button-focus {
+    background-color: #CDE0EB;
 }
-.dashlet.contracts .lecm-dashlet-actions .add {
-    background-image: url("../../images/lecm-base/components/docs-common/alf_document_add.png");
+.dashlet.contracts .createContract .yui-button-active {
+    background-color: #9BC1D6;
+}
+.dashlet.contracts .createContract .yui-button button {
+    width: 30px;
+    background: url(../../images/lecm-base/icons.svg) no-repeat -521px -41px;
 }
 
-.dashlet.contracts .toolbar {
-    border-bottom: none;
+.contract-filters {
+    max-width: calc(100% - 32px);
+    float: left;
 }
-.dashlet.contracts .titleBarActions .arm {
-    background-image: url('../../images/lecm-contracts/arm.png');
-}
-.dashlet.contracts .scrollableList {
-    padding: 0;
-}
+
 .dashlet.contracts .datagrid {
-    padding-top: 0;
-}
-.dashlet.contracts .datagrid .datagrid-bar {
-    margin: 0;
     padding: 0;
+}
+.dashlet.contracts .datagrid .grid {
+    border: none;
+    border-radius: 0;
+    margin: 0;
 }
 .dashlet.contracts .datagrid thead {
-    display:none;
+    display: none;
 }
-
+.dashlet.contracts .datagrid .grid .yui-dt-liner {
+    padding: 8px 16px;
+    line-height: inherit;
+}
+.dashlet.contracts .datagrid .grid .yui-dt-empty {
+    text-align: left;
+    font-style: normal;
+    color: #000000;
+}
 
