@@ -327,34 +327,102 @@
 		</forms>
 	</config>
 
-    <config evaluator="model-type" condition="lecm-document:base">
-        <forms>
-            <!-- Форма атрибутивного поиска-->
-			<form id="search-editor-fields">
+	<config evaluator="node-type" condition="lecm-eds-document:base">
+		<forms>
+			<form id="navigation-pane">
 				<field-visibility>
-					<show id="lecm-document:doc-type"/>
-					<show id="lecm-document:title"/>
-					<show id="lecm-document:regnum"/>
-					<show id="lecm-document:present-string"/>
-					<show id="lecm-document:doc-date"/>
-					<show id="lecm-statemachine:status" force="true"/>
-					<show id="lecm-document:subject-assoc"/>
-					<show id="lecm-document:author-assoc"/>
+					<show id="attributes"/>
+					<show id="attachments"/>
+					<show id="errands"/>
+					<show id="connections"/>
+					<show id="members"/>
+					<show id="tags"/>
+					<show id="history"/>
+					<show id="reports"/>
+					<show id="comments"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-document:present-string" label="Название"/>
-					<field id="lecm-document:author-assoc">
-						<control>
-							<control-param name="additionalFilter"></control-param>
-							<control-param name="useStrictFilterByOrg">false</control-param>
-							<control-param name="isShowNotActiveCheckBox">true</control-param>
-							<control-param name="notActiveCheckBoxLabelId">label.control.employees-show-dismissed</control-param>
+					<field id="attributes">
+						<control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+							<control-param name="iconSrc">/document-page/attributes-40.png</control-param>
+							<control-param name="uri">/lecm/components/document/form</control-param>
+							<control-param name="nodeLabel">Атрибуты</control-param>
+							<control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_AttrList")</control-param>
+						</control>
+					</field>
+					<field id="attachments">
+						<control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+							<control-param name="iconSrc">/document-page/attachments-40.png</control-param>
+							<control-param name="uri">/lecm/components/document/attachments</control-param>
+							<control-param name="nodeLabel">Вложения</control-param>
+							<control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_ContentList")</control-param>
+						</control>
+					</field>
+					<field id="errands">
+						<control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+							<control-param name="iconSrc">/document-page/errands-40.png</control-param>
+							<control-param name="uri">/lecm/components/document/errands</control-param>
+							<control-param name="nodeLabel">Поручения</control-param>
+							<control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_LinksView")</control-param>
+						</control>
+					</field>
+					<field id="connections">
+						<control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+							<control-param name="iconSrc">/document-page/connections-40.png</control-param>
+							<control-param name="uri">/lecm/components/document/connections-list</control-param>
+							<control-param name="nodeLabel">Связи</control-param>
+							<control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_LinksView")</control-param>
+							<control-param name="uri_excludeType">lecm-errands:document</control-param>
+						</control>
+					</field>
+					<field id="members">
+						<control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+							<control-param name="iconSrc">/document-page/members-40.png</control-param>
+							<control-param name="uri">/lecm/components/document/members-list</control-param>
+							<control-param name="nodeLabel">Участники документа</control-param>
+							<control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_MemberList")</control-param>
+						</control>
+					</field>
+					<field id="tags">
+						<control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+							<control-param name="iconSrc">/document-page/tags-40.png</control-param>
+							<control-param name="uri">/lecm/components/document/tags-list</control-param>
+							<control-param name="nodeLabel">Метки</control-param>
+							<control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_TagView")</control-param>
+						</control>
+					</field>
+					<field id="history">
+						<control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+							<control-param name="iconSrc">/document-page/history-40.png</control-param>
+							<control-param name="uri">/lecm/components/document/history-datagrid</control-param>
+							<control-param name="nodeLabel">История</control-param>
+							<control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_HistoryView")</control-param>
+							<control-param name="uri_showSecondaryCheckBox">true</control-param>
+							<control-param name="uri_hideCollapseButton">false</control-param>
+							<control-param name="uri_dataSource">lecm/business-journal/ds/history</control-param>
+						</control>
+					</field>
+					<field id="reports">
+						<control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+							<control-param name="iconSrc">/document-page/print-forms-40.png</control-param>
+							<control-param name="nodeLabel">Печатные формы</control-param>
+							<control-param name="uri">/lecm/components/document/forms</control-param>
+						</control>
+					</field>
+					<field id="comments">
+						<control template="/ru/it/lecm/documents/controls/navigation-item-control.ftl">
+							<control-param name="iconSrc">/document-page/comments-40.png</control-param>
+							<control-param name="uri">/lecm/components/comments/list</control-param>
+							<control-param name="nodeLabel">Комментарии</control-param>
+							<control-param name="nodeExpression">user.currentUser().hasPermission(doc.getNodeRef(), "_lecmPerm_CommentView")</control-param>
+							<control-param name="counterUri">/lecm/document/api/getCommentsCount</control-param>
+							<control-param name="uri_activityType">document</control-param>
 						</control>
 					</field>
 				</appearance>
 			</form>
-        </forms>
-    </config>
+		</forms>
+	</config>
 
     <config evaluator="model-type" condition="lecm-doc-dic-dt:typeDictionary">
         <forms>
