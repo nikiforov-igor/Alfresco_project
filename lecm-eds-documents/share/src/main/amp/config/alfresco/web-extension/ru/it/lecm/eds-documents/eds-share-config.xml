@@ -327,7 +327,7 @@
 		</forms>
 	</config>
 
-	<config evaluator="node-type" condition="lecm-eds-document:base">
+	<config evaluator="parent-type-form" condition="lecm-eds-document:base">
 		<forms>
 			<form id="navigation-pane">
 				<field-visibility>
