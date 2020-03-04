@@ -61,11 +61,11 @@ LogicECM.module.Resolutions.dashlet = LogicECM.module.Resolutions.dashlet || {};
                                 if (response.json) {
                                     var list = response.json.list;
                                     for (var index in list) {
-                                        var innerHtml = "<div class='column first'>" + this.message[list[index].key] + ":" + "</div>" +
-                                            "<div class='column second'><a class=\"status-button text-cropped\" " +
+                                        var innerHtml = "<div class='column third'><a " +
+                                            "href=\"" + Alfresco.constants.URL_PAGECONTEXT + "arm?code=" + encodeURI(list[index].armCode) + "&path=" + encodeURI(list[index].controlPath) + "\">" + list[index].controlCount + "</a></div>" +
+                                            "<div class='column second'><a " +
                                             "href=\"" + Alfresco.constants.URL_PAGECONTEXT + "arm?code=" + encodeURI(list[index].armCode) + "&path=" + encodeURI(list[index].path) + "\">" + list[index].allCount + "</a></div>" +
-                                            "<div class='column third'><a style=\"color:red;\" class=\"status-button text-cropped\" " +
-                                            "href=\"" + Alfresco.constants.URL_PAGECONTEXT + "arm?code=" + encodeURI(list[index].armCode) + "&path=" + encodeURI(list[index].controlPath) + "\">(" + list[index].controlCount + ")</a></div>";
+                                            "<div class='column first'>" + this.message[list[index].key] + "</div>";
                                         this.createRow(innerHtml);
                                     }
                                 }

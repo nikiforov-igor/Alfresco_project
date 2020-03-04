@@ -1,49 +1,37 @@
-.dashlet.resolutions .body .row {
-    line-height: 16px;
-    margin: 10px;
-}
-
-.yui-u .dashlet.issued-resolutions .body.dashlet-body {
-    padding: 0;
-}
-
 .dashlet.issued-resolutions .body .row.summary {
-    line-height: 16px;
+    height: 32px;
     margin: 0;
-    padding: 10px 1em;
-    border-bottom: 1px solid #d7d7d7;
+    padding: 8px 16px;
+    border-bottom: 1px solid #E5E5E5;
+    box-sizing: border-box;
     overflow: hidden;
 }
-
 .dashlet.issued-resolutions .body .row .column {
+    font-family: Roboto, sans-serif;
+    font-size: 13px;
+    line-height: 16px;
     margin: 0;
 }
-
+.dashlet.issued-resolutions .body .row .column.second,
+.dashlet.issued-resolutions .body .row .column.third {
+    width: 40px;
+    float: right;
+    text-align: right;
+}
+.dashlet.issued-resolutions .body .row .column.second a {
+    color: #046399;
+    font-weight: bold;
+}
+.dashlet.issued-resolutions .body .row .column.third a {
+    color: #EB5757;
+}
 .dashlet.issued-resolutions .body .row .column.first {
     width: auto;
-    margin-left: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    float: none;
 }
-
 .dashlet.issued-resolutions .body .row .column.first.bold {
     font-weight: bold;
-    margin-left: 0;
-}
-
-.dashlet.issued-resolutions .body .row .column.second {
-    margin: 0 0 0 10px;
-    float: left;
-}
-
-.dashlet.issued-resolutions .body .row .column.third {
-    margin: 0 0 0 5px;
-    color: red;
-    float: left;
-}
-
-.grid .dashlet.issued-resolutions .body .row .column.second a {
-    font-weight: bold;
-}
-
-.dashlet .titleBarActions .arm {
-    background-image: url('../../images/lecm-eds-documents/arm.png');
 }
