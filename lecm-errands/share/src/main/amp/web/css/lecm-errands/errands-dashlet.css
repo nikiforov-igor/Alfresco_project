@@ -20,7 +20,7 @@
     vertical-align: top;
 }
 .body.scrollableList .my-errands td.icons .yui-dt-liner {
-    padding: 8px 0 0 16px;
+    padding: 8px 0 8px 16px;
 }
 .body.scrollableList .my-errands td.icons .errand-is-important,
 .body.scrollableList .my-errands td.icons .errand-base-doc {
@@ -35,6 +35,9 @@
 }
 .body.scrollableList .my-errands td.icons .errand-base-doc {
     background-position: -608px -240px;
+}
+.body.scrollableList .my-errands td.icons .yui-dt-liner div:last-child {
+    margin: 0;
 }
 
 /* Дашлет Выданные мной поручения */

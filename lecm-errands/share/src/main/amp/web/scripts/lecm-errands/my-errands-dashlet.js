@@ -206,7 +206,7 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                         desc = '<div title="' + this.msg("label.important") + '" class="errand-is-important"></div>';
                     }
                     if (data.baseDocString != undefined) {
-                        desc = '<div title="' + data.baseDocString + '" class="errand-base-doc"></div>';
+                        desc += '<div title="' + data.baseDocString + '" class="errand-base-doc"></div>';
                     }
                 }
 
