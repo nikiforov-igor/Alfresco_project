@@ -11,6 +11,7 @@
 						<property name="lecm-arm:types"><![CDATA[]]></property>
 						<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
 						<property name="lecm-arm:search-query"><![CDATA[]]></property>
+						<property name="lecm-arm:icon-name"><![CDATA[sed.png]]></property>
 						<items>
                             <item name="cm:Настройки поручений и резолюций" type="lecm-arm:html-node">
                                 <property name="cm:name"><![CDATA[Настройки поручений и резолюций]]></property>
@@ -18,9 +19,6 @@
                                 <property name="lecm-arm:html-url"><![CDATA[page/my-errands-settings]]></property>
                             </item>
 						</items>
-						<assocs>
-							<assoc type="lecm-arm:icon-assoc" path="/Словарь данных/Icons/White/sed.png"/>
-						</assocs>
 					</item>
 				</items>
 			</item>

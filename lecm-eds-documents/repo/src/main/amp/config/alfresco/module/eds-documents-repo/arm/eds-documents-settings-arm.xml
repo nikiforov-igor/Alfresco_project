@@ -11,6 +11,7 @@
 						<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
 						<property name="lecm-arm:types"><![CDATA[]]></property>
 						<property name="lecm-arm:search-query"><![CDATA[]]></property>
+						<property name="lecm-arm:icon-name"><![CDATA[settings.png]]></property>
 						<items>
 							<item name="cm:Общие настройки" type="lecm-arm:html-node">
 								<property name="cm:name"><![CDATA[Общие настройки]]></property>
@@ -28,10 +29,6 @@
 								</property>
 							</item>
 						</items>
-						<assocs>
-							<assoc type="lecm-arm:icon-assoc"
-								   path="/Словарь данных/Icons/White/settings.png"/>
-						</assocs>
 					</item>
 				</items>
 			</item>

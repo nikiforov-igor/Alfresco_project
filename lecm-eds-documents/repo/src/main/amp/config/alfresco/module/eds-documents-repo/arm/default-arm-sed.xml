@@ -22,6 +22,7 @@
                         <property name="lecm-arm:is-for-secretaries"><![CDATA[false]]></property>
                         <property name="lecm-arm:types">
                             <![CDATA[lecm-nd:document,lecm-errands:document,lecm-incoming:document,lecm-internal:document,lecm-outgoing:document,lecm-ord:document,lecm-protocol:document,lecm-resolutions:document]]></property>
+                        <property name="lecm-arm:icon-name"><![CDATA[my-work.png]]></property>
                         <items>
                             <item name="cm:У меня на рассмотрении" type="lecm-arm:node">
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
@@ -5261,10 +5262,6 @@
                                 </assocs>
                             </item>
                         </items>
-                        <assocs>
-                            <assoc type="lecm-arm:icon-assoc"
-                                   path="/Словарь данных/Icons/White/my-work.png"/>
-                        </assocs>
                     </item>
                     <item name="cm:Навигатор" type="lecm-arm:accordion">
                         <property name="lecm-arm:search-query"><![CDATA[]]></property>
@@ -5276,6 +5273,7 @@
                         <property name="lecm-arm:is-for-secretaries"><![CDATA[false]]></property>
                         <property name="lecm-arm:types">
                             <![CDATA[lecm-nd:document,lecm-errands:document,lecm-incoming:document,lecm-internal:document,lecm-outgoing:document,lecm-ord:document,lecm-protocol:document,lecm-resolutions:document]]></property>
+                        <property name="lecm-arm:icon-name"><![CDATA[navigator.png]]></property>
                         <items>
                             <item name="cm:По типам документов" type="lecm-arm:node">
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
@@ -25982,10 +25980,6 @@
                                 </assocs>
                             </item>
                         </items>
-                        <assocs>
-                            <assoc type="lecm-arm:icon-assoc"
-                            path="/Словарь данных/Icons/White/navigator.png"/>
-                        </assocs>
                     </item>
                     <item name="cm:Отчеты" type="lecm-arm:accordion">
                         <property name="lecm-arm:search-query"><![CDATA[]]></property>
@@ -25996,6 +25990,7 @@
                         <property name="lecm-arm:is-for-secretaries"><![CDATA[false]]></property>
                         <property name="lecm-arm:types">
                             <![CDATA[lecm-nd:document,lecm-errands:document,lecm-incoming:document,lecm-internal:document,lecm-outgoing:document,lecm-ord:document]]></property>
+                        <property name="lecm-arm:icon-name"><![CDATA[reports.png]]></property>
                         <items>
                             <item name="cm:Журналы" type="lecm-arm:reports-node">
                                 <property name="cm:name"><![CDATA[Журналы]]></property>
@@ -26022,10 +26017,6 @@
                                     <![CDATA[lecm-ord:document,lecm-errands:document,lecm-nd:document,lecm-incoming:document,lecm-internal:document,lecm-outgoing:document,lecm-resolutions:document]]></property>
                             </item>
                         </items>
-                        <assocs>
-                            <assoc type="lecm-arm:icon-assoc"
-                                path="/Словарь данных/Icons/White/reports.png"/>
-                        </assocs>
                     </item>
                     <item name="cm:Работа регистратора" type="lecm-arm:accordion">
                         <property name="lecm-arm:search-query"><![CDATA[]]></property>
@@ -26040,6 +26031,7 @@
                         <property name="lecm-arm:types">
                             <![CDATA[lecm-nd:document,lecm-incoming:document,lecm-internal:document,lecm-outgoing:document,lecm-ord:document,lecm-protocol:document]]></property>
                         <property name="lecm-arm:root-node-html-url"><![CDATA[]]></property>
+                        <property name="lecm-arm:icon-name"><![CDATA[registrator-work.png]]></property>
                         <items>
                             <item name="cm:Черновики" type="lecm-arm:node">
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
@@ -29600,8 +29592,6 @@
                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/a20cf365-7222-43e0-9984-81d89125fe40"/>
                             <assoc type="lecm-arm:filters-assoc"
                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По меткам"/>
-                            <assoc type="lecm-arm:icon-assoc"
-                                    path="/Словарь данных/Icons/White/registrator-work.png"/>
                         </assocs>
                     </item>
                     <item name="cm:Ресурсы" type="lecm-arm:accordion">
@@ -29615,6 +29605,7 @@
                         <property name="lecm-arm:order"><![CDATA[60]]></property>
                         <property name="lecm-arm:is-for-secretaries"><![CDATA[false]]></property>
                         <property name="lecm-arm:types"><![CDATA[lecm-events:document]]></property>
+                        <property name="lecm-arm:icon-name"><![CDATA[resources.png]]></property>
                         <items>
                             <item name="cm:Мои мероприятия" type="lecm-arm:node">
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
@@ -29645,8 +29636,6 @@
                             </item>
                         </items>
                         <assocs>
-                            <assoc type="lecm-arm:icon-assoc"
-                                    path="/Словарь данных/Icons/White/resources.png"/>
                             <assoc type="lecm-arm:fields-assoc"
                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Ресурсы/f9b42412-5c9a-4911-841e-686ee89bb52d"/>
                         </assocs>
@@ -29660,6 +29649,7 @@
                         <property name="lecm-arm:order"><![CDATA[50]]></property>
                         <property name="lecm-arm:is-for-secretaries"><![CDATA[false]]></property>
                         <property name="lecm-arm:types"><![CDATA[lecm-meetings:document,lecm-protocol:document]]></property>
+                        <property name="lecm-arm:icon-name"><![CDATA[events.png]]></property>
                         <items>
                             <item name="cm:Совещания" type="lecm-arm:node">
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
@@ -30015,9 +30005,6 @@
                                 </assocs>
                             </item>
                         </items>
-                        <assocs>
-                            <assoc type="lecm-arm:icon-assoc" path="/Словарь данных/Icons/White/events.png"/>
-                        </assocs>
                     </item>
                     <item name="cm:Мои поисковые запросы" type="lecm-arm:accordion">
                         <property name="lecm-arm:search-query"><![CDATA[]]></property>
@@ -30028,6 +30015,7 @@
                         <property name="lecm-arm:order"><![CDATA[80]]></property>
                         <property name="lecm-arm:is-for-secretaries"><![CDATA[false]]></property>
                         <property name="lecm-arm:types"><![CDATA[]]></property>
+                        <property name="lecm-arm:icon-name"><![CDATA[my-search-queries.png]]></property>
                         <items>
                             <item name="cm:Управление поисковыми запросами" type="lecm-arm:html-node">
                                 <property name="lecm-arm:order"><![CDATA[5]]></property>
@@ -30068,9 +30056,6 @@
                                 </items>
                             </item>
                         </items>
-                        <assocs>
-                            <assoc type="lecm-arm:icon-assoc" path="/Словарь данных/Icons/White/my-search-queries.png"/>
-                        </assocs>
                     </item>
                     <item name="cm:Делегирование" type="lecm-arm:accordion">
                         <property name="lecm-arm:search-query"><![CDATA[]]></property>
@@ -30084,6 +30069,7 @@
                         <property name="lecm-arm:is-for-secretaries"><![CDATA[true]]></property>
                         <property name="lecm-arm:types"><![CDATA[]]></property>
                         <property name="lecm-arm:root-node-html-url"><![CDATA[page/owner-delegation]]></property>
+                        <property name="lecm-arm:icon-name"><![CDATA[delegate.png]]></property>
                         <items>
                             <item name="cm:2e051684-3e48-45c7-aba2-5ecb55850fd3" type="lecm-arm:field">
                                 <property name="lecm-arm:field-title"><![CDATA[Метки]]></property>
@@ -30105,8 +30091,6 @@
                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа"/>
                             <assoc type="lecm-arm:filters-assoc"
                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По меткам"/>
-                            <assoc type="lecm-arm:icon-assoc"
-                                    path="/Словарь данных/Icons/White/delegate.png"/>
                         </assocs>
                     </item>
                     <item name="cm:Работа контролера" type="lecm-arm:accordion">
@@ -30123,6 +30107,7 @@
                         <property name="lecm-arm:is-for-secretaries"><![CDATA[false]]></property>
                         <property name="lecm-arm:types">
                             <![CDATA[lecm-ord:document,lecm-errands:document,lecm-resolutions:document]]></property>
+                        <property name="lecm-arm:icon-name"><![CDATA[control.png]]></property>
                         <items>
                             <item name="cm:ОРД" type="lecm-arm:node">
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
@@ -30893,10 +30878,6 @@
                                 </assocs>
                             </item>
                         </items>
-                        <assocs>
-                            <assoc type="lecm-arm:icon-assoc"
-                                   path="/Словарь данных/Icons/White/control.png"/>
-                        </assocs>
                     </item>
                     <item name="cm:Корзина" type="lecm-arm:accordion">
                         <property name="lecm-arm:search-query"><![CDATA[]]></property>
@@ -30911,6 +30892,7 @@
                         <property name="lecm-arm:types">
                             <![CDATA[lecm-outgoing:document,lecm-nd:document,lecm-protocol:document,lecm-ord:document,lecm-errands:document,lecm-internal:document,lecm-resolutions:document,lecm-incoming:document,lecm-eds-document:base]]></property>
                         <property name="lecm-arm:root-node-html-url"><![CDATA[]]></property>
+                        <property name="lecm-arm:icon-name"><![CDATA[trash.png]]></property>
                         <items>
                             <item name="cm:6425c5eb-c3c0-45f8-b28d-7b80e4312a0d" type="lecm-arm:field">
                                 <property name="lecm-arm:field-title"><![CDATA[Номер]]></property>
@@ -31018,7 +31000,6 @@
                             </item>
                         </items>
                         <assocs>
-                            <assoc type="lecm-arm:icon-assoc" path="/Словарь данных/Icons/White/trash.png"/>
                             <assoc type="lecm-arm:fields-assoc"
                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Корзина/967d775c-ba37-4127-ad53-05368208351d"/>
                             <assoc type="lecm-arm:fields-assoc"

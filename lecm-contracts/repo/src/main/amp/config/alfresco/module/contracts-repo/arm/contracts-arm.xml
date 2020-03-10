@@ -22,6 +22,7 @@
                         <property name="lecm-arm:types">
                             <![CDATA[lecm-contract:document,lecm-additional-document:additionalDocument]]></property>
                         <property name="lecm-arm:root-node-html-url"><![CDATA[]]></property>
+                        <property name="lecm-arm:icon-name"><![CDATA[my-work.png]]></property>
                         <items>
                             <item name="cm:Главная" type="lecm-arm:html-node">
                                 <property name="cm:name"><![CDATA[Главная]]></property>
@@ -3649,8 +3650,6 @@
                         <assocs>
                             <assoc type="lecm-arm:filters-assoc"
                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По меткам"/>
-                            <assoc type="lecm-arm:icon-assoc"
-                                   path="/Словарь данных/Icons/White/my-work.png"/>
                         </assocs>
                     </item>
                     <item name="cm:Делегирование" type="lecm-arm:accordion">
@@ -3666,6 +3665,7 @@
                         <property name="lecm-arm:types">
                             <![CDATA[lecm-contract:document,lecm-additional-document:additionalDocument]]></property>
                         <property name="lecm-arm:root-node-html-url"><![CDATA[page/owner-delegation]]></property>
+                        <property name="lecm-arm:icon-name"><![CDATA[delegate.png]]></property>
                         <items>
                             <item name="cm:8fba3024-073e-4fdb-ba92-fe074ca4f0f1" type="lecm-arm:field">
                                 <property name="lecm-arm:field-title"><![CDATA[Метки]]></property>
@@ -3687,8 +3687,6 @@
                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Договорная деятельность/Моя работа"/>
                             <assoc type="lecm-arm:filters-assoc"
                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По меткам"/>
-                            <assoc type="lecm-arm:icon-assoc"
-                                   path="/Словарь данных/Icons/White/delegate.png"/>
                         </assocs>
                     </item>
                     <item name="cm:Навигатор" type="lecm-arm:accordion">
@@ -3702,6 +3700,7 @@
                         <property name="lecm-arm:is-for-secretaries"><![CDATA[false]]></property>
                         <property name="lecm-arm:types"><![CDATA[lecm-contract:document]]></property>
                         <property name="lecm-arm:root-node-html-url"><![CDATA[]]></property>
+                        <property name="lecm-arm:icon-name"><![CDATA[navigator.png]]></property>
                         <items>
                             <item name="cm:32776a52-6ff3-68a7-83ed-8c3148538579" type="lecm-arm:field">
                                 <property name="lecm-arm:field-title"><![CDATA[Номер]]></property>
@@ -4381,8 +4380,6 @@
                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По сумме договора"/>
                             <assoc type="lecm-arm:filters-assoc"
                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По меткам"/>
-                            <assoc type="lecm-arm:icon-assoc"
-                                   path="/Словарь данных/Icons/White/navigator.png"/>
                         </assocs>
                     </item>
                     <item name="cm:Мои поисковые запросы" type="lecm-arm:accordion">
@@ -4396,6 +4393,7 @@
                         <property name="lecm-arm:is-for-secretaries"><![CDATA[false]]></property>
                         <property name="lecm-arm:types"><![CDATA[]]></property>
                         <property name="lecm-arm:root-node-html-url"><![CDATA[]]></property>
+                        <property name="lecm-arm:icon-name"><![CDATA[my-search-queries.png]]></property>
                         <items>
                             <item name="cm:Поисковые запросы" type="lecm-arm:html-node">
                                 <property name="cm:name"><![CDATA[Поисковые запросы]]></property>
@@ -4440,10 +4438,6 @@
                                 <property name="lecm-arm:html-url"><![CDATA[page/search-query-create]]></property>
                             </item>
                         </items>
-                        <assocs>
-                            <assoc type="lecm-arm:icon-assoc"
-                                   path="/Словарь данных/Icons/White/my-search-queries.png"/>
-                        </assocs>
                     </item>
                     <item name="cm:Отчеты" type="lecm-arm:accordion">
                         <property name="lecm-arm:search-query"><![CDATA[]]></property>
@@ -4456,6 +4450,7 @@
                         <property name="lecm-arm:is-for-secretaries"><![CDATA[false]]></property>
                         <property name="lecm-arm:types"><![CDATA[lecm-contract:document]]></property>
                         <property name="lecm-arm:root-node-html-url"><![CDATA[]]></property>
+                        <property name="lecm-arm:icon-name"><![CDATA[reports.png]]></property>
                         <items>
                             <item name="cm:Договоры" type="lecm-arm:reports-node">
                                 <property name="cm:name"><![CDATA[Договоры]]></property>
@@ -4466,10 +4461,6 @@
                                 <property name="lecm-arm:types"><![CDATA[]]></property>
                             </item>
                         </items>
-                        <assocs>
-                            <assoc type="lecm-arm:icon-assoc"
-                                   path="/Словарь данных/Icons/White/reports.png"/>
-                        </assocs>
                     </item>
                     <item name="cm:Корзина" type="lecm-arm:accordion">
                         <property name="lecm-arm:search-query"><![CDATA[]]></property>
@@ -4482,6 +4473,7 @@
                         <property name="lecm-arm:order"><![CDATA[50]]></property>
                         <property name="lecm-arm:is-for-secretaries"><![CDATA[false]]></property>
                         <property name="lecm-arm:types"><![CDATA[]]></property>
+                        <property name="lecm-arm:icon-name"><![CDATA[trash.png]]></property>
                         <items>
                             <item name="cm:Корзина" type="lecm-arm:node">
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
@@ -4692,9 +4684,6 @@
                                 </assocs>
                             </item>
                         </items>
-                        <assocs>
-                            <assoc type="lecm-arm:icon-assoc" path="/Словарь данных/Icons/White/trash.png"/>
-                        </assocs>
                     </item>
                 </items>
             </item>
