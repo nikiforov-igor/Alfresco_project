@@ -27,4 +27,7 @@
     font-style: normal;
     color: #000000;
 }
+.dashlet.contracts .datagrid .grid .yui-dt-empty .yui-dt-liner {
+    padding: 12px 16px;
+}
 
