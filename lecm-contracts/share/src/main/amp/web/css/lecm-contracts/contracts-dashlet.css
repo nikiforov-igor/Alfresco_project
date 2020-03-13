@@ -18,6 +18,9 @@
 .dashlet.contracts .datagrid thead {
     display: none;
 }
+.dashlet.contracts .grid.yui-dt .yui-dt-last td {
+    border-bottom: 1px solid #E5E5E5 !important;
+}
 .dashlet.contracts .datagrid .grid .yui-dt-liner {
     padding: 8px 16px;
     line-height: inherit;
