@@ -1,3 +1,6 @@
+.dashlet.arm-documents table.eds-documents {
+    width: 100%;
+}
 .dashlet.arm-documents .eds-documents td .yui-dt-liner {
     padding: 8px 16px;
 }
