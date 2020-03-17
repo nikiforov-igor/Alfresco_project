@@ -9,6 +9,12 @@
 .body.scrollableList .my-errands td .yui-dt-liner {
     padding: 8px;
 }
+.body.scrollableList .my-errands td.yui-dt-empty {
+    border-bottom: none;
+}
+.body.scrollableList .my-errands td.yui-dt-empty .yui-dt-liner {
+    padding: 12px 16px;
+}
 .body.scrollableList .my-errands td .info a {
     font-weight: bold;
 }
