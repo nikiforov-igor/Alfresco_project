@@ -1,10 +1,25 @@
 .datagrid div.action-set .onEditWorkspace a,
 .datagrid div.action-set .more-actions .onEditWorkspace a.datagrid-action-link:before {
-	background: url("../../images/lecm-meetings/components/world-edit-ico.png") no-repeat 2px 4px;
+	background: url("../../images/lecm-base/icons.svg") no-repeat -428px -172px;
 }
 
+.datagrid .grid td.yui-dt-col-assoc_lecm-meetings-ts_site-assoc .yui-dt-liner {
+	height: 36px;
+	padding: 6px 4px;
+	margin: 0;
+}
 .datagrid a.site-link {
-	background-image: url("../../components/images/site-16.png");
-	width: 16px;
-	height: 16px;
+	width: 24px;
+	height: 24px;
+	border: none;
+	border-radius: 4px;
+	padding: 0;
+	display: inline-block;
+	background: url("../../images/lecm-base/icons.svg") no-repeat -396px -172px;
+}
+.datagrid a.site-link:hover {
+	background-color: rgba(4, 99, 153, 0.2);
+}
+.datagrid a.site-link:active {
+	background-color: rgba(4, 99, 153, 0.4);
 }

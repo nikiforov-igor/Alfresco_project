@@ -48,10 +48,10 @@
                                         <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
-                                        <property name="lecm-arm:field-marker-html"><![CDATA[]]></property>
+                                        <property name="lecm-arm:field-marker-html"><![CDATA[<div class="is-important"></div>]]></property>
                                         <property name="lecm-arm:field-name"><![CDATA[lecm-errands:is-important]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                        <property name="lecm-arm:field-marker-icon"><![CDATA[/images/lecm-documents/exclamation_16.png]]></property>
+                                        <property name="lecm-arm:field-marker-icon"><![CDATA[]]></property>
                                     </item>
                                     <item name="cm:e2531e8f-5365-4e72-a027-cb2b4ffa7e34" type="lecm-arm:field">
                                         <property name="lecm-arm:field-title"><![CDATA[На контроле]]></property>
@@ -193,11 +193,11 @@
                                                 <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
-                                                <property name="lecm-arm:field-marker-html"><![CDATA[]]></property>
+                                                <property name="lecm-arm:field-marker-html"><![CDATA[<div class="is-important"></div>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-errands:is-important]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                                <property name="lecm-arm:field-marker-icon"><![CDATA[/images/lecm-documents/exclamation_16.png]]></property>
+                                                <property name="lecm-arm:field-marker-icon"><![CDATA[]]></property>
                                             </item>
                                             <item name="cm:2ea29ac2-a0a2-4cd8-aa86-6945b6e373db" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-title"><![CDATA[На контроле]]></property>
@@ -560,12 +560,11 @@
                                                 <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
-                                                <property name="lecm-arm:field-marker-html"><![CDATA[]]></property>
+                                                <property name="lecm-arm:field-marker-html"><![CDATA[<div class="is-important"></div>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-errands:is-important]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                                <property name="lecm-arm:field-marker-icon">
-                                                    <![CDATA[/images/lecm-documents/exclamation_16.png]]></property>
+                                                <property name="lecm-arm:field-marker-icon"><![CDATA[]]></property>
                                             </item>
                                             <item name="cm:2bb51181-a553-48ac-b836-e2c957675ef9" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-title"><![CDATA[На контроле]]></property>
@@ -706,12 +705,11 @@
                                                 <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
-                                                <property name="lecm-arm:field-marker-html"><![CDATA[]]></property>
+                                                <property name="lecm-arm:field-marker-html"><![CDATA[<div class="is-important"></div>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-errands:is-important]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                                <property name="lecm-arm:field-marker-icon">
-                                                    <![CDATA[/images/lecm-documents/exclamation_16.png]]></property>
+                                                <property name="lecm-arm:field-marker-icon"><![CDATA[]]></property>
                                             </item>
                                             <item name="cm:608e968e-dec4-4e1e-a341-8d1e099113a7" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-title"><![CDATA[На контроле]]></property>
@@ -829,11 +827,10 @@
                                         <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
-                                        <property name="lecm-arm:field-marker-html"><![CDATA[]]></property>
+                                        <property name="lecm-arm:field-marker-html"><![CDATA[<div class="is-important"></div>]]></property>
                                         <property name="lecm-arm:field-name"><![CDATA[lecm-errands:is-important]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                        <property name="lecm-arm:field-marker-icon">
-                                            <![CDATA[/images/lecm-documents/exclamation_16.png]]></property>
+                                        <property name="lecm-arm:field-marker-icon"><![CDATA[]]></property>
                                     </item>
                                     <item name="cm:ed4acf76-3e54-4d58-afdf-3e45f4652514" type="lecm-arm:field">
                                         <property name="lecm-arm:field-title"><![CDATA[На контроле]]></property>
@@ -916,12 +913,11 @@
                                                 <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
-                                                <property name="lecm-arm:field-marker-html"><![CDATA[]]></property>
+                                                <property name="lecm-arm:field-marker-html"><![CDATA[<div class="is-important"></div>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-errands:is-important]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                                <property name="lecm-arm:field-marker-icon">
-                                                    <![CDATA[/images/lecm-documents/exclamation_16.png]]></property>
+                                                <property name="lecm-arm:field-marker-icon"><![CDATA[]]></property>
                                             </item>
                                             <item name="cm:c78c7b98-5a1f-4f93-8e23-69b53004075e" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-title"><![CDATA[На контроле]]></property>
@@ -2140,12 +2136,12 @@
                                                 <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
-                                                <property name="lecm-arm:field-marker-html"><![CDATA[]]></property>
+                                                <property name="lecm-arm:field-marker-html"><![CDATA[<div class="is-important"></div>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-errands:is-important]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                                 <property name="lecm-arm:field-marker-icon">
-                                                    <![CDATA[/images/lecm-documents/exclamation_16.png]]></property>
+                                                    <![CDATA[]]></property>
                                             </item>
                                             <item name="cm:45a60e81-9fe6-4c59-b714-dbd3aeebd023" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-title"><![CDATA[На контроле]]></property>
@@ -2402,12 +2398,11 @@
                                                 <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
-                                                <property name="lecm-arm:field-marker-html"><![CDATA[]]></property>
+                                                <property name="lecm-arm:field-marker-html"><![CDATA[<div class="is-important"></div>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-errands:is-important]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                                <property name="lecm-arm:field-marker-icon">
-                                                    <![CDATA[/images/lecm-documents/exclamation_16.png]]></property>
+                                                <property name="lecm-arm:field-marker-icon"><![CDATA[]]></property>
                                             </item>
                                             <item name="cm:f594ce3b-92d3-4008-8776-eea1885fb02e" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-title"><![CDATA[На контроле]]></property>
@@ -2811,11 +2806,10 @@
                                         <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
-                                        <property name="lecm-arm:field-marker-html"><![CDATA[]]></property>
+                                        <property name="lecm-arm:field-marker-html"><![CDATA[<div class="is-important"></div>]]></property>
                                         <property name="lecm-arm:field-name"><![CDATA[lecm-errands:is-important]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                        <property name="lecm-arm:field-marker-icon">
-                                            <![CDATA[/images/lecm-documents/exclamation_16.png]]></property>
+                                        <property name="lecm-arm:field-marker-icon"><![CDATA[]]></property>
                                     </item>
                                     <item name="cm:6911c547-c5c2-43cb-8e78-7737685052b5" type="lecm-arm:field">
                                         <property name="lecm-arm:field-title"><![CDATA[Метки]]></property>
@@ -2924,11 +2918,10 @@
                                         <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
-                                        <property name="lecm-arm:field-marker-html"><![CDATA[]]></property>
+                                        <property name="lecm-arm:field-marker-html"><![CDATA[<div class="is-important"></div>]]></property>
                                         <property name="lecm-arm:field-name"><![CDATA[lecm-errands:is-important]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                        <property name="lecm-arm:field-marker-icon">
-                                            <![CDATA[/images/lecm-documents/exclamation_16.png]]></property>
+                                        <property name="lecm-arm:field-marker-icon"><![CDATA[]]></property>
                                     </item>
                                     <item name="cm:5ea8909e-dc99-4706-8ecf-e8ef3f1ebae3" type="lecm-arm:field">
                                         <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
@@ -4104,12 +4097,11 @@
                                                 <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
-                                                <property name="lecm-arm:field-marker-html"><![CDATA[]]></property>
+                                                <property name="lecm-arm:field-marker-html"><![CDATA[<div class="is-important"></div>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-errands:is-important]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                                <property name="lecm-arm:field-marker-icon">
-                                                    <![CDATA[/images/lecm-documents/exclamation_16.png]]></property>
+                                                <property name="lecm-arm:field-marker-icon"><![CDATA[]]></property>
                                             </item>
                                             <item name="cm:db324300-077d-4e2a-a5b1-ef4da1c6d8d2" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-title"><![CDATA[Метки]]></property>
@@ -5208,10 +5200,10 @@
                                         <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
-                                        <property name="lecm-arm:field-marker-html"><![CDATA[]]></property>
+                                        <property name="lecm-arm:field-marker-html"><![CDATA[<div class="is-important"></div>]]></property>
                                         <property name="lecm-arm:field-name"><![CDATA[lecm-errands:is-important]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                       <property name="lecm-arm:field-marker-icon"><![CDATA[/images/lecm-documents/exclamation_16.png]]></property>
+                                       <property name="lecm-arm:field-marker-icon"><![CDATA[]]></property>
                                     </item>
                                     <item name="cm:db3549de-c641-4cae-b58b-138dcf614e5c" type="lecm-arm:field">
                                         <property name="lecm-arm:field-title"><![CDATA[На контроле]]></property>
@@ -7744,12 +7736,11 @@
                                                         <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
                                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
-                                                        <property name="lecm-arm:field-marker-html"><![CDATA[]]></property>
+                                                        <property name="lecm-arm:field-marker-html"><![CDATA[<div class="is-important"></div>]]></property>
                                                         <property name="lecm-arm:field-name">
                                                             <![CDATA[lecm-errands:is-important]]></property>
                                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                                        <property name="lecm-arm:field-marker-icon">
-                                                            <![CDATA[/images/lecm-documents/exclamation_16.png]]></property>
+                                                        <property name="lecm-arm:field-marker-icon"><![CDATA[]]></property>
                                                     </item>
                                                     <item name="cm:c6f86c14-a585-4e44-9053-4704ebe349ba" type="lecm-arm:field">
                                                         <property name="lecm-arm:field-title"><![CDATA[На контроле]]></property>
@@ -8037,12 +8028,11 @@
                                                 <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
-                                                <property name="lecm-arm:field-marker-html"><![CDATA[]]></property>
+                                                <property name="lecm-arm:field-marker-html"><![CDATA[<div class="is-important"></div>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-errands:is-important]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                                <property name="lecm-arm:field-marker-icon">
-                                                    <![CDATA[/images/lecm-documents/exclamation_16.png]]></property>
+                                                <property name="lecm-arm:field-marker-icon"><![CDATA[]]></property>
                                             </item>
                                             <item name="cm:fbf38014-f5bf-4821-8d70-8bfe778bcfaa" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-title"><![CDATA[На контроле]]></property>
@@ -9386,12 +9376,11 @@
                                         <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
-                                        <property name="lecm-arm:field-marker-html"><![CDATA[]]></property>
+                                        <property name="lecm-arm:field-marker-html"><![CDATA[<div class="is-important"></div>]]></property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-errands:is-important]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                        <property name="lecm-arm:field-marker-icon">
-                                        <![CDATA[/images/lecm-documents/exclamation_16.png]]></property>
+                                        <property name="lecm-arm:field-marker-icon"><![CDATA[]]></property>
                                     </item>
                                 </items>
                                 <assocs>
@@ -17838,13 +17827,13 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[true]]></property>
                                                                 <property name="lecm-arm:field-marker-html">
-                                                                    <![CDATA[]]></property>
+                                                                    <![CDATA[<div class="is-important"></div>]]></property>
                                                                 <property name="lecm-arm:field-name">
                                                                     <![CDATA[lecm-errands:is-important]]></property>
                                                                 <property name="lecm-arm:field-format-string">
                                                                     <![CDATA[]]></property>
                                                                 <property name="lecm-arm:field-marker-icon">
-                                                                    <![CDATA[/images/lecm-documents/exclamation_16.png]]></property>
+                                                                    <![CDATA[]]></property>
                                                             </item>
                                                             <item name="cm:3fc559b4-872a-456b-aa09-a650da35d910"
                                                                   type="lecm-arm:field">
@@ -18198,12 +18187,11 @@
                                                         <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
                                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
-                                                        <property name="lecm-arm:field-marker-html"><![CDATA[]]></property>
+                                                        <property name="lecm-arm:field-marker-html"><![CDATA[<div class="is-important"></div>]]></property>
                                                         <property name="lecm-arm:field-name">
                                                             <![CDATA[lecm-errands:is-important]]></property>
                                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                                        <property name="lecm-arm:field-marker-icon">
-                                                            <![CDATA[/images/lecm-documents/exclamation_16.png]]></property>
+                                                        <property name="lecm-arm:field-marker-icon"><![CDATA[]]></property>
                                                     </item>
                                                     <item name="cm:bbeff1f5-fd53-4b17-8553-5518f93c4614" type="lecm-arm:field">
                                                         <property name="lecm-arm:field-title"><![CDATA[На контроле]]></property>
@@ -18455,12 +18443,11 @@
                                                 <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
-                                                <property name="lecm-arm:field-marker-html"><![CDATA[]]></property>
+                                                <property name="lecm-arm:field-marker-html"><![CDATA[<div class="is-important"></div>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-errands:is-important]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                                <property name="lecm-arm:field-marker-icon">
-                                                    <![CDATA[/images/lecm-documents/exclamation_16.png]]></property>
+                                                <property name="lecm-arm:field-marker-icon"><![CDATA[]]></property>
                                             </item>
                                             <item name="cm:08cb4226-e3c7-407e-a504-fcdbc63690d2" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-title"><![CDATA[Номер]]></property>
@@ -18642,12 +18629,11 @@
                                                         <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
                                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
-                                                        <property name="lecm-arm:field-marker-html"><![CDATA[]]></property>
+                                                        <property name="lecm-arm:field-marker-html"><![CDATA[<div class="is-important"></div>]]></property>
                                                         <property name="lecm-arm:field-name">
                                                             <![CDATA[lecm-errands:is-important]]></property>
                                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                                        <property name="lecm-arm:field-marker-icon">
-                                                            <![CDATA[/images/lecm-documents/exclamation_16.png]]></property>
+                                                        <property name="lecm-arm:field-marker-icon"><![CDATA[]]></property>
                                                     </item>
                                                     <item name="cm:24f657f5-1979-468f-9a15-0b192c11b96a" type="lecm-arm:field">
                                                         <property name="lecm-arm:field-title"><![CDATA[На контроле]]></property>
@@ -18929,12 +18915,11 @@
                                                         <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
                                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
-                                                        <property name="lecm-arm:field-marker-html"><![CDATA[]]></property>
+                                                        <property name="lecm-arm:field-marker-html"><![CDATA[<div class="is-important"></div>]]></property>
                                                         <property name="lecm-arm:field-name">
                                                             <![CDATA[lecm-errands:is-important]]></property>
                                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                                        <property name="lecm-arm:field-marker-icon">
-                                                            <![CDATA[/images/lecm-documents/exclamation_16.png]]></property>
+                                                        <property name="lecm-arm:field-marker-icon"><![CDATA[]]></property>
                                                     </item>
                                                     <item name="cm:1a24c3e1-93ea-43d3-b65c-b4cddb0dd272" type="lecm-arm:field">
                                                         <property name="lecm-arm:field-title">
@@ -25096,12 +25081,11 @@
                                                         <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
                                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
-                                                        <property name="lecm-arm:field-marker-html"><![CDATA[]]></property>
+                                                        <property name="lecm-arm:field-marker-html"><![CDATA[<div class="is-important"></div>]]></property>
                                                         <property name="lecm-arm:field-name">
                                                             <![CDATA[lecm-errands:is-important]]></property>
                                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                                        <property name="lecm-arm:field-marker-icon">
-                                                            <![CDATA[/images/lecm-documents/exclamation_16.png]]></property>
+                                                        <property name="lecm-arm:field-marker-icon"><![CDATA[]]></property>
                                                     </item>
                                                     <item name="cm:9330a9e2-2d61-41d3-bcd6-2596177f03d1" type="lecm-arm:field">
                                                         <property name="lecm-arm:field-title"><![CDATA[Номер]]></property>
@@ -25428,11 +25412,10 @@
                                         <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
-                                        <property name="lecm-arm:field-marker-html"><![CDATA[]]></property>
+                                        <property name="lecm-arm:field-marker-html"><![CDATA[<div class="is-important"></div>]]></property>
                                         <property name="lecm-arm:field-name"><![CDATA[lecm-errands:is-important]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                        <property name="lecm-arm:field-marker-icon">
-                                            <![CDATA[/images/lecm-documents/exclamation_16.png]]></property>
+                                        <property name="lecm-arm:field-marker-icon"><![CDATA[]]></property>
                                     </item>
                                     <item name="cm:c66fb5b3-d86c-4910-8032-682bcffe9302" type="lecm-arm:field">
                                         <property name="lecm-arm:field-title"><![CDATA[Вид документа]]></property>
@@ -25871,11 +25854,10 @@
                                         <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
-                                        <property name="lecm-arm:field-marker-html"><![CDATA[]]></property>
+                                        <property name="lecm-arm:field-marker-html"><![CDATA[<div class="is-important"></div>]]></property>
                                         <property name="lecm-arm:field-name"><![CDATA[lecm-errands:is-important]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                        <property name="lecm-arm:field-marker-icon">
-                                            <![CDATA[/images/lecm-documents/exclamation_16.png]]></property>
+                                        <property name="lecm-arm:field-marker-icon"><![CDATA[]]></property>
                                     </item>
                                     <item name="cm:a04ca219-6c01-4ab5-a217-86ca088c614f" type="lecm-arm:field">
                                         <property name="lecm-arm:field-title"><![CDATA[Создатель]]></property>
@@ -30805,11 +30787,10 @@
                                         <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
-                                        <property name="lecm-arm:field-marker-html"><![CDATA[]]></property>
+                                        <property name="lecm-arm:field-marker-html"><![CDATA[<div class="is-important"></div>]]></property>
                                         <property name="lecm-arm:field-name"><![CDATA[lecm-errands:is-important]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                        <property name="lecm-arm:field-marker-icon">
-                                            <![CDATA[/images/lecm-documents/exclamation_16.png]]></property>
+                                        <property name="lecm-arm:field-marker-icon"><![CDATA[]]></property>
                                     </item>
                                     <item name="cm:9c7c8f8f-fcd7-45b0-b91e-379994405449" type="lecm-arm:field">
                                         <property name="lecm-arm:field-title"><![CDATA[Метки]]></property>
