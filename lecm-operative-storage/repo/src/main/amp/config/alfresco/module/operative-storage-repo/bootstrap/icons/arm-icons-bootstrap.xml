@@ -77,6 +77,68 @@
                     </cm:contains>
                 </view:associations>
             </cm:folder>
+            <cm:folder view:childName="cm:Black">
+                <app:uifacets />
+                <app:icon>space-icon-default</app:icon>
+                <cm:name>Black</cm:name>
+                <cm:title>Black</cm:title>
+                <cm:description>Black icons</cm:description>
+                <view:properties>
+                    <sys:node-uuid>38bf7e0e-c8ab-48a7-a03d-3158a4649665</sys:node-uuid>
+                </view:properties>
+                <view:associations>
+                    <cm:contains>
+                        <cm:content view:childName="cm:on-the-case.png">
+                            <view:aspects>
+                                <cm:titled />
+                                <cm:author />
+                                <exif:exif />
+                            </view:aspects>
+                            <view:properties>
+                                <sys:node-uuid>561d22eb-970c-4550-acbc-edcca9a5bc4e</sys:node-uuid>
+                                <exif:pixelXDimension>40</exif:pixelXDimension>
+                                <exif:pixelYDimension>40</exif:pixelYDimension>
+                                <cm:content>contentUrl=classpath:alfresco/module/operative-storage-repo/bootstrap/icons/black/on-the-case.png|mimetype=image/png|size=|encoding=UTF-8|locale=ru_</cm:content>
+                                <cm:title>on-the-case.png</cm:title>
+                                <cm:author>admin</cm:author>
+                                <cm:name>on-the-case.png</cm:name>
+                            </view:properties>
+                        </cm:content>
+                        <cm:content view:childName="cm:os-cases.png">
+                            <view:aspects>
+                                <cm:titled />
+                                <cm:author />
+                                <exif:exif />
+                            </view:aspects>
+                            <view:properties>
+                                <sys:node-uuid>9ed15668-5a9f-4d62-a073-5d45e49a6052</sys:node-uuid>
+                                <exif:pixelXDimension>40</exif:pixelXDimension>
+                                <exif:pixelYDimension>40</exif:pixelYDimension>
+                                <cm:content>contentUrl=classpath:alfresco/module/operative-storage-repo/bootstrap/icons/black/os-cases.png|mimetype=image/png|size=|encoding=UTF-8|locale=ru_</cm:content>
+                                <cm:title>os-cases.png</cm:title>
+                                <cm:author>admin</cm:author>
+                                <cm:name>os-cases.png</cm:name>
+                            </view:properties>
+                        </cm:content>
+                        <cm:content view:childName="cm:os-cases-manage.png">
+                            <view:aspects>
+                                <cm:titled />
+                                <cm:author />
+                                <exif:exif />
+                            </view:aspects>
+                            <view:properties>
+                                <sys:node-uuid>53ac203b-1cf7-4d3a-b023-946fe6b8fa5e</sys:node-uuid>
+                                <exif:pixelXDimension>40</exif:pixelXDimension>
+                                <exif:pixelYDimension>40</exif:pixelYDimension>
+                                <cm:content>contentUrl=classpath:alfresco/module/operative-storage-repo/bootstrap/icons/black/os-cases-manage.png|mimetype=image/png|size=|encoding=UTF-8|locale=ru_</cm:content>
+                                <cm:title>os-cases-manage.png</cm:title>
+                                <cm:author>admin</cm:author>
+                                <cm:name>os-cases-manage.png</cm:name>
+                            </view:properties>
+                        </cm:content>
+                    </cm:contains>
+                </view:associations>
+            </cm:folder>
         </cm:contains>
         </view:associations>
     </cm:folder>
