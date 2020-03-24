@@ -1,55 +1,21 @@
 #doc-bd {
-    margin-bottom: 10px;
     padding-bottom: 0;
 }
-#yui-main #doc-bd div.datalist-toolbar {
-    margin: 0 -10px;
-    border: 0;
-}
-#yui-main #doc-bd div.datalist-toolbar div.header-bar {
-    padding: 0 5px;
-}
-
-.yui-gc div.first {
-    width: 100%;
-}
-
 .yui-gc .yui-u .columnSize2.grid {
-    margin: 0 5px;
+    margin: 0 16px;
 }
-
 .yui-gc .yui-u .columnSize2.yui-gd div.column1,
 .yui-gc .yui-u .columnSize2.yui-gd div.column2 {
-    width: 49.5%;
-    margin-right: 0;
-    margin-left: 0;
+    width: calc(50% - 8px);
+    margin: 0;
 }
-
-.bordered {
-    border: 1px solid #6C6C6C;
-    border-radius: 5px 5px 0 0;
-}
-
 .yui-u .dashlet .dashlet-title {
-    background-color: #bbe6f3;
-    border-radius: 4px 4px 0 0;
-    padding: 5px 1em;
+    padding-right: 16px;
 }
 
-.yui-u .dashlet .dashlet-title.title span {
-    color: #0a678e;
-    font: 14px Arial;
-    font-weight: bold;
-}
 
-.yui-u .dashlet .dashlet-body {
-    padding: 0 1em;
-}
 
-.yui-gc .yui-u {
-    margin-left: 0;
-    width: 20%;
-}
+
 
 /* New design for the main page */
 #yui-main #doc-bd div.datalist-toolbar div.header-bar,

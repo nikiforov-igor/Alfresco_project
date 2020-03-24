@@ -1,26 +1,12 @@
-.yui-u .dashlet.contracts-summary .body.dashlet-body {
-    padding: 0;
-}
-.dashlet.contracts-summary .body .row.summary {
-    line-height: 16px;
-    margin: 0;
-    padding: 10px 1em;
-    border-bottom: 1px solid #d7d7d7;
-    overflow: hidden;
-}
-.dashlet.contracts-summary .body .row .column {
-    margin: 0;
-}
 .dashlet.contracts-summary .body .row .column.first {
     width: auto;
-    margin-left: 10px;
 }
 .dashlet.contracts-summary .body .row .column.first.bold {
     font-weight: bold;
-    margin-left: 0;
 }
 .dashlet.contracts-summary .body .row .column.second {
-    margin: 0 0 0 10px;
+    float: left;
+    margin: 0 0 0 8px;
 }
 .grid .dashlet.contracts-summary .body .row .column.second a {
     font-weight: bold;
