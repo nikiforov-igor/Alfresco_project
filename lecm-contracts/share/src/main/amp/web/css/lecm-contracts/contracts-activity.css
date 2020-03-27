@@ -1,3 +1,6 @@
+.dashlet.contracts-activity .scrollableList {
+    height: 254px;
+}
 .yui-u .dashlet.contracts-activity .body.dashlet-body div.no-records {
     padding: 12px 16px;
 }
