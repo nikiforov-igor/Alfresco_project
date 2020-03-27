@@ -1,3 +1,6 @@
+.dashlet.contracts-sr-info .scrollableList {
+    height: 254px;
+}
 .dashlet.contracts-sr-info ul.sr-list li {
     line-height: 16px;
     padding: 8px 16px;

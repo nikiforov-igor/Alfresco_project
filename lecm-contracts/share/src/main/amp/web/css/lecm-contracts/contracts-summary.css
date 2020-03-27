@@ -1,3 +1,6 @@
+.dashlet.contracts-summary .scrollableList {
+    height: 254px;
+}
 .dashlet.contracts-summary .body .row .column.first {
     width: auto;
 }
