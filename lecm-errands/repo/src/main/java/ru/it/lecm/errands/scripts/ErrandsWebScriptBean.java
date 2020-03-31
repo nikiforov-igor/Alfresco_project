@@ -953,7 +953,9 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                                     NodeRef errand = documentService.createDocument(ErrandsService.TYPE_ERRANDS.toPrefixString(namespaceService), properties, associations);
 
                                     if (errandsService.isTransferRightToBaseDocument()) {
-                                        nodeService.addAspect(errand, ErrandsService.ASPECT_SKIP_TRANSFER_RIGHT_TO_PARENT_ASPECT, null);
+                                        // данный аспект блокирует раздачу прав на документ-основание на входе поручения в Ожидает исполнение
+                                        // оставим раздачу на непосредственного родителя тут, а на статусе раздадутся на документ-основание
+                                        //nodeService.addAspect(errand, ErrandsService.ASPECT_SKIP_TRANSFER_RIGHT_TO_PARENT_ASPECT, null);
                                         String baseDocRef = associations.get("lecm-errands:additional-document-assoc");
                                         if (baseDocRef != null && !baseDocRef.isEmpty()) {
                                             NodeRef baseDoc = new NodeRef(baseDocRef);
