@@ -34,7 +34,7 @@
             </item>
             <item name="cm:Номер поручения на основании НД" type="lecm-regnum:template">
                 <property name="cm:name">Номер поручения на основании НД</property>
-                <property name="lecm-regnum:template-string">НД-{doc.attribute('lecm-errands:additional-doc-number').substring(0, doc.attribute('lecm-errands:additional-doc-number').length() - 3)}-{doc.attribute("lecm-errands:child-index-counter")}-{#formatCurrentDate('yy')}</property>
+                <property name="lecm-regnum:template-string">НД-{doc.attribute('lecm-errands:additional-doc-number')}-{doc.attribute("lecm-errands:child-index-counter")}-{#formatCurrentDate('yy')}</property>
                 <property name="lecm-regnum:template-comment">Шаблон для номера поручения, созданного на основании НД</property>
                 <property name="lecm-regnum:template-service-id">ERRAND_ON_ND_BASIS_NUMBER</property>
             </item>
