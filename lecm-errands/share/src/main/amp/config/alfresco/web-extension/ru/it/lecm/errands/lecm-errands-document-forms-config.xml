@@ -169,11 +169,7 @@
 
                     <field id="lecm-errands:execution-report-status" set="execution-report"/>
                     <field id="lecm-errands:execution-report-decline-reason" set="execution-report"/>
-                    <field id="lecm-errands:execution-report" set="execution-report">
-                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
-                            <control-param name="rows">8</control-param>
-                        </control>
-                    </field>
+                    <field id="lecm-errands:execution-report" set="execution-report"/>
                     <field id="lecm-errands:execution-connected-document-assoc" set="execution-report">
                         <control>
                             <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
