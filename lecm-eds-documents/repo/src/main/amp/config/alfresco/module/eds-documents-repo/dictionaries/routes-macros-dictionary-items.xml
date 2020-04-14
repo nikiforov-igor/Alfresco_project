@@ -37,7 +37,7 @@
                     }
                 })();]]>
                 </property>
-                <property name="cm:name"><![CDATA[Руководители по иерархии]]></property>
+                <property name="cm:title"><![CDATA[Руководители по иерархии]]></property>
                 <property name="lecmWorkflowRoutesMacros:macrosServiceId"><![CDATA[MACRO_BOSS_HIERARCHICAL]]></property>
                 <property name="lecmWorkflowRoutesMacros:multipleResults"><![CDATA[true]]></property>
             </item>
