@@ -317,7 +317,8 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
         },
         onActionEdit: function (evt, report) {
             Bubbling.fire("onActionEditCoexecutorReport", {
-                report: report
+                report: report,
+                formId: this.options.formId
             });
         },
         onActionTransferCoexecutorReport: function (evt, report) {

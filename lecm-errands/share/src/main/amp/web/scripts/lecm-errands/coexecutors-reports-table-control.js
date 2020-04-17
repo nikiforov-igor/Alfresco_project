@@ -252,7 +252,11 @@ LogicECM.errands = LogicECM.errands || {};
             this._itemUpdate(args[1].nodeRef);
         }, this, true);
         Bubbling.on("onActionEditCoexecutorReport", function (layer, args) {
-            this.onActionEdit(args[1].report);
+            var sourceFormId = args[1].formId;
+
+            if (sourceFormId && sourceFormId.indexOf(this.id) >= 0) {
+                this.onActionEdit(args[1].report);
+            }
         }, this, true);
 
         return LogicECM.errands.CoexecutorsReportsDatagrid.superclass.constructor.call(this, htmlId);
@@ -320,6 +324,7 @@ LogicECM.errands = LogicECM.errands || {};
         },
         //создание/редактирование отчета исполнителя
         processExecutionReport: function(formData, reportsRefs) {
+            console.log("processExecutionReport");
             var formConnections = formData.formConnections;
             var formAttachments = formData.formAttachments;
             var formText = formData.formText;
