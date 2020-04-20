@@ -865,13 +865,11 @@
                     <field id="lecm-events:location-assoc">
                         <control>
                             <control-param name="useStrictFilterByOrg">true</control-param>
-                            <control-param name="org_field">lecm-events-dic:locations-organization-assoc-ref</control-param>
                         </control>
                     </field>
                     <field id="lecm-events:temp-resources-assoc">
                         <control>
                             <control-param name="useStrictFilterByOrg">true</control-param>
-                            <control-param name="org_field">lecm-events-dic:resources-organization-assoc-ref</control-param>
                             <control-param name="sortSelected">true</control-param>
                             <control-param name="verticalList">true</control-param>
                             <control-param name="childrenDataSource">lecm/forms/picker</control-param>
@@ -985,13 +983,11 @@
                     <field id="lecm-events:location-assoc">
                         <control>
                             <control-param name="useStrictFilterByOrg">true</control-param>
-                            <control-param name="org_field">lecm-events-dic:locations-organization-assoc-ref</control-param>
                         </control>
                     </field>
                     <field id="lecm-events:temp-resources-assoc">
                         <control>
                             <control-param name="useStrictFilterByOrg">true</control-param>
-                            <control-param name="org_field">lecm-events-dic:resources-organization-assoc-ref</control-param>
                             <control-param name="sortSelected">true</control-param>
                             <control-param name="verticalList">true</control-param>
                             <control-param name="childrenDataSource">lecm/forms/picker</control-param>
