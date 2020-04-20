@@ -122,7 +122,7 @@ LogicECM.module = LogicECM.module || {};
                                     '   </div>' +
                                     '</div>';
 
-                                var parentPanel = LogicECM.module.Base.Util.getDocPanelParent(me.id);
+                                var parentPanel = LogicECM.module.Base.Util.getElemDocPanel(me.id);
                                 me.parentPanelId = parentPanel ? (parentPanel.id + "-") : "";
 
                                 var expandShowId = me.parentPanelId + "expand-show-" + nodeRef.replace('workspace://SpacesStore/', '');
