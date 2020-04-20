@@ -36,15 +36,26 @@
             <div class="value-div">
                 <#if field.control.params.options?? && field.control.params.options != "">
                     <input id="${fieldHtmlId}" type="hidden" name="-" value="${fieldValue?html}"/>
+                    <#--Радиобаттонам в имя добавим идентификатор панели документа (для двухпанельного режима), чтобы в каждой панели была отдельная группа радио-кнопок-->
+                    <#--Если не добавить, то радиобаттоны обеих панелей образуют единую группу, где может быть только один выбранный (последний) элемент-->
+                    <#--Делаем это только в режиме чтения-->
+                    <#assign parentPanelId = "",
+                            parentIdIndex = fieldHtmlId?index_of("-region")/>
+                    <#if parentIdIndex?? && parentIdIndex != -1>
+                        <#assign parentPanelId = fieldHtmlId[0..(parentIdIndex - 1)]/>
+                        <#if parentPanelId != "">
+                            <#assign parentPanelId = parentPanelId + "_"/>
+                        </#if>
+                    </#if>
                     <#list field.control.params.options?split(optionSeparator) as nameValue>
                         <#if nameValue?index_of(labelSeparator) == -1>
-                                <input disabled="disabled" type="radio" id="${fieldHtmlId}_${nameValue?html}" class="lecm-radio" name="${field.name}" value="${nameValue?html}"
+                                <input disabled="disabled" type="radio" id="${fieldHtmlId}_${nameValue?html}" class="lecm-radio" name="${parentPanelId}${field.name}" value="${nameValue?html}"
                             <#if nameValue == fieldValue?string || (fieldValue?is_number && fieldValue?c == nameValue)> checked="checked"</#if>"
                             <#if disabled>disabled="disabled"</#if>"/>
                             <label class="checkbox" for="${fieldHtmlId}_${nameValue?html}">${nameValue?html}</label>
                         <#else>
                             <#assign choice=nameValue?split(labelSeparator)>
-                                <input disabled="disabled" type="radio" id="${fieldHtmlId}_${choice[0]?html}" class="lecm-radio" name="${field.name}" value="${choice[0]?html}"
+                                <input disabled="disabled" type="radio" id="${fieldHtmlId}_${choice[0]?html}" class="lecm-radio" name="${parentPanelId}${field.name}" value="${choice[0]?html}"
                             <#if choice[0] == fieldValue?string || (fieldValue?is_number && fieldValue?c == choice[0])> checked="checked"</#if>
                                        <#if disabled>disabled="disabled"</#if>"/>
                             <label class="checkbox" for="${fieldHtmlId}_${choice[0]?html}">${msgValue(choice[1])?html}</label>
