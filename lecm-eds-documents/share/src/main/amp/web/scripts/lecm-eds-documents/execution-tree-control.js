@@ -122,8 +122,11 @@ LogicECM.module = LogicECM.module || {};
                                     '   </div>' +
                                     '</div>';
 
-                                var expandShowId = "expand-show-" + nodeRef.replace('workspace://SpacesStore/', '');
-                                var expandHideId = "expand-hide-" + nodeRef.replace('workspace://SpacesStore/', '');
+                                var parentPanel = LogicECM.module.Base.Util.getElemDocPanel(me.id);
+                                me.parentPanelId = parentPanel ? (parentPanel.id + "-") : "";
+
+                                var expandShowId = me.parentPanelId + "expand-show-" + nodeRef.replace('workspace://SpacesStore/', '');
+                                var expandHideId = me.parentPanelId + "expand-hide-" + nodeRef.replace('workspace://SpacesStore/', '');
                                 var showExpandLink = false;
                                 if ((oRecord._oData.docType == 'lecm-errands:document' && oRecord._oData.status == Alfresco.util.message("lecm.errands.statemachine-status.executed"))
                                     || (oRecord._oData.docType == 'lecm-resolutions:document' && (oRecord._oData.status == Alfresco.util.message("lecm.resolutions.statemachine-status.on-execution") || oRecord._oData.status == Alfresco.util.message("lecm.resolutions.statemachine-status.completed")))) {
@@ -141,7 +144,7 @@ LogicECM.module = LogicECM.module || {};
                                     expandShowMessage: Alfresco.util.message(oRecord._oData.docType == 'lecm-errands:document' ? 'msg.errand.report.show' : 'msg.resolution.statistic.show'),
                                     expandHideMessage: Alfresco.util.message(oRecord._oData.docType == 'lecm-errands:document' ? 'msg.errand.report.hide' : 'msg.resolution.statistic.hide'),
                                     showExpandClass: showExpandLink ? '' : 'hidden1',
-                                    expandedDivId: "expanded-block-" + nodeRef.replace('workspace://SpacesStore/', '')
+                                    expandedDivId: me.parentPanelId + "expanded-block-" + nodeRef.replace('workspace://SpacesStore/', '')
                                 });
                                 if (previousDocRef) {
                                     if (!me.receivedItems[nodeRef])
@@ -224,9 +227,9 @@ LogicECM.module = LogicECM.module || {};
             },
 
             expandedBlockShow: function (e, args) {
-                Dom.addClass("expand-show-" + args.nodeRef.replace('workspace://SpacesStore/', ''), "hidden1");
-                Dom.removeClass("expand-hide-" + args.nodeRef.replace('workspace://SpacesStore/', ''), "hidden1");
-                Dom.removeClass("expanded-block-" + args.nodeRef.replace('workspace://SpacesStore/', ''), "hidden1");
+                Dom.addClass(this.parentPanelId + "expand-show-" + args.nodeRef.replace('workspace://SpacesStore/', ''), "hidden1");
+                Dom.removeClass(this.parentPanelId + "expand-hide-" + args.nodeRef.replace('workspace://SpacesStore/', ''), "hidden1");
+                Dom.removeClass(this.parentPanelId + "expanded-block-" + args.nodeRef.replace('workspace://SpacesStore/', ''), "hidden1");
 
                 if (args.type == 'lecm-errands:document') {
                     this.expandErrandContent(args.nodeRef)
@@ -236,13 +239,13 @@ LogicECM.module = LogicECM.module || {};
             },
 
             expandedBlockHide: function (e, nodeRef) {
-                Dom.addClass("expand-hide-" + nodeRef.replace('workspace://SpacesStore/', ''), "hidden1");
-                Dom.addClass("expanded-block-" + nodeRef.replace('workspace://SpacesStore/', ''), "hidden1");
-                Dom.removeClass("expand-show-" + nodeRef.replace('workspace://SpacesStore/', ''), "hidden1");
+                Dom.addClass(this.parentPanelId + "expand-hide-" + nodeRef.replace('workspace://SpacesStore/', ''), "hidden1");
+                Dom.addClass(this.parentPanelId + "expanded-block-" + nodeRef.replace('workspace://SpacesStore/', ''), "hidden1");
+                Dom.removeClass(this.parentPanelId + "expand-show-" + nodeRef.replace('workspace://SpacesStore/', ''), "hidden1");
             },
 
             expandErrandContent: function (nodeRef) {
-                var container = Dom.get("expanded-block-" + nodeRef.replace('workspace://SpacesStore/', ''));
+                var container = Dom.get(this.parentPanelId + "expanded-block-" + nodeRef.replace('workspace://SpacesStore/', ''));
                 if (container && !container.innerHTML.length) {
                     Alfresco.util.Ajax.jsonGet({
                         url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/errands/getExecutorReport',
@@ -299,7 +302,7 @@ LogicECM.module = LogicECM.module || {};
             },
 
             expandResolutionContent: function (nodeRef) {
-                var container = Dom.get("expanded-block-" + nodeRef.replace('workspace://SpacesStore/', ''));
+                var container = Dom.get(this.parentPanelId + "expanded-block-" + nodeRef.replace('workspace://SpacesStore/', ''));
                 if (container && !container.innerHTML.length) {
                     Alfresco.util.Ajax.jsonPost({
                         url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
