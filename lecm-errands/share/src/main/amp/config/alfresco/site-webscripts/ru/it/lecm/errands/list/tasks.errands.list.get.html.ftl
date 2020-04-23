@@ -63,13 +63,6 @@
         <#if isErrandsStarter && hasStatemachine && isRegistered>
             Alfresco.util.createYUIButton(this, "${id}-errand-add", errandsComponent.createChildErrand.bind(errandsComponent), {}, Dom.get("${id}-errand-add"));
         </#if>
-
-            <#--Set panel height-->
-            var docPanel = LogicECM.module.Base.Util.getElemDocPanel("${id}_errands");
-
-            if (docPanel) {
-                LogicECM.module.Base.Util.setDocPanelHeight(docPanel.id);
-            }
         }
 
         function loadConnectionTree() {

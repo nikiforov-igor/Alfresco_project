@@ -79,6 +79,8 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                         failureMessage: this.msg("message.failure"),
                         execScripts: true
                     });
+
+                    this.setPanelHeight();
                 },
 
                 showErrands: function(errands, container) {
@@ -151,6 +153,14 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                     }
                     if (this.options.anchorId != "") {
                         Dom.get(this.options.anchorId).scrollIntoView();
+                    }
+                },
+
+                setPanelHeight: function() {
+                    var docPanel = LogicECM.module.Base.Util.getElemDocPanel(this.id);
+
+                    if (docPanel) {
+                        LogicECM.module.Base.Util.setDocPanelHeight(docPanel.id);
                     }
                 }
 
