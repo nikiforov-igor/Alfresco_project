@@ -318,7 +318,6 @@
 					</field>
 					<field id="lecm-document:subject-assoc">
 						<control>
-							<control-param name="plane">true</control-param>
 							<control-param name="endpointMany">true</control-param>
 						</control>
 					</field>
