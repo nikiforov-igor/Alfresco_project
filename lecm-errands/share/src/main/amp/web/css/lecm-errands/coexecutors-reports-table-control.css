@@ -27,20 +27,26 @@
     padding-left: 50px;
 }
 
+.form-field.with-grid.coexecutors-report .control.coexecutors-reports-additional-block {
+    margin: 0;
+}
 .form-field.with-grid.coexecutors-report .coexecutors-reports-additional-block .reports-filter-block {
     float: left;
+    margin: 10px 0 4px;
 }
-
-.form-field.with-grid.coexecutors-report .coexecutors-reports-additional-block .reports-filter-block input[type="checkbox"] {
-    margin-right: 2px;
-}
-
 .form-field.with-grid.coexecutors-report .coexecutors-reports-additional-block .reports-filter-block > label {
-    float: right;
+    margin: 0;
 }
-
 .form-field.with-grid.coexecutors-report .coexecutors-reports-additional-block .reports-transfer-block {
     float: right;
+    line-height: 0;
+    margin-top: 6px;
+}
+.form-field.with-grid.coexecutors-report .coexecutors-reports-additional-block .reports-transfer-block .yui-button {
+    margin: 0;
+}
+.form-field.with-grid.coexecutors-report .coexecutors-reports-additional-block .reports-transfer-block button {
+    line-height: 30px;
 }
 
 .form-field.with-grid.coexecutors-report .datagrid {
