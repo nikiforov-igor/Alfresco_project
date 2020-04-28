@@ -73,6 +73,14 @@ LogicECM.module.eds = LogicECM.module.eds || {};
 
                         this.rootSubmitElement.submitForm = this.submitForms.bind(this);
                     }
+
+                    //Если контрол содержится в панели, то убираем с панели скроллы (для контрола есть свой скролл)
+                    var panelParent = Dom.getAncestorByClassName(this.id, "yui-panel");
+
+                    if (panelParent) {
+                        Dom.removeClass(panelParent, "panel-body-scrollable");
+                        Dom.addClass(Dom.getAncestorByClassName(this.id, "form-fields"), "not-scrollable");
+                    }
                 }
             },
 
