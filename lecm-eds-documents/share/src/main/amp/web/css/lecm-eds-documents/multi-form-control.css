@@ -7,6 +7,9 @@
     max-height: 70vh;
     overflow-y: auto;
 }
+.yui-panel .control.multi-form ul.multi-form-documents-list + .yui-button {
+    margin-top: 12px;
+}
 
 .control.multi-form div.multi-form-documents-item {
     border-bottom: 1px solid #ccc;
