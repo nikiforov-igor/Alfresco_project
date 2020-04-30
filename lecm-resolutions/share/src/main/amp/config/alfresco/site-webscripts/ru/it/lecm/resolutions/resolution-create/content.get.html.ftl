@@ -44,3 +44,21 @@
 		</#if>
 	</@>
 </@>
+
+<script type="text/javascript">
+	(function() {
+		var Dom = YAHOO.util.Dom,
+			Event = YAHOO.util.Event;
+		var formId = "${el}-body";
+
+		function init() {
+			var lecmPage = Dom.get("lecm-page");
+
+			if (lecmPage) {
+				Dom.addClass(lecmPage, "not-overflowed");
+			}
+		}
+
+		Event.onAvailable(formId, init);
+	})();
+</script>
