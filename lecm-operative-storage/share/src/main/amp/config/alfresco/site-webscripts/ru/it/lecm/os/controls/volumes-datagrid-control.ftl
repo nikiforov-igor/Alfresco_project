@@ -52,8 +52,14 @@
 	<#assign usePagination = field.control.params.usePagination/>
 </#if>
 
+<#assign hideLabel = false/>
+<#if field.control.params.hideLabel?? && field.control.params.hideLabel == "true">
+	<#assign hideLabel = true/>
+</#if>
+
+
 <div class="control with-grid" id="${controlId}">
-	<label for="${controlId}">${field.label?html}:<#if field.endpointMandatory!false || field.mandatory!false>
+	<label for="${controlId}" <#if hideLabel>class="hidden"</#if>>${field.label?html}:<#if field.endpointMandatory!false || field.mandatory!false>
 		<span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
 	<@grid.datagrid containerId false>
 		<script type="text/javascript">//<![CDATA[
