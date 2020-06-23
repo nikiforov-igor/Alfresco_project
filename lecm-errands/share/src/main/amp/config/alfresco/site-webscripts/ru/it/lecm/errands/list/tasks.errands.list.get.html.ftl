@@ -1,49 +1,49 @@
 <#assign id = args.htmlid?js_string>
 <div class="errands-form" id="${id}_errands">
-    <div class="panel-header" id="${id}_errands">
+    <div class="panel-header">
         <div class="panel-title">${msg("label.title")}</div>
     </div>
-</div>
-<div class="list-container">
-    <div id="${id}_myErrandsList-view-mode-button-group" class="errands-button-group yui-navset form-tabs yui-navset-top">
-        <ul class="yui-nav">
-            <li class="selected" title="${msg("errands.list")}">
-                <a href="#links" id="${id}-view-mode-radiofield-links" tabindex="801">
-                    <em>${msg("errands.list")}</em>
-                </a>
-            </li>
-            <li title="${msg("errands.tree")}">
-                <a href="#tree" id="${id}-view-mode-radiofield-tree" tabindex="901">
-                    <em>${msg("errands.tree")}</em>
-                </a>
-            </li>
-        </ul>
-    </div>
-    <div id="${id}_myErrandsList-actions-button-group" class="yui-buttongroup errands-button-actions">
-<#if isErrandsStarter && hasStatemachine && isRegistered>
-        <div class="errand-add create-errand-action">
-           <span id="${id}-errand-add" class="yui-button yui-push-button">
-              <span class="first-child">
-                 <button type="button" title="${msg("errandslist.add.errand.tooltip")}">${msg("errandslist.add.errand")}</button>
-              </span>
-           </span>
+    <div class="list-container">
+        <div id="${id}_myErrandsList-view-mode-button-group" class="errands-button-group yui-navset form-tabs yui-navset-top">
+            <ul class="yui-nav">
+                <li class="selected" title="${msg("errands.list")}">
+                    <a href="#links" id="${id}-view-mode-radiofield-links" tabindex="801">
+                        <em>${msg("errands.list")}</em>
+                    </a>
+                </li>
+                <li title="${msg("errands.tree")}">
+                    <a href="#tree" id="${id}-view-mode-radiofield-tree" tabindex="901">
+                        <em>${msg("errands.tree")}</em>
+                    </a>
+                </li>
+            </ul>
         </div>
-</#if>
-        <div class="errands-list-filter">
-            <select id="${id}-errands-filter">
-                <option value="all">${msg("errandslist.option.all")}</option>
-                <option selected value="active">${msg("errandslist.option.active")}</option>
-                <option value="complete">${msg("errandslist.option.completed")}</option>
-            </select>
+        <div id="${id}_myErrandsList-actions-button-group" class="yui-buttongroup errands-button-actions">
+    <#if isErrandsStarter && hasStatemachine && isRegistered>
+            <div class="errand-add create-errand-action">
+               <span id="${id}-errand-add" class="yui-button yui-push-button">
+                  <span class="first-child">
+                     <button type="button" title="${msg("errandslist.add.errand.tooltip")}">${msg("errandslist.add.errand")}</button>
+                  </span>
+               </span>
+            </div>
+    </#if>
+            <div class="errands-list-filter">
+                <select id="${id}-errands-filter">
+                    <option value="all">${msg("errandslist.option.all")}</option>
+                    <option selected value="active">${msg("errandslist.option.active")}</option>
+                    <option value="complete">${msg("errandslist.option.completed")}</option>
+                </select>
+            </div>
         </div>
-    </div>
-    <div class="errands-container" id="${id}-listContainer">
-        <div class="body scrollableList" id="${id}_results">
-            <div id="${id}_errandsList"></div>
+        <div class="errands-container" id="${id}-listContainer">
+            <div class="body scrollableList" id="${id}_results">
+                <div id="${id}_errandsList"></div>
+            </div>
         </div>
-    </div>
 
-    <div class="connections-list" id="${id}-connections-list">
+        <div class="connections-list" id="${id}-connections-list">
+        </div>
     </div>
 </div>
 <script>

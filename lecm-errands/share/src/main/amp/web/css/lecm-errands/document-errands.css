@@ -114,6 +114,8 @@
 .errands-container .workflow-task-list-left-column > div,
 .errands-container .workflow-task-list-right-column > div {
     float: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .workflow-task-list-label ~ div {
