@@ -173,7 +173,7 @@
                         </control>
                     </field>
                     <field id="lecm-base-dummy-aspects:script" set="limitation-date">
-                        <control template="/ru/it/lecm/eds/controls/static-text-control.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/static-text-control.ftl">
                             <control-param name="textCode">label.ord.limitless</control-param>
                         </control>
                     </field>
@@ -315,7 +315,7 @@
                         </control>
                     </field>
                     <field id="lecm-base-dummy-aspects:script" set="limitation-date">
-                        <control template="/ru/it/lecm/eds/controls/static-text-control.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/static-text-control.ftl">
                             <control-param name="textCode">label.ord.limitless</control-param>
                         </control>
                     </field>

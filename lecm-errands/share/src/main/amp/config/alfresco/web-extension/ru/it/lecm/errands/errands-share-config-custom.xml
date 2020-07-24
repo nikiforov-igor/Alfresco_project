@@ -713,7 +713,7 @@
                         </constraint-handlers>
                     </field>
                     <field id="lecm-base-dummy-aspects:script" set="limitation-date">
-                        <control template="/ru/it/lecm/eds/controls/static-text-control.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/static-text-control.ftl">
                             <control-param name="textCode">label.errand.limitless</control-param>
                         </control>
                     </field>
@@ -823,7 +823,7 @@
                         </constraint-handlers>
                     </field>
                     <field id="lecm-base-dummy-aspects:script" set="limitation-date">
-                        <control template="/ru/it/lecm/eds/controls/static-text-control.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/static-text-control.ftl">
                             <control-param name="textCode">label.errand.limitless</control-param>
                         </control>
                     </field>
@@ -906,7 +906,7 @@
                         </constraint-handlers>
                     </field>
                     <field id="lecm-base-dummy-aspects:script" set="limitation-date">
-                        <control template="/ru/it/lecm/eds/controls/static-text-control.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/static-text-control.ftl">
                             <control-param name="textCode">label.errand.limitless</control-param>
                         </control>
                     </field>
@@ -1768,7 +1768,7 @@
                         </constraint-handlers>
                     </field>
                     <field id="lecm-base-dummy-aspects:script" set="limitation-date">
-                        <control template="/ru/it/lecm/eds/controls/static-text-control.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/static-text-control.ftl">
                             <control-param name="textCode">label.errand.limitless</control-param>
                         </control>
                     </field>
@@ -1814,7 +1814,7 @@
                         </constraint-handlers>
                     </field>
                     <field id="lecm-base-dummy-aspects:script2" set="errand-validity">
-                        <control template="/ru/it/lecm/eds/controls/static-text-control.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/static-text-control.ftl">
                             <control-param name="textCode">label.errand.period-endless</control-param>
                         </control>
                     </field>
@@ -1835,7 +1835,7 @@
                         </constraint-handlers>
                     </field>
                     <field id="lecm-base-dummy-aspects:script3" set="repeat">
-                        <control template="/ru/it/lecm/eds/controls/static-text-control.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/static-text-control.ftl">
                             <control-param name="textCode">label.errand.reiterationCount</control-param>
                         </control>
                     </field>

@@ -21,12 +21,6 @@
 					<param id="showFirstLevel" visible="true" localName="Показывать только первый уровень" availableValues="true|Да,false|Нет">false</param>
 				</control>
 
-				<control id="static-text" template="/ru/it/lecm/eds/controls/static-text-control.ftl" localName="Статический текст">
-					<param id="containerStyleClass" visible="true" localName="Значение по умолчанию"/>
-					<param id="text" visible="true" localName="Выводимый текст"/>
-					<param id="textCode" visible="true" localName="ID выводимого текста"/>
-				</control>
-
 				<control id="selectone-radiobuttons" template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl" localName="Одиночный выбор значения с checkBox">
 					<param id="optionSeparator" visible="true" localName="Разделитель свойств">,</param>
 					<param id="labelSeparator" visible="true" localName="Разделитель заголовок-значение">|</param>
