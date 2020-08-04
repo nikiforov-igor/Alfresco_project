@@ -25803,25 +25803,31 @@
                                             <![CDATA[@lecm\-document\:subject\-assoc\-ref:"#value-with-subtree-refs"]]></property>
                                         <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                         <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                        <property name="lecm-arm:icon-name"><![CDATA[]]></property>
                                         <property name="lecm-arm:counter-description"><![CDATA[]]></property>
                                         <property name="cm:name"><![CDATA[Тематики]]></property>
-                                        <property name="lecm-arm:search-type"><![CDATA[lecm-eds-document:base]]></property>
+                                        <property name="lecm-arm:sort-hold"><![CDATA[false]]></property>
                                         <property name="lecm-arm:is-not-inherit-parent-query"><![CDATA[false]]></property>
+                                        <property name="lecm-arm:search-type"><![CDATA[lecm-eds-document:base]]></property>
                                         <property name="lecm-arm:expression"><![CDATA[]]></property>
+                                        <property name="lecm-arm:tree-context-value-mode"><![CDATA[IF_SELECTED]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
+                                        <property name="lecm-arm:tree-context-value-key"><![CDATA[]]></property>
                                         <property name="lecm-arm:types"><![CDATA[]]></property>
+                                        <property name="lecm-arm:expand-row-source"><![CDATA[]]></property>
                                         <items>
                                             <item name="cm:eef7c43b-1147-4aff-b368-b95e8857a08e"
                                                   type="lecm-arm:dictionary-child-rule">
                                                 <property name="lecm-arm:node-rule-sort-config"><![CDATA[]]></property>
-                                                <property name="lecm-arm:levels-limit-enabled"><![CDATA[false]]></property>
                                                 <property name="cm:name">
                                                     <![CDATA[eef7c43b-1147-4aff-b368-b95e8857a08e]]></property>
-                                                <property name="lecm-arm:node-rule-page-count"><![CDATA[-1]]></property>
+                                                <property name="lecm-arm:node-rule-page-count"><![CDATA[10]]></property>
                                                 <property name="lecm-arm:node-rule-show-node-view-form">
                                                     <![CDATA[false]]></property>
                                                 <property name="lecm-arm:node-rule-search-template"><![CDATA[]]></property>
+                                                <property name="lecm-arm:levels-limit-enabled"><![CDATA[false]]></property>
+                                                <property name="lecm-arm:child-rule-substitute-string"><![CDATA[]]></property>
                                                 <assocs>
                                                     <assoc type="lecm-arm:child-rule-dictionary-assoc"
                                                            path="/Business platform/LECM/Сервис Справочники/Тематика"/>
