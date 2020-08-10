@@ -13,8 +13,8 @@
 									<![CDATA[page/components/console/errands-settings]]>
 								</property>
 							</item>
-							<item name="cm:Настройка дашлетов поручений" type="lecm-arm:html-node">
-								<property name="cm:name"><![CDATA[Настройка дашлетов поручений]]></property>
+							<item name="cm:Настройки дашлетов поручений" type="lecm-arm:html-node">
+								<property name="cm:name"><![CDATA[Настройки дашлетов поручений]]></property>
 								<property name="lecm-arm:order"><![CDATA[30]]></property>
 								<property name="lecm-arm:html-url">
 									<![CDATA[page/components/console/errands-dashlet-settings]]>
