@@ -4289,8 +4289,8 @@
                                     <![CDATA[NOT @lecm\-statemachine\-aspects\:is\-draft:true AND NOT @lecm\-statemachine\:status:'Удален' AND NOT @lecm\-statemachine\:status:'Аннулирован']]></property>
                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                 <property name="cm:name"><![CDATA[По контрагентам]]></property>
-                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
                                 <property name="lecm-arm:is-not-inherit-parent-query"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
                                 <property name="lecm-arm:expression"><![CDATA[]]></property>
                                 <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                                 <property name="lecm-arm:order"><![CDATA[30]]></property>
@@ -4303,8 +4303,8 @@
                                             <![CDATA[@lecm\-contract\:partner\-assoc\-ref:"#value-ref"]]></property>
                                         <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                         <property name="cm:name"><![CDATA[Контрагенты]]></property>
-                                        <property name="lecm-arm:search-type"><![CDATA[]]></property>
                                         <property name="lecm-arm:is-not-inherit-parent-query"><![CDATA[false]]></property>
+                                        <property name="lecm-arm:search-type"><![CDATA[]]></property>
                                         <property name="lecm-arm:expression"><![CDATA[]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
@@ -4318,11 +4318,11 @@
                                                 <property name="lecm-arm:child-rule-substitute-string"><![CDATA[]]></property>
                                                 <property name="cm:name">
                                                     <![CDATA[30aa2819-ca89-4143-916f-66544cb32d3d]]></property>
-                                                <property name="lecm-arm:node-rule-page-count"><![CDATA[-1]]></property>
+                                                <property name="lecm-arm:node-rule-page-count"><![CDATA[10]]></property>
                                                 <property name="lecm-arm:node-rule-show-node-view-form">
                                                     <![CDATA[false]]></property>
                                                 <property name="lecm-arm:node-rule-search-template">
-                                                    <![CDATA[@lecm\-contractor\:shortname:"#searchTerm"]]></property>
+                                                    <![CDATA[@lecm\-contractor\:shortname:"#searchTerm" OR @lecm\-contractor\:fullname:"#searchTerm"]]></property>
                                                 <property name="lecm-arm:list-query-child-rule">
                                                     <![CDATA[TYPE:"lecm-contractor:contractor-type" AND NOT ASPECT:"lecm-orgstr-aspects:is-organization-aspect" AND {{IN_SAME_ORGANIZATION({strict:false, disableGlobal:true})}}]]></property>
                                             </item>
