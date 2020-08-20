@@ -19,7 +19,7 @@
         </property>
     </bean>
 
-	<bean id="errands.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap"
+	<bean id="errands.LogicEcmModelsBootstrap" parent="modelsToRepositoryLoader"
 	      depends-on="dictionaryBootstrap, documents.LogicEcmModelsBootstrap,
 		  ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
 		  documents.LogicEcmModelsConnectionsBootstrap,
