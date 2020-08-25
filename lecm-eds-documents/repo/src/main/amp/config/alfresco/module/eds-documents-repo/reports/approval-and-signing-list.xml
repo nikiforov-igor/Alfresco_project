@@ -476,7 +476,7 @@
                                         <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
                                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[]]></property>
                                         <property name="lecm-rpeditor:dataColumnExpression">
-                                            <![CDATA[{lecm-routes-v2:stageItemMemberAssoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}]]></property>
+                                            <![CDATA[{@doc.attr('lecm-routes-v2:stageItemEmployeeOrgUnit') != null ? doc.attr('lecm-routes-v2:stageItemEmployeeOrgUnit') : doc.assoc('lecm-routes-v2:stageItemMemberAssoc') != null ? (@orgstructureScript.getPrimaryOrgUnit(doc.assoc('lecm-routes-v2:stageItemMemberAssoc')) != null ? @orgstructureScript.getPrimaryOrgUnit(doc.assoc('lecm-routes-v2:stageItemMemberAssoc')).properties['lecm-orgstr:element-short-name'] : '') : ''}]]></property>
                                         <property name="cm:name"><![CDATA[Подразделение]]></property>
                                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_unit]]></property>
@@ -546,7 +546,7 @@
                                         <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
                                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[]]></property>
                                         <property name="lecm-rpeditor:dataColumnExpression">
-                                            <![CDATA[{lecm-routes-v2:stageItemMemberAssoc/lecm-orgstr:employee-short-name}]]></property>
+                                            <![CDATA[{@doc.attr('lecm-routes-v2:stageItemEmployeeFIO') != null ? doc.attr('lecm-routes-v2:stageItemEmployeeFIO') : doc.assocAttr('lecm-routes-v2:stageItemMemberAssoc','lecm-orgstr:employee-short-name') != null ? doc.assocAttr('lecm-routes-v2:stageItemMemberAssoc','lecm-orgstr:employee-short-name') : ''}]]></property>
                                         <property name="cm:name"><![CDATA[ФИО]]></property>
                                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_fio]]></property>
@@ -589,7 +589,7 @@
                                         <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
                                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[]]></property>
                                         <property name="lecm-rpeditor:dataColumnExpression">
-                                            <![CDATA[{lecm-routes-v2:stageItemRealExecutor/lecm-orgstr:employee-short-name}]]></property>
+                                            <![CDATA[{lecm-routes-v2:stageItemRealExecutorFIO}]]></property>
                                         <property name="cm:name"><![CDATA[ФИО (реальный согласующий)]]></property>
                                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                                         <property name="lecm-rpeditor:dataColumnCode">
@@ -852,7 +852,7 @@
                                         <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
                                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[]]></property>
                                         <property name="lecm-rpeditor:dataColumnExpression">
-                                            <![CDATA[{lecm-routes-v2:stageItemMemberAssoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}]]></property>
+                                            <![CDATA[{@doc.attr('lecm-routes-v2:stageItemEmployeeOrgUnit') != null ? doc.attr('lecm-routes-v2:stageItemEmployeeOrgUnit') : doc.assoc('lecm-routes-v2:stageItemMemberAssoc') != null ? (@orgstructureScript.getPrimaryOrgUnit(doc.assoc('lecm-routes-v2:stageItemMemberAssoc')) != null ? @orgstructureScript.getPrimaryOrgUnit(doc.assoc('lecm-routes-v2:stageItemMemberAssoc')).properties['lecm-orgstr:element-short-name'] : '') : ''}]]></property>
                                         <property name="cm:name"><![CDATA[Подразделение]]></property>
                                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_unit]]></property>
@@ -922,7 +922,7 @@
                                         <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
                                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[]]></property>
                                         <property name="lecm-rpeditor:dataColumnExpression">
-                                            <![CDATA[{lecm-routes-v2:stageItemMemberAssoc/lecm-orgstr:employee-short-name}]]></property>
+                                            <![CDATA[{@doc.attr('lecm-routes-v2:stageItemEmployeeFIO') != null ? doc.attr('lecm-routes-v2:stageItemEmployeeFIO') : doc.assocAttr('lecm-routes-v2:stageItemMemberAssoc','lecm-orgstr:employee-short-name') != null ? doc.assocAttr('lecm-routes-v2:stageItemMemberAssoc','lecm-orgstr:employee-short-name') : ''}]]></property>
                                         <property name="cm:name"><![CDATA[ФИО]]></property>
                                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_fio]]></property>
@@ -965,7 +965,7 @@
                                         <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
                                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[]]></property>
                                         <property name="lecm-rpeditor:dataColumnExpression">
-                                            <![CDATA[{lecm-routes-v2:stageItemRealExecutor/lecm-orgstr:employee-short-name}]]></property>
+                                            <![CDATA[{lecm-routes-v2:stageItemRealExecutorFIO}]]></property>
                                         <property name="cm:name"><![CDATA[ФИО (реальный подписант)]]></property>
                                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                                         <property name="lecm-rpeditor:dataColumnCode">
@@ -1059,7 +1059,7 @@
                                 <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
                                 <property name="lecm-rpeditor:dataColumnClass"><![CDATA[]]></property>
                                 <property name="lecm-rpeditor:dataColumnExpression">
-                                    <![CDATA[{lecm-routes-v2:stageItemMemberAssoc/lecm-orgstr:employee-short-name}]]></property>
+                                    <![CDATA[{@doc.attr('lecm-routes-v2:stageItemEmployeeFIO') != null ? doc.attr('lecm-routes-v2:stageItemEmployeeFIO') : doc.assocAttr('lecm-routes-v2:stageItemMemberAssoc','lecm-orgstr:employee-short-name') != null ? doc.assocAttr('lecm-routes-v2:stageItemMemberAssoc','lecm-orgstr:employee-short-name') : ''}]]></property>
                                 <property name="cm:name"><![CDATA[ФИО]]></property>
                                 <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                                 <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_fio]]></property>
@@ -1073,7 +1073,7 @@
                                 <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
                                 <property name="lecm-rpeditor:dataColumnClass"><![CDATA[]]></property>
                                 <property name="lecm-rpeditor:dataColumnExpression">
-                                    <![CDATA[{lecm-routes-v2:stageItemMemberAssoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}]]></property>
+                                    <![CDATA[{@doc.attr('lecm-routes-v2:stageItemEmployeeOrgUnit') != null ? doc.attr('lecm-routes-v2:stageItemEmployeeOrgUnit') : doc.assoc('lecm-routes-v2:stageItemMemberAssoc') != null ? (@orgstructureScript.getPrimaryOrgUnit(doc.assoc('lecm-routes-v2:stageItemMemberAssoc')) != null ? @orgstructureScript.getPrimaryOrgUnit(doc.assoc('lecm-routes-v2:stageItemMemberAssoc')).properties['lecm-orgstr:element-short-name'] : '') : ''}]]></property>
                                 <property name="cm:name"><![CDATA[Подразделение]]></property>
                                 <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                                 <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_unit]]></property>
