@@ -6,7 +6,7 @@
         <property name="lecm-dic:type"><![CDATA[lecm-notification-template:template]]></property>
         <property name="lecm-dic:plane"><![CDATA[true]]></property>
         <property name="lecm-dic:description"><![CDATA[Шаблоны уведомлений]]></property>
-        <items>
+        <items updateMode="CreateOrUpdate">
             <item name="cm:MEETINGS_TIME_APPROVAL" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[MEETINGS_TIME_APPROVAL]]></property>
                 <property name="lecm-notification-template:template">
@@ -14,6 +14,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Совещания. Соглсование времени]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -26,6 +27,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Протокол. Отправлен на доработку]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -38,6 +40,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Протокол. Поступил на регистрацию]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -50,6 +53,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Протокол. Исполнитель по пункту]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[pointNumber – номер пункта протокола]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -62,6 +66,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Совещания. Приглашение на сайт]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – сотрудник, добавивший новую рабочую область <br /> url – url сайта]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -335,6 +340,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Совещания. Отмена привлечения ресурса]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[resource – привлекаемый ресурс]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -348,6 +354,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Совещания. Отмена использования ресурсов]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>

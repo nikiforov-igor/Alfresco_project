@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
     <item name="lecm-dic:Шаблоны уведомлений" type="lecm-dic:dictionary">
-        <items>
+        <items updateMode="CreateOrUpdate">
             <item name="cm:CONTRACT_REGISTER" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">
                     <![CDATA[Поступил новый договор на регистрацию, номер проекта: {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document-aspects:reg-project-data-number"))}]]></property>
@@ -9,6 +9,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Договор. Поступил на регистрацию]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -21,6 +22,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Договор. Зарегистрирован проект договора]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[partner – контрагент <br /> executor – исполнитель]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -33,6 +35,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Договор. Направлен на регистрацию]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -45,6 +48,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Договор. Подтвердить подписание контрагентом]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -69,6 +73,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Документ к договору. Поступил на подписание]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[contract – договор <br /> executor – исполнитель]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -81,6 +86,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Документ к договору. Подписан]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[contract – договор]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -93,6 +99,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Договор. Запланированы работы]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[stageNumber – номер этапа договора <br /> isStartPoint – флаг, true – запланировано начало, false – окончание]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -104,6 +111,7 @@
                     <![CDATA[{#isStarting ? "Начинается" : "Заканчивается"} срок исполнения по договору {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}]]></property>
                 <property name="lecm-notification-template:description"><![CDATA[Договор. Срок исполнения]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[isStarting – логический параметр «Начинается» или «Заканчивается»]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -116,6 +124,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Договор. Приближение срока этапа]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[stage – этап договора]]></property>
             </item>
         </items>
     </item>
