@@ -9,6 +9,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Превышен срок исполнения]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -20,6 +21,7 @@
                     <![CDATA[Вам направлено {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}]]></property>
                 <property name="lecm-notification-template:description"><![CDATA[Поручение. Направлено]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -32,6 +34,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Приближается срок исполнения]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -44,6 +47,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Истекла половина срока исполнения]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -55,6 +59,7 @@
                     <![CDATA[Истек срок исполнения поручения: {#mainObject.wrapAsLink(#mainObject.attribute("lecm-errands:title"))}]]></property>
                 <property name="lecm-notification-template:description"><![CDATA[Поручение. Истек срок]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -67,6 +72,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Направлено пользователем]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – инициатор поручения]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -79,6 +85,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Назначение соисполнителя]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – выполняющий действие]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -91,6 +98,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Удаление соисполнителя]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – выполняющий действие]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -103,6 +111,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Отчет по поручению принят]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – выполняющий действие]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -115,6 +124,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Отчет по поручению отклонен]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – выполняющий действие <br /> reason – причина отклонения]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -126,6 +136,7 @@
                     <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} {#wrapTitle("отменил", #comment)} поручение {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}]]></property>
                 <property name="lecm-notification-template:description"><![CDATA[Поручение. Отменено]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – выполняющий действие <br /> comment – строка «причина отмены»]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -138,6 +149,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Назначение контролера отменено]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – пользователь, снявший контролера]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -150,6 +162,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Назначение контролера]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – пользователь, назначивший контролера]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -162,6 +175,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Отчет об исполнении]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – соисполнитель]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -174,6 +188,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Отчет о соисполнении]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – выполняющий действие]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -186,6 +201,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Принять исполнение]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – выполняющий действие]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -198,6 +214,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Подтвердить исполнение]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – контролер]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -210,6 +227,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Отклонить исполнение]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – пользователь, отклонивший отчет <br /> reason – строка «причина отклонения»]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -222,6 +240,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Исполнено (контролеру)]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – исполнитель поручения]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -234,6 +253,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Исполнено (инициатору)]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – исполнитель поручения]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -246,6 +266,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Исполнено (направлен отчет)]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – пользователь, направивший отчет]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -258,6 +279,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Исполнено]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – пользователь, выполнивший действие]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -269,6 +291,7 @@
                     <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} запросил {#wrapTitle("отмену", #reason)} поручения {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}.]]></property>
                 <property name="lecm-notification-template:description"><![CDATA[Поручение. Запрос отмены]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – выполняющий действие <br /> reason – причина отмены]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -281,6 +304,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Запрос отмены отклонен]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[reason – причина отклонения]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -293,6 +317,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Запрос отмены принят]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[isExecutorChanged – флаг, был ли изменен исполнитель]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -305,6 +330,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Запрос изменения сроков исполнения]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – выполняющий действие <br /> reason – причина]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -317,6 +343,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Запрос изменения сроков исполнения отклонен]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – пользователь, выполнивший действие <br /> reason – причина отклонения]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -329,6 +356,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Запрос изменения сроков исполнения принят]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – инициатор поручения]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -339,6 +367,7 @@
                 <property name="lecm-notification-template:template"><![CDATA[Поручение {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} не исполнено в установленный срок.]]></property>
                 <property name="lecm-notification-template:description"><![CDATA[Поручение. Не исполнено в установленный срок]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc" xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
                 </assocs>
@@ -350,6 +379,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Назначен на исполнение]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – выполняющий действие]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -362,6 +392,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Снят с исполнения]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – выполняющий действие <br /> reason – причина изменения]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -374,6 +405,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Смена исполнителя]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – выполняющий действие <br /> reason – причина изменения]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -386,6 +418,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Изменен срок поручения]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – выполняющий действие <br /> dueDate – срок исполнения <br /> reason – причина изменения]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -398,6 +431,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Назначение контролера]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – пользователь, назначивший контролера]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>

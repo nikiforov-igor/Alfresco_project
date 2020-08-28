@@ -14,6 +14,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Резервирование номера. Нет доступных регистраторов]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -26,6 +27,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Резервирование номера. Запуск запроса резервирования рег.номера]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[employee – сотрудник, запустивший запрос на резервирование регистрационного номера]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -74,6 +76,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Резервирование номера. Запрос на резервирование отклонен регистратором]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -86,6 +89,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Резервирование номера. Запрос на резервирование выполнен регистратором]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -98,6 +102,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Резервирование номера. Запрос на резервирование удовлетворен (с датой)]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[regNumber – зарезервированный регистрационный номер <br /> reserveDate – дата, на которую был зарезервирован регистрационный номер]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -110,6 +115,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Резервирование номера. Запрос на резервирование удовлетворен (без даты)]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[regNumber – зарезервированный регистрационный номер]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
