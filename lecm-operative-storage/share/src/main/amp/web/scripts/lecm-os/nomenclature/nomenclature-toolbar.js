@@ -758,6 +758,11 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 					},
 					onSuccess: {
 						fn: function(response) {
+							Alfresco.util.PopupManager.displayMessage({
+								text: this.msg("message.save.success"),
+								displayTime: 0.5
+							});
+
 							Bubbling.fire("addTreeItem", {
 								nodeRef: response.json.persistedObject
 							});
@@ -768,9 +773,7 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 									itemType: this.node.itemType
 								});
                             Bubbling.fire("armRefreshSelectedTreeNode"); // обновить ветку в дереве
-                            Alfresco.util.PopupManager.displayMessage({
-								text: this.msg("message.save.success")
-							});
+
 							this.createBJRecord(response.json.persistedObject, "ADD");
 							this.editDialogOpening = false;
 						},
@@ -797,6 +800,8 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 			var object = args[1];
 			var nodeRef = object.nodeRef;
 			if(object.itemType == 'lecm-os:nomenclature-year-section') {
+				//Добавим задержку, чтобы сообщение "Ваши изменения были сохранены" успело скрыться
+				YAHOO.lang.later(1000, this, function() {
 				Alfresco.util.PopupManager.displayPrompt({
 					title:'Дополнительное действие',
 					text: 'Сформировать разделы номенклатуры по организационной структуре?',
@@ -830,6 +835,7 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 							}
 						}
 					]
+				});
 				});
 			}
 		},
