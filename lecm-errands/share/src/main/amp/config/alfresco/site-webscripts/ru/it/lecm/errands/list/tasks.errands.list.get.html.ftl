@@ -51,7 +51,10 @@
         var Dom = YAHOO.util.Dom;
 
         function initLoad() {
-            LogicECM.module.Base.Util.loadScripts(['scripts/lecm-base/components/lecm-form-tabs.js'], init, ['tabview']);
+            LogicECM.module.Base.Util.loadScripts([
+                'scripts/lecm-base/components/lecm-tabs-with-scrollers.js',
+                'scripts/lecm-base/components/lecm-form-tabs.js'
+            ], init, ['tabview']);
         }
 
         function init() {
