@@ -80,6 +80,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Совещания. Принять приглашение]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – сотрудник, принявший приглашение]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -92,6 +93,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Совещания. Возможное участие]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – сотрудник, ответивший на приглашение]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -104,6 +106,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Совещания. Отменить приглашение]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – сотрудник, отклонивший приглашение]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -116,6 +119,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Совещания. Предложить перенести время]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – сотрудник, выполнивший действие]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -151,6 +155,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Совещание. Результат резервирования ресурса]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[resource – привлекаемый ресурс <br /> reserved – решение <br /> comment – комментарий]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc" xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
                 </assocs>
@@ -162,6 +167,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Совещания. Приглашённый участник принял приглашение]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – участник]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -174,6 +180,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Совещания. Приглашённый участник возможное участие]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – участник]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -186,6 +193,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Совещания. Приглашённый участник отменил приглашение]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – участник]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -210,6 +218,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Совещания. Приглашение]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[eventExecutor – сотрудник, отправивший приглашение]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -238,6 +247,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Совещания. Приглашенные участники. Отмена участия.]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[Совещание {#mainObject.attribute("lecm-events:title")} отменено]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[attendees – карта получателей <br /> recipientMail – email получателя <br /> Initiator – инициатор(строка)]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -252,6 +262,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Совещания. Приглашенные участники. Отмена совещания]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[Совещание {#mainObject.attribute("lecm-events:title")} отменено]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[attendees – карта получателей <br /> recipientMail – email получателя <br /> Initiator – инициатор(строка)]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -270,6 +281,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Совещания. Приглашенные участники. Компания приглашает на совещание]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[Приглашение на совещание {#mainObject.attribute("lecm-events:title")}]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[attendees – карта получателей <br /> recipientMail – email получателя <br /> organization – компания(строка) <br /> location – место проведения <br /> Initiator – инициатор(строка) <br /> description – описание мероприятия]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -289,6 +301,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Совещания. Приглашенные участники. Совещание обновлено.]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[Обновление совещания {#mainObject.attribute("lecm-events:title")}]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[attendees – карта получателей <br /> recipientMail – email получателя <br /> location – место проведения <br /> Initiator – инициатор(строка) <br /> description – описание мероприятия]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -308,6 +321,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Совещания. Участие отменено]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[attendees – карта получателей <br /> recipientMail – email получателя <br /> location – место проведения]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -327,6 +341,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Совещания. Участники. Совещание или участие отменено]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[Совещание {#mainObject.attribute("lecm-events:title")} отменено]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[attendees – карта получателей <br /> recipientMail – email получателя]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -376,6 +391,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Совещания. Участники. Новое совещание.]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[Приглашение на совещание {#mainObject.attribute("lecm-events:title")}]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[attendees – карта получателей <br /> recipientMail – email получателя <br /> location – место проведения <br /> Initiator – инициатор(строка) <br /> attendeesString – участники (строка) <br /> recipient – получатель]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -397,6 +413,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Совещания. Участники. Совещание обновлено.]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[Обновление совещания {#mainObject.attribute("lecm-events:title")}]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[attendees – карта получателей <br /> recipientMail – email получателя <br /> location – место проведения <br /> Initiator – инициатор(строка) <br /> attendeesString – участники (строка) <br /> recipient – получатель]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
@@ -418,6 +435,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Совещания. Органайзер. Новое совещание.]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[Приглашение на совещание {#mainObject.attribute("lecm-events:title")}]]></property>
+                <property name="lecm-notification-template:available-objects"><![CDATA[attendees – карта получателей <br /> recipientMail – email получателя]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
