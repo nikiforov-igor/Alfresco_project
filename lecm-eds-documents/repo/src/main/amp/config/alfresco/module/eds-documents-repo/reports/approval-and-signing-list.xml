@@ -589,7 +589,7 @@
                                         <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
                                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[]]></property>
                                         <property name="lecm-rpeditor:dataColumnExpression">
-                                            <![CDATA[{lecm-routes-v2:stageItemRealExecutorFIO}]]></property>
+                                            <![CDATA[{@doc.attr('lecm-routes-v2:stageItemRealExecutorFIO') != null ? doc.attr('lecm-routes-v2:stageItemRealExecutorFIO') : doc.assocAttr('lecm-routes-v2:stageItemRealExecutor','lecm-orgstr:employee-short-name') != null ? doc.assocAttr('lecm-routes-v2:stageItemRealExecutor','lecm-orgstr:employee-short-name') : ''}]]></property>
                                         <property name="cm:name"><![CDATA[ФИО (реальный согласующий)]]></property>
                                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                                         <property name="lecm-rpeditor:dataColumnCode">
@@ -965,7 +965,7 @@
                                         <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
                                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[]]></property>
                                         <property name="lecm-rpeditor:dataColumnExpression">
-                                            <![CDATA[{lecm-routes-v2:stageItemRealExecutorFIO}]]></property>
+                                            <![CDATA[{@doc.attr('lecm-routes-v2:stageItemRealExecutorFIO') != null ? doc.attr('lecm-routes-v2:stageItemRealExecutorFIO') : doc.assocAttr('lecm-routes-v2:stageItemRealExecutor','lecm-orgstr:employee-short-name') != null ? doc.assocAttr('lecm-routes-v2:stageItemRealExecutor','lecm-orgstr:employee-short-name') : ''}]]></property>
                                         <property name="cm:name"><![CDATA[ФИО (реальный подписант)]]></property>
                                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                                         <property name="lecm-rpeditor:dataColumnCode">
