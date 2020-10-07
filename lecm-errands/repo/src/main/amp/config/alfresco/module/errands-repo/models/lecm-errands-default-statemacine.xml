@@ -3492,37 +3492,6 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                     </node>
                                                     <node>
                                                         <type>ScriptActionEntity</type>
-                                                        <name>708f8959-9e7e-475a-9fe5-09d9ed8256de</name>
-                                                        <properties>
-                                                            <property>
-                                                                <name>scriptLabel</name>
-                                                                <value>
-                                                                    <![CDATA[Проверка исполнителя родительского поручения]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>actionScript</name>
-                                                                <value><![CDATA[var doc = bpm_package.children[0];
-if(doc){
-
-  var parentDoc = errands.getAdditionalDocument(doc.nodeRef.toString());
-
-  if (parentDoc && parentDoc.type=="{http:\/\/www.it.ru\/logicECM\/errands\/1.0}document") {
-
-    parentDoc.properties["lecm-errands:children-executing-count"]++;
-    parentDoc.save();
-
-  }
-
-}]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects/>
-                                                        <associations/>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
-                                                    <node>
-                                                        <type>ScriptActionEntity</type>
                                                         <name>76d1ddfa-2d91-4cdc-9e62-f6fd91ef0f6d</name>
                                                         <properties>
                                                             <property>
