@@ -3,12 +3,9 @@ package ru.it.lecm.errands.shedule;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import org.quartz.CronTrigger;
-import org.quartz.SchedulerException;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.errands.ErrandsService;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

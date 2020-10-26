@@ -21,7 +21,7 @@
     <parent>
         <groupId>ru.it.lecm</groupId>
         <artifactId>platform</artifactId>
-        <version>2.10-SNAPSHOT</version>
+        <version>3.0-SNAPSHOT</version>
     </parent>
     <groupId>ru.it.lecm</groupId>
     <artifactId>eds</artifactId>
@@ -76,7 +76,7 @@
            which is typically environment independent
         -->
         <env>local</env>
-        <platform.version>2.10-SNAPSHOT</platform.version>
+        <platform.version>3.0-SNAPSHOT</platform.version>
         <eds.version>2.10-SNAPSHOT</eds.version>
     </properties>
 
