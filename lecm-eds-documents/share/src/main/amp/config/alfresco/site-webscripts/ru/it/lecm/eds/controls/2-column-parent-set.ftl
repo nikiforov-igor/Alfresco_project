@@ -1,7 +1,7 @@
 <#list set.children as item>
     <#if item.kind == "set">
         <#if (item_index % 2) == 0>
-            <div class="yui-g 2-column-parent-set">
+            <div class="yui-g 2-column-parent-set two-column-parent-set">
                 <div class="yui-u first">
         <#else>
                 <div class="yui-u">

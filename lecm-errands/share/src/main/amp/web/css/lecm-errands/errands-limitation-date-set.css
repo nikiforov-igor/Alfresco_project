@@ -3,6 +3,7 @@
     display: none;
 }
 .errands-limitation-date-set > div:not(.errands-limitation-date-set-radio) .label-div  ~ .container {
+    min-width: 80px;
     margin-left: 0;
 }
 .errands-limitation-date-set .errands-limitation-date-set-radio {
@@ -53,6 +54,13 @@
 .errands-limitation-date-set .errands-limitation-date-set-date {
     float: left;
     width: calc(100% - 248px);
+}
+/* В панелях превью форм с двумя колонками для лэйблов оставляем меньше места (146 вместо обычных 216), соответственно меняем и остальные размеры*/
+.yui-panel.form-preview-panel .two-column-parent-set .errands-limitation-date-set .errands-limitation-date-set-type {
+    width: calc(100% - 232px);
+}
+.yui-panel.form-preview-panel .two-column-parent-set .errands-limitation-date-set .errands-limitation-date-set-date {
+    width: calc(100% - 178px);
 }
 
 .errands-limitation-date-set .errands-limitation-date-set-limitless {
