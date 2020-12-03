@@ -2,15 +2,12 @@ package ru.it.lecm.incoming.schedule;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
-import org.quartz.CronTrigger;
-import org.quartz.SchedulerException;
 import ru.it.lecm.documents.beans.DocumentGlobalSettingsService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.incoming.beans.IncomingServiceImpl;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;

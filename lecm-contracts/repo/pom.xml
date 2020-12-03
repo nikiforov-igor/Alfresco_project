@@ -25,6 +25,12 @@
         <dependency>
             <groupId>org.alfresco</groupId>
             <artifactId>alfresco-repository</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <scope>provided</scope>
         </dependency>
         <!-- <dependency>
             <groupId>org.springframework</groupId>
@@ -141,6 +147,7 @@
             <groupId>ru.it.lecm.dictionary</groupId>
             <artifactId>dictionary-repo-api</artifactId>
             <version>${platform.version}</version>
+            <scope>provided</scope>
         </dependency>
         <!--<dependency>
             <groupId>ru.it.lecm.workflow</groupId>

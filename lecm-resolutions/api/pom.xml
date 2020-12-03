@@ -13,18 +13,20 @@
     <name>Logic ECM Resolutions Documents Repo API</name>
 
 	<dependencies>
-		<dependency>
+		<!--dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-data-model</artifactId>
-		</dependency>
+		</dependency-->
 		<dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-repository</artifactId>
+            <scope>provided</scope>
 		</dependency>
         <dependency>
             <groupId>ru.it.lecm.documents</groupId>
             <artifactId>documents-repo-api</artifactId>
             <version>${platform.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
