@@ -417,6 +417,7 @@ if (document) {
             var email = sender.properties["lecm-contractor:email"];
             var contractorName = sender.properties["lecm-contractor:fullname"];
             if (email && email.length) {
+                var subject = "Уведомление о регистрации письма";
                 var outgoingNumber = incoming.properties["lecm-incoming:outgoing-number"];
                 var outgoingDate = substitude.formatNodeTitle(incoming, "{lecm-incoming:outgoing-date?dd.MM.yyyy}");
                 var message = "Добрый день! <br>";
@@ -433,7 +434,7 @@ if (document) {
                 message += documentScript.getDocumentRegNumber(incoming);
                 message += "</b>.";
 
-                notificationsEmail.sendEmail("", message, email);
+                notificationsEmail.sendEmail(subject, message, email);
 
                 logText = "Корреспонденту " + contractorName + " направлено уведомление о получении документа";
             } else {
