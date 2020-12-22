@@ -469,7 +469,7 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 												Calendar fromCal = Calendar.getInstance();
 												fromCal.setTime(startEventDate);
 												calStart.set(Calendar.HOUR_OF_DAY, fromCal.get(Calendar.HOUR_OF_DAY));
-												calStart.set(Calendar.MINUTE, fromCal.get(Calendar.HOUR_OF_DAY));
+												calStart.set(Calendar.MINUTE, fromCal.get(Calendar.MINUTE));
 
 												Calendar calEnd = Calendar.getInstance();
 												calEnd.setTime(endPeriod);
@@ -477,7 +477,7 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 												Calendar toCal = Calendar.getInstance();
 												toCal.setTime(endEvenDate);
 												calEnd.set(Calendar.HOUR_OF_DAY, toCal.get(Calendar.HOUR_OF_DAY));
-												calEnd.set(Calendar.MINUTE, toCal.get(Calendar.HOUR_OF_DAY));
+												calEnd.set(Calendar.MINUTE, toCal.get(Calendar.MINUTE));
 
 												boolean createdEventConnection = false;
 
