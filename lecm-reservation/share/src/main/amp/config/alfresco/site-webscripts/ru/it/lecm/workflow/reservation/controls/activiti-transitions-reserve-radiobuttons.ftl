@@ -15,8 +15,11 @@
 <script type='text/javascript'>//<![CDATA[
 (function() {
 function init() {
-    LogicECM.module.Base.Util.loadScripts([
-            'scripts/lecm-workflow/reservation/activiti-transitions-reserve-radiobuttons.js'
+	LogicECM.module.Base.Util.loadResources([
+			'scripts/lecm-workflow/reservation/activiti-transitions-reserve-radiobuttons.js'
+		],
+		[
+			'css/lecm-base/components/activiti-transitions-radiobuttons.css'
 		], createControls);
 	}
 	function createControls(){
@@ -36,7 +39,6 @@ function init() {
 		}).setMessages(${messages});
 	}
 
-	console.log('in contol "activiti-transitions-reserve-radiobuttons"');
 	YAHOO.util.Event.onDOMReady(init);
 })();
 //]]></script>
