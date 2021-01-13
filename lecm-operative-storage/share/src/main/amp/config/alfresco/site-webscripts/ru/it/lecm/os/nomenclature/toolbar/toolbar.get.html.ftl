@@ -36,8 +36,7 @@
 			'scripts/lecm-os/nomenclature/nomenclature-toolbar.js'
 		], [
 			'components/data-lists/toolbar.css',
-			'css/lecm-dictionary/dictionary-toolbar.css',
-			'css/lecm-nomenclature/nomenclature-toolbar.css'
+			'css/lecm-dictionary/dictionary-toolbar.css'
 		], createToolbar);
 	}
 
