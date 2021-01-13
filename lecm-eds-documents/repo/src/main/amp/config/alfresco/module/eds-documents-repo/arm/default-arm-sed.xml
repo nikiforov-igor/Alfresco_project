@@ -25819,15 +25819,15 @@
                                         <items>
                                             <item name="cm:eef7c43b-1147-4aff-b368-b95e8857a08e"
                                                   type="lecm-arm:dictionary-child-rule">
-                                                <property name="lecm-arm:node-rule-sort-config"><![CDATA[]]></property>
+                                                <property name="lecm-arm:node-rule-sort-config"><![CDATA[cm:title|ASC]]></property>
                                                 <property name="cm:name">
                                                     <![CDATA[eef7c43b-1147-4aff-b368-b95e8857a08e]]></property>
                                                 <property name="lecm-arm:node-rule-page-count"><![CDATA[10]]></property>
                                                 <property name="lecm-arm:node-rule-show-node-view-form">
                                                     <![CDATA[false]]></property>
-                                                <property name="lecm-arm:node-rule-search-template"><![CDATA[]]></property>
+                                                <property name="lecm-arm:node-rule-search-template"><![CDATA[@cm\:title:"#searchTerm"]]></property>
                                                 <property name="lecm-arm:levels-limit-enabled"><![CDATA[false]]></property>
-                                                <property name="lecm-arm:child-rule-substitute-string"><![CDATA[]]></property>
+                                                <property name="lecm-arm:child-rule-substitute-string"><![CDATA[{cm:title}]]></property>
                                                 <assocs>
                                                     <assoc type="lecm-arm:child-rule-dictionary-assoc"
                                                            path="/Business platform/LECM/Сервис Справочники/Тематика"/>

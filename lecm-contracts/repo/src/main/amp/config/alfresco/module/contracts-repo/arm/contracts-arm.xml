@@ -4223,15 +4223,15 @@
                                             </item>
                                             <item name="cm:f20ed57c-b51d-4b3d-a608-a71c63fc61b8"
                                                   type="lecm-arm:dictionary-child-rule">
-                                                <property name="lecm-arm:node-rule-sort-config"><![CDATA[]]></property>
+                                                <property name="lecm-arm:node-rule-sort-config"><![CDATA[cm:title|ASC]]></property>
                                                 <property name="lecm-arm:levels-limit-enabled"><![CDATA[false]]></property>
-                                                <property name="lecm-arm:child-rule-substitute-string"><![CDATA[]]></property>
+                                                <property name="lecm-arm:child-rule-substitute-string"><![CDATA[{cm:title}]]></property>
                                                 <property name="cm:name">
                                                     <![CDATA[f20ed57c-b51d-4b3d-a608-a71c63fc61b8]]></property>
                                                 <property name="lecm-arm:node-rule-page-count"><![CDATA[10]]></property>
                                                 <property name="lecm-arm:node-rule-show-node-view-form">
                                                     <![CDATA[false]]></property>
-                                                <property name="lecm-arm:node-rule-search-template"><![CDATA[]]></property>
+                                                <property name="lecm-arm:node-rule-search-template"><![CDATA[@cm\:title:"#searchTerm"]]></property>
                                                 <assocs>
                                                     <assoc type="lecm-arm:child-rule-dictionary-assoc"
                                                            path="/Business platform/LECM/Сервис Справочники/Тематика"/>
