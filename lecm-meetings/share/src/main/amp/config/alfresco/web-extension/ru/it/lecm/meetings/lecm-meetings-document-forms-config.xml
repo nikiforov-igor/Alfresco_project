@@ -1266,9 +1266,7 @@
                             <control-param name="plane">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-meetings:items-assoc-item-name" label-id="label.meeting.item.name">
-                        <control template="/ru/it/lecm/base-share/search/textfield-with-search-options.ftl"/>
-                    </field>
+                    <field id="lecm-meetings:items-assoc-item-name" label-id="label.meeting.item.name" />
                 </appearance>
             </form>
         </forms>
