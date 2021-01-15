@@ -19,8 +19,8 @@
                 'scripts/lecm-arm/arm-documents-datagrid.js',
                 'scripts/lecm-documents/utils/search-queries.js',
                 'scripts/lecm-os/nomenclature/nomenclature-datagrid.js'];
-			var css = ['css/lecm-os/nomenclature-datagrid.css'];
-			LogicECM.module.Base.Util.loadResources(js, css, process);
+
+			LogicECM.module.Base.Util.loadResources(js, [], process);
 
 			function process(){
 
