@@ -9,7 +9,7 @@
 		<property name="lecm-group-actions:expression"><![CDATA[user.currentUser().hasBusinessRole('DA_REGISTRARS') OR user.currentUser().hasBusinessRole('OUTGOING_SENDERS')]]> </property>
 		<property name="lecm-group-actions:isGroup"><![CDATA[true]]> </property>
 		<property name="lecm-group-actions:forCollection"><![CDATA[true]]> </property>
-		<property name="lecm-group-actions:script"><![CDATA[model.openWindow="proxy/alfresco/lecm/report/register-sending?exec=1&templateCode=" + templateCode + "&ID=" + documentsArray.join(",") +"&targetFormat=DOC"]]>	</property>
+		<property name="lecm-group-actions:script"><![CDATA[model.openWindow="proxy/alfresco/lecm/report/register-sending?exec=1&templateCode=" + templateCode + "&ID=" + documentsArray.join(",") +"&targetFormat=DOCX"]]>	</property>
 		<items>
 			<item name="cm:Шаблон" type="lecm-group-actions:form-field">
 				<property name="lecm-group-actions:field-control">
