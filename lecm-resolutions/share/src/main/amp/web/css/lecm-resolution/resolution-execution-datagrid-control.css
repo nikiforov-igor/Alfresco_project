@@ -1,3 +1,7 @@
+.yui-skin-lecmTheme .control.resolution-execution-datagrid-control .datagrid {
+     padding-bottom: 10px;
+     padding-top: 0;
+}
 .resolution-execution-datagrid-control .execution-tree-control table thead {
      display: none;
 }
