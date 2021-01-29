@@ -59,3 +59,7 @@
 .resolution-form form .form-buttons .yui-submit-button {
     display: none;
 }
+
+.resolution-form .reviewers-hidden fieldset .set {
+    padding: 0 8px;
+}
