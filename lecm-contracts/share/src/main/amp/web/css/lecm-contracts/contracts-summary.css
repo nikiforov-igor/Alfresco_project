@@ -17,8 +17,8 @@
 
 /* Участники договорной деятельности */
 #form-members-list .form-field .datagrid {
-    padding: 10px;
+    padding: 8px;
 }
-#form-members-list .form-field .datagrid .datagrid-bar-bottom .yui-u.first{
-    width: 90%;
+#form-members-list .form-field .datagrid .datagrid-bar-bottom .yui-u.first {
+    width: auto;
 }
