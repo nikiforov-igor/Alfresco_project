@@ -7,6 +7,11 @@
 </#if >
 
 <#assign id=args.htmlid/>
+<#if (form.mode == "view" || (field?? && field.disabled))>
+    <#assign setClass = "viewmode" />
+<#else>
+    <#assign setClass = "editmode" />
+</#if >
 
 <script type="text/javascript">//<![CDATA[
 (function() {
@@ -17,7 +22,7 @@
 })();
 //]]></script>
 
-<div class="errands-limitation-date-set view">
+<div class="errands-limitation-date-set ${setClass}">
     <div class="errands-limitation-date-set-radio">
         <@formLib.renderField field=form.fields[set.children[0].id]/>
     </div>
