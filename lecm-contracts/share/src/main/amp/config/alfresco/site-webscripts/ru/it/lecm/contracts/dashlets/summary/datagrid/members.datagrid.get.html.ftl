@@ -12,6 +12,7 @@
         YAHOO.util.Event.onDOMReady(function (){
             var datagrid = new LogicECM.module.Base.DataGrid('${containerId}').setOptions({
                 usePagination: true,
+                paginationTemplate: "lecm.pagination.template.short",
                 disableDynamicPagination: true,
                 pageSize: 10,
                 showExtendSearchBlock: true,
