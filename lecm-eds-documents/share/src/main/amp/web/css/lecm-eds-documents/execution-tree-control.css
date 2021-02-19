@@ -20,14 +20,18 @@
 .execution-expanded-content.type-errand .content-column,
 .execution-expanded-content.type-resolution .content-column {
     color: #000000;
-    line-height: 20px;
+    line-height: 16px;
     white-space: pre-wrap;
     vertical-align: top;
 }
 .execution-expanded-content ul li{
-    line-height: 20px;
+    line-height: 16px;
 }
 
+.execution-tree-control .connections-list {
+    padding-bottom: 6px;
+    padding-top: 0;
+}
 .execution-tree-control .connections-list .graph-tree .yui-dt-data td.yui-dt-col-title,
 .execution-tree-control .connections-list .graph-tree .yui-dt-data td.yui-dt-expandablerow-trigger {
     padding-top: 14px;
