@@ -3,7 +3,6 @@
     <item name="cm:Сводка по тематикам документов (объедин.)" type="lecm-rpeditor:reportDescriptor">
         <property name="lecm-rpeditor:reportDocType">
             <![CDATA[lecm-incoming:document,lecm-internal:document,lecm-nd:document,lecm-ord:document,lecm-outgoing:document]]></property>
-        <property name="lecm-rpeditor:reportIsDeployed"><![CDATA[true]]></property>
         <property name="cm:name"><![CDATA[Сводка по тематикам документов (объедин.)]]></property>
         <property name="lecm-rpeditor:reportQueryPgSize"><![CDATA[-1]]></property>
         <property name="lecm-rpeditor:reportQuery"><![CDATA[]]></property>

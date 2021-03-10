@@ -2,7 +2,6 @@
 <items updateMode="RewriteChildren">
     <item name="cm:Досье договора" type="lecm-rpeditor:reportDescriptor">
         <property name="lecm-rpeditor:reportDocType"><![CDATA[lecm-contract:document]]></property>
-        <property name="lecm-rpeditor:reportIsDeployed"><![CDATA[true]]></property>
         <property name="cm:name"><![CDATA[Досье договора]]></property>
         <property name="lecm-rpeditor:includeAllOrganizations"><![CDATA[false]]></property>
         <property name="lecm-rpeditor:reportQueryPgSize"><![CDATA[-1]]></property>

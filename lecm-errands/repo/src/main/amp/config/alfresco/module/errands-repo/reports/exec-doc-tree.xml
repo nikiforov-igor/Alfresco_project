@@ -3,7 +3,6 @@
     <item name="cm:Дерево поручений документа" type="lecm-rpeditor:reportDescriptor">
         <property name="lecm-rpeditor:reportDocType"><![CDATA[lecm-errands:document]]></property>
         <property name="cm:name"><![CDATA[Дерево поручений документа]]></property>
-        <property name="lecm-rpeditor:reportIsDeployed"><![CDATA[true]]></property>
         <property name="lecm-rpeditor:includeAllOrganizations"><![CDATA[false]]></property>
         <property name="lecm-rpeditor:reportQueryPgSize"><![CDATA[-1]]></property>
         <property name="lecm-rpeditor:reportQuery"><![CDATA[+TYPE:"lecm-document:base"]]></property>
@@ -70,7 +69,6 @@
             </item>
             <item name="cm:Дочерние поручения" type="lecm-rpeditor:subReportDescriptor">
                 <property name="lecm-rpeditor:reportDocType"><![CDATA[lecm-errands:document]]></property>
-                <property name="lecm-rpeditor:reportIsDeployed"><![CDATA[false]]></property>
                 <property name="cm:name"><![CDATA[Дочерние поручения]]></property>
                 <property name="lecm-rpeditor:includeAllOrganizations"><![CDATA[false]]></property>
                 <property name="lecm-rpeditor:reportQueryPgSize"><![CDATA[-1]]></property>

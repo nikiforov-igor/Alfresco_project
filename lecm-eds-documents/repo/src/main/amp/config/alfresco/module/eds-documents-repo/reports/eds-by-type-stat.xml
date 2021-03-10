@@ -4,7 +4,6 @@
         <property name="lecm-rpeditor:reportDocType">
             <![CDATA[lecm-incoming:document,lecm-internal:document,lecm-nd:document,lecm-ord:document,lecm-outgoing:document]]></property>
         <property name="cm:name"><![CDATA[Сводка по типам документов]]></property>
-        <property name="lecm-rpeditor:reportIsDeployed"><![CDATA[false]]></property>
         <property name="lecm-rpeditor:reportQueryPgSize"><![CDATA[-1]]></property>
         <property name="lecm-rpeditor:reportQuery">
             <![CDATA[TYPE:"lecm-eds-document:base" AND @lecm\-document\-aspects\:reg\-data\-is\-registered:true]]></property>

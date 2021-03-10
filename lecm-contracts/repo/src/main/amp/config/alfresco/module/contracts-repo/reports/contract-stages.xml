@@ -2,7 +2,6 @@
 <items updateMode="RewriteChildren">
     <item name="cm:Этапы договора" type="lecm-rpeditor:reportDescriptor">
         <property name="lecm-rpeditor:reportDocType"><![CDATA[lecm-contract:document]]></property>
-        <property name="lecm-rpeditor:reportIsDeployed"><![CDATA[true]]></property>
         <property name="cm:name"><![CDATA[Этапы договора]]></property>
         <property name="lecm-rpeditor:includeAllOrganizations"><![CDATA[false]]></property>
         <property name="lecm-rpeditor:reportQueryPgSize"><![CDATA[-1]]></property>
@@ -68,7 +67,6 @@
             </item>
             <item name="cm:Этапы" type="lecm-rpeditor:subReportDescriptor">
                 <property name="lecm-rpeditor:reportDocType"><![CDATA[lecm-contract-table-structure:stage]]></property>
-                <property name="lecm-rpeditor:reportIsDeployed"><![CDATA[false]]></property>
                 <property name="cm:name"><![CDATA[Этапы]]></property>
                 <property name="lecm-rpeditor:includeAllOrganizations"><![CDATA[false]]></property>
                 <property name="lecm-rpeditor:reportQueryPgSize"><![CDATA[-1]]></property>
