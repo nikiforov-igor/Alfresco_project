@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="lecm-test-dic:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+    <description>Справочники тестового документа</description>
+    <author>Logic ECM</author>
+    <version>1.0</version>
+    <imports>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <import uri="http://www.it.ru/lecm/dictionary/1.0" prefix="lecm-dic"/>
+    </imports>
+    <namespaces>
+        <namespace uri="http://www.it.ru/logicECM/test/dictionaries/1.0" prefix="lecm-test-dic"/>
+    </namespaces>
+
+    <types>
+        <type name="lecm-test-dic:test-dic">
+            <title>Тестовый справочник</title>
+            <parent>lecm-dic:plane_dictionary_values</parent>
+            <properties>
+                <property name="lecm-test-dic:test-dic-code">
+                    <title>Код</title>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+            </properties>
+        </type>
+    </types>
+</model>

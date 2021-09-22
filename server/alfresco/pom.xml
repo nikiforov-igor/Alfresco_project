@@ -178,6 +178,13 @@
 			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.test</groupId>
+			<artifactId>test-repo</artifactId>
+			<version>${eds.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -428,6 +435,13 @@
 							<artifactId>reservation-repo</artifactId>
 							<type>amp</type>
 						</overlay>
+
+						<overlay>
+							<groupId>ru.it.lecm.test</groupId>
+							<artifactId>test-repo</artifactId>
+							<type>amp</type>
+						</overlay>
+
 					</overlays>
 					<archive>
 						<addMavenDescriptor>false</addMavenDescriptor>

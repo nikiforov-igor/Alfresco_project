@@ -150,6 +150,13 @@
 			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.test</groupId>
+			<artifactId>test-share</artifactId>
+			<version>${eds.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -354,6 +361,12 @@
 							<groupId>ru.it.lecm.workflow.reservation</groupId>
 							<artifactId>reservation-share</artifactId>
 							<type>amp</type>
+						</overlay>
+
+						<overlay>
+						<groupId>ru.it.lecm.test</groupId>
+						<artifactId>test-share</artifactId>
+						<type>amp</type>
 						</overlay>
 					</overlays>
 					<archive>
