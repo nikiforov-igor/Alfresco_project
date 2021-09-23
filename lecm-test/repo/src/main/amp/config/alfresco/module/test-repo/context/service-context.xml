@@ -47,4 +47,13 @@
         </property>
     </bean>
 
+    <bean id="testDictionaryBootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="dictionaryBootstrap">
+    <property name="dictionaries">
+        <list>
+            <value>alfresco/module/${artifactId}/dictionaries/lecm-test-dictionary.xml</value>
+        </list>
+    </property>
+    </bean>
+
 </beans>
